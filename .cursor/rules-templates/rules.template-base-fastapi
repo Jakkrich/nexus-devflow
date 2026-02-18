@@ -1,0 +1,195 @@
+# FastAPI Project Rules - Template
+
+## 🔍 Project Detection
+
+**IMPORTANT: Detect project type automatically at the start of each conversation.**
+
+### Detection Logic:
+1. **Check for FastAPI indicators:**
+   - Look for `main.py` or `app.py` with `from fastapi import FastAPI`
+   - Check `requirements.txt` or `pyproject.toml` for `fastapi`
+   - Check `uvicorn` or `gunicorn` in dependencies
+   - Look for `@app.get()`, `@app.post()` decorators
+
+2. **Check for database ORM:**
+   - Look for `SQLAlchemy` imports → SQLAlchemy ORM
+   - Look for `SQLModel` imports → SQLModel (Pydantic + SQLAlchemy)
+   - Look for `Tortoise ORM` → Async ORM
+   - Look for `databases` package → Async database
+
+3. **Check for validation library:**
+   - Look for `pydantic` imports → Pydantic for validation
+   - Check for Pydantic models with `BaseModel`
+
+4. **Report detected stack:**
+   - "Detected: FastAPI with [ORM] and [Validation]"
+   - Adjust rules accordingly
+
+---
+
+## 🔄 Project Awareness & Context
+
+### FastAPI Core Rules
+- **Always read `main.py` or `app.py`** to understand application structure
+- **Check `requirements.txt` or `pyproject.toml`** for dependencies
+- **Use FastAPI's dependency injection** for shared resources
+- **Follow FastAPI's async/await patterns** for I/O operations
+- **Use Pydantic models** for request/response validation
+
+### Naming Conventions
+- **Files**: `snake_case` (e.g., `user_service.py`)
+- **Classes**: `PascalCase` (e.g., `UserService`)
+- **Functions**: `snake_case` (e.g., `get_user_by_id`)
+- **Constants**: `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`)
+- **API endpoints**: `kebab-case` in URLs (e.g., `/api/v1/user-profiles`)
+
+---
+
+## 🧱 Code Structure & Modularity
+
+- **Never create files longer than 500 lines** - Split into smaller modules
+- **Organize by feature or responsibility:**
+  - `api/` - API route handlers
+  - `models/` - Database models (SQLAlchemy/SQLModel)
+  - `schemas/` - Pydantic models for request/response
+  - `services/` - Business logic layer
+  - `core/` - Core functionality (config, security, database)
+  - `utils/` - Utility functions
+- **Use dependency injection** for shared resources (database, config)
+- **Separate concerns:**
+  - Routes handle HTTP requests/responses
+  - Services contain business logic
+  - Models handle data persistence
+  - Schemas handle validation
+
+---
+
+## 🧪 Testing & Reliability
+
+### Testing Framework
+- **Use `pytest`** for unit and integration tests
+- **Use `pytest-asyncio`** for async tests
+- **Use `httpx`** for testing FastAPI endpoints
+- **Use `pytest-mock`** for mocking
+
+### Testing Rules
+- **Always create unit tests** for:
+  - API endpoints (all HTTP methods)
+  - Service layer functions
+  - Utility functions
+- **Test at least:**
+  - 1 happy path
+  - 1 edge case
+  - 1 error case
+- **Use fixtures** for test data and database setup
+- **Test async endpoints** with `pytest-asyncio`
+
+---
+
+---
+
+## 📎 Style & Conventions
+
+### Python Code
+- **Follow PEP8** coding standard
+- **Use type hints** for all functions and methods
+- **Format with `black`**
+- **Lint with `ruff`** or `flake8`
+- **Use `mypy`** for type checking
+
+---
+
+## 📚 Documentation Rules
+
+- **Add docstrings** to all functions and classes
+- **Document API endpoints** with description parameters
+- **Comment complex business logic** with `# Reason:` comments
+
+### Comment Prefixes
+
+Use standard comment prefixes to mark different types of notes in code:
+
+**Standard Prefixes:**
+- `TODO` - Work to be done in the future
+  - Example: `# TODO: Add rate limiting middleware`
+- `FIXME` - Bug that needs to be fixed
+  - Example: `# FIXME: Handle edge case when user_id is None`
+- `NOTE` - Important note or explanation
+  - Example: `# NOTE: This order matters for async operations`
+- `HACK` - Temporary workaround
+  - Example: `# HACK: Temporary fix until upstream library updates`
+- `XXX` - Warning or issue that needs attention
+  - Example: `# XXX: This bypasses security check - review needed`
+- `BUG` - Known bug
+  - Example: `# BUG: Race condition when concurrent requests`
+- `OPTIMIZE` - Performance optimization opportunity
+  - Example: `# OPTIMIZE: N+1 query issue here`
+- `REFACTOR` - Code that should be refactored
+  - Example: `# REFACTOR: Extract to separate service class`
+- `DEPRECATED` - Deprecated code
+  - Example: `# DEPRECATED: Use new_api() instead`
+- `WARNING` - Warning message
+  - Example: `# WARNING: This modifies global state`
+
+**PRP-Specific Prefixes:**
+- `PRP` - Reference to a PRP document
+  - Example: `# PRP: BUG-456_login-fails-after-reset`
+- `CONTEXT` - Important context information
+  - Example: `# CONTEXT: See INITIAL.md for project overview`
+- `REASON` - Explanation for complex logic (already in use)
+  - Example: `# REASON: Async context requires this approach`
+
+**Optional Priority Levels:**
+- Add priority after prefix: `# TODO(P1): Critical - must fix before release`
+- P1 = Critical, P2 = Medium, P3 = Low
+
+---
+
+## 🧠 AI Behavior Rules
+
+- **Never assume FastAPI version** - Check requirements.txt
+- **Always use async/await** for I/O operations (database, API calls)
+- **Always use Pydantic models** for request/response validation
+- **Always check existing code** before creating new functionality
+- **Never delete or overwrite existing code** unless explicitly instructed
+- **Always use dependency injection** for database sessions and shared resources
+- **Use FastAPI's built-in features** (automatic validation, documentation)
+- **Follow FastAPI's best practices** for error handling
+
+---
+
+## 🔧 FastAPI-Specific Gotchas
+
+### Async/Await Gotchas
+- **Use `async def`** for endpoints that do I/O operations
+- **Use `await`** for async database operations
+- **Don't mix sync and async** - Be consistent
+- **Use `asyncio.gather()`** for parallel async operations
+
+### Database Gotchas
+- **Always use dependency injection** for database sessions
+- **Commit transactions** explicitly when needed
+- **Handle database errors** with try-except blocks
+- **Use connection pooling** for production
+- **Close database connections** properly
+
+### Validation Gotchas
+- **Use Pydantic models** for all request/response validation
+- **Validate at the schema level** - Don't validate in routes
+- **Use `EmailStr`, `HttpUrl`** for common validations
+- **Custom validators** - Use Pydantic validators for complex logic
+
+### Security Gotchas
+- **Never store passwords in plain text** - Always hash
+- **Use `python-jose`** for JWT tokens
+- **Validate all user input** - Never trust client data
+- **Use HTTPS** in production
+- **Implement rate limiting** for API endpoints
+- **Use CORS middleware** properly configured
+
+### Performance Gotchas
+- **Use async database drivers** (asyncpg, aiomysql)
+- **Implement caching** for frequently accessed data
+- **Use background tasks** for long-running operations
+- **Optimize database queries** - Avoid N+1 queries
+- **Use connection pooling** efficiently

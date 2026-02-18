@@ -1,0 +1,185 @@
+# Odoo Project Rules - Auto-Detecting Template
+
+## 🔍 Project Detection
+
+**IMPORTANT: Detect project type automatically at the start of each conversation.**
+
+### Detection Logic:
+1. **Check for Odoo version indicators:**
+   - Look for `openerp.py` → **Odoo 8** (old naming)
+   - Look for `__manifest__.py` → **Odoo 13+** (new naming)
+   - Check `__openerp__.py` version field → **Odoo 8**
+   - Check `__manifest__.py` version field → **Odoo 13+**
+
+2. **Check directory structure:**
+   - `addons/` folder → Odoo module structure
+   - `models/`, `views/`, `controllers/`, `wizards/` → Odoo module structure
+
+3. **Report detected version:**
+   - "Detected: Odoo 8" or "Detected: Odoo 13"
+   - Adjust rules accordingly
+
+---
+
+## 🔄 Project Awareness & Context
+
+### Odoo 8 Specific Rules
+- **Always read `__openerp__.py`** to understand module dependencies and metadata
+- **Use `openerp` namespace** for imports: `from openerp import models, fields, api`
+- **Use `@api.one`, `@api.multi`, `@api.depends`** decorators
+- **XML views use `<openerp>` root tag**
+- **Use `fields.related()` for related fields**
+- **Python 2.7 compatible** (if legacy system)
+
+### Odoo 13 Specific Rules
+- **Always read `__manifest__.py`** to understand module dependencies and metadata
+- **Use `odoo` namespace** for imports: `from odoo import models, fields, api`
+- **Use `@api.model`, `@api.depends`** decorators (no more @api.one/@api.multi)
+- **XML views use `<odoo>` root tag**
+- **Use `fields.Many2one`, `fields.One2many`, `fields.Many2many`** with proper syntax
+- **Python 3.6+ compatible**
+
+### Common Odoo Rules (Both Versions)
+- **Check existing modules** in `addons/` folder before creating new ones
+- **Use consistent naming conventions:**
+  - Module names: `snake_case`
+  - Model names: `snake_case` (e.g., `sale_order_line`)
+  - Class names: `CamelCase` (e.g., `SaleOrderLine`)
+  - Field names: `snake_case`
+
+---
+
+## 🧱 Code Structure & Modularity
+
+- **Never create files longer than 500 lines** - Split into smaller models or mixins
+- **Organize by feature:**
+  - `models/` - Data models and business logic
+  - `views/` - XML views (form, tree, kanban, graph, pivot)
+  - `controllers/` - HTTP controllers for web routes
+  - `wizards/` - Transient models for user interactions
+  - `reports/` - QWeb reports
+- **Use mixins** for reusable functionality
+- **Follow Odoo's inheritance patterns:**
+  - Model inheritance: `_inherit` and `_name`
+  - View inheritance: `<xpath>` or `<field>` position attributes
+  - Controller inheritance: `@route()` decorators
+
+---
+
+## 🧪 Testing & Reliability
+
+### Odoo 8 Testing
+- **Use `odoo.tests.common`** for unit tests
+- **Test files in `tests/` folder**
+- **Use `@openerp.tests.common.at_install(False), post_install(True)`**
+
+### Odoo 13 Testing
+- **Use `odoo.tests.common`** for unit tests
+- **Test files in `tests/` folder**
+- **Use `@odoo.tests.tagged('post_install', '-at_install')`**
+- **Use `Form()` helper for form testing**
+
+### Common Testing Rules
+- **Always create unit tests** for:
+  - Model methods (compute, onchange, constraints)
+  - Business logic
+  - Workflow transitions
+- **Test at least:**
+  - 1 happy path
+  - 1 edge case
+  - 1 error case
+- **Test with different user groups** (if security is involved)
+
+---
+
+---
+
+## 📎 Style & Conventions
+
+### Python Code
+- **Follow PEP8** (Python 3.6+ style for Odoo 13, Python 2.7 style for Odoo 8)
+- **Use type hints** (Odoo 13 only, optional)
+- **Format with `black`** (if available)
+
+---
+
+## 📚 Documentation Rules
+
+- **Document model fields** with `string` and `help` attributes
+- **Comment complex business logic** with `# Reason:` comments
+
+### Comment Prefixes
+
+Use standard comment prefixes to mark different types of notes in code:
+
+**Standard Prefixes:**
+- `TODO` - Work to be done in the future
+  - Example: `# TODO: Add validation for email format`
+- `FIXME` - Bug that needs to be fixed
+  - Example: `# FIXME: This causes memory leak on large datasets`
+- `NOTE` - Important note or explanation
+  - Example: `# NOTE: This order matters for Odoo 8 compatibility`
+- `HACK` - Temporary workaround
+  - Example: `# HACK: Temporary fix until upstream library updates`
+- `XXX` - Warning or issue that needs attention
+  - Example: `# XXX: This bypasses security check - review needed`
+- `BUG` - Known bug
+  - Example: `# BUG: Race condition when concurrent requests`
+- `OPTIMIZE` - Performance optimization opportunity
+  - Example: `# OPTIMIZE: N+1 query issue here`
+- `REFACTOR` - Code that should be refactored
+  - Example: `# REFACTOR: Extract to separate mixin class`
+- `DEPRECATED` - Deprecated code
+  - Example: `# DEPRECATED: Use computed fields instead of fields.related()`
+- `WARNING` - Warning message
+  - Example: `# WARNING: This modifies global state`
+
+**PRP-Specific Prefixes:**
+- `PRP` - Reference to a PRP document
+  - Example: `# PRP: BUG-456_login-fails-after-reset`
+- `CONTEXT` - Important context information
+  - Example: `# CONTEXT: See INITIAL.md for project overview`
+- `REASON` - Explanation for complex logic (already in use)
+  - Example: `# REASON: Odoo 8 compatibility requires this approach`
+
+**Optional Priority Levels:**
+- Add priority after prefix: `# TODO(P1): Critical - must fix before release`
+- P1 = Critical, P2 = Medium, P3 = Low
+
+---
+
+## 🧠 AI Behavior Rules
+
+- **Never assume Odoo version** - Always detect first
+- **Never mix Odoo 8 and Odoo 13 syntax** - Use version-appropriate code
+- **Always check existing modules** before creating new functionality
+- **Never delete or overwrite existing code** unless explicitly instructed
+- **Always update security files** when adding new models
+- **Always test module upgrade** after making changes
+- **Use Odoo's ORM methods** - Don't write raw SQL unless necessary
+- **Follow Odoo's security model** - Use access rights and record rules
+
+---
+
+## 🔧 Odoo-Specific Gotchas
+
+### Odoo 8 Gotchas
+- `@api.one` returns list, `@api.multi` expects recordset
+- `fields.related()` requires `readonly=True` by default
+- Python 2.7 string handling (use `unicode()` for text)
+- Old-style XML views with `<openerp>` tag
+
+### Odoo 13 Gotchas
+- No more `@api.one` - use `@api.model` with loop
+- `fields.related()` is deprecated - use computed fields
+- Python 3.6+ string handling (native unicode)
+- New-style XML views with `<odoo>` tag
+- `@api.onchange` is deprecated - use `@api.depends` with compute
+
+### Common Gotchas
+- **Always use `self.env`** for environment access
+- **Use `sudo()`** carefully - only when necessary
+- **Transaction management** - changes are auto-committed
+- **Cache invalidation** - be aware of when fields are recomputed
+- **Access rights** - check `ir.model.access.csv` and record rules
+

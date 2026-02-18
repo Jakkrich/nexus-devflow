@@ -1,0 +1,191 @@
+# PHP Project Rules - Auto-Detecting Template
+
+## 🔍 Project Detection
+
+**IMPORTANT: Detect project type automatically at the start of each conversation.**
+
+### Detection Logic:
+1. **Check for framework indicators:**
+   - Look for `application/config/config.php` → **CodeIgniter 3**
+   - Look for `composer.json` with `"yiisoft/yii2"` → **Yii Framework**
+   - Check `index.php` for `define('ENVIRONMENT')` → **CodeIgniter 3**
+   - Check `web/index.php` with `require(__DIR__ . '/../vendor/autoload.php')` → **Yii Framework**
+   - Check directory structure:
+     - `application/` folder → **CodeIgniter 3**
+     - `vendor/yiisoft/` folder → **Yii Framework**
+
+2. **Check for framework version:**
+   - CodeIgniter 3: Check `application/config/config.php` for version comments
+   - Yii Framework: Check `composer.json` for `"yiisoft/yii2": "~2.0.x"`
+
+3. **Report detected framework:**
+   - "Detected: CodeIgniter 3" or "Detected: Yii Framework"
+   - Adjust rules accordingly
+
+---
+
+## 🔄 Project Awareness & Context
+
+### CodeIgniter 3 Specific Rules
+- **Always read `application/config/config.php`** to understand configuration
+- **Check `application/config/routes.php`** for routing rules
+- **Use `$this->load->model()`, `$this->load->view()`, `$this->load->library()`**
+- **Follow CodeIgniter naming conventions:**
+  - Controllers: `PascalCase` (e.g., `UserController.php`)
+  - Models: `PascalCase` (e.g., `User_model.php`)
+  - Views: `snake_case` (e.g., `user_list.php`)
+  - Libraries: `PascalCase` (e.g., `Email_library.php`)
+
+### Yii Framework Specific Rules
+- **Always read `config/web.php` or `config/console.php`** to understand configuration
+- **Check `config/routes.php`** for URL routing rules
+- **Use Yii's ActiveRecord** for database operations
+- **Use Yii's dependency injection** for services
+- **Follow Yii naming conventions:**
+  - Controllers: `PascalCase` (e.g., `UserController.php`)
+  - Models: `PascalCase` (e.g., `User.php`)
+  - Views: `snake_case` (e.g., `index.php`)
+  - Components: `PascalCase` (e.g., `EmailService.php`)
+
+### Common PHP Rules (Both Frameworks)
+- **Check existing code** before creating new functionality
+- **Use framework's built-in features** instead of reinventing
+- **Follow PSR standards** where applicable (PSR-1, PSR-2, PSR-4)
+- **Use Composer** for dependency management
+- **Use environment variables** for configuration (`.env` file)
+
+---
+
+## 🧱 Code Structure & Modularity
+
+- **Never create files longer than 500 lines** - Split into smaller classes or helpers
+- **Organize by feature:**
+  - **CodeIgniter 3:**
+    - `controllers/` - Request handling
+    - `models/` - Data access and business logic
+    - `views/` - Presentation layer
+    - `libraries/` - Reusable classes
+    - `helpers/` - Utility functions
+  - **Yii Framework:**
+    - `controllers/` - Request handling
+    - `models/` - Data models and business logic
+    - `views/` - Presentation layer
+    - `components/` - Reusable components
+    - `widgets/` - UI widgets
+- **Use namespaces** (Yii Framework) or proper class loading (CodeIgniter 3)
+- **Follow framework's autoloading** patterns
+
+---
+
+## 🧪 Testing & Reliability
+
+### Testing Rules
+- **Always create unit tests** for:
+  - Model methods
+  - Business logic
+  - API endpoints
+- **Test at least:**
+  - 1 happy path
+  - 1 edge case
+  - 1 error case
+- **Use database fixtures** for testing
+- **Test with different user roles** (if authentication is involved)
+
+---
+
+---
+
+## 📎 Style & Conventions
+
+### PHP Code
+- **Follow PSR-12** coding standard
+- **Use type hints** (PHP 7.4+)
+- **Format with `php-cs-fixer`** or `phpcs`
+- **Use strict types:** `declare(strict_types=1);`
+
+---
+
+## 📚 Documentation Rules
+
+- **Document model properties** with PHPDoc comments
+- **Comment complex business logic** with `// Reason:` comments
+- **Document API endpoints** with PHPDoc
+
+### Comment Prefixes
+
+Use standard comment prefixes to mark different types of notes in code:
+
+**Standard Prefixes:**
+- `TODO` - Work to be done in the future
+  - Example: `// TODO: Add input sanitization`
+- `FIXME` - Bug that needs to be fixed
+  - Example: `// FIXME: SQL injection vulnerability here`
+- `NOTE` - Important note or explanation
+  - Example: `// NOTE: CodeIgniter 3 specific behavior`
+- `HACK` - Temporary workaround
+  - Example: `// HACK: Temporary fix until upstream library updates`
+- `XXX` - Warning or issue that needs attention
+  - Example: `// XXX: This bypasses security check - review needed`
+- `BUG` - Known bug
+  - Example: `// BUG: Race condition when concurrent requests`
+- `OPTIMIZE` - Performance optimization opportunity
+  - Example: `// OPTIMIZE: N+1 query issue here`
+- `REFACTOR` - Code that should be refactored
+  - Example: `// REFACTOR: Extract to separate service class`
+- `DEPRECATED` - Deprecated code
+  - Example: `// DEPRECATED: Use new_api() instead`
+- `WARNING` - Warning message
+  - Example: `// WARNING: This modifies global state`
+
+**PRP-Specific Prefixes:**
+- `PRP` - Reference to a PRP document
+  - Example: `// PRP: BUG-456_login-fails-after-reset`
+- `CONTEXT` - Important context information
+  - Example: `// CONTEXT: See INITIAL.md for project overview`
+- `REASON` - Explanation for complex logic (already in use)
+  - Example: `// REASON: Yii Framework requires namespaced classes`
+
+**Optional Priority Levels:**
+- Add priority after prefix: `// TODO(P1): Critical - must fix before release`
+- P1 = Critical, P2 = Medium, P3 = Low
+
+---
+
+## 🧠 AI Behavior Rules
+
+- **Never assume framework** - Always detect first
+- **Never mix framework patterns** - Use framework-appropriate code
+- **Always check existing code** before creating new functionality
+- **Never delete or overwrite existing code** unless explicitly instructed
+- **Always use framework's security features** (CSRF protection, XSS prevention)
+- **Use framework's ORM/Query Builder** - Don't write raw SQL unless necessary
+- **Follow framework's routing conventions**
+
+---
+
+## 🔧 Framework-Specific Gotchas
+
+### CodeIgniter 3 Gotchas
+- **Always check `BASEPATH`** - Prevent direct access
+- **Use `$this->input->post()`** for POST data (not `$_POST`)
+- **Use `$this->db->escape()`** for SQL injection prevention
+- **Session handling** - Use `$this->session->userdata()`
+- **File uploads** - Use `$this->upload->do_upload()`
+- **Form validation** - Use `$this->form_validation->run()`
+
+### Yii Framework Gotchas
+- **Use ActiveRecord** - Don't write raw SQL queries
+- **Use `Yii::$app->`** for application components
+- **CSRF protection** - Enabled by default, use `csrfParam` in forms
+- **XSS prevention** - Use `Html::encode()` for output
+- **Database transactions** - Use `$transaction = Yii::$app->db->beginTransaction()`
+- **Cache** - Use `Yii::$app->cache->set()` and `get()`
+
+### Common PHP Gotchas
+- **Always validate input** - Never trust user input
+- **Use prepared statements** - Prevent SQL injection
+- **Escape output** - Prevent XSS attacks
+- **Error handling** - Use try-catch blocks
+- **Memory management** - Be aware of large data sets
+- **Session security** - Use secure session configuration
+
