@@ -15,6 +15,10 @@ Template optimized for AI agents to implement features with sufficient context a
 - **Updates:**
   - YYYY-MM-DD: [What changed in this PRP or its implementation]
 
+## Git Context
+- **Proposed Branch**: [type]/#[issue]-[alias]
+- **Commit Pattern**: [type]: <summary>
+
 ## Core Principles
 1. **Context is King**: Include ALL necessary documentation, examples, and caveats
 2. **Validation Loops**: Provide executable tests/lints the AI can run and fix

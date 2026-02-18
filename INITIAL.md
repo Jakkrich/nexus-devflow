@@ -28,7 +28,7 @@
 - (ยังไม่มีรายการ)
 
 ### Changes / Refactors
-- (ยังไม่มีรายการ)
+- [PRPS-001] Align PRPs-Framework with Git Naming Conventions - PRP: `PRPs-Framework/issues/PRPS-001_align-git-conventions/prp.md`
 
 ### Examples
 - [Project References] - `PRPs-Framework/references/`

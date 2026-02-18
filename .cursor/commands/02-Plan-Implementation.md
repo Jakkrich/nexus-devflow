@@ -9,6 +9,7 @@ Generate a complete PRP for general feature implementation with thorough researc
 - **Planner**: Use `PRPs-Framework/prompts/planner.md` for the PRP Generation Process.
 - **Spec Writer**: Use `PRPs-Framework/prompts/spec_writer.md` if creating a new spec from scratch.
 - **Full Guide**: See `PRPs-Framework/_prompt_guides/prompt_integration_guide.md` for details.
+- **Git Standards**: Follow `PRPs-Framework/_notes/git-branch-naming-conventions.md` for branch and commit naming.
 
 The AI agent only gets the context you are appending to the PRP and training data. Assume the AI agent has access to the codebase and the same knowledge cutoff as you, so it's important that your research findings are included or referenced in the PRP. The Agent has Websearch capabilities, so pass URLs to documentation and examples.
 
@@ -73,6 +74,7 @@ The assistant should read the spec, research the codebase and external docs, the
     - Include why each reference is relevant to this issue
 - **Gotchas**: Library quirks, version issues
 - **Patterns**: Existing approaches to follow OR documentation patterns
+- **Git Context**: Reference any "Proposed Branch" or naming conventions from `spec.md`.
 
 ### Implementation Blueprint
 - Start with pseudocode showing approach
@@ -194,15 +196,15 @@ odoo-bin -c odoo.conf --test-enable --stop-after-init -d test_db
 
 Before deciding the output filename, detect the **work item type** from the input spec file:
 
-- Look for an explicit `Type:` field (case-insensitive) in the spec content:
-  - `Type: BUG` → bug
-  - `Type: FEATURE` or `Type: FEAT` → feature
-  - `Type: CHANGE`, `CHG`, or `REFACTOR` → change/refactor
+- Look for an explicit `Type:` field (case-insensitive) in the spec content and map to `PRPs-Framework/_notes/git-branch-naming-conventions.md`:
+  - `Type: BUG` → `fix`
+  - `Type: FEATURE` or `Type: FEAT` → `feat`
+  - `Type: CHANGE`, `CHG`, or `REFACTOR` → `refactor` or `chore`
 - If no explicit type, infer from keywords in the title/content:
-  - Contains words like `bug`, `error`, `exception`, `issue`, `fails` → BUG
-  - Contains words like `feature`, `add`, `implement`, `new`, `support` → FEAT (feature)
-  - Contains words like `refactor`, `cleanup`, `improve`, `optimize` → CHG (change)
-  - Otherwise → ISSUE (generic)
+  - Contains words like `bug`, `error`, `exception`, `issue`, `fails` → `fix`
+  - Contains words like `feature`, `add`, `implement`, `new`, `support` → `feat`
+  - Contains words like `refactor`, `cleanup`, `improve`, `optimize` → `refactor`
+  - Otherwise → `chore` (generic maintenance)
 
 Derive the **output path** from the input folder:
 

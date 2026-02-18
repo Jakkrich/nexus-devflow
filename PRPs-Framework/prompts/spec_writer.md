@@ -84,6 +84,11 @@ Construct the content using this EXACT template structure, then call the **Write
 
 **Rationale**: [Why this workflow type fits the task]
 
+## Git Context
+
+- **Proposed Branch**: [type]/#[issue]-[alias]
+- **Commit Pattern**: [type]: <summary>
+
 ## Task Scope
 
 ### Services Involved

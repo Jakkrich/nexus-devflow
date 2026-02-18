@@ -1,0 +1,3 @@
+# Ignore all files in _notes but keep the folder
+PRPs-Framework/_notes/*
+!PRPs-Framework/_notes/.gitkeep

@@ -216,6 +216,7 @@ Based on the workflow type and services involved, create the implementation plan
 ## Overview
 - **Workflow Type**: [feature|refactor|investigation|migration|simple]
 - **Rationale**: [Why this workflow type was chosen]
+- **Proposed Branch**: [type]/#[issue]-[alias] (Follow `PRPs-Framework/_notes/git-branch-naming-conventions.md`)
 
 ## Phases
 ### [Phase ID (e.g., phase-1-backend)]: [Phase Name]

@@ -600,12 +600,16 @@ The system **automatically scans for secrets** before every commit. If secrets a
 
 ```bash
 git add .
-git commit -m "auto-claude: Complete [subtask-id] - [subtask description]
-
-- Files modified: [list]
-- Verification: [type] - passed
-- Phase progress: [X]/[Y] subtasks complete"
+git commit -m "<type>(<scope>): <summary>"
 ```
+
+**Examples:**
+- `feat(auth): add google oauth integration`
+- `fix: resolve memory leak in data parser`
+- `chore(deps): bump vite from 4.0 to 5.0`
+
+Follow the standards in `PRPs-Framework/_notes/git-branch-naming-conventions.md`.
+- Phase progress: [X]/[Y] subtasks complete
 
 ### DO NOT Push to Remote
 

@@ -7,6 +7,7 @@ Implement a feature using the PRP file.
 ## System Prompt / Persona
 - **Coder**: Use `PRPs-Framework/prompts/coder.md` for the Execution Process.
 - **Coder Recovery**: Use `PRPs-Framework/prompts/coder_recovery.md` if stuck.
+- **Git Standards**: Follow `PRPs-Framework/_notes/git-branch-naming-conventions.md`.
 - **Full Guide**: See `PRPs-Framework/_prompt_guides/prompt_integration_guide.md`.
 
 > NOTE: The PRP file name is also used to derive a Git branch name for this work (if the project is under Git).
@@ -17,11 +18,11 @@ Implement a feature using the PRP file.
    - **Detect Git repository:**
      - Try running a Git detection command (e.g., `git rev-parse --is-inside-work-tree`).
      - If this fails, or Git is not available, **skip this step** and continue on the current branch/directory.
-   - **Derive branch name from PRP folder name:**
-     - Take the folder name containing the `prp.md`, e.g. `456_login-fails`.
-     - Normalize to lowercase and replace spaces/underscores with dashes.
-     - If the name starts with a known type prefix (`feat-`, `bug-`, `chg-`, `issue-`, etc.), keep it.
-     - The resulting name forms the branch name, e.g. `feat-123-social-login`.
+   - **Derive branch name:**
+      - **Check PRP/Spec for "Proposed Branch" first.** If present, use it.
+      - Otherwise, derive from the folder name containing the `prp.md`, e.g. `456_login-fails`.
+      - Normalize to lowercase and replace spaces/underscores with dashes.
+      - Ensure it follows the `<type>/#<issueNumber>-<alias>` format if possible.
    - **Create or switch to branch:**
      - If the branch does not exist: create it and switch to it (e.g., `git checkout -b feat-123-social-login`).
      - If the branch exists: switch to it (e.g., `git checkout feat-123-social-login`).
@@ -29,12 +30,13 @@ Implement a feature using the PRP file.
        - Ask the user to resolve it, or
        - Continue on the current branch if appropriate for the project.
    - **Checkpoint strategy:**
-     - Plan to create **small, meaningful commits** during execution:
-       - After completing each major task from the PRP \"list of tasks\" section.
-       - After passing important validation gates (e.g., all tests passing).
-     - For each checkpoint (only if there are changes):
-       - Stage changes: `git add -A`
-       - Commit with a clear message, e.g. `git commit -m \"PRP FEAT-123: implement task 1 - create models\"`.
+      - Plan to create **small, meaningful commits** during execution:
+        - After completing each major task from the PRP \"list of tasks\" section.
+        - After passing important validation gates (e.g., all tests passing).
+      - For each checkpoint (only if there are changes):
+        - Stage changes: `git add -A`
+        - Commit with a semantic message: `<type>: <summary>` (e.g. `feat: implement task 1 - create models`).
+        - Follow the subject guidelines in `PRPs-Framework/_notes/git-branch-naming-conventions.md`.
      - If Git is not available or repository is not detected:
        - Skip branch creation and commits, and continue with the rest of the execution steps.
 
