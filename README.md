@@ -6,7 +6,7 @@ This framework is designed to maximize the efficiency of collaboration between *
 
 ---
 
-## � Key Feature: Multi-IDE Switcher
+## 🔑 Key Feature: Multi-IDE Switcher
 The PRPs-Framework is **IDE-Agnostic**. You can switch the entire codebase structure and internal links to support your favorite AI IDE using the `active-ide.py` script at the root.
 
 | AI IDE / Agent | Root Folder | Workflow Folder | Rules File |
@@ -43,7 +43,7 @@ git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/ap
 git config --global credential.helper "cache --timeout=900" 2>/dev/null; git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/application-etc/rules-development.git /tmp/prp-setup 2>/dev/null; git -C /tmp/prp-setup sparse-checkout set .cursor/scripts; bash /tmp/prp-setup/.cursor/scripts/update-prp.sh --apply; rm -rf /tmp/prp-setup
 ```
 
-### � 2. Project Structuring (Recommended)
+### 📂 2. Project Structuring (Recommended)
 
 #### **Standard Multi-Module Isolation**
 Focus on isolating context to prevent AI confusion. Place Rules at the root but keep task data specific to each module:
@@ -59,7 +59,7 @@ your-project/
 
 ---
 
-## � Core Workflow (JSON-Driven)
+## 🔄 Core Workflow (JSON-Driven)
 
 We work in cycles using JSON as the "Source of Truth" for maximum precision:
 
@@ -72,7 +72,7 @@ We work in cycles using JSON as the "Source of Truth" for maximum precision:
 
 ---
 
-## �️ Dashboard & Monitoring
+## 📊 Dashboard & Monitoring
 View overall task status via the **PRPs Dashboard** (Kanban Board):
 1. **Via Browser:** Open `[active-ide-root]/PRPs/html/dashboard.html`
 2. **Via Extension:** Install the `.vsix` from `[active-ide-root]/PRPs/extension/`
