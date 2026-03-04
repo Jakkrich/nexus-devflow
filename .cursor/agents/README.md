@@ -9,7 +9,7 @@ In your AI Chat (Cursor, Windsurf, Antigravity), you can invoke these Agents usi
 ```
 *Example: `/11-Agent discuss-spec .auto-claude/specs/007/spec.md`*
 
-> 💡 **Tip**: These personas are stored in the `agents/` folder of your active IDE directory (e.g., `.cursor/agents/`, `.agent/agents/`, or `.windsurf/agents/`). Use `active-ide.py` to switch between them.
+> 💡 **Tip**: These personas are stored in the `agents/` folder of your active IDE directory (e.g., `.cursor/agents/`, `.cursor/agents/`, or `.cursor/agents/`). Use `active-ide.py` to switch between them.
 
 ---
 

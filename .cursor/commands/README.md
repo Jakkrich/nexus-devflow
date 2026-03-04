@@ -111,8 +111,8 @@ This framework supports multiple AI IDEs. You can switch the folder structure an
 | IDE | Root Folder | Command Folder | Rule File |
 | :--- | :--- | :--- | :--- |
 | **Cursor** | `.cursor/` | `commands/` | `.cursorrules` |
-| **Windsurf** | `.windsurf/` | `workflows/` | `.windsurfrules` |
-| **Antigravity** | `.agent/` | `workflows/` | `.agentrules` |
+| **Windsurf** | `.cursor/` | `workflows/` | `.cursorrules` |
+| **Antigravity** | `.cursor/` | `workflows/` | `.cursorrules` |
 
 **How to switch:**
 - **Interactive:** `python active-ide.py`

@@ -35,8 +35,8 @@ my-skill/
 The location of your skills folder changes based on the environment you are using. Use the **`active-ide.py`** script at the project root to switch between them:
 
 - **Cursor**: `.cursor/skills/`
-- **Antigravity**: `.agent/skills/`
-- **Windsurf**: `.windsurf/skills/`
+- **Antigravity**: `.cursor/skills/`
+- **Windsurf**: `.cursor/skills/`
 
 ---
 
@@ -47,7 +47,7 @@ This is an instruction-only skill; you only need to create the `SKILL.md` file.
 ### Step 1: Create the directory
 ```bash
 # Path relative to your active IDE root
-mkdir -p .agent/skills/code-review
+mkdir -p .cursor/skills/code-review
 ```
 
 ### Step 2: Create SKILL.md

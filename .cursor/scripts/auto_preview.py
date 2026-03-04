@@ -5,9 +5,9 @@ Auto Preview - Antigravity Kit
 Manages (start/stop/status) the local development server for previewing the application.
 
 Usage:
-    python .agent/scripts/auto_preview.py start [port]
-    python .agent/scripts/auto_preview.py stop
-    python .agent/scripts/auto_preview.py status
+    python .cursor/scripts/auto_preview.py start [port]
+    python .cursor/scripts/auto_preview.py stop
+    python .cursor/scripts/auto_preview.py status
 """
 
 import os

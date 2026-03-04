@@ -56,17 +56,17 @@ def print_error(text: str):
 
 # Define priority-ordered checks
 CORE_CHECKS = [
-    ("Security Scan", ".agent/skills/vulnerability-scanner/scripts/security_scan.py", True),
-    ("Lint Check", ".agent/skills/lint-and-validate/scripts/lint_runner.py", True),
-    ("Schema Validation", ".agent/skills/database-design/scripts/schema_validator.py", False),
-    ("Test Runner", ".agent/skills/testing-patterns/scripts/test_runner.py", False),
-    ("UX Audit", ".agent/skills/frontend-design/scripts/ux_audit.py", False),
-    ("SEO Check", ".agent/skills/seo-fundamentals/scripts/seo_checker.py", False),
+    ("Security Scan", ".cursor/skills/vulnerability-scanner/scripts/security_scan.py", True),
+    ("Lint Check", ".cursor/skills/lint-and-validate/scripts/lint_runner.py", True),
+    ("Schema Validation", ".cursor/skills/database-design/scripts/schema_validator.py", False),
+    ("Test Runner", ".cursor/skills/testing-patterns/scripts/test_runner.py", False),
+    ("UX Audit", ".cursor/skills/frontend-design/scripts/ux_audit.py", False),
+    ("SEO Check", ".cursor/skills/seo-fundamentals/scripts/seo_checker.py", False),
 ]
 
 PERFORMANCE_CHECKS = [
-    ("Lighthouse Audit", ".agent/skills/performance-profiling/scripts/lighthouse_audit.py", True),
-    ("Playwright E2E", ".agent/skills/webapp-testing/scripts/playwright_runner.py", False),
+    ("Lighthouse Audit", ".cursor/skills/performance-profiling/scripts/lighthouse_audit.py", True),
+    ("Playwright E2E", ".cursor/skills/webapp-testing/scripts/playwright_runner.py", False),
 ]
 
 def check_script_exists(script_path: Path) -> bool:

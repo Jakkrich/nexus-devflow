@@ -10,7 +10,7 @@
 ### 1. AGENT ROUTING CHECKLIST (MANDATORY BEFORE EVERY CODE/DESIGN RESPONSE)
 Before ANY code or design work, you MUST complete this mental checklist:
 - Identify the correct agent for the domain.
-- READ the agent's `.md` file (or recall its rules) from `agents/` folder.
+- READ the agent's `.md` file (or recall its rules) from `./.cursor/agents/` folder.
 - **You MUST announce** `🤖 Applying knowledge of @[agent]...` at the start of your response.
 - Load required skills from the agent's frontmatter.
 *Failure to announce the agent = PROTOCOL VIOLATION.*

@@ -35,7 +35,7 @@ IDEs = {
     }
 }
 
-EXTENSIONS = [".md", ".ps1", ".sh", ".json", ".txt"]
+EXTENSIONS = [".md", ".ps1", ".sh", ".json", ".txt", ".py"]
 
 def detect_current_ide():
     for key, config in IDEs.items():
@@ -43,54 +43,59 @@ def detect_current_ide():
             return key
     return None
 
-def get_replacements(source_key, target_key):
-    s = IDEs[source_key]
+def get_all_replacements(target_key):
+    """Generate a dictionary of replacements from all other IDEs to the target IDE."""
     t = IDEs[target_key]
+    replacements = {}
     
-    replacements = {
-        f"{s['root']}/{s['sub_dirs']['workflows']}/": f"{t['root']}/{t['sub_dirs']['workflows']}/",
-        f"{s['root']}/{s['sub_dirs']['rules']}/": f"{t['root']}/{t['sub_dirs']['rules']}/",
-        f"{s['root']}/": f"{t['root']}/",
-        s["rule_file"]: t["rule_file"],
-        s["root"].replace("/", "\\"): t["root"].replace("/", "\\")
-    }
+    for key, s in IDEs.items():
+        if key == target_key: continue
+        
+        # Add various path patterns to replace
+        replacements.update({
+            f"{s['root']}/{s['sub_dirs']['workflows']}/": f"{t['root']}/{t['sub_dirs']['workflows']}/",
+            f"{s['root']}/{s['sub_dirs']['rules']}/": f"{t['root']}/{t['sub_dirs']['rules']}/",
+            f"{s['root']}/": f"{t['root']}/",
+            s["rule_file"]: t["rule_file"],
+            # Support Windows backslashes for scripts
+            s["root"].replace("/", "\\") + "\\": t["root"].replace("/", "\\") + "\\"
+        })
     return replacements
 
 def switch_ide(target_key):
     source_key = detect_current_ide()
     target = IDEs[target_key]
     
-    if source_key == target_key:
-        print(f"✨ Already in {target['name']} mode.")
-        return
-
-    print(f"\n🚀 Switching structure to {target['name']}...")
+    # 1. Internal content replacements (Always run this for sync/healing)
+    print(f"\n📝 Syncing internal links to {target['name']}...")
+    replacements = get_all_replacements(target_key)
+    root = Path(".")
+    updated_count = 0
     
-    # If no current IDE detected, we assume default source is Cursor for mappings 
-    # but practically we would just try to rename whatever is there.
-    # However, to be safe, if source is Unknown, we skip link replacement.
-    if source_key:
-        replacements = get_replacements(source_key, target_key)
+    for ext in EXTENSIONS:
+        for file_path in root.rglob(f"*{ext}"):
+            if ".git" in str(file_path) or "active-ide.py" in str(file_path): continue
+            try:
+                content = file_path.read_text(encoding="utf-8")
+                new_content = content
+                for old, new in replacements.items():
+                    new_content = new_content.replace(old, new)
+                
+                if new_content != content:
+                    file_path.write_text(new_content, encoding="utf-8")
+                    print(f"   ✅ Updated: {file_path}")
+                    updated_count += 1
+            except Exception: pass
+    
+    if updated_count == 0:
+        print("   ✨ All links are already up to date.")
+
+    # 2. Structural changes (Only if switching)
+    if source_key and source_key != target_key:
+        print(f"\n🚀 Switching structure from {IDEs[source_key]['name']} to {target['name']}...")
         source = IDEs[source_key]
         
-        # 1. Internal content replacements
-        print("📝 Updating internal links in files...")
-        root = Path(".")
-        for ext in EXTENSIONS:
-            for file_path in root.rglob(f"*{ext}"):
-                if ".git" in str(file_path) or "active-ide.py" in str(file_path): continue
-                try:
-                    content = file_path.read_text(encoding="utf-8")
-                    new_content = content
-                    for old, new in replacements.items():
-                        new_content = new_content.replace(old, new)
-                    
-                    if new_content != content:
-                        file_path.write_text(new_content, encoding="utf-8")
-                        print(f"   ✅ Updated: {file_path}")
-                except Exception: pass
-
-        # 2. Sub-folders rename
+        # Sub-folders rename
         s_workflow = Path(source["root"]) / source["sub_dirs"]["workflows"]
         t_workflow = Path(source["root"]) / target["sub_dirs"]["workflows"]
         if s_workflow.exists() and source["sub_dirs"]["workflows"] != target["sub_dirs"]["workflows"]:
@@ -105,7 +110,7 @@ def switch_ide(target_key):
             s_rules.rename(t_rules)
             print(f"   📂 Sub-folder: {source['sub_dirs']['rules']} -> {target['sub_dirs']['rules']}")
 
-        # 3. Root files rename
+        # Root files rename
         s_file = Path(source["rule_file"])
         t_file = Path(target["rule_file"])
         if s_file.exists():
@@ -113,15 +118,19 @@ def switch_ide(target_key):
             s_file.rename(t_file)
             print(f"   📄 Rule file: {source['rule_file']} -> {target['rule_file']}")
 
-        # 4. Root folder rename
+        # Root folder rename
         s_root = Path(source["root"])
         t_root = Path(target["root"])
         if s_root.exists():
             if t_root.exists(): shutil.rmtree(t_root)
             s_root.rename(t_root)
             print(f"   📁 Root folder: {source['root']} -> {target['root']}")
+    elif source_key == target_key:
+        print(f"\n✨ Structure is already in {target['name']} mode.")
+    else:
+        print(f"\n⚠️  No existing IDE structure detected. Links synced to {target['name']} anyway.")
 
-    print(f"\n✨ Done! Switched to {target['name']}.")
+    print(f"\n✅ Done! Project is fully synchronized to {target['name']}.")
 
 def main():
     parser = argparse.ArgumentParser(description="PRPs-Framework IDE Switcher")

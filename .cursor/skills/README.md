@@ -40,8 +40,8 @@ The AI will automatically retrieve instructions from the `SKILL.md` files within
 ## 🔄 Multi-IDE Support
 Skills are mobile! Use the **`active-ide.py`** script at the project root to switch the framework between:
 - **Cursor** (`.cursor/skills/`)
-- **Antigravity/Agent** (`.agent/skills/`)
-- **Windsurf** (`.windsurf/skills/`)
+- **Antigravity/Agent** (`.cursor/skills/`)
+- **Windsurf** (`.cursor/skills/`)
 
 ## 🛡️ Pure Agentic Standards
 All Skills are architected for **Zero-Script** operations:

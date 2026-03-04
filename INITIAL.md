@@ -37,9 +37,9 @@ Use these commands in Chat to control the Workflow:
 ### Project Context (Auto-Synced)
 - **Detected Stack**: Generic / PRPs-Framework
 - **Active Project**: `./` (Root)
-- **Project Path**: `D:/wsl/prp-auto-dev/`
+- **Project Path**: `e:/Projects/PRPs-Framework/`
 - **Mode**: Pure Agentic (Zero-Script)
-- **Standard**: Follows IDE-specific rules file (Cursor: `.cursorrules`, Agent: `.agentrules`, Windsurf: `.windsurfrules`)
+- **Standard**: Follows IDE-specific rules file (Cursor: `.cursorrules`, Agent: `.cursorrules`, Windsurf: `.cursorrules`)
 - **IDE Switcher**: Support for multiple AI IDEs via `active-ide.py`
 - **Last Sync**: 2026-03-04 22:45 (Local Time)
 

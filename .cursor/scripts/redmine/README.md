@@ -36,8 +36,8 @@ Create a `.env` file in this directory based on `.env.example`:
 ## 🔄 Multi-IDE Environment Notice
 These scripts are called using relative paths from the active IDE root. 
 - If using **Cursor**: `.cursor/scripts/redmine/`
-- If using **Antigravity**: `.agent/scripts/redmine/`
-- If using **Windsurf**: `.windsurf/scripts/redmine/`
+- If using **Antigravity**: `.cursor/scripts/redmine/`
+- If using **Windsurf**: `.cursor/scripts/redmine/`
 
 *The **`active-ide.py`** at the project root will automatically update internal framework references to these paths.*
 

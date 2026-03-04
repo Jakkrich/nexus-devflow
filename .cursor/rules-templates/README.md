@@ -14,7 +14,7 @@ Contains "Standardized Iron Rules" for controlling code quality and AI behavior 
 ### 1. Via `/00-Init` Workflow (Recommended)
 When you run the `/00-Init` workflow, the AI will:
 1. **Auto-Detect**: Inspect the codebase to determine the technology stack.
-2. **Auto-Apply**: Copy rules from the matching template to create or update the rules file at the root of the project (e.g., `.cursorrules`, `.agentrules`, or `.windsurfrules`).
+2. **Auto-Apply**: Copy rules from the matching template to create or update the rules file at the root of the project (e.g., `.cursorrules`, `.cursorrules`, or `.cursorrules`).
 
 ### 2. Manual Use
 You can copy the contents of your desired template file and paste them into your active rules file to activate those rules in the AI Chat immediately.
@@ -27,8 +27,8 @@ Depending on your active IDE, this folder may have a different name. Use `active
 | IDE | Folder Location | Rules File Created |
 | :--- | :--- | :--- |
 | **Cursor** | `.cursor/rules-templates/` | `.cursorrules` |
-| **Antigravity** | `.agent/rules-templates/` | `.agentrules` |
-| **Windsurf** | `.windsurf/rules/` | `.windsurfrules` |
+| **Antigravity** | `.cursor/rules-templates/` | `.cursorrules` |
+| **Windsurf** | `.cursor/rules-templates/` | `.cursorrules` |
 
 ---
 

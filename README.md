@@ -12,8 +12,8 @@ The PRPs-Framework is **IDE-Agnostic**. You can switch the entire codebase struc
 | AI IDE / Agent | Root Folder | Workflow Folder | Rules File |
 | :--- | :--- | :--- | :--- |
 | **Cursor** | `.cursor/` | `commands/` | `.cursorrules` |
-| **Windsurf** | `.windsurf/` | `workflows/` | `.windsurfrules` |
-| **Antigravity** | `.agent/` | `workflows/` | `.agentrules` |
+| **Windsurf** | `.cursor/` | `workflows/` | `.cursorrules` |
+| **Antigravity** | `.cursor/` | `workflows/` | `.cursorrules` |
 
 **How to switch:**
 ```powershell
@@ -49,7 +49,7 @@ git config --global credential.helper "cache --timeout=900" 2>/dev/null; git clo
 Focus on isolating context to prevent AI confusion. Place Rules at the root but keep task data specific to each module:
 ```text
 your-project/
-├── .cursor/ (or .agent/.windsurf)  <-- Rules & Prompts (One place)
+├── .cursor/ (or .cursor/.windsurf)  <-- Rules & Prompts (One place)
 ├── active-ide.py                   <-- Switcher Script
 ├── module1/
 │   └── .auto-claude/               <-- Specs specific to module1
