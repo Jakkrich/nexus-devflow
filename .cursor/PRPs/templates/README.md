@@ -1,8 +1,10 @@
-# 📋 PRPs JSON Templates & Standards
+# 📋 PRPs Framework Templates & Standards
 
-This folder contains standard templates for JSON files used to communicate with the **Auto-Claude Dashboard**, ensuring accurate display on the Kanban and Timeline.
+This folder contains the **Source of Truth** for all JSON and Markdown templates used by the PRPs-Framework. These templates ensure consistent communication with the **PRPs Dashboard** and provide a standardized structure for AI Agents.
 
 > 📖 **Standard Reference**: For full details on all Attributes and their Allowed Values, see [SCHEMA.md](./SCHEMA.md)
+
+> 💡 **Framework Note**: These templates are the core DNA of the framework. They are located within your active IDE root (e.g., `.cursor/PRPs/templates/`) but manage data in the `.auto-claude/` project folder.
 
 ## 🔄 State Mapping Table
 
@@ -21,9 +23,11 @@ This folder contains standard templates for JSON files used to communicate with 
 | :--- | :--- | :--- |
 | `implementation_plan.json` | Kanban state, phases, and subtasks. | `/01-Task` (init), `/02-Plan` (fill) |
 | `task_metadata.json` | Badges, categorization, and AI settings. | `/01-Task` |
-| `requirements.json` | Deep requirement details (Description fallback). | `/01-Task` |
-| `context.json` | Task-specific codebase intelligence (RAG context). | `/02-Plan` (Phase 2: Explore) |
+| `spec.md` | Human-readable requirement specification. | `/01-Task` |
+| `requirements.json` | Deep requirement details (System-readable). | `/01-Task` |
+| `context.json` | Task-specific codebase intelligence (RAG). | `/02-Plan` |
 | `task_logs.json` | Real-time timeline for the Dashboard "Logs" tab. | `/02-Plan`, `/03-Code`, `/04-Verify` |
+| `qa_report.md` | Verification and review summary. | `/04-Verify` |
 
 ## 🛡️ Critical Rules for AI
 1. **Source of Truth**: Always check `*.template.json` in this folder.

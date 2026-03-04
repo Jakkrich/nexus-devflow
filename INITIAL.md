@@ -22,7 +22,7 @@ Caution: Before making major structural changes, you should keep a snapshot with
 
 ### 🛠️ Core Commands (Zero-Script Mode)
 Use these commands in Chat to control the Workflow:
-- `/00-Init` : (Init) Analyze the project and set up `.cursorrules` from a Template
+- `/00-Init` : (Init) Analyze the project and set up rules from a Template (Auto-detects IDE)
 - `/01-Task` : (New Task) Create a task folder and write an initial Spec
 - `/02-Plan` : (Plan) In-depth code analysis and step-by-step planning
 - `/03-Code` : (Implement) Write code and continuously run the Validation Loop
@@ -39,8 +39,9 @@ Use these commands in Chat to control the Workflow:
 - **Active Project**: `./` (Root)
 - **Project Path**: `D:/wsl/prp-auto-dev/`
 - **Mode**: Pure Agentic (Zero-Script)
-- **Standard**: Follows `.cursorrules` (Multi-project aware)
-- **Last Sync**: 2026-03-04 15:13 (Local Time)
+- **Standard**: Follows IDE-specific rules file (Cursor: `.cursorrules`, Agent: `.agentrules`, Windsurf: `.windsurfrules`)
+- **IDE Switcher**: Support for multiple AI IDEs via `active-ide.py`
+- **Last Sync**: 2026-03-04 22:45 (Local Time)
 
 ### Active Specs & Tasks
 - *(Empty)*

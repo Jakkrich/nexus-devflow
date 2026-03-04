@@ -1,13 +1,15 @@
-# 🤖 Cursor Specialist Agents
+# 🤖 PRPs Specialist Agents (Personas)
 
-List of names and roles of the specialized AI Agents (Personas) used in this project to define AI behaviors for accurate and objective-driven performance.
+List of names and roles of the specialized AI Agents (Personas) used in this framework to define AI behaviors for accurate and objective-driven performance across multiple IDEs.
 
 ## 📋 How to use
-You can invoke these Agents using the command:
+In your AI Chat (Cursor, Windsurf, Antigravity), you can invoke these Agents using the command:
 ```text
 /11-Agent {AGENT_NAME} {TARGET_FILE/DIR}
 ```
 *Example: `/11-Agent discuss-spec .auto-claude/specs/007/spec.md`*
+
+> 💡 **Tip**: These personas are stored in the `agents/` folder of your active IDE directory (e.g., `.cursor/agents/`, `.agent/agents/`, or `.windsurf/agents/`). Use `active-ide.py` to switch between them.
 
 ---
 
@@ -92,4 +94,4 @@ You can invoke these Agents using the command:
 | **`prp-core-ralph-canceller`** | Canceller | [Legacy] Used to cancel the Ralph Loop. |
 
 ---
-*Note: All Agents are designed to be **Pure Agentic**, using Cursor's standard tools for reading and modifying files.*
+*Note: All Agents are designed to be **Pure Agentic**, using standard tools (Read/Write/Search) supported by modern AI IDEs and the PRPs-Framework.*
