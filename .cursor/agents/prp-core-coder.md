@@ -167,6 +167,10 @@ Task 2: CREATE src/features/x/service.ts ✅
 Task 3: UPDATE src/routes/index.ts ✅
 ```
 
+**JSON Update Required:**
+- For each completed subtask, update `status` to `completed` in `.auto-claude/specs/{task-id}/implementation_plan.json`.
+- Add a log entry to `.auto-claude/specs/{task-id}/task_logs.json` for each major step.
+
 **Deviation Handling:**
 If you must deviate from the plan:
 
@@ -277,12 +281,17 @@ Run any edge case tests specified in the plan.
 ### 5.1 Create Report Directory
 
 ```bash
-mkdir -p .claude/PRPs/reports
+# Reports should be placed in the task specification folder
+mkdir -p .auto-claude/specs/{task-id}
 ```
 
 ### 5.2 Generate Report
 
-**Path**: `.claude/PRPs/reports/{plan-name}-report.md`
+**Path**: `.auto-claude/specs/{task-id}/qa_report.md`
+
+**Dashboard Update Required**:
+- Update `status` to `human_review` in `.auto-claude/specs/{task-id}/implementation_plan.json`.
+- Log the completion of the verification phase in `.auto-claude/specs/{task-id}/task_logs.json`.
 
 ```markdown
 # Implementation Report
@@ -390,13 +399,13 @@ Compare the original investigation's assessment with what actually happened:
 ### 5.4 Archive Plan
 
 ```bash
-mkdir -p .claude/PRPs/plans/completed
-mv $ARGUMENTS .claude/PRPs/plans/completed/
+mkdir -p .auto-claude/specs/completed
+mv $ARGUMENTS .auto-claude/specs/completed/
 ```
 
 **PHASE_5_CHECKPOINT:**
 
-- [ ] Report created at `.claude/PRPs/reports/`
+- [ ] Report created as `qa_report.md` in the task folder
 - [ ] PRD updated (if applicable) - phase marked complete
 - [ ] Plan moved to completed folder
 
@@ -434,8 +443,8 @@ mv $ARGUMENTS .claude/PRPs/plans/completed/
 
 ### Artifacts
 
-- Report: `.claude/PRPs/reports/{name}-report.md`
-- Plan archived to: `.claude/PRPs/plans/completed/`
+- Report: `.auto-claude/specs/{task-id}/qa_report.md`
+- Plan archived to: `.auto-claude/specs/completed/`
 
 {If from PRD:}
 ### PRD Progress
@@ -508,5 +517,5 @@ To continue: `/prp-plan {prd-path}`
 - **LINT_PASS**: Lint command exits 0 (warnings OK)
 - **TESTS_PASS**: Test command all green
 - **BUILD_PASS**: Build command succeeds
-- **REPORT_CREATED**: Implementation report exists
-- **PLAN_ARCHIVED**: Original plan moved to completed
+- **REPORT_CREATED**: `qa_report.md` exists in task folder
+- **PLAN_ARCHIVED**: Original plan moved to `.auto-claude/specs/completed/`

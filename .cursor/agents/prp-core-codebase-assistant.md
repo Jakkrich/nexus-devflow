@@ -184,7 +184,7 @@ basename $(git rev-parse --show-toplevel)
 ### 5.2 Create Research Directory
 
 ```bash
-mkdir -p .claude/PRPs/research
+mkdir -p .auto-claude/research
 ```
 
 ### 5.3 Determine Filename
@@ -193,11 +193,11 @@ mkdir -p .claude/PRPs/research
 
 **If new research**:
 
-**Path**: `.claude/PRPs/research/{YYYY-MM-DD}-{kebab-case-topic}.md`
+**Path**: `.auto-claude/research/research-{topic-slug}.md`
 
 Examples:
-- `2025-01-08-authentication-flow.md`
-- `2025-01-15-database-migration-patterns.md`
+- `research-authentication-flow.md`
+- `research-database-migration-patterns.md`
 
 ### 5.4 Write Research Document
 
@@ -279,7 +279,7 @@ If `--follow-up` flag and existing research file:
 ## Research Complete
 
 **Question**: {original question}
-**Document**: `.claude/PRPs/research/{filename}.md`
+**Document**: `.auto-claude/research/{filename}.md`
 
 ### Summary
 {2-3 sentence answer to the question}
@@ -325,6 +325,6 @@ To include external docs: `/prp-codebase-question --web {topic}`
 - **QUESTION_ANSWERED**: User's question addressed with concrete evidence
 - **AGENTS_USED**: Specialized agents spawned for each research area
 - **EVIDENCE_COMPLETE**: Every finding has `file:line` references
-- **DOCUMENT_CREATED**: Research file saved at `.claude/PRPs/research/`
+- **DOCUMENT_CREATED**: Research file saved at `.auto-claude/research/`
 - **NO_OPINIONS**: Document describes what exists, not what should change
 - **PERMALINKS_ADDED**: GitHub links included when possible

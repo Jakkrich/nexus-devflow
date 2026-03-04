@@ -8,10 +8,10 @@ Template optimized for AI agents to implement features with sufficient context a
 ## Change History
 - **Created:** YYYY-MM-DD
 - **Type:** BUG / FEATURE / CHANGE / REFACTOR / OTHER
-- **Source Spec:** [PRPs-Framework/issues/ISSUE_xxx_*.md]
+- **Source Spec:** [.auto-claude/specs/ISSUE_xxx_*.md]
 - **Related PRPs:**
-  - [PRPs-Framework/PRPs/PRPs_FEAT-xxx_*.md] - [Why related]
-  - [PRPs-Framework/PRPs/PRPs_BUG-yyy_*.md] - [Why related]
+  - [.auto-claude/specs/PRPs_FEAT-xxx_*.md] - [Why related]
+  - [.auto-claude/specs/PRPs_BUG-yyy_*.md] - [Why related]
 - **Updates:**
   - YYYY-MM-DD: [What changed in this PRP or its implementation]
 
@@ -135,9 +135,9 @@ Agent will **fetch external URLs** and **read PDFs** when cited here. See `PRPs-
 ```
 
 ## Related PRPs
-- [PRPs-Framework/PRPs/PRPs_FEAT-xxx_some-feature_prp.md] - [Shared behavior or dependencies]
-- [PRPs-Framework/PRPs/PRPs_BUG-yyy_some-bug_prp.md] - [Historical bug or regression]
-- [PRPs-Framework/PRPs/PRPs_CHG-zzz_some-change_prp.md] - [Refactors that affect this area]
+- [.auto-claude/specs/PRPs_FEAT-xxx_some-feature_prp.md] - [Shared behavior or dependencies]
+- [.auto-claude/specs/PRPs_BUG-yyy_some-bug_prp.md] - [Historical bug or regression]
+- [.auto-claude/specs/PRPs_CHG-zzz_some-change_prp.md] - [Refactors that affect this area]
 
 ## Implementation Blueprint
 

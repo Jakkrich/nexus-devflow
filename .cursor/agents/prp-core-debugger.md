@@ -179,12 +179,12 @@ For deep mode, document why other hypotheses were rejected:
 ### 5.1 Create Report Directory
 
 ```bash
-mkdir -p .claude/PRPs/debug
+mkdir -p .auto-claude/debug
 ```
 
 ### 5.2 Generate Report
 
-**Path**: `.claude/PRPs/debug/rca-{issue-slug}.md`
+**Path**: `.auto-claude/debug/rca-{issue-slug}.md`
 
 ```markdown
 # Root Cause Analysis
@@ -260,7 +260,7 @@ WHY: {First level cause}
 **Root Cause**: {cause}
 **Confidence**: {High/Medium/Low}
 
-**Report**: `.claude/PRPs/debug/rca-{issue-slug}.md`
+**Report**: `.auto-claude/debug/rca-{issue-slug}.md`
 
 ### Summary
 
