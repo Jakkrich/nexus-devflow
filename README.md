@@ -35,7 +35,7 @@ If you prefer not to use the automated script, manually copy these folders and f
 > | **Cursor** | `.cursor/` | `.cursorrules` |
 > | **Windsurf** | `.windsurf/` | `.windsurfrules` |
 > | **Trae** | `.trae/` | `.traerules` |
-> | **Antigravity / Generic** | `.agent/` | `.agentrules` |
+> | **Antigravity / Generic** | `.cursor/` | `.cursorrules` |
 > | **PearAI** | `.pearai/` | `.pearairules` |
 > | **VS Code (Cline/Roo)** | *(place file at Root)* | `.clinerules` / `.roo-code-rules` |
 
@@ -145,6 +145,12 @@ You can access the Dashboard page to view the centralized task status in 2 ways:
 ## 🔍 Further Information
 - **Commands Guide (Commands Guide):** [.cursor/commands/README.md](.cursor/commands/README.md)
 - **Context Engineering Techniques:** [PRPs-Framework/README.md](./PRPs-Framework/README.md) (if available)
+
+## 🙏 Credits & Inspiration
+This project is inspired by and draws concepts from the following projects:
+- [PRPs-agentic-eng](https://github.com/Wirasm/PRPs-agentic-eng)
+- [Auto-Claude](https://github.com/AndyMik90/Auto-Claude)
+- [antigravity-kit](https://github.com/vudovn/antigravity-kit)
 
 ---
 *Developed by Antigravity Team for Agent-Ready Repositories*

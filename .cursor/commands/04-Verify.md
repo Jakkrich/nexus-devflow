@@ -20,7 +20,7 @@ You are an orchestrator. Your goal is to call the specialized QA agent to verify
 - Instruct the agent to:
   - Perform a deep code review (Correctness, Patterns, Security).
   - Run the validation suite (Type-check, Lint, Test, Build).
-  - **Run automated checklist**: You MUST run `python <ROOT_AI_FOLDER>/scripts/checklist.py .` (e.g., `.cursor/scripts` or `.agent/scripts` based on environment) to perform quick checks (Security, Lint, Schema, UX, SEO) before summarizing the QA report.
+  - **Run automated checklist**: You MUST run `python <ROOT_AI_FOLDER>/scripts/checklist.py .` (e.g., `.cursor/scripts` or `.cursor/scripts` based on environment) to perform quick checks (Security, Lint, Schema, UX, SEO) before summarizing the QA report.
   - Categorize any issues found.
   - **Identify Manual Checks**: Specify exactly what the human needs to check manually (e.g., UI feel, specific business logic edge cases that can't be auto-tested).
   - Generate the `qa_report.md` (Must strictly follow the template in [../PRPs/templates/qa_report.template.md](../PRPs/templates/qa_report.template.md)).

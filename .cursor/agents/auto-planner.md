@@ -83,7 +83,7 @@ You must use the `write_to_file` tool to create the `.auto-claude/specs/{ID}/imp
 }
 ```
 
-> ⚠️ **Always Read the Template First**: `.agent/PRPs/templates/implementation_plan.template.json`
+> ⚠️ **Always Read the Template First**: `.cursor/PRPs/templates/implementation_plan.template.json`
 
 ### ❌ Anti-Pattern (DO NOT DO THIS — It will cause `[object Object]` in the Dashboard Plan tab)
 ```json
@@ -103,7 +103,7 @@ You must use the `write_to_file` tool to create the `.auto-claude/specs/{ID}/imp
 2. **Small Scope**: Each Subtask should modify no more than 1-3 files.
 3. **Explicit Verification**: Every Subtask must have clear, runnable verification methods.
 4. **Dependency Order**: Phase sequence must align with usage necessity (e.g., API must be done before UI).
-5. **Follow Template**: Always refer to `.agent/PRPs/templates/implementation_plan.template.json` before creating the file.
+5. **Follow Template**: Always refer to `.cursor/PRPs/templates/implementation_plan.template.json` before creating the file.
 6. **String Fields**: `description` and items inside `files_to_modify`/`files_to_create` must ONLY be **strings** — NEVER use objects (it will display as `[object Object]` in the Dashboard).
 
 **Start your task by summarizing the Patterns found during code exploration, and present an initial outline of the working Phases for the User to review.**

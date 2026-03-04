@@ -38,7 +38,7 @@ Recommend the required QA depth based on the risk level:
 ## 💾 Output Export
 You must use the `write_to_file` tool to create the `.auto-claude/specs/{ID}/complexity_assessment.json` file.
 
-> ⚠️ **Always Read the Template First**: `.agent/PRPs/templates/complexity_assessment.template.json`
+> ⚠️ **Always Read the Template First**: `.cursor/PRPs/templates/complexity_assessment.template.json`
 
 Correct structure (must perfectly match the template):
 
@@ -89,6 +89,6 @@ Correct structure (must perfectly match the template):
 2. **Flag Research**: If a new library is needed, `research_needed: true` must always be set.
 3. **Pure Logic**: Base analysis strictly on facts from Requirements, do not guess.
 4. **Tool Use**: You must write the actual JSON file directly into the Task {ID} folder.
-5. **Follow Template**: Look at `.agent/PRPs/templates/complexity_assessment.template.json` before generating the file — `complexity` MUST be a **string**, not an object.
+5. **Follow Template**: Look at `.cursor/PRPs/templates/complexity_assessment.template.json` before generating the file — `complexity` MUST be a **string**, not an object.
 
 **Start your analysis by summarizing your understanding of the Task and present your preliminary assessment to the User.**
