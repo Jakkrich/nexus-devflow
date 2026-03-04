@@ -1,0 +1,51 @@
+# PRPs-Framework Generic Rules
+
+## 🔄 Project Awareness & Context
+- **Always read `INITIAL.md`** to understand the application structure and current task status
+- **Follow the 4-Step Cycle** strictly: `/01-Task` -> `/02-Plan` -> `/03-Code` -> `/04-Verify`
+- **Use the `.auto-claude/` directory** for tracking JSON and Markdown metadata
+
+## 🤖 Agent Framework Protocols (Agent x PRPs)
+
+### 1. AGENT ROUTING CHECKLIST (MANDATORY BEFORE EVERY CODE/DESIGN RESPONSE)
+Before ANY code or design work, you MUST complete this mental checklist:
+- Identify the correct agent for the domain.
+- READ the agent's `.md` file (or recall its rules) from `agents/` folder.
+- **You MUST announce** `🤖 Applying knowledge of @[agent]...` at the start of your response.
+- Load required skills from the agent's frontmatter.
+*Failure to announce the agent = PROTOCOL VIOLATION.*
+
+### 2. GLOBAL SOCRATIC GATE (MANDATORY)
+Every user request for a new feature, build, or complex logic must pass through the Socratic Gate before ANY tool use or implementation.
+- **New Feature / Build**: Deep Discovery. ASK minimum 3 strategic questions (Trade-offs, Edge cases).
+- **Code Edit / Bug Fix**: Confirm understanding + ask impact questions.
+- **Vague / Simple**: Ask Purpose, Users, and Scope.
+- **Direct "Proceed"**: Even if the user says proceed, ask 2 "Edge Case" questions first.
+*Wait for the user to clear the Gate before invoking subagents or writing code.*
+
+### 3. Final Checklist Protocol
+Trigger: When the user says "final checks", "check it", or similar phrases, or during `/04-Verify`.
+- **Manual Audit**: Execute required quality checks and ensure templates are adhered to.
+*A task is NOT finished until checks pass.*
+
+## 🛡️ Phase Locking & Workflow Enforcement (MANDATORY)
+
+> ⚠️ **This strict rule applies to every Command — no exceptions**
+
+| Phase | Command | Allowed Action | Forbidden Action |
+|-------|---------|----------------|------------------|
+| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | ❌ Modify Source Code |
+| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | ❌ Modify Source Code |
+| **3. Execute** | `/03-Code` | ✅ Modify Source Code according to Plan | — |
+| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | ❌ Modify new Logic |
+
+### Mandatory Rules:
+- **CRITICAL**: While running `/01-Task` or `/02-Plan`, the AI MUST NOT modify the project's Source Code under any circumstances.
+- **GATE**: If the User provides details in `/01-Task` or `/02-Plan`, record them in `spec.md` or `plan.md` ONLY — do not use them to write code.
+- **MANDATORY STOP**: After `/01-Task` is complete, you must STOP and instruct the User to run `/02-Plan` next; after `/02-Plan` is complete, you must STOP and instruct the User to run `/03-Code` next.
+- **IDLE PROTECTION**: If the AI detects that it is about to modify code without an approved `implementation_plan.json`, it must HALT and inform the User immediately.
+
+## 📚 Documentation & Traceability
+- **Always update task JSON** metadata and logs to precisely track changes.
+- **Prepend Task ID** to all relevant contexts to ensure complete traceability.
+- **Write descriptive commit messages** using `/07-Commit`.

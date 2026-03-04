@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto-Claude · Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon"><i class="fa-solid fa-robot"></i></div>
+      auto-claude <span>/ dashboard</span>
+    </div>
+
+    <!-- Nav tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="switchView('kanban')" id="tab-kanban"><i
+          class="fa-solid fa-table-columns"></i> Kanban</button>
+      <button class="nav-tab" onclick="switchView('strategy')" id="tab-strategy"><i class="fa-solid fa-compass"></i>
+        Strategy</button>
+      <button class="nav-tab" onclick="switchView('timeline')" id="tab-timeline"><i class="fa-solid fa-timeline"></i>
+        Timeline</button>
+      <button class="nav-tab" onclick="switchView('stats')" id="tab-stats"><i class="fa-solid fa-chart-pie"></i>
+        Stats</button>
+      <button class="nav-tab" onclick="switchView('search')" id="tab-search"><i
+          class="fa-solid fa-magnifying-glass"></i> Search</button>
+    </nav>
+
+    <!-- Project Switcher -->
+    <div class="project-switcher" id="projectSwitcher" style="display:none">
+      <div class="proj-bar" id="projBar" onclick="toggleProjDropdown()">
+        <i class="fa-solid fa-folder-open proj-icon"></i>
+        <span class="proj-bar-name" id="projBarName">—</span>
+        <i class="fa-solid fa-chevron-down chev"></i>
+      </div>
+      <div class="proj-dropdown" id="projDropdown" style="display:none">
+        <div class="proj-list-header">Projects</div>
+        <div id="projList"></div>
+        <div class="proj-add-btn" onclick="browseFolder()">
+          <div class="proj-add-ico"><i class="fa-solid fa-plus"></i></div>
+          Add project…
+        </div>
+      </div>
+    </div>
+    <div class="proj-no-folder" id="projEmpty">
+      <i class="fa-solid fa-folder-open" style="color:var(--text3);font-size:11px"></i>
+      <span>No project — click Browse</span>
+    </div>
+
+    <button class="btn btn-secondary" onclick="browseFolder()"><i class="fa-solid fa-folder-open"></i> Browse</button>
+    <button class="btn btn-primary" id="btnRefresh" onclick="refreshData()" style="display:none"><i
+        class="fa-solid fa-rotate"></i> Refresh</button>
+    <button class="btn btn-ghost" onclick="loadDemoData()"><i class="fa-solid fa-flask"></i> Demo</button>
+
+    <div class="header-right">
+      <select class="refresh-select" id="refreshSelect" onchange="setAutoRefresh()">
+        <option value="0">No auto-refresh</option>
+        <option value="5">Every 5s</option>
+        <option value="10">Every 10s</option>
+        <option value="30">Every 30s</option>
+        <option value="60">Every 60s</option>
+      </select>
+      <div class="badge"><span class="live-dot"></span><span id="totalCount">0</span> tasks</div>
+      <div class="badge" id="lastRefreshedBadge" style="display:none"><i class="fa-solid fa-clock"
+          style="font-size:9px;color:var(--text3)"></i><span id="lastRefreshTime">—</span></div>
+    </div>
+  </header>
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading workspace…</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ── KANBAN VIEW ── -->
+    <div class="view active" id="view-kanban">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="kanbanSearch" placeholder="Filter cards…" oninput="applyFilters()">
+        </div>
+        <select class="filter-select" id="filterPriority" onchange="applyFilters()">
+          <option value="">All priorities</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <select class="filter-select" id="filterCategory" onchange="applyFilters()">
+          <option value="">All categories</option>
+          <option value="feat">feat</option>
+          <option value="fix">fix</option>
+          <option value="chore">chore</option>
+          <option value="refactor">refactor</option>
+        </select>
+        <select class="filter-select" id="filterProject" onchange="applyFilters()" style="display:none">
+          <option value="">All projects</option>
+        </select>
+        <div class="sort-btn" onclick="cycleSortMode()">
+          <i class="fa-solid fa-sort" id="sortIcon"></i>
+          <span id="sortLabel">Default</span>
+        </div>
+        <span class="result-count" id="resultCount"></span>
+      </div>
+      <!-- Stats row -->
+      <div class="stats-row" id="statsRow" style="display:none">
+        <div class="stat-card planning" onclick="toggleStatusFilter('planning')">
+          <div class="stat-label">Planning</div>
+          <div class="stat-num" id="cnt-planning">0</div>
+        </div>
+        <div class="stat-card queue" onclick="toggleStatusFilter('queue')">
+          <div class="stat-label">Queue</div>
+          <div class="stat-num" id="cnt-queue">0</div>
+        </div>
+        <div class="stat-card progress" onclick="toggleStatusFilter('in-progress')">
+          <div class="stat-label">In Progress</div>
+          <div class="stat-num" id="cnt-progress">0</div>
+        </div>
+        <div class="stat-card ai-review" onclick="toggleStatusFilter('ai-review')">
+          <div class="stat-label">AI Review</div>
+          <div class="stat-num" id="cnt-ai-review">0</div>
+        </div>
+        <div class="stat-card human-review" onclick="toggleStatusFilter('human-review')">
+          <div class="stat-label">Human Review</div>
+          <div class="stat-num" id="cnt-human-review">0</div>
+        </div>
+        <div class="stat-card done" onclick="toggleStatusFilter('done')">
+          <div class="stat-label">Done</div>
+          <div class="stat-num" id="cnt-done">0</div>
+        </div>
+      </div>
+      <!-- Board -->
+      <div id="boardWrapper">
+        <div class="no-data">
+          <i class="fa-solid fa-layer-group"></i>
+          <h3>No workspace loaded</h3>
+          <p>Click <strong>Browse</strong> to select a project folder containing <code>.auto-claude/specs</code>, or
+            click <strong>Demo</strong> to preview sample data.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TIMELINE VIEW ── -->
+    <div class="view" id="view-timeline">
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="tlSearch" placeholder="Filter specs…" oninput="renderTimeline()">
+        </div>
+        <select class="filter-select" id="tlRange" onchange="renderTimeline()">
+          <option value="30">Last 30 days</option>
+          <option value="60">Last 60 days</option>
+          <option value="90">Last 90 days</option>
+          <option value="180">Last 180 days</option>
+          <option value="0">All time</option>
+        </select>
+      </div>
+      <div class="timeline-wrap" id="tlWrap">
+        <div class="no-data"><i class="fa-solid fa-timeline"></i>
+          <h3>No data</h3>
+          <p>Load a project to see the timeline.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATS VIEW ── -->
+    <div class="view" id="view-stats">
+      <div class="stats-dash" id="statsDash">
+        <div class="no-data"><i class="fa-solid fa-chart-pie"></i>
+          <h3>No data</h3>
+          <p>Load a project to see statistics.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEARCH VIEW ── -->
+    <div class="view" id="view-search">
+      <div class="toolbar">
+        <div class="search-box" style="max-width:500px;flex:1">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="globalSearch" placeholder="Search across spec title, description, plan, spec.md…"
+            oninput="runGlobalSearch()">
+        </div>
+        <span class="result-count" id="globalResultCount"></span>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-hint">
+          <i class="fa-solid fa-magnifying-glass-chart"></i>
+          <p>Type to search across all specs, plans, and documents</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STRATEGY VIEW ── -->
+    <div class="view" id="view-strategy">
+      <div id="strategyContent">
+        <div class="no-data">
+          <i class="fa-solid fa-chess-knight"></i>
+          <h3>No strategy data</h3>
+          <p>Load a project to see Roadmap and Discovery.</p>
+        </div>
+      </div>
+    </div>
+
+
+  </div><!-- /main -->
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-id" id="modalId">—</span>
+        <div class="modal-title" id="modalTitle">—</div>
+        <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-tabs">
+        <button class="tab-btn active" onclick="switchModalTab('overview')">Overview</button>
+        <button class="tab-btn" onclick="switchModalTab('spec')">Spec</button>
+        <button class="tab-btn" onclick="switchModalTab('plan')">Plan</button>
+        <button class="tab-btn" onclick="switchModalTab('logs')">Logs</button>
+        <button class="tab-btn" onclick="switchModalTab('qa')">QA Report</button>
+        <button class="tab-btn" onclick="switchModalTab('files')">Files</button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-pane active" id="tab-overview"></div>
+        <div class="tab-pane" id="tab-spec"></div>
+        <div class="tab-pane" id="tab-plan"></div>
+        <div class="tab-pane" id="tab-logs"></div>
+        <div class="tab-pane" id="tab-qa"></div>
+        <div class="tab-pane" id="tab-files"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+
+</html>

@@ -1,3 +1,84 @@
-# Ignore all files in _notes but keep the folder
+# PRP Framework - gitignore
+
+# ------------------------------
+# 1. AUTO-CLAUDE (Logs & Trash)
+# ------------------------------
+# Logs & Status Files - Always Ignore
+.auto-claude/logs/
+.auto-claude/temp/
+.auto-claude/worktrees/
+.auto-claude-status
+*.log
+
+# Security & Secrets - CRITICAL IGNORE!
+.security-key
+.auto-claude-security.json
+
+# ------------------------------
+# 2. ARTIFACTS (IGNORED BUT KEEP STRUCTURE)
+# ------------------------------
+.auto-claude/issues/*
+!.auto-claude/issues/.gitkeep
+.auto-claude/specs/*
+!.auto-claude/specs/.gitkeep
+
+# ------------------------------
+# 3. BACKEND & TOOLS
+# ------------------------------
+# Python Virtual Environments
+venv/
+.venv/
+env/
+
+# Python Cache & Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js Dependencies (Future Proofing)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# ------------------------------
+# 4. IDE / EDITOR SETTINGS
+# ------------------------------
+# VS Code / Cursor (Optional: Adjust based on team policy)
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.cursor/prp-commit.txt
+# .cursor/ is usually kept, but personal configs can be ignored
+
+# ------------------------------
+# 5. OS Generated Files
+# ------------------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ------------------------------
+# 6. Documentation & Notes
+# ------------------------------
+# Keep folder structure but ignore content inside sensitive/messy notes
 PRPs-Framework/_notes/*
 !PRPs-Framework/_notes/.gitkeep
+
+# ------------------------------
+# 7. Environment Variables
+# ------------------------------
+**.env
+
+# ------------------------------
+# 8. Template HTML & App code .cursor\PRPs\extension with out .vsix upload
+# ------------------------------
+template-html/*
+.cursor/PRPs/extension/*
+!.cursor/PRPs/extension/*.vsix
+
+.auto-claude/roadmaps_.json

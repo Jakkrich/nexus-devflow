@@ -1,0 +1,34 @@
+{
+    "complexity": "simple|standard|complex",
+    "workflow_type": "feature|refactor|investigation|migration|simple",
+    "confidence": 0.0,
+    "reasoning": "Explain the reasoning for this assessment level in 2-3 sentences.",
+    "analysis": {
+        "scope": {
+            "estimated_files": 0,
+            "is_cross_cutting": false
+        },
+        "integrations": {
+            "new_dependencies": [],
+            "research_needed": false
+        },
+        "risk": {
+            "level": "low|medium|high",
+            "concerns": [
+                "Risk 1 (If any)"
+            ]
+        }
+    },
+    "validation_recommendations": {
+        "risk_level": "trivial|low|medium|high|critical",
+        "skip_validation": false,
+        "test_types_required": [
+            "unit",
+            "integration",
+            "browser",
+            "manual"
+        ],
+        "security_scan_required": false,
+        "reasoning": "Explain why this testing level was chosen."
+    }
+}

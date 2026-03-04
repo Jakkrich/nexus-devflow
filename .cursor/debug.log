@@ -1,2 +1,0 @@
-{"sessionId": "debug-session", "runId": "run1", "hypothesisId": "C", "location": "app/api/v1/endpoints/health.py:15", "message": "Health check called", "data": {"hostname": "DESKTOP-H3N9BBF", "request_received": true}, "timestamp": 1768676759034}
-{"sessionId": "debug-session", "runId": "run1", "hypothesisId": "C", "location": "app/api/v1/endpoints/health.py:62", "message": "Health check response", "data": {"status_code": 503, "health_status": "unhealthy"}, "timestamp": 1768676763825}

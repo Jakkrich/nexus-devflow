@@ -1,0 +1,17 @@
+{
+    "sourceType": "manual",
+    "category": "feature",
+    "priority": "medium",
+    "complexity": "small",
+    "impact": "medium",
+    "acceptanceCriteria": [
+        "Criteria 1",
+        "Criteria 2"
+    ],
+    "dependencies": [
+        "Task ID or Name"
+    ],
+    "requireReviewBeforeCoding": true,
+    "isAutoProfile": true,
+    "model": "sonnet"
+}
