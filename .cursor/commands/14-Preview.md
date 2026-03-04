@@ -19,7 +19,7 @@ Manage the local preview development server (start, stop, status check).
 ## 🚦 Internal Process
 
 The AI will manage the preview server using the provided auto_preview script.
-*Note: Execute with IDE-Agnostic paths like `python <ROOT_AI_FOLDER>/scripts/auto_preview.py ...` (e.g. `.cursor` or `.agent`)*
+*Note: Execute with IDE-Agnostic paths like `python <ROOT_AI_FOLDER>/scripts/auto_preview.py ...` (e.g. `.cursor` or `.cursor`)*
 
 Commands to execute:
 - **Start**: `python <ROOT_AI_FOLDER>/scripts/auto_preview.py start [port]`

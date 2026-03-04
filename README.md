@@ -33,7 +33,7 @@ If you prefer not to use the automated script, manually copy these folders and f
 > | AI IDE / Agent | Folder Name | Rules File |
 > | :--- | :--- | :--- |
 > | **Cursor** | `.cursor/` | `.cursorrules` |
-> | **Windsurf** | `.windsurf/` | `.windsurfrules` |
+> | **Windsurf** | `.cursor/` | `.cursorrules` |
 > | **Trae** | `.trae/` | `.traerules` |
 > | **Antigravity / Generic** | `.cursor/` | `.cursorrules` |
 > | **PearAI** | `.pearai/` | `.pearairules` |

@@ -30,7 +30,7 @@ Wrong docs are worse than missing docs. Bloated docs are worse than concise docs
 **DO NOT touch these** (system files, not project docs):
 - `.AI/agents/*.md` - Agent definitions
 - `.AI/commands/*.md` - Command templates
-- `.agents/**/*.md` - Agent reference files
+- `.cursors/**/*.md` - Agent reference files
 - Plugin and workflow files
 
 ## Update Process
