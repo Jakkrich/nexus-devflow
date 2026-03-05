@@ -9,11 +9,11 @@ This framework is designed to maximize the efficiency of collaboration between *
 ## 🔑 Key Feature: Multi-IDE Switcher
 The PRPs-Framework is **IDE-Agnostic**. You can switch the entire codebase structure and internal links to support your favorite AI IDE using the `active-ide.py` script at the root.
 
-| AI IDE / Agent | Root Folder | Workflow Folder | Rules File |
+| AI IDE / Agent | Root Folder | Workflow Folder |
 | :--- | :--- | :--- | :--- |
-| **Cursor** | `.cursor/` | `commands/` | `.cursorrules` |
-| **Windsurf** | `.cursor/` | `workflows/` | `.cursorrules` |
-| **Antigravity** | `.cursor/` | `workflows/` | `.cursorrules` |
+| **Cursor** | `.cursor/` | `commands/` |
+| **Windsurf** | `.cursor/` | `workflows/` |
+| **Antigravity** | `.cursor/` | `workflows/` |
 
 **How to switch:**
 ```powershell
