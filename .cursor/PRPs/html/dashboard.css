@@ -1253,12 +1253,76 @@ body {
 }
 
 .card-footer {
-  margin-top: 8px;
-  padding-top: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px
+}
+
+.card-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+}
+
+.card-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-stop {
+  background: #f87171;
+  /* Red like in screenshot */
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.btn-stop:hover {
+  background: #ef4444;
+  transform: scale(1.05);
+}
+
+.card-dots-v {
+  color: var(--text3);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.tag-status-planning {
+  color: #f97316;
+  background: rgba(249, 115, 22, .1);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.tag-status-in-progress {
+  color: var(--yellow);
+  background: rgba(251, 191, 36, .1);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.tag-status-done {
+  color: var(--green);
+  background: rgba(52, 211, 153, .1);
+  padding: 2px 8px;
+  border-radius: 20px;
 }
 
 .card-progress {
@@ -1308,6 +1372,45 @@ body {
   font-size: 10px;
   color: var(--text3);
   font-family: 'DM Mono', monospace
+}
+
+.card-stepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+.card-stepper .step {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--text3);
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: var(--bg3);
+  border-radius: 5px;
+  transition: all .3s cubic-bezier(.4, 0, .2, 1);
+  letter-spacing: .5px;
+  border: 1px solid transparent;
+}
+
+.card-stepper .step.active {
+  background: rgba(251, 191, 36, .08);
+  color: var(--yellow);
+  border-color: rgba(251, 191, 36, .2);
+  box-shadow: 0 0 10px rgba(251, 191, 36, .1);
+}
+
+.card-stepper .step-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  min-width: 6px;
+  transition: all .3s;
+}
+
+.card-stepper .step-line.active {
+  background: rgba(251, 191, 36, .4);
 }
 
 .phase-dots {

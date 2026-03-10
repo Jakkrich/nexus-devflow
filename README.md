@@ -13,7 +13,7 @@ The PRPs-Framework is **IDE-Agnostic**. You can switch the entire codebase struc
 | :--- | :--- | :--- | :--- |
 | **Cursor** | `.cursor/` | `commands/` | `.cursorrules` |
 | **Windsurf** | `.cursor/` | `workflows/` | `.cursorrules` |
-| **Antigravity** | `.cursor/` | `workflows/` | `.cursorrules` |
+| **Antigravity** | `.cursor/` | `workflows/` | `.antigravityrules` |
 
 **How to switch:**
 ```powershell

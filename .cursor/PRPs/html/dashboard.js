@@ -243,6 +243,10 @@ function normalizeStatus(spec) {
   if (raw === 'archived') return 'archived';
   if (/human.?review/.test(raw)) return 'human-review';
   if (/ai.?review|^review|qa/.test(raw)) return 'ai-review';
+
+  // Requirement: If planned, move to In Progress
+  if (spec.plan && spec.plan.phases && spec.plan.phases.length > 0) return 'in-progress';
+
   if (/in.?progress|coding/.test(raw)) return 'in-progress';
   if (/queue|queued|pending/.test(raw)) return 'queue';
   return 'planning';
@@ -575,6 +579,7 @@ function buildCard(spec, idx) {
   el.className = 'card';
   el.style.animationDelay = (idx * 35) + 'ms';
   const meta = spec.meta || {}, plan = spec.plan || {};
+  const logs = spec.logs || {};
   const title = plan.feature || spec.id;
   const phases = plan.phases || [];
   const getTasks = (p) => p.tasks || p.subtasks || [];
@@ -588,8 +593,18 @@ function buildCard(spec, idx) {
     return `<div class="phase-dot ${pct === 100 ? 'done' : pct > 0 ? 'progress' : ''}"></div>`;
   }).join('');
 
+  // Stepper logic
+  const status = normalizeStatus(spec);
+  const hasPhases = !!(spec.plan && spec.plan.phases && spec.plan.phases.length > 0);
+
+  const stepPlan = hasPhases; // Only highlight PLAN after /02 (when phases exist)
+  const stepCode = ['in-progress', 'ai-review', 'human-review', 'done'].includes(status);
+  const stepQA = ['ai-review', 'human-review', 'done'].includes(status);
+  const isDone = status === 'done';
+
   const complexity = String(spec.complexity?.complexity || spec.complexity?.level || plan.complexity_assessment?.level || meta.complexity || '').trim() || undefined;
   const priCls = `tag-priority-${(meta.priority || 'medium').toLowerCase()}`;
+
   el.innerHTML = `
     <div class="card-top">
       <div class="card-id">${spec.id.split('-')[0]}</div>
@@ -599,6 +614,7 @@ function buildCard(spec, idx) {
       </button>
     </div>
     <div class="card-meta">
+      <span class="tag tag-status-${status}">${status.replace('-', ' ')}</span>
       ${meta.priority ? `<span class="tag ${priCls}">${meta.priority}</span>` : ''}
       ${meta.category ? `<span class="tag tag-category">${meta.category}</span>` : ''}
       ${complexity ? `<span class="tag tag-complexity">${complexity}</span>` : ''}
@@ -606,18 +622,44 @@ function buildCard(spec, idx) {
     ${total > 0 ? `
     <div class="card-progress">
       <div class="card-progress-labels">
-        <span class="card-progress-stat">${done}/${total} subtasks</span>
+        <span class="card-progress-stat">${status === 'in-progress' ? 'Coding' : status.replace('-', ' ')}</span>
         <span class="card-progress-pct">${Math.round(done / total * 100)}%</span>
       </div>
       <div class="card-progress-bar">
         <div class="card-progress-fill" style="width:${Math.round(done / total * 100)}%"></div>
       </div>
     </div>` : ''}
+    
+    <div class="card-stepper">
+      <div class="step ${stepPlan ? 'active' : ''}">Plan</div>
+      <div class="step-line ${stepCode ? 'active' : ''}"></div>
+      <div class="step ${stepCode ? 'active' : ''}">Code</div>
+      <div class="step-line ${stepQA ? 'active' : ''}"></div>
+      <div class="step ${stepQA ? 'active' : ''}">QA</div>
+    </div>
+
     <div class="card-footer">
-      <div class="phase-dots">${dots}</div>
+      <div class="card-footer-left">
+        <i class="fa-solid fa-clock"></i>
+        <span>${formatRelativeDate(spec.plan?.updated_at || spec.meta?.created_at)}</span>
+      </div>
     </div>`;
   el.addEventListener('click', () => openModal(spec));
   return el;
+}
+
+function formatRelativeDate(iso) {
+  if (!iso) return '—';
+  try {
+    const diff = Date.now() - new Date(iso);
+    const m = Math.floor(diff / 60000);
+    const h = Math.floor(m / 60);
+    const d = Math.floor(h / 24);
+    if (d > 0) return `${d}d ago`;
+    if (h > 0) return `${h}h ago`;
+    if (m > 0) return `${m}m ago`;
+    return 'just now';
+  } catch { return '—'; }
 }
 
 async function updateTaskStatus(specId, newStatus) {
