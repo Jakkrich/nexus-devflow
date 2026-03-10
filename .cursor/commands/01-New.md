@@ -65,6 +65,14 @@ Notify the user of the task creation result and recommend the next steps.
 
 ---
 
+## 🛡️ Execution Gate (Pre-Start Check)
+
+1. **Phase Validation**: Before proceeding, verify that no source code files are currently open for editing.
+2. **Explicit Intent**: State clearly: "I am starting Phase 1: Task Creation. I will NOT modify any source code files during this process."
+3. **Requirement Extraction**: If the user provides implementation details, extract them into `spec.md` only. **BLOCK** all attempts to use `replace_file_content` on project source code until `/03-Code` is initiated.
+
+---
+
 ## 🛡️ Best Practices
 - **Define "Done"**: Write Acceptance Criteria as clearly as possible so that the AI in the `/04-Verify` step can check accurately.
 - **Keep it Simple**: If the task is too large, recommend splitting it into multiple tasks.

@@ -17,10 +17,10 @@
 # ------------------------------
 # 2. ARTIFACTS (IGNORED BUT KEEP STRUCTURE)
 # ------------------------------
-.auto-claude/issues/*
-!.auto-claude/issues/.gitkeep
-.auto-claude/specs/*
-!.auto-claude/specs/.gitkeep
+# .auto-claude/issues/*
+# !.auto-claude/issues/.gitkeep
+# .auto-claude/specs/*
+# !.auto-claude/specs/.gitkeep
 
 # ------------------------------
 # 3. BACKEND & TOOLS
@@ -81,4 +81,4 @@ template-html/*
 .cursor/PRPs/extension/*
 !.cursor/PRPs/extension/*.vsix
 
-.auto-claude/roadmaps_.json
+# .auto-claude/roadmaps_.json

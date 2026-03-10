@@ -185,22 +185,51 @@ Execution Order: Security → Lint → Schema → Tests → UX → Seo.
 
 ---
 
-## 🛡️ Phase Locking & Workflow Enforcement (MANDATORY)
+## 🚀 Token Optimization Rules
 
-> ⚠️ **This strict rule applies to every Command — no exceptions**
+**MANDATORY: Always follow token optimization rules from `.cursor/rules/token-optimization.md`**
+
+### Core Principles:
+
+- **Read Only What You Need** - ใช้ `offset` และ `limit` เมื่ออ่านไฟล์
+- **Create Minimal Context** - สร้าง summary file แทนการส่งเอกสารทั้งหมด
+- **Incremental Processing** - ทำทีละขั้นตอนและ verify ทันที
+- **Pattern-Based Approach** - ใช้ `grep` และ line numbers แทนการอ่านทั้งไฟล์
+- **Direct Code Generation** - สำหรับงานง่ายๆ ให้สร้างโค้ดโดยตรง
+
+### Token Budget:
+
+- **Simple Tasks:** < 100K tokens
+- **Complex Tasks:** < 300K tokens
+- **Alert Threshold:** > 500K tokens (ควรแบ่งงาน)
+
+### Before Starting Work:
+
+1. สร้าง minimal context file (ใช้ template จาก `.cursor/rule-templates/minimal-context.md`)
+2. อ่านเฉพาะส่วนที่จำเป็น (ใช้ offset และ limit)
+3. ใช้ grep เพื่อหา pattern (ถ้าเป็นไปได้)
+4. แบ่งงานเป็น steps เล็กๆ
+5. Verify หลังแต่ละ step
+
+**See:** `.cursor/rules/token-optimization.md` for detailed rules and examples
+
+---
+
+## 🛡️ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
+
+> ⚠️ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
 
 | Phase | Command | Allowed Action | Forbidden Action |
 |-------|---------|----------------|------------------|
-| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | ❌ Modify Source Code |
-| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | ❌ Modify Source Code |
+| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | ❌ **Modify Source Code** |
+| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | ❌ **Modify Source Code** |
 | **3. Execute** | `/03-Code` | ✅ Modify Source Code according to Plan | — |
-| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | ❌ Modify new Logic |
+| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | ❌ **Modify Logic** |
 
 ### Mandatory Rules:
-- **CRITICAL**: While running `/01-Task` or `/02-Plan`, the AI MUST NOT modify the project's Source Code under any circumstances.
-- **GATE**: If the User provides details in `/01-Task` or `/02-Plan`, record them in `spec.md` or `plan.md` ONLY — do not use them to write code.
-- **MANDATORY STOP**: After `/01-Task` is complete, you must STOP and instruct the User to run `/02-Plan` next; after `/02-Plan` is complete, you must STOP and instruct the User to run `/03-Code` next.
-- **IDLE PROTECTION**: If the AI detects that it is about to modify code without an approved `implementation_plan.json`, it must HALT and inform the User immediately.
+- **STRICT PHASE LOCKING**: While running `/01-Task` or `/02-Plan`, using any tool to modify files outside the `.auto-claude/specs/` directory is **STRICTLY PROHIBITED**.
+- **EXECUTION GATE**: If the User provides implementation details in early phases, record them as requirements in `spec.md` only. Do **NOT** apply them to the codebase.
+- **MANDATORY STOP & CONFIRM**: You must stop after creating the spec or plan and wait for the User to execute the next phase command.
 
 ---
 
