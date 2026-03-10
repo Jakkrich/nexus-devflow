@@ -1,6 +1,6 @@
 #!/bin/bash
-BRANCH="prp-auto-dev"
-REPO_URL="https://git.nstda.or.th/application-etc/rules-development.git"
+BRANCH="main"
+REPO_URL="https://github.com/Jakkrich/PRPs-Framework.git"
 CHECK_ONLY=false
 APPLY=false
 
