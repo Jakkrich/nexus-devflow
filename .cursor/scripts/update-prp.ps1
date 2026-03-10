@@ -1,6 +1,6 @@
 param (
-    [string]$Branch = "prp-auto-dev",
-    [string]$RepoUrl = "https://git.nstda.or.th/application-etc/rules-development.git",
+    [string]$Branch = "main",
+    [string]$RepoUrl = "https://github.com/Jakkrich/PRPs-Framework.git",
     [switch]$CheckOnly,
     [switch]$Apply
 )
