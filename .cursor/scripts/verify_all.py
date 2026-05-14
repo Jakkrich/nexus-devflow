@@ -7,7 +7,7 @@ Runs COMPLETE validation including all checks + performance + E2E.
 Use this before deployment or major releases.
 
 Usage:
-    python scripts/verify_all.py . --url <URL>
+    python .cursor/scripts/verify_all.py . --url <URL>
 
 Includes ALL checks:
     ✅ Security Scan (OWASP, secrets, dependencies)
@@ -25,9 +25,14 @@ Includes ALL checks:
 import sys
 import subprocess
 import argparse
+import io
 from pathlib import Path
 from typing import List, Dict, Optional
 from datetime import datetime
+
+# Ensure UTF-8 output for Windows terminals
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # ANSI colors
 class Colors:
@@ -63,8 +68,8 @@ VERIFICATION_SUITE = [
     {
         "category": "Security",
         "checks": [
-            ("Security Scan", ".cursor/skills/vulnerability-scanner/scripts/security_scan.py", True),
-            ("Dependency Analysis", ".cursor/skills/vulnerability-scanner/scripts/dependency_analyzer.py", False),
+            ("Security Scan", "skills/vulnerability-scanner/scripts/security_scan.py", True),
+            ("Dependency Analysis", "skills/vulnerability-scanner/scripts/dependency_analyzer.py", False),
         ]
     },
     
@@ -72,8 +77,8 @@ VERIFICATION_SUITE = [
     {
         "category": "Code Quality",
         "checks": [
-            ("Lint Check", ".cursor/skills/lint-and-validate/scripts/lint_runner.py", True),
-            ("Type Coverage", ".cursor/skills/lint-and-validate/scripts/type_coverage.py", False),
+            ("Lint Check", "skills/lint-and-validate/scripts/lint_runner.py", True),
+            ("Type Coverage", "skills/lint-and-validate/scripts/type_coverage.py", False),
         ]
     },
     
@@ -81,7 +86,7 @@ VERIFICATION_SUITE = [
     {
         "category": "Data Layer",
         "checks": [
-            ("Schema Validation", ".cursor/skills/database-design/scripts/schema_validator.py", False),
+            ("Schema Validation", "skills/database-design/scripts/schema_validator.py", False),
         ]
     },
     
@@ -89,7 +94,7 @@ VERIFICATION_SUITE = [
     {
         "category": "Testing",
         "checks": [
-            ("Test Suite", ".cursor/skills/testing-patterns/scripts/test_runner.py", False),
+            ("Test Suite", "skills/testing-patterns/scripts/test_runner.py", False),
         ]
     },
     
@@ -97,8 +102,8 @@ VERIFICATION_SUITE = [
     {
         "category": "UX & Accessibility",
         "checks": [
-            ("UX Audit", ".cursor/skills/frontend-design/scripts/ux_audit.py", False),
-            ("Accessibility Check", ".cursor/skills/frontend-design/scripts/accessibility_checker.py", False),
+            ("UX Audit", "skills/frontend-design/scripts/ux_audit.py", False),
+            ("Accessibility Check", "skills/frontend-design/scripts/accessibility_checker.py", False),
         ]
     },
     
@@ -106,8 +111,8 @@ VERIFICATION_SUITE = [
     {
         "category": "SEO & Content",
         "checks": [
-            ("SEO Check", ".cursor/skills/seo-fundamentals/scripts/seo_checker.py", False),
-            ("GEO Check", ".cursor/skills/geo-fundamentals/scripts/geo_checker.py", False),
+            ("SEO Check", "skills/seo-fundamentals/scripts/seo_checker.py", False),
+            ("GEO Check", "skills/geo-fundamentals/scripts/geo_checker.py", False),
         ]
     },
     
@@ -116,8 +121,8 @@ VERIFICATION_SUITE = [
         "category": "Performance",
         "requires_url": True,
         "checks": [
-            ("Lighthouse Audit", ".cursor/skills/performance-profiling/scripts/lighthouse_audit.py", True),
-            ("Bundle Analysis", ".cursor/skills/performance-profiling/scripts/bundle_analyzer.py", False),
+            ("Lighthouse Audit", "skills/performance-profiling/scripts/lighthouse_audit.py", True),
+            ("Bundle Analysis", "skills/performance-profiling/scripts/bundle_analyzer.py", False),
         ]
     },
     
@@ -126,7 +131,7 @@ VERIFICATION_SUITE = [
         "category": "E2E Testing",
         "requires_url": True,
         "checks": [
-            ("Playwright E2E", ".cursor/skills/webapp-testing/scripts/playwright_runner.py", False),
+            ("Playwright E2E", "skills/webapp-testing/scripts/playwright_runner.py", False),
         ]
     },
     
@@ -134,7 +139,7 @@ VERIFICATION_SUITE = [
     {
         "category": "Mobile",
         "checks": [
-            ("Mobile Audit", ".cursor/skills/mobile-design/scripts/mobile_audit.py", False),
+            ("Mobile Audit", "skills/mobile-design/scripts/mobile_audit.py", False),
         ]
     },
     
@@ -142,10 +147,26 @@ VERIFICATION_SUITE = [
     {
         "category": "Internationalization",
         "checks": [
-            ("i18n Check", ".cursor/skills/i18n-localization/scripts/i18n_checker.py", False),
+            ("i18n Check", "skills/i18n-localization/scripts/i18n_checker.py", False),
         ]
     },
 ]
+
+def find_skill_path(project_path: Path, script_path: str) -> Path:
+    """Try to find the skill script in common locations"""
+    # 1. Try relative to project root (e.g., skills/...)
+    p1 = project_path / script_path
+    if p1.exists():
+        return p1
+    # 2. Try inside .agent folder (e.g., .cursor/skills/...)
+    p2 = project_path / ".agent" / script_path
+    if p2.exists():
+        return p2
+    # 3. Try inside .claude folder (legacy)
+    p3 = project_path / ".claude" / script_path
+    if p3.exists():
+        return p3
+    return p1
 
 def run_script(name: str, script_path: Path, project_path: str, url: Optional[str] = None) -> dict:
     """Run validation script"""
@@ -306,8 +327,8 @@ Examples:
         
         print_header(f"📋 {category.upper()}")
         
-        for name, script_path, required in suite["checks"]:
-            script = project_path / script_path
+        for name, script_rel_path, required in suite["checks"]:
+            script = find_skill_path(project_path, script_rel_path)
             result = run_script(name, script, str(project_path), args.url)
             result["category"] = category
             results.append(result)

@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": ["schema_version", "complexity", "workflow_type", "confidence", "reasoning", "analysis", "validation_recommendations", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "complexity": { "type": "string" },
+    "workflow_type": { "type": "string" },
+    "confidence": { "type": "number" },
+    "reasoning": { "type": "string" },
+    "analysis": { "type": "object" },
+    "validation_recommendations": { "type": "object" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

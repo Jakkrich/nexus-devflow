@@ -1,0 +1,106 @@
+# PRPs-Framework Core Rules - Governance Template
+
+## 🔍 Project Detection
+
+**IMPORTANT: Detect if this is a PRP-Framework managed project at the start of each conversation.**
+
+### Detection Logic:
+1. **Check for Framework Indicators:**
+   - Presence of `.auto-claude/` directory
+   - Presence of `INITIAL.md` in the root
+   - Presence of `active-ide.py` script
+2. **Check Configuration:**
+   - Look for commands like `/30-Task`, `/31-Plan` in `INITIAL.md`
+3. **Report detected framework:**
+   - "Detected: PRPs-Framework (Context Engineering & Agentic Workflow)"
+
+---
+
+## 🔄 Project Awareness & Context
+
+- **Always read `INITIAL.md`** at the beginning of the conversation to understand the project structure, active tasks, and current status.
+- **Follow the 4-Step Cycle strictly:**
+  1. `/30-Task` -> Create Metadata & Spec
+  2. `/31-Plan` -> Analyze & Design
+  3. `/32-Code` -> Implement & Validate
+  4. `/33-Verify` -> Quality Check & Summary
+- **Use the `.auto-claude/` directory** for storing all JSON metadata, specs, and execution logs.
+
+---
+
+## 🚀 Token Optimization Rules
+
+**MANDATORY: Always follow token optimization rules from `.agent/rules/token-optimization.md`**
+
+### Core Principles:
+
+- **Read Only What You Need** - ใช้ `offset` และ `limit` เมื่ออ่านไฟล์
+- **Create Minimal Context** - สร้าง summary file แทนการส่งเอกสารทั้งหมด
+- **Incremental Processing** - ทำทีละขั้นตอนและ verify ทันที
+- **Pattern-Based Approach** - ใช้ `grep` และ line numbers แทนการอ่านทั้งไฟล์
+- **Direct Code Generation** - สำหรับงานง่ายๆ ให้สร้างโค้ดโดยตรง
+
+### Token Budget:
+
+- **Simple Tasks:** < 100K tokens
+- **Complex Tasks:** < 300K tokens
+- **Alert Threshold:** > 500K tokens (ควรแบ่งงาน)
+
+### Before Starting Work:
+
+1. สร้าง minimal context file (ใช้ template จาก `.agent/rule-templates/minimal-context.md`)
+2. อ่านเฉพาะส่วนที่จำเป็น (ใช้ offset และ limit)
+3. ใช้ grep เพื่อหา pattern (ถ้าเป็นไปได้)
+4. แบ่งงานเป็น steps เล็กๆ
+5. Verify หลังแต่ละ step
+
+**See:** `.agent/rules/token-optimization.md` for detailed rules and examples
+
+---
+
+## 🛡️ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
+
+> ⚠️ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
+
+| Phase | Command | Allowed Action | Forbidden Action |
+|-------|---------|----------------|------------------|
+| **1. Create** | `/30-Task` | Create Metadata, `spec.md`, JSON files | ❌ **Modify Source Code** |
+| **2. Plan** | `/31-Plan` | Create Plan, Analyze Codebase | ❌ **Modify Source Code** |
+| **3. Execute** | `/32-Code` | ✅ Modify Source Code according to Plan | — |
+| **4. Verify** | `/33-Verify` | Inspect, Create QA Report | ❌ **Modify Logic** |
+
+### Mandatory Rules:
+- **STRICT PHASE LOCKING**: While running `/30-Task` or `/31-Plan`, using any tool to modify files outside the `.auto-claude/specs/` directory is **STRICTLY PROHIBITED**.
+- **EXECUTION GATE**: If the User provides implementation details in early phases, record them as requirements in `spec.md` only. Do **NOT** apply them to the codebase.
+- **MANDATORY STOP & CONFIRM**: You must stop after creating the spec or plan and wait for the User to execute the next phase command.
+
+---
+
+## 📂 Directory & File Standards
+
+### .auto-claude/ structure:
+- `specs/{TaskID}/spec.md`: Detailed requirements for a specific task.
+- `specs/{TaskID}/plan.md`: Step-by-step implementation plan.
+- `specs/{TaskID}/logs/`: Chronological execution logs.
+- `specs/{TaskID}/results/`: Output artifacts and validation reports.
+
+### Naming Conventions:
+- **Task ID**: Uses the format `[REF-ID]` as a prefix (e.g., `FIX-123_login-bug`).
+- **File Naming**: Descriptive and prefixed with Task ID where applicable.
+
+---
+
+## 🤖 AI Behavior Rules
+
+- **Always maintain traceability**: Connect every code change back to a specific requirement in the Spec.
+- **Be proactive but safe**: Always verify the current phase before executing any tool.
+- **Explain the "Why"**: Use `# Reason:` comments for complex logic to aid future AI and human reviewers.
+- **Self-Correction**: If you detect a breach of the 4-step workflow, halt immediately and inform the user.
+
+---
+
+## 🧪 Validation & Quality
+
+- **The Validation Loop is mandatory**: Any code change in `/32-Code` must be followed by a verification sweep.
+- **Continuous Documentation**: Update logs and status files incrementally, don't wait until the end of the task.
+- **Final Audit**: A task is only "Done" when `/33-Verify` returns a success signal and all checklist items are checked.

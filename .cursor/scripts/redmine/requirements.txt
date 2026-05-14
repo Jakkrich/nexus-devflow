@@ -1,2 +1,0 @@
-# Redmine API Integration
-python-redmine>=2.5.0

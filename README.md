@@ -12,7 +12,7 @@ The PRPs-Framework is **IDE-Agnostic**. You can switch the entire codebase struc
 | AI IDE / Agent | Root Folder | Workflow Folder | Rules File |
 | :--- | :--- | :--- | :--- |
 | **Cursor** | `.cursor/` | `commands/` | `.cursorrules` |
-| **Windsurf** | `.cursor/` | `workflows/` | `.windsurfrules` |
+| **Windsurf** | `.cursor/` | `workflows/` | `.cursorrules` |
 | **Antigravity** | `.cursor/` | `workflows/` | `.antigravityrules` |
 
 **How to switch:**
@@ -65,10 +65,10 @@ We work in cycles using JSON as the "Source of Truth" for maximum precision:
 
 | Step | Command | Description | Outputs (Source of Truth) |
 | :--- | :--- | :--- | :--- |
-| **1. Create** | `/01-Task` | Define problem & set basics | `spec.md`, `requirements.json` |
-| **2. Plan** | `/02-Plan` | Code analysis & subtasking | `implementation_plan.json`, `context.json` |
-| **3. Execute** | `/03-Code` | AI writes code (Validation Loop) | Source Code, `task_logs.json` |
-| **4. Verify** | `/04-Verify` | Senior Review & QA report | `qa_report.md`, Status: `done` |
+| **1. Create** | `/30-Task` | Define problem & set basics | `spec.md`, `requirements.json` |
+| **2. Plan** | `/31-Plan` | Code analysis & subtasking | `implementation_plan.json`, `context.json` |
+| **3. Execute** | `/32-Code` | AI writes code (Validation Loop) | Source Code, `task_logs.json` |
+| **4. Verify** | `/33-Verify` | Senior Review & QA report | `qa_report.md`, Status: `done` |
 
 ---
 

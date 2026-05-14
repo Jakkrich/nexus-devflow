@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": ["schema_version", "task_description", "user_goal", "workflow_type", "acceptance_criteria", "technical_constraints", "dependencies", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "task_description": { "type": "string" },
+    "user_goal": { "type": "string" },
+    "workflow_type": { "type": "string", "enum": ["feature", "bugfix", "refactor", "docs", "test", "investigation", "migration", "simple"] },
+    "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+    "technical_constraints": { "type": "array", "items": { "type": "string" } },
+    "dependencies": { "type": "array", "items": { "type": "string" } },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  }
+}

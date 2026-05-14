@@ -8,7 +8,7 @@ Caution: Before making major structural changes, you should keep a snapshot with
 - **Description**: Framework for Context Engineering and Agent-based Development to systematically help SA/BA and DEV collaborate with AI.
 
 ### System Requirements Summary (for Rebuild)
-- **Workflow**: 4-Step Cycle (JSON-Driven): Create (/01-Task) -> Plan (/02-Plan) -> Execute (/03-Code) -> Verify (/04-Verify).
+- **Workflow**: 4-Step Cycle (JSON-Driven): Create (/30-Task) -> Plan (/31-Plan) -> Execute (/32-Code) -> Verify (/33-Verify).
 - **Organization**: Uses an Issue ID-based directory structure to group Spec, PRP, and execution results together.
 - **Traceability**: Enforces the use of an External Ref ID as a prefix for file and branch names.
 
@@ -20,10 +20,10 @@ Caution: Before making major structural changes, you should keep a snapshot with
 
 ### 🛠️ Core Commands
 - `/00-Init` : Init Context & Rules
-- `/01-Task` : New Task & Spec
-- `/02-Plan` : Analyze & Plan
-- `/03-Code` : Implement & Test
-- `/04-Verify` : Senior Audit
+- `/30-Task` : New Task & Spec
+- `/31-Plan` : Analyze & Plan
+- `/32-Code` : Implement & Test
+- `/33-Verify` : Senior Audit
 
 ### Project Context (Auto-Synced)
 - **Detected Stack**: PRPs-Framework

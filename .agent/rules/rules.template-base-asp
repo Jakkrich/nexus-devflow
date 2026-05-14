@@ -1,0 +1,142 @@
+---
+description: Governance rules template for .NET/ASP.NET Core projects.
+---
+# ASP.NET Core Project Rules - Template
+
+## 🔍 Project Detection
+
+**IMPORTANT: Detect the ASP/ASP.NET version and language automatically at the start.**
+
+### Detection Logic:
+1. **Check for ASP.NET (Modern/Core):**
+   - Look for `Startup.cs`, `Program.cs`, or `.csproj` files.
+   - Look for `appsettings.json`.
+   - Look for `.cshtml` files (Razor).
+2. **Check for ASP.NET (Web Forms/Legacy):**
+   - Look for `.aspx`, `.ascx`, `.master` files.
+   - Look for `web.config`.
+3. **Check for Classic ASP (Legacy):**
+   - Look for `.asp` files using VBScript or JScript.
+4. **Report detected stack:**
+   - "Detected: ASP.NET Core (C#)" or "Detected: ASP.NET Web Forms" or "Detected: Classic ASP"
+
+---
+
+## 🔄 Project Awareness & Context
+
+- **Always read `web.config` or `appsettings.json`** to understand the application configuration and environment.
+- **Identify the Project Type**: MVC, Web API, Web Forms, or Razor Pages.
+- **Follow C# Coding Standards** (for ASP.NET) or VBScript best practices (for Classic ASP).
+- **Check for `Solution (.sln)` files** to understand the project structure and dependencies.
+
+---
+
+## 🚀 Token Optimization Rules
+
+**MANDATORY: Always follow token optimization rules from `.cursor/rules/token-optimization.md`**
+
+### Core Principles:
+
+- **Read Only What You Need** - ใช้ `offset` และ `limit` เมื่ออ่านไฟล์
+- **Create Minimal Context** - สร้าง summary file แทนการส่งเอกสารทั้งหมด
+- **Incremental Processing** - ทำทีละขั้นตอนและ verify ทันที
+- **Pattern-Based Approach** - ใช้ `grep` และ line numbers แทนการอ่านทั้งไฟล์
+- **Direct Code Generation** - สำหรับงานง่ายๆ ให้สร้างโค้ดโดยตรง
+
+### Token Budget:
+
+- **Simple Tasks:** < 100K tokens
+- **Complex Tasks:** < 300K tokens
+- **Alert Threshold:** > 500K tokens (ควรแบ่งงาน)
+
+### Before Starting Work:
+
+1. สร้าง minimal context file (ใช้ template จาก `.cursor/rule-templates/minimal-context.md`)
+2. อ่านเฉพาะส่วนที่จำเป็น (ใช้ offset และ limit)
+3. ใช้ grep เพื่อหา pattern (ถ้าเป็นไปได้)
+4. แบ่งงานเป็น steps เล็กๆ
+5. Verify หลังแต่ละ step
+
+**See:** `.cursor/rules/token-optimization.md` for detailed rules and examples
+
+---
+
+## 🛡️ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
+
+> ⚠️ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
+
+| Phase | Command | Allowed Action | Forbidden Action |
+|-------|---------|----------------|------------------|
+| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | ❌ **Modify Source Code** |
+| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | ❌ **Modify Source Code** |
+| **3. Execute** | `/03-Code` | ✅ Modify Source Code according to Plan | — |
+| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | ❌ **Modify Logic** |
+
+### Mandatory Rules:
+- **STRICT PHASE LOCKING**: While running `/01-Task` or `/02-Plan`, using any tool to modify files outside the `.workspaces/specs/` directory is **STRICTLY PROHIBITED**.
+- **EXECUTION GATE**: If the User provides implementation details in early phases, record them as requirements in `spec.md` only. Do **NOT** apply them to the codebase.
+- **MANDATORY STOP & CONFIRM**: You must stop after creating the spec or plan and wait for the User to execute the next phase command.
+
+---
+
+## 🧱 Code Structure & Modularity
+
+- **Never create files longer than 500 lines** - Use partial classes or split logic into services/repositories.
+- **Organize by responsibility:**
+  - `Controllers/` - Request handling.
+  - `Models/` or `Entities/` - Data structures.
+  - `Views/` or `Pages/` - UI templates.
+  - `Services/` or `Business/` - Logic layer.
+  - `Data/` or `Repositories/` - Access layer (Entity Framework).
+- **Use Dependency Injection (DI)** - For modern ASP.NET Core projects.
+- **Separate View Logic** - Keep logic in Controllers/ViewModels, not in the Views.
+
+---
+
+## 🧪 Testing & Reliability
+
+- **Use xUnit, NUnit, or MSTest** for ASP.NET unit testing.
+- **Test fundamental logic**: Controllers, Service methods, and Data transformations.
+- **Mock dependencies**: Use Moq or NSubstitute for external services and DB contexts.
+- **Always write tests for edge cases**: Null inputs, empty strings, and database failures.
+
+---
+
+## 📎 Style & Conventions
+
+- **Follow Microsoft C# Coding Conventions**:
+  - Classes/Methods: `PascalCase`.
+  - Private fields: `_camelCase`.
+  - Properties: `PascalCase`.
+- **Use Async/Await** for all I/O bound operations (Database, API, File System).
+- **Handle Exceptions properly**: Use try-catch blocks in the service/data layer and provide meaningful error messages.
+
+---
+
+## 📚 Documentation Rules
+
+- **Use XML Documentation Comments** (`///`) for all public classes and methods.
+- **Explain complex business logic** with `// Reason:` comments.
+- **Document API endpoints** using Swagger/OpenAPI annotations.
+
+---
+
+## 🔧 ASP-Specific Gotchas
+
+### ASP.NET Core
+- **Middleware Order matters**: Ensure `UseRouting`, `UseAuthentication`, and `UseAuthorization` are in the correct sequence.
+- **DbContext Life-cycle**: Be careful with Scoped vs Singleton services.
+- **Configuration**: Always use `IOptions<T>` for reading configuration.
+
+### Classic ASP / Web Forms
+- **Session State**: Avoid heavy objects in Session.
+- **SQL Injection**: Always use Parameterized Queries (Command objects), NEVER concatenate strings for SQL.
+- **Error Handling**: Use `On Error Resume Next` sparingly and only with proper checks in Classic ASP.
+- **Global.asa / Global.asax**: Understand the application lifecycle events.
+
+---
+
+## 🤖 AI Behavior Rules
+- **Never assume the framework version** - Always verify against `.csproj` or `web.config`.
+- **Preference for modern patterns**: If the project is ASP.NET Core, suggest `System.Text.Json` over `Newtonsoft.Json` unless already in use.
+- **Security First**: Always check for common vulnerabilities (XSS, CSRF, SQL Injection) when writing ASP code.

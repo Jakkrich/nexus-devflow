@@ -17,7 +17,12 @@ import json
 import signal
 import argparse
 import subprocess
+import io
 from pathlib import Path
+
+# Ensure UTF-8 output for Windows terminals
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 AGENT_DIR = Path(".agent")
 PID_FILE = AGENT_DIR / "preview.pid"
