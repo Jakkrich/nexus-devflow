@@ -11,10 +11,16 @@ Usage:
 """
 
 import os
+import sys
 import json
 import argparse
+import io
 from pathlib import Path
 from typing import Dict, Any, List
+
+# Ensure UTF-8 output for Windows terminals
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def get_project_root(path: str) -> Path:
     return Path(path).resolve()
@@ -56,7 +62,7 @@ def analyze_package_json(root: Path) -> Dict[str, Any]:
 def count_files(root: Path) -> Dict[str, int]:
     stats = {"created": 0, "modified": 0, "total": 0}
     # Simple count for now, comprehensive tracking would require git diff or extensive history
-    exclude = {".git", "node_modules", ".next", "dist", "build", ".agent", ".gemini", "__pycache__"}
+    exclude = {".git", "node_modules", ".next", "dist", "build", ".agent", ".claude", ".gemini", "__pycache__"}
     
     for root_dir, dirs, files in os.walk(root):
         dirs[:] = [d for d in dirs if d not in exclude]

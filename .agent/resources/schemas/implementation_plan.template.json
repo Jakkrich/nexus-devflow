@@ -1,0 +1,59 @@
+{
+    "schema_version": "{SCHEMA_VERSION}",
+    "feature": "{ID}: {Title}",
+    "description": "{Description}",
+    "workflow_type": "feature|refactor|investigation|migration|simple",
+    "complexity_assessment": {
+        "level": "simple|standard|complex",
+        "approach": "Briefly explain the implementation approach."
+    },
+    "status": "planning",
+    "planStatus": "planning",
+    "xstateState": "planning",
+    "created_at": "{ISO_TIMESTAMP}",
+    "updated_at": "{ISO_TIMESTAMP}",
+    "phases": [
+        {
+            "id": "phase-1",
+            "name": "Example Phase",
+            "type": "implementation",
+            "depends_on": [],
+            "subtasks": [
+                {
+                    "id": "subtask-1.1",
+                    "title": "Subtask Title",
+                    "description": "Subtask description — Must be a string only",
+                    "service": "frontend|backend|fullstack",
+                    "files_to_modify": [
+                        "path/to/file.js",
+                        "path/to/file.css"
+                    ],
+                    "files_to_create": [],
+                    "patterns_from": [
+                        "path/to/reference.js#L100-200"
+                    ],
+                    "verification": {
+                        "type": "browser|command|manual",
+                        "command": "Verification command or steps",
+                        "expected": "Desired outcome"
+                    },
+                    "status": "pending"
+                }
+            ]
+        }
+    ],
+    "summary": {
+        "total_phases": 1,
+        "services_involved": [
+            "frontend"
+        ],
+        "parallelism": {
+            "max_parallel_phases": 1,
+            "recommended_workers": 1
+        },
+        "manual_verification_steps": [
+            "1. Manual test step 1",
+            "2. Manual test step 2"
+        ]
+    }
+}

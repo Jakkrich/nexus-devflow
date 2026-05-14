@@ -7,8 +7,8 @@ Orchestrates all validation scripts in priority order.
 Use this for incremental validation during development.
 
 Usage:
-    python scripts/checklist.py .                    # Run core checks
-    python scripts/checklist.py . --url <URL>        # Include performance checks
+    python .cursor/scripts/checklist.py .                    # Run core checks
+    python .cursor/scripts/checklist.py . --url <URL>        # Include performance checks
 
 Priority Order:
     P0: Security Scan (vulnerabilities, secrets)
@@ -23,8 +23,13 @@ Priority Order:
 import sys
 import subprocess
 import argparse
+import io
 from pathlib import Path
 from typing import List, Tuple, Optional
+
+# Ensure UTF-8 output for Windows terminals
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # ANSI colors for terminal output
 class Colors:
@@ -56,17 +61,17 @@ def print_error(text: str):
 
 # Define priority-ordered checks
 CORE_CHECKS = [
-    ("Security Scan", ".cursor/skills/vulnerability-scanner/scripts/security_scan.py", True),
-    ("Lint Check", ".cursor/skills/lint-and-validate/scripts/lint_runner.py", True),
-    ("Schema Validation", ".cursor/skills/database-design/scripts/schema_validator.py", False),
-    ("Test Runner", ".cursor/skills/testing-patterns/scripts/test_runner.py", False),
-    ("UX Audit", ".cursor/skills/frontend-design/scripts/ux_audit.py", False),
-    ("SEO Check", ".cursor/skills/seo-fundamentals/scripts/seo_checker.py", False),
+    ("Security Scan", "skills/vulnerability-scanner/scripts/security_scan.py", True),
+    ("Lint Check", "skills/lint-and-validate/scripts/lint_runner.py", True),
+    ("Schema Validation", "skills/database-design/scripts/schema_validator.py", False),
+    ("Test Runner", "skills/testing-patterns/scripts/test_runner.py", False),
+    ("UX Audit", "skills/frontend-design/scripts/ux_audit.py", False),
+    ("SEO Check", "skills/seo-fundamentals/scripts/seo_checker.py", False),
 ]
 
 PERFORMANCE_CHECKS = [
-    ("Lighthouse Audit", ".cursor/skills/performance-profiling/scripts/lighthouse_audit.py", True),
-    ("Playwright E2E", ".cursor/skills/webapp-testing/scripts/playwright_runner.py", False),
+    ("Lighthouse Audit", "skills/performance-profiling/scripts/lighthouse_audit.py", True),
+    ("Playwright E2E", "skills/webapp-testing/scripts/playwright_runner.py", False),
 ]
 
 def check_script_exists(script_path: Path) -> bool:
@@ -159,6 +164,22 @@ def print_summary(results: List[dict]):
         print_success("All checks PASSED ✨")
         return True
 
+def find_skill_path(project_path: Path, script_path: str) -> Path:
+    """Try to find the skill script in common locations"""
+    # 1. Try relative to project root (e.g., skills/...)
+    p1 = project_path / script_path
+    if p1.exists():
+        return p1
+    # 2. Try inside .agent folder (e.g., .cursor/skills/...)
+    p2 = project_path / ".agent" / script_path
+    if p2.exists():
+        return p2
+    # 3. Try inside .claude folder (legacy)
+    p3 = project_path / ".claude" / script_path
+    if p3.exists():
+        return p3
+    return p1
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run Antigravity Kit validation checklist",
@@ -189,8 +210,8 @@ Examples:
     
     # Run core checks
     print_header("📋 CORE CHECKS")
-    for name, script_path, required in CORE_CHECKS:
-        script = project_path / script_path
+    for name, script_rel_path, required in CORE_CHECKS:
+        script = find_skill_path(project_path, script_rel_path)
         result = run_script(name, script, str(project_path))
         results.append(result)
         
@@ -203,8 +224,8 @@ Examples:
     # Run performance checks if URL provided
     if args.url and not args.skip_performance:
         print_header("⚡ PERFORMANCE CHECKS")
-        for name, script_path, required in PERFORMANCE_CHECKS:
-            script = project_path / script_path
+        for name, script_rel_path, required in PERFORMANCE_CHECKS:
+            script = find_skill_path(project_path, script_rel_path)
             result = run_script(name, script, str(project_path), args.url)
             results.append(result)
     

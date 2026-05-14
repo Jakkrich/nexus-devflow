@@ -1,0 +1,269 @@
+---
+description: Governance rules template for PHP (CodeIgniter/Yii) projects.
+---
+# PHP Project Rules - Template
+
+## 🔍 Project Detection
+
+**IMPORTANT: Detect project type automatically at the start of each conversation.**
+
+### Detection Logic:
+1. **Check for framework indicators:**
+   - Look for `application/config/config.php` → **CodeIgniter 3**
+   - Look for `composer.json` with `"yiisoft/yii2"` → **Yii Framework**
+   - Check `index.php` for `define('ENVIRONMENT')` → **CodeIgniter 3**
+   - Check `web/index.php` with `require(__DIR__ . '/../vendor/autoload.php')` → **Yii Framework**
+   - Check directory structure:
+     - `application/` folder → **CodeIgniter 3**
+     - `vendor/yiisoft/` folder → **Yii Framework**
+
+2. **Check for framework version:**
+   - CodeIgniter 3: Check `application/config/config.php` for version comments
+   - Yii Framework: Check `composer.json` for `"yiisoft/yii2": "~2.0.x"`
+
+3. **Report detected framework:**
+   - "Detected: CodeIgniter 3" or "Detected: Yii Framework"
+   - Adjust rules accordingly
+
+---
+
+## 🔄 Project Awareness & Context
+
+### CodeIgniter 3 Specific Rules
+- **Always read `application/config/config.php`** to understand configuration
+- **Check `application/config/routes.php`** for routing rules
+- **Use `$this->load->model()`, `$this->load->view()`, `$this->load->library()`**
+- **Follow CodeIgniter naming conventions:**
+  - Controllers: `PascalCase` (e.g., `UserController.php`)
+  - Models: `PascalCase` (e.g., `User_model.php`)
+  - Views: `snake_case` (e.g., `user_list.php`)
+  - Libraries: `PascalCase` (e.g., `Email_library.php`)
+
+### Yii Framework Specific Rules
+- **Always read `config/web.php` or `config/console.php`** to understand configuration
+- **Check `config/routes.php`** for URL routing rules
+- **Use Yii's ActiveRecord** for database operations
+- **Use Yii's dependency injection** for services
+- **Follow Yii naming conventions:**
+  - Controllers: `PascalCase` (e.g., `UserController.php`)
+  - Models: `PascalCase` (e.g., `User.php`)
+  - Views: `snake_case` (e.g., `index.php`)
+  - Components: `PascalCase` (e.g., `EmailService.php`)
+
+### Common PHP Rules (Both Frameworks)
+- **Check existing code** before creating new functionality
+- **Use framework's built-in features** instead of reinventing
+- **Follow PSR standards** where applicable (PSR-1, PSR-2, PSR-4)
+- **Use Composer** for dependency management
+- **Use environment variables** for configuration (`.env` file)
+
+---
+
+## 🧱 Code Structure & Modularity
+
+- **Never create files longer than 500 lines** - Split into smaller classes or helpers
+- **Organize by feature:**
+  - **CodeIgniter 3:**
+    - `controllers/` - Request handling
+    - `models/` - Data access and business logic
+    - `views/` - Presentation layer
+    - `libraries/` - Reusable classes
+    - `helpers/` - Utility functions
+  - **Yii Framework:**
+    - `controllers/` - Request handling
+    - `models/` - Data models and business logic
+    - `views/` - Presentation layer
+    - `components/` - Reusable components
+    - `widgets/` - UI widgets
+- **Use namespaces** (Yii Framework) or proper class loading (CodeIgniter 3)
+- **Follow framework's autoloading** patterns
+
+---
+
+## 🧪 Testing & Reliability
+
+### Testing Rules
+- **Always create unit tests** for:
+  - Model methods
+  - Business logic
+  - API endpoints
+- **Test at least:**
+  - 1 happy path
+  - 1 edge case
+  - 1 error case
+- **Use database fixtures** for testing
+- **Test with different user roles** (if authentication is involved)
+
+---
+
+---
+
+## 📎 Style & Conventions
+
+### PHP Code
+- **Follow PSR-12** coding standard
+- **Use type hints** (PHP 7.4+)
+- **Format with `php-cs-fixer`** or `phpcs`
+- **Use strict types:** `declare(strict_types=1);`
+
+---
+
+## 📚 Documentation Rules
+
+- **Document model properties** with PHPDoc comments
+- **Comment complex business logic** with `// Reason:` comments
+- **Document API endpoints** with PHPDoc
+
+### Comment Prefixes
+
+Use standard comment prefixes to mark different types of notes in code:
+
+**Standard Prefixes:**
+- `TODO` - Work to be done in the future
+  - Example: `// TODO: Add input sanitization`
+- `FIXME` - Bug that needs to be fixed
+  - Example: `// FIXME: SQL injection vulnerability here`
+- `NOTE` - Important note or explanation
+  - Example: `// NOTE: CodeIgniter 3 specific behavior`
+- `HACK` - Temporary workaround
+  - Example: `// HACK: Temporary fix until upstream library updates`
+- `XXX` - Warning or issue that needs attention
+  - Example: `// XXX: This bypasses security check - review needed`
+- `BUG` - Known bug
+  - Example: `// BUG: Race condition when concurrent requests`
+- `OPTIMIZE` - Performance optimization opportunity
+  - Example: `// OPTIMIZE: N+1 query issue here`
+- `REFACTOR` - Code that should be refactored
+  - Example: `// REFACTOR: Extract to separate service class`
+- `DEPRECATED` - Deprecated code
+  - Example: `// DEPRECATED: Use new_api() instead`
+- `WARNING` - Warning message
+  - Example: `// WARNING: This modifies global state`
+
+**PRP-Specific Prefixes:**
+- `PRP` - Reference to a PRP document
+  - Example: `// PRP: BUG-456_login-fails-after-reset`
+- `CONTEXT` - Important context information
+  - Example: `// CONTEXT: See INITIAL.md for project overview`
+- `REASON` - Explanation for complex logic (already in use)
+  - Example: `// REASON: Yii Framework requires namespaced classes`
+
+**Optional Priority Levels:**
+- Add priority after prefix: `// TODO(P1): Critical - must fix before release`
+- P1 = Critical, P2 = Medium, P3 = Low
+
+---
+
+## 🧠 AI Behavior Rules
+
+- **Never assume framework** - Always detect first
+- **Never mix framework patterns** - Use framework-appropriate code
+- **Always check existing code** before creating new functionality
+- **Never delete or overwrite existing code** unless explicitly instructed
+- **Always use framework's security features** (CSRF protection, XSS prevention)
+- **Use framework's ORM/Query Builder** - Don't write raw SQL unless necessary
+- **Follow framework's routing conventions**
+
+---
+
+## 🤖 Agent Framework Protocols (Agent x PRPs)
+
+### 1. AGENT ROUTING CHECKLIST (MANDATORY BEFORE EVERY CODE/DESIGN RESPONSE)
+Before ANY code or design work, you MUST complete this mental checklist:
+- Identify the correct agent for the domain.
+- READ the agent's `.md` file (or recall its rules) from `agents/` folder.
+- **You MUST announce** `🤖 Applying knowledge of @[agent]...` at the start of your response.
+- Load required skills from the agent's frontmatter.
+*Failure to announce the agent = PROTOCOL VIOLATION.*
+
+### 2. GLOBAL SOCRATIC GATE (MANDATORY)
+Every user request for a new feature, build, or complex logic must pass through the Socratic Gate before ANY tool use or implementation.
+- **New Feature / Build**: Deep Discovery. ASK minimum 3 strategic questions (Trade-offs, Edge cases).
+- **Code Edit / Bug Fix**: Confirm understanding + ask impact questions.
+- **Vague / Simple**: Ask Purpose, Users, and Scope.
+- **Direct "Proceed"**: Even if the user says proceed, ask 2 "Edge Case" questions first.
+*Wait for the user to clear the Gate before invoking subagents or writing code.*
+
+### 3. Final Checklist Protocol
+Trigger: When the user says "final checks", "check it", or similar phrases, or during `/04-Verify`.
+- **Manual Audit**: `python <ROOT_AI_FOLDER>/scripts/checklist.py .` (replace <ROOT_AI_FOLDER> with `.cursor` or `.agent` or `.claude`)
+- **Pre-Deploy**: `python <ROOT_AI_FOLDER>/scripts/verify_all.py .`
+Execution Order: Security → Lint → Schema → Tests → UX → Seo.
+*A task is NOT finished until `checklist.py` returns success.*
+
+---
+
+## 🚀 Token Optimization Rules
+
+**MANDATORY: Always follow token optimization rules from `.cursor/rules/token-optimization.md`**
+
+### Core Principles:
+
+- **Read Only What You Need** - ใช้ `offset` และ `limit` เมื่ออ่านไฟล์
+- **Create Minimal Context** - สร้าง summary file แทนการส่งเอกสารทั้งหมด
+- **Incremental Processing** - ทำทีละขั้นตอนและ verify ทันที
+- **Pattern-Based Approach** - ใช้ `grep` และ line numbers แทนการอ่านทั้งไฟล์
+- **Direct Code Generation** - สำหรับงานง่ายๆ ให้สร้างโค้ดโดยตรง
+
+### Token Budget:
+
+- **Simple Tasks:** < 100K tokens
+- **Complex Tasks:** < 300K tokens
+- **Alert Threshold:** > 500K tokens (ควรแบ่งงาน)
+
+### Before Starting Work:
+
+1. สร้าง minimal context file (ใช้ template จาก `.cursor/rule-templates/minimal-context.md`)
+2. อ่านเฉพาะส่วนที่จำเป็น (ใช้ offset และ limit)
+3. ใช้ grep เพื่อหา pattern (ถ้าเป็นไปได้)
+4. แบ่งงานเป็น steps เล็กๆ
+5. Verify หลังแต่ละ step
+
+**See:** `.cursor/rules/token-optimization.md` for detailed rules and examples
+
+---
+
+## 🛡️ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
+
+> ⚠️ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
+
+| Phase | Command | Allowed Action | Forbidden Action |
+|-------|---------|----------------|------------------|
+| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | ❌ **Modify Source Code** |
+| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | ❌ **Modify Source Code** |
+| **3. Execute** | `/03-Code` | ✅ Modify Source Code according to Plan | — |
+| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | ❌ **Modify Logic** |
+
+### Mandatory Rules:
+- **STRICT PHASE LOCKING**: While running `/01-Task` or `/02-Plan`, using any tool to modify files outside the `.workspaces/specs/` directory is **STRICTLY PROHIBITED**.
+- **EXECUTION GATE**: If the User provides implementation details in early phases, record them as requirements in `spec.md` only. Do **NOT** apply them to the codebase.
+- **MANDATORY STOP & CONFIRM**: You must stop after creating the spec or plan and wait for the User to execute the next phase command.
+
+---
+
+## 🔧 Framework-Specific Gotchas
+
+### CodeIgniter 3 Gotchas
+- **Always check `BASEPATH`** - Prevent direct access
+- **Use `$this->input->post()`** for POST data (not `$_POST`)
+- **Use `$this->db->escape()`** for SQL injection prevention
+- **Session handling** - Use `$this->session->userdata()`
+- **File uploads** - Use `$this->upload->do_upload()`
+- **Form validation** - Use `$this->form_validation->run()`
+
+### Yii Framework Gotchas
+- **Use ActiveRecord** - Don't write raw SQL queries
+- **Use `Yii::$app->`** for application components
+- **CSRF protection** - Enabled by default, use `csrfParam` in forms
+- **XSS prevention** - Use `Html::encode()` for output
+- **Database transactions** - Use `$transaction = Yii::$app->db->beginTransaction()`
+- **Cache** - Use `Yii::$app->cache->set()` and `get()`
+
+### Common PHP Gotchas
+- **Always validate input** - Never trust user input
+- **Use prepared statements** - Prevent SQL injection
+- **Escape output** - Prevent XSS attacks
+- **Error handling** - Use try-catch blocks
+- **Memory management** - Be aware of large data sets
+- **Session security** - Use secure session configuration
+
