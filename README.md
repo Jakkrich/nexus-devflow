@@ -12,8 +12,8 @@ The PRPs-Framework is **IDE-Agnostic**. You can switch the entire codebase struc
 | AI IDE / Agent | Root Folder | Workflow Folder | Rules File |
 | :--- | :--- | :--- | :--- |
 | **Cursor** | `.cursor/` | `commands/` | `.cursorrules` |
-| **Windsurf** | `.cursor/` | `workflows/` | `.cursorrules` |
-| **Antigravity** | `.cursor/` | `workflows/` | `.antigravityrules` |
+| **Windsurf** | `.windsurf/` | `workflows/` | `.cursorrules` |
+| **Antigravity** | `.agent/` | `workflows/` | `.antigravityrules` |
 
 **How to switch:**
 ```powershell
