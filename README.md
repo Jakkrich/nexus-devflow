@@ -1,96 +1,117 @@
-# PRPs-Framework 🧠
+﻿# PRPs-Framework
 
-**Context Engineering Framework for Multi-IDE System-Agentic Development.**
+PRPs-Framework is an agent-ready Context Engineering framework for structured AI-assisted software development.
 
-This framework is designed to maximize the efficiency of collaboration between **SA/BA** and **DEV** when working with AI (Agentic Workflow). It shifts the paradigm from fragmented verbal/document-based discussions to a **JSON & Markdown Structure** that AI Agents can read, understand, and execute with surgical precision.
+It gives teams a repeatable workflow for turning ideas into specs, plans, implementation logs, QA reports, and roadmap artifacts. The framework now uses a single active agent bundle, `.agent`, and root-level npm scripts for activation, indexing, validation, and PRP task operations.
 
----
+## What This Provides
 
-## 🔑 Key Feature: Multi-IDE Switcher
-The PRPs-Framework is **IDE-Agnostic**. You can switch the entire codebase structure and internal links to support your favorite AI IDE using the `active-ide.py` script at the root.
+- Agent personas for planning, research, coding, testing, review, security, performance, Git, DevOps, and coaching
+- Slash-command style workflow prompts under `.agent`
+- JSON schemas and templates for task artifacts
+- Static dashboard assets
+- Canonical workspace artifacts under `.workspaces`
+- Root npm scripts that replace the legacy Python IDE switcher
 
-| AI IDE / Agent | Root Folder | Workflow Folder | Rules File |
-| :--- | :--- | :--- | :--- |
-| **Cursor** | `.cursor/` | `commands/` | `.cursorrules` |
-| **Windsurf** | `.windsurf/` | `workflows/` | `.cursorrules` |
-| **Antigravity** | `.agent/` | `workflows/` | `.antigravityrules` |
+## Current Architecture
 
-**How to switch:**
-```powershell
-# Interactive Menu
-python active-ide.py
-
-# Direct Switch
-python active-ide.py --cursor
-python active-ide.py --windsurf
-python active-ide.py --antigravity
-```
-
----
-
-## 🛠 Installation Guide
-
-### 📥 1. Quick Installation (One-Liner) ⭐ RECOMMENDED
-Open your terminal inside your project's root folder and run the command below to inject the PRPs engines directly into your project!
-
-**For Windows (PowerShell):**
-```powershell
-git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/application-etc/rules-development.git "$env:TEMP\prp-setup" 2>$null; git -C "$env:TEMP\prp-setup" sparse-checkout set .cursor/scripts; powershell -ExecutionPolicy Bypass -File "$env:TEMP\prp-setup\.cursor\scripts\update-prp.ps1" -Apply; Remove-Item "$env:TEMP\prp-setup" -Recurse -Force
-```
-
-**For Linux / Mac / WSL (Bash):**
-```bash
-git config --global credential.helper "cache --timeout=900" 2>/dev/null; git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/application-etc/rules-development.git /tmp/prp-setup 2>/dev/null; git -C /tmp/prp-setup sparse-checkout set .cursor/scripts; bash /tmp/prp-setup/.cursor/scripts/update-prp.sh --apply; rm -rf /tmp/prp-setup
-```
-
-### 📂 2. Project Structuring (Recommended)
-
-#### **Standard Multi-Module Isolation**
-Focus on isolating context to prevent AI confusion. Place Rules at the root but keep task data specific to each module:
 ```text
-your-project/
-├── .cursor/ (or .cursor/.windsurf)  <-- Rules & Prompts (One place)
-├── active-ide.py                   <-- Switcher Script
-├── module1/
-│   └── .auto-claude/               <-- Specs specific to module1
-└── module2/
-    └── .auto-claude/               <-- Specs specific to module2
+PRPs-Framework/
+.agent/                    # Antigravity IDE agent framework bundle
+.workspaces/               # Canonical generated artifacts and task workspaces
+  project_index.json
+  roadmap/
+    project_index.json
+    roadmap_discovery.json
+    roadmap.json
+docs/                      # Human-readable guides
+scripts/                   # Root npm automation
+package.json               # Root command surface
+ROADMAP.md                 # Human-readable roadmap
+AGENTS.md                  # Agent persona overview
+INITIAL.md                 # Project context index
+SETUP.md                   # Setup guide
 ```
 
----
+## Requirements
 
-## 🔄 Core Workflow (JSON-Driven)
+- Node.js >= 18.17
+- Python 3 for helper scripts inside `.agent/scripts`
+- Git
 
-We work in cycles using JSON as the "Source of Truth" for maximum precision:
+## Quick Start
 
-| Step | Command | Description | Outputs (Source of Truth) |
-| :--- | :--- | :--- | :--- |
-| **1. Create** | `/30-Task` | Define problem & set basics | `spec.md`, `requirements.json` |
-| **2. Plan** | `/31-Plan` | Code analysis & subtasking | `implementation_plan.json`, `context.json` |
-| **3. Execute** | `/32-Code` | AI writes code (Validation Loop) | Source Code, `task_logs.json` |
-| **4. Verify** | `/33-Verify` | Senior Review & QA report | `qa_report.md`, Status: `done` |
+```powershell
+npm run activate
+npm run validate
+```
 
----
+Check PRP task status:
 
-## 📊 Dashboard & Monitoring
-View overall task status via the **PRPs Dashboard** (Kanban Board):
-1. **Via Browser:** Open `[active-ide-root]/PRPs/html/dashboard.html`
-2. **Via Extension:** Install the `.vsix` from `[active-ide-root]/PRPs/extension/`
+```powershell
+npm run agent:status
+```
 
----
+Run the PRP CLI directly:
 
-## 🔍 Further Information
-- **Commands Guide:** [commands/README.md](.cursor/commands/README.md)
-- **Specialist Agents:** [agents/README.md](.cursor/agents/README.md)
-- **Knowledge Skills:** [skills/README.md](.cursor/skills/README.md)
+```powershell
+npm run agent -- --help
+npm run agent -- init 001 "Example Task" example-task "Describe the task"
+```
 
----
+## Important Commands
 
-## 🙏 Credits & Inspiration
-This project is inspired by and draws concepts from:
-- [PRPs-agentic-eng](https://github.com/Wirasm/PRPs-agentic-eng)
-- [Auto-Claude](https://github.com/AndyMik90/Auto-Claude)
-- [antigravity-kit](https://github.com/vudovn/antigravity-kit)
+| Command | Purpose |
+| :--- | :--- |
+| `npm run activate` | Prepare `.workspaces`, generate project indexes, and record active `.agent` metadata |
+| `npm run index` | Regenerate `.workspaces/project_index.json` and roadmap project index |
+| `npm run validate` | Validate required files, JSON artifacts, roadmap references, and legacy cleanup |
+| `npm run sync:check` | Verify `.agent` is the single active framework bundle |
+| `npm run agent -- <command>` | Run the PRP task CLI from `.agent/scripts/prp.mjs` |
 
----
-*Developed by Antigravity Team for Agent-Ready Repositories*
+## Core Workflow
+
+The framework works in a JSON-driven cycle:
+
+| Step | Command | Output |
+| :--- | :--- | :--- |
+| Create | `/30-Task` | `spec.md`, `requirements.json` |
+| Plan | `/31-Plan` | `implementation_plan.json`, `context.json` |
+| Execute | `/32-Code` | source changes, `task_logs.json` |
+| Verify | `/33-Verify` | `qa_report.md`, final status |
+
+## Roadmap Artifacts
+
+Machine-readable roadmap artifacts live in:
+
+```text
+.workspaces/roadmap/
+project_index.json
+roadmap_discovery.json
+roadmap.json
+```
+
+Human-readable roadmap summary:
+
+```text
+ROADMAP.md
+```
+
+## Documentation
+
+- [Quickstart](docs/quickstart.md)
+- [Workspace Artifacts](docs/workspace-artifacts.md)
+- [Agent Bundle and npm Activation](docs/agent-bundle.md)
+- [JSON Artifact Contract](docs/json-artifact-contract.md)
+- [Roadmap](ROADMAP.md)
+- [Agents](AGENTS.md)
+
+## Notes for Maintainers
+
+- `.agent` is the only active framework bundle.
+- `.workspaces` is the canonical generated artifact directory.
+- Root npm scripts are the supported command surface.
+- Regenerate project indexes with `npm run index` after structural changes.
+- Run `npm run validate` before committing framework changes.
+
+

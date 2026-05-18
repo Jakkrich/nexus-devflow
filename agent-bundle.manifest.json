@@ -1,0 +1,28 @@
+{
+  "source_bundle": ".agent",
+  "description": "Single-source manifest for the active PRPs agent bundle.",
+  "required_paths": [
+    ".agent/package.json",
+    ".agent/agents",
+    ".agent/docs",
+    ".agent/resources/schemas",
+    ".agent/rules",
+    ".agent/scripts/prp.mjs",
+    ".agent/skills",
+    ".agent/workflows",
+    ".agent/dashboard/html/dashboard.html",
+    ".agent/dashboard/html/dashboard.css",
+    ".agent/dashboard/html/dashboard.js"
+  ],
+  "forbidden_legacy_paths": [
+    ".auto-claude",
+    ".cursor",
+    ".windsurf"
+  ],
+  "commands": {
+    "activate": "npm run activate",
+    "validate": "npm run validate",
+    "check_bundle": "npm run sync:check"
+  }
+}
+

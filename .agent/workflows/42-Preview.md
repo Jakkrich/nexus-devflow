@@ -1,7 +1,7 @@
----
+﻿---
 description: Preview Management - Manage the local preview development server (start, stop, status check) using automation scripts.
 ---
-# 🌐 Preview Management
+# ðŸŒ Preview Management
 
 ## Usage: `/14-Preview [subcommand]`
 
@@ -9,7 +9,7 @@ Manage the local preview development server (start, stop, status check).
 
 ---
 
-## 🛠️ Sub-commands
+## ðŸ› ï¸ Sub-commands
 
 - `/14-Preview`           - Show current preview server status
 - `/14-Preview start`     - Start the server
@@ -19,10 +19,10 @@ Manage the local preview development server (start, stop, status check).
 
 ---
 
-## 🚦 Internal Process
+## ðŸš¦ Internal Process
 
 The AI will manage the preview server using the provided auto_preview script.
-*Note: Execute with IDE-Agnostic paths like `python <ROOT_AI_FOLDER>/scripts/auto_preview.py ...` (e.g. `.cursor` or `.cursor`)*
+*Note: Execute with IDE-Agnostic paths like `python <ROOT_AI_FOLDER>/scripts/auto_preview.py ...` (e.g. `.agent`)*
 
 Commands to execute:
 - **Start**: `python <ROOT_AI_FOLDER>/scripts/auto_preview.py start [port]`
@@ -37,7 +37,8 @@ If the port is in use, elegantly offer options to the user:
 
 ### Status Format
 When displaying status, clearly state:
-- 🌐 **URL**: e.g., `http://localhost:3000`
-- 📁 **Project Path**: Absolute path to project
-- 🏷️ **App Type**: Next.js, FastAPI, Odoo, PHP, etc.
-- 💚 **Health Status**: e.g., OK
+- ðŸŒ **URL**: e.g., `http://localhost:3000`
+- ðŸ“ **Project Path**: Absolute path to project
+- ðŸ·ï¸ **App Type**: Next.js, FastAPI, Odoo, PHP, etc.
+- ðŸ’š **Health Status**: e.g., OK
+

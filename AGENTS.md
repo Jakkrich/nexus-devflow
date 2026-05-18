@@ -1,82 +1,88 @@
-# 🤖 PRPs Specialist Agents (Personas)
+# PRPs Specialist Agents
 
-รายการชื่อและบทบาทหน้าที่ของ AI Agents เฉพาะทาง (Personas) ที่ใช้ในเฟรมเวิร์กนี้
+เอกสารนี้สรุป persona หลักที่ใช้ใน PRPs-Framework สำหรับทำงานแบบ agentic workflow ผ่าน `.agent` bundle
 
-## 📋 วิธีเรียกใช้งาน
-เรียกใช้ Agent เหล่านี้ได้ผ่านคำสั่ง:
+## วิธีเรียกใช้งาน
+
 ```text
 /90-Agent {ชื่อ_AGENT} {ไฟล์_หรือ_โฟลเดอร์_เป้าหมาย}
 ```
 
----
+ตัวอย่าง:
 
-## 🏗️ 1. กลุ่มวางแผนและข้อกำหนด (Requirements & Planning)
-*ขั้นตอน: `/30-Task`, `/31-Plan`, `/12-PRD`*
+```text
+/90-Agent discuss-spec .workspaces/specs/007/spec.md
+```
 
-| ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
-|:---|:---|:---|
-| **`prp-core-planner`** 🌟 | **ผู้วางแผนหลัก** | วิเคราะห์โค้ดเชิงลึกและสร้างแผนการลงมือทำแบบทีละขั้นตอน (ใช้ใน `/31-Plan`) |
-| **`discuss-spec`** | วิศวกรข้อกำหนด | ตรวจสอบและขัดเกลา `spec.md` ให้ชัดเจน 360 องศาก่อนเริ่มงาน |
-| **`prp-core-prd-architect`**| ผู้ออกแบบ PRD | ร่างเอกสารความต้องการผลิตภัณฑ์ (PRD) จากไอเดียเริ่มต้น (ใช้ใน `/12-PRD`) |
-| **`orchestrator`** | ผู้ประสานงานหลัก | ควบคุมและประสานงาน Agent หลายตัวเพื่อสร้างระบบที่มีความซับซ้อนสูง |
+## 1. Requirements & Planning
 
----
+ใช้ในขั้นตอน `/30-Task`, `/31-Plan`, `/12-PRD`
 
-## 🔍 2. กลุ่มสำรวจและวิจัย (Research & Exploration)
-*ขั้นตอน: `/11-Research`*
+| Agent | บทบาท | หน้าที่หลัก |
+| :--- | :--- | :--- |
+| `prp-core-planner` | ผู้วางแผนหลัก | วิเคราะห์โค้ดและสร้าง implementation plan |
+| `discuss-spec` | วิศวกรข้อกำหนด | ตรวจและขัดเกลา `spec.md` ก่อนเริ่มงาน |
+| `prp-core-prd-architect` | ผู้ออกแบบ PRD | ร่าง PRD จากไอเดียเริ่มต้น |
+| `orchestrator` | ผู้ประสานงานหลัก | ประสาน agent หลายตัวในงานซับซ้อน |
 
-| ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
-|:---|:---|:---|
-| **`codebase-explorer`** 🌟| **นักสำรวจโค้ด** | ค้นหาตำแหน่งโค้ดและรูปแบบ (Patterns) เดิมที่มีอยู่เพื่อนำกลับมาใช้ใหม่ |
-| **`codebase-analyst`** | นักวิเคราะห์ระบบ | วิเคราะห์การไหลของข้อมูล (Data Flow) และความสัมพันธ์ระหว่างโมดูลต่างๆ |
-| **`web-researcher`** | นักวิจัยข้อมูล | ค้นหาข้อมูลเชิงลึกจากภายนอก (APIs, Best Practices) และระบุแหล่งอ้างอิง |
+## 2. Research & Exploration
 
----
+ใช้ในขั้นตอน `/11-Research`
 
-## 🛠️ 3. กลุ่มเขียนโค้ดและพัฒนา (Implementation & Development)
-*ขั้นตอน: `/32-Code`, `/90-Agent`*
+| Agent | บทบาท | หน้าที่หลัก |
+| :--- | :--- | :--- |
+| `codebase-explorer` | นักสำรวจโค้ด | ค้นหาโค้ดและ pattern เดิมที่นำกลับมาใช้ได้ |
+| `codebase-analyst` | นักวิเคราะห์ระบบ | วิเคราะห์ data flow และความสัมพันธ์ระหว่างโมดูล |
+| `web-researcher` | นักวิจัยข้อมูล | ค้นคว้า API, best practices และแหล่งอ้างอิง |
 
-| ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
-|:---|:---|:---|
-| **`prp-core-coder`** 🌟 | **นักพัฒนาหลัก** | เขียนโค้ดตามแผนที่วางไว้ พร้อมระบบ Validation Loop ตรวจสอบความถูกต้องเสมอ |
-| **`backend-specialist`** | ผู้เชี่ยวชาญ Backend | ออกแบบ API, ฐานข้อมูล และตรรกะฝั่ง Server |
-| **`frontend-specialist`** | ผู้เชี่ยวชาญ Frontend | พัฒนา UI/UX ด้วย React, Next.js และทำให้หน้าตาเว็บสวยงาม |
-| **`database-architect`** | ผู้ออกแบบฐานข้อมูล | ปรับแต่ง Query ที่ซับซ้อน, การทำ Index และออกแบบ Schema |
-| **`code-simplifier`** | ผู้เชี่ยวชาญ Refactor | ปรับปรุงโค้ดให้อ่านง่ายและสะอาดขึ้น (Clean Code) |
-| **`type-design-analyzer`** | สถาปนิก Type | ตรวจสอบการออกแบบ Type และ Interface ให้สอดคล้องกัน |
+## 3. Implementation & Development
 
----
+ใช้ในขั้นตอน `/32-Code`, `/90-Agent`
 
-## 🛡️ 4. กลุ่มตรวจสอบและแก้ไขบั๊ก (Quality & Debugging)
-*ขั้นตอน: `/33-Verify`, `/20-Debug`, `/40-Test`*
+| Agent | บทบาท | หน้าที่หลัก |
+| :--- | :--- | :--- |
+| `prp-core-coder` | นักพัฒนาหลัก | เขียนโค้ดตามแผนและทำ validation loop |
+| `backend-specialist` | ผู้เชี่ยวชาญ Backend | ออกแบบ API, database และ server logic |
+| `frontend-specialist` | ผู้เชี่ยวชาญ Frontend | พัฒนา UI/UX และ frontend implementation |
+| `database-architect` | ผู้ออกแบบฐานข้อมูล | ออกแบบ schema, index และ query |
+| `code-simplifier` | ผู้เชี่ยวชาญ refactor | ปรับโค้ดให้อ่านง่ายและลดความซับซ้อน |
+| `type-design-analyzer` | สถาปนิก type | ตรวจ type/interface ให้สอดคล้องกัน |
 
-| ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
-|:---|:---|:---|
-| **`test-engineer`** 🌟 | **วิศวกรทดสอบ** | เขียนชุดทดสอบ Unit Test และ Integration Test |
-| **`prp-core-debugger`** | ผู้เชี่ยวชาญ RCA | ค้นหาต้นตอของบั๊กด้วยเทคนิค 5 Whys (Root Cause Analysis) |
-| **`code-reviewer`** | ผู้ตรวจสอบโค้ดอาวุโส | ตรวจสอบคุณภาพโค้ดตามมาตรฐานของโปรเจกต์และความปลอดภัย |
-| **`security-auditor`** | ผู้ตรวจสอบความปลอดภัย | ค้นหาช่องโหว่และข้อผิดพลาดทางตรรกะ (OWASP) |
-| **`performance-optimizer`** | ผู้ปรับแต่งประสิทธิภาพ | วิเคราะห์และแก้ปัญหาคอขวดเรื่อง Memory และ CPU |
+## 4. Quality & Debugging
 
----
+ใช้ในขั้นตอน `/33-Verify`, `/20-Debug`, `/40-Test`
 
-## 📦 5. กลุ่มจัดการ Git และเอกสาร (Git & Documentation)
-*ขั้นตอน: `/50-Commit`, `/51-PR`*
+| Agent | บทบาท | หน้าที่หลัก |
+| :--- | :--- | :--- |
+| `test-engineer` | วิศวกรทดสอบ | เขียน unit/integration tests |
+| `prp-core-debugger` | ผู้เชี่ยวชาญ RCA | วิเคราะห์ root cause ของบั๊ก |
+| `code-reviewer` | ผู้ตรวจโค้ดอาวุโส | ตรวจคุณภาพ ความเสี่ยง และมาตรฐานโปรเจค |
+| `security-auditor` | ผู้ตรวจความปลอดภัย | ตรวจช่องโหว่และ logic risk |
+| `performance-optimizer` | ผู้ปรับประสิทธิภาพ | วิเคราะห์ bottleneck ด้าน CPU, memory และ latency |
+| `silent-failure-hunter` | ผู้ตรวจ failure ที่เงียบ | หาจุดที่ error อาจเกิดแต่ไม่มี log หรือ alert |
 
-| ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
-|:---|:---|:---|
-| **`prp-core-git-committer`**🌟| **ผู้เชี่ยวชาญ Git** | ช่วยเลือกไฟล์และเขียน Commit Message ตามมาตรฐาน |
-| **`prp-core-git-pr-maker`** | ผู้จัดการ PR | รวบรวมข้อมูลและสร้าง Pull Request ที่สมบูรณ์ |
+## 5. Git & Documentation
 
----
+ใช้ในขั้นตอน `/50-Commit`, `/51-PR`
 
-## 🎓 6. กลุ่มช่วยเหลือและที่ปรึกษา (Support & Coaching)
-*ขั้นตอน: `/99-Coach`*
+| Agent | บทบาท | หน้าที่หลัก |
+| :--- | :--- | :--- |
+| `prp-core-git-committer` | ผู้เชี่ยวชาญ Git | ช่วยเลือกไฟล์และเขียน commit message |
+| `prp-core-git-pr-maker` | ผู้จัดการ PR | สรุปข้อมูลและสร้าง pull request |
+| `docs-impact-agent` | ผู้ดูแลเอกสาร | วิเคราะห์ผลกระทบต่อเอกสารจากการเปลี่ยนโค้ด |
 
-| ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
-|:---|:---|:---|
-| **`coach-guideline`** 🌟 | **ที่ปรึกษาหลัก** | ให้คำแนะนำด้านแนวทางและช่วยเลือกคำสั่งที่เหมาะสม |
-| **`devops-engineer`** | วิศวกร DevOps | จัดการ Docker, Pipeline การ Deploy และความสมบูรณ์ของ Server |
+## 6. Support & Coaching
 
----
-🌟 = **Agent หลัก** ที่แนะนำให้เรียกใช้เป็นอันดับแรกในกลุ่มนั้นๆ
+ใช้ในขั้นตอน `/99-Coach`
+
+| Agent | บทบาท | หน้าที่หลัก |
+| :--- | :--- | :--- |
+| `coach-guideline` | ที่ปรึกษาหลัก | แนะนำ workflow และคำสั่งที่เหมาะสม |
+| `prp-core-codebase-assistant` | ผู้ช่วยโค้ดเบส | ตอบคำถามเกี่ยวกับโครงสร้างและ logic ในโปรเจค |
+| `devops-engineer` | วิศวกร DevOps | ดูแล Docker, pipeline, deployment และ server readiness |
+
+## หมายเหตุ
+
+- `.agent` คือ bundle หลักของ framework
+- ใช้ `npm run validate` เพื่อตรวจความพร้อมของ framework
+- ใช้ `npm run agent -- <command>` เพื่อเรียก PRP CLI จาก Node

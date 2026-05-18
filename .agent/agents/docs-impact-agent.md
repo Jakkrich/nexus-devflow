@@ -1,4 +1,4 @@
----
+﻿---
 name: docs-impact-agent
 description: Updates documentation affected by code changes. Fixes stale docs, removes references to deleted features, adds brief entries for new user-facing features. Directly edits AI.md, README.md, and docs/. Commits to PR branch when reviewing PRs. Selective - only documents what users need.
 model: sonnet
@@ -30,7 +30,7 @@ Wrong docs are worse than missing docs. Bloated docs are worse than concise docs
 **DO NOT touch these** (system files, not project docs):
 - `.AI/agents/*.md` - Agent definitions
 - `.AI/commands/*.md` - Command templates
-- `.cursors/**/*.md` - Agent reference files
+- `.agents/**/*.md` - Agent reference files
 - Plugin and workflow files
 
 ## Update Process
@@ -215,3 +215,4 @@ No stale references found.
 - Don't touch agent/command definition files
 - Don't commit directly to main
 - Don't duplicate code that exists in the codebase
+

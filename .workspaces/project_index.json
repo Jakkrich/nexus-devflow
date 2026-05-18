@@ -1,0 +1,112 @@
+{
+  "project_root": "D:\\PRPs-Framework",
+  "project_type": "single",
+  "services": {
+    "prps_framework": {
+      "name": "prps_framework",
+      "path": "D:\\PRPs-Framework",
+      "language": "JavaScript and Python",
+      "framework": "PRPs Context Engineering Framework",
+      "type": "library",
+      "package_manager": "npm",
+      "entry_point": "package.json",
+      "key_directories": {
+        ".agent": {
+          "path": ".agent",
+          "purpose": "Primary Antigravity IDE agent framework bundle"
+        },
+        ".workspaces": {
+          "path": ".workspaces",
+          "purpose": "Canonical generated project, roadmap, ideation, and spec artifacts"
+        },
+        "scripts": {
+          "path": "scripts",
+          "purpose": "Root npm automation scripts"
+        },
+        "docs": {
+          "path": "docs",
+          "purpose": "Human-readable user and maintainer guides"
+        }
+      },
+      "dependencies": [
+        "Node.js >=18.17",
+        "Python 3",
+        "Git",
+        "Antigravity IDE .agent workflows"
+      ],
+      "dev_dependencies": [],
+      "testing": "npm run validate",
+      "test_directory": "scripts",
+      "scripts": {
+        "agent": "node ./.agent/scripts/prp.mjs",
+        "agent:status": "node ./.agent/scripts/prp.mjs status",
+        "agent:validate": "node ./.agent/scripts/prp.mjs validate",
+        "activate": "node ./scripts/activate-agent.mjs",
+        "index": "node ./scripts/generate-project-index.mjs",
+        "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
+        "sync:check": "node ./scripts/sync-agent-bundle.mjs",
+        "validate": "node ./scripts/validate-framework.mjs"
+      }
+    },
+    "agent_flow": {
+      "name": "agent_flow",
+      "path": "D:\\PRPs-Framework\\.agent",
+      "language": "JavaScript and Python",
+      "framework": "Antigravity .agent bundle with Node.js ESM CLI and numbered Markdown workflows",
+      "type": "library",
+      "package_manager": "npm",
+      "entry_point": "./scripts/prp.mjs",
+      "key_directories": {
+        "agents": {
+          "path": "agents",
+          "purpose": "Specialist agent persona definitions"
+        },
+        "workflows": {
+          "path": "workflows",
+          "purpose": "Numbered Antigravity workflow prompts"
+        },
+        "docs": {
+          "path": "docs",
+          "purpose": "Framework documentation"
+        },
+        "resources": {
+          "path": "resources",
+          "purpose": "Schemas and templates for structured workflow artifacts"
+        },
+        "rules": {
+          "path": "rules",
+          "purpose": "Agent rules and coding guidance"
+        },
+        "scripts": {
+          "path": "scripts",
+          "purpose": "CLI, task tooling, validation, status, preview, and session helpers"
+        },
+        "skills": {
+          "path": "skills",
+          "purpose": "Reusable knowledge and automation skills"
+        },
+        "dashboard/html": {
+          "path": "dashboard/html",
+          "purpose": "Static dashboard UI assets"
+        }
+      },
+      "dependencies": [
+        "Node.js >=18.17"
+      ],
+      "testing": "Node.js script tests and framework validation",
+      "test_directory": "scripts"
+    }
+  },
+  "infrastructure": {},
+  "conventions": {
+    "documentation": "Markdown",
+    "artifact_format": "JSON and Markdown",
+    "agent_bundle": ".agent",
+    "primary_ide": "Antigravity",
+    "workspace_directory": ".workspaces",
+    "package_manager": "npm",
+    "legacy_cursor_removed": true
+  },
+  "generated_by": "scripts/generate-project-index.mjs",
+  "created_at": "2026-05-18T16:34:06.960Z"
+}

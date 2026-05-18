@@ -1,42 +1,56 @@
-## Project Context Index
+﻿## Project Context Index
 
-Use this file as the "Project Overview Overview" and an index linking to PRPs, references, and other documentation.
-Caution: Before making major structural changes, you should keep a snapshot with a Git commit.
+Use this file as a human-readable project overview. Machine-readable project context is generated at `.workspaces/project_index.json`.
 
 ### Project Overview
-- **Platform/Stack**: PRPs-Framework (Context Engineering)
-- **Description**: Framework for Context Engineering and Agent-based Development to systematically help SA/BA and DEV collaborate with AI.
 
-### System Requirements Summary (for Rebuild)
-- **Workflow**: 4-Step Cycle (JSON-Driven): Create (/30-Task) -> Plan (/31-Plan) -> Execute (/32-Code) -> Verify (/33-Verify).
-- **Organization**: Uses an Issue ID-based directory structure to group Spec, PRP, and execution results together.
-- **Traceability**: Enforces the use of an External Ref ID as a prefix for file and branch names.
+- **Platform/Stack**: PRPs-Framework, Context Engineering, Node.js CLI, Python helpers, Markdown/JSON artifacts
+- **Description**: Framework for structured agent-based development that helps SA/BA, DEV, QA, and reviewers collaborate with AI agents.
+- **Active Bundle**: `.agent`
+- **Command Surface**: root npm scripts
 
-### File & Directory Index
-- `INITIAL.md`: Project index file (current page)
-- `.auto-claude/`: Workspace status storage
-  - `specs/`: List of Tasks that have been processed
-  - `issues/`: Staging Area for pending tasks
+### System Requirements Summary
 
-### 🛠️ Core Commands
-- `/00-Init` : Init Context & Rules
-- `/30-Task` : New Task & Spec
-- `/31-Plan` : Analyze & Plan
-- `/32-Code` : Implement & Test
-- `/33-Verify` : Senior Audit
+- **Workflow**: Create -> Plan -> Execute -> Verify
+- **Artifact Style**: JSON and Markdown source-of-truth files
+- **Canonical Workspace Directory**: `.workspaces`
+- **Task Workspace Directory**: `.workspaces/specs`
+- **Roadmap Directory**: `.workspaces/roadmap`
 
-### Project Context (Auto-Synced)
-- **Detected Stack**: PRPs-Framework
-- **Active Project**: `./` (Root)
-- **Project Path**: `d:/wsl/prp-auto-dev/`
-- **Last Sync**: 2026-03-06 13:52 (Local Time)
+### Important Files
+
+- `package.json`: root npm command surface
+- `.agent/package.json`: agent bundle package metadata
+- `.agent/scripts/prp.mjs`: PRP task CLI
+- `.workspaces/project_index.json`: machine-readable project index
+- `.workspaces/roadmap/roadmap_discovery.json`: roadmap discovery output
+- `.workspaces/roadmap/roadmap.json`: machine-readable roadmap
+- `ROADMAP.md`: human-readable roadmap
+- `docs/quickstart.md`: setup and first-use guide
+
+### Core Commands
+
+- `npm run activate`: activate `.agent` and generate required project artifacts
+- `npm run index`: regenerate project indexes
+- `npm run validate`: validate framework health
+- `npm run sync:check`: confirm `.agent` is the only active bundle
+- `npm run agent -- <command>`: run PRP task CLI commands
 
 ### Active Specs & Tasks
+
 - *(Empty)*
 
 ### Documentation
-- [README (Root)] - `README.md`
 
-### Other Considerations
-- **Token Usage**: Optimized via `.cursor/rules/token-optimization.md`.
-- **Phase locking**: Active.
+- [README](README.md)
+- [Setup](SETUP.md)
+- [Roadmap](ROADMAP.md)
+- [Quickstart](docs/quickstart.md)
+- [Workspace Artifacts](docs/workspace-artifacts.md)
+
+### Maintenance Notes
+
+- Regenerate project index after directory or package changes.
+- Keep `.agent` as the single source for framework runtime assets.
+- Keep generated roadmap JSON and human-readable roadmap docs aligned.
+

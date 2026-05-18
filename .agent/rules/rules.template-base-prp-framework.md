@@ -1,9 +1,9 @@
----
+﻿---
 description: Core governance rules for the PRP-Framework (Context Engineering).
 ---
 # PRPs-Framework Core Rules - Governance Template
 
-## 🔍 Project Detection
+## ðŸ” Project Detection
 
 **IMPORTANT: Detect if this is a PRP-Framework managed project at the start of each conversation.**
 
@@ -11,7 +11,7 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 1. **Check for Framework Indicators:**
    - Presence of `.workspaces/` directory
    - Presence of `INITIAL.md` in the root
-   - Presence of `active-ide.py` script
+   - Presence of `npm run activate` script
 2. **Check Configuration:**
    - Look for commands like `/01-Task`, `/02-Plan` in `INITIAL.md`
 3. **Report detected framework:**
@@ -19,7 +19,7 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 
 ---
 
-## 🔄 Project Awareness & Context
+## ðŸ”„ Project Awareness & Context
 
 - **Always read `INITIAL.md`** at the beginning of the conversation to understand the project structure, active tasks, and current status.
 - **Follow the 4-Step Cycle strictly:**
@@ -31,46 +31,46 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 
 ---
 
-## 🚀 Token Optimization Rules
+## ðŸš€ Token Optimization Rules
 
 **MANDATORY: Always follow token optimization rules from `.claude/rules/token-optimization.md`**
 
 ### Core Principles:
 
-- **Read Only What You Need** - ใช้ `offset` และ `limit` เมื่ออ่านไฟล์
-- **Create Minimal Context** - สร้าง summary file แทนการส่งเอกสารทั้งหมด
-- **Incremental Processing** - ทำทีละขั้นตอนและ verify ทันที
-- **Pattern-Based Approach** - ใช้ `grep` และ line numbers แทนการอ่านทั้งไฟล์
-- **Direct Code Generation** - สำหรับงานง่ายๆ ให้สร้างโค้ดโดยตรง
+- **Read Only What You Need** - à¹ƒà¸Šà¹‰ `offset` à¹à¸¥à¸° `limit` à¹€à¸¡à¸·à¹ˆà¸­à¸­à¹ˆà¸²à¸™à¹„à¸Ÿà¸¥à¹Œ
+- **Create Minimal Context** - à¸ªà¸£à¹‰à¸²à¸‡ summary file à¹à¸—à¸™à¸à¸²à¸£à¸ªà¹ˆà¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
+- **Incremental Processing** - à¸—à¸³à¸—à¸µà¸¥à¸°à¸‚à¸±à¹‰à¸™à¸•à¸­à¸™à¹à¸¥à¸° verify à¸—à¸±à¸™à¸—à¸µ
+- **Pattern-Based Approach** - à¹ƒà¸Šà¹‰ `grep` à¹à¸¥à¸° line numbers à¹à¸—à¸™à¸à¸²à¸£à¸­à¹ˆà¸²à¸™à¸—à¸±à¹‰à¸‡à¹„à¸Ÿà¸¥à¹Œ
+- **Direct Code Generation** - à¸ªà¸³à¸«à¸£à¸±à¸šà¸‡à¸²à¸™à¸‡à¹ˆà¸²à¸¢à¹† à¹ƒà¸«à¹‰à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸„à¹‰à¸”à¹‚à¸”à¸¢à¸•à¸£à¸‡
 
 ### Token Budget:
 
 - **Simple Tasks:** < 100K tokens
 - **Complex Tasks:** < 300K tokens
-- **Alert Threshold:** > 500K tokens (ควรแบ่งงาน)
+- **Alert Threshold:** > 500K tokens (à¸„à¸§à¸£à¹à¸šà¹ˆà¸‡à¸‡à¸²à¸™)
 
 ### Before Starting Work:
 
-1. สร้าง minimal context file (ใช้ template จาก `.claude/rule-templates/minimal-context.md`)
-2. อ่านเฉพาะส่วนที่จำเป็น (ใช้ offset และ limit)
-3. ใช้ grep เพื่อหา pattern (ถ้าเป็นไปได้)
-4. แบ่งงานเป็น steps เล็กๆ
-5. Verify หลังแต่ละ step
+1. à¸ªà¸£à¹‰à¸²à¸‡ minimal context file (à¹ƒà¸Šà¹‰ template à¸ˆà¸²à¸ `.claude/rule-templates/minimal-context.md`)
+2. à¸­à¹ˆà¸²à¸™à¹€à¸‰à¸žà¸²à¸°à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¸ˆà¸³à¹€à¸›à¹‡à¸™ (à¹ƒà¸Šà¹‰ offset à¹à¸¥à¸° limit)
+3. à¹ƒà¸Šà¹‰ grep à¹€à¸žà¸·à¹ˆà¸­à¸«à¸² pattern (à¸–à¹‰à¸²à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸”à¹‰)
+4. à¹à¸šà¹ˆà¸‡à¸‡à¸²à¸™à¹€à¸›à¹‡à¸™ steps à¹€à¸¥à¹‡à¸à¹†
+5. Verify à¸«à¸¥à¸±à¸‡à¹à¸•à¹ˆà¸¥à¸° step
 
 **See:** `.claude/rules/token-optimization.md` for detailed rules and examples
 
 ---
 
-## 🛡️ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
+## ðŸ›¡ï¸ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
 
-> ⚠️ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
+> âš ï¸ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
 
 | Phase | Command | Allowed Action | Forbidden Action |
 |-------|---------|----------------|------------------|
-| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | ❌ **Modify Source Code** |
-| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | ❌ **Modify Source Code** |
-| **3. Execute** | `/03-Code` | ✅ Modify Source Code according to Plan | — |
-| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | ❌ **Modify Logic** |
+| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | âŒ **Modify Source Code** |
+| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | âŒ **Modify Source Code** |
+| **3. Execute** | `/03-Code` | âœ… Modify Source Code according to Plan | â€” |
+| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | âŒ **Modify Logic** |
 
 ### Mandatory Rules:
 - **STRICT PHASE LOCKING**: While running `/01-Task` or `/02-Plan`, using any tool to modify files outside the `.workspaces/specs/` directory is **STRICTLY PROHIBITED**.
@@ -79,7 +79,7 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 
 ---
 
-## 📂 Directory & File Standards
+## ðŸ“‚ Directory & File Standards
 
 ### .workspaces/ structure:
 - `specs/{TaskID}/spec.md`: Detailed requirements for a specific task.
@@ -93,7 +93,7 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 
 ---
 
-## 🤖 AI Behavior Rules
+## ðŸ¤– AI Behavior Rules
 
 - **Always maintain traceability**: Connect every code change back to a specific requirement in the Spec.
 - **Be proactive but safe**: Always verify the current phase before executing any tool.
@@ -102,8 +102,9 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 
 ---
 
-## 🧪 Validation & Quality
+## ðŸ§ª Validation & Quality
 
 - **The Validation Loop is mandatory**: Any code change in `/03-Code` must be followed by a verification sweep.
 - **Continuous Documentation**: Update logs and status files incrementally, don't wait until the end of the task.
 - **Final Audit**: A task is only "Done" when `/04-Verify` returns a success signal and all checklist items are checked.
+
