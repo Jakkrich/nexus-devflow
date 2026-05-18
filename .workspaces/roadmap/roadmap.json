@@ -1,0 +1,339 @@
+{
+  "id": "roadmap-20260518T154223Z",
+  "project_name": "PRPs-Framework",
+  "version": "1.0",
+  "vision": "PRPs-Framework is an IDE-agnostic context engineering toolkit that turns AI-assisted software development into a structured, traceable, JSON-driven workflow.",
+  "target_audience": {
+    "primary": "SA/BA and software developers who use AI coding agents and need a structured, repeatable workflow for requirements, planning, implementation, and verification.",
+    "secondary": [
+      "Technical leads standardizing AI-assisted delivery across teams",
+      "Solo developers who want stronger context management for agentic coding",
+      "AI IDE power users working across Cursor, Windsurf, and Antigravity",
+      "QA and review specialists who need traceable task artifacts"
+    ]
+  },
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "Foundation / MVP Hardening",
+      "description": "Make the framework reliable for workspace-based roadmap and task workflows by adding canonical files, validation, and documentation hygiene.",
+      "order": 1,
+      "status": "completed",
+      "features": [
+        "feature-1",
+        "feature-2",
+        "feature-3"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-1-1",
+          "title": "Canonical project context is available",
+          "description": "Required project index and roadmap discovery artifacts exist in the expected .workspaces locations and validate successfully.",
+          "features": [
+            "feature-1",
+            "feature-2"
+          ],
+          "status": "achieved"
+        },
+        {
+          "id": "milestone-1-2",
+          "title": "Documentation renders cleanly",
+          "description": "Thai and English documentation renders as UTF-8 without mojibake and explains the core workflow clearly.",
+          "features": [
+            "feature-3"
+          ],
+          "status": "achieved"
+        }
+      ]
+    },
+    {
+      "id": "phase-2",
+      "name": "Workflow Reliability",
+      "description": "Strengthen day-to-day developer use with root-level validation, reproducible sync, and clearer onboarding.",
+      "order": 2,
+      "status": "completed",
+      "features": [
+        "feature-4",
+        "feature-5",
+        "feature-6"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-2-1",
+          "title": "One command validates framework health",
+          "description": "Maintainers can run a documented root-level command to verify schemas, scripts, dashboard assets, and required artifacts.",
+          "features": [
+            "feature-4"
+          ],
+          "status": "achieved"
+        },
+        {
+          "id": "milestone-2-2",
+          "title": "IDE bundles stay in sync",
+          "description": "Cursor and Antigravity framework trees can be compared or regenerated from a single source of truth.",
+          "features": [
+            "feature-5",
+            "feature-6"
+          ],
+          "status": "achieved"
+        }
+      ]
+    },
+    {
+      "id": "phase-3",
+      "name": "Adoption and Scale",
+      "description": "Improve adoption across teams with guided setup, roadmap governance, and richer dashboard feedback.",
+      "order": 3,
+      "status": "completed",
+      "features": [
+        "feature-7",
+        "feature-8",
+        "feature-9"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-3-1",
+          "title": "New users can onboard quickly",
+          "description": "A concise quickstart and health check help users install, activate, and verify the framework in a target project.",
+          "features": [
+            "feature-7"
+          ],
+          "status": "achieved"
+        },
+        {
+          "id": "milestone-3-2",
+          "title": "Roadmap operations are visible and governed",
+          "description": "The project has an explicit roadmap, release cadence, and dashboard indicators for artifact health.",
+          "features": [
+            "feature-8",
+            "feature-9"
+          ],
+          "status": "achieved"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "feature-1",
+      "title": "Generate canonical project_index.json",
+      "description": "Create and maintain .workspaces/project_index.json using the workspace project index shape. Include detected services, key directories, entry points, dependencies, infrastructure, and conventions.",
+      "rationale": "The roadmap and planning agents expect project_index.json, and missing context causes downstream phases to fail or infer from incomplete information.",
+      "priority": "must",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "Given the repository root, when project indexing runs, then .workspaces/project_index.json is created as valid JSON",
+        "The index contains services for the root framework and IDE-specific bundles",
+        "The roadmap output directory receives a project_index.json copy usable by roadmap_features.md"
+      ],
+      "user_stories": [
+        "As a planning agent, I want a canonical project index so that I can reason about services and conventions without re-scanning the whole repository",
+        "As a maintainer, I want required context files generated predictably so that roadmap generation does not fail at startup"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-2",
+      "title": "Formalize roadmap discovery output location",
+      "description": "Standardize roadmap discovery files under .workspaces/roadmap and document when root-level copies are convenience outputs versus canonical runner outputs.",
+      "rationale": "Users and agents currently may look in different directories, which creates confusion between manually generated files and runner-managed roadmap artifacts.",
+      "priority": "must",
+      "complexity": "low",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [
+        "feature-1"
+      ],
+      "status": "done",
+      "acceptance_criteria": [
+        "roadmap_discovery.json exists in .workspaces/roadmap and validates against the discovery prompt contract",
+        "Documentation names .workspaces/roadmap as the canonical roadmap output directory",
+        "Root-level discovery files are clearly marked as optional human-readable or convenience artifacts"
+      ],
+      "user_stories": [
+        "As a roadmap generator, I want discovery data in the expected output directory so that feature generation can proceed without path ambiguity",
+        "As a developer, I want to know which files are canonical so that I do not edit the wrong artifact"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-3",
+      "title": "Normalize documentation encoding",
+      "description": "Convert README, SETUP, AGENTS, and related Thai/English docs to clean UTF-8 rendering. Add a lightweight check that catches mojibake in critical documentation files.",
+      "rationale": "Thai-language adoption is a differentiator for this framework, and garbled documentation undermines trust and onboarding quality.",
+      "priority": "must",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "Thai text and symbols render correctly in README.md, SETUP.md, and AGENTS.md",
+        "A documented validation step checks critical docs for common mojibake patterns",
+        "No workflow instructions are lost during encoding normalization"
+      ],
+      "user_stories": [
+        "As a Thai-speaking team member, I want documentation to render correctly so that I can follow setup and workflow guidance without guesswork",
+        "As a maintainer, I want encoding issues detected early so that docs stay readable after updates"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-4",
+      "title": "Add root-level framework validation command",
+      "description": "Expose a documented root command that validates JSON schemas, required .workspaces artifacts, CLI entrypoints, script tests, and dashboard asset presence.",
+      "rationale": "The framework already has validation scripts inside IDE bundles, but users need one obvious command to confirm the repository is healthy.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-2",
+      "dependencies": [
+        "feature-1",
+        "feature-2"
+      ],
+      "status": "done",
+      "acceptance_criteria": [
+        "A root-level command validates required JSON artifacts and reports missing files with actionable messages",
+        "The command verifies root package scripts and the .agent package entrypoint are present",
+        "The command exits non-zero when required roadmap or schema files are invalid"
+      ],
+      "user_stories": [
+        "As a maintainer, I want one validation command so that I can check framework health before release",
+        "As a user installing the framework, I want a clear pass/fail check so that I know setup is complete"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-5",
+      "title": "Create agent bundle health checker",
+      "description": "Add tooling to verify the .agent bundle has required agents, rules, schemas, scripts, skills, and dashboard assets, while confirming legacy bundle directories are absent.",
+      "rationale": "Duplicated IDE trees are useful for compatibility but create maintenance risk unless drift is visible and intentional.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-2",
+      "dependencies": [
+        "feature-4"
+      ],
+      "status": "done",
+      "acceptance_criteria": [
+        "The checker reports missing required .agent files and forbidden legacy bundle directories",
+        "Intentional differences can be allowlisted",
+        "The root validation command includes the sync check or links to it"
+      ],
+      "user_stories": [
+        "As a framework maintainer, I want to detect IDE bundle drift so that Cursor and Antigravity users receive equivalent workflows",
+        "As a contributor, I want clear drift reports so that I know which bundle needs updating"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-6",
+      "title": "Introduce single-source bundle generation",
+      "description": "Design a source-template or manifest-driven process that can regenerate IDE-specific folders from shared content while preserving necessary IDE differences.",
+      "rationale": "A sync checker finds drift, but generation from one source reduces long-term duplication cost as the agent and command library grows.",
+      "priority": "could",
+      "complexity": "high",
+      "impact": "medium",
+      "phase_id": "phase-2",
+      "dependencies": [
+        "feature-5"
+      ],
+      "status": "done",
+      "acceptance_criteria": [
+        "A shared manifest identifies files copied into each IDE bundle",
+        "Generation preserves Cursor, Windsurf, and Antigravity-specific names or paths",
+        "Generated output can be compared against checked-in bundles without unexpected changes"
+      ],
+      "user_stories": [
+        "As a maintainer, I want shared framework content generated into IDE-specific layouts so that updates are less error-prone",
+        "As a contributor, I want one place to edit shared agent guidance so that I do not duplicate changes manually"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-7",
+      "title": "Build a guided quickstart and health check",
+      "description": "Create a short onboarding path that walks users through installation, active IDE selection, symlink or copy setup, validation, and first task creation.",
+      "rationale": "The framework has powerful workflows, but new users need a fast path to success before they learn every command and persona.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-3",
+      "dependencies": [
+        "feature-4"
+      ],
+      "status": "done",
+      "acceptance_criteria": [
+        "A quickstart guide gets a new user from clone to validated setup in under 10 minutes",
+        "The guide covers both copy-based and symlink-based installation",
+        "The health check confirms active IDE files, project index, roadmap directory, and dashboard assets"
+      ],
+      "user_stories": [
+        "As a new user, I want a concise quickstart so that I can try the framework without reading every document first",
+        "As a team lead, I want repeatable setup steps so that team members configure projects consistently"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-8",
+      "title": "Publish human-readable roadmap and governance docs",
+      "description": "Add ROADMAP.md and lightweight governance guidance covering release cadence, artifact ownership, roadmap review, and how generated roadmap JSON maps to human planning docs.",
+      "rationale": "The project needs a visible strategic direction so users can understand what is planned, what is stable, and how to contribute improvements.",
+      "priority": "should",
+      "complexity": "low",
+      "impact": "medium",
+      "phase_id": "phase-3",
+      "dependencies": [
+        "feature-2"
+      ],
+      "status": "done",
+      "acceptance_criteria": [
+        "ROADMAP.md summarizes phases, priorities, and near-term focus",
+        "Governance notes define who owns generated artifacts and how updates are reviewed",
+        "The document links to .workspaces/roadmap/roadmap.json as the machine-readable source"
+      ],
+      "user_stories": [
+        "As a stakeholder, I want a readable roadmap so that I can understand project direction without reading JSON",
+        "As a maintainer, I want governance notes so that generated artifacts do not become stale or conflicting"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-9",
+      "title": "Add dashboard artifact health indicators",
+      "description": "Extend the PRPs dashboard to surface missing or stale workflow artifacts such as project_index.json, roadmap_discovery.json, roadmap.json, requirements, plans, and QA reports.",
+      "rationale": "Users benefit when framework health and task traceability are visible, not hidden in terminal logs or folder checks.",
+      "priority": "could",
+      "complexity": "high",
+      "impact": "medium",
+      "phase_id": "phase-3",
+      "dependencies": [
+        "feature-4",
+        "feature-8"
+      ],
+      "status": "done",
+      "acceptance_criteria": [
+        "Dashboard displays whether required project and roadmap artifacts exist",
+        "Dashboard distinguishes missing, stale, invalid, and healthy artifact states",
+        "Users can open or locate the relevant artifact from the dashboard context"
+      ],
+      "user_stories": [
+        "As a QA reviewer, I want dashboard health indicators so that I can quickly see whether task artifacts are complete",
+        "As a developer, I want missing files surfaced visually so that I can fix workflow setup before running agents"
+      ],
+      "competitor_insight_ids": []
+    }
+  ],
+  "metadata": {
+    "created_at": "2026-05-18T15:42:23Z",
+    "updated_at": "2026-05-18T15:58:46.514Z",
+    "generated_by": "roadmap_features agent",
+    "prioritization_framework": "MoSCoW",
+    "competitor_analysis_used": false
+  }
+}

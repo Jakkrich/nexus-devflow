@@ -1,9 +1,9 @@
----
+﻿---
 description: Governance rules template for .NET/ASP.NET Core projects.
 ---
 # ASP.NET Core Project Rules - Template
 
-## 🔍 Project Detection
+## ðŸ” Project Detection
 
 **IMPORTANT: Detect the ASP/ASP.NET version and language automatically at the start.**
 
@@ -22,7 +22,7 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 🔄 Project Awareness & Context
+## ðŸ”„ Project Awareness & Context
 
 - **Always read `web.config` or `appsettings.json`** to understand the application configuration and environment.
 - **Identify the Project Type**: MVC, Web API, Web Forms, or Razor Pages.
@@ -31,46 +31,46 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 🚀 Token Optimization Rules
+## ðŸš€ Token Optimization Rules
 
-**MANDATORY: Always follow token optimization rules from `.cursor/rules/token-optimization.md`**
+**MANDATORY: Always follow token optimization rules from `.agent/rules/minimal-context.md`**
 
 ### Core Principles:
 
-- **Read Only What You Need** - ใช้ `offset` และ `limit` เมื่ออ่านไฟล์
-- **Create Minimal Context** - สร้าง summary file แทนการส่งเอกสารทั้งหมด
-- **Incremental Processing** - ทำทีละขั้นตอนและ verify ทันที
-- **Pattern-Based Approach** - ใช้ `grep` และ line numbers แทนการอ่านทั้งไฟล์
-- **Direct Code Generation** - สำหรับงานง่ายๆ ให้สร้างโค้ดโดยตรง
+- **Read Only What You Need** - à¹ƒà¸Šà¹‰ `offset` à¹à¸¥à¸° `limit` à¹€à¸¡à¸·à¹ˆà¸­à¸­à¹ˆà¸²à¸™à¹„à¸Ÿà¸¥à¹Œ
+- **Create Minimal Context** - à¸ªà¸£à¹‰à¸²à¸‡ summary file à¹à¸—à¸™à¸à¸²à¸£à¸ªà¹ˆà¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
+- **Incremental Processing** - à¸—à¸³à¸—à¸µà¸¥à¸°à¸‚à¸±à¹‰à¸™à¸•à¸­à¸™à¹à¸¥à¸° verify à¸—à¸±à¸™à¸—à¸µ
+- **Pattern-Based Approach** - à¹ƒà¸Šà¹‰ `grep` à¹à¸¥à¸° line numbers à¹à¸—à¸™à¸à¸²à¸£à¸­à¹ˆà¸²à¸™à¸—à¸±à¹‰à¸‡à¹„à¸Ÿà¸¥à¹Œ
+- **Direct Code Generation** - à¸ªà¸³à¸«à¸£à¸±à¸šà¸‡à¸²à¸™à¸‡à¹ˆà¸²à¸¢à¹† à¹ƒà¸«à¹‰à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸„à¹‰à¸”à¹‚à¸”à¸¢à¸•à¸£à¸‡
 
 ### Token Budget:
 
 - **Simple Tasks:** < 100K tokens
 - **Complex Tasks:** < 300K tokens
-- **Alert Threshold:** > 500K tokens (ควรแบ่งงาน)
+- **Alert Threshold:** > 500K tokens (à¸„à¸§à¸£à¹à¸šà¹ˆà¸‡à¸‡à¸²à¸™)
 
 ### Before Starting Work:
 
-1. สร้าง minimal context file (ใช้ template จาก `.cursor/rule-templates/minimal-context.md`)
-2. อ่านเฉพาะส่วนที่จำเป็น (ใช้ offset และ limit)
-3. ใช้ grep เพื่อหา pattern (ถ้าเป็นไปได้)
-4. แบ่งงานเป็น steps เล็กๆ
-5. Verify หลังแต่ละ step
+1. à¸ªà¸£à¹‰à¸²à¸‡ minimal context file (à¹ƒà¸Šà¹‰ template à¸ˆà¸²à¸ `.agent/rules/minimal-context.md`)
+2. à¸­à¹ˆà¸²à¸™à¹€à¸‰à¸žà¸²à¸°à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¸ˆà¸³à¹€à¸›à¹‡à¸™ (à¹ƒà¸Šà¹‰ offset à¹à¸¥à¸° limit)
+3. à¹ƒà¸Šà¹‰ grep à¹€à¸žà¸·à¹ˆà¸­à¸«à¸² pattern (à¸–à¹‰à¸²à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸”à¹‰)
+4. à¹à¸šà¹ˆà¸‡à¸‡à¸²à¸™à¹€à¸›à¹‡à¸™ steps à¹€à¸¥à¹‡à¸à¹†
+5. Verify à¸«à¸¥à¸±à¸‡à¹à¸•à¹ˆà¸¥à¸° step
 
-**See:** `.cursor/rules/token-optimization.md` for detailed rules and examples
+**See:** `.agent/rules/minimal-context.md` for detailed rules and examples
 
 ---
 
-## 🛡️ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
+## ðŸ›¡ï¸ PHASE LOCKING & WORKFLOW ENFORCEMENT (STRICT)
 
-> ⚠️ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
+> âš ï¸ **STRICT GATE: ZERO TOLERANCE FOR CODE MODIFICATION IN PHASE 1 & 2**
 
 | Phase | Command | Allowed Action | Forbidden Action |
 |-------|---------|----------------|------------------|
-| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | ❌ **Modify Source Code** |
-| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | ❌ **Modify Source Code** |
-| **3. Execute** | `/03-Code` | ✅ Modify Source Code according to Plan | — |
-| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | ❌ **Modify Logic** |
+| **1. Create** | `/01-Task` | Create Metadata, `spec.md`, JSON files | âŒ **Modify Source Code** |
+| **2. Plan** | `/02-Plan` | Create Plan, Analyze Codebase | âŒ **Modify Source Code** |
+| **3. Execute** | `/03-Code` | âœ… Modify Source Code according to Plan | â€” |
+| **4. Verify** | `/04-Verify` | Inspect, Create QA Report | âŒ **Modify Logic** |
 
 ### Mandatory Rules:
 - **STRICT PHASE LOCKING**: While running `/01-Task` or `/02-Plan`, using any tool to modify files outside the `.workspaces/specs/` directory is **STRICTLY PROHIBITED**.
@@ -79,7 +79,7 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 🧱 Code Structure & Modularity
+## ðŸ§± Code Structure & Modularity
 
 - **Never create files longer than 500 lines** - Use partial classes or split logic into services/repositories.
 - **Organize by responsibility:**
@@ -93,7 +93,7 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 🧪 Testing & Reliability
+## ðŸ§ª Testing & Reliability
 
 - **Use xUnit, NUnit, or MSTest** for ASP.NET unit testing.
 - **Test fundamental logic**: Controllers, Service methods, and Data transformations.
@@ -102,7 +102,7 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 📎 Style & Conventions
+## ðŸ“Ž Style & Conventions
 
 - **Follow Microsoft C# Coding Conventions**:
   - Classes/Methods: `PascalCase`.
@@ -113,7 +113,7 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 📚 Documentation Rules
+## ðŸ“š Documentation Rules
 
 - **Use XML Documentation Comments** (`///`) for all public classes and methods.
 - **Explain complex business logic** with `// Reason:` comments.
@@ -121,7 +121,7 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 🔧 ASP-Specific Gotchas
+## ðŸ”§ ASP-Specific Gotchas
 
 ### ASP.NET Core
 - **Middleware Order matters**: Ensure `UseRouting`, `UseAuthentication`, and `UseAuthorization` are in the correct sequence.
@@ -136,7 +136,8 @@ description: Governance rules template for .NET/ASP.NET Core projects.
 
 ---
 
-## 🤖 AI Behavior Rules
+## ðŸ¤– AI Behavior Rules
 - **Never assume the framework version** - Always verify against `.csproj` or `web.config`.
 - **Preference for modern patterns**: If the project is ASP.NET Core, suggest `System.Text.Json` over `Newtonsoft.Json` unless already in use.
 - **Security First**: Always check for common vulnerabilities (XSS, CSRF, SQL Injection) when writing ASP code.
+

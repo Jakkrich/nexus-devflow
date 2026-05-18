@@ -1,0 +1,11 @@
+{
+  "active_bundle": ".agent",
+  "primary_ide": "Antigravity",
+  "package_manager": "npm",
+  "activated_at": "2026-05-18T16:04:21.390Z",
+  "scripts": {
+    "validate": "npm run validate",
+    "generate_project_index": "npm run index",
+    "prp_cli": "npm run agent -- <command>"
+  }
+}

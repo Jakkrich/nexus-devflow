@@ -1,26 +1,26 @@
-# PRP Framework - gitignore
+﻿# PRP Framework - gitignore
 
 # ------------------------------
-# 1. AUTO-CLAUDE (Logs & Trash)
+# 1. WORKSPACES (Logs & Trash)
 # ------------------------------
 # Logs & Status Files - Always Ignore
-.auto-claude/logs/
-.auto-claude/temp/
-.auto-claude/worktrees/
-.auto-claude-status
+.workspaces/logs/
+.workspaces/temp/
+.workspaces/worktrees/
+.workspaces-status
 *.log
 
 # Security & Secrets - CRITICAL IGNORE!
 .security-key
-.auto-claude-security.json
+.workspaces-security.json
 
 # ------------------------------
 # 2. ARTIFACTS (IGNORED BUT KEEP STRUCTURE)
 # ------------------------------
-# .auto-claude/issues/*
-# !.auto-claude/issues/.gitkeep
-# .auto-claude/specs/*
-# !.auto-claude/specs/.gitkeep
+# .workspaces/issues/*
+# !.workspaces/issues/.gitkeep
+# .workspaces/specs/*
+# !.workspaces/specs/.gitkeep
 
 # ------------------------------
 # 3. BACKEND & TOOLS
@@ -45,14 +45,12 @@ yarn-error.log
 # ------------------------------
 # 4. IDE / EDITOR SETTINGS
 # ------------------------------
-# VS Code / Cursor (Optional: Adjust based on team policy)
+# VS Code (Optional: Adjust based on team policy)
 .vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.cursor/prp-commit.txt
-# .cursor/ is usually kept, but personal configs can be ignored
 
 # ------------------------------
 # 5. OS Generated Files
@@ -75,10 +73,9 @@ PRPs-Framework/_notes/*
 **.env
 
 # ------------------------------
-# 8. Template HTML & App code .cursor\PRPs\extension with out .vsix upload
+# 8. Template HTML
 # ------------------------------
 template-html/*
-.cursor/PRPs/extension/*
-!.cursor/PRPs/extension/*.vsix
 
-# .auto-claude/roadmaps_.json
+# .workspaces/roadmaps_.json
+

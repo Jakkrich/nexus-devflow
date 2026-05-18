@@ -62,6 +62,35 @@ assert(logs.coding.logs.some((line) => line.includes('Testing log entry')), 'pha
 assert(logs.events.some((event) => event.message.includes('Testing log entry')), 'event log failed');
 console.log('[OK] logs and events verified.');
 
+run(['artifact:set', '999', 'requirements', 'task_description', 'Updated through artifact:set']);
+let requirements = readJson(path.join(taskDir, 'requirements.json'));
+assert(requirements.task_description === 'Updated through artifact:set', 'artifact:set failed');
+console.log('[OK] artifact:set verified.');
+
+run(['artifact:append', '999', 'requirements', 'acceptance_criteria', 'Artifact append works']);
+requirements = readJson(path.join(taskDir, 'requirements.json'));
+assert(requirements.acceptance_criteria.includes('Artifact append works'), 'artifact:append failed');
+console.log('[OK] artifact:append verified.');
+
+run(['artifact:merge', '999', 'complexity', 'metrics', '{"risk":"low"}']);
+const complexity = readJson(path.join(taskDir, 'complexity_assessment.json'));
+assert(complexity.metrics.risk === 'low', 'artifact:merge failed');
+console.log('[OK] artifact:merge verified.');
+
+const getOutput = run(['artifact:get', '999', 'requirements', 'task_description']);
+assert(getOutput.includes('Updated through artifact:set'), 'artifact:get failed');
+console.log('[OK] artifact:get verified.');
+
+fs.writeFileSync(
+  path.join(taskDir, 'requirements.json'),
+  '```json\n{"task_description":"Needs repair","user_goal":"Goal","workflow_type":"feature","acceptance_criteria":["ok",],"technical_constraints":[],"dependencies":[],"schema_version":"1.0.0","created_at":"now","updated_at":"now",}\n```',
+  'utf8',
+);
+run(['json:repair', '999', 'requirements']);
+requirements = readJson(path.join(taskDir, 'requirements.json'));
+assert(requirements.task_description === 'Needs repair', 'json:repair failed');
+console.log('[OK] json:repair verified.');
+
 run(['validate', '999']);
 console.log('[OK] schema validation passed.');
 

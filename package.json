@@ -1,0 +1,24 @@
+{
+  "name": "prps-framework",
+  "version": "1.0.0",
+  "description": "Agent-ready PRP workflow framework with .agent tooling, roadmap artifacts, and validation scripts.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "agent": "node ./.agent/scripts/prp.mjs",
+    "agent:status": "node ./.agent/scripts/prp.mjs status",
+    "agent:validate": "node ./.agent/scripts/prp.mjs validate",
+    "activate": "node ./scripts/activate-agent.mjs",
+    "index": "node ./scripts/generate-project-index.mjs",
+    "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
+    "sync:check": "node ./scripts/sync-agent-bundle.mjs",
+    "validate": "node ./scripts/validate-framework.mjs"
+  },
+  "bin": {
+    "prps": "./scripts/activate-agent.mjs"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "license": "UNLICENSED"
+}

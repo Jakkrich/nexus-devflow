@@ -75,6 +75,48 @@ function writeJson(file, data) {
   fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
 }
 
+function repairJson(raw) {
+  try {
+    JSON.parse(raw);
+    return raw;
+  } catch (originalError) {
+    let text = raw.trim();
+    text = text.replace(/^```(?:json)?\s*\n?/gm, '').replace(/\n?```\s*$/gm, '');
+    text = text.replace(/,(\s*[}\]])/g, '$1');
+    text = text.replace(/([}\]"0-9]|true|false|null)\s*\n(\s*[{["])/g, '$1,\n$2');
+    try {
+      JSON.parse(text);
+      return text;
+    } catch {
+      text = text.replace(/([}\]"])\s+([{["])/g, '$1, $2');
+      try {
+        JSON.parse(text);
+        return text;
+      } catch {
+        throw originalError;
+      }
+    }
+  }
+}
+
+function readJsonRepairable(file, fallback = {}, repair = false) {
+  if (!fs.existsSync(file)) return fallback;
+  const raw = fs.readFileSync(file, 'utf8');
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    if (!repair) throw new Error(`Cannot read JSON ${file}: ${error.message}`);
+    try {
+      const repaired = repairJson(raw);
+      const data = JSON.parse(repaired);
+      writeJson(file, data);
+      return data;
+    } catch (repairError) {
+      throw new Error(`Cannot repair JSON ${file}: ${repairError.message}`);
+    }
+  }
+}
+
 function readTemplate(name) {
   return readJson(path.join(SCHEMA_DIR, name));
 }
@@ -199,6 +241,114 @@ function parseOptions(args) {
     }
   }
   return { positional, options };
+}
+
+function resolveArtifactName(name) {
+  if (!name) throw new Error('Artifact name is required.');
+  const normalized = name.endsWith('.json') ? name : `${name}.json`;
+  const aliases = {
+    plan: 'implementation_plan.json',
+    implementation_plan: 'implementation_plan.json',
+    requirements: 'requirements.json',
+    metadata: 'task_metadata.json',
+    task_metadata: 'task_metadata.json',
+    logs: 'task_logs.json',
+    task_logs: 'task_logs.json',
+    context: 'context.json',
+    complexity: 'complexity_assessment.json',
+    complexity_assessment: 'complexity_assessment.json',
+  };
+  const fileName = aliases[name] || aliases[name.replace(/\.json$/, '')] || normalized;
+  if (!TEMPLATE_MANIFEST[fileName]) {
+    throw new Error(`Unknown artifact: ${name}. Known artifacts: ${Object.keys(TEMPLATE_MANIFEST).join(', ')}`);
+  }
+  return fileName;
+}
+
+function artifactPath(taskDir, artifactName) {
+  return path.join(taskDir, resolveArtifactName(artifactName));
+}
+
+function parseFieldPath(fieldPath) {
+  if (!fieldPath) return [];
+  const tokens = [];
+  const pattern = /([^.[\]]+)|\[(\d+)\]/g;
+  let match;
+  while ((match = pattern.exec(fieldPath)) !== null) {
+    tokens.push(match[1] ?? Number(match[2]));
+  }
+  return tokens;
+}
+
+function coerceCliValue(value) {
+  if (value === undefined) return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+}
+
+function getAtPath(data, fieldPath) {
+  let current = data;
+  for (const token of parseFieldPath(fieldPath)) {
+    if (current === undefined || current === null) return undefined;
+    current = current[token];
+  }
+  return current;
+}
+
+function setAtPath(data, fieldPath, value) {
+  const tokens = parseFieldPath(fieldPath);
+  if (!tokens.length) throw new Error('Field path is required.');
+  let current = data;
+  for (let i = 0; i < tokens.length - 1; i += 1) {
+    const token = tokens[i];
+    const nextToken = tokens[i + 1];
+    if (current[token] === undefined || current[token] === null) {
+      current[token] = typeof nextToken === 'number' ? [] : {};
+    }
+    current = current[token];
+    if (!isObject(current) && !Array.isArray(current)) {
+      throw new Error(`Cannot descend into non-container at ${tokens.slice(0, i + 1).join('.')}`);
+    }
+  }
+  current[tokens.at(-1)] = value;
+}
+
+function appendAtPath(data, fieldPath, value) {
+  const existing = getAtPath(data, fieldPath);
+  if (existing === undefined) {
+    setAtPath(data, fieldPath, []);
+  }
+  const target = getAtPath(data, fieldPath);
+  if (!Array.isArray(target)) throw new Error(`Field is not an array: ${fieldPath}`);
+  target.push(value);
+}
+
+function mergeAtPath(data, fieldPath, value) {
+  if (!isObject(value)) throw new Error('artifact:merge value must be a JSON object.');
+  const existing = getAtPath(data, fieldPath);
+  if (existing === undefined) {
+    setAtPath(data, fieldPath, {});
+  }
+  const target = getAtPath(data, fieldPath);
+  if (!isObject(target)) throw new Error(`Field is not an object: ${fieldPath}`);
+  Object.assign(target, value);
+}
+
+function loadArtifact(taskDir, artifactName, repair = false) {
+  const fileName = resolveArtifactName(artifactName);
+  const filePath = path.join(taskDir, fileName);
+  const templateName = TEMPLATE_MANIFEST[fileName];
+  const data = normalizeToTemplate(readJsonRepairable(filePath, readTemplate(templateName), repair), readTemplate(templateName));
+  data.schema_version ||= CONTRACT_VERSION;
+  return { fileName, filePath, templateName, data };
+}
+
+function saveArtifact(filePath, data) {
+  data.updated_at = timestamp();
+  writeJson(filePath, data);
 }
 
 function findTaskDir(id) {
@@ -388,7 +538,7 @@ function commandEvent(args) {
 function validateFile(filePath, templateName, fix) {
   const template = readTemplate(templateName);
   const schema = readSchemaForTemplate(templateName);
-  let data = readJson(filePath);
+  let data = readJsonRepairable(filePath, {}, fix);
   const missing = missingKeys(data, template);
   if (fix && missing.length) {
     data = normalizeToTemplate(data, template);
@@ -443,6 +593,78 @@ function commandRepair(args) {
   commandValidate([...args, '--fix'], true);
 }
 
+function commandArtifactGet(args) {
+  const { positional } = parseOptions(args);
+  const [id, artifactName, fieldPath] = positional;
+  if (!id || !artifactName) throw new Error('Usage: prp artifact:get {ID} {artifact} [field_path]');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { data } = loadArtifact(taskDir, artifactName, true);
+  const value = fieldPath ? getAtPath(data, fieldPath) : data;
+  console.log(JSON.stringify(value, null, 2));
+}
+
+function commandArtifactSet(args) {
+  const { positional } = parseOptions(args);
+  const [id, artifactName, fieldPath, ...valueParts] = positional;
+  if (!id || !artifactName || !fieldPath || !valueParts.length) {
+    throw new Error('Usage: prp artifact:set {ID} {artifact} {field_path} {value}');
+  }
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { fileName, filePath, data } = loadArtifact(taskDir, artifactName, true);
+  setAtPath(data, fieldPath, coerceCliValue(valueParts.join(' ')));
+  saveArtifact(filePath, data);
+  console.log(`Updated ${fileName}: ${fieldPath}`);
+}
+
+function commandArtifactAppend(args) {
+  const { positional } = parseOptions(args);
+  const [id, artifactName, fieldPath, ...valueParts] = positional;
+  if (!id || !artifactName || !fieldPath || !valueParts.length) {
+    throw new Error('Usage: prp artifact:append {ID} {artifact} {field_path} {value}');
+  }
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { fileName, filePath, data } = loadArtifact(taskDir, artifactName, true);
+  appendAtPath(data, fieldPath, coerceCliValue(valueParts.join(' ')));
+  saveArtifact(filePath, data);
+  console.log(`Appended ${fileName}: ${fieldPath}`);
+}
+
+function commandArtifactMerge(args) {
+  const { positional } = parseOptions(args);
+  const [id, artifactName, fieldPath, ...valueParts] = positional;
+  if (!id || !artifactName || !fieldPath || !valueParts.length) {
+    throw new Error('Usage: prp artifact:merge {ID} {artifact} {field_path} {json_object}');
+  }
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { fileName, filePath, data } = loadArtifact(taskDir, artifactName, true);
+  mergeAtPath(data, fieldPath, coerceCliValue(valueParts.join(' ')));
+  saveArtifact(filePath, data);
+  console.log(`Merged ${fileName}: ${fieldPath}`);
+}
+
+function commandJsonRepair(args) {
+  const { positional } = parseOptions(args);
+  const [id, artifactName] = positional;
+  if (!id || !artifactName) throw new Error('Usage: prp json:repair {ID} {artifact}');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { fileName, filePath, data } = loadArtifact(taskDir, artifactName, true);
+  saveArtifact(filePath, data);
+  const { missing, schemaErrors } = validateFile(filePath, TEMPLATE_MANIFEST[fileName], true);
+  if (missing.length || schemaErrors.length) {
+    console.log(`Repaired syntax and normalized ${fileName}, but validation still reports issues:`);
+    if (missing.length) console.log(`  MISSING KEYS: ${missing.join(', ')}`);
+    for (const error of schemaErrors) console.log(`  SCHEMA ERROR: ${error}`);
+    process.exitCode = 1;
+    return;
+  }
+  console.log(`Repaired and validated ${fileName}.`);
+}
+
 function commandStatus() {
   if (!fs.existsSync(SPECS_DIR)) {
     console.log('No tasks found (.workspaces/specs does not exist).');
@@ -479,6 +701,11 @@ Usage:
   prp update {ID} [--status status] [--subtask id --substatus status]
   prp log {ID} "message" [--phase planning|coding|validation] [--complete]
   prp event {ID} "message" [--event name] [--phase phase] [--ref id]
+  prp artifact:get {ID} {artifact} [field_path]
+  prp artifact:set {ID} {artifact} {field_path} {value}
+  prp artifact:append {ID} {artifact} {field_path} {value}
+  prp artifact:merge {ID} {artifact} {field_path} {json_object}
+  prp json:repair {ID} {artifact}
   prp validate [ID] [--fix]
   prp repair [ID]
   prp status
@@ -493,6 +720,11 @@ function main() {
     if (command === 'update') return commandUpdate(args);
     if (command === 'log') return commandLog(args);
     if (command === 'event') return commandEvent(args);
+    if (command === 'artifact:get') return commandArtifactGet(args);
+    if (command === 'artifact:set') return commandArtifactSet(args);
+    if (command === 'artifact:append') return commandArtifactAppend(args);
+    if (command === 'artifact:merge') return commandArtifactMerge(args);
+    if (command === 'json:repair') return commandJsonRepair(args);
     if (command === 'validate') return commandValidate(args);
     if (command === 'repair') return commandRepair(args);
     if (command === 'status') return commandStatus(args);
