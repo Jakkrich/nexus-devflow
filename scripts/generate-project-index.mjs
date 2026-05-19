@@ -71,7 +71,7 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
         },
         '.workspaces': {
           path: '.workspaces',
-          purpose: 'Canonical generated project, roadmap, ideation, and spec artifacts'
+          purpose: 'Canonical generated project, task, research, roadmap, PRD, debug, report, and lesson artifacts'
         },
         'scripts': {
           path: 'scripts',

@@ -12,12 +12,15 @@ npm run validate
 npm run index
 npm run sync:check
 npm run agent -- --help
+npm run agent -- artifact:get 001 requirements
+npm run agent -- plan:validate 001
 ```
 
 ## Bundle Rules
 
 - `.agent` contains agents, commands, rules, schemas, scripts, skills, and dashboard assets.
 - `.workspaces` contains generated project and roadmap artifacts.
+- Agents should use script-first JSON commands for structured artifacts instead of rewriting whole JSON files.
 - `scripts/` contains root automation wrappers and validation scripts.
 - Root docs explain how humans should use and maintain the framework.
 - `agent-bundle.manifest.json` defines the required bundle paths and forbidden legacy bundle paths.

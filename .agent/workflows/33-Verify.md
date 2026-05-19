@@ -1,46 +1,105 @@
-﻿---
-description: Verify Quality (Auto-QA Orchestration) - Perform a thorough, senior-engineer-level quality check on the implementation.
 ---
-# 🔍 Phase 33: Verify Quality (Auto-QA Orchestration)
-
-## Spec Folder: $ARGUMENTS
-
-Perform a thorough, senior-engineer-level quality check on the implementation. Generate a QA report and decide on the next steps.
-
+description: Verify Quality - Perform senior QA review and decide pass/fail with artifact validation.
 ---
+# Phase 33: Verify Quality
 
-## 🧠 Review Process
+Review implementation quality, run validation, produce a QA report, and route the task forward or back to coding.
 
-You are an orchestrator. Your goal is to call the specialized QA agent to verify the work.
+## Usage
 
-### Phase 1: Context Gathering
-- Locate the task directory `.workspaces/specs/{ID}/`.
-- Update `task_logs.json`: set `validation.status` to `active`.
+```text
+/33-Verify {ID}
+```
 
-### Phase 2: QA Execution
-**Call Agent**: `auto-qa-expert`
-- Provide the ID, the implementation plan, and the original spec.
-- Instruct the agent to:
-  - **Five-Axis Review**: Assess code for **Correctness**, **Readability**, **Architecture**, **Security**, and **Performance**.
-  - Run the validation suite (Type-check, Lint, Test, Build).
-  - **Run automated checklist**: You MUST run `python <ROOT_AI_FOLDER>/scripts/checklist.py .` (e.g., `.claude/scripts` or `.claude/scripts` based on environment) to perform quick checks (Security, Lint, Schema, UX, SEO) before summarizing the QA report.
-  - Categorize any issues found.
-  - **Identify Manual Checks**: Specify exactly what the human needs to check manually (e.g., UI feel, specific business logic edge cases that can't be auto-tested).
-  - Generate the `qa_report.md` (Must strictly follow the template in [../resources/schemas/qa_report.template.md](../resources/schemas/qa_report.template.md)).
+## Script-First JSON Rule
 
-### Phase 3: Final Decision
-- Based on the QA report:
-  - **If Pass**: Set `implementation_plan.json` values: `status: "human_review"`, `planStatus: "review"`, `xstateState: "human_review"`.
-  - **If Fail**: Set `implementation_plan.json` values: `status: "in_progress"`, `planStatus: "approved"`, `xstateState: "coding"` and return to coding phase.
-  - Mark `validation.status` in `task_logs.json` as `completed` or `failed`.
-  - Run `npx agent-flow validate {ID}` before reporting the final QA decision.
+Use commands for status and validation:
 
----
+```powershell
+npm run agent -- log {ID} "Started Phase 33: Verification" --phase validation
+npm run agent -- validate {ID}
+npm run agent -- update {ID} --status human_review
+npm run agent -- update {ID} --status in_progress
+npm run agent -- log {ID} "Phase 33 completed" --phase validation --complete
+```
 
-## 📄 Generation: QA Report (`qa_report.md`)
-The `auto-qa-expert` agent will generate this report in the task folder.
+If JSON is invalid, repair it before doing QA:
 
----
+```powershell
+npm run agent -- repair {ID}
+npm run agent -- validate {ID}
+```
 
-📌 **Next Step**: Run `/34-Human Approve {ID}` (when the user is satisfied).
+## Process
 
+### 1. Context Gathering
+
+Read:
+
+- `spec.md`
+- `requirements.json`
+- `implementation_plan.json`
+- `task_logs.json`
+- Changed files and test output
+
+### 2. Artifact Gate
+
+Run `npm run agent -- validate {ID}` first. If it fails, repair artifacts and re-run validation.
+
+### 3. QA Review
+
+Use the `qa_reviewer` pattern:
+
+- Correctness
+- Readability
+- Architecture
+- Security
+- Performance
+- Test coverage
+- Manual verification gaps
+
+Run project validation commands when available: lint, tests, typecheck, build, or targeted command from the plan.
+
+### 4. QA Report
+
+Create or update `qa_report.md` in the task directory. Include:
+
+- Verdict: pass or fail
+- Evidence: commands and results
+- Findings grouped by severity
+- Manual checks required
+- Recommended next action
+
+### 5. Decision
+
+If pass:
+
+```powershell
+npm run agent -- update {ID} --status human_review
+npm run agent -- log {ID} "QA passed; ready for human review" --phase validation --complete
+```
+
+If fail:
+
+```powershell
+npm run agent -- update {ID} --status in_progress
+npm run agent -- log {ID} "QA failed; returning to coding" --phase validation --complete
+```
+
+Use the `qa_fixer` pattern to turn findings into focused instructions for `/32-Code`.
+
+Always finish with:
+
+```powershell
+npm run agent -- validate {ID}
+```
+
+## Output
+
+Report:
+
+- QA verdict
+- Key findings
+- Commands run
+- Artifact validation status
+- Next command: `/34-Human Approve {ID}` if pass, or `/32-Code {ID}` if fail

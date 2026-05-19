@@ -14,6 +14,13 @@ Transform "$ARGUMENTS" into a battle-tested implementation plan through systemat
 
 **Execution Order**: CODEBASE FIRST, RESEARCH SECOND. Solutions must fit existing patterns before introducing new ones.
 
+**Script-First Artifact Contract**: For PRPs task artifacts, use the `json-artifact-handling` skill. Do not hand-write full JSON artifacts. Create and update planning JSON with:
+- `npm run agent -- artifact:set|append|merge ...`
+- `npm run agent -- plan:add-phase ...`
+- `npm run agent -- plan:add-subtask ...`
+- `npm run agent -- plan:validate {ID}`
+- `npm run agent -- validate {ID}`
+
 **Agent Strategy**: Use specialized agents for intelligence gathering:
 - `prp-core:codebase-explorer` — finds WHERE code lives and extracts implementation patterns
 - `prp-core:codebase-analyst` — analyzes HOW integration points work and traces data flow
@@ -23,7 +30,7 @@ Launch codebase agents in parallel first, then research agent second.
 </objective>
 
 <context>
-CLAUDE.md rules: @CLAUDE.md
+Project rules: read `AGENTS.md`, `.agent` workflow docs, and local project guidance before planning.
 
 **Directory Discovery** (run these to understand project structure):
 - List root contents: `ls -la`
@@ -125,13 +132,19 @@ So that <benefit/value>
 
 ## Phase 2: EXPLORE - Codebase Intelligence
 
-**CRITICAL: Launch two specialized agents in parallel using multiple Task tool calls in a single message.**
+For complex plans, recommend specialist `/90-Agent` calls for the user to run before finalizing the plan. If the IDE supports delegated agents and the user explicitly asked for orchestration, these can be run in parallel; otherwise keep the workflow manual and step-by-step.
 
 ### Agent 1: `prp-core:codebase-explorer`
 
 Finds WHERE code lives and extracts implementation patterns.
 
-Use Task tool with `subagent_type="prp-core:codebase-explorer"`:
+Recommended manual command:
+
+```text
+/90-Agent codebase-explorer {target}
+```
+
+Prompt to provide:
 
 ```
 Find all code relevant to implementing: [feature description].
@@ -154,7 +167,13 @@ Return ACTUAL code snippets from codebase, not generic examples.
 
 Analyzes HOW integration points work and traces data flow.
 
-Use Task tool with `subagent_type="prp-core:codebase-analyst"`:
+Recommended manual command:
+
+```text
+/90-Agent codebase-analyst {target}
+```
+
+Prompt to provide:
 
 ```
 Analyze the implementation details relevant to: [feature description].
@@ -184,7 +203,7 @@ Combine findings from both agents into a unified discovery table:
 
 **PHASE_2_CHECKPOINT:**
 
-- [ ] Both agents (`prp-core:codebase-explorer` and `prp-core:codebase-analyst`) launched in parallel and completed
+- [ ] Codebase exploration and analysis completed, either locally or through `/90-Agent`
 - [ ] At least 3 similar implementations found with file:line refs
 - [ ] Code snippets are ACTUAL (copy-pasted from codebase, not invented)
 - [ ] Integration points mapped with data flow traces
@@ -196,7 +215,13 @@ Combine findings from both agents into a unified discovery table:
 
 **ONLY AFTER Phase 2 is complete** - solutions must fit existing codebase patterns first.
 
-**Use Task tool with `subagent_type="prp-core:web-researcher"`:**
+Recommended manual command when external research is needed:
+
+```text
+/90-Agent web-researcher {research topic}
+```
+
+Prompt to provide:
 
 ```
 Research external documentation relevant to implementing: [feature description].
@@ -298,7 +323,13 @@ Return findings with:
 
 **For complex features with multiple integration points**, use `prp-core:codebase-analyst` to trace how existing architecture works at the integration points identified in Phase 2:
 
-Use Task tool with `subagent_type="prp-core:codebase-analyst"`:
+Recommended manual command:
+
+```text
+/90-Agent codebase-analyst {suspected area}
+```
+
+Prompt to provide:
 
 ```
 Analyze the architecture around these integration points for: [feature description].
@@ -362,7 +393,21 @@ Files to generate:
 - `context.json` (RAG intelligence)
 - `task_logs.json` (Timeline log)
 
-Create directory if needed: `mkdir -p .workspaces/specs/{task-id}`
+Create or update JSON artifacts through PRP CLI commands. Use direct Markdown editing for `plan.md` only.
+
+Recommended command pattern:
+
+```powershell
+npm run agent -- update {ID} --status planning
+npm run agent -- artifact:set {ID} context task_description "{Task summary}"
+npm run agent -- artifact:append {ID} context files_to_reference "{pattern file}"
+npm run agent -- artifact:set {ID} complexity level "{simple|standard|complex}"
+npm run agent -- artifact:set {ID} complexity approach "{Brief approach}"
+npm run agent -- plan:add-phase {ID} "{Phase Name}" --phase-id phase-1 --type implementation
+npm run agent -- plan:add-subtask {ID} phase-1 "{Subtask Title}" --description "{Detailed instruction}" --service backend --modify "src/file.ts" --pattern "src/example.ts" --verify-type command --verify-command "npm test" --verify-expected "tests pass"
+npm run agent -- plan:validate {ID}
+npm run agent -- validate {ID}
+```
 
 **PLAN_STRUCTURE** (the template to fill and save):
 
@@ -717,7 +762,7 @@ Use Browser MCP to verify:
 ```markdown
 ## Plan Created
 
-**Files Created**:
+**Files Created or Updated**:
 - `.workspaces/specs/{task-id}/plan.md`
 - `.workspaces/specs/{task-id}/implementation_plan.json`
 - `.workspaces/specs/{task-id}/context.json`
@@ -726,11 +771,11 @@ Use Browser MCP to verify:
 {If from PRD:}
 **Source PRD**: `{prd-file-path}`
 **Phase**: #{number} - {phase name}
-**PRD Updated**: Status set to `in-progress`, plan linked
+**PRD Update Recommended**: Status should be set to `in-progress`, plan linked
 
 {If parallel phases available:}
 **Parallel Opportunity**: Phase {X} can run concurrently in a separate worktree.
-To start: `git worktree add -b phase-{X} ../project-phase-{X} && cd ../project-phase-{X} && /prp-plan {prd-path}`
+To start: create a separate task or branch and run `/31-Plan {ID}` for that phase.
 
 **Summary**: {2-3 sentence feature overview}
 
@@ -741,7 +786,7 @@ To start: `git worktree add -b phase-{X} ../project-phase-{X} && cd ../project-p
 - {M} files to UPDATE
 - {K} total tasks
 
-**Next Step**: To execute, run: `/prp-implement .workspaces/specs/{task-id}/plan.md`
+**Next Step**: To execute, run: `/32-Code {ID}`
 ```
 
 </output>
@@ -756,6 +801,8 @@ To start: `git worktree add -b phase-{X} ../project-phase-{X} && cd ../project-p
 - [ ] Integration points mapped with specific file paths
 - [ ] Gotchas captured with mitigation strategies
 - [ ] Every task has at least one executable validation command
+- [ ] `npm run agent -- plan:validate {ID}` passes
+- [ ] `npm run agent -- validate {ID}` passes
 
 **IMPLEMENTATION_READINESS:**
 

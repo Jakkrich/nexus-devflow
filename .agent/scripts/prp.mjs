@@ -351,6 +351,113 @@ function saveArtifact(filePath, data) {
   writeJson(filePath, data);
 }
 
+function csvOrJsonArray(value) {
+  if (!value) return [];
+  const parsed = coerceCliValue(value);
+  if (Array.isArray(parsed)) return parsed.map((item) => String(item).trim()).filter(Boolean);
+  return String(value).split(',').map((item) => item.trim()).filter(Boolean);
+}
+
+function normalizeSubtaskStatus(status) {
+  const value = String(status || 'pending').trim().toLowerCase();
+  if (['pending', 'in_progress', 'completed', 'failed', 'done'].includes(value)) return value;
+  if (['todo', 'to_do', 'not_started', 'not-started', 'backlog'].includes(value)) return 'pending';
+  if (['in-progress', 'inprogress', 'working', 'active'].includes(value)) return 'in_progress';
+  if (['complete', 'finished', 'success'].includes(value)) return 'completed';
+  return 'pending';
+}
+
+function isTemplateExamplePhase(phase) {
+  return phase?.id === 'phase-1'
+    && phase?.name === 'Example Phase'
+    && Array.isArray(phase.subtasks)
+    && phase.subtasks.length === 1
+    && phase.subtasks[0]?.id === 'subtask-1.1'
+    && phase.subtasks[0]?.title === 'Subtask Title';
+}
+
+function clearExamplePlan(plan) {
+  if (Array.isArray(plan.phases) && plan.phases.length === 1 && isTemplateExamplePhase(plan.phases[0])) {
+    plan.phases = [];
+  }
+}
+
+function nextPhaseId(plan) {
+  const existing = new Set((plan.phases || []).map((phase) => phase.id));
+  let index = (plan.phases || []).length + 1;
+  while (existing.has(`phase-${index}`)) index += 1;
+  return `phase-${index}`;
+}
+
+function nextSubtaskId(phase) {
+  const existing = new Set((phase.subtasks || []).map((subtask) => subtask.id));
+  const phaseNumber = String(phase.id || 'phase-1').match(/\d+/)?.[0] || '1';
+  let index = (phase.subtasks || []).length + 1;
+  while (existing.has(`subtask-${phaseNumber}.${index}`)) index += 1;
+  return `subtask-${phaseNumber}.${index}`;
+}
+
+function findPhase(plan, phaseId) {
+  return (plan.phases || []).find((phase) => phase.id === phaseId || phase.name === phaseId);
+}
+
+function findSubtask(plan, subtaskId) {
+  for (const phase of plan.phases || []) {
+    for (const subtask of phase.subtasks || []) {
+      if (subtask.id === subtaskId || subtask.title === subtaskId) return { phase, subtask };
+    }
+  }
+  return null;
+}
+
+function updatePlanSummary(plan) {
+  const phases = Array.isArray(plan.phases) ? plan.phases : [];
+  const services = new Set();
+  const manualSteps = [];
+  for (const phase of phases) {
+    for (const subtask of phase.subtasks || []) {
+      if (subtask.service) services.add(subtask.service);
+      if (subtask.verification?.type === 'manual') {
+        manualSteps.push(subtask.verification.command || subtask.verification.expected || subtask.title);
+      }
+    }
+  }
+  plan.summary ||= {};
+  plan.summary.total_phases = phases.length;
+  plan.summary.services_involved = [...services];
+  plan.summary.parallelism ||= {};
+  plan.summary.parallelism.max_parallel_phases = Math.max(1, phases.filter((phase) => !phase.depends_on?.length).length);
+  plan.summary.parallelism.recommended_workers = Math.max(1, Math.min(3, plan.summary.parallelism.max_parallel_phases));
+  plan.summary.manual_verification_steps = manualSteps;
+}
+
+function validatePlanDependencies(plan) {
+  const errors = [];
+  const phases = Array.isArray(plan.phases) ? plan.phases : [];
+  const seen = new Set();
+  const allIds = new Set(phases.map((phase) => phase.id));
+  const subtaskIds = new Set();
+  for (const phase of phases) {
+    if (!phase.id) errors.push('Phase is missing id');
+    if (seen.has(phase.id)) errors.push(`Duplicate phase id: ${phase.id}`);
+    seen.add(phase.id);
+    for (const dep of phase.depends_on || []) {
+      if (dep === phase.id) errors.push(`Phase ${phase.id}: cannot depend on itself`);
+      if (!allIds.has(dep)) errors.push(`Phase ${phase.id}: depends on missing phase ${dep}`);
+      if (!seen.has(dep)) errors.push(`Phase ${phase.id}: depends on ${dep} before it appears in the plan`);
+    }
+    for (const subtask of phase.subtasks || []) {
+      if (subtaskIds.has(subtask.id)) errors.push(`Duplicate subtask id: ${subtask.id}`);
+      subtaskIds.add(subtask.id);
+    }
+  }
+  return errors;
+}
+
+function loadPlan(taskDir) {
+  return loadArtifact(taskDir, 'implementation_plan', true);
+}
+
 function findTaskDir(id) {
   if (!fs.existsSync(SPECS_DIR)) return null;
   return fs.readdirSync(SPECS_DIR, { withFileTypes: true })
@@ -464,7 +571,7 @@ function commandUpdate(args) {
     for (const phase of plan.phases || []) {
       for (const subtask of phase.subtasks || []) {
         if (subtask.id === options.subtask) {
-          subtask.status = options.substatus;
+          subtask.status = normalizeSubtaskStatus(options.substatus);
           found = true;
         }
       }
@@ -547,6 +654,9 @@ function validateFile(filePath, templateName, fix) {
     writeJson(filePath, data);
   }
   const schemaErrors = validateSchema(fix ? readJson(filePath) : data, schema);
+  if (templateName === 'implementation_plan.template.json') {
+    schemaErrors.push(...validatePlanDependencies(fix ? readJson(filePath) : data));
+  }
   return { missing, schemaErrors };
 }
 
@@ -665,6 +775,104 @@ function commandJsonRepair(args) {
   console.log(`Repaired and validated ${fileName}.`);
 }
 
+function commandPlanAddPhase(args) {
+  const { positional, options } = parseOptions(args);
+  const [id, ...nameParts] = positional;
+  const name = nameParts.join(' ').trim();
+  if (!id || !name) throw new Error('Usage: prp plan:add-phase {ID} "{Name}" [--phase-id id] [--type implementation] [--depends-on phase-1,phase-2]');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { filePath, data: plan } = loadPlan(taskDir);
+  clearExamplePlan(plan);
+  const phaseId = options['phase-id'] || nextPhaseId(plan);
+  if (findPhase(plan, phaseId)) throw new Error(`Phase already exists: ${phaseId}`);
+  plan.phases ||= [];
+  plan.phases.push({
+    id: phaseId,
+    name,
+    type: options.type || 'implementation',
+    depends_on: csvOrJsonArray(options['depends-on']),
+    subtasks: [],
+  });
+  updatePlanSummary(plan);
+  saveArtifact(filePath, plan);
+  console.log(`Added phase ${phaseId}: ${name}`);
+}
+
+function commandPlanAddSubtask(args) {
+  const { positional, options } = parseOptions(args);
+  const [id, phaseId, ...titleParts] = positional;
+  const title = titleParts.join(' ').trim();
+  if (!id || !phaseId || !title) {
+    throw new Error('Usage: prp plan:add-subtask {ID} {PHASE_ID} "{Title}" [--description text] [--service backend] [--modify a,b] [--create a,b] [--pattern a,b] [--verify-command cmd]');
+  }
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { filePath, data: plan } = loadPlan(taskDir);
+  clearExamplePlan(plan);
+  const phase = findPhase(plan, phaseId);
+  if (!phase) throw new Error(`Phase not found: ${phaseId}`);
+  phase.subtasks ||= [];
+  const subtaskId = options['subtask-id'] || options.id || nextSubtaskId(phase);
+  if (findSubtask(plan, subtaskId)) throw new Error(`Subtask already exists: ${subtaskId}`);
+  phase.subtasks.push({
+    id: subtaskId,
+    title,
+    description: options.description || title,
+    service: options.service || 'fullstack',
+    files_to_modify: csvOrJsonArray(options.modify || options['files-to-modify']),
+    files_to_create: csvOrJsonArray(options.create || options['files-to-create']),
+    patterns_from: csvOrJsonArray(options.pattern || options['patterns-from']),
+    verification: {
+      type: options['verify-type'] || 'manual',
+      command: options['verify-command'] || options.verify || 'Manual verification',
+      expected: options['verify-expected'] || 'Expected behavior is observed',
+    },
+    status: normalizeSubtaskStatus(options.status || 'pending'),
+  });
+  updatePlanSummary(plan);
+  saveArtifact(filePath, plan);
+  console.log(`Added subtask ${subtaskId}: ${title}`);
+}
+
+function commandPlanSetSubtaskStatus(args) {
+  const { positional } = parseOptions(args);
+  const [id, subtaskId, status] = positional;
+  if (!id || !subtaskId || !status) throw new Error('Usage: prp plan:set-subtask-status {ID} {SUBTASK_ID} {status}');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { filePath, data: plan } = loadPlan(taskDir);
+  const found = findSubtask(plan, subtaskId);
+  if (!found) throw new Error(`Subtask not found: ${subtaskId}`);
+  found.subtask.status = normalizeSubtaskStatus(status);
+  updatePlanSummary(plan);
+  saveArtifact(filePath, plan);
+  appendEvent(taskDir, {
+    event: 'subtask.status_changed',
+    phase: plan.xstateState || 'coding',
+    ref: found.subtask.id,
+    message: `Subtask ${found.subtask.id} -> ${found.subtask.status}`,
+  });
+  console.log(`Updated subtask ${found.subtask.id}: ${found.subtask.status}`);
+}
+
+function commandPlanValidate(args) {
+  const { positional } = parseOptions(args);
+  const [id] = positional;
+  if (!id) throw new Error('Usage: prp plan:validate {ID}');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const planPath = path.join(taskDir, 'implementation_plan.json');
+  const { missing, schemaErrors } = validateFile(planPath, 'implementation_plan.template.json', false);
+  if (missing.length || schemaErrors.length) {
+    if (missing.length) console.log(`MISSING KEYS: ${missing.join(', ')}`);
+    for (const error of schemaErrors) console.log(`SCHEMA ERROR: ${error}`);
+    process.exitCode = 1;
+    return;
+  }
+  console.log('Plan validation passed.');
+}
+
 function commandStatus() {
   if (!fs.existsSync(SPECS_DIR)) {
     console.log('No tasks found (.workspaces/specs does not exist).');
@@ -706,6 +914,10 @@ Usage:
   prp artifact:append {ID} {artifact} {field_path} {value}
   prp artifact:merge {ID} {artifact} {field_path} {json_object}
   prp json:repair {ID} {artifact}
+  prp plan:add-phase {ID} "{Name}" [--phase-id id] [--type implementation] [--depends-on phase-1,phase-2]
+  prp plan:add-subtask {ID} {PHASE_ID} "{Title}" [--description text] [--service backend] [--modify a,b] [--create a,b]
+  prp plan:set-subtask-status {ID} {SUBTASK_ID} {status}
+  prp plan:validate {ID}
   prp validate [ID] [--fix]
   prp repair [ID]
   prp status
@@ -725,6 +937,10 @@ function main() {
     if (command === 'artifact:append') return commandArtifactAppend(args);
     if (command === 'artifact:merge') return commandArtifactMerge(args);
     if (command === 'json:repair') return commandJsonRepair(args);
+    if (command === 'plan:add-phase') return commandPlanAddPhase(args);
+    if (command === 'plan:add-subtask') return commandPlanAddSubtask(args);
+    if (command === 'plan:set-subtask-status') return commandPlanSetSubtaskStatus(args);
+    if (command === 'plan:validate') return commandPlanValidate(args);
     if (command === 'validate') return commandValidate(args);
     if (command === 'repair') return commandRepair(args);
     if (command === 'status') return commandStatus(args);

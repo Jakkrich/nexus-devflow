@@ -19,6 +19,14 @@ Find the **actual root cause** - the specific code, config, or logic that, if ch
 
 **The Test**: "If I changed THIS, would the issue be prevented?" If the answer is "maybe" or "partially", you haven't found the root cause yet. Keep digging.
 
+**Artifact Rule**: If RCA findings need to be recorded in PRPs JSON, use the `json-artifact-handling` skill and script-first commands. Prefer logs and status commands over manual JSON edits:
+
+```powershell
+npm run agent -- log {ID} "Root cause: {summary}" --phase validation
+npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} failed
+npm run agent -- validate {ID}
+```
+
 ---
 
 ## Phase 1: CLASSIFY - Parse Input
@@ -106,7 +114,13 @@ WHY 5: Why does [intermediate cause D] happen?
 
 **For tracing complex code paths**, use `prp-core:codebase-analyst` to understand how the suspected code works before diving into the 5 Whys:
 
-Use Task tool with `subagent_type="prp-core:codebase-analyst"`:
+Recommended manual command:
+
+```text
+/90-Agent codebase-analyst {suspected area}
+```
+
+Prompt to provide:
 
 ```
 Analyze the implementation around: [suspected area / error location]

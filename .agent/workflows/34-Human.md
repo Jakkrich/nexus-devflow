@@ -67,6 +67,18 @@ Instruct the Agent to use the `replace_file_content` tool to modify the `status`
 - **Recommend Next Step**: _"Run `/32-Code {ID}` to improve based on the Feedback"_
 - **Record lesson (Optional)**: If the Feedback represents a rule or style that should be memorized permanently, add a note to `.workspaces/lessons.md`. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md).
 
+#### Follow-Up Planning Addon
+
+When the user asks for additional functionality after completion, apply the `followup_planner` pattern:
+
+- Extend the existing implementation plan; do not replace completed phases or subtasks.
+- Preserve all existing statuses.
+- Add new phase(s) and subtask(s) with `npm run agent -- plan:add-phase` and `npm run agent -- plan:add-subtask`.
+- Run `npm run agent -- plan:validate {ID}` and `npm run agent -- validate {ID}`.
+- Recommend `/32-Code {ID}` only after the user approves the added follow-up plan.
+
+When the task is approved or rejected, optionally apply the `insight_extractor` pattern to record reusable lessons, gotchas, and future recommendations.
+
 ### Step 3: Notify
 Show a summary to the user:
 

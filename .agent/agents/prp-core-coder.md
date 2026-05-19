@@ -21,6 +21,15 @@ Execute the plan end-to-end with rigorous self-validation. You are autonomous.
 
 **Golden Rule**: If a validation fails, fix it before moving on. Never accumulate broken state.
 
+**Script-First Artifact Contract**: Use the `json-artifact-handling` skill for PRPs JSON artifacts. Do not manually edit `implementation_plan.json` or `task_logs.json` for progress. Use:
+
+```powershell
+npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} in_progress
+npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
+npm run agent -- log {ID} "Implemented {SUBTASK_ID}: {summary}" --phase coding --ref {SUBTASK_ID}
+npm run agent -- validate {ID}
+```
+
 ---
 
 ## Phase 0: DETECT - Project Environment
@@ -79,7 +88,7 @@ Locate and understand:
 ```
 Error: Plan not found at $ARGUMENTS
 
-Create a plan first: /prp-plan "feature description"
+Create a plan first: `/31-Plan {ID}`
 ```
 
 **PHASE_1_CHECKPOINT:**
@@ -168,8 +177,9 @@ Task 3: UPDATE src/routes/index.ts ✅
 ```
 
 **JSON Update Required:**
-- For each completed subtask, update `status` to `completed` in `.workspaces/specs/{task-id}/implementation_plan.json`.
-- Add a log entry to `.workspaces/specs/{task-id}/task_logs.json` for each major step.
+- For each started or completed subtask, run `npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} {status}`.
+- Add a log entry with `npm run agent -- log {ID} "message" --phase coding --ref {SUBTASK_ID}`.
+- Run `npm run agent -- validate {ID}` after artifact updates.
 
 **Deviation Handling:**
 If you must deviate from the plan:
@@ -290,8 +300,9 @@ mkdir -p .workspaces/specs/{task-id}
 **Path**: `.workspaces/specs/{task-id}/qa_report.md`
 
 **Dashboard Update Required**:
-- Update `status` to `human_review` in `.workspaces/specs/{task-id}/implementation_plan.json`.
-- Log the completion of the verification phase in `.workspaces/specs/{task-id}/task_logs.json`.
+- Run `npm run agent -- update {ID} --status ai_review` when coding is ready for QA.
+- Run `npm run agent -- log {ID} "Phase 32 completed successfully" --phase coding --complete`.
+- Run `npm run agent -- validate {ID}`.
 
 ```markdown
 # Implementation Report
@@ -459,14 +470,14 @@ mv $ARGUMENTS .workspaces/specs/completed/
 **Next Phase**: {next pending phase, or "All phases complete!"}
 {If next phase can parallel: "Note: Phase {X} can also start now (parallel)"}
 
-To continue: `/prp-plan {prd-path}`
+To continue: create or select the next task ID, then run `/31-Plan {ID}`.
 
 ### Next Steps
 
 1. Review the report (especially if deviations noted)
-2. Create PR: `gh pr create` or `/prp-pr`
+2. Create PR: `/51-PR` or use the repository's PR command.
 3. Merge when approved
-{If more phases: "4. Continue with next phase: `/prp-plan {prd-path}`"}
+{If more phases: "4. Continue with the next task or run `/31-Plan {ID}` for the next phase."}
 ```
 
 ---

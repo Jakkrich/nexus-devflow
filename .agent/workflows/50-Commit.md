@@ -33,4 +33,4 @@ You are an orchestrator. Your goal is to call the specialized Git Committer agen
 
 ---
 
-📌 **Next Step**: Run `/08-PR` to create a Pull Request.
+📌 **Next Step**: Run `/51-PR` to create a Pull Request.

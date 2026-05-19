@@ -2,7 +2,7 @@
   "active_bundle": ".agent",
   "primary_ide": "Antigravity",
   "package_manager": "npm",
-  "activated_at": "2026-05-18T16:04:21.390Z",
+  "activated_at": "2026-05-19T03:17:57.411Z",
   "scripts": {
     "validate": "npm run validate",
     "generate_project_index": "npm run index",

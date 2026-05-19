@@ -91,6 +91,46 @@ requirements = readJson(path.join(taskDir, 'requirements.json'));
 assert(requirements.task_description === 'Needs repair', 'json:repair failed');
 console.log('[OK] json:repair verified.');
 
+run(['plan:add-phase', '999', 'Backend API', '--phase-id', 'phase-backend', '--type', 'implementation']);
+plan = readJson(path.join(taskDir, 'implementation_plan.json'));
+assert(plan.phases.length === 1, 'plan:add-phase should replace template example phase');
+assert(plan.phases[0].id === 'phase-backend', 'plan:add-phase failed');
+console.log('[OK] plan:add-phase verified.');
+
+run([
+  'plan:add-subtask',
+  '999',
+  'phase-backend',
+  'Create health endpoint',
+  '--description',
+  'Create a health endpoint following existing API conventions',
+  '--service',
+  'backend',
+  '--modify',
+  'src/api/health.ts',
+  '--pattern',
+  'src/api/users.ts',
+  '--verify-type',
+  'command',
+  '--verify-command',
+  'npm test',
+  '--verify-expected',
+  'tests pass',
+]);
+plan = readJson(path.join(taskDir, 'implementation_plan.json'));
+assert(plan.phases[0].subtasks.length === 1, 'plan:add-subtask failed');
+assert(plan.phases[0].subtasks[0].service === 'backend', 'plan:add-subtask service failed');
+assert(plan.summary.services_involved.includes('backend'), 'plan summary service update failed');
+console.log('[OK] plan:add-subtask verified.');
+
+run(['plan:set-subtask-status', '999', plan.phases[0].subtasks[0].id, 'complete']);
+plan = readJson(path.join(taskDir, 'implementation_plan.json'));
+assert(plan.phases[0].subtasks[0].status === 'completed', 'plan:set-subtask-status normalization failed');
+console.log('[OK] plan:set-subtask-status verified.');
+
+run(['plan:validate', '999']);
+console.log('[OK] plan:validate verified.');
+
 run(['validate', '999']);
 console.log('[OK] schema validation passed.');
 
