@@ -1,4 +1,4 @@
-﻿## Project Context Index
+## Project Context Index
 
 Use this file as a human-readable project overview. Machine-readable project context is generated at `.workspaces/project_index.json`.
 
@@ -47,6 +47,11 @@ Use this file as a human-readable project overview. Machine-readable project con
 - [Roadmap](ROADMAP.md)
 - [Quickstart](docs/quickstart.md)
 - [Workspace Artifacts](docs/workspace-artifacts.md)
+
+### Knowledge Base (Project Brain)
+
+This project uses an Obsidian-style Vault as its Second Brain, located in `docs/vault/`.
+**ATTENTION ALL AGENTS:** Before performing any major documentation changes or retrieving historical lessons, you MUST read the Librarian rules at [docs/vault/VAULT_RULES.md](docs/vault/VAULT_RULES.md).
 
 ### Maintenance Notes
 
