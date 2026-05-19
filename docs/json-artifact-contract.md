@@ -1,6 +1,6 @@
 # JSON Artifact Contract
 
-This document defines the Phase 1 design contract for upgrading PRPs-Framework with prompt-inspired structured artifact handling while preserving the PRPs manual, IDE-driven workflow.
+This document defines the Phase 1 design contract for upgrading Nexus-DevFlow with prompt-inspired structured artifact handling while preserving the PRPs manual, IDE-driven workflow.
 
 ## Goal
 

@@ -64,4 +64,4 @@
 - **Manual Verification**: [Specific instructions for the human reviewer]
 
 ---
-*Technical Plan generated via PRPs-Framework Manager*
+*Technical Plan generated via Nexus-DevFlow Manager*

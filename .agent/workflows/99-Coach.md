@@ -245,4 +245,4 @@ git config --global credential.helper "cache --timeout=900" 2>/dev/null; git clo
 *(Alternatively, if the framework is already installed, they can just type `/999-Update` in the chat!)*
 
 ---
-*Developed for PRPs-Framework — Coach Mode (Read-Only Guideline & Q&A)*
+*Developed for Nexus-DevFlow — Coach Mode (Read-Only Guideline & Q&A)*

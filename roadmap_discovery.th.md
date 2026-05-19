@@ -1,10 +1,10 @@
-# Roadmap Discovery: PRPs-Framework
+# Roadmap Discovery: Nexus-DevFlow
 
 สร้างเมื่อ: 2026-05-18T15:31:54Z
 
 ## สรุปภาพรวม
 
-PRPs-Framework คือชุดเครื่องมือ Context Engineering สำหรับทำงานร่วมกับ AI coding agents อย่างเป็นระบบ โดยใช้ JSON และ Markdown เป็นแหล่งข้อมูลหลักของงาน ตั้งแต่ requirement, planning, coding, verification ไปจนถึง roadmap
+Nexus-DevFlow คือชุดเครื่องมือ Context Engineering สำหรับทำงานร่วมกับ AI coding agents อย่างเป็นระบบ โดยใช้ JSON และ Markdown เป็นแหล่งข้อมูลหลักของงาน ตั้งแต่ requirement, planning, coding, verification ไปจนถึง roadmap
 
 โครงสร้างล่าสุดกำหนดให้ `.agent` เป็น bundle หลักสำหรับ Antigravity IDE และใช้ `.workspaces` เป็นพื้นที่เก็บ artifact ของโปรเจคทั้งหมด
 
@@ -36,7 +36,7 @@ PRPs-Framework คือชุดเครื่องมือ Context Engineer
 
 ## Product Vision
 
-PRPs-Framework เป็น toolkit สำหรับเปลี่ยนการพัฒนาซอฟต์แวร์ด้วย AI ให้เป็น workflow ที่มีโครงสร้าง ชัดเจน และ trace ได้
+Nexus-DevFlow เป็น toolkit สำหรับเปลี่ยนการพัฒนาซอฟต์แวร์ด้วย AI ให้เป็น workflow ที่มีโครงสร้าง ชัดเจน และ trace ได้
 
 คุณค่าหลักคือการรวม agent personas, numbered workflows, schemas, scripts, dashboard assets และ roadmap artifacts ไว้ในระบบเดียว โดยใช้ `.agent` เป็น Antigravity runtime bundle และ `.workspaces` เป็นพื้นที่เก็บ machine-readable artifacts
 

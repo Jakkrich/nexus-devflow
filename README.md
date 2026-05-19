@@ -1,6 +1,6 @@
-﻿# PRPs-Framework
+﻿# Nexus-DevFlow
 
-PRPs-Framework is an agent-ready Context Engineering framework for structured AI-assisted software development.
+Nexus-DevFlow is an agent-ready Context Engineering framework for structured AI-assisted software development.
 
 It gives teams a repeatable workflow for turning ideas into specs, plans, implementation logs, QA reports, and roadmap artifacts. The framework now uses a single active agent bundle, `.agent`, and root-level npm scripts for activation, indexing, validation, and PRP task operations.
 
@@ -18,7 +18,7 @@ The current workflow is script-first for JSON artifacts: agents should use PRP C
 ## Current Architecture
 
 ```text
-PRPs-Framework/
+Nexus-DevFlow/
 .agent/                    # Antigravity IDE agent framework bundle
 .workspaces/               # Canonical generated artifacts and task workspaces
   debug/

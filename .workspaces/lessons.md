@@ -1,6 +1,6 @@
 # Project Lessons Learned
 
-This file records durable lessons, gotchas, preferences, and reusable implementation patterns discovered while using PRPs-Framework.
+This file records durable lessons, gotchas, preferences, and reusable implementation patterns discovered while using Nexus-DevFlow.
 
 Use this for knowledge that should guide future tasks. Keep task-specific logs inside `.workspaces/specs/{ID}-*/task_logs.json`.
 

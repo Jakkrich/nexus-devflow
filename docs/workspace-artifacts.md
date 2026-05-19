@@ -1,6 +1,6 @@
 # Workspace Artifacts
 
-PRPs-Framework stores generated project memory and machine-readable workflow artifacts under `.workspaces`.
+Nexus-DevFlow stores generated project memory and machine-readable workflow artifacts under `.workspaces`.
 
 ## Canonical Layout
 

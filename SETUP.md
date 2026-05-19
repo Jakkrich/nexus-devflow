@@ -1,4 +1,4 @@
-﻿# PRPs-Framework Setup Guide
+﻿# Nexus-DevFlow Setup Guide
 
 This setup uses npm and the `.agent` bundle. The legacy Python switcher is no longer used.
 
@@ -7,8 +7,8 @@ This setup uses npm and the `.agent` bundle. The legacy Python switcher is no lo
 Place the framework in a shared tools folder or directly inside the repository that will use it.
 
 ```powershell
-git clone <repo-url> PRPs-Framework
-cd PRPs-Framework
+git clone <repo-url> Nexus-DevFlow
+cd Nexus-DevFlow
 ```
 
 ## 2. Activate the Agent Bundle
@@ -56,13 +56,13 @@ If this framework is stored centrally, link only the `.agent` bundle into a targ
 Windows PowerShell:
 
 ```powershell
-New-Item -ItemType SymbolicLink -Path ".agent" -Target "D:\Tools\PRPs-Framework\.agent"
+New-Item -ItemType SymbolicLink -Path ".agent" -Target "D:\Tools\Nexus-DevFlow\.agent"
 ```
 
 Linux, macOS, or WSL:
 
 ```bash
-ln -s /path/to/PRPs-Framework/.agent .agent
+ln -s /path/to/Nexus-DevFlow/.agent .agent
 ```
 
 Then copy or adapt the root `package.json` scripts for that project.

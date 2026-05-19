@@ -4,7 +4,7 @@ Use this file as a human-readable project overview. Machine-readable project con
 
 ### Project Overview
 
-- **Platform/Stack**: PRPs-Framework, Context Engineering, Node.js CLI, Python helpers, Markdown/JSON artifacts
+- **Platform/Stack**: Nexus-DevFlow, Context Engineering, Node.js CLI, Python helpers, Markdown/JSON artifacts
 - **Description**: Framework for structured agent-based development that helps SA/BA, DEV, QA, and reviewers collaborate with AI agents.
 - **Active Bundle**: `.agent`
 - **Command Surface**: root npm scripts

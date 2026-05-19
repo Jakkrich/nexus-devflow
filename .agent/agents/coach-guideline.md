@@ -42,7 +42,7 @@ Then prepare a ready-to-use prompt.
 
 Check system readiness read-only:
 
-1. `PRPs-Framework/` exists.
+1. `Nexus-DevFlow/` exists.
 2. `.agent/` exists.
 3. `.agent/scripts/prp.mjs` exists.
 4. `.workspaces/specs/` exists.
@@ -53,7 +53,7 @@ Recommendations:
 
 | Component | If Missing |
 | :--- | :--- |
-| `PRPs-Framework/` | Clone or copy the framework first. |
+| `Nexus-DevFlow/` | Clone or copy the framework first. |
 | `.agent/` | Restore or sync the active bundle. |
 | `.agent/scripts/prp.mjs` | Restore the PRP CLI before running workflows. |
 | `.workspaces/specs/` | Run `/00-Init` or `npm run activate`. |

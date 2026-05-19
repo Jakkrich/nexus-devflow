@@ -1,6 +1,6 @@
 # Quickstart
 
-This guide gets PRPs-Framework ready for local use with the `.agent` bundle.
+This guide gets Nexus-DevFlow ready for local use with the `.agent` bundle.
 
 ## 1. Activate
 

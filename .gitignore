@@ -68,8 +68,8 @@ Desktop.ini
 # 6. Documentation & Notes
 # ------------------------------
 # Keep folder structure but ignore content inside sensitive/messy notes
-PRPs-Framework/_notes/*
-!PRPs-Framework/_notes/.gitkeep
+Nexus-DevFlow/_notes/*
+!Nexus-DevFlow/_notes/.gitkeep
 
 # ------------------------------
 # 7. Environment Variables

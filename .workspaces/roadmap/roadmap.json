@@ -1,8 +1,8 @@
 {
   "id": "roadmap-20260518T154223Z",
-  "project_name": "PRPs-Framework",
+  "project_name": "Nexus-DevFlow",
   "version": "1.0",
-  "vision": "PRPs-Framework is an IDE-agnostic context engineering toolkit that turns AI-assisted software development into a structured, traceable, JSON-driven workflow.",
+  "vision": "Nexus-DevFlow is an IDE-agnostic context engineering toolkit that turns AI-assisted software development into a structured, traceable, JSON-driven workflow.",
   "target_audience": {
     "primary": "SA/BA and software developers who use AI coding agents and need a structured, repeatable workflow for requirements, planning, implementation, and verification.",
     "secondary": [

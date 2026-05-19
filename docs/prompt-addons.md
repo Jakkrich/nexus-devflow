@@ -1,6 +1,6 @@
 # Prompt Addons
 
-This document maps external prompt families into PRPs-Framework.
+This document maps external prompt families into Nexus-DevFlow.
 
 These prompts are not copied verbatim. They are adapted into PRPs workflows, agents, and skills so the user keeps manual IDE control and JSON artifacts are still handled by scripts.
 

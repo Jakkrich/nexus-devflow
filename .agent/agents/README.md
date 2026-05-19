@@ -91,4 +91,4 @@ description: ภาพรวมของ Specialist Agents ทั้งหมด
 ---
 🌟 = **Agent หลัก** ที่แนะนำให้เรียกใช้เป็นอันดับแรกในกลุ่มนั้นๆ
 ---
-*Note: Agents ทั้งหมดทำงานในระบบ Pure Agentic โดยใช้เครื่องมือมาตรฐาน (Read/Write/Search) ที่รองรับโดย AI IDE ยุคใหม่และ PRPs-Framework*
+*Note: Agents ทั้งหมดทำงานในระบบ Pure Agentic โดยใช้เครื่องมือมาตรฐาน (Read/Write/Search) ที่รองรับโดย AI IDE ยุคใหม่และ Nexus-DevFlow*

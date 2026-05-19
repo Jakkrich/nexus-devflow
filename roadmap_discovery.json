@@ -1,5 +1,5 @@
 {
-  "project_name": "PRPs-Framework",
+  "project_name": "Nexus-DevFlow",
   "project_type": "cli",
   "tech_stack": {
     "primary_language": "Python and JavaScript",
@@ -44,7 +44,7 @@
     "usage_context": "Used inside a software project repository by running slash-command style workflows and helper scripts during AI-assisted development. The framework can be injected, copied, or symlinked into target projects and then activated for the selected AI IDE."
   },
   "product_vision": {
-    "one_liner": "PRPs-Framework is an IDE-agnostic context engineering toolkit that turns AI-assisted software development into a structured, traceable, JSON-driven workflow.",
+    "one_liner": "Nexus-DevFlow is an IDE-agnostic context engineering toolkit that turns AI-assisted software development into a structured, traceable, JSON-driven workflow.",
     "problem_statement": "AI agents can produce inconsistent results when requirements, project context, planning decisions, implementation status, and verification evidence are scattered across chats and informal documents.",
     "value_proposition": "The framework gives teams reusable agent personas, slash-command workflows, schemas, scripts, and dashboard tooling so AI IDEs can understand and execute work with clearer context, stronger traceability, and less repeated explanation.",
     "success_metrics": [
@@ -126,6 +126,3 @@
   },
   "created_at": "2026-05-18T15:31:54Z"
 }
-
-
-
