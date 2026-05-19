@@ -42,9 +42,13 @@ When `/brainstorm` is triggered:
 
 Keep this workflow exploratory. Do not create or mutate task JSON unless the user explicitly asks to continue into `/30-Task`.
 
+**MANDATORY RULE:** Before generating the brainstorming report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/brainstorm.template.md` to ensure a consistent output layout. Save the final report to `.workspaces/research/brainstorm-{topic}.md` where `{topic}` is a slugified version of the topic.
+
 ---
 
 ## Output Format
+
+Return a brief summary in the chat, and save the full brainstorming report under `.workspaces/research/brainstorm-{topic}.md` following the template schema:
 
 ```markdown
 ## 🧠 Brainstorm: [Topic]
@@ -121,4 +125,5 @@ What direction would you like to explore?
 - **Visual when helpful** - use diagrams for architecture
 - **Honest tradeoffs** - don't hide complexity
 - **Defer to user** - present options, let them decide
+- **Save Report** - MUST save the report file to disk so the user has a persistent copy
 - **Manual next step** - recommend `/11-Research`, `/12-PRD`, or `/30-Task` after the user chooses a direction

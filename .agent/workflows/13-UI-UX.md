@@ -18,8 +18,9 @@ This command activates the UI/UX design intelligence system to help you design, 
 
 1. **Invoke Skill**: Activate `skills/ui-ux-pro-max/SKILL.md`.
 2. **Analysis**: Extract design requirements from the arguments.
-3. **Design System**: Run the python search script to generate a design system.
-4. **Implementation**: Use the generated tokens and rules to build or review the UI.
+3. **Template Verification**: **MANDATORY:** Before generating UI/UX details, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/ui_ux.template.md` to ensure a consistent output layout.
+4. **Design System & Output**: Run the search script to generate a design system. Save the final design system specification as a markdown report under `.workspaces/reports/ui-ux-{topic}.md` (where `{topic}` is a slugified version of the target screen or feature).
+5. **Implementation**: Use the generated tokens and rules to build or review the UI.
 
 ---
-*Next Step: Follow the instructions provided by the Skill to generate the Design System.*
+*Next Step: Follow the instructions provided by the Skill to generate the Design System and save the report.*

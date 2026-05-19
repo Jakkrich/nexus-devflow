@@ -29,7 +29,7 @@ npm.cmd run agent -- plan:add-phase 007 "Backend implementation" --type implemen
 npm.cmd run agent -- plan:add-subtask 007 phase-1 "Create API endpoint" --service backend
 npm.cmd run agent -- plan:set-subtask-status 007 subtask-1.1 completed
 npm.cmd run agent -- plan:validate 007
-npm.cmd run agent -- validate 007
+npm.cmd run validate 007
 ```
 
 ## Workflow Groups
@@ -53,15 +53,15 @@ npm.cmd run agent -- validate 007
 | `/00-Init` | เตรียม project context และ sync workspace | `/00-Init` |
 | `/01-App-Builder` | เริ่มสร้างแอปใหม่จากศูนย์ | `/01-App-Builder "Next.js CRM dashboard"` |
 | `/02-Status` | ดูสถานะ project, task, agent bundle | `/02-Status` |
-| `/10-Brainstorm` | คิดทางเลือกก่อนทำจริง | `/10-Brainstorm "membership system for restaurants"` |
+| `/10-Brainstorm` | คิดทางเลือกพร้อม tradeoff (บันทึกลง `.workspaces/research/`) | `/10-Brainstorm "membership system for restaurants"` |
 | `/11-Research` | วิจัย codebase, architecture, pattern | `/11-Research "how auth currently works"` |
 | `/12-PRD` | สร้าง PRD จาก idea | `/12-PRD "customer loyalty feature"` |
-| `/13-UI-UX` | ออกแบบ UI/UX direction | `/13-UI-UX "mobile checkout flow"` |
+| `/13-UI-UX` | ออกแบบ UI/UX direction (บันทึกลง `.workspaces/reports/`) | `/13-UI-UX "mobile checkout flow"` |
 | `/14-Orchestrate` | วางแผนงานซับซ้อนที่ต้องใช้หลายมุมมอง | `/14-Orchestrate "multi-service billing migration"` |
 | `/15-Spec-Research` | ตรวจ API, SDK, library, integration ก่อนทำ spec | `/15-Spec-Research "Stripe subscription webhook"` |
-| `/16-Competitor` | วิเคราะห์คู่แข่ง, pain point, market gap | `/16-Competitor "AI project planning tools"` |
+| `/16-Competitor` | วิเคราะห์คู่แข่ง, pain point, market gap (บันทึกลง `.workspaces/research/`) | `/16-Competitor "AI project planning tools"` |
 | `/17-Roadmap` | สร้าง/ปรับ roadmap artifacts | `/17-Roadmap "refresh roadmap from current project state"` |
-| `/18-Spec-Orchestrate` | ประสาน PRD, research, competitor, task creation แบบ manual | `/18-Spec-Orchestrate "new onboarding module"` |
+| `/18-Spec-Orchestrate` | ประสาน PRD, research, competitor (บันทึกลง `.workspaces/reports/`) | `/18-Spec-Orchestrate "new onboarding module"` |
 | `/20-Debug` | วิเคราะห์ root cause ของปัญหา | `/20-Debug "login redirects forever"` |
 | `/30-Task` | สร้าง task workspace และ artifacts | `/30-Task "Add password reset"` |
 | `/31-Plan` | สร้าง implementation plan | `/31-Plan 007` |
@@ -69,19 +69,19 @@ npm.cmd run agent -- validate 007
 | `/33-Verify` | ตรวจคุณภาพและ QA gate | `/33-Verify 007` |
 | `/34-Human` | approve, reject, feedback โดยมนุษย์ | `/34-Human Approve 007` |
 | `/35-Followup` | เพิ่มงานต่อยอดใน task เดิมโดยไม่ลบ plan เดิม | `/35-Followup 007 "add CSV export"` |
-| `/39-QA-Orchestrate` | ประสาน QA ซับซ้อนหลายมิติ | `/39-QA-Orchestrate 007` |
-| `/40-Test` | สร้าง/รัน test | `/40-Test 007` |
-| `/41-Simplify` | refactor ลดความซับซ้อน | `/41-Simplify "src/auth"` |
+| `/39-QA-Orchestrate` | ประสาน QA ซับซ้อนหลายมิติ (บันทึกลง `.workspaces/reports/`) | `/39-QA-Orchestrate 007` |
+| `/40-Test` | สร้าง/รัน test (บันทึกลง `.workspaces/reports/`) | `/40-Test 007` |
+| `/41-Simplify` | refactor ลดความซับซ้อน (บันทึกลง `.workspaces/reports/`) | `/41-Simplify "src/auth"` |
 | `/42-Preview` | เปิด/ตรวจ preview server | `/42-Preview start` |
 | `/50-Commit` | stage และเขียน commit | `/50-Commit "task 007 only"` |
 | `/51-PR` | สร้าง pull request | `/51-PR main` |
-| `/52-Deploy` | deploy พร้อม preflight check | `/52-Deploy staging` |
+| `/52-Deploy` | deploy พร้อม preflight check (บันทึกลง `.workspaces/reports/`) | `/52-Deploy staging` |
 | `/53-Changelog` | อัปเดต changelog | `/53-Changelog` |
 | `/54-Insight` | สกัดบทเรียน, pattern, gotcha | `/54-Insight 007` |
-| `/55-PR-Review` | review PR หรือ local diff แบบ findings-first | `/55-PR-Review "PR #123"` |
-| `/56-PR-Followup` | แปลง PR comments เป็น fixes หรือ follow-up subtasks | `/56-PR-Followup "PR #123 comments"` |
-| `/57-Issue-Triage` | วิเคราะห์ GitHub issue, duplicate, spam, route เป็น workflow | `/57-Issue-Triage "issue #456"` |
-| `/58-Merge` | ผสาน feature branch เข้าสู่ base branch และทำความสะอาด | `/58-Merge` |
+| `/55-PR-Review` | review PR หรือ local diff | `/55-PR-Review "PR #123"` |
+| `/56-PR-Followup` | แปลง PR comments เป็น fixes (บันทึกลง `.workspaces/reports/`) | `/56-PR-Followup "PR #123 comments"` |
+| `/57-Issue-Triage` | triage GitHub issue, duplicate, spam (บันทึกลง `.workspaces/issues/`) | `/57-Issue-Triage "issue #456"` |
+| `/58-Merge` | ผสาน feature branch และทำความสะอาด | `/58-Merge` |
 | `/60-Graphify` | สร้าง knowledge graph จาก folder | `/60-Graphify .agent/workflows` |
 | `/90-Agent` | เรียก specialist agent | `/90-Agent code-reviewer .workspaces/specs/007` |
 | `/99-Coach` | ถามทาง, ขอคำแนะนำ, read-only guide | `/99-Coach "ควรไป workflow ไหนต่อ"` |
@@ -95,14 +95,6 @@ npm.cmd run agent -- validate 007
 ```text
 /00-Init
 /02-Status
-```
-
-Terminal validation:
-
-```powershell
-npm.cmd run activate
-npm.cmd run validate
-npm.cmd run agent:status
 ```
 
 ### 2. Small Feature Flow
@@ -157,7 +149,7 @@ npm.cmd run agent:status
 ใช้เมื่อ behavior ต้องเหมือนเดิม แต่ code ต้องอ่านง่ายขึ้น
 
 ```text
-/11-Research "current auth module boundaries"
+/10-Research "current auth module boundaries"
 /41-Simplify "src/auth"
 /33-Verify
 /34-Human Approve 009
@@ -204,13 +196,6 @@ npm.cmd run agent:status
 /17-Roadmap "refresh roadmap from competitor findings and current project state"
 /12-PRD "top priority roadmap item"
 /30-Task "Implement top priority roadmap item"
-```
-
-Roadmap validation:
-
-```powershell
-npm.cmd run roadmap:validate
-npm.cmd run validate
 ```
 
 ### 9. Broad Spec Orchestration Flow
@@ -315,14 +300,6 @@ npm.cmd run validate
 /99-Coach "สรุปบทเรียนจาก task 014 และแนะนำ workflow ถัดไป"
 ```
 
-Insight ควรบันทึกเฉพาะสิ่งที่ใช้ซ้ำได้ เช่น:
-
-- file purpose
-- pattern ที่ควรใช้ซ้ำ
-- gotcha ที่เคยทำพลาด
-- approach ที่เวิร์กหรือไม่เวิร์ก
-- recommendation สำหรับ session ถัดไป
-
 ### 16. New App Flow
 
 ใช้เมื่อเริ่มแอปใหม่จากศูนย์
@@ -373,6 +350,10 @@ Insight ควรบันทึกเฉพาะสิ่งที่ใช้
 
 ให้ AI เสนอหลายทางเลือกพร้อม tradeoff ก่อนตัดสินใจ
 
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/brainstorm.template.md` ก่อนวิเคราะห์
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างผลงานวิเคราะห์จริงลงที่ `.workspaces/research/brainstorm-{topic}.md`
+
 ### `/11-Research`
 
 ```text
@@ -396,6 +377,10 @@ Insight ควรบันทึกเฉพาะสิ่งที่ใช้
 ```
 
 ใช้วาง UX, layout, design direction
+
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/ui_ux.template.md` ก่อนออกแบบ
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างรายงานและโทเค็นความสวยงามลงที่ `.workspaces/reports/ui-ux-{topic}.md`
 
 ### `/14-Orchestrate`
 
@@ -421,6 +406,10 @@ Insight ควรบันทึกเฉพาะสิ่งที่ใช้
 
 ใช้วิเคราะห์คู่แข่งและ market gap
 
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/competitor_analysis.template.md` ก่อนค้นคว้า
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างรายงานเปรียบเทียบตลาดลงที่ `.workspaces/research/{date}-{slug}-competitor-analysis.md`
+
 ### `/17-Roadmap`
 
 ```text
@@ -436,6 +425,10 @@ Insight ควรบันทึกเฉพาะสิ่งที่ใช้
 ```
 
 ใช้จัดลำดับ PRD, research, competitor, task creation สำหรับ idea ใหญ่
+
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/spec_orchestration.template.md` ก่อนประกอบสเปก
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างรายงานวิพากษ์สเปกลงที่ `.workspaces/reports/spec_orchestration-{slug}.md`
 
 ### `/20-Debug`
 
@@ -501,6 +494,10 @@ Insight ควรบันทึกเฉพาะสิ่งที่ใช้
 
 แตก QA เป็นหลาย lane และ route ไป specialist ที่เหมาะสม
 
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/qa_orchestration.template.md` ก่อนแตกเลนทดสอบ
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างแผนผังตรวจสอบลงที่ `.workspaces/reports/qa_orchestrate_{ID}.md`
+
 ### `/40-Test`
 
 ```text
@@ -509,6 +506,10 @@ Insight ควรบันทึกเฉพาะสิ่งที่ใช้
 
 สร้างหรือรัน test
 
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/test_report.template.md` ก่อนดำเนินการเขียนหรือวิเคราะห์ผล
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างรายงานและ Coverage ลงที่ `.workspaces/reports/test_report_{target}.md`
+
 ### `/41-Simplify`
 
 ```text
@@ -516,6 +517,10 @@ Insight ควรบันทึกเฉพาะสิ่งที่ใช้
 ```
 
 refactor ให้เรียบง่ายขึ้นโดยไม่เปลี่ยน behavior
+
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/refactoring.template.md` ก่อนปรับแก้โค้ด
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างผลเปรียบเทียบก่อน-หลัง (Diff/Transformation) ลงที่ `.workspaces/reports/refactoring_{slug}.md`
 
 ### `/42-Preview`
 
@@ -551,6 +556,10 @@ stage และ commit อย่างระวัง
 
 deploy พร้อม preflight และ verification
 
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/deploy_report.template.md` ก่อนปล่อยระบบ
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างรายงานความเรียบร้อยลงที่ `.workspaces/reports/deploy_report_{timestamp}.md`
+
 ### `/53-Changelog`
 
 ```text
@@ -571,45 +580,41 @@ deploy พร้อม preflight และ verification
 
 ```text
 /55-PR-Review "PR #123"
-/55-PR-Review "review current local diff"
-/55-PR-Review 001
 ```
 
-ใช้ GitHub PR prompt addons เช่น `pr_reviewer`, `pr_quality_agent`, `pr_logic_agent`, `pr_security_agent`, `pr_structural`, `pr_codebase_fit_agent`, และ `pr_finding_validator` 
-
-**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
-- **การบันทึกไฟล์ออฟไลน์:** หากระบุเลข Task ID หรือมี Task เชื่อมโยงอยู่ ระบบจะบันทึกรายงานรีวิวเป็นไฟล์ `pr_review.md` ไว้ในโฟลเดอร์ของ Task นั้นโดยอัตโนมัติ (เช่น `.workspaces/specs/{ID}-*/pr_review.md`)
+ใช้ GitHub PR prompt addons เพื่อรีวิวโค้ด
 
 ### `/56-PR-Followup`
 
 ```text
 /56-PR-Followup "PR #123 unresolved comments"
-/56-PR-Followup 016 "address requested changes"
 ```
 
-ใช้แยก comment ว่า valid, resolved, needs clarification, out of scope, pre-existing หรือ non-actionable แล้ว route ไป `/32-Code` หรือ `/35-Followup`
+ใช้แยก comment เพื่อแปลงเป็น Fixes ใน Workspace
+
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/pr_followup.template.md` ก่อนเริ่มจัดประเภทคอมเมนต์
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างแผนสรุปงานแก้ไขแยกประเด็นลงที่ `.workspaces/reports/pr_followup_{ID}.md`
 
 ### `/57-Issue-Triage`
 
 ```text
 /57-Issue-Triage "issue #456"
-/57-Issue-Triage "bug report: export fails on large files"
 ```
 
-ใช้ GitHub issue prompt addons เช่น `issue_analyzer`, `issue_triager`, `duplicate_detector`, `spam_detector`, และ `pr_ai_triage`
+ใช้ GitHub issue prompt เพื่อคัดกรองจัดกลุ่มความสำคัญ
+
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **ตรวจสอบแม่แบบ:** ต้องเช็กรูปแบบหัวข้อที่ระบุใน `.agent/resources/schemas/triage.template.md` ก่อนเริ่มประเมิน
+- **การบันทึกไฟล์รายงาน:** บังคับสร้างผลประเมินอาการและช่องโหว่ความเสี่ยงลงที่ `.workspaces/issues/triage_{issue_number}.md`
 
 ### `/58-Merge`
 
 ```text
 /58-Merge
-/58-Merge main
 ```
 
-ผสาน feature branch ปัจจุบัน เข้าสู่ base branch (ค่าเริ่มต้นคือ `main`) ดันโค้ดขึ้น remote server และลบสาขาที่รวมเสร็จแล้วออกอย่างปลอดภัย
-
-**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
-- **Pre-flight Check:** โฟลเดอร์ทำงาน (Working directory) ต้องสะอาดและไม่มีการแก้ไขที่ยังไม่ได้ Commit
-- **Force Delete Warning:** หาก local branch ยังไม่ได้ push หรือรวมสมบูรณ์ในระดับรีโมท Git อาจขึ้นเตือน ระบบจะสั่งลบแบบบังคับ (`git branch -D`) เพื่อจบงานอย่างหมดจด
+ผสาน feature branch และทำความสะอาด
 
 ### `/60-Graphify`
 
@@ -622,8 +627,6 @@ deploy พร้อม preflight และ verification
 ### `/90-Agent`
 
 ```text
-/90-Agent discuss-spec .workspaces/specs/016/spec.md
-/90-Agent prp-core-planner .workspaces/specs/016
 /90-Agent code-reviewer .workspaces/specs/016
 ```
 
@@ -664,12 +667,12 @@ deploy พร้อม preflight และ verification
 | Folder | เก็บอะไร | Flow ที่เกี่ยวข้อง |
 | :--- | :--- | :--- |
 | `.workspaces/specs/` | task workspace และ JSON artifacts | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` |
-| `.workspaces/research/` | research reports และ integration notes | `/11-Research`, `/15-Spec-Research`, `/16-Competitor` |
+| `.workspaces/research/` | research reports และ integration/brainstorm notes | `/11-Research`, `/15-Spec-Research`, `/16-Competitor`, `/10-Brainstorm` |
 | `.workspaces/prds/` | PRD ก่อนแตกเป็น task | `/12-PRD`, `/18-Spec-Orchestrate` |
 | `.workspaces/roadmap/` | roadmap discovery และ feature priorities | `/17-Roadmap` |
 | `.workspaces/issues/` | issue triage, duplicate/spam decisions | `/57-Issue-Triage` |
 | `.workspaces/debug/` | RCA/debug reports | `/20-Debug` |
-| `.workspaces/reports/` | specialist, QA, PR review reports | `/14-Orchestrate`, `/39-QA-Orchestrate`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` |
+| `.workspaces/reports/` | specialist, QA, design, test, refactor reports | `/13-UI-UX`, `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/52-Deploy`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` |
 | `.workspaces/lessons.md` | lessons, gotchas, reusable patterns | `/20-Debug`, `/34-Human`, `/54-Insight`, `/99-Coach` |
 
 ถ้า folder ว่างแต่เป็นรายการในตารางนี้ ให้เก็บไว้ เพราะเป็น staging area ของ workflow นั้น ๆ
