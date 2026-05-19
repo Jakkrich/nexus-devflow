@@ -1,4 +1,24 @@
-﻿'use strict';
+'use strict';
+
+import {
+  KANBAN_COLUMNS,
+  getCreated,
+  getVisibleKanbanColumns,
+  normalizeStatus,
+  priorityOrder,
+} from './dashboard-status.js';
+
+import {
+  fetchDashboardCommands,
+  formatDuration,
+  runDashboardCommand
+} from './dashboard-commands.js';
+
+import {
+  renderWorkspaceFiles,
+  toggleFileGroup,
+  viewWorkspaceFile
+} from './dashboard-files.js';
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  STATE
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -17,14 +37,7 @@ let filterStatus = null;
 let sortMode = 0; // 0=default, 1=priority, 2=created
 
 const SORT_MODES = ['Default', 'Priority', 'Created'];
-const COLUMNS = [
-  { key: 'planning', label: 'Planning', color: 'var(--col-planning)' },
-  { key: 'queue', label: 'Queue', color: 'var(--col-queue)', collapsed: true },
-  { key: 'in-progress', label: 'In Progress', color: 'var(--col-progress)' },
-  { key: 'ai-review', label: 'AI Review', color: 'var(--col-ai-review)' },
-  { key: 'human-review', label: 'Human Review', color: 'var(--col-human-review)' },
-  { key: 'done', label: 'Done', color: 'var(--col-done)' },
-];
+const COLUMNS = KANBAN_COLUMNS;
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  FILE SYSTEM HELPERS
@@ -364,29 +377,7 @@ async function loadFromProjectUrl(baseUrl) {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  STATUS / HELPERS
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-function normalizeStatus(spec) {
-  const raw = (spec.plan?.xstateState || spec.plan?.status || 'planning').toLowerCase().trim();
-  if (/^done|completed$/.test(raw)) return 'done';
-  if (raw === 'archived') return 'archived';
-  if (/human.?review/.test(raw)) return 'human-review';
-  if (/ai.?review|^review|qa/.test(raw)) return 'ai-review';
-
-  // Requirement: If planned, move to In Progress
-  if (spec.plan && spec.plan.phases && spec.plan.phases.length > 0) return 'in-progress';
-
-  if (/in.?progress|coding/.test(raw)) return 'in-progress';
-  if (/queue|queued|pending/.test(raw)) return 'queue';
-  return 'planning';
-}
-
-function priorityOrder(s) {
-  const p = s.meta?.priority?.toLowerCase();
-  return p === 'high' ? 0 : p === 'medium' ? 1 : p === 'low' ? 2 : 3;
-}
-
-function getCreated(s) {
-  return new Date(s.plan?.created_at || s.logs?.created_at || 0);
-}
+// Helper functions imported from dashboard-status.js
 
 function escHtml(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -421,6 +412,8 @@ function switchView(v) {
   if (v === 'stats') renderStats();
   if (v === 'strategy') renderStrategy();
   if (v === 'search') document.getElementById('globalSearch').focus();
+  if (v === 'files') renderWorkspaceFiles();
+  if (v === 'operations') renderOperations();
 }
 
 function renderStrategy() {
@@ -660,12 +653,16 @@ function renderKanban(specs = null) {
   const allGroups = {};
   COLUMNS.forEach(c => allGroups[c.key] = 0);
   allSpecs.forEach(s => { const k = normalizeStatus(s); if (allGroups[k] !== undefined) allGroups[k]++; });
-  document.getElementById('cnt-planning').textContent = allGroups.planning;
-  document.getElementById('cnt-queue').textContent = allGroups.queue;
-  document.getElementById('cnt-progress').textContent = allGroups['in-progress'];
-  document.getElementById('cnt-ai-review').textContent = allGroups['ai-review'];
-  document.getElementById('cnt-human-review').textContent = allGroups['human-review'];
-  document.getElementById('cnt-done').textContent = allGroups.done;
+
+  const visibleColumns = getVisibleKanbanColumns(allGroups, filterStatus);
+
+  // Render statsrow dynamically based on visible columns to fit system lanes
+  statsRow.innerHTML = visibleColumns.map(col => `
+    <div class="stat-card ${col.key === 'in-progress' ? 'progress' : col.key} ${filterStatus === col.key ? 'filtered' : ''}" data-status="${col.key}" onclick="toggleStatusFilter('${col.key}')">
+      <div class="stat-label">${col.label}${col.system ? ' <span class="system-lane-label">System</span>' : ''}</div>
+      <div class="stat-num" style="color:${col.color}">${allGroups[col.key] || 0}</div>
+    </div>`).join('');
+
   document.getElementById('totalCount').textContent = allSpecs.length;
   statsRow.style.display = 'flex';
 
@@ -677,15 +674,17 @@ function renderKanban(specs = null) {
   const board = document.createElement('div');
   board.className = 'board';
 
-  COLUMNS.forEach(col => {
+  visibleColumns.forEach(col => {
     const cards = groups[col.key] || [];
     const colEl = document.createElement('div');
-    colEl.className = `column ${col.collapsed ? 'collapsed' : ''}`;
+    const isCollapsed = localStorage.getItem(`kanban:column:collapsed:${col.key}`) === 'true' || 
+                        (localStorage.getItem(`kanban:column:collapsed:${col.key}`) === null && !!col.collapsed);
+    colEl.className = `column ${isCollapsed ? 'collapsed' : ''}`;
     colEl.dataset.col = col.key;
     colEl.innerHTML = `
       <div class="col-header" onclick="toggleColumn(this)">
         <div class="col-dot" style="background:${col.color}"></div>
-        <div class="col-title">${col.label}</div>
+        <div class="col-title">${col.label}${col.system ? ' <span class="system-lane-label">System</span>' : ''}</div>
         <div class="col-badge">${cards.length}</div>
         <i class="fa-solid fa-chevron-left col-toggle"></i>
       </div>
@@ -718,7 +717,9 @@ function renderKanban(specs = null) {
 
 function toggleColumn(header) {
   const col = header.closest('.column');
+  const colKey = col.dataset.col;
   col.classList.toggle('collapsed');
+  localStorage.setItem(`kanban:column:collapsed:${colKey}`, col.classList.contains('collapsed'));
 }
 
 function buildCard(spec, idx) {
@@ -1409,9 +1410,8 @@ function openModal(spec) {
     <div style="margin-top:20px; padding:12px; background:rgba(56,189,248,0.05); border:1px dashed var(--accent); border-radius:var(--r); display:flex; gap:12px; align-items:flex-start">
       <i class="fa-solid fa-lightbulb" style="color:var(--accent); margin-top:3px"></i>
       <div style="font-size:11px; line-height:1.5; color:var(--text2)">
-        <strong style="color:var(--accent); text-transform:uppercase; font-size:10px; letter-spacing:0.5px; display:block; margin-bottom:4px">ðŸ’¡ Discovery Tip</strong>
-        à¸›à¸£à¸°à¹€à¸¡à¸´à¸™à¸„à¸§à¸²à¸¡à¸‹à¸±à¸šà¸‹à¹‰à¸­à¸™ (Complexity) à¸£à¹ˆà¸§à¸¡à¸à¸±à¸š AI: à¸«à¸²à¸ AI à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¸§à¹ˆà¸² <strong>COMPLEX</strong> à¹à¸•à¹ˆà¸—à¹ˆà¸²à¸™à¸¡à¸­à¸‡à¸§à¹ˆà¸² <strong>SIMPLE</strong> (à¸«à¸£à¸·à¸­à¸à¸¥à¸±à¸šà¸à¸±à¸™) 
-        à¹‚à¸›à¸£à¸”à¸«à¸¢à¸¸à¸”à¹à¸¥à¸° <strong>Discuss Spec</strong> à¹€à¸žà¸·à¹ˆà¸­à¸›à¸£à¸±à¸šà¸ˆà¸¹à¸™à¸„à¸§à¸²à¸¡à¹€à¸‚à¹‰à¸²à¹ƒà¸ˆà¹à¸¥à¸°à¸‚à¸­à¸šà¹€à¸‚à¸•à¸‡à¸²à¸™à¹ƒà¸«à¹‰à¸•à¸£à¸‡à¸à¸±à¸™à¸à¹ˆà¸­à¸™à¹€à¸£à¸´à¹ˆà¸¡à¸¥à¸‡à¸¡à¸·à¸”à¸—à¸³à¹à¸œà¸™à¸‡à¸²à¸™ (Planning) à¸•à¹ˆà¸­à¹„à¸›
+        <strong style="color:var(--accent); text-transform:uppercase; font-size:10px; letter-spacing:0.5px; display:block; margin-bottom:4px">💡 Discovery Tip</strong>
+        Align Complexity with AI: If the AI analyzes a task as <strong>COMPLEX</strong> but you see it as <strong>SIMPLE</strong> (or vice versa), please pause and use <strong>Discuss Spec</strong> to align understandings before continuing to the Planning phase.
       </div>
     </div>
     
@@ -1976,6 +1976,206 @@ async function initDashboard() {
   await tryRestoreLastSession();
   await tryAutoLoadCurrentProject();
 }
+
+// Workspace file group management imported from dashboard-files.js
+
+// =========================================================================
+//  OPERATIONS PANEL VIEW & RUNNER
+// =========================================================================
+let dashboardCommands = [];
+let activeCommandResult = null;
+let runningCommandId = null;
+
+async function renderOperations() {
+  const wrap = document.getElementById('operationsPanel');
+  if (!wrap) return;
+
+  wrap.innerHTML = '<div class="ops-loading"><div class="spinner"></div><span>Loading actions...</span></div>';
+
+  try {
+    if (!dashboardCommands.length) {
+      const response = await fetch('/api/commands', { cache: 'no-store' });
+      if (response.ok) {
+        const result = await response.json();
+        if (result.commands) {
+          dashboardCommands = Object.entries(result.commands).map(([id, info]) => ({ id, ...info }));
+        }
+      }
+    }
+
+    if (!dashboardCommands.length) {
+      wrap.innerHTML = '<div class="no-data"><i class="fa-solid fa-terminal"></i><h3>No operations available</h3><p>The companion Node server did not register any whitelisted scripts.</p></div>';
+      return;
+    }
+
+    wrap.innerHTML = `
+      <div class="ops-layout">
+        <div class="ops-sidebar">
+          <div class="ops-sidebar-title">Registered Ops</div>
+          <div class="ops-command-list">
+            ${dashboardCommands.map(cmd => `
+              <div class="ops-command-item" onclick="selectCommand('${cmd.id}')" id="cmd-item-${cmd.id}">
+                <div class="ops-command-item-header">
+                  <span class="ops-command-label">${escHtml(cmd.label)}</span>
+                  ${cmd.mutates ? '<span class="ops-badge mutate">Writes</span>' : '<span class="ops-badge readonly">Read</span>'}
+                </div>
+                <div class="ops-command-desc">${escHtml(cmd.description)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="ops-viewer" id="opsViewer">
+          <div class="ops-viewer-empty">
+            <i class="fa-solid fa-square-terminal"></i>
+            <h3>No operation triggered</h3>
+            <p>Select a whitelisted script from the left side and click **Run** to execute it.</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Re-select active command if possible
+    if (activeCommandResult) {
+      selectCommand(activeCommandResult.id);
+    }
+  } catch (err) {
+    wrap.innerHTML = `
+      <div class="no-data">
+        <i class="fa-solid fa-plug-circle-xmark"></i>
+        <h3>Operations unavailable</h3>
+        <p>Ensure the dashboard is loaded via the Node server at port 5050.</p>
+        <p style="margin-top: 8px; color: var(--red); font-family: monospace;">${escHtml(err.message)}</p>
+      </div>
+    `;
+  }
+}
+
+async function selectCommand(id) {
+  const cmd = dashboardCommands.find(c => c.id === id);
+  if (!cmd) return;
+
+  document.querySelectorAll('.ops-command-item').forEach(el => el.classList.remove('active'));
+  const listEl = document.getElementById(`cmd-item-${id}`);
+  if (listEl) listEl.classList.add('active');
+
+  const viewer = document.getElementById('opsViewer');
+  if (!viewer) return;
+
+  const isRunning = runningCommandId === id;
+  const result = activeCommandResult && activeCommandResult.id === id ? activeCommandResult : null;
+
+  let resultHtml = '';
+  if (isRunning) {
+    resultHtml = `
+      <div class="ops-terminal-loader">
+        <div class="spinner"></div>
+        <span>Executing subprocess... stdout and stderr streams will dump upon completion.</span>
+      </div>
+    `;
+  } else if (result) {
+    const output = [result.stdout, result.stderr].filter(Boolean).join('\n');
+    const exitBadgeClass = result.ok ? 'exit-ok' : 'exit-error';
+    const statusText = result.ok ? 'Passed' : 'Failed';
+    const duration = formatDuration(result.durationMs);
+
+    resultHtml = `
+      <div class="ops-result-summary">
+        <div class="ops-result-badge ${exitBadgeClass}">
+          <i class="fa-solid ${result.ok ? 'fa-check' : 'fa-triangle-exclamation'}"></i> ${statusText} (code ${result.code ?? 1})
+        </div>
+        <div class="ops-result-time"><i class="fa-solid fa-clock"></i> Execution time: ${duration}</div>
+      </div>
+      <div class="ops-terminal-header">
+        <span>Output Log (stdout/stderr)</span>
+        <button class="btn btn-ghost" id="btn-copy-output">
+          <i class="fa-solid fa-copy"></i> Copy
+        </button>
+      </div>
+      <pre class="ops-terminal-body"><code>${escHtml(output || '(No output returned)')}</code></pre>
+    `;
+  } else {
+    resultHtml = `
+      <div class="ops-terminal-empty">
+        <i class="fa-solid fa-play"></i>
+        <span>Ready to run. Click **Execute Script** above.</span>
+      </div>
+    `;
+  }
+
+  viewer.innerHTML = `
+    <div class="ops-viewer-header">
+      <div class="ops-viewer-info">
+        <div class="ops-viewer-title">${escHtml(cmd.label)}</div>
+        <div class="ops-viewer-cmd"><code>$ ${escHtml(cmd.command.flat().join(' '))}</code></div>
+      </div>
+      <button class="btn btn-primary" onclick="triggerCommand('${cmd.id}')" ${isRunning ? 'disabled' : ''}>
+        <i class="fa-solid fa-play"></i> Execute Script
+      </button>
+    </div>
+    <div class="ops-viewer-body">
+      ${resultHtml}
+    </div>
+  `;
+
+  if (result) {
+    const output = [result.stdout, result.stderr].filter(Boolean).join('\n');
+    document.getElementById('btn-copy-output')?.addEventListener('click', () => {
+      copyText(output);
+    });
+  }
+}
+
+async function triggerCommand(id) {
+  if (runningCommandId) return;
+  runningCommandId = id;
+  selectCommand(id);
+
+  try {
+    const res = await runDashboardCommand(id);
+    activeCommandResult = { id, ...res };
+    showToast(res.ok ? 'Script ran successfully' : 'Script failed with errors', res.ok ? 'success' : 'error');
+  } catch (err) {
+    activeCommandResult = {
+      id,
+      ok: false,
+      code: 1,
+      stderr: err.message,
+      durationMs: 0
+    };
+    showToast(`Execution failed: ${err.message}`, 'error');
+  } finally {
+    runningCommandId = null;
+    selectCommand(id);
+    
+    // Auto-refresh stats/specs if command mutates state
+    const cmd = dashboardCommands.find(c => c.id === id);
+    if (cmd && cmd.mutates) {
+      refreshData();
+    }
+  }
+}
+
+// Expose functions globally to support browser modules inline events
+Object.assign(window, {
+  switchView,
+  toggleProjDropdown,
+  browseFolder,
+  switchProject,
+  confirmRemoveProject,
+  closeModal,
+  switchModalTab,
+  toggleColumn,
+  toggleStatusFilter,
+  runGlobalSearch,
+  setAutoRefresh,
+  loadDemoData,
+  refreshData,
+  viewFile,
+  toggleFileGroup,
+  viewWorkspaceFile,
+  selectCommand,
+  triggerCommand,
+});
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  EVENTS
