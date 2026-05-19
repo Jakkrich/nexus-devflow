@@ -17,7 +17,8 @@ You are an orchestrator. Your goal is to call the specialized Git Committer agen
 **Call Agent**: `prp-core-git-committer`
 - Provide the target description (e.g., "all", "backend only", "staged").
 - The agent will:
-  - Check the current Git status.
+  - Check the current Git status and branch.
+  - **MANDATORY RULE:** If the current branch is `main` or `master`, the agent MUST automatically create a new branch (e.g., `git checkout -b feature/{Task-Name}`), checkout that branch, and only then proceed with staging and committing.
   - Interpret your description to stage the correct files.
   - Review the staged changes to understand the context.
 

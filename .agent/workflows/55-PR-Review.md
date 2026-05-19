@@ -69,3 +69,5 @@ Use code-review style:
 ## Output
 
 Return a PR review. Do not modify files unless the user explicitly asks for fixes.
+
+**MANDATORY RULE:** If a Task ID is linked to this PR, ALWAYS save this review report to a file named `pr_review.md` inside that task's workspace directory (e.g., `.workspaces/specs/{ID}-*/pr_review.md`).
