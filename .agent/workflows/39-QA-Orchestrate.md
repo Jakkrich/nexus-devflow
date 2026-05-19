@@ -57,7 +57,11 @@ Use `/90-Agent` only when helpful:
 /90-Agent security-auditor .workspaces/specs/{ID}-*/
 ```
 
-### 4. Route Fixes
+### 4. Create QA Orchestration Report
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/qa_orchestration.template.md` to ensure a consistent output layout.
+- Save the final report to `.workspaces/reports/qa_orchestrate_{ID}.md` (where `{ID}` is the target task ID).
+
+### 5. Route Fixes
 
 If findings are actionable:
 
@@ -67,4 +71,4 @@ If findings are actionable:
 
 ## Output
 
-Return a QA route with findings, recommended specialists, and the next command.
+Return a QA route with findings, recommended specialists, verify that the report has been successfully written to the specified path, and recommend the next command.

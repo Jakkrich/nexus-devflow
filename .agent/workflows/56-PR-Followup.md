@@ -44,7 +44,11 @@ Classify as:
 - pre-existing issue
 - non-actionable or incorrect
 
-### 3. Route Work
+### 3. Create PR Follow-Up Report
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/pr_followup.template.md` to ensure a consistent output layout.
+- Save the final report to `.workspaces/reports/pr_followup_{ID}.md` (where `{ID}` is the target task ID).
+
+### 4. Route Work
 
 For in-scope fixes:
 
@@ -64,7 +68,7 @@ For review-only response:
 /55-PR-Review {PR}
 ```
 
-### 4. Preserve Artifacts
+### 5. Preserve Artifacts
 
 If the PR is linked to a PRP task, log key follow-up decisions:
 
@@ -75,9 +79,4 @@ npm run agent -- validate {ID}
 
 ## Output
 
-Return:
-
-- comment classification
-- required fixes
-- out-of-scope follow-ups
-- suggested reply or next command
+Return a brief summary of comment classification and action plan in the chat, verify that the report has been successfully written to the specified path, and suggest the next command.

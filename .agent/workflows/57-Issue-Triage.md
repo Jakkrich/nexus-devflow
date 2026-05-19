@@ -51,7 +51,11 @@ Assess:
 - affected area
 - confidence
 
-### 3. Route
+### 3. Create Issue Triage Report
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/triage.template.md` to ensure a consistent output layout.
+- Save the final report to `.workspaces/issues/triage_{issue_number}.md` (where `{issue_number}` is the issue number or identifier).
+
+### 4. Route
 
 Use:
 
@@ -61,13 +65,6 @@ Use:
 - `/30-Task` for actionable implementation work
 - `/99-Coach` when the issue is not actionable yet
 
-### 4. Output Triage Recommendation
+## Output Triage Recommendation
 
-Return:
-
-- classification
-- duplicate/spam assessment
-- missing information
-- recommended labels
-- suggested next workflow
-- draft response when useful
+Return classification and duplicate/spam assessment in the chat, verify that the report has been successfully written to the specified path, and suggest the next workflow command.

@@ -30,7 +30,7 @@ Before any deployment, the AI MUST verify the following Checklist:
 5. **Infrastructure**: Env vars set, migrations ready, monitoring configured.
 6. **Documentation**: README / ADRs / CHANGELOG updated.
 
-*You MUST run `python <ROOT_AI_FOLDER>/scripts/verify_all.py .` (e.g., `../scripts/verify_all.py` or `.claude/scripts/verify_all.py`) to systematically audit the codebase before giving the green light.*
+*You MUST run appropriate validation commands to systematically audit the codebase before giving the green light.*
 
 ### Phase 2: Deployment Execution
 Determine the project's platform (Vercel, Railway, Docker, Fly.io, etc.) and execute the appropriate build & deploy commands.
@@ -39,8 +39,10 @@ Determine the project's platform (Vercel, Railway, Docker, Fly.io, etc.) and exe
 - Docker: `docker compose up -d`
 - Fly.io: `fly deploy`
 
-### Phase 3: Health Check & Verify
-Verify that the deployed application is responding (HTTP 200 OK) and all services (Database, API) are healthy.
+### Phase 3: Health Check, Verify & Report
+- **Template Verification**: **MANDATORY:** Before final deployment, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/deploy_report.template.md` to ensure a consistent output layout.
+- Save the final deployment and pre-flight check report to `.workspaces/reports/deploy_report_{timestamp}.md` (where `{timestamp}` is a clean date/time slug).
+- Verify that the deployed application is responding (HTTP 200 OK) and all services (Database, API) are healthy.
 
 ---
 
@@ -50,6 +52,7 @@ Verify that the deployed application is responding (HTTP 200 OK) and all service
 Generate a summary indicating:
 - **Summary**: Version, Environment, Duration, Platform
 - **URLs**: Production, Dashboard
+- **Report Location**: Confirm the deploy checklist and validation report has been written to the specified workspace path.
 - **What Changed**: Bullet points of new features or fixes
 - **Health Check**: Status of API and Database
 

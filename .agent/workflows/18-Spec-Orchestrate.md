@@ -49,6 +49,10 @@ Apply `spec_critic` before recommending implementation:
 - risk areas
 - ambiguous UX or data behavior
 
+### 4. Create Spec Orchestration Report
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/spec_orchestration.template.md` to ensure a consistent output layout.
+- Save the final report to `.workspaces/reports/spec_orchestration-{slug}.md` (where `{slug}` is a URL-friendly name derived from the topic/arguments).
+
 ## Output
 
-Return a short orchestration plan with the exact next command the user should run.
+Return a short orchestration plan in the chat, verify that the full report has been successfully written to the specified path, and recommend the exact next command the user should run.

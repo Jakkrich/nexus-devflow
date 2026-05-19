@@ -45,7 +45,11 @@ For market gaps, summarize:
 - possible feature or product angle
 - confidence level
 
-### 4. Route The Result
+### 4. Create Competitor Analysis Report
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/competitor_analysis.template.md` to ensure a consistent output layout.
+- Save the final report to `.workspaces/research/{date}-{slug}-competitor-analysis.md` (where `{date}` is today's date in YYYY-MM-DD format, and `{slug}` is a URL-friendly name derived from the topic).
+
+### 5. Route The Result
 
 - For product strategy, send findings to `/12-PRD`.
 - For roadmap planning, send findings to `/17-Roadmap`.
@@ -53,4 +57,4 @@ For market gaps, summarize:
 
 ## Output
 
-Return a concise competitor analysis with sources and recommended next workflow.
+Return a concise competitor analysis in chat, cite sources, verify that the report has been successfully written to the specified path, and recommend the next workflow.
