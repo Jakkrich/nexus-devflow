@@ -9,6 +9,7 @@
 .workspaces/worktrees/
 .workspaces/.uv-cache/
 .workspaces-status
+.workspaces/specs/*
 *.log
 
 # Security & Secrets - CRITICAL IGNORE!

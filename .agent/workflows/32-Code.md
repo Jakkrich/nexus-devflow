@@ -31,6 +31,8 @@ npm run agent -- json:repair {ID} implementation_plan
 npm run agent -- validate {ID}
 ```
 
+**MANDATORY RULE:** If you create temporary script files (e.g., `.ps1`, `.sh`) to execute multiple CLI commands in batch, you MUST save them inside the task workspace directory (e.g., `.workspaces/specs/{ID}-*/scratch/` or `.workspaces/specs/{ID}-*/`) and NEVER in the project's central `scripts/` directory.
+
 ## Process
 
 ### 1. Get Bearings

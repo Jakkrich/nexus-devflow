@@ -31,6 +31,8 @@ npm run agent -- validate {ID}
 
 Raw `implementation_plan.json` rewrites are fallback only. Prefer many small commands over one large JSON response.
 
+**MANDATORY RULE:** If you create temporary script files (e.g., `.ps1`, `.sh`) to execute multiple CLI commands in batch, you MUST save them inside the task workspace directory (e.g., `.workspaces/specs/{ID}-*/scratch/` or `.workspaces/specs/{ID}-*/`) and NEVER in the project's central `scripts/` directory.
+
 ## Process
 
 ### 1. Read Task Artifacts
@@ -82,7 +84,13 @@ Each subtask should answer:
 - Which existing pattern to follow
 - How to verify it
 
-### 5. Validate And Close Planning
+### 5. Create Human-Readable Plan
+
+Create a `plan.md` file in the task workspace (`.workspaces/specs/{ID}-*/plan.md`) that summarizes the JSON plan in a readable format.
+**MANDATORY:** You MUST base the structure of this file strictly on the template provided at `.agent/resources/schemas/plan.template.md`.
+**MANDATORY:** You MUST present this `plan.md` content to the user for review and wait for their explicit approval before recommending the next command.
+
+### 6. Validate And Close Planning
 
 Run:
 
@@ -100,5 +108,6 @@ If validation fails, run repair and update only the broken fields with script co
 - Context references are recorded.
 - Plan phases are ordered by dependency.
 - Every subtask has title, description, service, files, patterns, verification, and status.
+- Human-readable `plan.md` is created and presented.
 - `plan:validate` passes.
 - Next command: `/32-Code {ID}`
