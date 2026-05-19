@@ -98,4 +98,6 @@ If a report is substantial, save it to:
 .workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md
 ```
 
+Before saving a substantial agent report, inspect `.agent/resources/schemas/agent_report.template.md` and use its required headings unless the target workflow provides a more specific template.
+
 Short reports can be returned directly in chat.

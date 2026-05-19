@@ -33,6 +33,7 @@ You are an orchestrator. Your goal is to call the specialized Deep Debugging age
 
 ### Phase 4: FIX & VERIFY (Report & Output)
 - Verify that the agent confirms the root cause via the **Three Tests** (Causation, Necessity, Sufficiency).
+- **MANDATORY:** Before generating the RCA report, inspect `.agent/resources/schemas/rca.template.md` and use its required headings and table structure.
 - Ensure the agent generates the detailed RCA report in `.workspaces/debug/rca-{slug}.md`.
 - Capture the **Fix Specification**, **Verification Plan**, and **Prevention Measures**.
 - If the bug reveals a systemic misunderstanding or a new pattern, ensure it is carefully recorded in `.workspaces/lessons.md` (Strictly using the [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md) template).

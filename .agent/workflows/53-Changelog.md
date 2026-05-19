@@ -51,9 +51,10 @@ Run the command by typing:
     *   `Security` → Patch or Minor.
 
 ### 3. Update CHANGELOG.md
-1.  **Generate Entry**: Format the gathered information into a Markdown block.
-2.  **Insertion**: Use `replace_file_content` to insert the new version block at the top of the version list (usually after the header and description).
-3.  **Validation**: Ensure the file remains readable and correctly formatted.
+1.  **Template Verification**: Before generating a new changelog block, inspect `.agent/resources/schemas/changelog_entry.template.md` and use its headings.
+2.  **Generate Entry**: Format the gathered information into a Markdown block.
+3.  **Insertion**: Use `replace_file_content` to insert the new version block at the top of the version list (usually after the header and description).
+4.  **Validation**: Ensure the file remains readable and correctly formatted.
 
 ## Benefits
 - **Automation**: Reduces the manual effort of tracking changes.

@@ -53,6 +53,10 @@ def get_template(name: str) -> Dict[str, Any]:
     template_path = TEMPLATE_DIR / name
     return read_json(template_path)
 
+def get_text_template(name: str) -> str:
+    """Reads a Markdown/text template."""
+    return (TEMPLATE_DIR / name).read_text(encoding="utf-8")
+
 def normalize_to_template(data: Any, template: Any) -> Any:
     """Return data with every key from template present, preserving real values."""
     if isinstance(template, dict):

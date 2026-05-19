@@ -34,6 +34,7 @@ You are an orchestrator. Your goal is to call the specialized PRD Architect agen
 - Confirm the MVP definition.
 
 ### Phase 4: Output Generation
+- **MANDATORY:** Before generating the PRD, inspect `.agent/resources/schemas/prd.template.md` and use its required headings and table structure.
 - Ensure the PRD is saved as `.workspaces/prds/{slug}.prd.md`.
 - Verify the document includes the problem statement, key hypotheses, and implementation phases.
 - Convert any autonomous `spec_orchestrator_agentic` assumptions into explicit next steps. The user should still confirm before `/30-Task` and `/31-Plan`.

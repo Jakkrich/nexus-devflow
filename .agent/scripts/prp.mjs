@@ -25,6 +25,10 @@ const TEMPLATE_MANIFEST = {
   'complexity_assessment.json': 'complexity_assessment.template.json',
 };
 
+const REQUIRED_MARKDOWN_TEMPLATE_MANIFEST = {
+  'spec.md': 'spec.template.md',
+};
+
 function isObject(value) {
   return value && typeof value === 'object' && !Array.isArray(value);
 }
@@ -121,6 +125,10 @@ function readTemplate(name) {
   return readJson(path.join(SCHEMA_DIR, name));
 }
 
+function readTextTemplate(name) {
+  return fs.readFileSync(path.join(SCHEMA_DIR, name), 'utf8');
+}
+
 function readSchemaForTemplate(templateName) {
   const schemaName = templateName.replace('.template.json', '.schema.json');
   const schemaPath = path.join(SCHEMA_DIR, schemaName);
@@ -140,6 +148,13 @@ function replacePlaceholders(value, replacements) {
 
 function materialize(templateName, replacements = {}) {
   return replacePlaceholders(readTemplate(templateName), replacements);
+}
+
+function materializeTextTemplate(templateName, replacements = {}) {
+  return Object.entries(replacements).reduce(
+    (text, [key, val]) => text.replaceAll(`{${key}}`, String(val)),
+    readTextTemplate(templateName),
+  );
 }
 
 function normalizeToTemplate(data, template) {
@@ -548,7 +563,17 @@ function commandInit(args) {
   }
 
   const specPath = path.join(taskDir, 'spec.md');
-  if (!fs.existsSync(specPath)) fs.writeFileSync(specPath, `# Spec: ${id} - ${title}\n\n${description}\n`, 'utf8');
+  if (!fs.existsSync(specPath)) {
+    const spec = materializeTextTemplate('spec.template.md', {
+      'Task ID': id,
+      'Task Title': title,
+      ID: id,
+      Title: title,
+      Description: description,
+      ISO_TIMESTAMP: now,
+    });
+    fs.writeFileSync(specPath, spec.endsWith('\n') ? spec : `${spec}\n`, 'utf8');
+  }
   appendEvent(taskDir, { event: 'task.created', phase: 'planning', message: `Created task ${id}: ${title}` });
   console.log(`Successfully initialized task ${id} in ${taskDir}`);
 }
@@ -660,6 +685,19 @@ function validateFile(filePath, templateName, fix) {
   return { missing, schemaErrors };
 }
 
+function markdownHeadings(text) {
+  return text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^#{2,6}\s+/.test(line));
+}
+
+function validateMarkdownFile(filePath, templateName) {
+  const templateHeadings = markdownHeadings(readTextTemplate(templateName));
+  const fileHeadings = new Set(markdownHeadings(fs.readFileSync(filePath, 'utf8')));
+  return templateHeadings.filter((heading) => !fileHeadings.has(heading));
+}
+
 function commandValidate(args, fixDefault = false) {
   const { positional, options } = parseOptions(args);
   const [id] = positional;
@@ -691,6 +729,35 @@ function commandValidate(args, fixDefault = false) {
         if (missing.length) console.log(`  MISSING KEYS in ${fileName}: ${missing.join(', ')}`);
         for (const error of schemaErrors) console.log(`  SCHEMA ERROR in ${fileName}: ${error}`);
         if (fix && missing.length) console.log(`  FIXED KEYS: ${fileName}`);
+      } else {
+        console.log(`  OK: ${fileName}`);
+      }
+    }
+    for (const [fileName, templateName] of Object.entries(REQUIRED_MARKDOWN_TEMPLATE_MANIFEST)) {
+      const filePath = path.join(taskDir, fileName);
+      if (!fs.existsSync(filePath)) {
+        hadErrors = true;
+        console.log(`  MISSING FILE: ${fileName}`);
+        if (fix) {
+          const now = timestamp();
+          const id = path.basename(taskDir).split('-')[0];
+          const title = readJson(path.join(taskDir, 'requirements.json')).task_description || path.basename(taskDir);
+          const content = materializeTextTemplate(templateName, {
+            'Task ID': id,
+            'Task Title': title,
+            ID: id,
+            Title: title,
+            ISO_TIMESTAMP: now,
+          });
+          fs.writeFileSync(filePath, content.endsWith('\n') ? content : `${content}\n`, 'utf8');
+          console.log(`  FIXED FILE: ${fileName}`);
+        }
+        continue;
+      }
+      const missingHeadings = validateMarkdownFile(filePath, templateName);
+      if (missingHeadings.length) {
+        hadErrors = true;
+        console.log(`  MISSING HEADINGS in ${fileName}: ${missingHeadings.join(', ')}`);
       } else {
         console.log(`  OK: ${fileName}`);
       }

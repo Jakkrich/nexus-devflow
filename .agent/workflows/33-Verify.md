@@ -63,6 +63,7 @@ Run project validation commands when available: lint, tests, typecheck, build, o
 ### 4. QA Report
 
 Create or update `qa_report.md` in the task directory. Include:
+**MANDATORY:** Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and keep the report aligned to its required headings and tables.
 
 - Verdict: pass or fail
 - Evidence: commands and results

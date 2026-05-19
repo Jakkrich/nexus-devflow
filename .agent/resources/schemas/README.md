@@ -33,11 +33,41 @@
 | `task_logs.json` | Timeline การทำงานแบบ Real-time | ทุก Skills (เมื่อเริ่ม/จบขั้นตอนสำคัญ) |
 | `qa_report.md` | สรุปผลการทดสอบและการตรวจสอบ | `code-review-and-quality`, `shipping-and-launch` |
 
+### Markdown Template Manifest
+
+ทุก workflow ที่สร้างไฟล์ Markdown ต้องอ่าน template ที่เกี่ยวข้องในโฟลเดอร์นี้ก่อนสร้างหรืออัปเดตไฟล์ และต้องคงหัวข้อหลักตาม template ไว้เสมอ
+
+| Output file | Template | Workflow หลัก |
+| :--- | :--- | :--- |
+| `INITIAL.md` | `initial.template.md` | `/00-Init` |
+| `ROADMAP.md` | `roadmap.template.md` | `/17-Roadmap` |
+| `CHANGELOG.md` entry | `changelog_entry.template.md` | `/53-Changelog` |
+| `.workspaces/specs/{ID}-*/spec.md` | `spec.template.md` | `/30-Task` |
+| `.workspaces/specs/{ID}-*/plan.md` | `plan.template.md` | `/31-Plan` |
+| `.workspaces/specs/{ID}-*/qa_report.md` | `qa_report.template.md` | `/33-Verify`, `/34-Human` |
+| `.workspaces/specs/{ID}-*/pr_review.md` | `pr_review.template.md` | `/55-PR-Review` |
+| `.workspaces/research/{date}-{slug}.md` | `research.template.md` | `/11-Research` |
+| `.workspaces/prds/{slug}.prd.md` | `prd.template.md` | `/12-PRD` |
+| `.workspaces/research/{date}-{slug}-spec-research.md` | `spec_research.template.md` | `/15-Spec-Research` |
+| `.workspaces/debug/rca-{slug}.md` | `rca.template.md` | `/20-Debug` |
+| `.workspaces/research/brainstorm-{topic}.md` | `brainstorm.template.md` | `/10-Brainstorm` |
+| `.workspaces/research/{date}-{slug}-competitor-analysis.md` | `competitor_analysis.template.md` | `/16-Competitor` |
+| `.workspaces/reports/ui-ux-{topic}.md` | `ui_ux.template.md` | `/13-UI-UX` |
+| `.workspaces/reports/spec_orchestration-{slug}.md` | `spec_orchestration.template.md` | `/18-Spec-Orchestrate` |
+| `.workspaces/reports/qa_orchestrate_{ID}.md` | `qa_orchestration.template.md` | `/39-QA-Orchestrate` |
+| `.workspaces/reports/test_report_{target}.md` | `test_report.template.md` | `/40-Test` |
+| `.workspaces/reports/refactoring_{slug}.md` | `refactoring.template.md` | `/41-Simplify` |
+| `.workspaces/reports/deploy_report_{timestamp}.md` | `deploy_report.template.md` | `/52-Deploy` |
+| `.workspaces/reports/pr_followup_{ID}.md` | `pr_followup.template.md` | `/56-PR-Followup` |
+| `.workspaces/issues/triage_{issue_number}.md` | `triage.template.md` | `/57-Issue-Triage` |
+| `.workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md` | `agent_report.template.md` | `/90-Agent` |
+| `.workspaces/lessons.md` | `lessons.template.md` | `/20-Debug`, `/34-Human`, `/54-Insight` |
+
 ---
 
 ## 🛡️ กฎเหล็กสำหรับ AI (Critical Rules for AI)
 
-1. **ตรวจสอบเทมเพลตเสมอ**: ต้องตรวจสอบไฟล์ `*.template.json` ในโฟลเดอร์นี้ทุกครั้งก่อนสร้างไฟล์ใหม่
+1. **ตรวจสอบเทมเพลตเสมอ**: ต้องตรวจสอบไฟล์ `*.template.json` หรือ `*.template.md` ในโฟลเดอร์นี้ทุกครั้งก่อนสร้างไฟล์ใหม่
 2. **ห้ามลบ Attributes**: เก็บ Keys ทั้งหมดไว้เสมอ แม้ว่าจะไม่มีข้อมูลก็ตาม
 3. **ID ต้องเป็น String**: ตัวเลขงานย่อย เช่น `"1.1"` ต้องกำหนดเป็น String
 4. **มาตรฐาน ISO Date**: Timestamps ทั้งหมดต้องใช้รูปแบบ ISO 8601 (UTC)

@@ -34,15 +34,16 @@ Search for the folder `.workspaces/specs/{ID}-*/` and read `implementation_plan.
 
 ### Step 2: Execute Action (PURE AGENTIC)
 
-Instruct the Agent to use the `replace_file_content` tool to modify the `status` in `implementation_plan.json` according to the received command:
+Use PRP CLI commands for `implementation_plan.json` status changes. Do not manually rewrite dashboard JSON.
 
 #### ✅ Approve (Mark as DONE)
-- **Update status**: Change `"status": "..."` to `"status": "done"` and `"xstateState": "done"`
+- **Update status**: Run `npm run agent -- update {ID} --status done`
 - **Record lesson**: If this task contains good techniques or a structure that acts as a good prototype, add a note to `.workspaces/lessons.md` as a Best Practice. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md).
 - **End of lifecycle** — The task is completed.
 
 #### 🔄 Reject (Send back for fixes)
-- **Update status**: Change the status back to `"status": "in_progress"`
+- **Update status**: Run `npm run agent -- update {ID} --status in_progress`
+- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings.
 - **Record Rejection** in `qa_report.md` under the heading `## Rejection History`:
   ```markdown
   ## Rejection History
@@ -56,7 +57,8 @@ Instruct the Agent to use the `replace_file_content` tool to modify the `status`
 - **Record lesson**: Add a note of the mistake and what needs to be fixed to `.workspaces/lessons.md` to prevent repeating the bug in the next task. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md).
 
 #### 📝 Feedback (Add Note and loop back)
-- **Update status**: Change the status back to `"status": "in_progress"`
+- **Update status**: Run `npm run agent -- update {ID} --status in_progress`
+- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings.
 - **Record Feedback** in `qa_report.md` under the heading `## Feedback History`:
   ```markdown
   ## Feedback History

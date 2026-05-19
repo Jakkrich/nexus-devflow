@@ -35,7 +35,7 @@ Run the command by typing:
 3. **Generate/Update .antigravityrules**: 
    - Check the detected Stack and select the matching Template from `../rules-templates/`.
    - Use `write_to_file` to bring content from the Template to create or update the `.antigravityrules` file at the root.
-4. **Update INITIAL.md**: Use `replace_file_content` or `write_to_file` to update information in `INITIAL.md`:
+4. **Update INITIAL.md**: Before creating or updating `INITIAL.md`, inspect `.agent/resources/schemas/initial.template.md` and preserve its required headings.
    - Fill in the list of specs found in `.workspaces/specs/`.
    - Update **Last Sync** to the current date and time.
    - Summarize the **Project Overview** based on findings.
@@ -49,7 +49,7 @@ Understand the project deeply:
 ### 4. Update INITIAL.md & .antigravityrules (The Source of Truth)
 Create or update key files:
 - **.antigravityrules**: Strict rules for the project aligning with the Tech Stack.
-- **INITIAL.md**: Table of contents and project context.
+- **INITIAL.md**: Table of contents and project context, structured from `.agent/resources/schemas/initial.template.md`.
    - **Project Overview**: Project type and core Stack.
    - **Project Context (Auto-Synced)**: List of Allowed Commands and the latest Sync status.
    - **Last Sync**: The time of the most recent Sync.
