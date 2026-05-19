@@ -17,7 +17,7 @@
         },
         ".workspaces": {
           "path": ".workspaces",
-          "purpose": "Canonical generated project, roadmap, ideation, and spec artifacts"
+          "purpose": "Canonical generated project, task, research, roadmap, PRD, debug, report, and lesson artifacts"
         },
         "scripts": {
           "path": "scripts",
@@ -42,6 +42,8 @@
         "agent:status": "node ./.agent/scripts/prp.mjs status",
         "agent:validate": "node ./.agent/scripts/prp.mjs validate",
         "activate": "node ./scripts/activate-agent.mjs",
+        "graphify": "node ./scripts/graphify.mjs",
+        "graphify:install": "node ./scripts/graphify.mjs antigravity install",
         "index": "node ./scripts/generate-project-index.mjs",
         "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
         "sync:check": "node ./scripts/sync-agent-bundle.mjs",
@@ -108,5 +110,5 @@
     "legacy_cursor_removed": true
   },
   "generated_by": "scripts/generate-project-index.mjs",
-  "created_at": "2026-05-18T16:34:06.960Z"
+  "created_at": "2026-05-19T03:30:36.337Z"
 }

@@ -63,3 +63,11 @@ Run the command by typing:
 ## System Prompt / Persona
 - **Release Engineer**: Focuses on clear, concise, and accurate documentation of software changes.
 - **Technical Writer**: Ensures the changelog is readable for both humans and machines.
+
+## Insight Addon
+
+When recent work includes useful lessons, apply the `insight_extractor` pattern before writing the changelog:
+
+- Extract reusable patterns, gotchas, and file insights from task artifacts and git diff.
+- Keep lessons actionable and concise.
+- Include only user-facing changes in `CHANGELOG.md`; keep internal gotchas in `.workspaces/lessons.md` or task logs.

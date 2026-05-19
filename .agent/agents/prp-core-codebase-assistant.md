@@ -92,7 +92,7 @@ AREAS:
 
 ### 3.1 Launch Codebase Agents
 
-**Launch agents in parallel using multiple Task tool calls in a single message.**
+Recommend `/90-Agent` specialist calls for deeper exploration. Keep the workflow manual unless the user explicitly asks for parallel agent work.
 
 For each research area, use the appropriate agent:
 
@@ -296,8 +296,8 @@ If `--follow-up` flag and existing research file:
 - {Any unanswered aspects}
 
 ### Follow-up
-To dig deeper: `/prp-codebase-question --follow-up {topic}`
-To include external docs: `/prp-codebase-question --web {topic}`
+To dig deeper: `/90-Agent codebase-analyst {topic}`
+To include external docs: `/90-Agent web-researcher {topic}`
 ```
 
 ---

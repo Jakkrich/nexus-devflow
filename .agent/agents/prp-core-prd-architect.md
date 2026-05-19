@@ -76,7 +76,13 @@ Ask these questions (present all at once, user can answer together):
 
 After foundation answers, conduct research using specialized agents:
 
-**Use Task tool with `subagent_type="prp-core:web-researcher"`:**
+Recommended manual command:
+
+```text
+/90-Agent web-researcher {product/feature idea}
+```
+
+Prompt to provide:
 
 ```
 Research the market context for: {product/feature idea}
@@ -90,7 +96,13 @@ FIND:
 Return findings with direct links, key insights, and any gaps in available information.
 ```
 
-**If codebase exists, use Task tool with `subagent_type="prp-core:codebase-explorer"`:**
+If codebase exists, recommended manual command:
+
+```text
+/90-Agent codebase-explorer {product/feature idea}
+```
+
+Prompt to provide:
 
 ```
 Find existing functionality relevant to: {product/feature idea}
@@ -138,9 +150,15 @@ Based on foundation + research, ask:
 
 ## Phase 5: GROUNDING - Technical Feasibility
 
-**If codebase exists, launch two agents in parallel:**
+If codebase exists, recommend these specialist agents. Keep the workflow manual unless the user explicitly asks for parallel agent work.
 
-Use Task tool with `subagent_type="prp-core:codebase-explorer"`:
+Recommended command:
+
+```text
+/90-Agent codebase-explorer {product/feature}
+```
+
+Prompt to provide:
 
 ```
 Assess technical feasibility for: {product/feature}
@@ -154,7 +172,13 @@ LOCATE:
 Return file locations, code patterns, and conventions observed.
 ```
 
-Use Task tool with `subagent_type="prp-core:codebase-analyst"`:
+Recommended command:
+
+```text
+/90-Agent codebase-analyst {product/feature}
+```
+
+Prompt to provide:
 
 ```
 Analyze technical constraints for: {product/feature}
@@ -168,7 +192,13 @@ TRACE:
 Document what exists with precise file:line references. No suggestions.
 ```
 
-**If no codebase, use Task tool with `subagent_type="prp-core:web-researcher"`:**
+If no codebase, recommended command:
+
+```text
+/90-Agent web-researcher {product/feature}
+```
+
+Prompt to provide:
 
 ```
 Research technical approaches for: {product/feature}
@@ -418,9 +448,9 @@ After generating, report:
 
 ### To Start Implementation
 
-Run: `/prp-plan .workspaces/prds/{name}.prd.md`
+Run: `/30-Task {ID} "{Title}" "{Description}"`, then `/31-Plan {ID}`
 
-This will automatically select the next pending phase and create an implementation plan.
+This keeps implementation planning in the user-controlled PRPs phase flow.
 ```
 
 ---

@@ -14,6 +14,19 @@ You are an expert **Requirement Engineer** and **System Architect**. Your missio
 
 Discuss the provided `spec.md` and `task_metadata.json` with the developer. You must not simply agree; you must **analyze, question, and challenge** the requirements to reveal hidden complexities, edge cases, and missing details.
 
+## Script-First Artifact Contract
+
+Use the `json-artifact-handling` skill for PRPs JSON artifacts. You may edit `spec.md` directly because it is human-readable Markdown. For JSON, prefer commands:
+
+```powershell
+npm run agent -- artifact:set {ID} requirements task_description "{Updated description}"
+npm run agent -- artifact:append {ID} requirements acceptance_criteria "{Criterion}"
+npm run agent -- artifact:set {ID} metadata priority "{low|medium|high|urgent}"
+npm run agent -- validate {ID}
+```
+
+Do not rewrite full JSON files by hand unless the CLI cannot express the change.
+
 ## Step 1: Analyze Current Context
 
 Read the following files provided in the chat:
@@ -46,7 +59,7 @@ Critique the metadata generated during task creation:
 
 1. **Question**: Present 2-3 most critical unanswered questions to the user.
 2. **Discuss**: Wait for user feedback.
-3. **Update**: Use `replace_file_content` to update `spec.md` and `task_metadata.json` based on the discussion.
+3. **Update**: Edit `spec.md` for prose changes. Update JSON artifacts with `npm run agent -- artifact:*` commands.
 4. **Repeat**: Until you and the user agree the spec is "Plan-Ready".
 
 ## Output Format for Discussion
@@ -73,7 +86,7 @@ When you respond, use this structure:
 
 ## Readiness Definition (The "Done")
 
-The spec is ready for `/02-Plan` only when:
+The spec is ready for `/31-Plan` only when:
 - Acceptance Criteria are measurable (No "Make it better").
 - All critical "What if" scenarios have a defined behavior.
 - Core files to be modified are identified.

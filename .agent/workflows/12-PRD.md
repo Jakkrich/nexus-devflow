@@ -26,6 +26,8 @@ You are an orchestrator. Your goal is to call the specialized PRD Architect agen
 ### Phase 2: Grounding & Feasibility
 - Facilitate the agent's research into technical feasibility and market context.
 - Ensure the agent evaluates internal codebase patterns if applicable.
+- Apply `spec_researcher` when the PRD mentions external APIs, SDKs, databases, cloud services, or other integrations.
+- Apply `competitor_analysis` when the idea needs market positioning, alternative products, user pain points, or differentiator opportunities.
 
 ### Phase 3: Scope Definition
 - Review the agent's MoSCoW prioritization (Must, Should, Won't).
@@ -34,6 +36,7 @@ You are an orchestrator. Your goal is to call the specialized PRD Architect agen
 ### Phase 4: Output Generation
 - Ensure the PRD is saved as `.workspaces/prds/{slug}.prd.md`.
 - Verify the document includes the problem statement, key hypotheses, and implementation phases.
+- Convert any autonomous `spec_orchestrator_agentic` assumptions into explicit next steps. The user should still confirm before `/30-Task` and `/31-Plan`.
 
 ---
 

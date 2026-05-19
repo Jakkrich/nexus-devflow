@@ -32,6 +32,16 @@ When `/brainstorm` is triggered:
    - Summarize tradeoffs
    - Give a recommendation with reasoning
 
+4. **Apply prompt ideation addons when useful**
+   - `ideation_code_improvements`: feature and code improvement ideas
+   - `ideation_code_quality`: simplification, maintainability, and quality debt
+   - `ideation_documentation`: documentation gaps
+   - `ideation_performance`: performance bottleneck hypotheses
+   - `ideation_security`: security hardening ideas
+   - `ideation_ui_ux`: UI/UX improvement candidates
+
+Keep this workflow exploratory. Do not create or mutate task JSON unless the user explicitly asks to continue into `/30-Task`.
+
 ---
 
 ## Output Format
@@ -111,3 +121,4 @@ What direction would you like to explore?
 - **Visual when helpful** - use diagrams for architecture
 - **Honest tradeoffs** - don't hide complexity
 - **Defer to user** - present options, let them decide
+- **Manual next step** - recommend `/11-Research`, `/12-PRD`, or `/30-Task` after the user chooses a direction

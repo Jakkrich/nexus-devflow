@@ -1,5 +1,21 @@
 # PRPs Specialist Agents
 
+## Script-First JSON Rule
+
+Agents should use PRP CLI commands for JSON artifacts whenever possible:
+
+```powershell
+npm run agent -- artifact:get {ID} {artifact}
+npm run agent -- artifact:set {ID} {artifact} {field_path} {value}
+npm run agent -- artifact:append {ID} {artifact} {field_path} {value}
+npm run agent -- plan:add-phase {ID} "{Name}"
+npm run agent -- plan:add-subtask {ID} {PHASE_ID} "{Title}"
+npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
+npm run agent -- validate {ID}
+```
+
+Use manual JSON editing only as a fallback, then run validation immediately.
+
 เอกสารนี้สรุป persona หลักที่ใช้ใน PRPs-Framework สำหรับทำงานแบบ agentic workflow ผ่าน `.agent` bundle
 
 ## วิธีเรียกใช้งาน

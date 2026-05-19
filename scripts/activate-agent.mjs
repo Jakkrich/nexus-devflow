@@ -33,6 +33,9 @@ function main() {
   ensureDir('.workspaces/specs');
   ensureDir('.workspaces/issues');
   ensureDir('.workspaces/research');
+  ensureDir('.workspaces/prds');
+  ensureDir('.workspaces/debug');
+  ensureDir('.workspaces/reports');
 
   const now = new Date().toISOString();
   writeJson('.workspaces/active-agent.json', {

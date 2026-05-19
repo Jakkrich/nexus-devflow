@@ -8,6 +8,8 @@ let activeProjectIds = [];  // for multi-project aggregate
 let currentSpec = null;
 let refreshTimer = null;
 let rootHandle = null;
+let rootUrl = null;
+let rootProjectName = null;
 let strategyDiscovery = null;
 let strategyRoadmap = null;
 let artifactHealth = [];
@@ -152,6 +154,8 @@ async function switchProject(id) {
   const ok = await verifyPerm(p.handle);
   if (!ok) { showToast(`Please Browse to reconnect "${p.name}" again`, 'error'); return; }
   rootHandle = p.handle;
+  rootUrl = null;
+  rootProjectName = null;
   await idbSet('activeProject', id);
   document.getElementById('projBarName').textContent = p.name;
   document.getElementById('btnRefresh').style.display = 'flex';
@@ -172,6 +176,8 @@ async function browseFolder() {
   try {
     const handle = await window.showDirectoryPicker({ mode: 'read' });
     rootHandle = handle;
+    rootUrl = null;
+    rootProjectName = null;
     const id = await saveProject(handle);
     document.getElementById('projBarName').textContent = handle.name;
     document.getElementById('btnRefresh').style.display = 'flex';
@@ -181,6 +187,7 @@ async function browseFolder() {
 }
 
 async function refreshData() {
+  if (!rootHandle && rootUrl) return refreshUrlData();
   if (!rootHandle) return;
   showLoading(true);
   try {
@@ -224,6 +231,45 @@ async function refreshData() {
   showLoading(false);
 }
 
+async function refreshUrlData() {
+  if (!rootUrl) return;
+  showLoading(true);
+  try {
+    const specs = await loadFromProjectUrl(rootUrl);
+    const projectId = 'auto-current-project';
+    specsByProject = { [projectId]: specs };
+
+    const readJsonStatus = async (label, ...p) => {
+      const path = p.join('/');
+      try {
+        const data = await readJsonUrl(rootUrl, ...p);
+        return data ? { label, path, status: 'healthy', data } : { label, path, status: 'missing', data: null };
+      } catch {
+        return { label, path, status: 'invalid', data: null };
+      }
+    };
+
+    const artifactChecks = await Promise.all([
+      readJsonStatus('Project index', '.workspaces', 'project_index.json'),
+      readJsonStatus('Roadmap index', '.workspaces', 'roadmap', 'project_index.json'),
+      readJsonStatus('Discovery', '.workspaces', 'roadmap', 'roadmap_discovery.json'),
+      readJsonStatus('Roadmap', '.workspaces', 'roadmap', 'roadmap.json')
+    ]);
+    artifactHealth = artifactChecks;
+    strategyDiscovery = artifactChecks.find(a => a.label === 'Discovery')?.data
+      || await readJsonUrl(rootUrl, '.workspaces', 'roadmap_discovery.json').catch(() => null);
+    strategyRoadmap = artifactChecks.find(a => a.label === 'Roadmap')?.data
+      || await readJsonUrl(rootUrl, '.workspaces', 'roadmap.json').catch(() => null);
+
+    rebuildAllSpecs();
+    renderAutoProjectHeader();
+    renderAll();
+    updateLastRefresh();
+    showToast(`Auto-loaded ${specs.length} spec${specs.length !== 1 ? 's' : ''}`, 'success');
+  } catch (e) { console.error(e); showToast('Auto-load unavailable: ' + e.message, 'error'); }
+  showLoading(false);
+}
+
 function rebuildAllSpecs() {
   allSpecs = Object.values(specsByProject).flat();
   // Inject projectId into each spec
@@ -240,6 +286,67 @@ async function loadFromHandle(handle) {
     const s = { id: name };
     const tryJson = async (...p) => { const h = await getFileHandle(sh, ...p); if (!h) return null; try { return JSON.parse(await readFile(h)) } catch { return null } };
     const tryMd = async (...p) => { const h = await getFileHandle(sh, ...p); if (!h) return null; return readFile(h); };
+    s.plan = await tryJson('implementation_plan.json');
+    s.meta = await tryJson('task_metadata.json');
+    s.logs = await tryJson('task_logs.json');
+    s.context = await tryJson('context.json');
+    s.requirements = await tryJson('requirements.json');
+    s.complexity = await tryJson('complexity_assessment.json');
+    s.specMd = await tryMd('spec.md');
+    s.planMd = await tryMd('plan.md');
+    s.qaMd = await tryMd('qa_report.md');
+    specs.push(s);
+  }
+  return specs;
+}
+
+async function fetchTextUrl(baseUrl, ...parts) {
+  const url = new URL(parts.map(encodeURIComponent).join('/'), baseUrl);
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) return null;
+  return response.text();
+}
+
+async function readJsonUrl(baseUrl, ...parts) {
+  const text = await fetchTextUrl(baseUrl, ...parts);
+  if (!text) return null;
+  return JSON.parse(text);
+}
+
+async function readTextUrl(baseUrl, ...parts) {
+  return fetchTextUrl(baseUrl, ...parts);
+}
+
+async function listDirsUrl(baseUrl, ...parts) {
+  const dirUrl = new URL(parts.map(encodeURIComponent).join('/') + '/', baseUrl);
+  const response = await fetch(dirUrl, { cache: 'no-store' });
+  if (!response.ok) return [];
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const dirs = [];
+  for (const a of doc.querySelectorAll('a[href]')) {
+    const raw = a.getAttribute('href');
+    if (!raw || raw.startsWith('?') || raw.startsWith('#') || raw === '../') continue;
+    const decoded = decodeURIComponent(raw.split(/[?#]/)[0]).replace(/\/$/, '');
+    const name = decoded.split('/').filter(Boolean).pop();
+    if (!name || name === '..' || name.includes('.')) continue;
+    dirs.push({ name });
+  }
+  return [...new Map(dirs.map(d => [d.name, d])).values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+async function loadFromProjectUrl(baseUrl) {
+  let dirs = [];
+  try { dirs = await listDirsUrl(baseUrl, '.workspaces', 'specs'); } catch { dirs = []; }
+  if (!dirs.length) {
+    try { dirs = await listDirsUrl(baseUrl, 'specs'); } catch { dirs = []; }
+  }
+
+  const specs = [];
+  for (const { name } of dirs) {
+    const s = { id: name };
+    const tryJson = async (...p) => { try { return await readJsonUrl(baseUrl, '.workspaces', 'specs', name, ...p); } catch { return null; } };
+    const tryMd = async (...p) => { try { return await readTextUrl(baseUrl, '.workspaces', 'specs', name, ...p); } catch { return null; } };
     s.plan = await tryJson('implementation_plan.json');
     s.meta = await tryJson('task_metadata.json');
     s.logs = await tryJson('task_logs.json');
@@ -1156,16 +1263,6 @@ function _doSearch() {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  MODAL
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-function normalizeStatus(spec) {
-  const raw = (spec.plan?.xstateState || spec.plan?.status || 'planning').toLowerCase().trim();
-  if (/^done|completed$/.test(raw)) return 'done';
-  if (raw === 'archived') return 'archived';
-  if (/human.?review/.test(raw)) return 'human-review';
-  if (/ai.?review|^review|qa/.test(raw)) return 'ai-review';
-  if (/in.?progress|coding/.test(raw)) return 'in-progress';
-  if (/queue|queued|pending/.test(raw)) return 'queue';
-  return 'planning';
-}
 
 function openModal(spec) {
   if (!spec) return;
@@ -1625,7 +1722,7 @@ function syntaxHL(json) {
 function setAutoRefresh() {
   if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
   const secs = parseInt(document.getElementById('refreshSelect').value);
-  if (secs > 0 && rootHandle) refreshTimer = setInterval(refreshData, secs * 1000);
+  if (secs > 0 && (rootHandle || rootUrl)) refreshTimer = setInterval(refreshData, secs * 1000);
   else if (secs > 0) { showToast('Select a project first', 'error'); document.getElementById('refreshSelect').value = '0'; }
 }
 
@@ -1801,6 +1898,56 @@ function loadDemoData() {
   showToast('Demo data loaded', 'success');
 }
 
+function getCurrentProjectBaseUrl() {
+  const href = window.location.href;
+  const marker = '/.agent/dashboard/html/';
+  const normalized = href.replaceAll('\\', '/');
+  const index = normalized.indexOf(marker);
+  if (index === -1) return null;
+  return new URL(normalized.slice(0, index + 1));
+}
+
+function projectNameFromUrl(baseUrl) {
+  const parts = decodeURIComponent(baseUrl.pathname).replace(/\/$/, '').split('/').filter(Boolean);
+  return parts[parts.length - 1] || 'Current Project';
+}
+
+function renderAutoProjectHeader() {
+  document.getElementById('projBarName').textContent = rootProjectName || 'Current Project';
+  document.getElementById('projectSwitcher').style.display = 'flex';
+  document.getElementById('projEmpty').style.display = 'none';
+  document.getElementById('btnRefresh').style.display = 'flex';
+  document.getElementById('projList').innerHTML = `
+    <div class="proj-item active">
+      <div class="proj-item-ico"><i class="fa-solid fa-folder-open"></i></div>
+      <div class="proj-item-info">
+        <div class="proj-item-name">${escHtml(rootProjectName || 'Current Project')}</div>
+        <div class="proj-item-path" title="${escHtml(rootUrl?.href || '')}">${escHtml(rootUrl?.href || '')}</div>
+      </div>
+      <div class="proj-item-actions"><i class="fa-solid fa-check proj-check"></i></div>
+    </div>`;
+}
+
+async function tryAutoLoadCurrentProject() {
+  if (rootHandle || rootUrl) return false;
+  const baseUrl = getCurrentProjectBaseUrl();
+  if (!baseUrl) return false;
+
+  const projectIndex = await readJsonUrl(baseUrl, '.workspaces', 'project_index.json').catch(() => null);
+  const hasWorkspace =
+    projectIndex
+    || await readJsonUrl(baseUrl, '.workspaces', 'roadmap', 'roadmap.json').catch(() => null)
+    || await readJsonUrl(baseUrl, '.workspaces', 'roadmap', 'roadmap_discovery.json').catch(() => null);
+  if (!hasWorkspace) return false;
+
+  rootUrl = baseUrl;
+  rootProjectName = projectIndex?.project_root
+    ? projectIndex.project_root.split(/[\\/]/).filter(Boolean).pop()
+    : projectNameFromUrl(baseUrl);
+  await refreshUrlData();
+  return true;
+}
+
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  SESSION RESTORE
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -1825,13 +1972,18 @@ async function tryRestoreLastSession() {
   }
 }
 
+async function initDashboard() {
+  await tryRestoreLastSession();
+  await tryAutoLoadCurrentProject();
+}
+
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  EVENTS
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { document.getElementById('modalOverlay').classList.remove('show'); closeProjDropdown(); }
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); switchView('search'); }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'r' && rootHandle) { e.preventDefault(); refreshData(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'r' && (rootHandle || rootUrl)) { e.preventDefault(); refreshData(); }
 });
 
 document.addEventListener('click', e => {
@@ -1847,5 +1999,5 @@ document.addEventListener('click', e => {
   }
 });
 
-window.addEventListener('load', tryRestoreLastSession);
+window.addEventListener('load', initDashboard);
 

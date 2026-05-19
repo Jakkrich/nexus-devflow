@@ -36,6 +36,8 @@
 
 ### 5. โครงสร้างพื้นฐานและเวิร์กโฟลว์ (Infra & Workflow)
 *   **`git-workflow-and-versioning`**: การจัดการ Branch และการตั้งชื่อ Commit ตามมาตรฐาน
+*   **`json-artifact-handling`**: Script-first commands for creating, updating, repairing, and validating PRPs JSON artifacts.
+*   **`prompt-addons`**: Adapted prompt families for ideation, competitor research, insight extraction, follow-up planning, QA, roadmap, spec, and GitHub workflows.
 *   *   **`ci-cd-and-automation`**: การจัดการระบบอัตโนมัติและการทดสอบใน Pipeline
 *   **`server-management` / `deployment-procedures`**: การจัดการเซิร์ฟเวอร์และการติดตั้ง
 *   **`bash-linux` / `powershell-windows`**: การใช้งาน Command Line ในแต่ละระบบปฏิบัติการ

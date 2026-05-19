@@ -1,0 +1,699 @@
+# PRPs-Framework Usage Guide
+
+คู่มือนี้อธิบายวิธีใช้ workflow ทั้งหมดของ PRPs-Framework แบบผู้ใช้ควบคุมทีละขั้นใน IDE โดยปรับปรุงจาก `.agent/workflows/README.md` และเพิ่ม workflow addon จาก external prompt families
+
+แนวคิดหลัก:
+
+- ใช้ workflow เป็นคำสั่งนำทาง ไม่ใช่ระบบ auto-run ทั้งหมด
+- เริ่มจาก discovery แล้วค่อยสร้าง task, plan, code, verify
+- JSON artifacts ควรแก้ด้วย PRP CLI เช่น `artifact:*`, `plan:*`, `validate`, `repair`
+- ถ้าใช้ PowerShell บน Windows แล้ว `npm` ติด execution policy ให้ใช้ `npm.cmd`
+
+## Quick Command Surface
+
+```powershell
+npm.cmd run activate
+npm.cmd run validate
+npm.cmd run agent:status
+npm.cmd run agent -- --help
+```
+
+Task JSON commands:
+
+```powershell
+npm.cmd run agent -- init 007 "Feature Name" feature-name "Short description"
+npm.cmd run agent -- artifact:get 007 requirements
+npm.cmd run agent -- artifact:set 007 requirements priority high
+npm.cmd run agent -- artifact:append 007 requirements acceptance_criteria "User can complete the target flow"
+npm.cmd run agent -- plan:add-phase 007 "Backend implementation" --type implementation
+npm.cmd run agent -- plan:add-subtask 007 phase-1 "Create API endpoint" --service backend
+npm.cmd run agent -- plan:set-subtask-status 007 subtask-1.1 completed
+npm.cmd run agent -- plan:validate 007
+npm.cmd run agent -- validate 007
+```
+
+## Workflow Groups
+
+| Group | Workflows | Use When |
+| :--- | :--- | :--- |
+| Setup & Status | `/00-Init`, `/01-App-Builder`, `/02-Status` | เริ่ม project, scaffold app, ตรวจสถานะ framework |
+| Discovery & Product Thinking | `/10-Brainstorm`, `/11-Research`, `/12-PRD`, `/13-UI-UX`, `/14-Orchestrate` | คิด feature, วิจัย codebase, ทำ PRD, วาง UX, ประสานงานซับซ้อน |
+| Prompt Addon Discovery | `/15-Spec-Research`, `/16-Competitor`, `/17-Roadmap`, `/18-Spec-Orchestrate` | ใช้ prompt family เพิ่มเติม เช่น spec research, competitor, roadmap, spec orchestration |
+| Debugging | `/20-Debug` | วิเคราะห์ root cause ก่อนวางแผนแก้ |
+| Core PRP Execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` | สร้าง task, วางแผน, เขียนโค้ด, ตรวจ, approve, ต่อเติมงานเดิม |
+| Quality & Optimization | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | QA ซับซ้อน, test, refactor, preview |
+| Ship & Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight` | commit, PR, deploy, changelog, เก็บบทเรียนหลังงานเสร็จ |
+| GitHub Review & Triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | review PR, แก้ PR comments, triage GitHub issues |
+| Knowledge & Specialist Tools | `/60-Graphify`, `/90-Agent`, `/99-Coach` | graph knowledge, เรียก specialist, ขอคำแนะนำแบบ read-only |
+
+## Workflow Index
+
+| Workflow | Purpose | Example |
+| :--- | :--- | :--- |
+| `/00-Init` | เตรียม project context และ sync workspace | `/00-Init` |
+| `/01-App-Builder` | เริ่มสร้างแอปใหม่จากศูนย์ | `/01-App-Builder "Next.js CRM dashboard"` |
+| `/02-Status` | ดูสถานะ project, task, agent bundle | `/02-Status` |
+| `/10-Brainstorm` | คิดทางเลือกก่อนทำจริง | `/10-Brainstorm "membership system for restaurants"` |
+| `/11-Research` | วิจัย codebase, architecture, pattern | `/11-Research "how auth currently works"` |
+| `/12-PRD` | สร้าง PRD จาก idea | `/12-PRD "customer loyalty feature"` |
+| `/13-UI-UX` | ออกแบบ UI/UX direction | `/13-UI-UX "mobile checkout flow"` |
+| `/14-Orchestrate` | วางแผนงานซับซ้อนที่ต้องใช้หลายมุมมอง | `/14-Orchestrate "multi-service billing migration"` |
+| `/15-Spec-Research` | ตรวจ API, SDK, library, integration ก่อนทำ spec | `/15-Spec-Research "Stripe subscription webhook"` |
+| `/16-Competitor` | วิเคราะห์คู่แข่ง, pain point, market gap | `/16-Competitor "AI project planning tools"` |
+| `/17-Roadmap` | สร้าง/ปรับ roadmap artifacts | `/17-Roadmap "refresh roadmap from current project state"` |
+| `/18-Spec-Orchestrate` | ประสาน PRD, research, competitor, task creation แบบ manual | `/18-Spec-Orchestrate "new onboarding module"` |
+| `/20-Debug` | วิเคราะห์ root cause ของปัญหา | `/20-Debug "login redirects forever"` |
+| `/30-Task` | สร้าง task workspace และ artifacts | `/30-Task "Add password reset"` |
+| `/31-Plan` | สร้าง implementation plan | `/31-Plan 007` |
+| `/32-Code` | ลงมือทำทีละ subtask | `/32-Code 007` |
+| `/33-Verify` | ตรวจคุณภาพและ QA gate | `/33-Verify 007` |
+| `/34-Human` | approve, reject, feedback โดยมนุษย์ | `/34-Human Approve 007` |
+| `/35-Followup` | เพิ่มงานต่อยอดใน task เดิมโดยไม่ลบ plan เดิม | `/35-Followup 007 "add CSV export"` |
+| `/39-QA-Orchestrate` | ประสาน QA ซับซ้อนหลายมิติ | `/39-QA-Orchestrate 007` |
+| `/40-Test` | สร้าง/รัน test | `/40-Test 007` |
+| `/41-Simplify` | refactor ลดความซับซ้อน | `/41-Simplify "src/auth"` |
+| `/42-Preview` | เปิด/ตรวจ preview server | `/42-Preview start` |
+| `/50-Commit` | stage และเขียน commit | `/50-Commit "task 007 only"` |
+| `/51-PR` | สร้าง pull request | `/51-PR main` |
+| `/52-Deploy` | deploy พร้อม preflight check | `/52-Deploy staging` |
+| `/53-Changelog` | อัปเดต changelog | `/53-Changelog` |
+| `/54-Insight` | สกัดบทเรียน, pattern, gotcha | `/54-Insight 007` |
+| `/55-PR-Review` | review PR หรือ local diff แบบ findings-first | `/55-PR-Review "PR #123"` |
+| `/56-PR-Followup` | แปลง PR comments เป็น fixes หรือ follow-up subtasks | `/56-PR-Followup "PR #123 comments"` |
+| `/57-Issue-Triage` | วิเคราะห์ GitHub issue, duplicate, spam, route เป็น workflow | `/57-Issue-Triage "issue #456"` |
+| `/60-Graphify` | สร้าง knowledge graph จาก folder | `/60-Graphify .agent/workflows` |
+| `/90-Agent` | เรียก specialist agent | `/90-Agent code-reviewer .workspaces/specs/007` |
+| `/99-Coach` | ถามทาง, ขอคำแนะนำ, read-only guide | `/99-Coach "ควรไป workflow ไหนต่อ"` |
+
+## Basic SOP Paths
+
+### 1. Start Or Refresh Project
+
+ใช้เมื่อเริ่มใช้ framework ใน repo นี้หรือหลังเปลี่ยนโครงสร้าง project
+
+```text
+/00-Init
+/02-Status
+```
+
+Terminal validation:
+
+```powershell
+npm.cmd run activate
+npm.cmd run validate
+npm.cmd run agent:status
+```
+
+### 2. Small Feature Flow
+
+เหมาะกับ feature ชัดเจน ขอบเขตไม่ใหญ่
+
+```text
+/30-Task "Add password reset"
+/31-Plan 007
+/32-Code 007
+/33-Verify 007
+/34-Human Approve 007
+/53-Changelog
+/50-Commit "task 007"
+```
+
+### 3. Full Feature Flow
+
+เหมาะกับ feature ที่ยังต้องคิด product และ acceptance criteria
+
+```text
+/10-Brainstorm "self-service billing portal"
+/12-PRD "self-service billing portal"
+/30-Task "Build self-service billing portal"
+/31-Plan 007
+/32-Code 007
+/33-Verify 007
+/34-Human Approve 007
+/54-Insight 007
+/53-Changelog
+/50-Commit "billing portal"
+/51-PR main
+```
+
+### 4. Bug Fix Flow
+
+เริ่มจาก root cause ก่อนสร้าง task
+
+```text
+/20-Debug "checkout fails after payment success"
+/30-Task "Fix checkout success handling"
+/31-Plan 008
+/32-Code 008
+/33-Verify 008
+/34-Human Approve 008
+/54-Insight 008
+/50-Commit "fix checkout success handling"
+```
+
+### 5. Refactor Flow
+
+ใช้เมื่อ behavior ต้องเหมือนเดิม แต่ code ต้องอ่านง่ายขึ้น
+
+```text
+/11-Research "current auth module boundaries"
+/41-Simplify "src/auth"
+/33-Verify
+/34-Human Approve 009
+/54-Insight 009
+/50-Commit "simplify auth module"
+```
+
+### 6. Test Improvement Flow
+
+ใช้เมื่ออยากเพิ่ม test coverage หรือปิด regression risk
+
+```text
+/11-Research "existing test patterns for auth"
+/40-Test "src/auth"
+/33-Verify
+/50-Commit "add auth tests"
+```
+
+## Advanced SOP Paths
+
+### 7. Integration-Heavy Feature Flow
+
+ใช้เมื่อมี external API, SDK, database, OAuth, payment, webhook
+
+```text
+/15-Spec-Research "Stripe subscription webhook and customer portal"
+/12-PRD "subscription billing"
+/30-Task "Implement subscription billing"
+/31-Plan 010
+/32-Code 010
+/39-QA-Orchestrate 010
+/33-Verify 010
+/34-Human Approve 010
+/54-Insight 010
+```
+
+### 8. Product Strategy And Roadmap Flow
+
+ใช้เมื่ออยากรู้ว่าจะทำอะไรต่อ ไม่ใช่แค่ implement task เดียว
+
+```text
+/10-Brainstorm "next quarter product bets"
+/16-Competitor "AI coding workflow tools"
+/17-Roadmap "refresh roadmap from competitor findings and current project state"
+/12-PRD "top priority roadmap item"
+/30-Task "Implement top priority roadmap item"
+```
+
+Roadmap validation:
+
+```powershell
+npm.cmd run roadmap:validate
+npm.cmd run validate
+```
+
+### 9. Broad Spec Orchestration Flow
+
+ใช้เมื่อ idea ใหญ่เกินกว่าจะเริ่มที่ `/30-Task` ทันที
+
+```text
+/18-Spec-Orchestrate "multi-tenant analytics module"
+/15-Spec-Research "analytics storage and query options"
+/16-Competitor "analytics tools for small SaaS"
+/12-PRD "multi-tenant analytics module"
+/30-Task "Implement analytics MVP"
+/31-Plan 011
+```
+
+### 10. Follow-Up Feature Flow
+
+ใช้เมื่อ task เดิมเสร็จแล้ว แต่อยากต่อยอดโดยรักษา context เดิม
+
+```text
+/35-Followup 007 "add CSV export to the report screen"
+/31-Plan 007
+/32-Code 007
+/33-Verify 007
+/34-Human Approve 007
+/54-Insight 007
+```
+
+สำคัญ: follow-up ต้อง extend plan เดิม ไม่ replace subtasks ที่ completed แล้ว
+
+### 11. Complex QA Flow
+
+ใช้เมื่อ QA ต้องแยกหลาย lane เช่น correctness, security, performance, UX, regression
+
+```text
+/39-QA-Orchestrate 012
+/90-Agent code-reviewer .workspaces/specs/012
+/90-Agent test-engineer .workspaces/specs/012
+/33-Verify 012
+/32-Code 012
+/33-Verify 012
+/34-Human Approve 012
+```
+
+### 12. PR Review And Fix Flow
+
+ใช้เมื่อต้องทำ PR, รับ comment, แล้วแปลงเป็น fix task
+
+```text
+/50-Commit "task 012"
+/51-PR main
+/55-PR-Review "PR for task 012"
+/56-PR-Followup "address PR review comments for task 012"
+/32-Code 012
+/33-Verify 012
+```
+
+### 13. GitHub Issue To PRP Task Flow
+
+ใช้เมื่อเริ่มจาก GitHub issue ก่อน ยังไม่รู้ว่าเป็น bug, feature, duplicate หรือ noise
+
+```text
+/57-Issue-Triage "issue #456"
+/20-Debug "root cause for issue #456"
+/30-Task "Fix issue #456"
+/31-Plan 456
+/32-Code 456
+/33-Verify 456
+/50-Commit "fix issue 456"
+/51-PR main
+```
+
+ถ้าเป็น feature request:
+
+```text
+/57-Issue-Triage "issue #789"
+/12-PRD "feature request from issue #789"
+/30-Task "Implement issue #789"
+```
+
+### 14. Release Flow
+
+ใช้หลังงานผ่าน QA และ human approval
+
+```text
+/33-Verify 013
+/34-Human Approve 013
+/54-Insight 013
+/53-Changelog
+/50-Commit "release task 013"
+/51-PR main
+/52-Deploy staging
+```
+
+### 15. Knowledge And Insight Flow
+
+ใช้เมื่อต้องการให้ระบบจำ pattern หรือบทเรียนสำหรับงานถัดไป
+
+```text
+/54-Insight 014
+/53-Changelog
+/99-Coach "สรุปบทเรียนจาก task 014 และแนะนำ workflow ถัดไป"
+```
+
+Insight ควรบันทึกเฉพาะสิ่งที่ใช้ซ้ำได้ เช่น:
+
+- file purpose
+- pattern ที่ควรใช้ซ้ำ
+- gotcha ที่เคยทำพลาด
+- approach ที่เวิร์กหรือไม่เวิร์ก
+- recommendation สำหรับ session ถัดไป
+
+### 16. New App Flow
+
+ใช้เมื่อเริ่มแอปใหม่จากศูนย์
+
+```text
+/01-App-Builder "Next.js admin dashboard with auth"
+/00-Init
+/10-Brainstorm "dashboard modules"
+/12-PRD "admin dashboard MVP"
+/30-Task "Build admin dashboard MVP"
+/31-Plan 015
+/32-Code 015
+/42-Preview start
+/33-Verify 015
+```
+
+## Single Workflow Examples
+
+### `/00-Init`
+
+```text
+/00-Init
+```
+
+ใช้เพื่อ sync project context และเตรียม `.workspaces`
+
+### `/01-App-Builder`
+
+```text
+/01-App-Builder "Vite React app for internal task tracking"
+```
+
+ใช้เมื่อยังไม่มี app structure หรืออยาก scaffold project ใหม่
+
+### `/02-Status`
+
+```text
+/02-Status
+```
+
+ใช้ดูสถานะ task และ agent bundle
+
+### `/10-Brainstorm`
+
+```text
+/10-Brainstorm "improve onboarding conversion"
+```
+
+ให้ AI เสนอหลายทางเลือกพร้อม tradeoff ก่อนตัดสินใจ
+
+### `/11-Research`
+
+```text
+/11-Research "where user permissions are checked"
+```
+
+ใช้วิจัย codebase และ pattern เดิม
+
+### `/12-PRD`
+
+```text
+/12-PRD "team invitation feature"
+```
+
+แปลง idea เป็น product requirements
+
+### `/13-UI-UX`
+
+```text
+/13-UI-UX "settings page for billing and team management"
+```
+
+ใช้วาง UX, layout, design direction
+
+### `/14-Orchestrate`
+
+```text
+/14-Orchestrate "migrate auth, billing, and permissions together"
+```
+
+ใช้เมื่องานต้องประสานหลายมุมมอง
+
+### `/15-Spec-Research`
+
+```text
+/15-Spec-Research "OpenAI Responses API streaming and tool calling"
+```
+
+ใช้ตรวจ external integration ก่อนเขียน plan
+
+### `/16-Competitor`
+
+```text
+/16-Competitor "developer workflow automation tools"
+```
+
+ใช้วิเคราะห์คู่แข่งและ market gap
+
+### `/17-Roadmap`
+
+```text
+/17-Roadmap "prioritize next 3 roadmap phases"
+```
+
+ใช้ปรับ `.workspaces/roadmap` และ `ROADMAP.md`
+
+### `/18-Spec-Orchestrate`
+
+```text
+/18-Spec-Orchestrate "build a full customer support module"
+```
+
+ใช้จัดลำดับ PRD, research, competitor, task creation สำหรับ idea ใหญ่
+
+### `/20-Debug`
+
+```text
+/20-Debug "API returns 200 but frontend shows empty data"
+```
+
+ใช้หา root cause
+
+### `/30-Task`
+
+```text
+/30-Task "Add email verification"
+```
+
+สร้าง task workspace และ JSON artifacts
+
+### `/31-Plan`
+
+```text
+/31-Plan 016
+```
+
+สร้าง implementation plan จาก task artifacts
+
+### `/32-Code`
+
+```text
+/32-Code 016
+```
+
+ทำงานทีละ subtask และ update status ผ่าน script
+
+### `/33-Verify`
+
+```text
+/33-Verify 016
+```
+
+ตรวจคุณภาพ, validation, QA report
+
+### `/34-Human`
+
+```text
+/34-Human Feedback 016 "Please add empty-state handling"
+```
+
+ใช้ approve, reject, review, feedback
+
+### `/35-Followup`
+
+```text
+/35-Followup 016 "Add admin audit log after email verification"
+```
+
+เพิ่ม phase/subtask ต่อจาก plan เดิม
+
+### `/39-QA-Orchestrate`
+
+```text
+/39-QA-Orchestrate 016
+```
+
+แตก QA เป็นหลาย lane และ route ไป specialist ที่เหมาะสม
+
+### `/40-Test`
+
+```text
+/40-Test "src/features/invitations"
+```
+
+สร้างหรือรัน test
+
+### `/41-Simplify`
+
+```text
+/41-Simplify "src/features/invitations"
+```
+
+refactor ให้เรียบง่ายขึ้นโดยไม่เปลี่ยน behavior
+
+### `/42-Preview`
+
+```text
+/42-Preview start
+/42-Preview status
+/42-Preview stop
+```
+
+จัดการ preview server
+
+### `/50-Commit`
+
+```text
+/50-Commit "task 016 only"
+```
+
+stage และ commit อย่างระวัง
+
+### `/51-PR`
+
+```text
+/51-PR main
+```
+
+สร้าง PR จาก branch ปัจจุบัน
+
+### `/52-Deploy`
+
+```text
+/52-Deploy staging
+```
+
+deploy พร้อม preflight และ verification
+
+### `/53-Changelog`
+
+```text
+/53-Changelog
+```
+
+อัปเดต changelog จาก task artifacts และ git history
+
+### `/54-Insight`
+
+```text
+/54-Insight 016
+```
+
+สกัด lesson, pattern, gotcha จากงานที่ทำ
+
+### `/55-PR-Review`
+
+```text
+/55-PR-Review "PR #123"
+/55-PR-Review "review current local diff"
+```
+
+ใช้ GitHub PR prompt addons เช่น `pr_reviewer`, `pr_quality_agent`, `pr_logic_agent`, `pr_security_agent`, `pr_structural`, `pr_codebase_fit_agent`, และ `pr_finding_validator`
+
+### `/56-PR-Followup`
+
+```text
+/56-PR-Followup "PR #123 unresolved comments"
+/56-PR-Followup 016 "address requested changes"
+```
+
+ใช้แยก comment ว่า valid, resolved, needs clarification, out of scope, pre-existing หรือ non-actionable แล้ว route ไป `/32-Code` หรือ `/35-Followup`
+
+### `/57-Issue-Triage`
+
+```text
+/57-Issue-Triage "issue #456"
+/57-Issue-Triage "bug report: export fails on large files"
+```
+
+ใช้ GitHub issue prompt addons เช่น `issue_analyzer`, `issue_triager`, `duplicate_detector`, `spam_detector`, และ `pr_ai_triage`
+
+### `/60-Graphify`
+
+```text
+/60-Graphify docs
+```
+
+สร้าง knowledge graph จาก folder
+
+### `/90-Agent`
+
+```text
+/90-Agent discuss-spec .workspaces/specs/016/spec.md
+/90-Agent prp-core-planner .workspaces/specs/016
+/90-Agent code-reviewer .workspaces/specs/016
+```
+
+เรียก specialist agent แบบ manual
+
+### `/99-Coach`
+
+```text
+/99-Coach "งานนี้ควรเริ่มด้วย workflow ไหน"
+```
+
+ถามทางแบบ read-only
+
+## Common Decision Guide
+
+| Situation | Use |
+| :--- | :--- |
+| ยังไม่รู้ว่าจะทำอะไรดี | `/10-Brainstorm` |
+| idea ใหญ่และยังไม่ชัด | `/18-Spec-Orchestrate` |
+| ต้องเช็ก SDK/API ก่อน | `/15-Spec-Research` |
+| ต้องดูคู่แข่งหรือ market gap | `/16-Competitor` |
+| ต้องจัด roadmap | `/17-Roadmap` |
+| พร้อมสร้างงานแล้ว | `/30-Task` |
+| มี task แล้วแต่ยังไม่มีแผน | `/31-Plan` |
+| มี plan แล้วพร้อมทำ | `/32-Code` |
+| ทำเสร็จแล้วต้องตรวจ | `/33-Verify` |
+| QA ซับซ้อน | `/39-QA-Orchestrate` |
+| อยากต่อยอด task เดิม | `/35-Followup` |
+| อยากเก็บบทเรียน | `/54-Insight` |
+| ต้อง review PR | `/55-PR-Review` |
+| ต้องแก้ PR comments | `/56-PR-Followup` |
+| ต้อง triage GitHub issue | `/57-Issue-Triage` |
+| ไม่แน่ใจ | `/99-Coach` |
+
+## Workspace Folder Map
+
+| Folder | เก็บอะไร | Flow ที่เกี่ยวข้อง |
+| :--- | :--- | :--- |
+| `.workspaces/specs/` | task workspace และ JSON artifacts | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` |
+| `.workspaces/research/` | research reports และ integration notes | `/11-Research`, `/15-Spec-Research`, `/16-Competitor` |
+| `.workspaces/prds/` | PRD ก่อนแตกเป็น task | `/12-PRD`, `/18-Spec-Orchestrate` |
+| `.workspaces/roadmap/` | roadmap discovery และ feature priorities | `/17-Roadmap` |
+| `.workspaces/issues/` | issue triage, duplicate/spam decisions | `/57-Issue-Triage` |
+| `.workspaces/debug/` | RCA/debug reports | `/20-Debug` |
+| `.workspaces/reports/` | specialist, QA, PR review reports | `/14-Orchestrate`, `/39-QA-Orchestrate`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` |
+| `.workspaces/lessons.md` | lessons, gotchas, reusable patterns | `/20-Debug`, `/34-Human`, `/54-Insight`, `/99-Coach` |
+
+ถ้า folder ว่างแต่เป็นรายการในตารางนี้ ให้เก็บไว้ เพราะเป็น staging area ของ workflow นั้น ๆ
+
+## Artifact And Validation Rules
+
+หลังแก้ JSON ทุกครั้งควร validate:
+
+```powershell
+npm.cmd run agent -- validate {ID}
+```
+
+ถ้า JSON เสีย:
+
+```powershell
+npm.cmd run agent -- repair {ID}
+npm.cmd run agent -- validate {ID}
+```
+
+สำหรับ plan:
+
+```powershell
+npm.cmd run agent -- plan:validate {ID}
+```
+
+สำหรับ roadmap:
+
+```powershell
+npm.cmd run roadmap:validate
+```
+
+ก่อนส่งงานหรือ commit:
+
+```powershell
+npm.cmd run validate
+node .agent\scripts\test-prp.mjs
+```
+
+## Recommended Operating Style
+
+1. ใช้ `/99-Coach` ถ้าไม่แน่ใจว่าจะไปทางไหน
+2. อย่าข้าม `/31-Plan` ถ้างานมีมากกว่า 1-2 จุด
+3. ใช้ `/15-Spec-Research` ก่อนแตะ integration ที่ไม่แน่ใจ
+4. ใช้ `/35-Followup` แทนการแก้ plan เดิมทับ เมื่อเป็นงานต่อยอด
+5. ใช้ `/54-Insight` หลังงานยาก เพื่อให้ session ถัดไปฉลาดขึ้น
+6. ใช้ `npm.cmd run validate` เป็น checkpoint สม่ำเสมอ

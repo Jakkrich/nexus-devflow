@@ -1,61 +1,104 @@
-﻿---
-description: Plan Implementation (Auto-Orchestration) - Transform a spec.md into a battle-tested implementation plan.
 ---
-# 📋 Phase 31: Plan Implementation (Auto-Orchestration)
-
-## Spec File: $ARGUMENTS
-
-Transform a `spec.md` into a battle-tested implementation plan through systematic codebase exploration, pattern extraction, and strategic design.
-
+description: Plan Implementation - Transform spec.md into a script-managed implementation plan.
 ---
+# Phase 31: Plan Implementation
 
-## 🛠️ Internal Process
-**⚠️ STRICT MODE: PLAN ONLY! NO CODING ALLOWED. DO NOT TOUCH SOURCE CODE.**
+**Strict mode: planning only. Do not edit source code in this phase.**
 
+Create a codebase-informed implementation plan using CLI plan helpers instead of manually writing full JSON.
 
-You are an orchestrator. Your goal is to coordinate specialized agents to create a high-quality implementation plan.
+## Usage
 
+```text
+/31-Plan {ID}
+```
 
-### Phase 1: Complexity Assessment
-**Call Agent**: `complexity-assessor`
-- Provide the spec file or task description.
-- **Mandatory Output**: Must generate `complexity_assessment.json` by strictly following the template in [../resources/schemas/complexity_assessment.template.json](../resources/schemas/complexity_assessment.template.json). Do not use alternate filenames.
-- **Primary Data**: Must define **Complexity level** and **Approach (Reasoning)**.
-- Determine if the task requires standard agentic planning or legacy deep analysis based on the assessment.
+## Script-First JSON Rule
 
-### Phase 2: Plan Generation
-**Call Agent**: `auto-planner` (Default) or `prp-core-planner` (High Complexity/Legacy)
-- Provide the spec content and the complexity assessment result.
-- **Initialize Plan**: Run `npx agent-flow update {ID} --status planning`
-- Instruct the agent to generate:
-  - `implementation_plan.json` (Must strictly follow the template format in [../resources/schemas/implementation_plan.template.json](../resources/schemas/implementation_plan.template.json). Initial states: `status: "in_progress"`, `planStatus: "approved"`, `xstateState: "coding"`)
-    - **CRITICAL**: Use the **Atomic Task Principle**:
-      - Break down specs into small, verifiable tasks (2-5 mins each).
-      - Ensure **Dependency Ordering** (implement dependencies before consumers).
-      - Each `subtask` MUST include:
-        - `title`: Short descriptive title.
-        - `service`: "frontend", "backend", or "fullstack".
-        - `files_to_modify` and `files_to_create`: Explicit file paths.
-        - `patterns_from`: References to existing code patterns.
-        - `verification`: Detailed `command` and `expected` outcome.
-  - `context.json` (Must strictly follow the template format in [../resources/schemas/context.template.json](../resources/schemas/context.template.json))
-  - `plan.md` (Must strictly follow the template format in [../resources/schemas/plan.template.md](../resources/schemas/plan.template.md))
-  - Initialize `task_logs.json` (Must strictly follow the template format in [../resources/schemas/task_logs.template.json](../resources/schemas/task_logs.template.json))
+Use PRP CLI commands to update JSON artifacts:
 
-### Phase 3: Final Review & Metadata
-- Verify that all artifacts are created in `.workspaces/specs/{ID}/`.
-- Ensure `task_logs.json` marks the planning phase as `completed`.
-- Run `npx agent-flow validate {ID}` before reporting completion.
-- Confirm the plan is ready for execution.
+```powershell
+npm run agent -- update {ID} --status planning
+npm run agent -- artifact:set {ID} complexity level "{simple|standard|complex}"
+npm run agent -- artifact:set {ID} complexity approach "{Planning approach}"
+npm run agent -- artifact:set {ID} context task_description "{Task summary}"
+npm run agent -- artifact:append {ID} context files_to_reference "{path/to/pattern}"
+npm run agent -- plan:add-phase {ID} "{Phase Name}" --phase-id phase-1 --type implementation
+npm run agent -- plan:add-subtask {ID} phase-1 "{Subtask Title}" --description "{Detailed instruction}" --service backend --modify "src/file.ts" --pattern "src/example.ts" --verify-type command --verify-command "npm test" --verify-expected "tests pass"
+npm run agent -- plan:validate {ID}
+npm run agent -- validate {ID}
+```
 
----
+Raw `implementation_plan.json` rewrites are fallback only. Prefer many small commands over one large JSON response.
 
-## 🏁 Output Checklist
-- [ ] `complexity-assessor` has analyzed the task (Result: **Complexity** & **Approach** defined).
-- [ ] `auto-planner` or `prp-core-planner` has generated the full plan suite.
-- [ ] `implementation_plan.json` contains `complexity_assessment` data.
-- [ ] All JSON artifacts follow the project schema.
-- [ ] `task_logs.json` is updated.
+## Process
 
-📌 **Next Step**: Run `/32-Code {ID}` to start the implementation.
+### 1. Read Task Artifacts
 
+Read:
+
+- `.workspaces/specs/{ID}-*/spec.md`
+- `requirements.json`
+- `context.json`
+- `complexity_assessment.json`
+- `implementation_plan.json`
+
+### 2. Assess Complexity
+
+Use the `complexity_assessor` pattern:
+
+- `simple`: 1 phase, 1-3 subtasks.
+- `standard`: multiple ordered phases, clear verification per subtask.
+- `complex`: deeper codebase exploration, possible `/90-Agent codebase-analyst` recommendation.
+
+Store the result through `artifact:set`, then validate.
+
+### 3. Explore Codebase Patterns
+
+Use fast searches (`rg`, file reads) to find:
+
+- Similar implementations
+- Entry points
+- Config and test commands
+- Files likely to modify
+- Files to reference as patterns
+
+Save important findings to `context.json` with `artifact:set`, `artifact:append`, or `artifact:merge`.
+
+### 4. Build Plan With Helpers
+
+Use the `planner` pattern, but create plan structure through CLI:
+
+- Add phases in dependency order.
+- Add subtasks that are small, verifiable units.
+- Include explicit files to modify/create.
+- Include patterns to follow.
+- Include verification command or manual check.
+
+Each subtask should answer:
+
+- What to change
+- Where to change it
+- Which existing pattern to follow
+- How to verify it
+
+### 5. Validate And Close Planning
+
+Run:
+
+```powershell
+npm run agent -- plan:validate {ID}
+npm run agent -- validate {ID}
+npm run agent -- log {ID} "Phase 31 completed: implementation plan ready" --phase planning --complete
+```
+
+If validation fails, run repair and update only the broken fields with script commands.
+
+## Output Checklist
+
+- Complexity is recorded.
+- Context references are recorded.
+- Plan phases are ordered by dependency.
+- Every subtask has title, description, service, files, patterns, verification, and status.
+- `plan:validate` passes.
+- Next command: `/32-Code {ID}`
