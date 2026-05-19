@@ -1,10 +1,10 @@
-﻿# PRPs-Framework Roadmap
+﻿# Nexus-DevFlow Roadmap
 
 Machine-readable source: `.workspaces/roadmap/roadmap.json`
 
 ## Vision
 
-PRPs-Framework is an IDE-agnostic context engineering toolkit that turns AI-assisted software development into a structured, traceable, JSON-driven workflow.
+Nexus-DevFlow is an IDE-agnostic context engineering toolkit that turns AI-assisted software development into a structured, traceable, JSON-driven workflow.
 
 ## Phase 1: Foundation / MVP Hardening
 

@@ -33,4 +33,4 @@ Upon detecting a Platform:
 3. **Fallback**: If an unrecognized Stack is spotted, I will ask you for details or default to the standard **Generic Python/JS** pattern.
 
 ---
-*Developed for PRPs-Framework — Hybrid Development Support*
+*Developed for Nexus-DevFlow — Hybrid Development Support*

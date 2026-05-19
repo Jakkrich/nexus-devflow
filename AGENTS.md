@@ -16,7 +16,7 @@ npm run agent -- validate {ID}
 
 Use manual JSON editing only as a fallback, then run validation immediately.
 
-เอกสารนี้สรุป persona หลักที่ใช้ใน PRPs-Framework สำหรับทำงานแบบ agentic workflow ผ่าน `.agent` bundle
+เอกสารนี้สรุป persona หลักที่ใช้ใน Nexus-DevFlow สำหรับทำงานแบบ agentic workflow ผ่าน `.agent` bundle
 
 ## วิธีเรียกใช้งาน
 

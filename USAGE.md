@@ -1,6 +1,6 @@
-# PRPs-Framework Usage Guide
+# Nexus-DevFlow Usage Guide
 
-คู่มือนี้อธิบายวิธีใช้ workflow ทั้งหมดของ PRPs-Framework แบบผู้ใช้ควบคุมทีละขั้นใน IDE โดยปรับปรุงจาก `.agent/workflows/README.md` และเพิ่ม workflow addon จาก external prompt families
+คู่มือนี้อธิบายวิธีใช้ workflow ทั้งหมดของ Nexus-DevFlow แบบผู้ใช้ควบคุมทีละขั้นใน IDE โดยปรับปรุงจาก `.agent/workflows/README.md` และเพิ่ม workflow addon จาก external prompt families
 
 แนวคิดหลัก:
 

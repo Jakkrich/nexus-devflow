@@ -1,4 +1,4 @@
-# PRPs-Framework Core Rules - Governance Template
+# Nexus-DevFlow Core Rules - Governance Template
 
 ## 🔍 Project Detection
 
@@ -12,7 +12,7 @@
 2. **Check Configuration:**
    - Look for commands like `/30-Task`, `/31-Plan` in `INITIAL.md`
 3. **Report detected framework:**
-   - "Detected: PRPs-Framework (Context Engineering & Agentic Workflow)"
+   - "Detected: Nexus-DevFlow (Context Engineering & Agentic Workflow)"
 
 ---
 

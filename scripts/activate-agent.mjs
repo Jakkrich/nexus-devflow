@@ -59,7 +59,7 @@ function main() {
     return;
   }
 
-  console.log('PRPs-Framework activated for .agent.');
+  console.log('Nexus-DevFlow activated for .agent.');
   console.log('Next: npm run validate');
 }
 

@@ -1,7 +1,7 @@
 ﻿---
 description: Core governance rules for the PRP-Framework (Context Engineering).
 ---
-# PRPs-Framework Core Rules - Governance Template
+# Nexus-DevFlow Core Rules - Governance Template
 
 ## ðŸ” Project Detection
 
@@ -15,7 +15,7 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 2. **Check Configuration:**
    - Look for commands like `/01-Task`, `/02-Plan` in `INITIAL.md`
 3. **Report detected framework:**
-   - "Detected: PRPs-Framework (Context Engineering & Agentic Workflow)"
+   - "Detected: Nexus-DevFlow (Context Engineering & Agentic Workflow)"
 
 ---
 

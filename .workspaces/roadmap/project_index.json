@@ -1,10 +1,10 @@
 {
-  "project_root": "D:\\PRPs-Framework",
+  "project_root": "D:\\Nexus-DevFlow",
   "project_type": "single",
   "services": {
     "prps_framework": {
       "name": "prps_framework",
-      "path": "D:\\PRPs-Framework",
+      "path": "D:\\Nexus-DevFlow",
       "language": "JavaScript and Python",
       "framework": "PRPs Context Engineering Framework",
       "type": "library",
@@ -52,7 +52,7 @@
     },
     "agent_flow": {
       "name": "agent_flow",
-      "path": "D:\\PRPs-Framework\\.agent",
+      "path": "D:\\Nexus-DevFlow\\.agent",
       "language": "JavaScript and Python",
       "framework": "Antigravity .agent bundle with Node.js ESM CLI and numbered Markdown workflows",
       "type": "library",

@@ -1,6 +1,6 @@
 # Script-First JSON Workflow
 
-This guide shows how to use PRPs-Framework after the JSON artifact upgrade.
+This guide shows how to use Nexus-DevFlow after the JSON artifact upgrade.
 
 The core idea is simple: the AI decides what should change, but PRP CLI scripts write, repair, and validate JSON artifacts. This keeps token usage low and prevents malformed JSON from creeping into `.workspaces/specs`.
 

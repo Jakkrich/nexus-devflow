@@ -86,7 +86,7 @@ This section is used to specify subtasks to be executed in sequence, along with 
 
 ### Documentation & References (list all context needed to implement the feature)
 
-Agent will **fetch external URLs** and **read PDFs** when cited here. See `PRPs-Framework/references/README.md` for conventions.
+Agent will **fetch external URLs** and **read PDFs** when cited here. See `Nexus-DevFlow/references/README.md` for conventions.
 
 ```yaml
 # MUST READ - Include these in your context window
@@ -100,16 +100,16 @@ Agent will **fetch external URLs** and **read PDFs** when cited here. See `PRPs-
   section: [Specific section about common pitfalls]
   critical: [Key insight that prevents common errors]
 
-- example: [PRPs-Framework/references/path/to/file.ext OR PRPs-Framework/references/folder_name/]
+- example: [Nexus-DevFlow/references/path/to/file.ext OR Nexus-DevFlow/references/folder_name/]
   why: [Pattern to follow, implementation approach, or gotchas from user-provided examples]
 
-- pdf: [PRPs-Framework/references/docs/spec.pdf OR path under PRPs-Framework/references/]
+- pdf: [Nexus-DevFlow/references/docs/spec.pdf OR path under Nexus-DevFlow/references/]
   why: [Sections or topics in the PDF relevant to this issue - agent will read and select by problem]
 
-- docfile: [PRPs-Framework/references/topic.md containing external links]
+- docfile: [Nexus-DevFlow/references/topic.md containing external links]
   why: [Agent will fetch URLs found in this file and use content for this issue]
   
-- docfile: [PRPs-Framework/ai_docs/file.md]
+- docfile: [Nexus-DevFlow/ai_docs/file.md]
   why: [Documentation that the user has pasted into the project]
 
 ```
