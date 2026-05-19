@@ -1,4 +1,4 @@
-﻿# Nexus-DevFlow
+# Nexus-DevFlow
 
 Nexus-DevFlow is an agent-ready Context Engineering framework for structured AI-assisted software development.
 
@@ -13,7 +13,7 @@ The current workflow is script-first for JSON artifacts: agents should use PRP C
 - JSON schemas and templates for task artifacts
 - Static dashboard assets
 - Canonical workspace artifacts under `.workspaces`
-- Root npm scripts that replace the legacy Python IDE switcher
+- Root npm scripts for orchestration and validation
 
 ## Current Architecture
 
@@ -45,7 +45,6 @@ SETUP.md                   # Setup guide
 ## Requirements
 
 - Node.js >= 18.17
-- Python 3 for helper scripts inside `.agent/scripts`
 - Git
 
 ## Quick Start

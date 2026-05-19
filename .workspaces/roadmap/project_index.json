@@ -1,10 +1,10 @@
 {
-  "project_root": "D:\\Nexus-DevFlow",
+  "project_root": "D:\\nexus-devflow",
   "project_type": "single",
   "services": {
     "prps_framework": {
       "name": "prps_framework",
-      "path": "D:\\Nexus-DevFlow",
+      "path": "D:\\nexus-devflow",
       "language": "JavaScript and Python",
       "framework": "PRPs Context Engineering Framework",
       "type": "library",
@@ -42,9 +42,11 @@
         "agent:status": "node ./.agent/scripts/prp.mjs status",
         "agent:validate": "node ./.agent/scripts/prp.mjs validate",
         "activate": "node ./scripts/activate-agent.mjs",
+        "dashboard": "node ./.agent/scripts/serve-dashboard.mjs",
         "graphify": "node ./scripts/graphify.mjs",
         "graphify:install": "node ./scripts/graphify.mjs antigravity install",
         "index": "node ./scripts/generate-project-index.mjs",
+        "link-project": "node ./scripts/link-project.mjs",
         "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
         "sync:check": "node ./scripts/sync-agent-bundle.mjs",
         "validate": "node ./scripts/validate-framework.mjs"
@@ -52,7 +54,7 @@
     },
     "agent_flow": {
       "name": "agent_flow",
-      "path": "D:\\Nexus-DevFlow\\.agent",
+      "path": "D:\\nexus-devflow\\.agent",
       "language": "JavaScript and Python",
       "framework": "Antigravity .agent bundle with Node.js ESM CLI and numbered Markdown workflows",
       "type": "library",
@@ -110,5 +112,5 @@
     "legacy_cursor_removed": true
   },
   "generated_by": "scripts/generate-project-index.mjs",
-  "created_at": "2026-05-19T03:30:36.337Z"
+  "created_at": "2026-05-19T05:53:22.931Z"
 }

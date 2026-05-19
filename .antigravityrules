@@ -6,9 +6,9 @@
 
 ### Detection Logic:
 1. **Check for Framework Indicators:**
-   - Presence of `.auto-claude/` directory
+   - Presence of `.agent/` directory
+   - Presence of `.workspaces/` directory
    - Presence of `INITIAL.md` in the root
-   - Presence of `active-ide.py` script
 2. **Check Configuration:**
    - Look for commands like `/30-Task`, `/31-Plan` in `INITIAL.md`
 3. **Report detected framework:**
@@ -24,7 +24,8 @@
   2. `/31-Plan` -> Analyze & Design
   3. `/32-Code` -> Implement & Validate
   4. `/33-Verify` -> Quality Check & Summary
-- **Use the `.auto-claude/` directory** for storing all JSON metadata, specs, and execution logs.
+- **Use the `.workspaces/` directory** for storing all JSON metadata, specs, and execution logs.
+- **Script-First JSON Rule**: Agents should use PRP CLI commands (`npm run agent -- artifact:*`, `npm run agent -- plan:*`) to interact with JSON files rather than manually editing them.
 
 ---
 
@@ -70,7 +71,7 @@
 | **4. Verify** | `/33-Verify` | Inspect, Create QA Report | ❌ **Modify Logic** |
 
 ### Mandatory Rules:
-- **STRICT PHASE LOCKING**: While running `/30-Task` or `/31-Plan`, using any tool to modify files outside the `.auto-claude/specs/` directory is **STRICTLY PROHIBITED**.
+- **STRICT PHASE LOCKING**: While running `/30-Task` or `/31-Plan`, using any tool to modify files outside the `.workspaces/specs/` directory is **STRICTLY PROHIBITED**.
 - **EXECUTION GATE**: If the User provides implementation details in early phases, record them as requirements in `spec.md` only. Do **NOT** apply them to the codebase.
 - **MANDATORY STOP & CONFIRM**: You must stop after creating the spec or plan and wait for the User to execute the next phase command.
 
@@ -78,14 +79,14 @@
 
 ## 📂 Directory & File Standards
 
-### .auto-claude/ structure:
-- `specs/{TaskID}/spec.md`: Detailed requirements for a specific task.
-- `specs/{TaskID}/plan.md`: Step-by-step implementation plan.
-- `specs/{TaskID}/logs/`: Chronological execution logs.
-- `specs/{TaskID}/results/`: Output artifacts and validation reports.
+### .workspaces/ structure:
+- `.workspaces/specs/{TaskID}/spec.md`: Detailed requirements for a specific task.
+- `.workspaces/specs/{TaskID}/*.json`: Structured artifacts (requirements, context, implementation_plan, task_logs).
+- `.workspaces/roadmap/`: Machine-readable roadmap artifacts.
+- `.workspaces/active-agent.json`: Active agent tracking.
 
 ### Naming Conventions:
-- **Task ID**: Uses the format `[REF-ID]` as a prefix (e.g., `FIX-123_login-bug`).
+- **Task ID**: Uses the format `[REF-ID]` as a prefix (e.g., `001-setup`, `FIX-123`).
 - **File Naming**: Descriptive and prefixed with Task ID where applicable.
 
 ---

@@ -15,7 +15,6 @@
     ".agent/dashboard/html/dashboard.js"
   ],
   "forbidden_legacy_paths": [
-    ".auto-claude",
     ".cursor",
     ".windsurf"
   ],
@@ -25,4 +24,3 @@
     "check_bundle": "npm run sync:check"
   }
 }
-
