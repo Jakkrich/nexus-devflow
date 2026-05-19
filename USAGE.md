@@ -42,7 +42,7 @@ npm.cmd run agent -- validate 007
 | Debugging | `/20-Debug` | วิเคราะห์ root cause ก่อนวางแผนแก้ |
 | Core PRP Execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` | สร้าง task, วางแผน, เขียนโค้ด, ตรวจ, approve, ต่อเติมงานเดิม |
 | Quality & Optimization | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | QA ซับซ้อน, test, refactor, preview |
-| Ship & Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight` | commit, PR, deploy, changelog, เก็บบทเรียนหลังงานเสร็จ |
+| Ship & Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight`, `/58-Merge` | commit, PR, deploy, changelog, เก็บบทเรียนหลังงานเสร็จ, ผสานสาขา |
 | GitHub Review & Triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | review PR, แก้ PR comments, triage GitHub issues |
 | Knowledge & Specialist Tools | `/60-Graphify`, `/90-Agent`, `/99-Coach` | graph knowledge, เรียก specialist, ขอคำแนะนำแบบ read-only |
 
@@ -81,6 +81,7 @@ npm.cmd run agent -- validate 007
 | `/55-PR-Review` | review PR หรือ local diff แบบ findings-first | `/55-PR-Review "PR #123"` |
 | `/56-PR-Followup` | แปลง PR comments เป็น fixes หรือ follow-up subtasks | `/56-PR-Followup "PR #123 comments"` |
 | `/57-Issue-Triage` | วิเคราะห์ GitHub issue, duplicate, spam, route เป็น workflow | `/57-Issue-Triage "issue #456"` |
+| `/58-Merge` | ผสาน feature branch เข้าสู่ base branch และทำความสะอาด | `/58-Merge` |
 | `/60-Graphify` | สร้าง knowledge graph จาก folder | `/60-Graphify .agent/workflows` |
 | `/90-Agent` | เรียก specialist agent | `/90-Agent code-reviewer .workspaces/specs/007` |
 | `/99-Coach` | ถามทาง, ขอคำแนะนำ, read-only guide | `/99-Coach "ควรไป workflow ไหนต่อ"` |
@@ -571,9 +572,13 @@ deploy พร้อม preflight และ verification
 ```text
 /55-PR-Review "PR #123"
 /55-PR-Review "review current local diff"
+/55-PR-Review 001
 ```
 
-ใช้ GitHub PR prompt addons เช่น `pr_reviewer`, `pr_quality_agent`, `pr_logic_agent`, `pr_security_agent`, `pr_structural`, `pr_codebase_fit_agent`, และ `pr_finding_validator`
+ใช้ GitHub PR prompt addons เช่น `pr_reviewer`, `pr_quality_agent`, `pr_logic_agent`, `pr_security_agent`, `pr_structural`, `pr_codebase_fit_agent`, และ `pr_finding_validator` 
+
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **การบันทึกไฟล์ออฟไลน์:** หากระบุเลข Task ID หรือมี Task เชื่อมโยงอยู่ ระบบจะบันทึกรายงานรีวิวเป็นไฟล์ `pr_review.md` ไว้ในโฟลเดอร์ของ Task นั้นโดยอัตโนมัติ (เช่น `.workspaces/specs/{ID}-*/pr_review.md`)
 
 ### `/56-PR-Followup`
 
@@ -592,6 +597,19 @@ deploy พร้อม preflight และ verification
 ```
 
 ใช้ GitHub issue prompt addons เช่น `issue_analyzer`, `issue_triager`, `duplicate_detector`, `spam_detector`, และ `pr_ai_triage`
+
+### `/58-Merge`
+
+```text
+/58-Merge
+/58-Merge main
+```
+
+ผสาน feature branch ปัจจุบัน เข้าสู่ base branch (ค่าเริ่มต้นคือ `main`) ดันโค้ดขึ้น remote server และลบสาขาที่รวมเสร็จแล้วออกอย่างปลอดภัย
+
+**กฎเกณฑ์และ Gotchas (Rules & Gotchas):**
+- **Pre-flight Check:** โฟลเดอร์ทำงาน (Working directory) ต้องสะอาดและไม่มีการแก้ไขที่ยังไม่ได้ Commit
+- **Force Delete Warning:** หาก local branch ยังไม่ได้ push หรือรวมสมบูรณ์ในระดับรีโมท Git อาจขึ้นเตือน ระบบจะสั่งลบแบบบังคับ (`git branch -D`) เพื่อจบงานอย่างหมดจด
 
 ### `/60-Graphify`
 
