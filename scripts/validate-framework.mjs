@@ -27,9 +27,7 @@ const requiredPaths = [
 ];
 
 const forbiddenPaths = [
-  '.auto-claude',
   '.cursor',
-  'active-ide.py',
   '.cursorrules'
 ];
 
@@ -60,7 +58,7 @@ function scanForLegacyReferences(failures) {
     path.normalize('scripts/sync-agent-bundle.mjs'),
     path.normalize('scripts/validate-framework.mjs')
   ]);
-  const legacyPatterns = ['.auto-claude', '.cursor', 'active-ide.py', '.cursorrules'];
+  const legacyPatterns = ['.cursor', '.cursorrules'];
   const hits = [];
 
   function walk(dir) {

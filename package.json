@@ -13,6 +13,7 @@
     "graphify": "node ./scripts/graphify.mjs",
     "graphify:install": "node ./scripts/graphify.mjs antigravity install",
     "index": "node ./scripts/generate-project-index.mjs",
+    "link-project": "node ./scripts/link-project.mjs",
     "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
     "sync:check": "node ./scripts/sync-agent-bundle.mjs",
     "validate": "node ./scripts/validate-framework.mjs"

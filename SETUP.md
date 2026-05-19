@@ -1,15 +1,24 @@
-﻿# Nexus-DevFlow Setup Guide
+# Nexus-DevFlow Setup Guide
 
 This setup uses npm and the `.agent` bundle. The legacy Python switcher is no longer used.
 
-## 1. Clone or Copy the Framework
+## 1. Clone the Framework
 
 Place the framework in a shared tools folder or directly inside the repository that will use it.
 
 ```powershell
-git clone <repo-url> Nexus-DevFlow
-cd Nexus-DevFlow
+git clone https://github.com/Jakkrich/nexus-devflow
+cd nexus-devflow
 ```
+
+## 2. Manual Installation (Alternative)
+
+If you don't want to clone the entire repository, you can manually copy the essential framework files into your own project:
+
+1. Copy the `.agent/` folder into your project root.
+2. Copy the `scripts/` folder into your project root.
+3. Merge the `"scripts"` block from `package.json` into your project's `package.json`.
+4. (Optional) Copy documentation files like `README.md`, `SETUP.md`, `ROADMAP.md`, `AGENTS.md`, and `INITIAL.md` for reference.
 
 ## 2. Activate the Agent Bundle
 
@@ -49,23 +58,32 @@ Create a task:
 npm run agent -- init 001 "Example Task" example-task "Describe the task"
 ```
 
-## 5. Optional Symlink Into Another Project
+## 5. Link Framework into Your Project (Symlink)
 
-If this framework is stored centrally, link only the `.agent` bundle into a target project.
-
-Windows PowerShell:
+If you have cloned Nexus-DevFlow in a central location and want to use it in multiple projects, you can link it automatically using the `link-project` script. This script will create symbolic links (or junctions on Windows) for `.agent` and `scripts/` into your target project.
 
 ```powershell
-New-Item -ItemType SymbolicLink -Path ".agent" -Target "D:\Tools\Nexus-DevFlow\.agent"
+# Inside the Nexus-DevFlow directory, run:
+npm run link-project -- <path-to-your-project>
+
+# Example:
+npm run link-project -- D:\MyProjects\AwesomeApp
 ```
 
-Linux, macOS, or WSL:
+After linking, copy or adapt the `scripts` section from Nexus-DevFlow's `package.json` into your project's `package.json` to enable `npm run agent`, `npm run validate`, etc.
 
-```bash
-ln -s /path/to/Nexus-DevFlow/.agent .agent
-```
+### What to Link vs. What to Keep Project-Specific
 
-Then copy or adapt the root `package.json` scripts for that project.
+It is critical to separate the framework engine from your project's data:
+
+**✅ Things that SHOULD be Linked (Shared Engine):**
+- **`.agent/`**: Contains the core workflows, skills, and agent instructions. This keeps all your projects using the same updated standards.
+- **`scripts/`**: Contains the Node.js automation scripts that power the `npm run` commands.
+
+**❌ Things that MUST NOT be Linked (Project-Specific Data):**
+- **`.workspaces/`**: This folder stores your project's tasks, specs, research, and roadmap. It is the "brain" of your specific project. Linking this would mix tasks across all your projects.
+- **`package.json`**: You must keep your project's own `package.json` for dependencies. Only copy the `"scripts"` block from the framework.
+- **`INITIAL.md` / `ROADMAP.md`**: These contain context and planning strictly for the specific project you are building.
 
 ## Expected Files After Activation
 
