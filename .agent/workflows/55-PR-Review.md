@@ -70,4 +70,5 @@ Use code-review style:
 
 Return a PR review. Do not modify files unless the user explicitly asks for fixes.
 
+**MANDATORY RULE:** Before saving a PR review report, inspect `.agent/resources/schemas/pr_review.template.md` and use its required headings and table structure.
 **MANDATORY RULE:** If a Task ID is linked to this PR, ALWAYS save this review report to a file named `pr_review.md` inside that task's workspace directory (e.g., `.workspaces/specs/{ID}-*/pr_review.md`).

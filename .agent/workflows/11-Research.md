@@ -36,6 +36,7 @@ Use the prompt addon patterns when the topic matches:
 
 ### Phase 3: Synthesis & Documentation
 - Ensure the agent prioritizes **What IS** over "What SHOULD BE" (Cartographer Mindset).
+- **MANDATORY:** Before generating the research report, inspect `.agent/resources/schemas/research.template.md` and use its headings and table structure.
 - Verify the agent generates a research file in `.workspaces/research/{date}-{slug}.md`.
 - Ensure all claims are backed by code evidence.
 - For external research or competitor analysis, include source links and separate facts from inference.

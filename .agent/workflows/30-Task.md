@@ -57,16 +57,7 @@ Use the `spec_gatherer` pattern:
 ### 3. Populate Artifacts
 
 Use script commands to populate `requirements.json`. Edit `spec.md` directly only for the human-readable specification.
-
-`spec.md` should include:
-
-- Overview
-- Workflow Type
-- Task Scope
-- Success Criteria
-- Constraints
-- Out of Scope
-- Next Suggested Phase
+**MANDATORY:** Before creating or updating `spec.md`, inspect `.agent/resources/schemas/spec.template.md` and keep the file aligned to its required headings. The `npm run agent -- init ...` command creates `spec.md` from this template; manual edits must preserve that structure.
 
 ### 4. Validate
 

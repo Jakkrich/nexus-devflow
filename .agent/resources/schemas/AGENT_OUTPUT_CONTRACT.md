@@ -10,6 +10,8 @@ This contract keeps Antigravity agent output stable enough for the PRP dashboard
 4. Every JSON file must include `schema_version`.
 5. Every meaningful action must append an event to `task_logs.json.events`.
 6. Every phase must end with `npx agent-flow validate {ID}`.
+7. Every generated Markdown artifact must be based on the matching `*.template.md` in `.agent/resources/schemas/`.
+8. Before creating or updating a Markdown artifact, read the template first and preserve its required headings.
 
 ## Required Task Files
 
@@ -22,6 +24,8 @@ Every `.workspaces/specs/{ID}-{slug}/` folder must contain:
 - `context.json`
 - `complexity_assessment.json`
 - `spec.md`
+
+`spec.md` is created from `spec.template.md` and is validated for required template headings by `npm run agent -- validate {ID}`.
 
 ## State Commands
 
