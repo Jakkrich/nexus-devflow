@@ -656,6 +656,7 @@ deploy พร้อม preflight และ verification
 | ต้อง review PR | `/55-PR-Review` |
 | ต้องแก้ PR comments | `/56-PR-Followup` |
 | ต้อง triage GitHub issue | `/57-Issue-Triage` |
+| ต้องผสานสาขา (Merge Branch) | `/58-Merge` |
 | ไม่แน่ใจ | `/99-Coach` |
 
 ## Workspace Folder Map
