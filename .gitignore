@@ -1,4 +1,4 @@
-﻿# PRP Framework - gitignore
+# PRP Framework - gitignore
 
 # ------------------------------
 # 1. WORKSPACES (Logs & Trash)
@@ -84,3 +84,7 @@ template-html/*
 
 # .workspaces/roadmaps_.json
 
+# ------------------------------
+# 9. OBSIDIAN VAULT SETTINGS
+# ------------------------------
+docs/vault/.obsidian/workspace.json
