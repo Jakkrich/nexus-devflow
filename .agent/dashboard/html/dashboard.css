@@ -34,13 +34,18 @@
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   height: 100vh;
   overflow: hidden;
   display: flex;
   flex-direction: column
+}
+
+h1, h2, h3, h4, h5, h6, .logo, .col-title, .modal-title, .workspace-files-title, .ops-sidebar-title, .ops-viewer-title {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.2px;
 }
 
 ::-webkit-scrollbar {
@@ -64,7 +69,9 @@ body {
 /* ── HEADER ── */
 .header {
   flex-shrink: 0;
-  background: rgba(12, 13, 16, .97);
+  background: rgba(19, 20, 26, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   padding: 0 20px;
   display: flex;
@@ -1120,8 +1127,8 @@ body {
 }
 
 .column {
-  flex: 0 0 290px;
-  min-width: 290px;
+  flex: 1 1 0;
+  min-width: 220px;
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--rl);
