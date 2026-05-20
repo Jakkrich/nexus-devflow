@@ -31,6 +31,7 @@ Planning and requirements:
 | `discuss-spec` | Refine `spec.md` and requirements before planning. |
 | `prp-core-prd-architect` | Draft PRD documents from early ideas. |
 | `orchestrator` | Coordinate complex work and recommend next specialist steps. |
+| `prp-core-boss` | Route `/goal` requests, decompose work, enforce turn budgets, and validate worker output. |
 
 Research and exploration:
 
@@ -45,6 +46,7 @@ Implementation:
 | Agent | Purpose |
 | :--- | :--- |
 | `prp-core-coder` | Implement planned subtasks. |
+| `prp-core-worker` | Execute focused Boss-assigned `/goal` subtasks and report validation status. |
 | `backend-specialist` | Backend, APIs, database, server logic. |
 | `frontend-specialist` | UI/UX and frontend implementation. |
 | `database-architect` | Schema, indexing, and query design. |
