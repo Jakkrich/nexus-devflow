@@ -1,4 +1,4 @@
-﻿# Getting Started with agent-skills
+# Getting Started with agent-skills
 
 agent-skills works with any AI coding agent that accepts Markdown instructions. This guide covers the universal approach. For tool-specific setup, see the dedicated guides.
 
@@ -105,12 +105,52 @@ The `.claude/commands/` directory contains slash commands for Claude Code:
 
 | Command | Skill Invoked |
 |---------|---------------|
+| `/goal` | Autonomous Goal Runner (Boss-Worker loop) |
 | `/spec` | spec-driven-development |
 | `/plan` | planning-and-task-breakdown |
 | `/build` | incremental-implementation + test-driven-development |
 | `/test` | test-driven-development |
 | `/review` | code-review-and-quality |
 | `/ship` | shipping-and-launch |
+
+### Running the Goal Command
+
+The `/goal` command allows you to run high-level autonomous tasks. Instead of executing subtasks step-by-step, the goal runner uses a **Boss-Worker** control loop that runs continuously until a specific, verifiable "finish line" is reached.
+
+#### 1. How to Run It
+
+You can run the goal command directly from your agent interface or via the local CLI:
+
+##### Via Agent Interface (Slash Command):
+```text
+/goal {GOAL_DESCRIPTION}
+```
+*Example:* `/goal Implement user authentication and add tests`
+
+##### Via Local CLI (PowerShell/CMD):
+You can execute it natively in your workspace using `npm`:
+```powershell
+npm run goal -- --goal "Implement new feature" --max-turns 30 --parallel
+# Using positional arguments:
+npm run goal -- goal "Implement new feature" max-turns 30 parallel
+```
+
+#### 2. The Boss-Worker Architecture
+
+* **Worker (`prp-core-worker`):** Implements focused changes, edits files, and executes tasks.
+* **Boss (`prp-core-boss`):** Classifies requests, decomposes them into structured subtasks, coordinates flow paths, checks validation gates (tests and strict verification), and verifies if the finish line has been successfully achieved.
+
+#### 3. Best Practices (Safety & Verification)
+
+> [!IMPORTANT]
+> **Definitive Finish Line:** Ensure the goal description has a clear, objective criteria that the Boss agent can verify (e.g., "The new authentication API returns 200 OK and unit tests are passing"). Subjective targets like "make the UI beautiful" can cause infinite loops.
+
+> [!TIP]
+> **Use Safety Caps:** Always include safety net arguments (like `--max-turns` or limit statements) to prevent token drain. 
+> *Example:* `npm run goal -- goal "Add database indexes" max-turns 15`
+
+> [!NOTE]
+> **Start Small:** Test the goal runner on minor features or directories first before scaling it up to orchestrate massive refactors.
 
 ## Using References
 
