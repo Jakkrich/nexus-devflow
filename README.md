@@ -44,27 +44,126 @@ Its most important rule is simple:
 
 ---
 
-## The DevFlow
+## Advanced Goal Flow
 
 ```mermaid
-flowchart LR
-    Goal["/05-Goal<br/>High-level intent"] --> Route{"Boss route"}
-    Route -->|feature / fix / refactor| Task["/30-Task<br/>spec.md + requirements.json"]
-    Route -->|product idea| PRD["/12-PRD<br/>product requirements"]
-    Route -->|unclear idea| Brainstorm["/10-Brainstorm<br/>options + tradeoffs"]
-    Route -->|failure / regression| Debug["/20-Debug<br/>RCA report"]
+flowchart TD
+    Goal["/05-Goal<br/>High-level intent"] --> Boss["Boss Agent<br/>route, budget, decompose"]
+    Boss --> Route{"Select flow"}
 
+    Route -->|feature / fix / refactor| DevFlow["DevFlow Task Execution"]
+    Route -->|product idea| SpecFlow["PRD / Spec Flow"]
+    Route -->|unclear idea| IdeaFlow["Brainstorm Flow"]
+    Route -->|failure / regression| DebugFlow["RCA / Debug Flow"]
+
+    DevFlow --> Split{"Large enough<br/>for workers?"}
+    SpecFlow --> Split
+    IdeaFlow --> Split
+    DebugFlow --> Split
+
+    Split -->|single scope| WorkerOne["Worker<br/>focused task"]
+    Split -->|multi scope| WorkerGroup["Worker Group<br/>parallel or staged tasks"]
+
+    WorkerOne --> Gate["Boss Validation Gate<br/>quality, tests, artifacts"]
+    WorkerGroup --> Gate
+
+    Gate -->|needs changes| Revise["Send back to worker"]
+    Revise --> Gate
+    Gate -->|accepted| Session["Session Log<br/>metrics, decisions, next flow"]
+    Session --> Next["Recommended DevFlow<br/>/30-Task → /31-Plan → /32-Code → /33-Verify"]
+```
+
+Use `/05-Goal` when you want the AI to decide the right route, split work across specialist roles, track turn budgets, and produce a session log before moving into the normal DevFlow.
+
+---
+
+## Basic DevFlow
+
+```mermaid
+flowchart TD
+    Task["/30-Task<br/>create task workspace"]
+    Spec["spec.md<br/>requirements.json"]
+    Plan["/31-Plan<br/>implementation plan"]
+    Code["/32-Code<br/>implement subtasks"]
+    Verify["/33-Verify<br/>QA and validation"]
+    Human["/34-Human<br/>approve or feedback"]
+    Ship["/50-Commit<br/>/51-PR"]
+
+    Task --> Spec
+    Spec --> Plan
+    Plan --> Code
+    Code --> Verify
+    Verify -->|pass| Human
+    Verify -->|fail| Code
+    Human -->|approve| Ship
+    Human -->|feedback| Plan
+```
+
+Use this flow when you already know the work is a concrete feature, bug fix, docs update, refactor, or test improvement.
+
+---
+
+## Recommended Flow Patterns
+
+### Product / Spec Flow
+
+```mermaid
+flowchart TD
+    Idea["Product idea"]
+    Brainstorm["/10-Brainstorm<br/>options and tradeoffs"]
+    PRD["/12-PRD<br/>requirements and scope"]
+    Task["/30-Task<br/>task artifacts"]
+    Plan["/31-Plan<br/>implementation plan"]
+    Code["/32-Code<br/>build"]
+    Verify["/33-Verify<br/>QA"]
+
+    Idea --> Brainstorm
+    Brainstorm --> PRD
     PRD --> Task
-    Brainstorm --> Task
+    Task --> Plan
+    Plan --> Code
+    Code --> Verify
+```
+
+### Debug / RCA Flow
+
+```mermaid
+flowchart TD
+    Symptom["Bug or regression"]
+    Debug["/20-Debug<br/>root cause analysis"]
+    Task["/30-Task<br/>fix scope"]
+    Plan["/31-Plan<br/>safe fix plan"]
+    Code["/32-Code<br/>apply fix"]
+    Verify["/33-Verify<br/>regression checks"]
+    Insight["/54-Insight<br/>lesson learned"]
+
+    Symptom --> Debug
     Debug --> Task
+    Task --> Plan
+    Plan --> Code
+    Code --> Verify
+    Verify --> Insight
+```
 
-    Task --> Plan["/31-Plan<br/>implementation_plan.json"]
-    Plan --> Code["/32-Code<br/>validated subtasks"]
-    Code --> Verify["/33-Verify<br/>qa_report.md"]
-    Verify --> Human["/34-Human<br/>approve / feedback"]
-    Human --> Ship["/50-Commit<br/>/51-PR"]
+### QA / Review Flow
 
-    Verify -.issues found.-> Code
+```mermaid
+flowchart TD
+    Done["Implementation done"]
+    Verify["/33-Verify<br/>baseline QA"]
+    QA["/39-QA-Orchestrate<br/>multi-lane QA"]
+    Review["/90-Agent code-reviewer<br/>risk review"]
+    Fix["/32-Code<br/>fix findings"]
+    Human["/34-Human<br/>approval"]
+    Commit["/50-Commit<br/>ship-ready commit"]
+
+    Done --> Verify
+    Verify --> QA
+    QA --> Review
+    Review -->|findings| Fix
+    Fix --> Verify
+    Review -->|clean| Human
+    Human --> Commit
 ```
 
 ---
