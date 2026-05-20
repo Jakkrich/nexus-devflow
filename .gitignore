@@ -10,6 +10,12 @@
 .workspaces/.uv-cache/
 .workspaces-status
 .workspaces/specs/*
+.workspaces/issues/*
+.workspaces/research/*
+.workspaces/roadmaps/*
+.workspaces/debug/*
+.workspaces/prds/*
+.workspaces/roadmaps_*.json
 *.log
 
 # Security & Secrets - CRITICAL IGNORE!
