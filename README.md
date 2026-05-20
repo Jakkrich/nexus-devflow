@@ -23,11 +23,11 @@
 
 Nexus-DevFlow is a structured Context Engineering framework for AI-assisted software development. It gives agents and humans the same operating contract: create a task, write a spec, build an implementation plan, execute in small validated steps, and keep the resulting artifacts traceable.
 
-The framework uses one active bundle, [`.agent`](./.agent), plus root-level npm scripts for activation, indexing, validation, dashboard support, Graphify integration, and PRP task operations.
+The framework uses one active bundle, [`.agent`](./.agent), plus workspace conventions that tell AI agents how to plan, edit, validate, and report work consistently.
 
 Its most important rule is simple:
 
-> JSON artifacts are script-first. Agents should use `npm run agent -- artifact:*`, `plan:*`, `validate`, and `repair` instead of rewriting full JSON files by hand.
+> JSON artifacts are script-first. The AI should update task artifacts through the PRP tooling instead of rewriting full JSON files by hand.
 
 ---
 
@@ -37,7 +37,7 @@ Its most important rule is simple:
 | :--- | :--- |
 | **Goal-first routing** | `/05-Goal` classifies broad intent into DevFlow, PRD, Brainstorm, or Debug paths. |
 | **Repeatable PRP lifecycle** | `/30-Task` → `/31-Plan` → `/32-Code` → `/33-Verify`, with artifacts at every step. |
-| **Script-managed JSON** | Safer artifact mutation through CLI helpers instead of fragile manual edits. |
+| **Script-managed JSON** | The AI mutates task artifacts through PRP helpers instead of fragile manual edits. |
 | **Specialist agents** | Planners, coders, reviewers, test engineers, security auditors, DevOps, docs, and coaches. |
 | **Traceable workspaces** | Specs, PRDs, research, debug reports, QA reports, roadmap data, and lessons live under `.workspaces`. |
 | **Validation gates** | Framework validation, plan validation, task validation, and dedicated runner tests. |
@@ -69,47 +69,37 @@ flowchart LR
 
 ---
 
-## Quick Start
+## How You Use It
 
-Requirements:
+You normally do not need to run the internal commands yourself. In an AI-enabled IDE such as Antigravity, you ask for the workflow you want, and the AI uses the framework tools behind the scenes.
 
-- Node.js `>=18.17`
-- Git
+Start with plain intent:
 
-Prepare and validate the framework:
-
-```powershell
-npm.cmd run activate
-npm.cmd run validate
+```text
+/05-Goal "add password reset with email token and regression tests"
 ```
 
-Check current PRP task status:
+Or use a specific phase when you already know where the work belongs:
 
-```powershell
-npm.cmd run agent:status
+```text
+/30-Task "Add password reset"
+/31-Plan 007
+/32-Code 007
+/33-Verify 007
 ```
 
-Run the PRP CLI:
-
-```powershell
-npm.cmd run agent -- --help
-npm.cmd run agent -- init 001 "Example Task" example-task "Describe the task"
-```
-
-Try the goal runner:
-
-```powershell
-npm.cmd run goal -- goal "add a docs note explaining how to run the goal command" max-turns 10 dry-run
-```
+The AI handles the behind-the-scenes artifact updates, validation commands, status changes, and session logs. For the complete workflow catalog and examples, use [USAGE.md](./USAGE.md).
 
 ---
 
-## Example Goal Sessions
+## Example User Flows
 
 ### Small Feature
 
-```powershell
-npm.cmd run goal -- goal "add password reset with email token and regression tests" max-turns 20 dry-run
+Ask:
+
+```text
+/05-Goal "add password reset with email token and regression tests"
 ```
 
 Expected route:
@@ -130,8 +120,10 @@ Recommended flow:
 
 ### Debug / RCA
 
-```powershell
-npm.cmd run goal -- goal "debug login redirect loop after session expires" max-turns 15 dry-run
+Ask:
+
+```text
+/05-Goal "debug login redirect loop after session expires"
 ```
 
 Recommended flow:
@@ -144,28 +136,7 @@ Recommended flow:
 /33-Verify 008
 ```
 
-Goal session logs are written to:
-
-```text
-.workspaces/specs/goal-sessions/session-{goal_id}.json
-.workspaces/specs/goal_latest_session.json
-.workspaces/specs/goal_execution_log.json
-```
-
----
-
-## Core Commands
-
-| Command | Purpose |
-| :--- | :--- |
-| `npm.cmd run activate` | Prepare `.workspaces`, generate indexes, and record active `.agent` metadata. |
-| `npm.cmd run validate` | Validate required files, JSON artifacts, roadmap references, and legacy cleanup. |
-| `npm.cmd run goal -- goal "..." max-turns 20 dry-run` | Route a high-level goal and write a Boss-Worker session log. |
-| `npm.cmd run agent -- <command>` | Run the PRP task CLI from `.agent/scripts/prp.mjs`. |
-| `npm.cmd run agent -- artifact:*` | Read or update task JSON fields without rewriting full files. |
-| `npm.cmd run agent -- plan:*` | Add phases, add subtasks, update subtask status, and validate plans. |
-| `npm.cmd run graphify -- <args>` | Auto-install/repair Graphify, then run the Graphify CLI. |
-| `npm.cmd run index` | Regenerate `.workspaces/project_index.json` and roadmap project index. |
+The AI records the routing decision, task breakdown, metrics, and latest session under `.workspaces/specs/`.
 
 ---
 
@@ -203,6 +174,8 @@ Invoke a specialist manually:
 /90-Agent code-reviewer .workspaces/specs/007
 ```
 
+Most users call these workflows in chat. The specialist agent then reads the target, applies its persona, and uses the repository tooling as needed.
+
 ---
 
 ## Workspace Map
@@ -233,29 +206,11 @@ Nexus-DevFlow/
 
 ---
 
-## Validation
+## Validation Model
 
-Run these before committing framework changes:
+Validation is part of the workflow, not a separate ritual for the user to memorize. During `/32-Code` and `/33-Verify`, the AI should run the appropriate project checks, validate PRP artifacts, repair broken JSON contracts when needed, and summarize the result in the task workspace.
 
-```powershell
-npm.cmd run validate
-node .agent\scripts\test-prp.mjs
-node .agent\scripts\test-goal-runner.mjs
-```
-
-Validate a task:
-
-```powershell
-npm.cmd run agent -- validate 007
-npm.cmd run agent -- plan:validate 007
-```
-
-Repair a task artifact contract:
-
-```powershell
-npm.cmd run agent -- repair 007
-npm.cmd run agent -- validate 007
-```
+For maintainers who are changing the framework itself, the exact validation commands live in [USAGE.md](./USAGE.md) and the docs under [docs/](./docs).
 
 ---
 
@@ -279,9 +234,9 @@ npm.cmd run agent -- validate 007
 
 - `.agent` is the only active framework bundle.
 - `.workspaces` is the canonical generated artifact directory.
-- Root npm scripts are the supported command surface.
-- Regenerate project indexes with `npm.cmd run index` after structural changes.
-- Run `npm.cmd run validate` before committing framework changes.
+- Root npm scripts are the internal command surface used by agents and maintainers.
+- Regenerate project indexes after structural changes.
+- Validate the framework before committing framework changes.
 
 <div align="center">
 
