@@ -16,6 +16,7 @@ npm.cmd run activate
 npm.cmd run validate
 npm.cmd run agent:status
 npm.cmd run agent -- --help
+npm.cmd run goal -- goal "Create a small test task" max-turns 15 dry-run
 ```
 
 Task JSON commands:
@@ -36,6 +37,7 @@ npm.cmd run validate 007
 
 | Group | Workflows | Use When |
 | :--- | :--- | :--- |
+| Goal Automation | `/05-Goal` | Route a high-level goal into DevFlow, PRD, Brainstorm, or Debug flow with Boss-Worker session logging. |
 | Setup & Status | `/00-Init`, `/01-App-Builder`, `/02-Status` | เริ่ม project, scaffold app, ตรวจสถานะ framework |
 | Discovery & Product Thinking | `/10-Brainstorm`, `/11-Research`, `/12-PRD`, `/13-UI-UX`, `/14-Orchestrate` | คิด feature, วิจัย codebase, ทำ PRD, วาง UX, ประสานงานซับซ้อน |
 | Prompt Addon Discovery | `/15-Spec-Research`, `/16-Competitor`, `/17-Roadmap`, `/18-Spec-Orchestrate` | ใช้ prompt family เพิ่มเติม เช่น spec research, competitor, roadmap, spec orchestration |
@@ -50,6 +52,7 @@ npm.cmd run validate 007
 
 | Workflow | Purpose | Example |
 | :--- | :--- | :--- |
+| `/05-Goal` | Route high-level goal with max-turns, task decomposition, metrics, and session log | `/05-Goal "add password reset and tests"` |
 | `/00-Init` | เตรียม project context และ sync workspace | `/00-Init` |
 | `/01-App-Builder` | เริ่มสร้างแอปใหม่จากศูนย์ | `/01-App-Builder "Next.js CRM dashboard"` |
 | `/02-Status` | ดูสถานะ project, task, agent bundle | `/02-Status` |
@@ -97,7 +100,51 @@ npm.cmd run validate 007
 /02-Status
 ```
 
-### 2. Small Feature Flow
+### 2. Goal-First Autonomous Flow
+
+ใช้เมื่อมีคำสั่งระดับ goal แล้วอยากให้ระบบช่วยเลือก flow ที่เหมาะสมก่อนเริ่มทำงานจริง เช่น feature, PRD, brainstorm, หรือ debug
+
+```text
+/05-Goal "add password reset with email token and regression tests"
+```
+
+CLI สำหรับ Antigravity/Nexus-DevFlow:
+
+```powershell
+npm.cmd run goal -- goal "add password reset with email token and regression tests" max-turns 20 dry-run
+```
+
+ผลลัพธ์หลัก:
+
+- เลือก flow เช่น `DevFlow Task Execution`, `PRD / Spec Flow`, `Brainstorm Flow`, หรือ `RCA / Debug Flow`
+- แตกงานเป็น worker tasks พร้อม `parallel_group`
+- บันทึก log ที่ `.workspaces/specs/goal-sessions/session-{goal_id}.json`
+- อัปเดต `.workspaces/specs/goal_latest_session.json` และ `.workspaces/specs/goal_execution_log.json`
+- แนะนำ command ถัดไป เช่น `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`
+
+ตัวอย่างเมื่อ goal ถูก route ไป DevFlow:
+
+```text
+/05-Goal "add password reset with email token and regression tests"
+/30-Task "Add password reset with email token and regression tests"
+/31-Plan 007
+/32-Code 007
+/33-Verify 007
+/34-Human Approve 007
+```
+
+ตัวอย่างเมื่อ goal เป็น bug/debug:
+
+```text
+/05-Goal "debug login redirect loop after session expires"
+/20-Debug "debug login redirect loop after session expires"
+/30-Task "Fix login redirect loop after session expires"
+/31-Plan 008
+/32-Code 008
+/33-Verify 008
+```
+
+### 3. Small Feature Flow
 
 เหมาะกับ feature ชัดเจน ขอบเขตไม่ใหญ่
 
@@ -111,7 +158,7 @@ npm.cmd run validate 007
 /50-Commit "task 007"
 ```
 
-### 3. Full Feature Flow
+### 4. Full Feature Flow
 
 เหมาะกับ feature ที่ยังต้องคิด product และ acceptance criteria
 
@@ -129,7 +176,7 @@ npm.cmd run validate 007
 /51-PR main
 ```
 
-### 4. Bug Fix Flow
+### 5. Bug Fix Flow
 
 เริ่มจาก root cause ก่อนสร้าง task
 
@@ -144,7 +191,7 @@ npm.cmd run validate 007
 /50-Commit "fix checkout success handling"
 ```
 
-### 5. Refactor Flow
+### 6. Refactor Flow
 
 ใช้เมื่อ behavior ต้องเหมือนเดิม แต่ code ต้องอ่านง่ายขึ้น
 
@@ -157,7 +204,7 @@ npm.cmd run validate 007
 /50-Commit "simplify auth module"
 ```
 
-### 6. Test Improvement Flow
+### 7. Test Improvement Flow
 
 ใช้เมื่ออยากเพิ่ม test coverage หรือปิด regression risk
 
@@ -170,7 +217,7 @@ npm.cmd run validate 007
 
 ## Advanced SOP Paths
 
-### 7. Integration-Heavy Feature Flow
+### 8. Integration-Heavy Feature Flow
 
 ใช้เมื่อมี external API, SDK, database, OAuth, payment, webhook
 
@@ -186,7 +233,7 @@ npm.cmd run validate 007
 /54-Insight 010
 ```
 
-### 8. Product Strategy And Roadmap Flow
+### 9. Product Strategy And Roadmap Flow
 
 ใช้เมื่ออยากรู้ว่าจะทำอะไรต่อ ไม่ใช่แค่ implement task เดียว
 
@@ -198,7 +245,7 @@ npm.cmd run validate 007
 /30-Task "Implement top priority roadmap item"
 ```
 
-### 9. Broad Spec Orchestration Flow
+### 10. Broad Spec Orchestration Flow
 
 ใช้เมื่อ idea ใหญ่เกินกว่าจะเริ่มที่ `/30-Task` ทันที
 
@@ -211,7 +258,7 @@ npm.cmd run validate 007
 /31-Plan 011
 ```
 
-### 10. Follow-Up Feature Flow
+### 11. Follow-Up Feature Flow
 
 ใช้เมื่อ task เดิมเสร็จแล้ว แต่อยากต่อยอดโดยรักษา context เดิม
 
@@ -226,7 +273,7 @@ npm.cmd run validate 007
 
 สำคัญ: follow-up ต้อง extend plan เดิม ไม่ replace subtasks ที่ completed แล้ว
 
-### 11. Complex QA Flow
+### 12. Complex QA Flow
 
 ใช้เมื่อ QA ต้องแยกหลาย lane เช่น correctness, security, performance, UX, regression
 
@@ -240,7 +287,7 @@ npm.cmd run validate 007
 /34-Human Approve 012
 ```
 
-### 12. PR Review And Fix Flow
+### 13. PR Review And Fix Flow
 
 ใช้เมื่อต้องทำ PR, รับ comment, แล้วแปลงเป็น fix task
 
@@ -253,7 +300,7 @@ npm.cmd run validate 007
 /33-Verify 012
 ```
 
-### 13. GitHub Issue To PRP Task Flow
+### 14. GitHub Issue To PRP Task Flow
 
 ใช้เมื่อเริ่มจาก GitHub issue ก่อน ยังไม่รู้ว่าเป็น bug, feature, duplicate หรือ noise
 
@@ -276,7 +323,7 @@ npm.cmd run validate 007
 /30-Task "Implement issue #789"
 ```
 
-### 14. Release Flow
+### 15. Release Flow
 
 ใช้หลังงานผ่าน QA และ human approval
 
@@ -290,7 +337,7 @@ npm.cmd run validate 007
 /52-Deploy staging
 ```
 
-### 15. Knowledge And Insight Flow
+### 16. Knowledge And Insight Flow
 
 ใช้เมื่อต้องการให้ระบบจำ pattern หรือบทเรียนสำหรับงานถัดไป
 
@@ -300,7 +347,7 @@ npm.cmd run validate 007
 /99-Coach "สรุปบทเรียนจาก task 014 และแนะนำ workflow ถัดไป"
 ```
 
-### 16. New App Flow
+### 17. New App Flow
 
 ใช้เมื่อเริ่มแอปใหม่จากศูนย์
 
@@ -341,6 +388,34 @@ npm.cmd run validate 007
 ```
 
 ใช้ดูสถานะ task และ agent bundle
+
+### `/05-Goal`
+
+```text
+/05-Goal "implement API key rotation with audit log"
+```
+
+ใช้เป็น entry point แบบ goal-first สำหรับ Antigravity IDE เมื่อยังไม่แน่ใจว่าควรเริ่มที่ `/30-Task`, `/12-PRD`, `/10-Brainstorm`, หรือ `/20-Debug`
+
+CLI equivalent:
+
+```powershell
+npm.cmd run goal -- goal "implement API key rotation with audit log" max-turns 20 parallel dry-run
+```
+
+Output artifacts:
+
+- `.workspaces/specs/goal-sessions/session-{goal_id}.json`
+- `.workspaces/specs/goal_latest_session.json`
+- `.workspaces/specs/goal_execution_log.json`
+
+ใช้ option หลัก:
+
+- `goal "..."` ระบุ goal description
+- `max-turns 30` กำหนด turn budget
+- `parallel` เปิด parallel worker grouping ในแผน session
+- `dry-run` สร้าง routing/session plan โดยไม่ถือว่าเริ่ม execute จริง
+- `json` แสดง session JSON เต็มใน terminal
 
 ### `/10-Brainstorm`
 
@@ -644,6 +719,7 @@ deploy พร้อม preflight และ verification
 
 | Situation | Use |
 | :--- | :--- |
+| มี goal กว้าง ๆ และอยากให้ระบบเลือก flow ให้ก่อน | `/05-Goal` |
 | ยังไม่รู้ว่าจะทำอะไรดี | `/10-Brainstorm` |
 | idea ใหญ่และยังไม่ชัด | `/18-Spec-Orchestrate` |
 | ต้องเช็ก SDK/API ก่อน | `/15-Spec-Research` |
@@ -709,9 +785,18 @@ npm.cmd run roadmap:validate
 ```powershell
 npm.cmd run validate
 node .agent\scripts\test-prp.mjs
+node .agent\scripts\test-goal-runner.mjs
 ```
 
+Goal session files:
+
+- `.workspaces/specs/goal-sessions/session-{goal_id}.json` stores each `/05-Goal` run.
+- `.workspaces/specs/goal_latest_session.json` stores the latest session copy.
+- `.workspaces/specs/goal_execution_log.json` stores the latest execution log contract.
+
 ## Recommended Operating Style
+
+0. ใช้ `/05-Goal` เมื่อมีเป้าหมายกว้าง ๆ และอยากให้ระบบ route ไป flow ที่เหมาะสมพร้อมบันทึก session log
 
 1. ใช้ `/99-Coach` ถ้าไม่แน่ใจว่าจะไปทางไหน
 2. อย่าข้าม `/31-Plan` ถ้างานมีมากกว่า 1-2 จุด
