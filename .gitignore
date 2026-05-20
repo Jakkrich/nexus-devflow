@@ -15,7 +15,8 @@
 .workspaces/roadmaps/*
 .workspaces/debug/*
 .workspaces/prds/*
-.workspaces/roadmaps_*.json
+.workspaces/**/*.json
+.workspaces/**/*.md
 *.log
 
 # Security & Secrets - CRITICAL IGNORE!
