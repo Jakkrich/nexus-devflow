@@ -12,11 +12,14 @@
 .workspaces/specs/*
 .workspaces/issues/*
 .workspaces/research/*
+.workspaces/roadmap/*
 .workspaces/roadmaps/*
 .workspaces/debug/*
 .workspaces/prds/*
+.workspaces/reports/*
 .workspaces/**/*.json
 .workspaces/**/*.md
+!.workspaces/**/.gitkeep
 *.log
 
 # Security & Secrets - CRITICAL IGNORE!
