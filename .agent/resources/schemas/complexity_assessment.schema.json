@@ -8,6 +8,7 @@
     "confidence": { "type": "number" },
     "reasoning": { "type": "string" },
     "analysis": { "type": "object" },
+    "metrics": { "type": "object" },
     "validation_recommendations": { "type": "object" },
     "created_at": { "type": "string" },
     "updated_at": { "type": "string" }

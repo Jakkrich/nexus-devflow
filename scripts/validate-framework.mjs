@@ -7,6 +7,7 @@ import { generateProjectIndex } from './generate-project-index.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
 const args = new Set(process.argv.slice(2));
+const manifest = readJson('agent-bundle.manifest.json', []);
 
 const requiredJson = [
   '.workspaces/project_index.json',
@@ -17,19 +18,15 @@ const requiredJson = [
 
 const requiredPaths = [
   '.agent',
-  '.agent/package.json',
-  '.agent/scripts/prp.mjs',
   'agent-bundle.manifest.json',
   'package.json',
   'ROADMAP.md',
   'docs/quickstart.md',
-  'docs/workspace-artifacts.md'
+  'docs/workspace-artifacts.md',
+  ...(manifest?.required_paths || [])
 ];
 
-const forbiddenPaths = [
-  '.cursor',
-  '.cursorrules'
-];
+const forbiddenPaths = manifest?.forbidden_legacy_paths || [];
 
 function fail(message, failures) {
   failures.push(message);
@@ -127,8 +124,11 @@ function validateWorkflowNumbering(failures) {
 function main() {
   const failures = [];
   generateProjectIndex(projectRoot);
+  const seenRequired = new Set();
 
   for (const item of requiredPaths) {
+    if (seenRequired.has(item)) continue;
+    seenRequired.add(item);
     if (!fs.existsSync(path.join(projectRoot, item))) fail(`Missing required path: ${item}`, failures);
     else ok(`Found ${item}`);
   }

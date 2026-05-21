@@ -252,13 +252,15 @@ If you need to install or update the PRP Framework into your project, you can re
 
 **For Windows (PowerShell):**
 ```powershell
-git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/application-etc/rules-development.git "$env:TEMP\prp-setup" 2>$null; git -C "$env:TEMP\prp-setup" sparse-checkout set .claude/scripts; powershell -ExecutionPolicy Bypass -File "$env:TEMP\prp-setup\.claude\scripts\update-prp.ps1" -Apply; Remove-Item "$env:TEMP\prp-setup" -Recurse -Force
+git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/application-etc/rules-development.git "$env:TEMP\prp-setup" 2>$null; git -C "$env:TEMP\prp-setup" sparse-checkout set .claude/scripts; powershell -ExecutionPolicy Bypass -File "$env:TEMP\prp-setup\.claude\scripts\update-prp.ps1" -Apply
 ```
 
 **For Linux / Mac / WSL (Bash):**
 ```bash
-git config --global credential.helper "cache --timeout=900" 2>/dev/null; git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/application-etc/rules-development.git /tmp/prp-setup 2>/dev/null; git -C /tmp/prp-setup sparse-checkout set .claude/scripts; bash /tmp/prp-setup/.claude/scripts/update-prp.sh --apply; rm -rf /tmp/prp-setup
+git config --global credential.helper "cache --timeout=900" 2>/dev/null; git clone -b prp-auto-dev --filter=blob:none --sparse https://git.nstda.or.th/application-etc/rules-development.git /tmp/prp-setup 2>/dev/null; git -C /tmp/prp-setup sparse-checkout set .claude/scripts; bash /tmp/prp-setup/.claude/scripts/update-prp.sh --apply
 ```
+
+After the update, remove the temporary setup directory only after confirming the resolved path is the intended temp folder.
 
 *(Alternatively, if the framework is already installed, they can just type `/999-Update` in the chat!)*
 

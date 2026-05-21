@@ -20,6 +20,9 @@
 .workspaces/**/*.json
 .workspaces/**/*.md
 !.workspaces/**/.gitkeep
+!.workspaces/reports/project_*evaluation*.md
+!.workspaces/reports/project_evaluation_fix_report_*.md
+.workspaces/reports/*
 *.log
 
 # Security & Secrets - CRITICAL IGNORE!
@@ -53,6 +56,7 @@ node_modules/
 npm-debug.log
 yarn-debug.log
 yarn-error.log
+.agent/.test-workspace-node/
 
 # Graphify generated knowledge graph
 graphify-out/

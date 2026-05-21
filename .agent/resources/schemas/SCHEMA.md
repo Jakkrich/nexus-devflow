@@ -74,7 +74,7 @@ Used to store initial details and as a dataset for the Spec Writer.
 ## 🕒 4. task_logs.json (Timeline)
 **Path**: `.workspaces/specs/{ID}/task_logs.json`
 
-`task_logs.json` supports the legacy phase buckets (`planning`, `coding`, `validation`) and the new append-only `events[]` timeline. Agents should append events through `npx agent-flow log` or `npx agent-flow event`.
+`task_logs.json` supports the legacy phase buckets (`planning`, `coding`, `validation`) and the new append-only `events[]` timeline. Agents should append events through `npm.cmd run agent -- log` or `npm.cmd run agent -- event`.
 
 ### 🔹 EntryObject Structure
 ```json

@@ -82,6 +82,6 @@ Show current project and agent status.
 ## Technical
 
 Status uses these scripts:
-- `npx agent-flow status`
+- `npm.cmd run agent:status`
 - `python .agent/scripts/session_manager.py status`
 

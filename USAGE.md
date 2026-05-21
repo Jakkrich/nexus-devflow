@@ -30,7 +30,7 @@ npm.cmd run agent -- plan:add-phase 007 "Backend implementation" --type implemen
 npm.cmd run agent -- plan:add-subtask 007 phase-1 "Create API endpoint" --service backend
 npm.cmd run agent -- plan:set-subtask-status 007 subtask-1.1 completed
 npm.cmd run agent -- plan:validate 007
-npm.cmd run validate 007
+npm.cmd run agent -- validate 007
 ```
 
 ## Workflow Groups

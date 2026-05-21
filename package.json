@@ -18,8 +18,12 @@
     "index": "node ./scripts/generate-project-index.mjs",
     "link-project": "node ./scripts/link-project.mjs",
     "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
+    "security:scan": "node ./scripts/scan-security-hygiene.mjs",
     "sync:check": "node ./scripts/sync-agent-bundle.mjs",
-    "validate": "node ./scripts/validate-framework.mjs"
+    "validate": "node ./scripts/validate-framework.mjs",
+    "validate:all": "node ./scripts/validate-all.mjs",
+    "validate:dashboard": "node ./scripts/validate-dashboard-contract.mjs",
+    "validate:docs": "node ./scripts/scan-doc-contract.mjs"
   },
   "bin": {
     "prps": "./scripts/activate-agent.mjs"

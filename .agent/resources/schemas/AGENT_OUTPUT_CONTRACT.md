@@ -5,11 +5,11 @@ This contract keeps Antigravity agent output stable enough for the PRP dashboard
 ## Golden Rules
 
 1. Do not hand-write dashboard JSON when the CLI can update it.
-2. Always use `npx agent-flow` for task state transitions, phase logs, repair, and validation.
+2. Always use `npm.cmd run agent -- ...` for task state transitions, phase logs, repair, and validation in this repository.
 3. Never delete JSON keys. Use `null`, `[]`, `{}`, or `""` when data is not available yet.
 4. Every JSON file must include `schema_version`.
 5. Every meaningful action must append an event to `task_logs.json.events`.
-6. Every phase must end with `npx agent-flow validate {ID}`.
+6. Every phase must end with `npm.cmd run agent -- validate {ID}`.
 7. Every generated Markdown artifact must be based on the matching `*.template.md` in `.agent/resources/schemas/`.
 8. Before creating or updating a Markdown artifact, read the template first and preserve its required headings.
 
@@ -29,14 +29,14 @@ Every `.workspaces/specs/{ID}-{slug}/` folder must contain:
 
 ## State Commands
 
-```bash
-npx agent-flow init 007 "Add Billing" add-billing "Implement Stripe billing"
-npx agent-flow update 007 --status in_progress
-npx agent-flow update 007 --subtask subtask-1.1 --substatus completed
-npx agent-flow log 007 "Implemented checkout API" --phase coding
-npx agent-flow event 007 "Stripe webhook verified" --event validation.evidence --phase validation --ref subtask-2.1
-npx agent-flow validate 007
-npx agent-flow repair 007
+```powershell
+npm.cmd run agent -- init 007 "Add Billing" add-billing "Implement Stripe billing"
+npm.cmd run agent -- update 007 --status in_progress
+npm.cmd run agent -- update 007 --subtask subtask-1.1 --substatus completed
+npm.cmd run agent -- log 007 "Implemented checkout API" --phase coding
+npm.cmd run agent -- event 007 "Stripe webhook verified" --event validation.evidence --phase validation --ref subtask-2.1
+npm.cmd run agent -- validate 007
+npm.cmd run agent -- repair 007
 ```
 
 ## Dashboard Event Shape
