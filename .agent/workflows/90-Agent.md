@@ -84,6 +84,19 @@ Specialist agents must follow the same script-first JSON rule:
 
 If the specialist is only reviewing, it should recommend exact commands instead of mutating artifacts.
 
+## 9arm-Skills Discipline Routing
+
+When the target task matches one of these review or communication modes, apply the credited local pack under `.agent/skills/9arm-skills/` while preserving the normal specialist output contract:
+
+| Situation | Apply |
+| :--- | :--- |
+| `code-reviewer`, PR review, plan critique, or change risk review | `9arm-skills/scrutinize` |
+| debug/RCA specialist work | `9arm-skills/debug-mantra` |
+| completed bug/regression lesson extraction | `9arm-skills/post-mortem` |
+| stakeholder-readable summary, PR body, release note, standup, or status update | `9arm-skills/management-talk` |
+
+Reports that use the pack should include a short `Source Discipline` note with credit to `thananon/9arm-skills`.
+
 ## Process
 
 1. Load persona from `../agents/{AGENT_NAME}.md`.

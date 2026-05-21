@@ -8,6 +8,7 @@ This file is used to record "lessons" learned from the collaboration between hum
 
 ### [YYYY-MM-DD] | [Task ID/Ref] | [Category] | [Source]
 - **Source**: (Where it came from: /10-Human, /06-Debug, /09-Research, or Manual)
+- **Source Discipline**: (Optional: e.g. 9arm-skills/post-mortem, credit: thananon/9arm-skills)
 - **Context**: (The problem encountered or what was discovered)
 - **Lesson**: (The lesson learned - what should be done or what should not be done)
 - **Action**: (How to apply this practically or improve the workflow)

@@ -1,5 +1,5 @@
 ---
-description: PR Review Addon - Review a pull request using GitHub review prompt patterns.
+description: PR Review Addon - Review a pull request using GitHub review prompt patterns and the credited 9arm-skills/scrutinize discipline.
 ---
 
 # Phase 55: PR Review Addon
@@ -24,6 +24,14 @@ Adapted from:
 - `github/pr_finding_validator.md`
 - `github/partials/full_context_analysis.md`
 
+Additional credited discipline:
+
+- `.agent/skills/9arm-skills/scrutinize/SKILL.md`
+- Source pack: `9arm-skills`
+- Credit: `thananon/9arm-skills`
+- Upstream: https://github.com/thananon/9arm-skills
+- Adapted for: Antigravity IDE / Nexus-DevFlow
+
 ## Process
 
 ### 1. Load Review Context
@@ -37,6 +45,12 @@ Read the available context:
 - project patterns and existing code around the changed files
 
 ### 2. Select Review Lanes
+
+Start with the `scrutinize` lens before detailed lane review:
+
+- Intent check: should this change exist in this form?
+- Smaller alternative: can the same outcome be reached with less code, lower risk, or existing patterns?
+- Actual path trace: follow runtime behavior beyond the diff.
 
 Use lanes that match the change:
 
@@ -65,6 +79,8 @@ Use code-review style:
 2. Open questions or assumptions
 3. Short summary
 4. Test gaps or residual risk
+
+When saving a substantial report, include a short `Source Discipline` section crediting `9arm-skills/scrutinize` and, where useful, brief `Intent Check`, `Smaller Alternative Considered`, and `Actual Path Trace` sections. Preserve the required PR review template headings.
 
 ## Output
 

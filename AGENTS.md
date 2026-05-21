@@ -77,6 +77,23 @@ Use manual JSON editing only as a fallback, then run validation immediately.
 | `performance-optimizer` | ผู้ปรับประสิทธิภาพ | วิเคราะห์ bottleneck ด้าน CPU, memory และ latency |
 | `silent-failure-hunter` | ผู้ตรวจ failure ที่เงียบ | หาจุดที่ error อาจเกิดแต่ไม่มี log หรือ alert |
 
+### 4.1 9arm-Skills Discipline Layer
+
+ใช้เป็นหลักคิดเสริมใน flow เดิม ไม่ใช่ agent ที่มาแทน flow เดิม
+
+Credit เดิม:
+
+- `9arm-skills`
+- `thananon/9arm-skills`
+- https://github.com/thananon/9arm-skills
+
+| 9arm Skill | ใช้กับ Flow | หน้าที่หลัก |
+| :--- | :--- | :--- |
+| `debug-mantra` | `/20-Debug` | บังคับ reproduce, trace fail path, falsify hypothesis, cross-reference breadcrumbs ก่อนเสนอ fix |
+| `post-mortem` | `/54-Insight` | เปลี่ยน bug/incident ที่แก้และ validate แล้วให้เป็นความรู้ทีม |
+| `scrutinize` | `/55-PR-Review`, `/90-Agent code-reviewer` | ตรวจ intent, ทางเลือกที่เล็กกว่า, actual code path, และ risk ก่อน approve |
+| `management-talk` | `/51-PR`, `/53-Changelog`, `/99-Coach` | แปลงรายละเอียดวิศวกรรมเป็น status/impact/owner/next step ที่ stakeholder อ่านเข้าใจ |
+
 ## 5. Git & Documentation
 
 ใช้ในขั้นตอน `/50-Commit`, `/51-PR`

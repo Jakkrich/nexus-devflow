@@ -72,3 +72,13 @@ When recent work includes useful lessons, apply the `insight_extractor` pattern 
 - Extract reusable patterns, gotchas, and file insights from task artifacts and git diff.
 - Keep lessons actionable and concise.
 - Include only user-facing changes in `CHANGELOG.md`; keep internal gotchas in `.workspaces/lessons.md` or task logs.
+
+## Management-Talk Addon
+
+When changelog input is too implementation-heavy, apply `.agent/skills/9arm-skills/management-talk/SKILL.md` as a credited communication lens:
+
+- Source pack: `9arm-skills`
+- Credit: `thananon/9arm-skills`
+- Adapted for: Antigravity IDE / Nexus-DevFlow
+- Preserve user-facing impact, validation, risk, and follow-up.
+- Remove low-value internal details such as function names, long file paths, and commit SHAs unless they are needed for release decisions.
