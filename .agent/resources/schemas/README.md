@@ -73,8 +73,8 @@
 4. **มาตรฐาน ISO Date**: Timestamps ทั้งหมดต้องใช้รูปแบบ ISO 8601 (UTC)
 5. **Phase ต้องเป็น Integer**: หมายเลขลำดับเฟสต้องเป็นตัวเลขจำนวนเต็ม
 6. **บันทึก Timeline อย่างต่อเนื่อง**: อัปเดต `task_logs.json` ทุกครั้งหลังจบการใช้เครื่องมือ (Tool) หรือขั้นตอนสำคัญ
-7. **ใช้ Node CLI เป็นทางหลัก**: ใช้ `npx agent-flow` สำหรับ init/update/log/event/validate/repair แทนการเขียน JSON โดยตรง
-8. **ผ่าน JSON Schema Gate**: ทุก phase ต้องจบด้วย `npx agent-flow validate {ID}` และถ้า fail ให้ใช้ `npx agent-flow repair {ID}` ก่อนเดินต่อ
+7. **ใช้ Node CLI เป็นทางหลัก**: ใช้ `npm.cmd run agent -- ...` สำหรับ init/update/log/event/validate/repair แทนการเขียน JSON โดยตรง
+8. **ผ่าน JSON Schema Gate**: ทุก phase ต้องจบด้วย `npm.cmd run agent -- validate {ID}` และถ้า fail ให้ใช้ `npm.cmd run agent -- repair {ID}` ก่อนเดินต่อ
 
 ---
 

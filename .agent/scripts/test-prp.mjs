@@ -22,6 +22,20 @@ function run(args) {
   return result.stdout;
 }
 
+function runExpectFail(args, expectedText) {
+  const result = spawnSync(process.execPath, [cli, ...args], {
+    cwd: projectRoot,
+    env: { ...process.env, PRP_PROJECT_ROOT: projectRoot, PRP_AGENT_DIR: agentDir },
+    encoding: 'utf8',
+  });
+  const output = `${result.stdout || ''}${result.stderr || ''}`;
+  if (result.status === 0) throw new Error(`Command unexpectedly passed: prp ${args.join(' ')}`);
+  if (expectedText && !output.includes(expectedText)) {
+    throw new Error(`Expected failed command output to include "${expectedText}". Output:\n${output}`);
+  }
+  return output;
+}
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -33,6 +47,7 @@ function readJson(file) {
 fs.mkdirSync(projectRoot, { recursive: true });
 fs.rmSync(taskDir, { recursive: true, force: true });
 
+try {
 run(['init', '999', 'Integration Test', 'test-task', 'Node contract test']);
 
 const requiredFiles = [
@@ -83,7 +98,7 @@ console.log('[OK] artifact:get verified.');
 
 fs.writeFileSync(
   path.join(taskDir, 'requirements.json'),
-  '```json\n{"task_description":"Needs repair","user_goal":"Goal","workflow_type":"feature","acceptance_criteria":["ok",],"technical_constraints":[],"dependencies":[],"schema_version":"1.0.0","created_at":"now","updated_at":"now",}\n```',
+  '```json\n{"task_description":"Needs repair","user_goal":"Goal","workflow_type":"feature","acceptance_criteria":["ok",],"technical_constraints":[],"dependencies":[],"schema_version":"1.0.0","created_at":"2026-05-21T00:00:00.000Z","updated_at":"2026-05-21T00:00:00.000Z",}\n```',
   'utf8',
 );
 run(['json:repair', '999', 'requirements']);
@@ -134,5 +149,37 @@ console.log('[OK] plan:validate verified.');
 run(['validate', '999']);
 console.log('[OK] schema validation passed.');
 
+const planPath = path.join(taskDir, 'implementation_plan.json');
+const validPlan = readJson(planPath);
+
+const badTimestampPlan = structuredClone(validPlan);
+badTimestampPlan.updated_at = 'not-a-date';
+fs.writeFileSync(planPath, `${JSON.stringify(badTimestampPlan, null, 2)}\n`, 'utf8');
+runExpectFail(['plan:validate', '999'], 'expected ISO timestamp');
+console.log('[OK] invalid timestamp rejected.');
+
+const badStatusPlan = structuredClone(validPlan);
+badStatusPlan.status = 'in_progress';
+badStatusPlan.planStatus = 'planning';
+badStatusPlan.xstateState = 'planning';
+fs.writeFileSync(planPath, `${JSON.stringify(badStatusPlan, null, 2)}\n`, 'utf8');
+runExpectFail(['plan:validate', '999'], 'expected approved for status in_progress');
+console.log('[OK] status mapping mismatch rejected.');
+
+const unknownKeyPlan = structuredClone(validPlan);
+unknownKeyPlan.extra_contract_drift = true;
+fs.writeFileSync(planPath, `${JSON.stringify(unknownKeyPlan, null, 2)}\n`, 'utf8');
+runExpectFail(['plan:validate', '999'], 'unknown top-level key');
+console.log('[OK] unknown top-level key rejected.');
+
+fs.writeFileSync(planPath, `${JSON.stringify(validPlan, null, 2)}\n`, 'utf8');
+run(['validate', '999']);
+console.log('[OK] schema validation restored after negative fixtures.');
+
 run(['status']);
 console.log('\nALL NODE PRP TESTS PASSED SUCCESSFULLY!');
+} finally {
+  if (!process.env.PRP_TEST_KEEP_WORKSPACE) {
+    fs.rmSync(projectRoot, { recursive: true, force: true });
+  }
+}

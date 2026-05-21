@@ -15,6 +15,7 @@ const STATUS_MAP = {
   done: ['done', 'done'],
   error: ['rejected', 'validation'],
 };
+const ISO_TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
 
 const TEMPLATE_MANIFEST = {
   'task_metadata.json': 'task_metadata.template.json',
@@ -232,6 +233,55 @@ function validateSchema(value, schema, prefix = '<root>', rootSchema = schema) {
 
   if (schema.type === 'array' && Array.isArray(value) && schema.items) {
     value.forEach((item, index) => errors.push(...validateSchema(item, schema.items, `${prefix}[${index}]`, rootSchema)));
+  }
+
+  return errors;
+}
+
+function validateTimestamp(value, prefix) {
+  if (typeof value !== 'string') return [`${prefix}: expected ISO timestamp string`];
+  if (value.includes('{') && value.includes('}')) return [];
+  return ISO_TIMESTAMP_PATTERN.test(value) ? [] : [`${prefix}: expected ISO timestamp, got ${JSON.stringify(value)}`];
+}
+
+function validateTopLevelKeys(value, schema, prefix) {
+  if (!isObject(value) || !schema?.properties) return [];
+  const allowed = new Set(Object.keys(schema.properties));
+  return Object.keys(value)
+    .filter((key) => !allowed.has(key))
+    .map((key) => `${prefix}.${key}: unknown top-level key`);
+}
+
+function validateSemanticFile(data, templateName, schema) {
+  const errors = [];
+  errors.push(...validateTopLevelKeys(data, schema, '<root>'));
+
+  for (const field of ['created_at', 'updated_at']) {
+    if (field in data) errors.push(...validateTimestamp(data[field], `<root>.${field}`));
+  }
+
+  if (templateName === 'task_logs.template.json') {
+    for (const [phaseName, phase] of Object.entries({ planning: data.planning, coding: data.coding, validation: data.validation })) {
+      if (!phase) continue;
+      if (phase.started_at !== null) errors.push(...validateTimestamp(phase.started_at, `<root>.${phaseName}.started_at`));
+      if (phase.completed_at !== null) errors.push(...validateTimestamp(phase.completed_at, `<root>.${phaseName}.completed_at`));
+    }
+    for (const [index, event] of (data.events || []).entries()) {
+      errors.push(...validateTimestamp(event.timestamp, `<root>.events[${index}].timestamp`));
+    }
+  }
+
+  if (templateName === 'implementation_plan.template.json') {
+    const expected = STATUS_MAP[data.status];
+    if (expected) {
+      const [planStatus, xstateState] = expected;
+      if (data.planStatus !== planStatus) {
+        errors.push(`<root>.planStatus: expected ${planStatus} for status ${data.status}, got ${data.planStatus}`);
+      }
+      if (data.xstateState !== xstateState) {
+        errors.push(`<root>.xstateState: expected ${xstateState} for status ${data.status}, got ${data.xstateState}`);
+      }
+    }
   }
 
   return errors;
@@ -679,6 +729,7 @@ function validateFile(filePath, templateName, fix) {
     writeJson(filePath, data);
   }
   const schemaErrors = validateSchema(fix ? readJson(filePath) : data, schema);
+  schemaErrors.push(...validateSemanticFile(fix ? readJson(filePath) : data, templateName, schema));
   if (templateName === 'implementation_plan.template.json') {
     schemaErrors.push(...validatePlanDependencies(fix ? readJson(filePath) : data));
   }
