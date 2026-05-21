@@ -34,8 +34,8 @@ argument-hint: [optional: task description, issue ID, or your question]
 
 Check system readiness step-by-step:
 
-#### A.1 — .claude/commands Directory
-- Verify if `.claude/workflows/` exists.
+#### A.1 — .agent/workflows Directory
+- Verify if `.agent/workflows/` exists.
 - This is the "brain" of the system. If it goes missing, `/` commands cannot be used.
 
 #### A.2 — .workspaces Directory
@@ -55,7 +55,7 @@ Display the results in a table:
 ┌─────────────────────────┬────────┐
 │ Component               │ Status │
 ├─────────────────────────┼────────┤
-│ .claude/workflows/       │ ✅     │
+│ .agent/workflows/        │ ✅     │
 │ .workspaces/specs/     │ ✅     │
 │ INITIAL.md              │ ✅     │
 └─────────────────────────┴────────┘
@@ -89,6 +89,24 @@ If all pass → Proceed to Phase B.
 ---
 
 ## The Workflow Cycle
+
+## 9arm-Skills Communication Lens
+
+When the user asks for a stakeholder-readable summary, status update, talking points, PR explanation, release note, or management-facing explanation, apply `.agent/skills/9arm-skills/management-talk/SKILL.md`.
+
+Keep Coach Mode read-only. Translate the current state into:
+
+- current status
+- impact
+- owner
+- next step
+- risk or blocker
+
+Credit the source when the summary explicitly uses that lens:
+
+```text
+Source discipline: 9arm-skills/management-talk (credit: thananon/9arm-skills)
+```
 
 ### � Level 0: ASK & Q&A (General Inquiries)
 

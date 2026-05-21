@@ -5,6 +5,12 @@
 - **Target**: {Target}
 - **Timestamp**: {Timestamp}
 
+## Source Discipline
+- **Source Pack**: {Source Pack, optional}
+- **Applied Skill**: {Applied Skill, optional}
+- **Credit**: {Credit, optional}
+- **Adapted For**: {Adapted For, optional}
+
 ## 2. Context Reviewed
 - **Files / Folders**: {Files Reviewed}
 - **Artifacts**: {Artifacts Reviewed}

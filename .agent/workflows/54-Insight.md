@@ -1,5 +1,5 @@
 ---
-description: Insight Extraction - Extract reusable lessons, file insights, patterns, gotchas, and recommendations from completed work.
+description: Insight Extraction - Extract reusable lessons, file insights, patterns, gotchas, recommendations, and 9arm-skills/post-mortem learning from completed work.
 ---
 
 # Phase 54: Insight Extraction
@@ -13,6 +13,14 @@ Use this workflow after implementation, QA, human approval, PR review, or a debu
 Adapted from:
 
 - `insight_extractor.md`
+
+Additional credited discipline when the source work is a bug, regression, or incident:
+
+- `.agent/skills/9arm-skills/post-mortem/SKILL.md`
+- Source pack: `9arm-skills`
+- Credit: `thananon/9arm-skills`
+- Upstream: https://github.com/thananon/9arm-skills
+- Adapted for: Antigravity IDE / Nexus-DevFlow
 
 ## Process
 
@@ -40,6 +48,17 @@ Capture only actionable knowledge:
 
 Avoid generic notes that do not help future work.
 
+For bug, regression, or incident work, apply the `post-mortem` lens only after fix and validation evidence exist:
+
+- what broke
+- impact
+- reliable repro or timeline
+- root cause
+- fix
+- validation evidence
+- why it slipped through
+- prevention or follow-up
+
 ### 3. Save Or Route Insights
 
 Use the smallest durable destination:
@@ -66,3 +85,5 @@ Return:
 - approach outcome
 - recommendations
 - where the insight was recorded or should be recorded
+
+If `post-mortem` was applied, include a short `Source Discipline` note crediting `9arm-skills/post-mortem`.

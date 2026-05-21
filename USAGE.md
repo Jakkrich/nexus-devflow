@@ -48,6 +48,20 @@ npm.cmd run validate 007
 | GitHub Review & Triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | review PR, แก้ PR comments, triage GitHub issues |
 | Knowledge & Specialist Tools | `/60-Graphify`, `/90-Agent`, `/99-Coach` | graph knowledge, เรียก specialist, ขอคำแนะนำแบบ read-only |
 
+## 9arm-Skills Discipline Layer
+
+Nexus-DevFlow adapts [`thananon/9arm-skills`](https://github.com/thananon/9arm-skills) for Antigravity IDE as a credited discipline layer. Users keep using the same workflow commands; the flow applies the relevant skill internally and preserves the usual report output.
+
+| Workflow | Applied skill | Output remains |
+| :--- | :--- | :--- |
+| `/20-Debug` | `9arm-skills/debug-mantra` | `.workspaces/debug/rca-{slug}.md` |
+| `/54-Insight` | `9arm-skills/post-mortem` | task logs, `.workspaces/lessons.md`, or insight summary |
+| `/55-PR-Review` | `9arm-skills/scrutinize` | task `pr_review.md` or PR review report |
+| `/90-Agent code-reviewer` | `9arm-skills/scrutinize` | `.workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md` when substantial |
+| `/51-PR`, `/53-Changelog`, `/99-Coach` | `9arm-skills/management-talk` | PR body, changelog entry, or read-only coach summary |
+
+Credit is preserved as `9arm-skills` / `thananon/9arm-skills` in relevant reports.
+
 ## Workflow Index
 
 | Workflow | Purpose | Example |
@@ -513,6 +527,8 @@ Output artifacts:
 
 ใช้หา root cause
 
+This workflow applies `9arm-skills/debug-mantra`: reproduce first, trace the actual fail path, falsify hypotheses, and cross-reference breadcrumbs before proposing a fix. The RCA report format remains the Nexus template under `.workspaces/debug/`.
+
 ### `/30-Task`
 
 ```text
@@ -651,6 +667,8 @@ deploy พร้อม preflight และ verification
 
 สกัด lesson, pattern, gotcha จากงานที่ทำ
 
+For bug, regression, or incident work, this workflow can apply `9arm-skills/post-mortem` after the fix has validation evidence.
+
 ### `/55-PR-Review`
 
 ```text
@@ -658,6 +676,8 @@ deploy พร้อม preflight และ verification
 ```
 
 ใช้ GitHub PR prompt addons เพื่อรีวิวโค้ด
+
+This workflow applies `9arm-skills/scrutinize` as an outsider review lens: intent check, smaller alternative, actual path trace, then findings first.
 
 ### `/56-PR-Followup`
 
@@ -714,6 +734,8 @@ deploy พร้อม preflight และ verification
 ```
 
 ถามทางแบบ read-only
+
+When asked for stakeholder-facing wording, Coach applies `9arm-skills/management-talk` while staying read-only.
 
 ## Common Decision Guide
 

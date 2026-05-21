@@ -41,6 +41,7 @@ Its most important rule is simple:
 | **Specialist agents** | Planners, coders, reviewers, test engineers, security auditors, DevOps, docs, and coaches. |
 | **Traceable workspaces** | Specs, PRDs, research, debug reports, QA reports, roadmap data, and lessons live under `.workspaces`. |
 | **Validation gates** | Framework validation, plan validation, task validation, and dedicated runner tests. |
+| **9arm-skills discipline** | Credited engineering discipline from `thananon/9arm-skills` adapted for Antigravity IDE debug, review, post-mortem, and stakeholder communication flows. |
 
 ---
 
@@ -274,6 +275,21 @@ Invoke a specialist manually:
 ```
 
 Most users call these workflows in chat. The specialist agent then reads the target, applies its persona, and uses the repository tooling as needed.
+
+## 9arm-Skills Discipline Pack
+
+Nexus-DevFlow includes a credited adaptation of [`thananon/9arm-skills`](https://github.com/thananon/9arm-skills) under `.agent/skills/9arm-skills/`.
+
+The pack is not a replacement for the existing workflows. It is a thinking discipline layer:
+
+| Normal workflow | 9arm-skills lens |
+| :--- | :--- |
+| `/20-Debug` | `debug-mantra`: reproduce, trace the fail path, falsify hypotheses, and preserve breadcrumbs before fixing. |
+| `/54-Insight` | `post-mortem`: turn validated bug fixes and incidents into reusable team knowledge. |
+| `/55-PR-Review`, `/90-Agent code-reviewer` | `scrutinize`: check intent, smaller alternatives, and actual runtime paths before approving changes. |
+| `/51-PR`, `/53-Changelog`, `/99-Coach` | `management-talk`: translate engineering detail into stakeholder-readable status, impact, owner, and next step. |
+
+Reports keep the normal Nexus output contracts and include credit when the 9arm lens is applied.
 
 ---
 

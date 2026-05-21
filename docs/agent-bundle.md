@@ -24,6 +24,7 @@ npm run agent -- plan:validate 001
 - `scripts/` contains root automation wrappers and validation scripts.
 - Root docs explain how humans should use and maintain the framework.
 - `agent-bundle.manifest.json` defines the required bundle paths and forbidden legacy bundle paths.
+- `.agent/skills/9arm-skills/` contains the credited `thananon/9arm-skills` adaptation for Antigravity IDE. It is used as a discipline layer for existing workflows, not as a replacement bundle.
 
 ## Why a Single Bundle
 

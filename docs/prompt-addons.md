@@ -19,6 +19,7 @@ These prompts are not copied verbatim. They are adapted into PRPs workflows, age
 | Follow-up | `followup_planner` | `/35-Followup`, `/34-Human`, `/31-Plan`, `/32-Code` | Extend existing plans without replacing completed subtasks. New phases/subtasks are appended with `plan:*` commands. |
 | GitHub PR | `github/pr_*`, `github/QA_REVIEW_SYSTEM_PROMPT`, `github/spam_detector`, `github/duplicate_detector`, `github/issue_*` | `/51-PR`, `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage`, `code-reviewer`, `security-auditor` | Review PRs, classify findings, validate comments, fill templates, triage issues, and resolve follow-up comments. |
 | Validation Tools | `mcp_tools/api_validation`, `database_validation`, `electron_validation`, `puppeteer_browser` | `/33-Verify`, `/40-Test`, frontend/backend specialist agents | Convert tool-specific assumptions into available IDE/browser/API/database validation steps. |
+| 9arm-skills | `debug-mantra`, `post-mortem`, `scrutinize`, `management-talk` from `thananon/9arm-skills` | `/20-Debug`, `/54-Insight`, `/55-PR-Review`, `/90-Agent`, `/51-PR`, `/53-Changelog`, `/99-Coach` | Use as a credited engineering discipline layer adapted for Antigravity IDE. Keep Nexus report formats and artifact destinations unchanged. |
 
 ## Manual IDE Conversion Rules
 
@@ -32,6 +33,16 @@ Use these conversions whenever an external prompt assumes autonomous Claude beha
 | WebSearch without citation | Browse or research with source links and note limitations. |
 | Output a JSON object only | Use script-first JSON commands, then validate. |
 | Continue after QA/follow-up automatically | Route to `/32-Code`, `/31-Plan`, or `/34-Human` based on user choice. |
+
+## 9arm-Skills Adaptation Rules
+
+`9arm-skills` is integrated as a credited discipline pack under `.agent/skills/9arm-skills/`.
+
+- Keep the source credit: `9arm-skills`, `thananon/9arm-skills`, https://github.com/thananon/9arm-skills.
+- Replace Claude Code-specific wording with Antigravity IDE / Nexus-DevFlow wording.
+- Keep the existing Nexus workflow commands and output files.
+- Add `Source Discipline` notes to substantial reports when a 9arm lens is applied.
+- Do not let 9arm reports replace required Nexus templates such as RCA and PR review templates.
 
 ## Suggested Workflow Routing
 
