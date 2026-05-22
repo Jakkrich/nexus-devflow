@@ -69,7 +69,7 @@ External prompt libraries can be used as source material, not copied verbatim. P
 | `qa_reviewer.md` | `/33-Verify`, `code-reviewer`, `test-engineer` | Five-axis review, validation suite, QA report. |
 | `qa_fixer.md` | `/33-Verify` fail path, `/32-Code` retry | Convert QA findings into focused fix subtasks. |
 | `qa_orchestrator_agentic.md` | `/39-QA-Orchestrate`, `/33-Verify`, `/40-Test`, `/90-Agent` | Convert autonomous QA orchestration into explicit review, test, and fix steps. |
-| `validation_fixer.md` | JSON repair workflow, validation agent/skill | Read validation errors, apply minimal fix, validate again. |
+| `validation_fixer.md` | `/33-Verify` fail path, `/32-Code` retry, `json-artifact-handling`, `lint-and-validate` | Keep as a thin skill alias: read validation errors, repair artifacts with CLI first, apply code fixes only when needed, validate again. |
 | `roadmap_discovery.md` | `/17-Roadmap` | Improve project discovery and roadmap input quality. |
 | `roadmap_features.md` | `/17-Roadmap` | Improve prioritized roadmap generation. |
 | `competitor_analysis.md` | `/16-Competitor`, `/11-Research`, `/12-PRD`, `/17-Roadmap` | Research competitors, user pain points, market gaps, and differentiator opportunities. |
@@ -77,9 +77,9 @@ External prompt libraries can be used as source material, not copied verbatim. P
 | `insight_extractor.md` | `/54-Insight`, `/33-Verify`, `/34-Human`, `/53-Changelog`, lessons/memory docs | Extract reusable patterns, gotchas, file insights, and recommendations after implementation. |
 | `ideation_code_improvements.md` | `/10-Brainstorm`, `/11-Research` | Generate improvement candidates for users to select manually. |
 | `ideation_code_quality.md` | `/41-Simplify`, `/33-Verify` | Find quality debt and refactor opportunities. |
-| `ideation_documentation.md` | docs workflows, `docs-impact-agent` | Identify documentation gaps. |
-| `ideation_performance.md` | `performance-optimizer` | Identify performance bottlenecks. |
-| `ideation_security.md` | `security-auditor` | Identify security hardening work. |
+| `ideation_documentation.md` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, `/53-Changelog`, `documentation-and-adrs`, `docs-impact-agent` | Keep as skill-backed docs analysis; identify documentation gaps without adding a standalone workflow. |
+| `ideation_performance.md` | `/33-Verify`, `/39-QA-Orchestrate`, `/41-Simplify`, `performance-optimization`, `performance-optimizer` | Keep as skill-backed review; identify measured bottlenecks and route selected fixes through the normal task flow. |
+| `ideation_security.md` | `/33-Verify`, `/39-QA-Orchestrate`, `/20-Debug`, `security-and-hardening`, `security-auditor` | Keep as skill-backed review; identify hardening work or incident risk before creating follow-up tasks. |
 | `ideation_ui_ux.md` | `/13-UI-UX`, `frontend-specialist` | Identify UI/UX improvements. |
 | `github/pr_template_filler.md` | `/51-PR` | Fill PR body from task artifacts, diff, commit history, and template expectations. |
 | `github/pr_reviewer.md`, `github/QA_REVIEW_SYSTEM_PROMPT.md` | `/55-PR-Review`, `/39-QA-Orchestrate` | Findings-first PR review with severity, file references, and test gaps. |
@@ -88,7 +88,7 @@ External prompt libraries can be used as source material, not copied verbatim. P
 | `github/pr_fixer.md`, `github/pr_followup*.md` | `/56-PR-Followup`, `/35-Followup`, `/32-Code` | Convert PR comments into focused fixes or follow-up subtasks. |
 | `github/pr_orchestrator.md`, `github/pr_parallel_orchestrator.md` | `/55-PR-Review`, `/39-QA-Orchestrate` | Convert multi-agent PR orchestration into explicit review lanes and optional `/90-Agent` calls. |
 | `github/issue_analyzer.md`, `github/issue_triager.md`, `github/duplicate_detector.md`, `github/spam_detector.md`, `github/pr_ai_triage.md` | `/57-Issue-Triage`, `/11-Research`, `/30-Task` | Issue analysis, duplicate detection, spam screening, and triage recommendations. |
-| `mcp_tools/*` | `/33-Verify`, `/40-Test`, validation docs/skills | Convert API, database, browser, and Electron validation assumptions into available IDE tooling. |
+| `mcp_tools/*` | `/33-Verify`, `/40-Test`, `browser-testing-with-devtools`, `lint-and-validate`, domain validation skills | Keep as tool-specific skill guidance; convert API, database, browser, and Electron validation assumptions into available IDE tooling. |
 
 ## What To Convert From Claude Automation
 
@@ -170,7 +170,7 @@ Review and QA agents:
 - Own defect detection, validation, and report generation.
 - Use repair commands before asking for full regeneration.
 
-Coach/support agents:
+Help/support agents:
 
 - Recommend the next workflow command.
 - Explain artifact state.

@@ -39,7 +39,7 @@ Nexus-DevFlow stores generated project memory and machine-readable workflow arti
 | :--- | :--- | :--- |
 | `.workspaces/active-agent.json` | Records the active `.agent` bundle and npm command surface | `/00-Init`, `npm run activate` |
 | `.workspaces/project_index.json` | Project-wide structure, services, conventions, and commands | `/00-Init`, `/11-Research`, `/31-Plan`, `npm run index` |
-| `.workspaces/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `/20-Debug`, `/34-Human`, `/53-Changelog`, `/54-Insight`, `/99-Coach` |
+| `.workspaces/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `/20-Debug`, `/34-Human`, `/53-Changelog`, `/54-Insight`, `/99-Help` |
 
 ## Task Workspace Files
 

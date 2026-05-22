@@ -75,4 +75,4 @@ Remove or compress unless needed:
 
 ## Nexus-DevFlow Output
 
-Use this skill inside `/51-PR`, `/53-Changelog`, and `/99-Coach` when the user needs a human-readable summary. Keep existing Nexus output formats and destinations intact.
+Use this skill inside `/51-PR`, `/53-Changelog`, and `/99-Help` when the user needs a human-readable summary. Keep existing Nexus output formats and destinations intact.

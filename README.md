@@ -41,6 +41,7 @@ Its most important rule is simple:
 | **Specialist agents** | Planners, coders, reviewers, test engineers, security auditors, DevOps, docs, and coaches. |
 | **Traceable workspaces** | Specs, PRDs, research, debug reports, QA reports, roadmap data, and lessons live under `.workspaces`. |
 | **Validation gates** | Framework validation, plan validation, task validation, and dedicated runner tests. |
+| **Thin addon aliases** | Borderline prompt commands stay mapped to existing DevFlow phases and skills instead of becoming premature slash workflows. |
 | **9arm-skills discipline** | Credited engineering discipline from `thananon/9arm-skills` adapted for Antigravity IDE debug, review, post-mortem, and stakeholder communication flows. |
 
 ---
@@ -287,7 +288,7 @@ The pack is not a replacement for the existing workflows. It is a thinking disci
 | `/20-Debug` | `debug-mantra`: reproduce, trace the fail path, falsify hypotheses, and preserve breadcrumbs before fixing. |
 | `/54-Insight` | `post-mortem`: turn validated bug fixes and incidents into reusable team knowledge. |
 | `/55-PR-Review`, `/90-Agent code-reviewer` | `scrutinize`: check intent, smaller alternatives, and actual runtime paths before approving changes. |
-| `/51-PR`, `/53-Changelog`, `/99-Coach` | `management-talk`: translate engineering detail into stakeholder-readable status, impact, owner, and next step. |
+| `/51-PR`, `/53-Changelog`, `/99-Help` | `management-talk`: translate engineering detail into stakeholder-readable status, impact, owner, and next step. |
 
 Reports keep the normal Nexus output contracts and include credit when the 9arm lens is applied.
 
@@ -339,7 +340,7 @@ For maintainers who are changing the framework itself, the exact validation comm
 | [Agent Bundle](./docs/agent-bundle.md) | `.agent` bundle structure and activation model. |
 | [JSON Artifact Contract](./docs/json-artifact-contract.md) | Required PRP JSON files and schema expectations. |
 | [Script-First JSON Workflow](./docs/script-first-json-workflow.md) | Safe CLI commands for JSON mutation. |
-| [Prompt Addons](./docs/prompt-addons.md) | Research, competitor, roadmap, QA, insight, and follow-up workflows. |
+| [Prompt Addons](./docs/prompt-addons.md) | Research, competitor, roadmap, QA, insight, follow-up workflows, borderline command decisions, and thin skill aliases. |
 | [Roadmap](./ROADMAP.md) | Current roadmap summary. |
 | [Agents](./AGENTS.md) | Persona list and specialist responsibilities. |
 

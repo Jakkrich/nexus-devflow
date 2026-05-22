@@ -79,8 +79,8 @@ description: ภาพรวมของ Specialist Agents ทั้งหมด
 
 ---
 
-## 🎓 6. กลุ่มช่วยเหลือและที่ปรึกษา (Support & Coaching)
-*ใช้สำหรับขั้นตอน: `/99-Coach`*
+## 🎓 6. กลุ่มช่วยเหลือและที่ปรึกษา (Support & Help)
+*ใช้สำหรับขั้นตอน: `/99-Help`*
 
 | ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
 |:---|:---|:---|

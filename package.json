@@ -12,7 +12,7 @@
     "dashboard": "node ./.agent/scripts/serve-dashboard.mjs",
     "goal": "node ./.agent/scripts/goal-runner.mjs",
     "graphify": "node ./scripts/graphify.mjs",
-    "graphify:install": "node ./scripts/graphify.mjs antigravity install",
+    "graphify:install": "node ./scripts/graphify.mjs install --platform codex",
     "graphify:update": "node ./scripts/graphify.mjs update .",
     "graphify:hook:install": "node ./scripts/install-git-hook.mjs",
     "index": "node ./scripts/generate-project-index.mjs",
@@ -23,7 +23,11 @@
     "validate": "node ./scripts/validate-framework.mjs",
     "validate:all": "node ./scripts/validate-all.mjs",
     "validate:dashboard": "node ./scripts/validate-dashboard-contract.mjs",
-    "validate:docs": "node ./scripts/scan-doc-contract.mjs"
+    "validate:docs": "node ./scripts/scan-doc-contract.mjs",
+    "codex:install-global": "node ./scripts/install-codex-global.mjs",
+    "codex:check-global": "node ./scripts/update-codex-global.mjs --check",
+    "codex:update-global": "node ./scripts/update-codex-global.mjs",
+    "codex:update-global:pull": "node ./scripts/update-codex-global.mjs --pull"
   },
   "bin": {
     "prps": "./scripts/activate-agent.mjs"
