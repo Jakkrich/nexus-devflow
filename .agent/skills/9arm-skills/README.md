@@ -11,7 +11,7 @@ adapted_for: Antigravity IDE / Nexus-DevFlow
 
 This pack adapts the engineering discipline ideas from `9arm-skills` into the Nexus-DevFlow `.agent` bundle.
 
-`9arm-skills` is used as a credited thinking layer, not as a replacement for Nexus-DevFlow. Users should keep invoking the normal workflows (`/20-Debug`, `/55-PR-Review`, `/54-Insight`, `/90-Agent`, `/99-Coach`). The workflow applies the relevant 9arm discipline internally and still writes the usual Nexus reports and artifacts.
+`9arm-skills` is used as a credited thinking layer, not as a replacement for Nexus-DevFlow. Users should keep invoking the normal workflows (`/20-Debug`, `/55-PR-Review`, `/54-Insight`, `/90-Agent`, `/99-Help`). The workflow applies the relevant 9arm discipline internally and still writes the usual Nexus reports and artifacts.
 
 ## Credit
 
@@ -28,7 +28,7 @@ This pack adapts the engineering discipline ideas from `9arm-skills` into the Ne
 | `/54-Insight` | `post-mortem` | Turn validated bug fixes and incidents into durable team knowledge. |
 | `/55-PR-Review` | `scrutinize` | Review intent, smaller alternatives, actual paths, and findings before approving changes. |
 | `/90-Agent code-reviewer` | `scrutinize` | Apply outsider review discipline to specialist code reviews. |
-| `/51-PR`, `/53-Changelog`, `/99-Coach` | `management-talk` | Translate engineering details into stakeholder-readable status, impact, owner, and next step. |
+| `/51-PR`, `/53-Changelog`, `/99-Help` | `management-talk` | Translate engineering details into stakeholder-readable status, impact, owner, and next step. |
 
 ## Output Rule
 

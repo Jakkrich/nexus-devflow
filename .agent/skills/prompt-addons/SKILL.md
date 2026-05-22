@@ -1,3 +1,8 @@
+---
+name: prompt-addons
+description: Routes external prompt families into Nexus-DevFlow workflows, specialist agents, or thin skill aliases. Use when deciding whether a prompt-inspired command belongs in an existing DevFlow phase, should remain an agent skill, or should not become a slash workflow.
+---
+
 # Prompt Addons
 
 Use this skill when a workflow needs adapted prompt-family behavior outside the core task lifecycle: ideation, competitor research, insight extraction, follow-up planning, roadmap work, GitHub PR review, issue triage, or specialized validation.
@@ -28,6 +33,26 @@ PRPs remains a manual IDE workflow:
 | Follow-up | Add functionality to completed specs | `/35-Followup`, `/34-Human`, `/31-Plan`, `/32-Code` |
 | GitHub | PR review, PR fixing, issue triage, comment follow-up | `/51-PR`, `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` |
 | MCP tools | API, database, browser, Electron validation | `/33-Verify`, `/40-Test` |
+
+## Borderline Command Rule
+
+Do not promote every source prompt into a top-level slash workflow. Classify it first:
+
+1. If the user intent changes the lifecycle phase, route to the existing workflow.
+2. If the prompt is a repeatable method used inside many phases, keep it as a skill.
+3. If the prompt only renames an existing capability, keep a thin alias in documentation and route to the existing workflow plus skill.
+4. If the prompt depends on unsupported tool/runtime assumptions, convert it into validation guidance inside `/33-Verify`, `/40-Test`, or the nearest available skill.
+
+## Borderline Routing
+
+| Source prompt or command idea | DevFlow step | Keep as | Rule |
+| :--- | :--- | :--- | :--- |
+| `validation_fixer` | `/33-Verify` fail path, then `/32-Code` retry if code must change | Thin skill alias to `json-artifact-handling` and `lint-and-validate` | Repair artifacts with PRP CLI first; fix code only after validation identifies a real implementation failure. |
+| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, or `/53-Changelog` depending on timing | Skill-backed agent action using `documentation-and-adrs` and `docs-impact-agent` | Do not create a standalone `/Documentation-Ideation` workflow. |
+| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, or `/41-Simplify` | Skill-backed review using `performance-optimization` and `performance-optimizer` | Require measurement before recommending optimization work. |
+| `ideation_security` | `/33-Verify`, `/39-QA-Orchestrate`, `/20-Debug` for incident symptoms | Skill-backed review using `security-and-hardening` and `security-auditor` | Treat findings as review output or task input, not automatic implementation. |
+| `mcp_tools/*` validation prompts | `/33-Verify` and `/40-Test` | Tool-specific validation skill guidance | Convert unavailable tools to the current IDE/browser/API/database verification options. |
+| Autonomous orchestration aliases | `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, or `/90-Agent` | Thin alias only | Preserve user-controlled DevFlow phase gates. |
 
 ## Follow-Up Planning
 

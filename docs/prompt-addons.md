@@ -19,7 +19,7 @@ These prompts are not copied verbatim. They are adapted into PRPs workflows, age
 | Follow-up | `followup_planner` | `/35-Followup`, `/34-Human`, `/31-Plan`, `/32-Code` | Extend existing plans without replacing completed subtasks. New phases/subtasks are appended with `plan:*` commands. |
 | GitHub PR | `github/pr_*`, `github/QA_REVIEW_SYSTEM_PROMPT`, `github/spam_detector`, `github/duplicate_detector`, `github/issue_*` | `/51-PR`, `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage`, `code-reviewer`, `security-auditor` | Review PRs, classify findings, validate comments, fill templates, triage issues, and resolve follow-up comments. |
 | Validation Tools | `mcp_tools/api_validation`, `database_validation`, `electron_validation`, `puppeteer_browser` | `/33-Verify`, `/40-Test`, frontend/backend specialist agents | Convert tool-specific assumptions into available IDE/browser/API/database validation steps. |
-| 9arm-skills | `debug-mantra`, `post-mortem`, `scrutinize`, `management-talk` from `thananon/9arm-skills` | `/20-Debug`, `/54-Insight`, `/55-PR-Review`, `/90-Agent`, `/51-PR`, `/53-Changelog`, `/99-Coach` | Use as a credited engineering discipline layer adapted for Antigravity IDE. Keep Nexus report formats and artifact destinations unchanged. |
+| 9arm-skills | `debug-mantra`, `post-mortem`, `scrutinize`, `management-talk` from `thananon/9arm-skills` | `/20-Debug`, `/54-Insight`, `/55-PR-Review`, `/90-Agent`, `/51-PR`, `/53-Changelog`, `/99-Help` | Use as a credited engineering discipline layer adapted for Antigravity IDE. Keep Nexus report formats and artifact destinations unchanged. |
 
 ## Manual IDE Conversion Rules
 
@@ -33,6 +33,24 @@ Use these conversions whenever an external prompt assumes autonomous Claude beha
 | WebSearch without citation | Browse or research with source links and note limitations. |
 | Output a JSON object only | Use script-first JSON commands, then validate. |
 | Continue after QA/follow-up automatically | Route to `/32-Code`, `/31-Plan`, or `/34-Human` based on user choice. |
+
+## Borderline Commands
+
+Some source prompts look like commands but should not become standalone DevFlow workflows yet. Use this rule:
+
+- If it changes the user's lifecycle phase, route to the existing numbered workflow.
+- If it is a method that can run inside several phases, keep it as a skill.
+- If it is only a friendlier name for existing behavior, document it as a thin alias to the existing workflow plus skill.
+- If it depends on unavailable Claude/MCP/runtime behavior, convert it into validation guidance for the current IDE tools.
+
+| Borderline source | DevFlow location | Decision | Notes |
+| :--- | :--- | :--- | :--- |
+| `validation_fixer` | `/33-Verify` fail path, `/32-Code` retry when implementation must change | Thin skill alias | Use `json-artifact-handling` for PRP CLI repair and `lint-and-validate` for project checks. |
+| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, `/53-Changelog` | Skill-backed agent action | Use `documentation-and-adrs` and `docs-impact-agent`; no standalone docs-ideation workflow. |
+| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, `/41-Simplify` | Skill-backed review | Use `performance-optimization` and `performance-optimizer`; require measurement before optimization. |
+| `ideation_security` | `/33-Verify`, `/39-QA-Orchestrate`, `/20-Debug` for incidents | Skill-backed review | Use `security-and-hardening` and `security-auditor`; findings become review output or task input. |
+| `mcp_tools/*` validation prompts | `/33-Verify`, `/40-Test` | Tool-specific skill guidance | Map to available browser/API/database validation tools; document limitations when a tool is unavailable. |
+| Autonomous orchestration aliases | `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, `/90-Agent` | Thin alias only | Preserve user-controlled phase gates instead of auto-running subagents. |
 
 ## 9arm-Skills Adaptation Rules
 

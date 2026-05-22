@@ -46,7 +46,20 @@ npm.cmd run agent -- validate 007
 | Quality & Optimization | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | QA ซับซ้อน, test, refactor, preview |
 | Ship & Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight`, `/58-Merge` | commit, PR, deploy, changelog, เก็บบทเรียนหลังงานเสร็จ, ผสานสาขา |
 | GitHub Review & Triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | review PR, แก้ PR comments, triage GitHub issues |
-| Knowledge & Specialist Tools | `/60-Graphify`, `/90-Agent`, `/99-Coach` | graph knowledge, เรียก specialist, ขอคำแนะนำแบบ read-only |
+| Knowledge & Specialist Tools | `/60-Graphify`, `/90-Agent`, `/99-Help` | graph knowledge, เรียก specialist, ขอคำแนะนำแบบ read-only |
+
+## Borderline Addons And Thin Aliases
+
+คำสั่งที่มาจาก prompt family บางตัวดูเหมือนควรเป็น slash command แต่ใน Nexus-DevFlow ยังควรเป็น skill หรือ alias บาง ๆ ก่อน เพื่อไม่ให้ workflow แตกย่อยเกินจำเป็น:
+
+| Intent / Source | ให้เริ่มที่ | เป็นอะไรในระบบ |
+| :--- | :--- | :--- |
+| `validation_fixer` | `/33-Verify` แล้วกลับ `/32-Code` ถ้าต้องแก้ implementation | thin alias ไปที่ `json-artifact-handling` + `lint-and-validate` |
+| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, หรือ `/53-Changelog` | skill-backed analysis ด้วย `documentation-and-adrs` + `docs-impact-agent` |
+| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, หรือ `/41-Simplify` | skill-backed review ด้วย `performance-optimization` + `performance-optimizer` |
+| `ideation_security` | `/33-Verify`, `/39-QA-Orchestrate`, หรือ `/20-Debug` เมื่อเป็น incident | skill-backed review ด้วย `security-and-hardening` + `security-auditor` |
+| `mcp_tools/*` validation | `/33-Verify` หรือ `/40-Test` | tool-specific validation guidance ตามเครื่องมือที่ IDE มีจริง |
+| autonomous orchestration aliases | `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, หรือ `/90-Agent` | alias บาง ๆ ไม่ auto-run ข้าม phase gate |
 
 ## 9arm-Skills Discipline Layer
 
@@ -58,7 +71,7 @@ Nexus-DevFlow adapts [`thananon/9arm-skills`](https://github.com/thananon/9arm-s
 | `/54-Insight` | `9arm-skills/post-mortem` | task logs, `.workspaces/lessons.md`, or insight summary |
 | `/55-PR-Review` | `9arm-skills/scrutinize` | task `pr_review.md` or PR review report |
 | `/90-Agent code-reviewer` | `9arm-skills/scrutinize` | `.workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md` when substantial |
-| `/51-PR`, `/53-Changelog`, `/99-Coach` | `9arm-skills/management-talk` | PR body, changelog entry, or read-only coach summary |
+| `/51-PR`, `/53-Changelog`, `/99-Help` | `9arm-skills/management-talk` | PR body, changelog entry, or read-only help summary |
 
 Credit is preserved as `9arm-skills` / `thananon/9arm-skills` in relevant reports.
 
@@ -101,7 +114,7 @@ Credit is preserved as `9arm-skills` / `thananon/9arm-skills` in relevant report
 | `/58-Merge` | ผสาน feature branch และทำความสะอาด | `/58-Merge` |
 | `/60-Graphify` | สร้าง knowledge graph จาก folder | `/60-Graphify .agent/workflows` |
 | `/90-Agent` | เรียก specialist agent | `/90-Agent code-reviewer .workspaces/specs/007` |
-| `/99-Coach` | ถามทาง, ขอคำแนะนำ, read-only guide | `/99-Coach "ควรไป workflow ไหนต่อ"` |
+| `/99-Help` | ถามทาง, ขอคำแนะนำ, read-only guide | `/99-Help "ควรไป workflow ไหนต่อ"` |
 
 ## Basic SOP Paths
 
@@ -358,7 +371,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 ```text
 /54-Insight 014
 /53-Changelog
-/99-Coach "สรุปบทเรียนจาก task 014 และแนะนำ workflow ถัดไป"
+/99-Help "สรุปบทเรียนจาก task 014 และแนะนำ workflow ถัดไป"
 ```
 
 ### 17. New App Flow
@@ -727,15 +740,15 @@ This workflow applies `9arm-skills/scrutinize` as an outsider review lens: inten
 
 เรียก specialist agent แบบ manual
 
-### `/99-Coach`
+### `/99-Help`
 
 ```text
-/99-Coach "งานนี้ควรเริ่มด้วย workflow ไหน"
+/99-Help "งานนี้ควรเริ่มด้วย workflow ไหน"
 ```
 
 ถามทางแบบ read-only
 
-When asked for stakeholder-facing wording, Coach applies `9arm-skills/management-talk` while staying read-only.
+When asked for stakeholder-facing wording, Help applies `9arm-skills/management-talk` while staying read-only.
 
 ## Common Decision Guide
 
@@ -758,7 +771,7 @@ When asked for stakeholder-facing wording, Coach applies `9arm-skills/management
 | ต้องแก้ PR comments | `/56-PR-Followup` |
 | ต้อง triage GitHub issue | `/57-Issue-Triage` |
 | ต้องผสานสาขา (Merge Branch) | `/58-Merge` |
-| ไม่แน่ใจ | `/99-Coach` |
+| ไม่แน่ใจ | `/99-Help` |
 
 ## Workspace Folder Map
 
@@ -771,7 +784,7 @@ When asked for stakeholder-facing wording, Coach applies `9arm-skills/management
 | `.workspaces/issues/` | issue triage, duplicate/spam decisions | `/57-Issue-Triage` |
 | `.workspaces/debug/` | RCA/debug reports | `/20-Debug` |
 | `.workspaces/reports/` | specialist, QA, design, test, refactor reports | `/13-UI-UX`, `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/52-Deploy`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` |
-| `.workspaces/lessons.md` | lessons, gotchas, reusable patterns | `/20-Debug`, `/34-Human`, `/54-Insight`, `/99-Coach` |
+| `.workspaces/lessons.md` | lessons, gotchas, reusable patterns | `/20-Debug`, `/34-Human`, `/54-Insight`, `/99-Help` |
 
 ถ้า folder ว่างแต่เป็นรายการในตารางนี้ ให้เก็บไว้ เพราะเป็น staging area ของ workflow นั้น ๆ
 
@@ -820,7 +833,7 @@ Goal session files:
 
 0. ใช้ `/05-Goal` เมื่อมีเป้าหมายกว้าง ๆ และอยากให้ระบบ route ไป flow ที่เหมาะสมพร้อมบันทึก session log
 
-1. ใช้ `/99-Coach` ถ้าไม่แน่ใจว่าจะไปทางไหน
+1. ใช้ `/99-Help` ถ้าไม่แน่ใจว่าจะไปทางไหน
 2. อย่าข้าม `/31-Plan` ถ้างานมีมากกว่า 1-2 จุด
 3. ใช้ `/15-Spec-Research` ก่อนแตะ integration ที่ไม่แน่ใจ
 4. ใช้ `/35-Followup` แทนการแก้ plan เดิมทับ เมื่อเป็นงานต่อยอด

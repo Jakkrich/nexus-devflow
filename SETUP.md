@@ -1,88 +1,31 @@
 # Nexus-DevFlow Setup Guide
 
-This setup uses npm and the `.agent` bundle. The legacy Python switcher is no longer used.
+This setup uses npm, the `.agent` bundle, and a Codex global skill. The legacy Python switcher is no longer used.
 
 ## 1. Clone the Framework
 
-Place the framework in a shared tools folder or directly inside the repository that will use it.
+Place the framework in a shared tools folder. For this machine the canonical path is:
 
 ```powershell
-git clone https://github.com/Jakkrich/nexus-devflow
-cd nexus-devflow
+D:\Projects\nexus-devflow
 ```
 
-## 2. Install With AI Prompt
+## 2. Install Globally for Codex
 
-Recommended for AI-enabled IDEs such as Antigravity: clone Nexus-DevFlow once into a tools folder, then ask the AI to install or link it into the project you are currently working on.
+Run this once from the Nexus-DevFlow directory:
 
-Example folder layout:
-
-```text
-D:\Tools\nexus-devflow        # cloned framework
-D:\Projects\AwesomeApp        # target project
+```powershell
+cd D:\Projects\nexus-devflow
+npm run codex:install-global
 ```
 
-Open the target project in your AI IDE, then paste a prompt like this:
+The installer creates:
 
-```text
-I have cloned Nexus-DevFlow at:
-D:\Tools\nexus-devflow
+- `%USERPROFILE%\.codex\skills\nexus-devflow\SKILL.md`
+- `%USERPROFILE%\.codex\nexus-devflow.json`
+- a managed Nexus-DevFlow section in `%USERPROFILE%\.codex\AGENTS.md`
 
-Please install Nexus-DevFlow into this project.
-
-Follow these rules:
-- Inspect this project's package.json first.
-- Link or copy only the framework engine files needed for DevFlow:
-  - .agent/
-  - scripts/
-- Do not link or copy .workspaces/ from the framework repo.
-- Keep this project's own package.json dependencies intact.
-- Merge only the useful Nexus-DevFlow npm scripts into this project's package.json.
-- Create project-local .workspaces folders by running the framework activation step.
-- Validate the setup when finished.
-- Report exactly what changed and which validation checks passed.
-
-If symlinks or junctions require permission, ask me before doing that step.
-```
-
-For a safer copy-based install instead of links, use:
-
-```text
-I have cloned Nexus-DevFlow at:
-D:\Tools\nexus-devflow
-
-Please copy Nexus-DevFlow into this project without symlinks.
-
-Copy:
-- .agent/
-- scripts/
-
-Then merge the Nexus-DevFlow npm scripts into this project's package.json without removing existing scripts.
-Do not copy .workspaces/.
-After copying, activate and validate the framework.
-Show me the changed files and any validation result.
-```
-
-For a link-based install across many projects, use:
-
-```text
-I have cloned Nexus-DevFlow at:
-D:\Tools\nexus-devflow
-
-Please link Nexus-DevFlow into this project using the framework's link-project workflow.
-
-Target project:
-<current project root>
-
-Rules:
-- Link .agent/ and scripts/ only.
-- Never link .workspaces/.
-- Merge npm scripts carefully into package.json.
-- Activate and validate after linking.
-- Tell me if Windows administrator permission or developer mode is needed for symlinks.
-```
-
-After installation, normal usage should be through DevFlow prompts, for example:
+After that, Codex can use Nexus-DevFlow from any project when you ask for DevFlow or numbered workflows such as:
 
 ```text
 /05-Goal "add password reset with email token and regression tests"
@@ -92,9 +35,26 @@ After installation, normal usage should be through DevFlow prompts, for example:
 /33-Verify 001
 ```
 
-The AI should run the behind-the-scenes commands, update JSON artifacts through the PRP CLI, and summarize validation results.
+The global install keeps the framework engine in `D:\Projects\nexus-devflow`. Project-specific artifacts should stay in each target project's own `.workspaces` directory.
 
-## 3. Manual Installation (Alternative)
+## 3. Check and Update Codex Global Install
+
+When you want Codex to verify or refresh the global Nexus-DevFlow install, ask Codex to run one of these from the framework root:
+
+```powershell
+cd D:\Projects\nexus-devflow
+npm run codex:check-global
+npm run codex:update-global
+npm run codex:update-global:pull
+```
+
+- `codex:check-global` verifies the global skill, manifest, installer syntax, and framework validation.
+- `codex:update-global` reinstalls the Codex global skill from the local checkout and validates the framework.
+- `codex:update-global:pull` first runs `git pull --ff-only`, then reinstalls and validates. It refuses to pull if the working tree is dirty.
+
+## 3. Optional Project-Local Install
+
+### Manual Installation (Alternative)
 
 If you don't want to clone the entire repository, you can manually copy the essential framework files into your own project:
 

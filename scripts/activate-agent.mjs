@@ -40,7 +40,7 @@ function main() {
   const now = new Date().toISOString();
   writeJson('.workspaces/active-agent.json', {
     active_bundle: '.agent',
-    primary_ide: 'Antigravity',
+    primary_ide: 'Codex',
     package_manager: 'npm',
     activated_at: now,
     scripts: {
@@ -59,7 +59,7 @@ function main() {
     return;
   }
 
-  console.log('Nexus-DevFlow activated for .agent.');
+  console.log('Nexus-DevFlow activated for Codex .agent workflow bundle.');
   console.log('Next: npm run validate');
 }
 

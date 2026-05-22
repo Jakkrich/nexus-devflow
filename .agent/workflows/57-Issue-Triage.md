@@ -63,7 +63,7 @@ Use:
 - `/15-Spec-Research` for external dependency uncertainty
 - `/12-PRD` for product-level feature requests
 - `/30-Task` for actionable implementation work
-- `/99-Coach` when the issue is not actionable yet
+- `/99-Help` when the issue is not actionable yet
 
 ## Output Triage Recommendation
 

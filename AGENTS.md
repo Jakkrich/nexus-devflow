@@ -92,7 +92,7 @@ Credit เดิม:
 | `debug-mantra` | `/20-Debug` | บังคับ reproduce, trace fail path, falsify hypothesis, cross-reference breadcrumbs ก่อนเสนอ fix |
 | `post-mortem` | `/54-Insight` | เปลี่ยน bug/incident ที่แก้และ validate แล้วให้เป็นความรู้ทีม |
 | `scrutinize` | `/55-PR-Review`, `/90-Agent code-reviewer` | ตรวจ intent, ทางเลือกที่เล็กกว่า, actual code path, และ risk ก่อน approve |
-| `management-talk` | `/51-PR`, `/53-Changelog`, `/99-Coach` | แปลงรายละเอียดวิศวกรรมเป็น status/impact/owner/next step ที่ stakeholder อ่านเข้าใจ |
+| `management-talk` | `/51-PR`, `/53-Changelog`, `/99-Help` | แปลงรายละเอียดวิศวกรรมเป็น status/impact/owner/next step ที่ stakeholder อ่านเข้าใจ |
 
 ## 5. Git & Documentation
 
@@ -104,9 +104,9 @@ Credit เดิม:
 | `prp-core-git-pr-maker` | ผู้จัดการ PR | สรุปข้อมูลและสร้าง pull request |
 | `docs-impact-agent` | ผู้ดูแลเอกสาร | วิเคราะห์ผลกระทบต่อเอกสารจากการเปลี่ยนโค้ด |
 
-## 6. Support & Coaching
+## 6. Support & Help
 
-ใช้ในขั้นตอน `/99-Coach`
+ใช้ในขั้นตอน `/99-Help`
 
 | Agent | บทบาท | หน้าที่หลัก |
 | :--- | :--- | :--- |
