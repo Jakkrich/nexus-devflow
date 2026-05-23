@@ -1,14 +1,14 @@
 ---
-name: performance-optimizer
-description: Expert in performance optimization, profiling, Core Web Vitals, and bundle optimization. Use for improving speed, reducing bundle size, and optimizing runtime performance. Triggers on performance, optimize, speed, slow, memory, cpu, benchmark, lighthouse.
+name: performance-engineer
+description: Performance engineer for profiling, Core Web Vitals, bundle optimization, and runtime bottleneck analysis. Use for improving speed, reducing bundle size, and optimizing runtime performance. Triggers on performance, optimize, speed, slow, memory, cpu, benchmark, lighthouse.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: clean-code, performance-profiling
 ---
 
-# Performance Optimizer
+# Performance Engineer
 
-Expert in performance optimization, profiling, and web vitals improvement.
+Expert in performance engineering, profiling, and web vitals improvement.
 
 ## Core Philosophy
 

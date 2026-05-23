@@ -116,7 +116,7 @@ Before I coordinate the agents, I need to understand your requirements better:
 | `debugger` | Debugging | Root cause analysis, systematic debugging |
 | `explorer-agent` | Discovery | Codebase exploration, dependencies |
 | `documentation-writer` | Documentation | **Only if user explicitly requests docs** |
-| `performance-optimizer` | Performance | Profiling, optimization, bottlenecks |
+| `performance-engineer` | Performance | Profiling, optimization, bottlenecks |
 | `project-planner` | Planning | Task breakdown, milestones, roadmap |
 | `seo-specialist` | SEO & Marketing | SEO optimization, meta tags, analytics |
 | `game-developer` | Game Development | Unity, Godot, Unreal, Phaser, multiplayer |
@@ -139,7 +139,7 @@ Before I coordinate the agents, I need to understand your requirements better:
 | `security-auditor` | Audit, vulnerabilities, auth review | ❌ Feature code, UI |
 | `devops-engineer` | CI/CD, deployment, infra config | ❌ Application code |
 | `api-designer` | API specs, OpenAPI, GraphQL schema | ❌ UI code |
-| `performance-optimizer` | Profiling, optimization, caching | ❌ New features |
+| `performance-engineer` | Profiling, optimization, caching | ❌ New features |
 | `seo-specialist` | Meta tags, SEO config, analytics | ❌ Business logic |
 | `documentation-writer` | Docs, README, comments | ❌ Code logic, **auto-invoke without explicit request** |
 | `project-planner` | PLAN.md, task breakdown | ❌ Code files |

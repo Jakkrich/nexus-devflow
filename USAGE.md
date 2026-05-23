@@ -55,8 +55,8 @@ npm.cmd run agent -- validate 007
 | Intent / Source | ให้เริ่มที่ | เป็นอะไรในระบบ |
 | :--- | :--- | :--- |
 | `validation_fixer` | `/33-Verify` แล้วกลับ `/32-Code` ถ้าต้องแก้ implementation | thin alias ไปที่ `json-artifact-handling` + `lint-and-validate` |
-| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, หรือ `/53-Changelog` | skill-backed analysis ด้วย `documentation-and-adrs` + `docs-impact-agent` |
-| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, หรือ `/41-Simplify` | skill-backed review ด้วย `performance-optimization` + `performance-optimizer` |
+| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, หรือ `/53-Changelog` | skill-backed analysis ด้วย `documentation-and-adrs` + `documentation-maintainer` |
+| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, หรือ `/41-Simplify` | skill-backed review ด้วย `performance-optimization` + `performance-engineer` |
 | `ideation_security` | `/33-Verify`, `/39-QA-Orchestrate`, หรือ `/20-Debug` เมื่อเป็น incident | skill-backed review ด้วย `security-and-hardening` + `security-auditor` |
 | `mcp_tools/*` validation | `/33-Verify` หรือ `/40-Test` | tool-specific validation guidance ตามเครื่องมือที่ IDE มีจริง |
 | autonomous orchestration aliases | `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, หรือ `/90-Agent` | alias บาง ๆ ไม่ auto-run ข้าม phase gate |

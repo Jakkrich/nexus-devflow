@@ -27,7 +27,7 @@ Use manual JSON editing only as a fallback, then run validation immediately.
 ตัวอย่าง:
 
 ```text
-/90-Agent discuss-spec .workspaces/specs/007/spec.md
+/90-Agent requirements-engineer .workspaces/specs/007/spec.md
 ```
 
 ## 1. Requirements & Planning
@@ -37,7 +37,7 @@ Use manual JSON editing only as a fallback, then run validation immediately.
 | Agent | บทบาท | หน้าที่หลัก |
 | :--- | :--- | :--- |
 | `prp-core-planner` | ผู้วางแผนหลัก | วิเคราะห์โค้ดและสร้าง implementation plan |
-| `discuss-spec` | วิศวกรข้อกำหนด | ตรวจและขัดเกลา `spec.md` ก่อนเริ่มงาน |
+| `requirements-engineer` | วิศวกรข้อกำหนด | ตรวจและขัดเกลา `spec.md` ก่อนเริ่มงาน |
 | `prp-core-prd-architect` | ผู้ออกแบบ PRD | ร่าง PRD จากไอเดียเริ่มต้น |
 | `orchestrator` | ผู้ประสานงานหลัก | ประสาน agent หลายตัวในงานซับซ้อน |
 
@@ -61,8 +61,6 @@ Use manual JSON editing only as a fallback, then run validation immediately.
 | `backend-specialist` | ผู้เชี่ยวชาญ Backend | ออกแบบ API, database และ server logic |
 | `frontend-specialist` | ผู้เชี่ยวชาญ Frontend | พัฒนา UI/UX และ frontend implementation |
 | `database-architect` | ผู้ออกแบบฐานข้อมูล | ออกแบบ schema, index และ query |
-| `code-simplifier` | ผู้เชี่ยวชาญ refactor | ปรับโค้ดให้อ่านง่ายและลดความซับซ้อน |
-| `type-design-analyzer` | สถาปนิก type | ตรวจ type/interface ให้สอดคล้องกัน |
 
 ## 4. Quality & Debugging
 
@@ -74,8 +72,7 @@ Use manual JSON editing only as a fallback, then run validation immediately.
 | `prp-core-debugger` | ผู้เชี่ยวชาญ RCA | วิเคราะห์ root cause ของบั๊ก |
 | `code-reviewer` | ผู้ตรวจโค้ดอาวุโส | ตรวจคุณภาพ ความเสี่ยง และมาตรฐานโปรเจค |
 | `security-auditor` | ผู้ตรวจความปลอดภัย | ตรวจช่องโหว่และ logic risk |
-| `performance-optimizer` | ผู้ปรับประสิทธิภาพ | วิเคราะห์ bottleneck ด้าน CPU, memory และ latency |
-| `silent-failure-hunter` | ผู้ตรวจ failure ที่เงียบ | หาจุดที่ error อาจเกิดแต่ไม่มี log หรือ alert |
+| `performance-engineer` | ผู้ปรับประสิทธิภาพ | วิเคราะห์ bottleneck ด้าน CPU, memory และ latency |
 
 ### 4.1 9arm-Skills Discipline Layer
 
@@ -94,6 +91,16 @@ Credit เดิม:
 | `scrutinize` | `/55-PR-Review`, `/90-Agent code-reviewer` | ตรวจ intent, ทางเลือกที่เล็กกว่า, actual code path, และ risk ก่อน approve |
 | `management-talk` | `/51-PR`, `/53-Changelog`, `/99-Help` | แปลงรายละเอียดวิศวกรรมเป็น status/impact/owner/next step ที่ stakeholder อ่านเข้าใจ |
 
+### 4.2 Reusable Engineering Skills
+
+ทักษะเหล่านี้ไม่ใช่ agent แยกแล้ว ให้เรียกผ่าน agent หรือ workflow ที่รับผิดชอบงานนั้นแทน
+
+| Skill | ใช้ผ่าน |
+| :--- | :--- |
+| `code-simplification` | `prp-core-coder`, `code-reviewer`, `/41-Simplify` |
+| `type-design` | `backend-specialist`, `frontend-specialist`, `database-architect`, `code-reviewer` |
+| `silent-failure-audit` | `code-reviewer`, `test-engineer`, `backend-specialist`, `security-auditor` |
+
 ## 5. Git & Documentation
 
 ใช้ในขั้นตอน `/50-Commit`, `/51-PR`
@@ -102,7 +109,7 @@ Credit เดิม:
 | :--- | :--- | :--- |
 | `prp-core-git-committer` | ผู้เชี่ยวชาญ Git | ช่วยเลือกไฟล์และเขียน commit message |
 | `prp-core-git-pr-maker` | ผู้จัดการ PR | สรุปข้อมูลและสร้าง pull request |
-| `docs-impact-agent` | ผู้ดูแลเอกสาร | วิเคราะห์ผลกระทบต่อเอกสารจากการเปลี่ยนโค้ด |
+| `documentation-maintainer` | ผู้ดูแลเอกสาร | วิเคราะห์ผลกระทบต่อเอกสารจากการเปลี่ยนโค้ด |
 
 ## 6. Support & Help
 

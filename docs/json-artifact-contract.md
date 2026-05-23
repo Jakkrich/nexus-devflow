@@ -56,10 +56,10 @@ External prompt libraries can be used as source material, not copied verbatim. P
 
 | Source prompt | PRPs destination | Adaptation |
 | :--- | :--- | :--- |
-| `spec_gatherer.md` | `/30-Task`, `discuss-spec` | Ask targeted questions, then use artifact commands to populate `requirements.json`. |
+| `spec_gatherer.md` | `/30-Task`, `requirements-engineer` | Ask targeted questions, then use artifact commands to populate `requirements.json`. |
 | `spec_quick.md` | `/30-Task` simple mode | Create small specs with minimal questions and script-created JSON. |
 | `spec_writer.md` | `/30-Task`, `/31-Plan` | Write `spec.md`; JSON artifacts are created or updated via CLI. |
-| `spec_critic.md` | `/31-Plan`, `/90-Agent discuss-spec` | Review spec completeness before planning. |
+| `spec_critic.md` | `/31-Plan`, `/90-Agent requirements-engineer` | Review spec completeness before planning. |
 | `spec_researcher.md` | `/15-Spec-Research`, `/11-Research`, `/12-PRD`, `/30-Task` | Validate integrations, libraries, APIs, and dependencies before planning. |
 | `spec_orchestrator_agentic.md` | `/18-Spec-Orchestrate`, `/12-PRD`, `/30-Task`, `/31-Plan` | Convert autonomous spec orchestration into user-approved PRPs phases. |
 | `complexity_assessor.md` | `/31-Plan` | Fill `complexity_assessment.json` and choose simple, standard, or complex planning path. |
@@ -77,8 +77,8 @@ External prompt libraries can be used as source material, not copied verbatim. P
 | `insight_extractor.md` | `/54-Insight`, `/33-Verify`, `/34-Human`, `/53-Changelog`, lessons/memory docs | Extract reusable patterns, gotchas, file insights, and recommendations after implementation. |
 | `ideation_code_improvements.md` | `/10-Brainstorm`, `/11-Research` | Generate improvement candidates for users to select manually. |
 | `ideation_code_quality.md` | `/41-Simplify`, `/33-Verify` | Find quality debt and refactor opportunities. |
-| `ideation_documentation.md` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, `/53-Changelog`, `documentation-and-adrs`, `docs-impact-agent` | Keep as skill-backed docs analysis; identify documentation gaps without adding a standalone workflow. |
-| `ideation_performance.md` | `/33-Verify`, `/39-QA-Orchestrate`, `/41-Simplify`, `performance-optimization`, `performance-optimizer` | Keep as skill-backed review; identify measured bottlenecks and route selected fixes through the normal task flow. |
+| `ideation_documentation.md` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, `/53-Changelog`, `documentation-and-adrs`, `documentation-maintainer` | Keep as skill-backed docs analysis; identify documentation gaps without adding a standalone workflow. |
+| `ideation_performance.md` | `/33-Verify`, `/39-QA-Orchestrate`, `/41-Simplify`, `performance-optimization`, `performance-engineer` | Keep as skill-backed review; identify measured bottlenecks and route selected fixes through the normal task flow. |
 | `ideation_security.md` | `/33-Verify`, `/39-QA-Orchestrate`, `/20-Debug`, `security-and-hardening`, `security-auditor` | Keep as skill-backed review; identify hardening work or incident risk before creating follow-up tasks. |
 | `ideation_ui_ux.md` | `/13-UI-UX`, `frontend-specialist` | Identify UI/UX improvements. |
 | `github/pr_template_filler.md` | `/51-PR` | Fill PR body from task artifacts, diff, commit history, and template expectations. |

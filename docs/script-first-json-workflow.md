@@ -91,7 +91,7 @@ Only rewrite a full JSON file manually when no script can express the change. Va
 Specialist agents follow the same contract:
 
 ```text
-/90-Agent discuss-spec .workspaces/specs/001/spec.md
+/90-Agent requirements-engineer .workspaces/specs/001/spec.md
 /90-Agent prp-core-planner .workspaces/specs/001/
 /90-Agent code-reviewer .workspaces/specs/001/
 ```

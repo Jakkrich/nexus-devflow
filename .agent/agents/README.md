@@ -11,7 +11,7 @@ description: ภาพรวมของ Specialist Agents ทั้งหมด
 ```text
 /90-Agent {ชื่อ_AGENT} {ไฟล์_หรือ_โฟลเดอร์_เป้าหมาย}
 ```
-*ตัวอย่าง: `/90-Agent discuss-spec .workspaces/specs/007/spec.md`*
+*ตัวอย่าง: `/90-Agent requirements-engineer .workspaces/specs/007/spec.md`*
 
 ---
 
@@ -21,7 +21,7 @@ description: ภาพรวมของ Specialist Agents ทั้งหมด
 | ชื่อ Agent | บทบาท (Role) | หน้าที่หลัก (Responsibilities) |
 |:---|:---|:---|
 | **`prp-core-planner`** 🌟 | **ผู้วางแผนหลัก** | วิเคราะห์โค้ดเชิงลึกและสร้างแผนการลงมือทำแบบทีละขั้นตอน (ใช้ใน `/31-Plan`) |
-| **`discuss-spec`** | วิศวกรข้อกำหนด | ตรวจสอบและขัดเกลา `spec.md` ให้ชัดเจน 360 องศาก่อนเริ่มงาน |
+| **`requirements-engineer`** | วิศวกรข้อกำหนด | ตรวจสอบและขัดเกลา `spec.md` ให้ชัดเจน 360 องศาก่อนเริ่มงาน |
 | **`prp-core-prd-architect`**| ผู้ออกแบบ PRD | ร่างเอกสารความต้องการผลิตภัณฑ์ (PRD) จากไอเดียเริ่มต้น (ใช้ใน `/12-PRD`) |
 | **`orchestrator`** | ผู้ประสานงานหลัก | ควบคุมและประสานงาน Agent หลายตัวเพื่อสร้างระบบที่มีความซับซ้อนสูง |
 
@@ -47,8 +47,6 @@ description: ภาพรวมของ Specialist Agents ทั้งหมด
 | **`backend-specialist`** | ผู้เชี่ยวชาญ Backend | ออกแบบ API, ฐานข้อมูล และตรรกะฝั่ง Server (Node.js, Python, PHP) |
 | **`frontend-specialist`** | ผู้เชี่ยวชาญ Frontend | พัฒนา UI/UX ด้วย React, Next.js และทำให้หน้าตาเว็บสวยงาม |
 | **`database-architect`** | ผู้ออกแบบฐานข้อมูล | ปรับแต่ง Query ที่ซับซ้อน, การทำ Index และออกแบบ Schema |
-| **`code-simplifier`** | ผู้เชี่ยวชาญ Refactor | ปรับปรุงโค้ดให้อ่านง่ายและสะอาดขึ้น (Clean Code) โดยไม่เปลี่ยนตรรกะเดิม |
-| **`type-design-analyzer`** | สถาปนิก Type | ตรวจสอบการออกแบบ Type และ Interface ให้สอดคล้องกันทั้งโปรเจกต์ |
 
 ---
 
@@ -60,11 +58,20 @@ description: ภาพรวมของ Specialist Agents ทั้งหมด
 | **`test-engineer`** 🌟 | **วิศวกรทดสอบ** | เขียนชุดทดสอบ Unit Test และ Integration Test ให้ครอบคลุมทุกกรณี |
 | **`prp-core-debugger`** | ผู้เชี่ยวชาญ RCA | ค้นหาต้นตอของบั๊กด้วยเทคนิค 5 Whys (Root Cause Analysis) |
 | **`code-reviewer`** | ผู้ตรวจสอบโค้ดอาวุโส | ตรวจสอบคุณภาพโค้ดตามมาตรฐานของโปรเจกต์และความปลอดภัย |
-| **`silent-failure-hunter`**| นักล่าบั๊กซ่อนเร้น | ค้นหาจุดเสี่ยงที่อาจเกิด Error แบบเงียบๆ หรือไม่ได้ถูกบันทึก Log ไว้ |
 | **`security-auditor`** | ผู้ตรวจสอบความปลอดภัย | ค้นหาช่องโหว่และข้อผิดพลาดทางตรรกะ (OWASP) |
 | **`penetration-tester`** | นักเจาะระบบสายขาว | จำลองการโจมตีเพื่อทดสอบความแข็งแกร่งของระบบ |
-| **`performance-optimizer`** | ผู้ปรับแต่งประสิทธิภาพ | วิเคราะห์และแก้ปัญหาคอขวด (Bottlenecks) เรื่อง Memory และ CPU |
+| **`performance-engineer`** | ผู้ปรับแต่งประสิทธิภาพ | วิเคราะห์และแก้ปัญหาคอขวด (Bottlenecks) เรื่อง Memory และ CPU |
 | **`seo-specialist`** | ที่ปรึกษา SEO | ตรวจสอบหน้าเว็บเพื่อให้คะแนน SEO และ Google Compliance ดีที่สุด |
+
+### Reusable Skills
+
+รายการต่อไปนี้เป็น skills ไม่ใช่ agents ให้เรียกผ่าน agent หรือ workflow ที่รับผิดชอบงานนั้น:
+
+| Skill | ใช้ผ่าน |
+|:---|:---|
+| **`code-simplification`** | `prp-core-coder`, `code-reviewer`, `/41-Simplify` |
+| **`type-design`** | `backend-specialist`, `frontend-specialist`, `database-architect`, `code-reviewer` |
+| **`silent-failure-audit`** | `code-reviewer`, `test-engineer`, `backend-specialist`, `security-auditor` |
 
 ---
 
@@ -75,7 +82,7 @@ description: ภาพรวมของ Specialist Agents ทั้งหมด
 |:---|:---|:---|
 | **`prp-core-git-committer`**🌟| **ผู้เชี่ยวชาญ Git** | ช่วยเลือกไฟล์และเขียน Commit Message ตามมาตรฐาน |
 | **`prp-core-git-pr-maker`** | ผู้จัดการ PR | รวบรวมข้อมูลและสร้าง Pull Request ที่สมบูรณ์ |
-| **`docs-impact-agent`** | ผู้จัดการเอกสาร | วิเคราะห์ว่าการเปลี่ยนโค้ดส่งผลกระทบต่อเอกสารส่วนไหนบ้าง |
+| **`documentation-maintainer`** | ผู้จัดการเอกสาร | วิเคราะห์ว่าการเปลี่ยนโค้ดส่งผลกระทบต่อเอกสารส่วนไหนบ้าง |
 
 ---
 

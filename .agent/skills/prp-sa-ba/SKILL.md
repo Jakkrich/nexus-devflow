@@ -49,4 +49,4 @@ Advocate relevant commands following the respective workflow hierarchy:
 3. **Review**: Subsequent to human confirmation/review, put forward commands under the spectrum of `/10-Human`.
 
 ---
-*Note: This skill synergizes most efficiently running alongside the Agent Persona `discuss-spec`.*
+*Note: This skill synergizes most efficiently running alongside the Agent Persona `requirements-engineer`.*

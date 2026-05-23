@@ -262,12 +262,14 @@ Specialist personas live in [`.agent/agents`](./.agent/agents).
 
 | Area | Agents |
 | :--- | :--- |
-| Planning | `prp-core-planner`, `discuss-spec`, `prp-core-prd-architect`, `orchestrator`, `prp-core-boss` |
+| Planning | `prp-core-planner`, `requirements-engineer`, `prp-core-prd-architect`, `orchestrator`, `prp-core-boss` |
 | Research | `codebase-explorer`, `codebase-analyst`, `web-researcher` |
 | Implementation | `prp-core-coder`, `prp-core-worker`, `backend-specialist`, `frontend-specialist`, `database-architect` |
-| Quality | `test-engineer`, `code-reviewer`, `security-auditor`, `performance-optimizer`, `silent-failure-hunter` |
-| Git & Docs | `prp-core-git-committer`, `prp-core-git-pr-maker`, `docs-impact-agent` |
+| Quality | `test-engineer`, `code-reviewer`, `security-auditor`, `performance-engineer` |
+| Git & Docs | `prp-core-git-committer`, `prp-core-git-pr-maker`, `documentation-maintainer` |
 | Support | `coach-guideline`, `prp-core-codebase-assistant`, `devops-engineer` |
+
+Reusable method skills such as `code-simplification`, `type-design`, and `silent-failure-audit` live in [`.agent/skills`](./.agent/skills) and are applied by the responsible agent or workflow.
 
 Invoke a specialist manually:
 

@@ -8,7 +8,7 @@ These prompts are not copied verbatim. They are adapted into PRPs workflows, age
 
 | Prompt family | Source prompts | PRPs destination | Adaptation |
 | :--- | :--- | :--- | :--- |
-| Spec | `spec_gatherer`, `spec_quick`, `spec_writer`, `spec_critic`, `spec_researcher`, `spec_orchestrator_agentic` | `/12-PRD`, `/15-Spec-Research`, `/18-Spec-Orchestrate`, `/30-Task`, `/31-Plan`, `discuss-spec`, `prp-core-prd-architect` | Gather requirements, research integrations, write specs, critique completeness, and convert agentic orchestration into user-approved phase steps. |
+| Spec | `spec_gatherer`, `spec_quick`, `spec_writer`, `spec_critic`, `spec_researcher`, `spec_orchestrator_agentic` | `/12-PRD`, `/15-Spec-Research`, `/18-Spec-Orchestrate`, `/30-Task`, `/31-Plan`, `requirements-engineer`, `prp-core-prd-architect` | Gather requirements, research integrations, write specs, critique completeness, and convert agentic orchestration into user-approved phase steps. |
 | Complexity | `complexity_assessor` | `/31-Plan`, `prp-core-planner` | Classify simple, standard, or complex work before planning. Use script commands for `complexity_assessment.json`. |
 | Roadmap | `roadmap_discovery`, `roadmap_features` | `/17-Roadmap`, roadmap docs, roadmap validation flows | Improve project discovery, audience, gaps, phases, and feature prioritization. Keep output under `.workspaces/roadmap`. |
 | Ideation | `ideation_code_improvements`, `ideation_code_quality`, `ideation_documentation`, `ideation_performance`, `ideation_security`, `ideation_ui_ux` | `/10-Brainstorm`, `/11-Research`, `/13-UI-UX`, `/33-Verify`, `/41-Simplify` | Produce option sets and improvement candidates. No automatic implementation; user chooses the next workflow. |
@@ -46,8 +46,8 @@ Some source prompts look like commands but should not become standalone DevFlow 
 | Borderline source | DevFlow location | Decision | Notes |
 | :--- | :--- | :--- | :--- |
 | `validation_fixer` | `/33-Verify` fail path, `/32-Code` retry when implementation must change | Thin skill alias | Use `json-artifact-handling` for PRP CLI repair and `lint-and-validate` for project checks. |
-| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, `/53-Changelog` | Skill-backed agent action | Use `documentation-and-adrs` and `docs-impact-agent`; no standalone docs-ideation workflow. |
-| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, `/41-Simplify` | Skill-backed review | Use `performance-optimization` and `performance-optimizer`; require measurement before optimization. |
+| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, `/53-Changelog` | Skill-backed agent action | Use `documentation-and-adrs` and `documentation-maintainer`; no standalone docs-ideation workflow. |
+| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, `/41-Simplify` | Skill-backed review | Use `performance-optimization` and `performance-engineer`; require measurement before optimization. |
 | `ideation_security` | `/33-Verify`, `/39-QA-Orchestrate`, `/20-Debug` for incidents | Skill-backed review | Use `security-and-hardening` and `security-auditor`; findings become review output or task input. |
 | `mcp_tools/*` validation prompts | `/33-Verify`, `/40-Test` | Tool-specific skill guidance | Map to available browser/API/database validation tools; document limitations when a tool is unavailable. |
 | Autonomous orchestration aliases | `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, `/90-Agent` | Thin alias only | Preserve user-controlled phase gates instead of auto-running subagents. |
@@ -70,9 +70,9 @@ Some source prompts look like commands but should not become standalone DevFlow 
 | Research integrations or external APIs | `/15-Spec-Research` | `/90-Agent web-researcher` |
 | Analyze competitors | `/16-Competitor` | `/90-Agent prp-core-prd-architect` |
 | Refresh roadmap | `/17-Roadmap` | `/90-Agent prp-core-planner` |
-| Orchestrate broad spec work | `/18-Spec-Orchestrate` | `/90-Agent discuss-spec` |
-| Create product requirements | `/12-PRD` | `/90-Agent discuss-spec` |
-| Create executable task artifacts | `/30-Task` | `/90-Agent discuss-spec` |
+| Orchestrate broad spec work | `/18-Spec-Orchestrate` | `/90-Agent requirements-engineer` |
+| Create product requirements | `/12-PRD` | `/90-Agent requirements-engineer` |
+| Create executable task artifacts | `/30-Task` | `/90-Agent requirements-engineer` |
 | Plan implementation | `/31-Plan` | `/90-Agent prp-core-planner` |
 | Extend completed work | `/35-Followup` | `/90-Agent prp-core-planner` |
 | Orchestrate complex QA | `/39-QA-Orchestrate` | `/90-Agent code-reviewer` |
