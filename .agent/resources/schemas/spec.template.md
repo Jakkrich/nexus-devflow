@@ -1,27 +1,27 @@
 # Specification: {Task ID} - {Task Title}
 
 ## 1. Overview
-- **Objective**: [What are we trying to achieve?]
-- **Business Value**: [Why is this important? Who does it benefit?]
-- **Target Audience/Users**: [Who will use this feature?]
+- **Objective**: Write the concrete outcome in one or two sentences, using the user's actual request and the affected system or screen.
+- **Business Value**: Explain why the work matters, who benefits, and what pain or risk it removes.
+- **Target Audience/Users**: Name the real users, maintainers, reviewers, or systems affected by this task.
 
 ## 2. Requirements & Acceptance Criteria
-- [ ] Requirement 1: [Detailed description of expected behavior]
-- [ ] Requirement 2: [Detailed description of expected behavior]
-- [ ] Acceptance Criterion 1: [Condition that must be met to consider this requirement complete]
+- [ ] Describe a specific expected behavior, data change, UI change, or operational outcome.
+- [ ] Describe another concrete requirement, including boundaries and edge cases when known.
+- [ ] State a measurable acceptance criterion that proves the task is complete.
 
 ## 3. Context & Background
-- **Current State**: [How does it work right now?]
-- **Problem Statement**: [What is the exact problem we are solving?]
-- **Related Issues/Features**: [Links to other tasks or bugs]
+- **Current State**: Summarize how the system behaves today, based on the user's report or code inspection.
+- **Problem Statement**: State the exact problem, gap, or opportunity being solved.
+- **Related Issues/Features**: Link or name related tasks, issues, files, screens, or say that none were provided.
 
 ## 4. Technical Constraints & Assumptions
-- **Constraints**: [e.g., Must support legacy browsers, must execute in < 200ms]
-- **Assumptions**: [e.g., Assuming the third-party API is always available]
+- **Constraints**: List real technical, compatibility, performance, security, or process constraints.
+- **Assumptions**: List assumptions that planning or implementation depends on, and mark uncertain items as questions to resolve.
 
 ## 5. UI/UX Considerations (If applicable)
-- **Design Guidelines**: [Link to Figma, or text description of layout/colors]
-- **Interactions**: [Hover states, loading spinners, transitions]
+- **Design Guidelines**: Describe applicable existing UI patterns, design files, responsive behavior, accessibility, and visual constraints.
+- **Interactions**: Describe relevant states, transitions, input behavior, loading, empty, error, and success behavior.
 
 ## 6. Out of Scope
-- [Explicitly state what will NOT be done in this task to prevent scope creep]
+- List concrete exclusions that prevent scope creep, such as unrelated screens, refactors, integrations, or behavior changes.

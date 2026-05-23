@@ -46,7 +46,7 @@ For market gaps, summarize:
 - confidence level
 
 ### 4. Create Competitor Analysis Report
-- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/competitor_analysis.template.md` to ensure a consistent output layout.
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/competitor_analysis.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} competitor_analysis.template.md` and replace any placeholder/template text with concrete competitors, segments, strengths, gaps, and strategic recommendations.
 - Save the final report to `.workspaces/research/{date}-{slug}-competitor-analysis.md` (where `{date}` is today's date in YYYY-MM-DD format, and `{slug}` is a URL-friendly name derived from the topic).
 
 ### 5. Route The Result

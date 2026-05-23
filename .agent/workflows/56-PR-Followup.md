@@ -45,7 +45,7 @@ Classify as:
 - non-actionable or incorrect
 
 ### 3. Create PR Follow-Up Report
-- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/pr_followup.template.md` to ensure a consistent output layout.
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/pr_followup.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} pr_followup.template.md` and replace any placeholder/template text with concrete review comments, decisions, tasks, and risks.
 - Save the final report to `.workspaces/reports/pr_followup_{ID}.md` (where `{ID}` is the target task ID).
 
 ### 4. Route Work

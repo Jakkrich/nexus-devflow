@@ -35,7 +35,7 @@ Run the command by typing:
 3. **Generate/Update .antigravityrules**: 
    - Check the detected Stack and select the matching Template from `../rules-templates/`.
    - Use `write_to_file` to bring content from the Template to create or update the `.antigravityrules` file at the root.
-4. **Update INITIAL.md**: Before creating or updating `INITIAL.md`, inspect `.agent/resources/schemas/initial.template.md` and preserve its required headings.
+4. **Update INITIAL.md**: Before creating or updating `INITIAL.md`, inspect `.agent/resources/schemas/initial.template.md` and preserve its required headings. Before reporting completion, run `npm run agent -- markdown:validate INITIAL.md initial.template.md` and replace any placeholder/template text with concrete project paths, commands, conventions, and next actions.
    - Fill in the list of specs found in `.workspaces/specs/`.
    - Update **Last Sync** to the current date and time.
    - Summarize the **Project Overview** based on findings.

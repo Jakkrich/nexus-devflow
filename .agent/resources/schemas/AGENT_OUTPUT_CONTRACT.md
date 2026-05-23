@@ -12,6 +12,8 @@ This contract keeps Antigravity agent output stable enough for the PRP dashboard
 6. Every phase must end with `npm.cmd run agent -- validate {ID}`.
 7. Every generated Markdown artifact must be based on the matching `*.template.md` in `.agent/resources/schemas/`.
 8. Before creating or updating a Markdown artifact, read the template first and preserve its required headings.
+9. Markdown artifacts must contain real task-specific content. Do not leave bracket instructions, `{Placeholder}` tokens, `Requirement 1`, `Option A`, `TODO`, `TBD`, or similar template scaffolding in saved output.
+10. Before reporting a Markdown artifact as complete, run `npm.cmd run agent -- markdown:validate {path} {template_name}` when the CLI is available. For task workspaces, `npm.cmd run agent -- validate {ID}` also checks `spec.md`.
 
 ## Required Task Files
 
@@ -25,7 +27,16 @@ Every `.workspaces/specs/{ID}-{slug}/` folder must contain:
 - `complexity_assessment.json`
 - `spec.md`
 
-`spec.md` is created from `spec.template.md` and is validated for required template headings by `npm run agent -- validate {ID}`.
+`spec.md` is created from `spec.template.md` and is validated for required headings and placeholder-free content by `npm run agent -- validate {ID}`.
+
+## Markdown Quality Gate
+
+For every generated Markdown artifact:
+
+- Preserve the headings and tables required by the matching template.
+- Replace template guidance with specific content from the user request, code inspection, research, command output, or explicit assumptions.
+- If information is missing, write a concrete question or assumption instead of leaving a placeholder.
+- Run `npm.cmd run agent -- markdown:validate {path} {template_name}` for reusable reports, research files, PRDs, QA reports, plans, RCA reports, triage reports, and agent reports.
 
 ## State Commands
 

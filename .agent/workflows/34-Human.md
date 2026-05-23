@@ -38,12 +38,12 @@ Use PRP CLI commands for `implementation_plan.json` status changes. Do not manua
 
 #### ✅ Approve (Mark as DONE)
 - **Update status**: Run `npm run agent -- update {ID} --status done`
-- **Record lesson**: If this task contains good techniques or a structure that acts as a good prototype, add a note to `.workspaces/lessons.md` as a Best Practice. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md).
+- **Record lesson**: If this task contains good techniques or a structure that acts as a good prototype, add a note to `.workspaces/lessons.md` as a Best Practice. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
 - **End of lifecycle** — The task is completed.
 
 #### 🔄 Reject (Send back for fixes)
 - **Update status**: Run `npm run agent -- update {ID} --status in_progress`
-- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings.
+- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings. Before reporting completion, run `npm run agent -- markdown:validate {qa_report_path} qa_report.template.md` and replace any placeholder/template text with concrete approval/rejection/feedback evidence.
 - **Record Rejection** in `qa_report.md` under the heading `## Rejection History`:
   ```markdown
   ## Rejection History
@@ -54,11 +54,11 @@ Use PRP CLI commands for `implementation_plan.json` status changes. Do not manua
     - [ ] {Things to fix based on the Message}
   ```
 - **Recommend Next Step**: _"Run `/32-Code {ID}` to apply fixes according to the Feedback"_
-- **Record lesson**: Add a note of the mistake and what needs to be fixed to `.workspaces/lessons.md` to prevent repeating the bug in the next task. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md).
+- **Record lesson**: Add a note of the mistake and what needs to be fixed to `.workspaces/lessons.md` to prevent repeating the bug in the next task. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
 
 #### 📝 Feedback (Add Note and loop back)
 - **Update status**: Run `npm run agent -- update {ID} --status in_progress`
-- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings.
+- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings. Before reporting completion, run `npm run agent -- markdown:validate {qa_report_path} qa_report.template.md` and replace any placeholder/template text with concrete approval/rejection/feedback evidence.
 - **Record Feedback** in `qa_report.md` under the heading `## Feedback History`:
   ```markdown
   ## Feedback History
@@ -67,7 +67,7 @@ Use PRP CLI commands for `implementation_plan.json` status changes. Do not manua
   - **Feedback**: {Message}
   ```
 - **Recommend Next Step**: _"Run `/32-Code {ID}` to improve based on the Feedback"_
-- **Record lesson (Optional)**: If the Feedback represents a rule or style that should be memorized permanently, add a note to `.workspaces/lessons.md`. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md).
+- **Record lesson (Optional)**: If the Feedback represents a rule or style that should be memorized permanently, add a note to `.workspaces/lessons.md`. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
 
 #### Follow-Up Planning Addon
 

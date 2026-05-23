@@ -149,6 +149,27 @@ console.log('[OK] plan:validate verified.');
 run(['validate', '999']);
 console.log('[OK] schema validation passed.');
 
+const specPath = path.join(taskDir, 'spec.md');
+const validSpec = fs.readFileSync(specPath, 'utf8');
+fs.writeFileSync(
+  specPath,
+  validSpec.replace('- **Objective**:', '- **Objective**: [What are we trying to achieve?]\n- **Original Objective**:'),
+  'utf8',
+);
+runExpectFail(['validate', '999'], 'PLACEHOLDER TEXT in spec.md');
+fs.writeFileSync(specPath, validSpec, 'utf8');
+console.log('[OK] markdown placeholder rejected in task validation.');
+
+const reportPath = path.join(projectRoot, '.workspaces', 'reports', 'placeholder-report.md');
+fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+fs.writeFileSync(
+  reportPath,
+  '# Test Report\n\n## 1. Overview\n- **Objective**: [What are we trying to achieve?]\n',
+  'utf8',
+);
+runExpectFail(['markdown:validate', reportPath], 'PLACEHOLDER TEXT');
+console.log('[OK] markdown placeholder rejected in report validation.');
+
 const planPath = path.join(taskDir, 'implementation_plan.json');
 const validPlan = readJson(planPath);
 

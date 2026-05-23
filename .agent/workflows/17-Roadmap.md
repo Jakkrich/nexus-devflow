@@ -62,7 +62,7 @@ Use `roadmap_features` pattern to group work into:
 
 Keep roadmap items traceable to evidence from specs, user feedback, competitor findings, or implementation insights.
 
-When creating or updating `ROADMAP.md`, inspect `.agent/resources/schemas/roadmap.template.md` first and preserve its required headings and table structure.
+When creating or updating `ROADMAP.md`, inspect `.agent/resources/schemas/roadmap.template.md` first and preserve its required headings and table structure. Before reporting completion, run `npm run agent -- markdown:validate ROADMAP.md roadmap.template.md` and replace any placeholder/template text with concrete phases, features, rationale, risks, dependencies, and validation needs.
 
 ### 4. Validate
 

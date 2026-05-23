@@ -87,7 +87,7 @@ Each subtask should answer:
 ### 5. Create Human-Readable Plan
 
 Create a `plan.md` file in the task workspace (`.workspaces/specs/{ID}-*/plan.md`) that summarizes the JSON plan in a readable format.
-**MANDATORY:** You MUST base the structure of this file strictly on the template provided at `.agent/resources/schemas/plan.template.md`.
+**MANDATORY:** You MUST base the structure of this file strictly on the template provided at `.agent/resources/schemas/plan.template.md`. Before reporting completion, run `npm run agent -- markdown:validate {plan_md_path} plan.template.md` and replace any placeholder/template text with concrete phases, files, commands, dependencies, and verification evidence.
 **MANDATORY:** You MUST present this `plan.md` content to the user for review and wait for their explicit approval before recommending the next command.
 
 ### 6. Validate And Close Planning

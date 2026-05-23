@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import argparse
+import re
 from pathlib import Path
 from prp_core import (
     SPECS_DIR, get_timestamp, read_json, write_json, 
@@ -38,6 +39,62 @@ def materialize_text(template_name, replacements=None):
     for key, replacement in replacements.items():
         text = text.replace("{" + key + "}", str(replacement))
     return text
+
+def render_initial_spec(task_id, title, description):
+    scope = description or title
+    return f"""# Specification: {task_id} - {title}
+
+## 1. Overview
+- **Objective**: Deliver "{title}" according to the requested scope: {scope}
+- **Business Value**: Turn the request into a tracked, testable task so planning, implementation, and verification can proceed without relying on an empty template.
+- **Target Audience/Users**: The users, maintainers, or reviewers affected by "{title}" as described in the request. Refine the exact roles during clarification if the request does not name them.
+
+## 2. Requirements & Acceptance Criteria
+- [ ] Capture the concrete behavior, bug, or deliverable described by: {scope}
+- [ ] Preserve existing behavior that is not explicitly part of this task.
+- [ ] Add enough validation evidence for reviewers to confirm the task is complete.
+
+## 3. Context & Background
+- **Current State**: The current system needs work related to "{title}". Inspect the relevant code, docs, and artifacts before planning.
+- **Problem Statement**: The request needs to be converted into an implementation-ready specification with clear behavior and verification.
+- **Related Issues/Features**: No related issue was provided during task creation.
+
+## 4. Technical Constraints & Assumptions
+- **Constraints**: Follow the existing project architecture, coding conventions, and validation commands discovered during planning.
+- **Assumptions**: Any missing product, UX, data, or integration detail must be clarified before implementation or recorded explicitly in the plan.
+
+## 5. UI/UX Considerations (If applicable)
+- **Design Guidelines**: Match existing UI patterns when the task affects user-facing screens.
+- **Interactions**: Preserve current interaction behavior unless the request explicitly changes it.
+
+## 6. Out of Scope
+- Changes unrelated to "{title}" are out of scope unless the user approves them as follow-up work.
+"""
+
+def markdown_headings(text):
+    return [line.strip() for line in text.splitlines() if re.match(r"^#{2,6}\s+", line.strip())]
+
+def markdown_quality_issues(text):
+    body = re.sub(r"```[\s\S]*?```", "", text)
+    checks = [
+        ("bracketed template instruction", re.compile(r"\[[^\]\n]*(?:what|why|who|describe|detailed|condition|link|benefit|drawback|example|e\.g\.|missing|coverage|will implement|out of scope)[^\]\n]*\]", re.I)),
+        ("unresolved brace placeholder", re.compile(r"\{[A-Za-z][A-Za-z0-9 _/#.-]{1,80}\}")),
+        ("numbered requirement placeholder", re.compile(r"\b(?:Requirement\s+[12]|Acceptance Criterion\s+1|Option\s+[ABC]:\s*(?:\{Option Name\}|\[Name\]|Option Name)|Subtask Title)\b", re.I)),
+        ("unfinished marker", re.compile(r"\b(?:TODO|TBD|FIXME|PLACEHOLDER)\b", re.I)),
+    ]
+    issues = []
+    for label, pattern in checks:
+        match = pattern.search(body)
+        if match:
+            issues.append(f"{label}: {match.group(0).strip()}")
+    return issues
+
+def validate_markdown(path, template_name):
+    text = path.read_text(encoding="utf-8")
+    template_headings = markdown_headings(get_text_template(template_name))
+    file_headings = set(markdown_headings(text))
+    missing = [heading for heading in template_headings if heading not in file_headings]
+    return missing, markdown_quality_issues(text)
 
 def replace_placeholders(value, replacements):
     if isinstance(value, dict):
@@ -119,12 +176,7 @@ def cmd_init(args):
     # 6. spec.md (created from Markdown template)
     spec_path = task_dir / "spec.md"
     if not spec_path.exists():
-        spec_replacements = {
-            **replacements,
-            "Task ID": args.id,
-            "Task Title": args.title,
-        }
-        spec_path.write_text(materialize_text("spec.template.md", spec_replacements), encoding="utf-8")
+        spec_path.write_text(render_initial_spec(args.id, args.title, args.description or args.title), encoding="utf-8")
 
     print(f"Successfully initialized task {args.id} in {task_dir}")
 
@@ -215,6 +267,26 @@ def cmd_validate(args):
                     print(f"  FIXED KEYS: {filename}")
             else:
                 print(f"  OK: {filename}")
+
+        spec_path = task_dir / "spec.md"
+        if not spec_path.exists():
+            had_errors = True
+            print("  MISSING FILE: spec.md")
+            if args.fix:
+                task_id = task_dir.name.split("-", 1)[0]
+                title = read_json(task_dir / "requirements.json").get("task_description") or task_dir.name
+                spec_path.write_text(render_initial_spec(task_id, title, title), encoding="utf-8")
+                print("  FIXED FILE: spec.md")
+        else:
+            missing_headings, quality_issues = validate_markdown(spec_path, "spec.template.md")
+            if missing_headings or quality_issues:
+                had_errors = True
+                if missing_headings:
+                    print(f"  MISSING HEADINGS in spec.md: {', '.join(missing_headings)}")
+                for issue in quality_issues:
+                    print(f"  PLACEHOLDER TEXT in spec.md: {issue}")
+            else:
+                print("  OK: spec.md")
 
     if had_errors and not args.fix:
         raise SystemExit(1)
