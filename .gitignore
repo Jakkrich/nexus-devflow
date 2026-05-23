@@ -95,6 +95,7 @@ docs/vault/
 # ------------------------------
 # Ignore Design Assets & Graphic Assets
 docs/*.png
+!docs/logo-nexus-devflow.png
 docs/*.jpg
 docs/*.jpeg
 docs/*.svg
