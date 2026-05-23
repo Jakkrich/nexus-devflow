@@ -1,31 +1,74 @@
-# Nexus-DevFlow Setup Guide
+# Nexus-DevFlow Setup
 
-This setup uses npm, the `.agent` bundle, and a Codex global skill. The legacy Python switcher is no longer used.
+This guide is for humans installing Nexus-DevFlow themselves.
 
-## 1. Clone the Framework
+If you want an AI assistant to install or upgrade it for you, copy the prompt in [Install With AI](#install-with-ai) and send it to your AI tool. The detailed AI playbook lives in [SETUP-BY-AI.md](./SETUP-BY-AI.md).
 
-Place the framework in a shared tools folder. For this machine the canonical path is:
+## Requirements
 
-```powershell
-D:\Projects\nexus-devflow
-```
+- Node.js 18.17 or newer
+- npm
+- git, if you want to update from the repository
+- A local checkout of this repository
 
-## 2. Install Globally for Codex
+## 1. Clone Or Open The Framework
 
-Run this once from the Nexus-DevFlow directory:
+Recommended shared location on this machine:
 
 ```powershell
 cd D:\Projects\nexus-devflow
-npm run codex:install-global
 ```
 
-The installer creates:
+If you use another path, replace `D:\Projects\nexus-devflow` in the commands below.
+
+## 2. Validate The Framework
+
+```powershell
+npm run validate
+```
+
+This checks the framework bundle, required files, roadmap artifacts, and generated project indexes.
+
+## 3. Install Globally For Codex
+
+Codex has a built-in global install path in this repository:
+
+```powershell
+cd D:\Projects\nexus-devflow
+npm run codex:update-global
+npm run codex:check-global
+```
+
+The installer writes:
 
 - `%USERPROFILE%\.codex\skills\nexus-devflow\SKILL.md`
 - `%USERPROFILE%\.codex\nexus-devflow.json`
-- a managed Nexus-DevFlow section in `%USERPROFILE%\.codex\AGENTS.md`
+- a managed Nexus-DevFlow block in `%USERPROFILE%\.codex\AGENTS.md`
 
-After that, Codex can use Nexus-DevFlow from any project when you ask for DevFlow or numbered workflows such as:
+`codex:check-global` verifies the global skill, manifest, framework root, installed version, installer syntax, and framework validation.
+
+## 4. Upgrade The Codex Global Install
+
+Use this when the local checkout already has the version you want:
+
+```powershell
+cd D:\Projects\nexus-devflow
+npm run codex:update-global
+npm run codex:check-global
+```
+
+Use this when you want to pull the latest repository version first:
+
+```powershell
+cd D:\Projects\nexus-devflow
+npm run codex:update-global:pull
+```
+
+`codex:update-global:pull` refuses to pull when the working tree is dirty. Review, commit, or stash local changes first.
+
+## 5. Use Nexus-DevFlow In A Project
+
+After the global install, ask Codex for Nexus-DevFlow or a numbered workflow from any project:
 
 ```text
 /05-Goal "add password reset with email token and regression tests"
@@ -35,109 +78,52 @@ After that, Codex can use Nexus-DevFlow from any project when you ask for DevFlo
 /33-Verify 001
 ```
 
-The global install keeps the framework engine in `D:\Projects\nexus-devflow`. Project-specific artifacts should stay in each target project's own `.workspaces` directory.
+Project artifacts should stay in the target project's own `.workspaces` folder. Do not share or link `.workspaces` between projects.
 
-## 3. Check and Update Codex Global Install
+## 6. Optional Project-Local Link
 
-When you want Codex to verify or refresh the global Nexus-DevFlow install, ask Codex to run one of these from the framework root:
+If you want a target project to use this framework directly:
 
 ```powershell
 cd D:\Projects\nexus-devflow
-npm run codex:check-global
-npm run codex:update-global
-npm run codex:update-global:pull
+npm run link-project -- D:\Path\To\YourProject
 ```
 
-- `codex:check-global` verifies the global skill, manifest, installer syntax, and framework validation.
-- `codex:update-global` reinstalls the Codex global skill from the local checkout and validates the framework.
-- `codex:update-global:pull` first runs `git pull --ff-only`, then reinstalls and validates. It refuses to pull if the working tree is dirty.
+Then copy or adapt the `scripts` block from Nexus-DevFlow's `package.json` into the target project's `package.json`.
 
-## 3. Optional Project-Local Install
+Shared engine files:
 
-### Manual Installation (Alternative)
+- `.agent/`
+- `scripts/`
 
-If you don't want to clone the entire repository, you can manually copy the essential framework files into your own project:
+Project-specific files:
 
-1. Copy the `.agent/` folder into your project root.
-2. Copy the `scripts/` folder into your project root.
-3. Merge the `"scripts"` block from `package.json` into your project's `package.json`.
-4. (Optional) Copy documentation files like `README.md`, `SETUP.md`, `ROADMAP.md`, `AGENTS.md`, and `INITIAL.md` for reference.
+- `.workspaces/`
+- `package.json`
+- `INITIAL.md`
+- `ROADMAP.md`
 
-## 4. Activate the Agent Bundle
+## 7. Manual Project-Local Copy
 
-```powershell
-npm run activate
-```
+If symlinks are not appropriate:
 
-This command:
+1. Copy `.agent/` into the target project root.
+2. Copy `scripts/` into the target project root.
+3. Merge the relevant npm scripts from this repository's `package.json`.
+4. Run `npm run activate`.
+5. Run `npm run validate`.
 
-- Confirms `.agent` exists
-- Creates `.workspaces/roadmap`
-- Creates `.workspaces/specs`
-- Creates `.workspaces/issues`
-- Creates `.workspaces/research`
-- Writes `.workspaces/active-agent.json`
-- Regenerates `.workspaces/project_index.json`
-- Regenerates `.workspaces/roadmap/project_index.json`
+## Install With AI
 
-## 5. Validate the Framework
-
-```powershell
-npm run validate
-```
-
-Validation checks required files, generated JSON artifacts, roadmap feature references, and legacy files that should no longer exist.
-
-## 6. Use the PRP CLI
-
-```powershell
-npm run agent -- --help
-npm run agent:status
-```
-
-Create a task:
-
-```powershell
-npm run agent -- init 001 "Example Task" example-task "Describe the task"
-```
-
-## 7. Link Framework into Your Project (Symlink)
-
-If you have cloned Nexus-DevFlow in a central location and want to use it in multiple projects, you can link it automatically using the `link-project` script. This script will create symbolic links (or junctions on Windows) for `.agent` and `scripts/` into your target project.
-
-```powershell
-# Inside the Nexus-DevFlow directory, run:
-npm run link-project -- <path-to-your-project>
-
-# Example:
-npm run link-project -- D:\MyProjects\AwesomeApp
-```
-
-After linking, copy or adapt the `scripts` section from Nexus-DevFlow's `package.json` into your project's `package.json` to enable `npm run agent`, `npm run validate`, etc.
-
-### What to Link vs. What to Keep Project-Specific
-
-It is critical to separate the framework engine from your project's data:
-
-**✅ Things that SHOULD be Linked (Shared Engine):**
-- **`.agent/`**: Contains the core workflows, skills, and agent instructions. This keeps all your projects using the same updated standards.
-- **`scripts/`**: Contains the Node.js automation scripts that power the `npm run` commands.
-
-**❌ Things that MUST NOT be Linked (Project-Specific Data):**
-- **`.workspaces/`**: This folder stores your project's tasks, specs, research, and roadmap. It is the "brain" of your specific project. Linking this would mix tasks across all your projects.
-- **`package.json`**: You must keep your project's own `package.json` for dependencies. Only copy the `"scripts"` block from the framework.
-- **`INITIAL.md` / `ROADMAP.md`**: These contain context and planning strictly for the specific project you are building.
-
-## Expected Files After Activation
+Copy this single prompt into your AI assistant:
 
 ```text
-.agent/
-.workspaces/active-agent.json
-.workspaces/project_index.json
-.workspaces/roadmap/project_index.json
-.workspaces/roadmap/roadmap_discovery.json
-.workspaces/roadmap/roadmap.json
+Install or upgrade Nexus-DevFlow for this machine/project. First read SETUP-BY-AI.md from the Nexus-DevFlow repository and follow it as the source of truth. Detect the framework root, package version, target AI provider, and target project. Before upgrading, check git status, package.json version, CHANGELOG latest version, and any existing installed manifest/version for this provider. Do not overwrite user files blindly. Keep .workspaces project-specific. After install or upgrade, run the relevant validation commands, report the installed version, the framework root, files changed, and any provider-specific manual steps I must approve.
 ```
 
-Run `npm run validate` whenever framework structure changes.
+## Troubleshooting
 
+- If `codex:check-global` reports a version mismatch, run `npm run codex:update-global` from the framework root and check again.
+- If `codex:update-global:pull` refuses to pull, inspect `git status --short` and resolve local changes first.
+- If validation says task JSON is malformed, run `npm run agent -- json:repair <ID> <artifact>` and then `npm run agent -- validate <ID>`.
+- If `.agent` files are missing in a project-local install, restore or relink the framework bundle before running validation.

@@ -23,7 +23,7 @@ Generates missing tests, runs existing test suites, or checks test coverage for 
 ### Scenario A: Generate Tests
 If the user requests tests for a target:
 1. **Analyze**: Identify functions, edge cases, and external dependencies.
-2. **Template Verification**: **MANDATORY:** Before generating the test plan, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/test_report.template.md` to ensure a consistent output layout.
+2. **Template Verification**: **MANDATORY:** Before generating the test plan, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/test_report.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} test_report.template.md` and replace any placeholder/template text with concrete coverage, command output, failures, and gaps.
 3. **Generate Cases**: Develop Happy path, Error cases, Edge cases.
 4. **Write**: Implement the tests using the project's testing framework (Pytest, Jest, Vitest, etc.). Follow the `Arrange-Act-Assert` pattern and mock external dependencies.
 5. **Save Test Report**: Save the test plan and results to `.workspaces/reports/test_report_{target}.md` (where `{target}` is a slugified version of the file or feature name).

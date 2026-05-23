@@ -37,6 +37,18 @@
 
 ทุก workflow ที่สร้างไฟล์ Markdown ต้องอ่าน template ที่เกี่ยวข้องในโฟลเดอร์นี้ก่อนสร้างหรืออัปเดตไฟล์ และต้องคงหัวข้อหลักตาม template ไว้เสมอ
 
+## Markdown Quality Gate
+
+Template มีไว้กำหนดโครง ไม่ใช่ผลลัพธ์สุดท้าย ห้ามบันทึกไฟล์ Markdown ที่ยังเหลือข้อความแนว placeholder เช่น `[What ...]`, `{Placeholder}`, `Requirement 1`, `Option A`, `TODO`, `TBD`, หรือคำอธิบาย generic ที่ไม่ได้อ้างอิง request/code/evidence จริง
+
+ก่อนรายงานว่า Markdown artifact เสร็จแล้ว ให้รัน:
+
+```powershell
+npm.cmd run agent -- markdown:validate {path} {template_name}
+```
+
+สำหรับ `.workspaces/specs/{ID}-*/spec.md` คำสั่ง `npm.cmd run agent -- validate {ID}` จะตรวจ heading และ placeholder-free content ให้ด้วย ถ้าข้อมูลยังไม่พอ ให้เขียนเป็นคำถามหรือ assumption ที่ชัดเจนแทนการปล่อยช่องว่างจาก template
+
 | Output file | Template | Workflow หลัก |
 | :--- | :--- | :--- |
 | `INITIAL.md` | `initial.template.md` | `/00-Init` |
@@ -75,6 +87,7 @@
 6. **บันทึก Timeline อย่างต่อเนื่อง**: อัปเดต `task_logs.json` ทุกครั้งหลังจบการใช้เครื่องมือ (Tool) หรือขั้นตอนสำคัญ
 7. **ใช้ Node CLI เป็นทางหลัก**: ใช้ `npm.cmd run agent -- ...` สำหรับ init/update/log/event/validate/repair แทนการเขียน JSON โดยตรง
 8. **ผ่าน JSON Schema Gate**: ทุก phase ต้องจบด้วย `npm.cmd run agent -- validate {ID}` และถ้า fail ให้ใช้ `npm.cmd run agent -- repair {ID}` ก่อนเดินต่อ
+9. **ผ่าน Markdown Quality Gate**: ทุก Markdown artifact ต้องไม่มี placeholder และต้องผ่าน `npm.cmd run agent -- markdown:validate {path} {template_name}` เมื่อเป็นรายงาน/เอกสารที่ reusable
 
 ---
 

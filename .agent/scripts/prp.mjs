@@ -158,6 +158,38 @@ function materializeTextTemplate(templateName, replacements = {}) {
   );
 }
 
+function renderInitialSpec({ id, title, description }) {
+  const scope = description || title;
+  return `# Specification: ${id} - ${title}
+
+## 1. Overview
+- **Objective**: Deliver "${title}" according to the requested scope: ${scope}
+- **Business Value**: Turn the request into a tracked, testable task so planning, implementation, and verification can proceed without relying on an empty template.
+- **Target Audience/Users**: The users, maintainers, or reviewers affected by "${title}" as described in the request. Refine the exact roles during clarification if the request does not name them.
+
+## 2. Requirements & Acceptance Criteria
+- [ ] Capture the concrete behavior, bug, or deliverable described by: ${scope}
+- [ ] Preserve existing behavior that is not explicitly part of this task.
+- [ ] Add enough validation evidence for reviewers to confirm the task is complete.
+
+## 3. Context & Background
+- **Current State**: The current system needs work related to "${title}". Inspect the relevant code, docs, and artifacts before planning.
+- **Problem Statement**: The request needs to be converted into an implementation-ready specification with clear behavior and verification.
+- **Related Issues/Features**: No related issue was provided during task creation.
+
+## 4. Technical Constraints & Assumptions
+- **Constraints**: Follow the existing project architecture, coding conventions, and validation commands discovered during planning.
+- **Assumptions**: Any missing product, UX, data, or integration detail must be clarified before implementation or recorded explicitly in the plan.
+
+## 5. UI/UX Considerations (If applicable)
+- **Design Guidelines**: Match existing UI patterns when the task affects user-facing screens.
+- **Interactions**: Preserve current interaction behavior unless the request explicitly changes it.
+
+## 6. Out of Scope
+- Changes unrelated to "${title}" are out of scope unless the user approves them as follow-up work.
+`;
+}
+
 function normalizeToTemplate(data, template) {
   if (isObject(template)) {
     const normalized = isObject(data) ? structuredClone(data) : {};
@@ -614,14 +646,7 @@ function commandInit(args) {
 
   const specPath = path.join(taskDir, 'spec.md');
   if (!fs.existsSync(specPath)) {
-    const spec = materializeTextTemplate('spec.template.md', {
-      'Task ID': id,
-      'Task Title': title,
-      ID: id,
-      Title: title,
-      Description: description,
-      ISO_TIMESTAMP: now,
-    });
+    const spec = renderInitialSpec({ id, title, description });
     fs.writeFileSync(specPath, spec.endsWith('\n') ? spec : `${spec}\n`, 'utf8');
   }
   appendEvent(taskDir, { event: 'task.created', phase: 'planning', message: `Created task ${id}: ${title}` });
@@ -743,10 +768,63 @@ function markdownHeadings(text) {
     .filter((line) => /^#{2,6}\s+/.test(line));
 }
 
-function validateMarkdownFile(filePath, templateName) {
-  const templateHeadings = markdownHeadings(readTextTemplate(templateName));
-  const fileHeadings = new Set(markdownHeadings(fs.readFileSync(filePath, 'utf8')));
-  return templateHeadings.filter((heading) => !fileHeadings.has(heading));
+function stripFencedCode(text) {
+  return text.replace(/```[\s\S]*?```/g, '');
+}
+
+function findMarkdownQualityIssues(text) {
+  const body = stripFencedCode(text);
+  const issues = [];
+  const checks = [
+    {
+      label: 'bracketed template instruction',
+      pattern: /\[[^\]\n]*(?:what|why|who|describe|detailed|condition|link|benefit|drawback|example|e\.g\.|missing|coverage|will implement|out of scope)[^\]\n]*\]/i,
+    },
+    {
+      label: 'unresolved brace placeholder',
+      pattern: /\{[A-Za-z][A-Za-z0-9 _/#.-]{1,80}\}/,
+    },
+    {
+      label: 'numbered requirement placeholder',
+      pattern: /\b(?:Requirement\s+[12]|Acceptance Criterion\s+1|Option\s+[ABC]:\s*(?:\{Option Name\}|\[Name\]|Option Name)|Subtask Title)\b/i,
+    },
+    {
+      label: 'unfinished marker',
+      pattern: /\b(?:TODO|TBD|FIXME|PLACEHOLDER)\b/i,
+    },
+  ];
+
+  for (const check of checks) {
+    const match = body.match(check.pattern);
+    if (match) issues.push(`${check.label}: ${match[0].trim()}`);
+  }
+  return issues;
+}
+
+function validateMarkdownFile(filePath, templateName = null) {
+  const text = fs.readFileSync(filePath, 'utf8');
+  const missingHeadings = templateName
+    ? markdownHeadings(readTextTemplate(templateName)).filter((heading) => !new Set(markdownHeadings(text)).has(heading))
+    : [];
+  const qualityIssues = findMarkdownQualityIssues(text);
+  return { missingHeadings, qualityIssues };
+}
+
+function commandMarkdownValidate(args) {
+  const { positional } = parseOptions(args);
+  const [filePathArg, templateName] = positional;
+  if (!filePathArg) throw new Error('Usage: prp markdown:validate {file_path} [template_name]');
+  const filePath = path.resolve(PROJECT_ROOT, filePathArg);
+  if (!fs.existsSync(filePath)) throw new Error(`Markdown file not found: ${filePath}`);
+  const { missingHeadings, qualityIssues } = validateMarkdownFile(filePath, templateName || null);
+  if (missingHeadings.length) {
+    console.log(`MISSING HEADINGS in ${path.basename(filePath)}: ${missingHeadings.join(', ')}`);
+  }
+  for (const issue of qualityIssues) {
+    console.log(`PLACEHOLDER TEXT in ${path.basename(filePath)}: ${issue}`);
+  }
+  if (missingHeadings.length || qualityIssues.length) process.exitCode = 1;
+  else console.log(`Markdown validation passed: ${filePath}`);
 }
 
 function commandValidate(args, fixDefault = false) {
@@ -793,22 +871,25 @@ function commandValidate(args, fixDefault = false) {
           const now = timestamp();
           const id = path.basename(taskDir).split('-')[0];
           const title = readJson(path.join(taskDir, 'requirements.json')).task_description || path.basename(taskDir);
-          const content = materializeTextTemplate(templateName, {
-            'Task ID': id,
-            'Task Title': title,
-            ID: id,
-            Title: title,
-            ISO_TIMESTAMP: now,
-          });
+          const content = templateName === 'spec.template.md'
+            ? renderInitialSpec({ id, title, description: title })
+            : materializeTextTemplate(templateName, {
+              'Task ID': id,
+              'Task Title': title,
+              ID: id,
+              Title: title,
+              ISO_TIMESTAMP: now,
+            });
           fs.writeFileSync(filePath, content.endsWith('\n') ? content : `${content}\n`, 'utf8');
           console.log(`  FIXED FILE: ${fileName}`);
         }
         continue;
       }
-      const missingHeadings = validateMarkdownFile(filePath, templateName);
-      if (missingHeadings.length) {
+      const { missingHeadings, qualityIssues } = validateMarkdownFile(filePath, templateName);
+      if (missingHeadings.length || qualityIssues.length) {
         hadErrors = true;
-        console.log(`  MISSING HEADINGS in ${fileName}: ${missingHeadings.join(', ')}`);
+        if (missingHeadings.length) console.log(`  MISSING HEADINGS in ${fileName}: ${missingHeadings.join(', ')}`);
+        for (const issue of qualityIssues) console.log(`  PLACEHOLDER TEXT in ${fileName}: ${issue}`);
       } else {
         console.log(`  OK: ${fileName}`);
       }
@@ -1036,6 +1117,7 @@ Usage:
   prp plan:add-subtask {ID} {PHASE_ID} "{Title}" [--description text] [--service backend] [--modify a,b] [--create a,b]
   prp plan:set-subtask-status {ID} {SUBTASK_ID} {status}
   prp plan:validate {ID}
+  prp markdown:validate {file_path} [template_name]
   prp validate [ID] [--fix]
   prp repair [ID]
   prp status
@@ -1059,6 +1141,7 @@ function main() {
     if (command === 'plan:add-subtask') return commandPlanAddSubtask(args);
     if (command === 'plan:set-subtask-status') return commandPlanSetSubtaskStatus(args);
     if (command === 'plan:validate') return commandPlanValidate(args);
+    if (command === 'markdown:validate') return commandMarkdownValidate(args);
     if (command === 'validate') return commandValidate(args);
     if (command === 'repair') return commandRepair(args);
     if (command === 'status') return commandStatus(args);

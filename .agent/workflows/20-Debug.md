@@ -47,11 +47,11 @@ You are an orchestrator. Your goal is to call the specialized Deep Debugging age
 
 ### Phase 4: FIX & VERIFY (Report & Output)
 - Verify that the agent confirms the root cause via the **Three Tests** (Causation, Necessity, Sufficiency).
-- **MANDATORY:** Before generating the RCA report, inspect `.agent/resources/schemas/rca.template.md` and use its required headings and table structure.
+- **MANDATORY:** Before generating the RCA report, inspect `.agent/resources/schemas/rca.template.md` and use its required headings and table structure. Before reporting completion, run `npm run agent -- markdown:validate {report_path} rca.template.md` and replace any placeholder/template text with concrete symptoms, reproduction steps, evidence, hypotheses, root cause, and prevention steps.
 - Ensure the agent generates the detailed RCA report in `.workspaces/debug/rca-{slug}.md`.
 - Add a short `Source Discipline` section crediting `9arm-skills/debug-mantra` while preserving the RCA template headings.
 - Capture the **Fix Specification**, **Verification Plan**, and **Prevention Measures**.
-- If the bug reveals a systemic misunderstanding or a new pattern, ensure it is carefully recorded in `.workspaces/lessons.md` (Strictly using the [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md) template).
+- If the bug reveals a systemic misunderstanding or a new pattern, ensure it is carefully recorded in `.workspaces/lessons.md` (Strictly using the [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md) template). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
 
 ---
 

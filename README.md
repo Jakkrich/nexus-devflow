@@ -8,7 +8,7 @@
 
 **Agent-ready PRP workflow framework** for turning ideas into specs, plans, code changes, QA reports, roadmap artifacts, and reusable engineering knowledge.
 
-[Usage](./USAGE.md) · [Quickstart](./docs/quickstart.md) · [Agents](./AGENTS.md) · [Roadmap](./ROADMAP.md) · [Workspace Artifacts](./docs/workspace-artifacts.md)
+[Setup](./SETUP.md) · [AI Setup](./SETUP-BY-AI.md) · [Usage](./USAGE.md) · [Quickstart](./docs/quickstart.md) · [Agents](./AGENTS.md) · [Roadmap](./ROADMAP.md) · [Workspace Artifacts](./docs/workspace-artifacts.md)
 
 ![Node](https://img.shields.io/badge/node-%3E%3D18.17-3fb950)
 ![Workflow](https://img.shields.io/badge/workflow-Task%20%E2%86%92%20Plan%20%E2%86%92%20Code%20%E2%86%92%20Verify-58a6ff)
@@ -334,6 +334,8 @@ For maintainers who are changing the framework itself, the exact validation comm
 
 | Guide | Covers |
 | :--- | :--- |
+| [Setup](./SETUP.md) | Human setup, Codex global install, upgrades, and one prompt for AI-assisted setup. |
+| [Setup By AI](./SETUP-BY-AI.md) | Provider-neutral AI playbook for installing, upgrading, version checking, and validating Nexus-DevFlow. |
 | [Usage Guide](./USAGE.md) | Full workflow catalog, SOP paths, `/05-Goal`, and command examples. |
 | [Quickstart](./docs/quickstart.md) | First setup and framework activation. |
 | [Workspace Artifacts](./docs/workspace-artifacts.md) | Folder responsibilities and artifact cleanup rules. |

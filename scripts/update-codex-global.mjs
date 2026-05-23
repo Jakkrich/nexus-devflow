@@ -12,6 +12,7 @@ const skillFile = path.join(codexHome, 'skills', 'nexus-devflow', 'SKILL.md');
 const manifestFile = path.join(codexHome, 'nexus-devflow.json');
 const args = new Set(process.argv.slice(2));
 const isWindows = process.platform === 'win32';
+const packageJson = JSON.parse(fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8'));
 
 function commandName(command) {
   if (isWindows && command === 'npm') return 'npm.cmd';
@@ -53,6 +54,9 @@ function checkGlobal() {
     if (manifest.framework_root !== projectRoot) {
       problems.push(`Manifest points to ${manifest.framework_root}, expected ${projectRoot}`);
     }
+    if (manifest.version !== packageJson.version) {
+      problems.push(`Installed version ${manifest.version || '<missing>'} does not match current framework version ${packageJson.version}`);
+    }
   }
   assertOk(run('node', ['--check', path.join(projectRoot, 'scripts', 'install-codex-global.mjs')]), 'Installer syntax check');
   assertOk(run('node', [path.join(projectRoot, 'scripts', 'validate-framework.mjs')]), 'Framework validation');
@@ -60,6 +64,7 @@ function checkGlobal() {
     throw new Error(`Codex global install has ${problems.length} issue(s):\n- ${problems.join('\n- ')}`);
   }
   console.log('Codex global install check passed.');
+  console.log(`Version: ${packageJson.version}`);
   console.log(`Skill: ${skillFile}`);
   console.log(`Manifest: ${manifestFile}`);
   const status = gitStatusShort();

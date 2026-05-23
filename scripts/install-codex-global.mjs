@@ -11,6 +11,7 @@ const skillDir = path.join(codexHome, 'skills', 'nexus-devflow');
 const skillFile = path.join(skillDir, 'SKILL.md');
 const agentsFile = path.join(codexHome, 'AGENTS.md');
 const manifestFile = path.join(codexHome, 'nexus-devflow.json');
+const packageJson = JSON.parse(fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8'));
 
 function writeFile(targetFile, fileContent) {
   fs.mkdirSync(path.dirname(targetFile), { recursive: true });
@@ -97,6 +98,7 @@ function updateGlobalAgents(root) {
 writeFile(skillFile, skillContent(projectRoot));
 writeFile(manifestFile, JSON.stringify({
   name: 'nexus-devflow',
+  version: packageJson.version,
   installed_for: 'codex-global',
   framework_root: projectRoot,
   skill: path.relative(codexHome, skillFile),

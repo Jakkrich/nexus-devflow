@@ -36,7 +36,7 @@ Adapted from:
 ### 3. Produce Research Output
 
 Save or summarize research under `.workspaces/research/` when the result is reusable.
-**MANDATORY:** Before generating a reusable markdown research file, inspect `.agent/resources/schemas/spec_research.template.md` and use its required headings and table structure.
+**MANDATORY:** Before generating a reusable markdown research file, inspect `.agent/resources/schemas/spec_research.template.md` and use its required headings and table structure. Before reporting completion, run `npm run agent -- markdown:validate {report_path} spec_research.template.md` and replace any placeholder/template text with verified sources, package details, constraints, and follow-up tasks.
 
 Recommended file name:
 

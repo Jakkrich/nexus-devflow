@@ -63,7 +63,7 @@ Run project validation commands when available: lint, tests, typecheck, build, o
 ### 4. QA Report
 
 Create or update `qa_report.md` in the task directory. Include:
-**MANDATORY:** Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and keep the report aligned to its required headings and tables.
+**MANDATORY:** Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and keep the report aligned to its required headings and tables. Before reporting completion, run `npm run agent -- markdown:validate {qa_report_path} qa_report.template.md` and replace any placeholder/template text with concrete command output, manual checks, failures, screenshots, and residual risks.
 
 - Verdict: pass or fail
 - Evidence: commands and results

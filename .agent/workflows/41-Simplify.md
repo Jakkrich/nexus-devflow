@@ -18,7 +18,7 @@ Simplify recently changed code (or the specified scope) while preserving exact b
    - Generic names → descriptive names
    - Duplicated logic → shared functions
    - Dead code → remove after confirming
-5. **Template Verification**: **MANDATORY:** Before executing any changes, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/refactoring.template.md` to ensure a consistent output layout.
+5. **Template Verification**: **MANDATORY:** Before executing any changes, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/refactoring.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} refactoring.template.md` and replace any placeholder/template text with concrete before/after observations, risk, and validation.
 6. Apply each simplification incrementally — run tests after each change.
 7. **Save Refactoring Report**: Save the before/after code comparison and simplification breakdown report to `.workspaces/reports/refactoring_{slug}.md` (where `{slug}` is a URL-friendly name derived from the target file name or component).
 8. Verify all tests pass, the build succeeds, and the diff is clean.

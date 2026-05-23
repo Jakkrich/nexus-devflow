@@ -68,6 +68,8 @@ Use the smallest durable destination:
 - `.workspaces/lessons.md` for project-wide lessons
 - `/53-Changelog` for user-facing release notes
 
+When updating `.workspaces/lessons.md`, inspect `.agent/resources/schemas/lessons.template.md` first. Before reporting completion, run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` and replace any placeholder/template text with concrete incident facts, insight, prevention, and follow-up action.
+
 If task logs are appropriate:
 
 ```powershell

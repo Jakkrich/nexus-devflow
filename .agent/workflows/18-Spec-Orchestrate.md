@@ -50,7 +50,7 @@ Apply `spec_critic` before recommending implementation:
 - ambiguous UX or data behavior
 
 ### 4. Create Spec Orchestration Report
-- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/spec_orchestration.template.md` to ensure a consistent output layout.
+- **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/spec_orchestration.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} spec_orchestration.template.md` and replace any placeholder/template text with concrete orchestration decisions, risks, task breakdowns, and next steps.
 - Save the final report to `.workspaces/reports/spec_orchestration-{slug}.md` (where `{slug}` is a URL-friendly name derived from the topic/arguments).
 
 ## Output
