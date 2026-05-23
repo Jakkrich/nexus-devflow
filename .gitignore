@@ -93,12 +93,11 @@ docs/vault/
 # ------------------------------
 # 10. DESIGN ASSETS & ROADMAPS
 # ------------------------------
-# Ignore Design Assets & Graphic Assets
-docs/*.png
-!docs/logo-nexus-devflow.png
-docs/*.jpg
-docs/*.jpeg
-docs/*.svg
+# Keep Design Assets & Graphic Assets in docs
+!docs/*.png
+!docs/*.jpg
+!docs/*.jpeg
+!docs/*.svg
 
 # Ignore Project Roadmap & Discovery Artifacts (Design Phase)
 ROADMAP.md
