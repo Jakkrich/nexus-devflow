@@ -1,29 +1,13 @@
 # PRP Framework - gitignore
 
 # ------------------------------
-# 1. WORKSPACES (Logs & Trash)
+# 1. WORKSPACES (Logs, Specs, & Plans)
 # ------------------------------
-# Logs & Status Files - Always Ignore
-.workspaces/logs/
-.workspaces/temp/
-.workspaces/worktrees/
-.workspaces/.uv-cache/
+# Ignore all workspaces files and directories completely
+.workspaces/
 .workspaces-status
-.workspaces/specs/*
-.workspaces/issues/*
-.workspaces/research/*
-.workspaces/roadmap/*
-.workspaces/roadmaps/*
-.workspaces/debug/*
-.workspaces/prds/*
-.workspaces/reports/*
-.workspaces/**/*.json
-.workspaces/**/*.md
-!.workspaces/**/.gitkeep
-!.workspaces/reports/project_*evaluation*.md
-!.workspaces/reports/project_evaluation_fix_report_*.md
-.workspaces/reports/*
 *.log
+
 
 # Security & Secrets - CRITICAL IGNORE!
 .security-key
@@ -101,6 +85,21 @@ template-html/*
 # .workspaces/roadmaps_.json
 
 # ------------------------------
-# 9. OBSIDIAN VAULT SETTINGS
+# 9. OBSIDIAN VAULT NOTES & SETTINGS
 # ------------------------------
-docs/vault/.obsidian/workspace.json
+# Ignore Obsidian Vault entirely
+docs/vault/
+
+# ------------------------------
+# 10. DESIGN ASSETS & ROADMAPS
+# ------------------------------
+# Ignore Design Assets & Graphic Assets
+docs/*.png
+docs/*.jpg
+docs/*.jpeg
+docs/*.svg
+
+# Ignore Project Roadmap & Discovery Artifacts (Design Phase)
+ROADMAP.md
+roadmap_discovery.json
+roadmap_discovery.th.md
