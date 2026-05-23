@@ -15,6 +15,7 @@
 - **Files / Folders**: {Files Reviewed}
 - **Artifacts**: {Artifacts Reviewed}
 - **Commands**: {Commands}
+- **Context Usage Notes**: {Files/artifacts loaded, known token counts if available, and one optimization note}
 
 ## 3. Findings Or Work Completed
 - {Finding}

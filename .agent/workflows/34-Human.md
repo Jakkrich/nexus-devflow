@@ -115,3 +115,19 @@ Human verifies according to Manual Verification Guide
 
 ## Output
 - **Updated Files**: `implementation_plan.json` (status), `qa_report.md` (rejection/feedback history)
+
+## Next Workflow Recommendation
+
+- **Primary**: `/54-Insight {ID}` after approval, or `/32-Code {ID}` after rejection or feedback.
+- **Why**: Approved work should preserve lessons; rejected work should loop back to implementation.
+- **Alternatives**:
+  - `/50-Commit {ID}` - choose this after approval when changes are ready to commit.
+  - `/59-Wiki project ingest .workspaces/specs/{ID}-*/` - choose this when approval or feedback contains reusable knowledge.
+  - `/35-Followup {ID}` - choose this when the human requests additional scope after approval.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when human approval, rejection, or feedback creates a durable preference, rule, or project lesson.
+- **Scope**: `project` unless the feedback is about DevFlow itself.
+- **Reason**: Human feedback is high-value project memory and should not remain only in chat.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/{ID}-*/qa_report.md`

@@ -46,7 +46,7 @@ npm.cmd run agent -- validate 007
 | Quality & Optimization | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | QA ซับซ้อน, test, refactor, preview |
 | Ship & Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight`, `/58-Merge` | commit, PR, deploy, changelog, เก็บบทเรียนหลังงานเสร็จ, ผสานสาขา |
 | GitHub Review & Triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | review PR, แก้ PR comments, triage GitHub issues |
-| Knowledge & Specialist Tools | `/60-Graphify`, `/90-Agent`, `/99-Help` | graph knowledge, เรียก specialist, ขอคำแนะนำแบบ read-only |
+| Knowledge & Specialist Tools | `/59-Wiki`, `/60-Graphify`, `/90-Agent`, `/99-Help` | compile wiki knowledge, graph knowledge, เรียก specialist, ขอคำแนะนำแบบ read-only |
 
 ## Borderline Addons And Thin Aliases
 
@@ -112,6 +112,7 @@ Credit is preserved as `9arm-skills` / `thananon/9arm-skills` in relevant report
 | `/56-PR-Followup` | แปลง PR comments เป็น fixes (บันทึกลง `.workspaces/reports/`) | `/56-PR-Followup "PR #123 comments"` |
 | `/57-Issue-Triage` | triage GitHub issue, duplicate, spam (บันทึกลง `.workspaces/issues/`) | `/57-Issue-Triage "issue #456"` |
 | `/58-Merge` | ผสาน feature branch และทำความสะอาด | `/58-Merge` |
+| `/59-Wiki` | compile framework/project knowledge wiki | `/59-Wiki project ingest .workspaces/specs/007-feature` |
 | `/60-Graphify` | สร้าง knowledge graph จาก folder | `/60-Graphify .agent/workflows` |
 | `/90-Agent` | เรียก specialist agent | `/90-Agent code-reviewer .workspaces/specs/007` |
 | `/99-Help` | ถามทาง, ขอคำแนะนำ, read-only guide | `/99-Help "ควรไป workflow ไหนต่อ"` |

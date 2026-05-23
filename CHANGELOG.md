@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-05-24
+
+### Added
+- **ระบบ DevFlow Wiki (`/59-Wiki`)**: นำเสนอระบบรวบรวมและสกัดองค์ความรู้ (Knowledge Compilation Engine) แบบ 2-Namespace (`framework` และ `project`) สำหรับจัดระเบียบสถาปัตยกรรม, แนวทางปฏิบัติการพัฒนา, ข้อควรระวัง (Gotchas), และการตัดสินใจเชิงโครงสร้างจาก source artifacts ใน workspace
+- **Wiki CLI Automation Tools**: เพิ่มคำสั่งควบคุมคุณภาพและความปลอดภัยของเอกสารผ่าน CLI `prp wiki:init` และ `prp wiki:lint` ป้องกันข้อผิดพลาดของข้อมูลที่ไม่เสร็จสมบูรณ์ (TODO/TBD) หรือข้อมูลที่ขาดการอ้างอิงแหล่งที่มา (`## Sources`)
+- **Lightweight Context & Token Telemetry**: ติดตั้งโครงสร้างบันทึกและวิเคราะห์ telemetry ของบริบท (`context_usage`) ในระบบสตรีมงาน `/05-Goal` เพื่อติดตาม token usage (input, output, cached) และ optimize การอ่านไฟล์
+
+### Changed
+- **Unified Workflow Inter-linking**: ปรับปรุงและอัปเกรดมาตรฐาน workflow สำคัญทั้งหมด 10 รายการในระบบเพื่อเพิ่มส่วน *Wiki Update Recommendation* สำหรับผสานความรู้กลับสู่ DevFlow Wiki
+- **Standardized Recommendations Template**: กำหนดกรอบของระบบแนะนำลำดับงาน (Workflow Recommendation) ด้วยเทมเพลตมาตรฐานและระบบสคริปต์ทดสอบอัตโนมัติ
+
+### Fixed
+- **Workflow Semantic Consistency**: แก้ไขปัญหางานสแกนและจัดหมวดหมู่ข้อมูล session ให้มีความเสถียรยิ่งขึ้น รองรับการเชื่อมต่อ workflow ที่ซับซ้อนและการส่งต่อข้อมูลของ boss-worker agents
+
+### Validation
+- `node .agent/scripts/test-goal-runner.mjs`
+- `node .agent/scripts/test-workflow-recommendations.mjs`
+- `npm run agent -- wiki:lint project`
+- `npm run agent -- wiki:lint framework`
+- `npm run validate`
+
 ## [1.2.0] - 2026-05-23
 
 ### Added

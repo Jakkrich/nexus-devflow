@@ -18,6 +18,9 @@ Nexus-DevFlow stores generated project memory and machine-readable workflow arti
 |   |-- project_index.json
 |   |-- roadmap_discovery.json
 |   `-- roadmap.json
+|-- wiki/
+|   |-- framework/
+|   `-- project/
 `-- specs/
 ```
 
@@ -32,6 +35,7 @@ Nexus-DevFlow stores generated project memory and machine-readable workflow arti
 | `.workspaces/prds/` | Product Requirements Documents generated before task creation | `/12-PRD`, `/18-Spec-Orchestrate`, `/16-Competitor`, `/17-Roadmap` | Yes. It bridges product thinking to executable tasks. |
 | `.workspaces/debug/` | Root cause analysis reports and debugging notes | `/20-Debug`, `/39-QA-Orchestrate`, `/54-Insight` | Yes. It keeps RCA separate from implementation artifacts. |
 | `.workspaces/reports/` | Specialist agent reports and cross-cutting review outputs | `/14-Orchestrate`, `/39-QA-Orchestrate`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` | Yes. It captures reports that are not tied to one task artifact. |
+| `.workspaces/wiki/` | Compiled framework and project knowledge pages with source-backed links | `/54-Insight`, `/59-Wiki`, `/90-Agent`, `/99-Help` | Yes. It is the durable compiled knowledge layer. |
 
 ## Top-Level Files
 
@@ -84,6 +88,41 @@ Quality and Review:
   /56-PR-Followup    -> .workspaces/reports/ and/or specs/{ID}-*/
   /57-Issue-Triage   -> .workspaces/issues/
   /54-Insight        -> .workspaces/lessons.md and task logs
+
+Knowledge:
+  /59-Wiki           -> .workspaces/wiki/framework/ or .workspaces/wiki/project/
+```
+
+## Wiki Layer
+
+DevFlow Wiki stores compiled knowledge, not source truth. Source truth remains in code, specs, QA reports, RCA reports, PR reviews, commits, and research artifacts.
+
+Use `.workspaces/wiki/framework/` for Nexus-DevFlow framework knowledge such as workflow decisions, agent boundaries, command contracts, and token/context lessons.
+
+Use `.workspaces/wiki/project/` for target-project knowledge such as architecture, domain concepts, decisions, patterns, gotchas, and task lessons.
+
+Every wiki page should include a `Sources` section that links back to the artifacts or commits used to compile it.
+
+Project wiki skeletons are initialized by `npm run activate` or:
+
+```powershell
+npm.cmd run agent -- wiki:init project
+npm.cmd run agent -- wiki:lint project
+```
+
+The project wiki contract is:
+
+```text
+.workspaces/wiki/project/
+|-- index.md
+|-- architecture/
+|-- decisions/
+|-- domain/
+|-- gotchas/
+|-- patterns/
+|-- tasks/
+|-- token-context/
+`-- _drafts/
 ```
 
 ## Deletion Policy
@@ -105,6 +144,7 @@ Not safe to delete by default:
 - `.workspaces/prds`
 - `.workspaces/debug`
 - `.workspaces/reports`
+- `.workspaces/wiki`
 - `.workspaces/lessons.md`
 
 ## Regeneration

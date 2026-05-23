@@ -231,6 +231,26 @@ function makeStep(stepIndex, phase, actor, message, timestamp) {
   return { step_index: stepIndex, phase, actor, message, timestamp };
 }
 
+function makeContextUsageNotes() {
+  return {
+    tracking_mode: 'manual_optional',
+    context_loaded: [],
+    files_read: [],
+    artifacts_read: [],
+    token_usage: {
+      tracking_mode: 'manual_optional',
+      input_tokens: null,
+      output_tokens: null,
+      cached_tokens: null,
+      total_tokens: null,
+      source: 'not_recorded',
+    },
+    optimization_notes: [
+      'Fill these notes after execution when a session loads more context than expected or token usage is available from the runtime.',
+    ],
+  };
+}
+
 function replaceGoal(command, goal) {
   return command.replaceAll('{goal}', goal.replaceAll('"', '\\"'));
 }
@@ -277,6 +297,7 @@ function buildSession(config) {
       total_turns: totalTurns,
       turns_by_phase: turnsByPhase,
     },
+    context_usage: makeContextUsageNotes(),
     flow_selected: route.flow,
     routing_reason: route.reason,
     complexity,

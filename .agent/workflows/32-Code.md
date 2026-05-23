@@ -84,3 +84,19 @@ Report:
 - Verification commands run
 - Any blocked or manual checks
 - Next command: `/33-Verify {ID}`
+
+## Next Workflow Recommendation
+
+- **Primary**: `/33-Verify {ID}` when the planned subtask or full implementation is complete.
+- **Why**: Implementation needs independent QA before human acceptance or commit.
+- **Alternatives**:
+  - `/20-Debug "{blocker}"` - choose this when implementation is blocked by an unexplained failure.
+  - `/90-Agent prp-core-debugger {target}` - choose this for focused root-cause help inside an existing task.
+  - `/31-Plan {ID}` - choose this when the implementation plan is incomplete or no longer matches the work.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when coding discovers a reusable implementation pattern, gotcha, or context optimization.
+- **Scope**: `project` unless the discovery is about DevFlow itself.
+- **Reason**: Coding findings are useful only when they are stable enough to help future tasks.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/{ID}-*/task_logs.json`

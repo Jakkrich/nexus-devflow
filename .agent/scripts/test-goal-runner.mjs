@@ -40,6 +40,10 @@ assert(latest.flow_selected === 'RCA / Debug Flow', 'debug goal should route to 
 assert(latest.config.max_turns === 15, 'max turn config should be recorded');
 assert(latest.config.parallel_enabled === true, 'parallel config should be recorded');
 assert(latest.metrics.total_turns <= 15, 'total turns should respect max turn budget');
+assert(latest.context_usage && typeof latest.context_usage === 'object', 'context usage notes should be recorded');
+assert(latest.context_usage.token_usage.tracking_mode === 'manual_optional', 'token usage should default to manual optional tracking');
+assert(Array.isArray(latest.context_usage.files_read), 'context usage should record files read as a list');
+assert(Array.isArray(latest.context_usage.optimization_notes), 'context usage should record optimization notes as a list');
 assert(Array.isArray(latest.tasks_decomposed) && latest.tasks_decomposed.length === 3, 'debug flow should create three tasks');
 assert(Array.isArray(latest.recommended_commands) && latest.recommended_commands[0].startsWith('/20-Debug'), 'debug flow should recommend /20-Debug');
 

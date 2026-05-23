@@ -53,6 +53,22 @@ You are an orchestrator. Your goal is to call the specialized Deep Debugging age
 - Capture the **Fix Specification**, **Verification Plan**, and **Prevention Measures**.
 - If the bug reveals a systemic misunderstanding or a new pattern, ensure it is carefully recorded in `.workspaces/lessons.md` (Strictly using the [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md) template). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
 
+## Next Workflow Recommendation
+
+- **Primary**: `/30-Task {next_id} "{fix title}"` when the fix is not tracked yet.
+- **Why**: RCA should become an executable task before source code changes are made.
+- **Alternatives**:
+  - `/32-Code {ID}` - choose this when the task already exists and the root cause is proven.
+  - `/54-Insight {rca_report}` - choose this after validation to preserve the root cause and prevention lesson.
+  - `/59-Wiki project ingest {rca_report}` - choose this when the RCA revealed a reusable project gotcha.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when the RCA confirms a root cause, prevention step, or recurring failure pattern.
+- **Scope**: `project` unless the issue exposes a DevFlow workflow or agent behavior problem.
+- **Reason**: Debug findings are high-value wiki inputs only after the cause is proven.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/debug/rca-{slug}.md`
+
 ---
 
 ## 📝 Output Format

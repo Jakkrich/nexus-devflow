@@ -78,3 +78,18 @@ Report:
 - Key acceptance criteria
 - Validation status
 - Next command: `/31-Plan {ID}`
+
+## Next Workflow Recommendation
+
+- **Primary**: `/31-Plan {ID}`
+- **Why**: The task artifacts exist and should be transformed into an implementation plan before coding.
+- **Alternatives**:
+  - `/90-Agent requirements-engineer .workspaces/specs/{ID}-{slug}/spec.md` - choose this when the spec needs specialist review.
+  - `/11-Research "{topic}"` - choose this when external or codebase research is still missing.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` only when task creation captures a durable project convention, domain concept, or framework workflow lesson.
+- **Scope**: `project` for target-project knowledge, `framework` for DevFlow workflow improvements.
+- **Reason**: Most task specs are source artifacts; wiki updates should wait until the knowledge is reusable or verified.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/{ID}-{slug}/spec.md`

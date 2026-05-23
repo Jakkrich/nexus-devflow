@@ -88,3 +88,19 @@ Return a PR review. Do not modify files unless the user explicitly asks for fixe
 
 **MANDATORY RULE:** Before saving a PR review report, inspect `.agent/resources/schemas/pr_review.template.md` and use its required headings and table structure. Before reporting completion, run `npm run agent -- markdown:validate {report_path} pr_review.template.md` and replace any placeholder/template text with concrete findings, file references, risk, and verification gaps.
 **MANDATORY RULE:** If a Task ID is linked to this PR, ALWAYS save this review report to a file named `pr_review.md` inside that task's workspace directory (e.g., `.workspaces/specs/{ID}-*/pr_review.md`).
+
+## Next Workflow Recommendation
+
+- **Primary**: `/32-Code {ID}` when review finds required fixes, or `/50-Commit {ID}` when the review is clean and the task is approved.
+- **Why**: PR review either creates corrective work or clears the path toward commit/PR completion.
+- **Alternatives**:
+  - `/54-Insight {review_report}` - choose this when review findings reveal reusable lessons.
+  - `/59-Wiki project ingest {review_report}` - choose this when review establishes a durable project convention or risk pattern.
+  - `/56-PR-Followup {target}` - choose this when the PR has comments that need classification and response.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when review finds a reusable risk pattern, convention, architectural decision, or testing gap.
+- **Scope**: `project` unless the finding changes DevFlow review behavior.
+- **Reason**: Review findings compound well when stored as patterns and gotchas rather than isolated comments.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/{ID}-*/pr_review.md`

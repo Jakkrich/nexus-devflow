@@ -309,6 +309,7 @@ Nexus-DevFlow/
     research/                # Research notes and brainstorm outputs
     specs/                   # PRP task workspaces and goal sessions
     roadmap/                 # Machine-readable roadmap artifacts
+    wiki/                    # Compiled framework/project knowledge pages
   docs/                      # Human-readable guides
   scripts/                   # Root automation scripts
 ```
@@ -321,6 +322,7 @@ Nexus-DevFlow/
 | `.workspaces/debug` | `/20-Debug` |
 | `.workspaces/reports` | `/14-Orchestrate`, `/40-Test`, `/41-Simplify`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` |
 | `.workspaces/roadmap` | `/17-Roadmap` |
+| `.workspaces/wiki` | `/54-Insight`, `/59-Wiki`, `/90-Agent`, `/99-Help` |
 
 ---
 
