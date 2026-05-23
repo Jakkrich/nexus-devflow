@@ -20,7 +20,7 @@ npm run goal -- goal "Implement goal command" max-turns 30 parallel
 
 ## Purpose
 
-The goal runner turns an open-ended request into a routed DevFlow execution plan. It records the routing decision, task decomposition, max-turn budget, elapsed time, and worker handoff history in a session log.
+The goal runner turns an open-ended request into a routed DevFlow execution plan. It records the routing decision, task decomposition, max-turn budget, elapsed time, worker handoff history, and lightweight context usage notes in a session log.
 
 ## Boss-Worker Roles
 
@@ -47,7 +47,8 @@ The Boss first classifies the request into one of these paths:
 4. Execute or recommend the relevant DevFlow commands.
 5. Track turns by phase and stop when the configured `max-turns` budget is reached.
 6. Run validation gates appropriate to the selected flow.
-7. Save a structured session report.
+7. Add lightweight Context Usage Notes when the runtime or operator can provide them.
+8. Save a structured session report.
 
 ## Log Contract
 
@@ -66,10 +67,21 @@ Each log includes:
 - `status`
 - `config`
 - `metrics`
+- `context_usage`
 - `flow_selected`
 - `tasks_decomposed`
 - `execution_steps`
 - `recommended_commands`
+
+### Context Usage Notes
+
+`context_usage` is intentionally manual and optional until the runtime exposes exact token telemetry. Use it to capture:
+
+- `context_loaded`: short names of prompts, skills, or workflow docs loaded
+- `files_read`: focused files or folders read during execution
+- `artifacts_read`: specs, plans, reports, or logs used as context
+- `token_usage`: `input_tokens`, `output_tokens`, `cached_tokens`, and `total_tokens` when available
+- `optimization_notes`: one or two concrete ways to reduce context next time
 
 ## Validation
 
@@ -89,3 +101,19 @@ Report:
 - Task decomposition summary
 - Session log path
 - Recommended next command or validation result
+
+## Next Workflow Recommendation
+
+- **Primary**: the first command listed in `recommended_commands`.
+- **Why**: `/05-Goal` routes broad intent into the most appropriate DevFlow path.
+- **Alternatives**:
+  - `/10-Brainstorm "{goal}"` - choose this when the goal is still exploratory.
+  - `/20-Debug "{goal}"` - choose this when the goal is primarily a failure investigation.
+  - `/30-Task {next_id} "{goal}"` - choose this when the goal is ready for task execution.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when routing reveals a reusable workflow decision, token/context lesson, or project pattern; otherwise `no`.
+- **Scope**: `project` for target-project lessons, `framework` for DevFlow routing or workflow lessons.
+- **Reason**: Goal sessions can reveal recurring route decisions and context-loading patterns.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/goal_latest_session.json` or `/59-Wiki framework ingest .workspaces/specs/goal_latest_session.json`

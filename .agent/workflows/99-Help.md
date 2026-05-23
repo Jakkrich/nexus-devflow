@@ -262,6 +262,22 @@ git config --global credential.helper "cache --timeout=900" 2>/dev/null; git clo
 
 After the update, remove the temporary setup directory only after confirming the resolved path is the intended temp folder.
 
+## Next Workflow Recommendation
+
+- **Primary**: the numbered workflow that best matches the user's current state.
+- **Why**: `/99-Help` is the routing and coaching entry point for people and agents.
+- **Alternatives**:
+  - `/05-Goal "{goal}"` - choose this for broad goals that need routing and decomposition.
+  - `/30-Task {next_id} "{title}"` - choose this for executable work.
+  - `/59-Wiki query {framework|project|all} "{question}"` - choose this when the user needs accumulated knowledge.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when help reveals a missing guide, recurring confusion, workflow route, or project convention that should be remembered.
+- **Scope**: `framework` for DevFlow guidance, `project` for target-project guidance.
+- **Reason**: Repeated help questions are strong signals for wiki pages or workflow documentation.
+- **Suggested Command**: `/59-Wiki framework ingest .agent/workflows/99-Help.md`
+
 *(Alternatively, if the framework is already installed, they can just type `/999-Update` in the chat!)*
 
 ---

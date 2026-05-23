@@ -111,3 +111,19 @@ If validation fails, run repair and update only the broken fields with script co
 - Human-readable `plan.md` is created and presented.
 - `plan:validate` passes.
 - Next command: `/32-Code {ID}`
+
+## Next Workflow Recommendation
+
+- **Primary**: `/32-Code {ID}` after the user approves `plan.md`.
+- **Why**: Approved planning is the gate before implementation.
+- **Alternatives**:
+  - `/90-Agent codebase-analyst .workspaces/specs/{ID}-*/` - choose this when architecture or data flow is unclear.
+  - `/11-Research "{topic}"` - choose this when the plan depends on external docs or APIs.
+  - `/30-Task {ID} "{title}"` - choose this only when the spec needs to be rewritten before planning continues.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when planning records a reusable architecture decision, project pattern, or context-loading lesson.
+- **Scope**: `project` unless the planning lesson changes DevFlow framework behavior.
+- **Reason**: Plans often discover stable patterns and minimal context references that future sessions should reuse.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/{ID}-*/plan.md`

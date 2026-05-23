@@ -104,3 +104,19 @@ Report:
 - Commands run
 - Artifact validation status
 - Next command: `/34-Human Approve {ID}` if pass, or `/32-Code {ID}` if fail
+
+## Next Workflow Recommendation
+
+- **Primary**: `/34-Human Approve {ID}` when QA passes, or `/32-Code {ID}` when QA fails.
+- **Why**: Verification decides whether work moves to human acceptance or loops back to coding.
+- **Alternatives**:
+  - `/54-Insight {ID}` - choose this after a pass or meaningful failure to preserve lessons.
+  - `/59-Wiki project ingest .workspaces/specs/{ID}-*/qa_report.md` - choose this when QA reveals reusable project knowledge.
+  - `/55-PR-Review {target}` - choose this when a PR-level risk review is needed before merge.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when QA confirms a reusable lesson, regression pattern, manual check, or validation command.
+- **Scope**: `project` unless QA reveals a DevFlow framework rule.
+- **Reason**: Verified QA evidence is one of the safest sources for project wiki updates.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/{ID}-*/qa_report.md`

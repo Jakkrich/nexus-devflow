@@ -30,6 +30,11 @@ const REQUIRED_MARKDOWN_TEMPLATE_MANIFEST = {
   'spec.md': 'spec.template.md',
 };
 
+const WIKI_LAYOUTS = {
+  framework: ['agents', 'commands', 'decisions', 'gotchas', 'token-context', 'workflows'],
+  project: ['architecture', 'decisions', 'domain', 'gotchas', 'patterns', 'tasks', 'token-context', '_drafts'],
+};
+
 function isObject(value) {
   return value && typeof value === 'object' && !Array.isArray(value);
 }
@@ -156,6 +161,11 @@ function materializeTextTemplate(templateName, replacements = {}) {
     (text, [key, val]) => text.replaceAll(`{${key}}`, String(val)),
     readTextTemplate(templateName),
   );
+}
+
+function writeTextIfMissing(file, content) {
+  ensureDir(path.dirname(file));
+  if (!fs.existsSync(file)) fs.writeFileSync(file, content, 'utf8');
 }
 
 function renderInitialSpec({ id, title, description }) {
@@ -1100,6 +1110,95 @@ function commandStatus() {
   console.log('==================================================\n');
 }
 
+function wikiRoot(scope) {
+  if (!['framework', 'project'].includes(scope)) {
+    throw new Error('Wiki scope must be "framework" or "project".');
+  }
+  return path.join(PROJECT_ROOT, '.workspaces', 'wiki', scope);
+}
+
+function starterPage(title, summary, source) {
+  return materializeTextTemplate('wiki_page.template.md', {
+    Title: title,
+    'One or two sentences describing the reusable knowledge.': summary,
+    'Situation where this page should be loaded.': 'Load this page when related knowledge is needed for a DevFlow workflow.',
+    'Concrete guidance, pattern, decision, gotcha, or context note.': 'Add source-backed project details during `/59-Wiki ingest`.',
+    'Related wiki page or "None yet."': 'None yet.',
+    'Source artifact, file path, report, commit, or command output.': source,
+  });
+}
+
+function commandWikiInit(args) {
+  const scope = args[0] || 'project';
+  const root = wikiRoot(scope);
+  for (const dir of WIKI_LAYOUTS[scope]) ensureDir(path.join(root, dir));
+
+  const indexTemplate = scope === 'project'
+    ? readTextTemplate('wiki_project_index.template.md')
+    : `# Framework Wiki
+
+This wiki compiles reusable knowledge about Nexus-DevFlow itself.
+
+## Start Here
+
+- [[workflows/devflow-lifecycle]]
+- [[workflows/wiki-knowledge-loop]]
+- [[decisions/two-namespace-wiki]]
+- [[commands/script-first-json-rule]]
+- [[agents/specialist-routing]]
+- [[token-context/context-usage-notes]]
+
+## Sources
+
+- \`.agent/workflows/59-Wiki.md\`
+- \`docs/workspace-artifacts.md\`
+`;
+  writeTextIfMissing(path.join(root, 'index.md'), indexTemplate);
+
+  if (scope === 'project') {
+    writeTextIfMissing(path.join(root, 'architecture', 'overview.md'), starterPage('Architecture Overview', 'Project architecture notes compiled from source artifacts.', '.workspaces/project_index.json'));
+    for (const section of ['decisions', 'domain', 'gotchas', 'patterns', 'tasks', 'token-context']) {
+      const title = section.split('-').map((part) => part[0].toUpperCase() + part.slice(1)).join(' ');
+      writeTextIfMissing(path.join(root, section, 'index.md'), starterPage(title, `${title} knowledge compiled from verified project artifacts.`, '.agent/workflows/59-Wiki.md'));
+    }
+  }
+
+  console.log(`Initialized ${scope} wiki at ${path.relative(PROJECT_ROOT, root)}`);
+}
+
+function walkMarkdownFiles(dir, files = []) {
+  if (!fs.existsSync(dir)) return files;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkMarkdownFiles(full, files);
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      files.push(full);
+    }
+  }
+  return files;
+}
+
+function commandWikiLint(args) {
+  const scope = args[0] || 'project';
+  const root = wikiRoot(scope);
+  if (!fs.existsSync(root)) throw new Error(`Wiki scope is not initialized: ${scope}`);
+  const failures = [];
+  const files = walkMarkdownFiles(root)
+    .filter((file) => !path.relative(root, file).split(path.sep).includes('_drafts'));
+  for (const file of files) {
+    const relative = path.relative(PROJECT_ROOT, file);
+    const text = fs.readFileSync(file, 'utf8');
+    if (!text.includes('## Sources')) failures.push(`${relative}: missing ## Sources`);
+    if (/\b(TODO|TBD)\b/i.test(text)) failures.push(`${relative}: contains TODO/TBD placeholder`);
+  }
+  if (failures.length) {
+    for (const failure of failures) console.error(failure);
+    throw new Error(`${scope} wiki lint failed with ${failures.length} issue(s).`);
+  }
+  console.log(`Wiki lint passed for ${scope} (${files.length} page(s)).`);
+}
+
 function help() {
   console.log(`PRP Task Management Tool (Node)
 
@@ -1120,6 +1219,8 @@ Usage:
   prp markdown:validate {file_path} [template_name]
   prp validate [ID] [--fix]
   prp repair [ID]
+  prp wiki:init {framework|project}
+  prp wiki:lint {framework|project}
   prp status
 `);
 }
@@ -1145,6 +1246,8 @@ function main() {
     if (command === 'validate') return commandValidate(args);
     if (command === 'repair') return commandRepair(args);
     if (command === 'status') return commandStatus(args);
+    if (command === 'wiki:init') return commandWikiInit(args);
+    if (command === 'wiki:lint') return commandWikiLint(args);
     throw new Error(`Unknown command: ${command}`);
   } catch (error) {
     console.error(`Error: ${error.message}`);

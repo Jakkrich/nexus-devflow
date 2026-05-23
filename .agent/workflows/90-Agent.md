@@ -110,7 +110,8 @@ Reports that use the pack should include a short `Source Discipline` note with c
 2. Read the target file, folder, task directory, or recent changes.
 3. Apply the persona's specialist logic.
 4. If JSON artifact changes are needed, use script commands.
-5. Produce either a concise report or a focused set of changes.
+5. Record lightweight context usage in the report or task log when the agent loads notable context.
+6. Produce either a concise report or a focused set of changes.
 
 ## Output
 
@@ -122,4 +123,22 @@ If a report is substantial, save it to:
 
 Before saving a substantial agent report, inspect `.agent/resources/schemas/agent_report.template.md` and use its required headings unless the target workflow provides a more specific template. Before reporting completion, run `npm run agent -- markdown:validate {report_path} agent_report.template.md` and replace any placeholder/template text with concrete files reviewed, findings, recommendations, and validation needs.
 
+For substantial reports, add a short `Context Usage Notes` subsection under the context reviewed area with files/artifacts loaded, any known token counts, and one practical optimization note for future runs.
+
 Short reports can be returned directly in chat.
+
+## Next Workflow Recommendation
+
+- **Primary**: the workflow that owns the target's lifecycle, such as `/31-Plan`, `/32-Code`, `/33-Verify`, `/54-Insight`, or `/55-PR-Review`.
+- **Why**: `/90-Agent` supplies specialist judgment; the owning workflow should execute the next lifecycle step.
+- **Alternatives**:
+  - `/14-Orchestrate {target}` - choose this when multiple specialist perspectives are needed.
+  - `/59-Wiki project ingest {report_path}` - choose this when the specialist report contains reusable project knowledge.
+  - `/99-Help {target}` - choose this when the correct next route is unclear.
+
+## Wiki Update Recommendation
+
+- **Needed**: `yes` when the agent report captures reusable findings, conventions, gotchas, decisions, or context usage lessons.
+- **Scope**: `project` for target-project knowledge, `framework` for DevFlow/agent behavior knowledge.
+- **Reason**: Specialist reports are valuable wiki sources only when they contain reusable, source-backed conclusions.
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md`
