@@ -22,7 +22,7 @@ PRPs remains a manual IDE workflow:
 
 | Family | Use for | PRPs location |
 | :--- | :--- | :--- |
-| Spec | Requirement gathering, spec research, spec critique | `/12-PRD`, `/15-Spec-Research`, `/18-Spec-Orchestrate`, `/30-Task`, `/31-Plan`, `discuss-spec` |
+| Spec | Requirement gathering, spec research, spec critique | `/12-PRD`, `/15-Spec-Research`, `/18-Spec-Orchestrate`, `/30-Task`, `/31-Plan`, `requirements-engineer` |
 | Complexity | Scope and risk classification | `/31-Plan`, `prp-core-planner` |
 | Roadmap | Product discovery and feature prioritization | `/17-Roadmap` and `.workspaces/roadmap` |
 | Ideation | Code, docs, performance, security, UI/UX improvement ideas | `/10-Brainstorm`, `/11-Research`, `/13-UI-UX`, `/41-Simplify` |
@@ -48,8 +48,8 @@ Do not promote every source prompt into a top-level slash workflow. Classify it 
 | Source prompt or command idea | DevFlow step | Keep as | Rule |
 | :--- | :--- | :--- | :--- |
 | `validation_fixer` | `/33-Verify` fail path, then `/32-Code` retry if code must change | Thin skill alias to `json-artifact-handling` and `lint-and-validate` | Repair artifacts with PRP CLI first; fix code only after validation identifies a real implementation failure. |
-| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, or `/53-Changelog` depending on timing | Skill-backed agent action using `documentation-and-adrs` and `docs-impact-agent` | Do not create a standalone `/Documentation-Ideation` workflow. |
-| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, or `/41-Simplify` | Skill-backed review using `performance-optimization` and `performance-optimizer` | Require measurement before recommending optimization work. |
+| `ideation_documentation` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, or `/53-Changelog` depending on timing | Skill-backed agent action using `documentation-and-adrs` and `documentation-maintainer` | Do not create a standalone `/Documentation-Ideation` workflow. |
+| `ideation_performance` | `/33-Verify`, `/39-QA-Orchestrate`, or `/41-Simplify` | Skill-backed review using `performance-optimization` and `performance-engineer` | Require measurement before recommending optimization work. |
 | `ideation_security` | `/33-Verify`, `/39-QA-Orchestrate`, `/20-Debug` for incident symptoms | Skill-backed review using `security-and-hardening` and `security-auditor` | Treat findings as review output or task input, not automatic implementation. |
 | `mcp_tools/*` validation prompts | `/33-Verify` and `/40-Test` | Tool-specific validation skill guidance | Convert unavailable tools to the current IDE/browser/API/database verification options. |
 | Autonomous orchestration aliases | `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, or `/90-Agent` | Thin alias only | Preserve user-controlled DevFlow phase gates. |

@@ -14,7 +14,7 @@ Run a specialist agent persona for targeted expertise while preserving the PRPs 
 Examples:
 
 ```text
-/90-Agent discuss-spec .workspaces/specs/007-example/spec.md
+/90-Agent requirements-engineer .workspaces/specs/007-example/spec.md
 /90-Agent codebase-explorer src/services/
 /90-Agent code-reviewer .workspaces/specs/007-example
 ```
@@ -28,7 +28,7 @@ Planning and requirements:
 | Agent | Purpose |
 | :--- | :--- |
 | `prp-core-planner` | Create implementation plans from specs and codebase patterns. |
-| `discuss-spec` | Refine `spec.md` and requirements before planning. |
+| `requirements-engineer` | Refine `spec.md` and requirements before planning. |
 | `prp-core-prd-architect` | Draft PRD documents from early ideas. |
 | `orchestrator` | Coordinate complex work and recommend next specialist steps. |
 | `prp-core-boss` | Route `/goal` requests, decompose work, enforce turn budgets, and validate worker output. |
@@ -50,8 +50,6 @@ Implementation:
 | `backend-specialist` | Backend, APIs, database, server logic. |
 | `frontend-specialist` | UI/UX and frontend implementation. |
 | `database-architect` | Schema, indexing, and query design. |
-| `code-simplifier` | Refactor without changing behavior. |
-| `type-design-analyzer` | Type/interface consistency. |
 
 Quality and debugging:
 
@@ -61,8 +59,7 @@ Quality and debugging:
 | `prp-core-debugger` | Root cause analysis. |
 | `code-reviewer` | Code review, risk, regressions. |
 | `security-auditor` | Security and logic risk. |
-| `performance-optimizer` | Performance bottlenecks. |
-| `silent-failure-hunter` | Swallowed errors and missing observability. |
+| `performance-engineer` | Performance bottlenecks. |
 
 Git and docs:
 
@@ -70,7 +67,17 @@ Git and docs:
 | :--- | :--- |
 | `prp-core-git-committer` | Commit preparation and message quality. |
 | `prp-core-git-pr-maker` | Pull request summary and preparation. |
-| `docs-impact-agent` | Documentation impact analysis. |
+| `documentation-maintainer` | Documentation impact analysis. |
+
+## Reusable Skills
+
+The following former narrow agents are now skills. Invoke them through the responsible agent or workflow instead of `/90-Agent`:
+
+| Skill | Apply Through |
+| :--- | :--- |
+| `code-simplification` | `prp-core-coder`, `code-reviewer`, or `/41-Simplify` |
+| `type-design` | `backend-specialist`, `frontend-specialist`, `database-architect`, or `code-reviewer` |
+| `silent-failure-audit` | `code-reviewer`, `test-engineer`, `backend-specialist`, or `security-auditor` |
 
 ## Artifact Contract
 

@@ -29,7 +29,7 @@ $ARGUMENTS
 |-----------|---------------------------|
 | **Web App** | frontend-specialist, backend-specialist, test-engineer |
 | **API** | backend-specialist, security-auditor, test-engineer |
-| **UI/Design** | frontend-specialist, seo-specialist, performance-optimizer |
+| **UI/Design** | frontend-specialist, seo-specialist, performance-engineer |
 | **Database** | database-architect, backend-specialist, security-auditor |
 | **Full Stack** | orchestrator, frontend-specialist, backend-specialist, devops-engineer |
 | **Debug** | prp-core-debugger, codebase-explorer, test-engineer |
