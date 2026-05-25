@@ -1,3 +1,23 @@
+<!-- nexus-devflow:start -->
+# Nexus-DevFlow
+
+Use Nexus-DevFlow when the user asks for DevFlow, PRP workflows, or numbered commands such as /05-Goal, /10-Brainstorm, /30-Task, /31-Plan, /32-Code, /33-Verify, /40-Test, /53-Changelog, /55-PR-Review, or /99-Help.
+
+Framework root: `d:\Projects\nexus-devflow`
+Framework version: `1.4.0`
+
+Before running a workflow:
+- Read the matching file under `d:\Projects\nexus-devflow/.agent/workflows/`.
+- Keep target project artifacts in the target project's `.workspaces` directory.
+- Use PRP CLI commands for JSON artifacts whenever possible.
+- Run validation before reporting completion.
+
+Update/check:
+- Check local framework: `npm run validate`
+- Check installed provider integration: inspect this managed block and compare Framework version with `d:\Projects\nexus-devflow/package.json`
+- Upgrade local checkout: check `git status --short`; if clean, pull or ask the user to approve pull; then reapply this block with the new package version.
+<!-- nexus-devflow:end -->
+
 # PRPs Specialist Agents
 
 ## Script-First JSON Rule
