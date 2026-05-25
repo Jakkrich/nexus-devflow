@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -48,7 +48,7 @@ function readJson(relativePath, failures) {
 }
 
 function scanForLegacyReferences(failures) {
-  const excluded = new Set(['.git', 'node_modules']);
+  const excluded = new Set(['.git', 'node_modules', '.venv', 'venv', 'env']);
   const allowedLegacyMentions = new Set([
     path.normalize('scripts/activate-agent.mjs'),
     path.normalize('agent-bundle.manifest.json'),

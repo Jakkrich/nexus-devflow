@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-05-25
+
+### Added
+- **DevFlow Concept Intake Skill (`devflow-concept-intake`)**: ระบบสแกนและประเมิน Repository เบื้องต้น (`Concept Intake Skill`) ติดตั้งใน `.agent/skills/devflow-concept-intake/` ประกอบด้วยโครงสร้างข้อมูล `SKILL.md`, `openai.yaml` สำหรับ Agent และเทมเพลตมาตรฐานสำหรับการเสนอแนวทางการพัฒนาและการติดตาม upstream
+
+### Changed
+- **Standardized Markdown Metadata Contract**: ออกแบบสัญญาโครงสร้างเอกสาร (Markdown Metadata Contract) จัดเก็บที่ `docs/markdown-metadata-contract.md` เพื่อบังคับใช้อภิข้อมูล (YAML Frontmatter) และ Obsidian-compatible heading tags ในการรวบรวมและวิเคราะห์เอกสาร specs, plans, และ reports ในระบบ
+- **README Refactoring & Asset Cleanups**: ปรับปรุงเนื้อหา `README.md` ให้ทันสมัย เพิ่มดัชนี Workflow Index และปรับโครงสร้างภาพประกอบ โดยลบไฟล์ `.png` เดิมที่ไม่ได้ใช้งานออกจาก `docs/` เพื่อกระชับขนาดของ repository
+
+### Fixed
+- **Adoption of MIT License**: เปลี่ยนแปลงเงื่อนไขสัญญาอนุญาต (License) ของระบบเป็นสัญญาอนุญาตแบบ MIT อย่างเป็นทางการ โดยเพิ่มไฟล์ `LICENSE` และปรับค่าใน `package.json`
+
+### Removed
+- ลบไฟล์ภาพประกอบการทำงานเดิม (`docs/dva_*.png`) ที่ล้าสมัยและไม่ได้ใช้งานออกจากระบบ
+
+### Security
+- ไม่มีประเด็นความปลอดภัยหรือช่องโหว่ใหม่จากการตรวจสอบระบบและสุขอนามัยของ repository
+
+### Validation
+- `npm run validate`
+- `npm run validate:docs`
+- `npm run sync:check`
+
 ## [1.3.0] - 2026-05-24
 
 ### Added
