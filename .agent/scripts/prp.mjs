@@ -15,7 +15,10 @@ const STATUS_MAP = {
   done: ['done', 'done'],
   error: ['rejected', 'validation'],
 };
+const TRANSITION_STATUSES = new Set(['planning', 'in_progress', 'ai_review', 'human_review', 'done', 'error']);
 const ISO_TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+const TASK_ID_PATTERN = /^[0-9A-Za-z][0-9A-Za-z._-]{0,40}$/;
+const TASK_SLUG_PATTERN = /^[a-z0-9][a-z0-9-]{0,80}$/;
 
 const TEMPLATE_MANIFEST = {
   'task_metadata.json': 'task_metadata.template.json',
@@ -24,6 +27,7 @@ const TEMPLATE_MANIFEST = {
   'task_logs.json': 'task_logs.template.json',
   'context.json': 'context.template.json',
   'complexity_assessment.json': 'complexity_assessment.template.json',
+  'plan_approval.json': 'plan_approval.template.json',
 };
 
 const REQUIRED_MARKDOWN_TEMPLATE_MANIFEST = {
@@ -486,6 +490,51 @@ function saveArtifact(filePath, data) {
   writeJson(filePath, data);
 }
 
+function validateArtifactData(data, templateName) {
+  const template = readTemplate(templateName);
+  const schema = readSchemaForTemplate(templateName);
+  const missing = missingKeys(data, template);
+  const schemaErrors = validateSchema(data, schema);
+  schemaErrors.push(...validateSemanticFile(data, templateName, schema));
+  if (templateName === 'implementation_plan.template.json') {
+    schemaErrors.push(...validatePlanDependencies(data));
+  }
+  return { missing, schemaErrors };
+}
+
+function formatArtifactValidationErrors(fileName, missing, schemaErrors) {
+  const details = [];
+  if (missing.length) details.push(`missing keys: ${missing.join(', ')}`);
+  if (schemaErrors.length) details.push(`schema errors: ${schemaErrors.join('; ')}`);
+  return `Artifact validation failed for ${fileName}: ${details.join('; ')}`;
+}
+
+function saveValidatedArtifact(filePath, fileName, templateName, data) {
+  const nextData = structuredClone(data);
+  nextData.updated_at = timestamp();
+  const { missing, schemaErrors } = validateArtifactData(nextData, templateName);
+  if (missing.length || schemaErrors.length) {
+    throw new Error(formatArtifactValidationErrors(fileName, missing, schemaErrors));
+  }
+  writeJson(filePath, nextData);
+}
+
+function assertSafeTaskSegment(label, value, pattern) {
+  if (!pattern.test(value) || value.includes('/') || value.includes('\\') || value.includes('..')) {
+    const hint = label === 'ID'
+      ? 'Use letters, numbers, dots, underscores, or hyphens only.'
+      : 'Use lowercase letters, numbers, and hyphens only.';
+    throw new Error(`Invalid task ${label}: ${value}. ${hint}`);
+  }
+}
+
+function assertPathInside(child, parent, label) {
+  const relative = path.relative(parent, child);
+  if (relative === '' || relative.startsWith('..') || path.isAbsolute(relative)) {
+    throw new Error(`${label} must stay inside ${parent}: ${child}`);
+  }
+}
+
 function csvOrJsonArray(value) {
   if (!value) return [];
   const parsed = coerceCliValue(value);
@@ -594,10 +643,15 @@ function loadPlan(taskDir) {
 }
 
 function findTaskDir(id) {
+  assertSafeTaskSegment('ID', id, TASK_ID_PATTERN);
   if (!fs.existsSync(SPECS_DIR)) return null;
   return fs.readdirSync(SPECS_DIR, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name.startsWith(`${id}-`))
-    .map((entry) => path.join(SPECS_DIR, entry.name))
+    .map((entry) => path.resolve(SPECS_DIR, entry.name))
+    .filter((entryPath) => {
+      assertPathInside(entryPath, SPECS_DIR, 'Task directory');
+      return true;
+    })
     .sort()[0] || null;
 }
 
@@ -650,8 +704,11 @@ function commandInit(args) {
   const { positional, options } = parseOptions(args);
   const [id, title, slug, ...descParts] = positional;
   if (!id || !title || !slug) throw new Error('Usage: prp init {ID} "{Title}" {slug} ["Description"] [--force]');
+  assertSafeTaskSegment('ID', id, TASK_ID_PATTERN);
+  assertSafeTaskSegment('slug', slug, TASK_SLUG_PATTERN);
 
-  const taskDir = path.join(SPECS_DIR, `${id}-${slug}`);
+  const taskDir = path.resolve(SPECS_DIR, `${id}-${slug}`);
+  assertPathInside(taskDir, SPECS_DIR, 'Task directory');
   if (fs.existsSync(taskDir) && !options.force) {
     throw new Error(`Task directory already exists: ${taskDir}. Use --force to overwrite.`);
   }
@@ -702,7 +759,10 @@ function commandUpdate(args) {
   const plan = normalizeToTemplate(readJson(planPath), readTemplate('implementation_plan.template.json'));
   plan.schema_version ||= CONTRACT_VERSION;
   plan.updated_at = timestamp();
-  if (options.status) syncStatus(plan, options.status);
+  if (options.status) {
+    console.warn('Warning: update --status bypasses lifecycle gates. Prefer `prp transition {ID} {status}`.');
+    syncStatus(plan, options.status);
+  }
 
   if (options.subtask && options.substatus) {
     let found = false;
@@ -724,6 +784,146 @@ function commandUpdate(args) {
   }
   writeJson(planPath, plan);
   console.log(`Updated task ${id}.`);
+}
+
+function commandPlanApprove(args) {
+  const { positional, options } = parseOptions(args);
+  const [id] = positional;
+  if (!id) throw new Error('Usage: prp plan:approve {ID} --actor "{name}" --summary "{summary}"');
+  const actor = options.actor || options.by || 'agent';
+  const summary = options.summary || options.message || '';
+  if (!summary) throw new Error('plan:approve requires --summary "{summary}"');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const approvalPath = path.join(taskDir, 'plan_approval.json');
+  const existing = normalizeToTemplate(readJson(approvalPath, readTemplate('plan_approval.template.json')), readTemplate('plan_approval.template.json'));
+  const now = timestamp();
+  const approval = {
+    ...existing,
+    schema_version: existing.schema_version || CONTRACT_VERSION,
+    approved: true,
+    approved_at: now,
+    actor,
+    summary,
+    updated_at: now,
+  };
+  approval.created_at = approval.created_at && !approval.created_at.includes('{') ? approval.created_at : now;
+  saveValidatedArtifact(approvalPath, 'plan_approval.json', 'plan_approval.template.json', approval);
+  appendEvent(taskDir, {
+    event: 'plan.approved',
+    phase: 'planning',
+    actor,
+    message: summary,
+  });
+  console.log(`Approved plan for task ${id}.`);
+}
+
+function commandPlanApproval(args) {
+  const { positional } = parseOptions(args);
+  const [id] = positional;
+  if (!id) throw new Error('Usage: prp plan:approval {ID}');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const approvalPath = path.join(taskDir, 'plan_approval.json');
+  const approval = normalizeToTemplate(readJson(approvalPath, readTemplate('plan_approval.template.json')), readTemplate('plan_approval.template.json'));
+  console.log(JSON.stringify({
+    approved: approval.approved === true,
+    approved_at: approval.approved_at || null,
+    actor: approval.actor || null,
+    summary: approval.summary || '',
+  }, null, 2));
+}
+
+function allPlanSubtasksComplete(plan) {
+  const subtasks = (plan.phases || []).flatMap((phase) => phase.subtasks || []);
+  return subtasks.length > 0 && subtasks.every((subtask) => ['completed', 'done'].includes(subtask.status));
+}
+
+function hasHumanCompletionEvidence(taskDir, options) {
+  if (options.summary || options.message || options.actor) return true;
+  const logs = readJson(path.join(taskDir, 'task_logs.json'));
+  return (logs.events || []).some((event) =>
+    ['human.approved', 'human.action', 'human.feedback'].includes(event.event)
+    || event.actor === 'human'
+  );
+}
+
+function assertTransitionAllowed(taskDir, plan, nextStatus, options) {
+  if (!TRANSITION_STATUSES.has(nextStatus)) {
+    throw new Error(`Invalid transition status: ${nextStatus}. Allowed: ${[...TRANSITION_STATUSES].join(', ')}`);
+  }
+  if (nextStatus === 'in_progress') {
+    const approval = readJson(path.join(taskDir, 'plan_approval.json'), {});
+    if (approval.approved !== true) throw new Error('Cannot transition to in_progress before plan approval.');
+  }
+  if (nextStatus === 'ai_review') {
+    if (!allPlanSubtasksComplete(plan)) {
+      throw new Error('Cannot transition to ai_review until all plan subtasks are completed or done.');
+    }
+    assertTaskValid(taskDir);
+  }
+  if (nextStatus === 'human_review') {
+    const qaPath = path.join(taskDir, 'qa_report.md');
+    if (!fs.existsSync(qaPath)) throw new Error('Cannot transition to human_review before qa_report.md exists.');
+    const { missingHeadings, qualityIssues } = validateMarkdownFile(qaPath, 'qa_report.template.md');
+    if (missingHeadings.length || qualityIssues.length) {
+      throw new Error(`QA report validation failed:\n  ${[
+        ...missingHeadings.map((heading) => `MISSING HEADING: ${heading}`),
+        ...qualityIssues.map((issue) => `PLACEHOLDER TEXT: ${issue}`),
+      ].join('\n  ')}`);
+    }
+    assertTaskValid(taskDir);
+  }
+  if (nextStatus === 'done') {
+    if (plan.status !== 'human_review') throw new Error('Cannot transition to done before human_review.');
+    if (!hasHumanCompletionEvidence(taskDir, options)) {
+      throw new Error('Cannot transition to done without a human action message or approval event.');
+    }
+  }
+}
+
+function commandTransition(args) {
+  const { positional, options } = parseOptions(args);
+  const [id, nextStatus] = positional;
+  if (!id || !nextStatus) throw new Error('Usage: prp transition {ID} {status} [--actor name] [--summary message]');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { filePath, data: plan } = loadPlan(taskDir);
+  assertTransitionAllowed(taskDir, plan, nextStatus, options);
+  const fromStatus = plan.status;
+  syncStatus(plan, nextStatus);
+  saveValidatedArtifact(filePath, 'implementation_plan.json', 'implementation_plan.template.json', plan);
+  appendEvent(taskDir, {
+    event: 'task.transitioned',
+    phase: plan.xstateState || 'planning',
+    actor: options.actor || 'agent',
+    message: options.summary || options.message || `Transitioned ${id} from ${fromStatus} to ${nextStatus}`,
+    metadata: { from_status: fromStatus, to_status: nextStatus },
+  });
+  console.log(`Transitioned task ${id}: ${fromStatus} -> ${nextStatus}.`);
+}
+
+function commandFollowupStart(args) {
+  const { positional, options } = parseOptions(args);
+  const [id, ...summaryParts] = positional;
+  const summary = summaryParts.join(' ').trim() || options.summary || options.message || '';
+  if (!id || !summary) throw new Error('Usage: prp followup:start {ID} "{summary}"');
+  const taskDir = findTaskDir(id);
+  if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
+  const { filePath, data: plan } = loadPlan(taskDir);
+  plan.summary ||= {};
+  plan.summary.followup_round = Number(plan.summary.followup_round || 0) + 1;
+  plan.summary.followup_summary = summary;
+  syncStatus(plan, 'planning');
+  saveValidatedArtifact(filePath, 'implementation_plan.json', 'implementation_plan.template.json', plan);
+  appendEvent(taskDir, {
+    event: 'followup.started',
+    phase: 'planning',
+    actor: options.actor || 'agent',
+    message: summary,
+    metadata: { followup_round: plan.summary.followup_round },
+  });
+  console.log(`Started follow-up round ${plan.summary.followup_round} for task ${id}.`);
 }
 
 function commandLog(args) {
@@ -848,6 +1048,38 @@ function validateMarkdownFile(filePath, templateName = null) {
   return { missingHeadings, qualityIssues };
 }
 
+function taskValidationErrors(taskDir) {
+  const errors = [];
+  for (const [fileName, templateName] of Object.entries(TEMPLATE_MANIFEST)) {
+    const filePath = path.join(taskDir, fileName);
+    if (!fs.existsSync(filePath)) {
+      errors.push(`MISSING FILE: ${fileName}`);
+      continue;
+    }
+    const { missing, schemaErrors } = validateFile(filePath, templateName, false);
+    if (missing.length) errors.push(`MISSING KEYS in ${fileName}: ${missing.join(', ')}`);
+    for (const error of schemaErrors) errors.push(`SCHEMA ERROR in ${fileName}: ${error}`);
+  }
+  for (const [fileName, templateName] of Object.entries(REQUIRED_MARKDOWN_TEMPLATE_MANIFEST)) {
+    const filePath = path.join(taskDir, fileName);
+    if (!fs.existsSync(filePath)) {
+      errors.push(`MISSING FILE: ${fileName}`);
+      continue;
+    }
+    const { missingHeadings, qualityIssues } = validateMarkdownFile(filePath, templateName);
+    if (missingHeadings.length) errors.push(`MISSING HEADINGS in ${fileName}: ${missingHeadings.join(', ')}`);
+    for (const issue of qualityIssues) errors.push(`PLACEHOLDER TEXT in ${fileName}: ${issue}`);
+  }
+  return errors;
+}
+
+function assertTaskValid(taskDir) {
+  const errors = taskValidationErrors(taskDir);
+  if (errors.length) {
+    throw new Error(`Task validation failed:\n  ${errors.join('\n  ')}`);
+  }
+}
+
 function commandMarkdownValidate(args) {
   const { positional } = parseOptions(args);
   const [filePathArg, templateName] = positional;
@@ -959,9 +1191,9 @@ function commandArtifactSet(args) {
   }
   const taskDir = findTaskDir(id);
   if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
-  const { fileName, filePath, data } = loadArtifact(taskDir, artifactName, true);
+  const { fileName, filePath, templateName, data } = loadArtifact(taskDir, artifactName, true);
   setAtPath(data, fieldPath, coerceCliValue(valueParts.join(' ')));
-  saveArtifact(filePath, data);
+  saveValidatedArtifact(filePath, fileName, templateName, data);
   console.log(`Updated ${fileName}: ${fieldPath}`);
 }
 
@@ -973,9 +1205,9 @@ function commandArtifactAppend(args) {
   }
   const taskDir = findTaskDir(id);
   if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
-  const { fileName, filePath, data } = loadArtifact(taskDir, artifactName, true);
+  const { fileName, filePath, templateName, data } = loadArtifact(taskDir, artifactName, true);
   appendAtPath(data, fieldPath, coerceCliValue(valueParts.join(' ')));
-  saveArtifact(filePath, data);
+  saveValidatedArtifact(filePath, fileName, templateName, data);
   console.log(`Appended ${fileName}: ${fieldPath}`);
 }
 
@@ -987,9 +1219,9 @@ function commandArtifactMerge(args) {
   }
   const taskDir = findTaskDir(id);
   if (!taskDir) throw new Error(`Task with ID ${id} not found.`);
-  const { fileName, filePath, data } = loadArtifact(taskDir, artifactName, true);
+  const { fileName, filePath, templateName, data } = loadArtifact(taskDir, artifactName, true);
   mergeAtPath(data, fieldPath, coerceCliValue(valueParts.join(' ')));
-  saveArtifact(filePath, data);
+  saveValidatedArtifact(filePath, fileName, templateName, data);
   console.log(`Merged ${fileName}: ${fieldPath}`);
 }
 
@@ -1233,6 +1465,7 @@ function help() {
 Usage:
   prp init {ID} "{Title}" {slug} ["Description"] [--force]
   prp update {ID} [--status status] [--subtask id --substatus status]
+  prp transition {ID} {planning|in_progress|ai_review|human_review|done|error}
   prp log {ID} "message" [--phase planning|coding|validation] [--complete]
   prp event {ID} "message" [--event name] [--phase phase] [--ref id]
   prp artifact:get {ID} {artifact} [field_path]
@@ -1243,7 +1476,10 @@ Usage:
   prp plan:add-phase {ID} "{Name}" [--phase-id id] [--type implementation] [--depends-on phase-1,phase-2]
   prp plan:add-subtask {ID} {PHASE_ID} "{Title}" [--description text] [--service backend] [--modify a,b] [--create a,b]
   prp plan:set-subtask-status {ID} {SUBTASK_ID} {status}
+  prp plan:approve {ID} --actor "{name}" --summary "{summary}"
+  prp plan:approval {ID}
   prp plan:validate {ID}
+  prp followup:start {ID} "{summary}"
   prp markdown:validate {file_path} [template_name]
   prp validate [ID] [--fix]
   prp repair [ID]
@@ -1259,6 +1495,7 @@ function main() {
     if (!command || command === '--help' || command === '-h') return help();
     if (command === 'init') return commandInit(args);
     if (command === 'update') return commandUpdate(args);
+    if (command === 'transition') return commandTransition(args);
     if (command === 'log') return commandLog(args);
     if (command === 'event') return commandEvent(args);
     if (command === 'artifact:get') return commandArtifactGet(args);
@@ -1269,7 +1506,10 @@ function main() {
     if (command === 'plan:add-phase') return commandPlanAddPhase(args);
     if (command === 'plan:add-subtask') return commandPlanAddSubtask(args);
     if (command === 'plan:set-subtask-status') return commandPlanSetSubtaskStatus(args);
+    if (command === 'plan:approve') return commandPlanApprove(args);
+    if (command === 'plan:approval') return commandPlanApproval(args);
     if (command === 'plan:validate') return commandPlanValidate(args);
+    if (command === 'followup:start') return commandFollowupStart(args);
     if (command === 'markdown:validate') return commandMarkdownValidate(args);
     if (command === 'validate') return commandValidate(args);
     if (command === 'repair') return commandRepair(args);

@@ -8,19 +8,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
 const args = new Set(process.argv.slice(2));
 const manifest = readJson('agent-bundle.manifest.json', []);
+const roadmapOnly = args.has('--roadmap-only');
+const roadmapJsonArtifacts = [
+  '.workspaces/roadmap/roadmap_discovery.json',
+  '.workspaces/roadmap/roadmap.json'
+];
 
 const requiredJson = [
   '.workspaces/project_index.json',
-  '.workspaces/roadmap/project_index.json',
-  '.workspaces/roadmap/roadmap_discovery.json',
-  '.workspaces/roadmap/roadmap.json'
+  '.workspaces/roadmap/project_index.json'
 ];
 
 const requiredPaths = [
   '.agent',
   'agent-bundle.manifest.json',
   'package.json',
-  'ROADMAP.md',
   'docs/quickstart.md',
   'docs/workspace-artifacts.md',
   ...(manifest?.required_paths || [])
@@ -82,6 +84,11 @@ function scanForLegacyReferences(failures) {
 }
 
 function validateRoadmap(failures) {
+  if (!shouldValidateRoadmap()) {
+    ok('Roadmap artifacts are optional for default framework validation');
+    return;
+  }
+
   const roadmap = readJson('.workspaces/roadmap/roadmap.json', failures);
   if (!roadmap) return;
   if (!Array.isArray(roadmap.phases) || roadmap.phases.length < 1) {
@@ -105,6 +112,14 @@ function validateRoadmap(failures) {
   ok(`Roadmap has ${roadmap.phases.length} phases and ${roadmap.features.length} features`);
 }
 
+function shouldValidateRoadmap() {
+  return roadmapOnly || roadmapJsonArtifacts.some((item) => fs.existsSync(path.join(projectRoot, item)));
+}
+
+function requiredRoadmapPaths() {
+  return shouldValidateRoadmap() ? ['ROADMAP.md'] : [];
+}
+
 function validateWorkflowNumbering(failures) {
   const workflowDir = path.join(projectRoot, '.agent', 'workflows');
   if (!fs.existsSync(workflowDir)) {
@@ -126,7 +141,7 @@ function main() {
   generateProjectIndex(projectRoot);
   const seenRequired = new Set();
 
-  for (const item of requiredPaths) {
+  for (const item of [...requiredPaths, ...requiredRoadmapPaths()]) {
     if (seenRequired.has(item)) continue;
     seenRequired.add(item);
     if (!fs.existsSync(path.join(projectRoot, item))) fail(`Missing required path: ${item}`, failures);
@@ -138,7 +153,7 @@ function main() {
     else ok(`Legacy path absent: ${item}`);
   }
 
-  for (const item of requiredJson) {
+  for (const item of [...requiredJson, ...(shouldValidateRoadmap() ? roadmapJsonArtifacts : [])]) {
     if (!fs.existsSync(path.join(projectRoot, item))) {
       fail(`Missing JSON artifact: ${item}`, failures);
       continue;
@@ -148,7 +163,7 @@ function main() {
 
   validateRoadmap(failures);
   validateWorkflowNumbering(failures);
-  if (!args.has('--roadmap-only')) scanForLegacyReferences(failures);
+  if (!roadmapOnly) scanForLegacyReferences(failures);
 
   if (failures.length) {
     console.error(`\nValidation failed with ${failures.length} issue(s).`);

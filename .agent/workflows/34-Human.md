@@ -1,9 +1,9 @@
 ---
-description: Create Human Actions - Perform explicit human actions on a task, such as approving, rejecting, or providing feedback.
+description: Human actions compatibility dispatcher - Routes legacy /34-Human commands to explicit human action workflows.
 ---
-# Phase 34: Human Actions
+# Phase 34: Human Actions Compatibility Dispatcher
 
-Perform explicit human actions on a task, such as approving, rejecting, or providing feedback.
+Route legacy `/34-Human [Action] {ID} [Message]` commands to the first-class human action workflows.
 
 ## Usage
 
@@ -11,123 +11,88 @@ Perform explicit human actions on a task, such as approving, rejecting, or provi
 /34-Human [Action] {ID} [Message]
 ```
 
-Example: `/34-Human Approve 003`
-Example: `/34-Human Reject 003 "Needs better error handling"`
-Example: `/34-Human Feedback 003 "Please add validation for email format as well"`
+Legacy examples:
+
+```
+/34-Human Approve 003
+/34-Human Reject 003 "Needs better error handling"
+/34-Human Feedback 003 "Please add validation for email format as well"
+/34-Human ReCheck 003 "Did verification cover the fallback path?"
+```
+
+Preferred first-class commands:
+
+```
+/34-Human-Approve 003
+/34-Human-Reject 003 "Needs better error handling"
+/34-Human-Feedback 003 "Please add validation for email format as well"
+/34-Human-ReCheck 003 "Did verification cover the fallback path?"
+```
 
 ## Arguments
 
 - **Action**:
-  - `Approve`: Mark task as DONE ✅
-  - `Reject`: Send the work back for fixes → Loops back to `/32-Code` 🔄
-  - `Review`: Mark task as REVIEW NEEDED.
-  - `Feedback`: Add a feedback note → Loops back to `/32-Code` 🔄
+  - `Approve`: Route to `/34-Human-Approve {ID} [Approval message]`
+  - `Reject`: Route to `/34-Human-Reject {ID} "{Reason}"`
+  - `Feedback`: Route to `/34-Human-Feedback {ID} "{Feedback}"`
+  - `ReCheck` or `Review`: Route to `/34-Human-ReCheck {ID} [Question]`
 - **ID**: Task ID (e.g., `003`).
-- **Message**: Reason or feedback (Required for Reject/Feedback)
+- **Message**: Optional for Approve and ReCheck. Required for Reject and Feedback.
 
 ---
 
 ## Process
 
-### Step 1: Locate Task
-Search for the folder `.workspaces/specs/{ID}-*/` and read `implementation_plan.json`.
+### Step 1: Parse Legacy Action
+Read the first argument and map it to the explicit workflow:
 
-### Step 2: Execute Action (PURE AGENTIC)
+| Legacy Action | First-Class Workflow | Lifecycle Effect |
+|---|---|---|
+| `Approve` | `/34-Human-Approve` | Transitions task to `done` |
+| `Reject` | `/34-Human-Reject` | Transitions task to `in_progress` and records rejection history |
+| `Feedback` | `/34-Human-Feedback` | Transitions task to `in_progress` and records feedback history |
+| `ReCheck` or `Review` | `/34-Human-ReCheck` | Read-only review; status unchanged by default |
 
-Use PRP CLI commands for `implementation_plan.json` status changes. Do not manually rewrite dashboard JSON.
+### Step 2: Enforce Required Message Rules
+- `Reject` requires a reason.
+- `Feedback` requires a feedback message.
+- `Approve` may use `"Approved by human"` when no message is provided.
+- `ReCheck` may run without a question and perform a general review.
 
-#### ✅ Approve (Mark as DONE)
-- **Update status**: Run `npm run agent -- update {ID} --status done`
-- **Record lesson**: If this task contains good techniques or a structure that acts as a good prototype, add a note to `.workspaces/lessons.md` as a Best Practice. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
-- **End of lifecycle** — The task is completed.
+### Step 3: Delegate To The Explicit Workflow
+Follow the matching first-class workflow file as the source of truth:
 
-#### 🔄 Reject (Send back for fixes)
-- **Update status**: Run `npm run agent -- update {ID} --status in_progress`
-- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings. Before reporting completion, run `npm run agent -- markdown:validate {qa_report_path} qa_report.template.md` and replace any placeholder/template text with concrete approval/rejection/feedback evidence.
-- **Record Rejection** in `qa_report.md` under the heading `## Rejection History`:
-  ```markdown
-  ## Rejection History
-  ### Round {N} — {Date}
-  - **Reviewer**: Human
-  - **Reason**: {Message}
-  - **Action Items**:
-    - [ ] {Things to fix based on the Message}
-  ```
-- **Recommend Next Step**: _"Run `/32-Code {ID}` to apply fixes according to the Feedback"_
-- **Record lesson**: Add a note of the mistake and what needs to be fixed to `.workspaces/lessons.md` to prevent repeating the bug in the next task. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
+- [34-Human-Approve.md](34-Human-Approve.md)
+- [34-Human-Reject.md](34-Human-Reject.md)
+- [34-Human-Feedback.md](34-Human-Feedback.md)
+- [34-Human-ReCheck.md](34-Human-ReCheck.md)
 
-#### 📝 Feedback (Add Note and loop back)
-- **Update status**: Run `npm run agent -- update {ID} --status in_progress`
-- **Template Verification**: Before creating or updating `qa_report.md`, inspect `.agent/resources/schemas/qa_report.template.md` and preserve its required headings. Before reporting completion, run `npm run agent -- markdown:validate {qa_report_path} qa_report.template.md` and replace any placeholder/template text with concrete approval/rejection/feedback evidence.
-- **Record Feedback** in `qa_report.md` under the heading `## Feedback History`:
-  ```markdown
-  ## Feedback History
-  ### Round {N} — {Date}
-  - **From**: Human
-  - **Feedback**: {Message}
-  ```
-- **Recommend Next Step**: _"Run `/32-Code {ID}` to improve based on the Feedback"_
-- **Record lesson (Optional)**: If the Feedback represents a rule or style that should be memorized permanently, add a note to `.workspaces/lessons.md`. Must strictly follow the template in [../resources/schemas/lessons.template.md](../resources/schemas/lessons.template.md). Run `npm run agent -- markdown:validate .workspaces/lessons.md lessons.template.md` before reporting the lesson as complete.
-
-#### Follow-Up Planning Addon
-
-When the user asks for additional functionality after completion, apply the `followup_planner` pattern:
-
-- Extend the existing implementation plan; do not replace completed phases or subtasks.
-- Preserve all existing statuses.
-- Add new phase(s) and subtask(s) with `npm run agent -- plan:add-phase` and `npm run agent -- plan:add-subtask`.
-- Run `npm run agent -- plan:validate {ID}` and `npm run agent -- validate {ID}`.
-- Recommend `/32-Code {ID}` only after the user approves the added follow-up plan.
-
-When the task is approved or rejected, optionally apply the `insight_extractor` pattern to record reusable lessons, gotchas, and future recommendations.
-
-### Step 3: Notify
+### Step 4: Notify
 Show a summary to the user:
 
 ```
-📋 Human Action: {Action} on Task {ID}
-📌 Status: {new_status}
-📌 Next Step: {recommendation}
+Human Action: {Action} on Task {ID}
+Status: {new_status_or_unchanged}
+Next Step: {recommendation from delegated workflow}
 ```
-
----
-
-## Workflow Diagram
-
-```
-/32-Code {ID}
-    ↓
-/33-Verify {ID} (QA Report + Manual Guide)
-    ↓
-Status: human_review
-    ↓
-Human verifies according to Manual Verification Guide
-    ↓
-    ├── /34-Human Approve {ID}  → ✅ Done (Finished)
-    ├── /34-Human Reject {ID}   → 🔄 in_progress → /32-Code (Loop back)
-    └── /34-Human Feedback {ID} → 🔄 in_progress → /32-Code (Loop back)
-```
-
-> **Reject/Feedback Loop**: Will loop continuously until Approved
-> Each round will increment the Round number (Round 1, Round 2, ...)
 
 ---
 
 ## Output
-- **Updated Files**: `implementation_plan.json` (status), `qa_report.md` (rejection/feedback history)
+- **Updated Files**: Determined by the delegated workflow. ReCheck updates no files by default.
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/54-Insight {ID}` after approval, or `/32-Code {ID}` after rejection or feedback.
-- **Why**: Approved work should preserve lessons; rejected work should loop back to implementation.
+- **Primary**: Use the explicit workflow that matches the human action: `/34-Human-Approve {ID}`, `/34-Human-Reject {ID} "{Reason}"`, `/34-Human-Feedback {ID} "{Feedback}"`, or `/34-Human-ReCheck {ID} [Question]`.
+- **Why**: The explicit commands are easier to discover, validate, document, and maintain than a single action-dispatch command.
 - **Alternatives**:
-  - `/50-Commit {ID}` - choose this after approval when changes are ready to commit.
-  - `/59-Wiki project ingest .workspaces/specs/{ID}-*/` - choose this when approval or feedback contains reusable knowledge.
-  - `/35-Followup {ID}` - choose this when the human requests additional scope after approval.
+  - `/33-Verify {ID}` - choose this before human action when validation evidence is missing.
+  - `/32-Code {ID}` - choose this after rejection or feedback.
+  - `/54-Insight {ID}` - choose this after approval.
 
 ## Wiki Update Recommendation
 
-- **Needed**: `yes` when human approval, rejection, or feedback creates a durable preference, rule, or project lesson.
-- **Scope**: `project` unless the feedback is about DevFlow itself.
-- **Reason**: Human feedback is high-value project memory and should not remain only in chat.
+- **Needed**: `yes` when the delegated action records durable approval, rejection, feedback, or project preference.
+- **Scope**: `project` unless the action concerns DevFlow framework behavior.
+- **Reason**: Human decisions are high-value project memory and should not remain only in chat.
 - **Suggested Command**: `/59-Wiki project ingest .workspaces/specs/{ID}-*/qa_report.md`

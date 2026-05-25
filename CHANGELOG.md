@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-05-25
+
+### Added
+- **First-Class Human Review Workflows**: เพิ่มสคริปต์เวิร์กโฟลว์เฉพาะเจาะจงสำหรับการรีวิวโดยนักพัฒนา/ผู้ควบคุมระบบ ได้แก่ `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback` และ `/34-Human-ReCheck` พร้อมสร้างตัวกลางรองรับคำสั่งรูปแบบเดิมใน `/34-Human` เพื่อความเข้ากันได้ย้อนหลัง
+- **Plan Approval Schema & Template**: ติดตั้งโครงสร้างตรวจสอบความถูกต้องของการอนุมัติแผนการดำเนินงาน (`plan_approval.schema.json` และเทมเพลตเริ่มต้น) ในโฟลเดอร์หลักของเอเจนต์
+- **Script-First CLI Enhancements**: ติดตั้งคำสั่งควบคุมในระดับเอเจนต์ ได้แก่ `transition` (เปลี่ยนสถานะคิวงานพร้อมเงื่อนไขความปลอดภัย), `plan:approve` (บันทึกข้อมูลการอนุมัติแบบกำหนดตัวบุคคลและข้อสรุป), `plan:approval` (ตรวจสอบข้อมูลการอนุมัติ), และ `followup:start` (เริ่มดำเนินขั้นตอนการพัฒนาเพิ่มเติมแบบระบุรอบ)
+- **Link Project Test Coverage**: เพิ่มสคริปต์ทดสอบระบบจำลองการทำงานและตรวจสอบโครงสร้างโฟลเดอร์สำหรับการเชื่อมต่อโปรเจ็กต์ `scripts/test-link-project.mjs`
+
+### Changed
+- **Unified Review & Lifecycle Validation Gates**: ปรับปรุงและบังคับใช้นโยบายตรวจสอบความปลอดภัยของขั้นตอนงาน โดยป้องกันการสลับสถานะไปยัง `done` หากไม่มีหลักฐานการตรวจสอบจากผู้ตรวจสอบ (Human Action Message) และปฏิเสธการเปลี่ยนเป็น `ai_review` หรือเขียนโค้ดก่อนที่แผนงานจะถูกอนุมัติอย่างเป็นทางการ
+- **Standardized JSON Schema Enforcement**: ปรับขั้นตอนการทำงานของเอเจนต์ผ่าน CLI ให้ตรวจสอบความเสถียรและความสอดคล้องของเอกสารแผนงาน (Implementation Plan) และข้อมูลความต้องการระบบ (Requirements Schema) ก่อนทำการอัปเดตหรือผนวกข้อมูลใดๆ
+
+### Fixed
+- **Markdown Artifact Gates & Negative Fixtures**: แก้ไขและเพิ่มการควบคุมคุณภาพเอกสาร ไม่ยอมรับข้อความที่เป็น Placeholder/Scaffolding ในระหว่างการเปลี่ยนสถานะของสัญญางาน พร้อมจำลองระบบทดสอบเพื่อป้องกันกรณีหลุดรอด
+
+### Validation
+- `npm run validate:all`
+
 ## [1.4.0] - 2026-05-25
 
 ### Added

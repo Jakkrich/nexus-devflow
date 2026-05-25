@@ -16,7 +16,8 @@ Implement the approved plan incrementally. Source code edits are allowed in this
 Do not edit progress JSON manually. Use:
 
 ```powershell
-npm run agent -- update {ID} --status in_progress
+npm run agent -- plan:approval {ID}
+npm run agent -- transition {ID} in_progress
 npm run agent -- log {ID} "Started Phase 32: Coding" --phase coding
 npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} in_progress
 npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
@@ -43,6 +44,9 @@ Read:
 - `requirements.json`
 - `context.json`
 - `implementation_plan.json`
+- `plan_approval.json`
+
+Confirm `plan_approval.json.approved === true`, preferably with `npm run agent -- plan:approval {ID}`, before coding.
 
 Select the first `pending` or `in_progress` subtask. Work on only one subtask at a time.
 
@@ -70,7 +74,7 @@ Use the `coder_recovery` pattern when blocked:
 When all subtasks are completed:
 
 ```powershell
-npm run agent -- update {ID} --status ai_review
+npm run agent -- transition {ID} ai_review
 npm run agent -- log {ID} "Phase 32 completed successfully" --phase coding --complete
 npm run agent -- validate {ID}
 ```

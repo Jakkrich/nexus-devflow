@@ -42,7 +42,7 @@ npm.cmd run agent -- validate 007
 | Discovery & Product Thinking | `/10-Brainstorm`, `/11-Research`, `/12-PRD`, `/13-UI-UX`, `/14-Orchestrate` | คิด feature, วิจัย codebase, ทำ PRD, วาง UX, ประสานงานซับซ้อน |
 | Prompt Addon Discovery | `/15-Spec-Research`, `/16-Competitor`, `/17-Roadmap`, `/18-Spec-Orchestrate` | ใช้ prompt family เพิ่มเติม เช่น spec research, competitor, roadmap, spec orchestration |
 | Debugging | `/20-Debug` | วิเคราะห์ root cause ก่อนวางแผนแก้ |
-| Core PRP Execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` | สร้าง task, วางแผน, เขียนโค้ด, ตรวจ, approve, ต่อเติมงานเดิม |
+| Core PRP Execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/34-Human-ReCheck`, `/35-Followup` | สร้าง task, วางแผน, เขียนโค้ด, ตรวจ, approve/reject/feedback/recheck, ต่อเติมงานเดิม |
 | Quality & Optimization | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | QA ซับซ้อน, test, refactor, preview |
 | Ship & Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight`, `/58-Merge` | commit, PR, deploy, changelog, เก็บบทเรียนหลังงานเสร็จ, ผสานสาขา |
 | GitHub Review & Triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | review PR, แก้ PR comments, triage GitHub issues |
@@ -97,7 +97,11 @@ Credit is preserved as `9arm-skills` / `thananon/9arm-skills` in relevant report
 | `/31-Plan` | สร้าง implementation plan | `/31-Plan 007` |
 | `/32-Code` | ลงมือทำทีละ subtask | `/32-Code 007` |
 | `/33-Verify` | ตรวจคุณภาพและ QA gate | `/33-Verify 007` |
-| `/34-Human` | approve, reject, feedback โดยมนุษย์ | `/34-Human Approve 007` |
+| `/34-Human-Approve` | approve งานโดยมนุษย์และปิด task | `/34-Human-Approve 007` |
+| `/34-Human-Reject` | reject พร้อมเหตุผลและส่งกลับไปแก้ | `/34-Human-Reject 007 "Needs better error handling"` |
+| `/34-Human-Feedback` | เพิ่ม feedback และส่งกลับไปปรับปรุง | `/34-Human-Feedback 007 "Please add empty-state handling"` |
+| `/34-Human-ReCheck` | read-only review/question ก่อนตัดสินใจ | `/34-Human-ReCheck 007 "Did QA cover fallback cases?"` |
+| `/34-Human` | legacy compatibility dispatcher | `/34-Human Approve 007` |
 | `/35-Followup` | เพิ่มงานต่อยอดใน task เดิมโดยไม่ลบ plan เดิม | `/35-Followup 007 "add CSV export"` |
 | `/39-QA-Orchestrate` | ประสาน QA ซับซ้อนหลายมิติ (บันทึกลง `.workspaces/reports/`) | `/39-QA-Orchestrate 007` |
 | `/40-Test` | สร้าง/รัน test (บันทึกลง `.workspaces/reports/`) | `/40-Test 007` |
@@ -158,7 +162,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /31-Plan 007
 /32-Code 007
 /33-Verify 007
-/34-Human Approve 007
+/34-Human-Approve 007
 ```
 
 ตัวอย่างเมื่อ goal เป็น bug/debug:
@@ -181,7 +185,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /31-Plan 007
 /32-Code 007
 /33-Verify 007
-/34-Human Approve 007
+/34-Human-Approve 007
 /53-Changelog
 /50-Commit "task 007"
 ```
@@ -197,7 +201,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /31-Plan 007
 /32-Code 007
 /33-Verify 007
-/34-Human Approve 007
+/34-Human-Approve 007
 /54-Insight 007
 /53-Changelog
 /50-Commit "billing portal"
@@ -214,7 +218,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /31-Plan 008
 /32-Code 008
 /33-Verify 008
-/34-Human Approve 008
+/34-Human-Approve 008
 /54-Insight 008
 /50-Commit "fix checkout success handling"
 ```
@@ -227,7 +231,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /10-Research "current auth module boundaries"
 /41-Simplify "src/auth"
 /33-Verify
-/34-Human Approve 009
+/34-Human-Approve 009
 /54-Insight 009
 /50-Commit "simplify auth module"
 ```
@@ -257,7 +261,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /32-Code 010
 /39-QA-Orchestrate 010
 /33-Verify 010
-/34-Human Approve 010
+/34-Human-Approve 010
 /54-Insight 010
 ```
 
@@ -295,7 +299,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /31-Plan 007
 /32-Code 007
 /33-Verify 007
-/34-Human Approve 007
+/34-Human-Approve 007
 /54-Insight 007
 ```
 
@@ -312,7 +316,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 /33-Verify 012
 /32-Code 012
 /33-Verify 012
-/34-Human Approve 012
+/34-Human-Approve 012
 ```
 
 ### 13. PR Review And Fix Flow
@@ -357,7 +361,7 @@ npm.cmd run goal -- goal "add password reset with email token and regression tes
 
 ```text
 /33-Verify 013
-/34-Human Approve 013
+/34-Human-Approve 013
 /54-Insight 013
 /53-Changelog
 /50-Commit "release task 013"
@@ -575,13 +579,16 @@ This workflow applies `9arm-skills/debug-mantra`: reproduce first, trace the act
 
 ตรวจคุณภาพ, validation, QA report
 
-### `/34-Human`
+### `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/34-Human-ReCheck`
 
 ```text
-/34-Human Feedback 016 "Please add empty-state handling"
+/34-Human-Approve 016
+/34-Human-Reject 016 "Needs better error handling"
+/34-Human-Feedback 016 "Please add empty-state handling"
+/34-Human-ReCheck 016 "Did verification cover the empty state?"
 ```
 
-ใช้ approve, reject, review, feedback
+ใช้บันทึก human decision หลังตรวจ: approve ปิดงาน, reject/feedback ส่งกลับไป `/32-Code`, และ recheck เป็น read-only review/question ที่ไม่ transition status โดย default. `/34-Human` เดิมยังใช้ได้เป็น compatibility dispatcher เช่น `/34-Human Approve 016`.
 
 ### `/35-Followup`
 
@@ -778,14 +785,14 @@ When asked for stakeholder-facing wording, Help applies `9arm-skills/management-
 
 | Folder | เก็บอะไร | Flow ที่เกี่ยวข้อง |
 | :--- | :--- | :--- |
-| `.workspaces/specs/` | task workspace และ JSON artifacts | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` |
+| `.workspaces/specs/` | task workspace และ JSON artifacts | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/34-Human-ReCheck`, `/35-Followup` |
 | `.workspaces/research/` | research reports และ integration/brainstorm notes | `/11-Research`, `/15-Spec-Research`, `/16-Competitor`, `/10-Brainstorm` |
 | `.workspaces/prds/` | PRD ก่อนแตกเป็น task | `/12-PRD`, `/18-Spec-Orchestrate` |
 | `.workspaces/roadmap/` | roadmap discovery และ feature priorities | `/17-Roadmap` |
 | `.workspaces/issues/` | issue triage, duplicate/spam decisions | `/57-Issue-Triage` |
 | `.workspaces/debug/` | RCA/debug reports | `/20-Debug` |
 | `.workspaces/reports/` | specialist, QA, design, test, refactor reports | `/13-UI-UX`, `/14-Orchestrate`, `/18-Spec-Orchestrate`, `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/52-Deploy`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` |
-| `.workspaces/lessons.md` | lessons, gotchas, reusable patterns | `/20-Debug`, `/34-Human`, `/54-Insight`, `/99-Help` |
+| `.workspaces/lessons.md` | lessons, gotchas, reusable patterns | `/20-Debug`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/54-Insight`, `/99-Help` |
 
 ถ้า folder ว่างแต่เป็นรายการในตารางนี้ ให้เก็บไว้ เพราะเป็น staging area ของ workflow นั้น ๆ
 

@@ -7,10 +7,24 @@ The core idea is simple: the AI decides what should change, but PRP CLI scripts 
 ## Daily Flow
 
 ```text
-/30-Task -> /31-Plan -> /32-Code -> /33-Verify
+/30-Task -> /31-Plan -> /32-Code -> /33-Verify -> /34-Human-Approve
 ```
 
 Each workflow is still user-controlled inside the IDE. The framework does not run a Claude-style autonomous loop. The user chooses the next step, and agents update artifacts with commands.
+
+## Lifecycle Commands
+
+| Workflow | Enforced command contract |
+| :--- | :--- |
+| `/30-Task` | Create task artifacts with `init` and `artifact:*`, then `validate`. |
+| `/31-Plan` | Build plan artifacts, then record approval with `plan:approve`. |
+| `/32-Code` | Confirm approval with `plan:approval`, enter coding with `transition {ID} in_progress`, complete subtasks, then `transition {ID} ai_review`. |
+| `/33-Verify` | Create `qa_report.md`, then `transition {ID} human_review` on pass or `transition {ID} in_progress` on fail. |
+| `/34-Human-Approve` | Use `transition {ID} done --actor "Human" --summary "{Approval summary}"`. |
+| `/34-Human-Reject` | Use `transition {ID} in_progress --actor "Human" --summary "{Rejection reason}"`, then record rejection history in `qa_report.md`. |
+| `/34-Human-Feedback` | Use `transition {ID} in_progress --actor "Human" --summary "{Feedback summary}"`, then record feedback history in `qa_report.md`. |
+| `/34-Human-ReCheck` | Read task artifacts and QA evidence without changing status by default; recommend approve, reject, feedback, or verify. |
+| `/34-Human` | Compatibility dispatcher for legacy action-style commands. |
 
 ## Windows Command Note
 
@@ -63,6 +77,7 @@ Use plan helpers instead of asking the AI to print a full `implementation_plan.j
 npm run agent -- plan:add-phase 001 "Prepare artifact workflow" --type implementation
 npm run agent -- plan:add-subtask 001 phase-1 "Add JSON command examples" --service docs --modify docs/script-first-json-workflow.md --verify-type command --verify-command "npm.cmd run validate"
 npm run agent -- plan:validate 001
+npm run agent -- plan:approve 001 --actor "Reviewer" --summary "Plan approved for implementation"
 ```
 
 When implementation progresses:
@@ -71,6 +86,7 @@ When implementation progresses:
 npm run agent -- plan:set-subtask-status 001 subtask-1 in_progress
 npm run agent -- log 001 "Started docs update" --phase implementation
 npm run agent -- plan:set-subtask-status 001 subtask-1 completed
+npm run agent -- transition 001 ai_review
 npm run agent -- validate 001
 ```
 
@@ -100,6 +116,8 @@ Agents should recommend or run the smallest useful command:
 
 - `artifact:*` for generic JSON fields
 - `plan:*` for `implementation_plan.json`
+- `transition` for lifecycle status gates
+- `followup:start` for new work on an existing task
 - `json:repair`, `repair`, and `validate` for recovery
 - `log` and `event` for traceability
 

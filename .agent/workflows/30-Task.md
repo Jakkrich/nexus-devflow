@@ -49,10 +49,10 @@ Use the `spec_gatherer` pattern:
 
 ### 2. Create Workspace
 
-1. **Branch Check:** Check the current git branch. If it is `main` or `master`, you MUST automatically create and checkout a new feature branch (e.g., `git checkout -b feature/{ID}-{slug}`) before proceeding.
-2. Generate a kebab-case slug from the title.
-3. Run `npm run agent -- init ...`.
-4. Confirm the task directory exists under `.workspaces/specs/{ID}-{slug}/`.
+1. Generate a kebab-case slug from the title.
+2. Run `npm run agent -- init ...`.
+3. Confirm the task directory exists under `.workspaces/specs/{ID}-{slug}/`.
+4. Leave branch creation to implementation, commit, or PR workflows where source edits begin.
 
 ### 3. Populate Artifacts
 

@@ -28,7 +28,7 @@ Nexus-DevFlow stores generated project memory and machine-readable workflow arti
 
 | Path | Stores | Related Workflows | Keep? |
 | :--- | :--- | :--- | :--- |
-| `.workspaces/specs/` | Per-task workspaces: `spec.md`, `requirements.json`, `implementation_plan.json`, `context.json`, `task_logs.json`, `qa_report.md` | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup`, `/39-QA-Orchestrate`, `/54-Insight`, `/90-Agent` | Yes. This is the core PRP task store. |
+| `.workspaces/specs/` | Per-task workspaces: `spec.md`, `requirements.json`, `implementation_plan.json`, `context.json`, `task_logs.json`, `qa_report.md` | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/34-Human-ReCheck`, `/35-Followup`, `/39-QA-Orchestrate`, `/54-Insight`, `/90-Agent` | Yes. This is the core PRP task store. |
 | `.workspaces/roadmap/` | Product discovery, roadmap phases, feature priorities, roadmap project index | `/16-Competitor`, `/17-Roadmap`, `/18-Spec-Orchestrate` | Yes. Required by `npm run roadmap:validate`. |
 | `.workspaces/research/` | Reusable research reports, integration notes, codebase research, source-backed findings | `/11-Research`, `/15-Spec-Research`, `/16-Competitor`, `/18-Spec-Orchestrate` | Yes. It is the durable research library. |
 | `.workspaces/issues/` | Staged issue analysis, triage notes, duplicate/spam decisions, source issue summaries | `/57-Issue-Triage`, `/20-Debug`, `/30-Task` | Yes. It links external issues to PRP tasks. |
@@ -43,7 +43,7 @@ Nexus-DevFlow stores generated project memory and machine-readable workflow arti
 | :--- | :--- | :--- |
 | `.workspaces/active-agent.json` | Records the active `.agent` bundle and npm command surface | `/00-Init`, `npm run activate` |
 | `.workspaces/project_index.json` | Project-wide structure, services, conventions, and commands | `/00-Init`, `/11-Research`, `/31-Plan`, `npm run index` |
-| `.workspaces/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `/20-Debug`, `/34-Human`, `/53-Changelog`, `/54-Insight`, `/99-Help` |
+| `.workspaces/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `/20-Debug`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/53-Changelog`, `/54-Insight`, `/99-Help` |
 
 ## Task Workspace Files
 
@@ -88,7 +88,10 @@ Execution:
   /31-Plan           -> .workspaces/specs/{ID}-*/implementation_plan.json
   /32-Code           -> .workspaces/specs/{ID}-*/task_logs.json
   /33-Verify         -> .workspaces/specs/{ID}-*/qa_report.md
-  /34-Human          -> .workspaces/specs/{ID}-*/qa_report.md and .workspaces/lessons.md
+  /34-Human-Approve -> .workspaces/specs/{ID}-*/implementation_plan.json and .workspaces/lessons.md
+  /34-Human-Reject  -> .workspaces/specs/{ID}-*/qa_report.md and .workspaces/lessons.md
+  /34-Human-Feedback -> .workspaces/specs/{ID}-*/qa_report.md and .workspaces/lessons.md
+  /34-Human-ReCheck -> read-only task artifact review by default
   /35-Followup       -> .workspaces/specs/{ID}-*/implementation_plan.json
 
 Quality and Review:

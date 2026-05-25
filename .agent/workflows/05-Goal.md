@@ -1,9 +1,9 @@
 ---
-description: Autonomous Goal Runner - Route a high-level goal into the correct Nexus-DevFlow path, coordinate work, and record execution metrics.
+description: Goal Router - Route a high-level goal into the correct Nexus-DevFlow path and record recommendation metrics.
 ---
-# Phase 05: Goal Runner
+# Phase 05: Goal Router
 
-Run a high-level `/goal` request through the Nexus-DevFlow process with a Boss-Worker control loop.
+Route a high-level `/goal` request into the most appropriate Nexus-DevFlow path.
 
 ## Usage
 
@@ -20,7 +20,7 @@ npm run goal -- goal "Implement goal command" max-turns 30 parallel
 
 ## Purpose
 
-The goal runner turns an open-ended request into a routed DevFlow execution plan. It records the routing decision, task decomposition, max-turn budget, elapsed time, worker handoff history, and lightweight context usage notes in a session log.
+The goal router turns an open-ended request into a routed DevFlow recommendation plan. It records the routing decision, task decomposition, max-turn budget, elapsed time, recommended handoff path, and lightweight context usage notes in a session log. The current CLI recommends and records commands; it does not automatically execute `/30-Task` through `/33-Verify`.
 
 ## Boss-Worker Roles
 
@@ -44,7 +44,7 @@ The Boss first classifies the request into one of these paths:
 1. Parse goal text and runtime config.
 2. Select a flow path and record the decision.
 3. Estimate complexity and split large goals into worker-sized tasks.
-4. Execute or recommend the relevant DevFlow commands.
+4. Recommend the relevant DevFlow commands.
 5. Track turns by phase and stop when the configured `max-turns` budget is reached.
 6. Run validation gates appropriate to the selected flow.
 7. Add lightweight Context Usage Notes when the runtime or operator can provide them.
@@ -65,6 +65,7 @@ Each log includes:
 - `goal_id`
 - `goal_description`
 - `status`
+- `execution_mode` (`recommendation_only`)
 - `config`
 - `metrics`
 - `context_usage`

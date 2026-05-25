@@ -18,8 +18,8 @@ Use commands for status and validation:
 ```powershell
 npm run agent -- log {ID} "Started Phase 33: Verification" --phase validation
 npm run agent -- validate {ID}
-npm run agent -- update {ID} --status human_review
-npm run agent -- update {ID} --status in_progress
+npm run agent -- transition {ID} human_review
+npm run agent -- transition {ID} in_progress
 npm run agent -- log {ID} "Phase 33 completed" --phase validation --complete
 ```
 
@@ -76,14 +76,14 @@ Create or update `qa_report.md` in the task directory. Include:
 If pass:
 
 ```powershell
-npm run agent -- update {ID} --status human_review
+npm run agent -- transition {ID} human_review
 npm run agent -- log {ID} "QA passed; ready for human review" --phase validation --complete
 ```
 
 If fail:
 
 ```powershell
-npm run agent -- update {ID} --status in_progress
+npm run agent -- transition {ID} in_progress
 npm run agent -- log {ID} "QA failed; returning to coding" --phase validation --complete
 ```
 
@@ -103,11 +103,11 @@ Report:
 - Key findings
 - Commands run
 - Artifact validation status
-- Next command: `/34-Human Approve {ID}` if pass, or `/32-Code {ID}` if fail
+- Next command: `/34-Human-Approve {ID}` if pass, or `/32-Code {ID}` if fail
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/34-Human Approve {ID}` when QA passes, or `/32-Code {ID}` when QA fails.
+- **Primary**: `/34-Human-Approve {ID}` when QA passes, or `/32-Code {ID}` when QA fails.
 - **Why**: Verification decides whether work moves to human acceptance or loops back to coding.
 - **Alternatives**:
   - `/54-Insight {ID}` - choose this after a pass or meaningful failure to preserve lessons.

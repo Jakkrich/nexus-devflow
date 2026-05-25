@@ -47,6 +47,7 @@ Classify the request:
 Use plan helpers:
 
 ```powershell
+npm run agent -- followup:start {ID} "{Summary}"
 npm run agent -- plan:add-phase {ID} "Follow-up: {Name}" --type followup
 npm run agent -- plan:add-subtask {ID} {PHASE_ID} "{Title}" --description "{Description}" --service {service}
 npm run agent -- plan:validate {ID}
