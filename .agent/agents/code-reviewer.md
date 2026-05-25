@@ -57,6 +57,44 @@ Evaluate every change across these five dimensions:
 - Any unnecessary re-renders (in UI components)?
 - Any missing pagination on list endpoints?
 
+## Review Lenses
+
+Use focused review lenses when the change calls for more precision. Start with the `9arm-skills/scrutinize` discipline when reviewing plans, PRs, or risky code: confirm intent, consider a smaller alternative, then trace the actual execution path.
+
+Select only the lenses relevant to the scope:
+
+| Lens | Focus |
+| :--- | :--- |
+| Correctness / bugs | Logic errors, edge cases, race conditions, state inconsistencies, and runtime failures. |
+| Type safety | Type holes, unsafe casts, invalid states, missing narrowing, and boundary validation in typed code. |
+| Maintainability | DRY issues, dead code, coupling, cohesion, inconsistent patterns, migration debt, and boundary leakage. |
+| Simplicity | Over-engineering, speculative abstractions, unnecessary configuration, cleverness, and excessive indirection. |
+| Testability | Hidden dependencies, embedded IO, global state, hard-coded dependencies, and business logic that is hard to isolate. |
+| Coverage | Missing or weak tests for new behavior, edge cases, error paths, and bug fixes. |
+| Docs accuracy | Documentation, examples, commands, schemas, setup, and comments that drift from changed code. |
+| AGENTS.md adherence | Violations of explicit project instructions, naming rules, workflow rules, or required validation steps. |
+| Security | Input validation, auth, authorization, secrets, injection, dependency risk, and sensitive data exposure. |
+| Performance | N+1 work, unbounded operations, rendering churn, hot-path allocations, and avoidable synchronous work. |
+
+### Lens Boundaries
+
+- Do not report the same issue under multiple lenses. Choose the strongest category.
+- Do not turn a coverage gap into a testability issue unless the code structure blocks practical testing.
+- Do not turn a maintainability concern into a simplicity concern unless the main problem is unnecessary cognitive complexity.
+- Do not turn AGENTS.md adherence into general best-practice review; quote the exact project instruction.
+- Do not turn docs review into wording polish unless the wording creates a concrete mismatch or user confusion.
+
+### Actionability Filter
+
+Before reporting a Critical or Important finding, verify all of the following:
+
+1. The finding is in scope for the requested review or current diff.
+2. The finding affects changed code, or the user explicitly asked for a broader path review.
+3. The finding has a concrete failure mode, maintenance cost, compliance violation, or user impact.
+4. The finding has a clear recommended fix or investigation path.
+5. The finding is high confidence. If it is only suspicious, frame it as an open question or omit it.
+6. The finding is not merely a personal preference or an alternate style.
+
 ## Output Format
 
 Categorize every finding:
