@@ -1,28 +1,63 @@
-# Agent Report: {Agent Name}
+---
+id: "agent-report-{Agent Name}-{Timestamp}"
+title: "Agent Report: {Agent Name}"
+doc_type: "report"
+category: "agent"
+status: "draft"
+created: "{Date}"
+updated: "{Date}"
+owner: "{Agent Name}"
+source_workflow: "/90-Agent"
+related_task: null
+related_files: []
+tags:
+  - nexus-devflow
+  - report
+  - agent
+aliases:
+  - "{Agent Name} Report"
+summary: "Specialist agent report for {Target}."
+metadata_version: 1
+review_result: "pending"
+review_scope: "{Target}"
+finding_count: 0
+---
 
-## 1. Target
+# Agent Report: {Agent Name} #doc/report #report/review
+
+## 1. Target #section/summary
+
 - **Agent**: {Agent Name}
 - **Target**: {Target}
 - **Timestamp**: {Timestamp}
 
-## Source Discipline
+## 2. Source Discipline #section/context
+
 - **Source Pack**: {Source Pack, optional}
 - **Applied Skill**: {Applied Skill, optional}
 - **Credit**: {Credit, optional}
 - **Adapted For**: {Adapted For, optional}
 
-## 2. Context Reviewed
+## 3. Context Reviewed #section/context
+
 - **Files / Folders**: {Files Reviewed}
 - **Artifacts**: {Artifacts Reviewed}
 - **Commands**: {Commands}
 - **Context Usage Notes**: {Files/artifacts loaded, known token counts if available, and one optimization note}
 
-## 3. Findings Or Work Completed
+## 4. Findings Or Work Completed #section/findings
+
 - {Finding}
 
-## 4. Recommendations
+## 5. Recommendations #section/recommendations
+
 - {Recommendation}
 
-## 5. Follow-Up
+## 6. Follow-Up #section/followup
+
 - **Next Command**: {Next Command}
 - **Validation Needed**: {Validation Needed}
+
+## 7. Sources #section/sources
+
+- {Sources}

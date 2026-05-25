@@ -25,6 +25,7 @@ The framework keeps the moving parts explicit:
 - `.agent` contains reusable workflows, agents, schemas, scripts, skills, and dashboard assets.
 - `.workspaces` contains generated project state: specs, plans, reports, research, debug notes, and wiki artifacts.
 - PRP CLI commands update JSON artifacts instead of hand-editing structured state.
+- Generated Markdown uses a shared frontmatter and Obsidian heading-tag contract for reports, research, specs, decisions, and wiki pages.
 - Validation gates keep tasks, plans, and framework files reviewable before handoff.
 
 ---
@@ -58,6 +59,7 @@ Release:    /50-Commit -> /51-PR -> /53-Changelog -> /54-Insight
 | **Script-first artifacts** | Requirements, plans, and task state are updated through PRP CLI commands to avoid malformed JSON. |
 | **Agent-ready bundle** | `.agent` packages workflows, specialist agents, schemas, rules, skills, and scripts as one portable framework bundle. |
 | **Project-local state** | `.workspaces` keeps generated artifacts in the target project instead of mixing state across repos. |
+| **Obsidian-ready Markdown** | Generated `.md` files use structured frontmatter plus heading tags so reports remain readable, queryable, and vault-friendly. |
 | **Debug-first fixes** | Bug work starts with `/20-Debug` so fixes are based on reproduction, trace, and root-cause notes. |
 | **Validation by default** | Framework validation, doc contract scans, plan validation, and task validation are part of the normal loop. |
 | **Specialist agents** | Use `/90-Agent` for focused roles such as code review, backend, frontend, database, testing, security, docs, and DevOps. |
@@ -196,6 +198,8 @@ npm.cmd run agent -- validate 001
 ```
 
 Keep `.workspaces` project-specific. Do not share generated workspace artifacts between unrelated projects.
+
+Generated Markdown files should follow the [Markdown Metadata Contract](./docs/markdown-metadata-contract.md).
 
 ---
 

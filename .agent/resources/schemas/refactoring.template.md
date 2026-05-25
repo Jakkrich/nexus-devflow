@@ -1,45 +1,62 @@
-# 🧹 Code Simplification & Refactoring Report: {Target}
+---
+id: "refactoring-{Target Slug}"
+title: "Code Simplification And Refactoring Report: {Target}"
+doc_type: "report"
+category: "refactoring"
+status: "draft"
+created: "{Date}"
+updated: "{Date}"
+owner: "{Owner}"
+source_workflow: "/41-Simplify"
+related_task: null
+related_files:
+  - "{Target File/Directory}"
+tags:
+  - nexus-devflow
+  - report
+  - refactoring
+aliases:
+  - "Refactoring Report: {Target}"
+summary: "Code simplification and refactoring report for {Target}."
+metadata_version: 1
+risk_level: "medium"
+---
+
+# Code Simplification And Refactoring Report: {Target} #doc/report #report/review
 
 > **Source Trigger**: `/41-Simplify`
 > **Target Path**: {Target File/Directory}
-> **Complexity Metric**: [e.g. Cyclomatic Complexity, Line Count reduction]
+> **Complexity Metric**: [e.g. Cyclomatic Complexity, line count reduction]
 
----
+## 1. Complexity Assessment And Gaps #section/findings
 
-## 🏗️ 1. Complexity Assessment & Gaps
 - **Current Architecture**: [Describe the current convoluted structure/state]
 - **Identified Smell**: [e.g. Deeply nested loops, giant conditional statements, high coupling]
 - **Target Goal**: [What simplification we are targeting]
 
----
+## 2. Code Transformation #section/details
 
-## 📝 2. Code Transformation (Before vs. After)
+### File #section/files
 
-### File: `path/to/file.ext`
+- **Path**: `path/to/file.ext`
 
 ```diff
 - // Convoluted or complex code block
-- function complexFunction(x) {
--   if (x) {
--     if (y) {
--       return z;
--     }
--   }
-- }
 + // Simplified, clean, and highly readable equivalent
-+ function simplifiedFunction(x) {
-+   if (!x || !y) return null;
-+   return z;
-+ }
 ```
 
----
+## 3. Safety And Regression Risk Assessment #section/verification
 
-## 🛡️ 3. Safety & Regression Risk Assessment
 - **Behavior Preservation**: [Explain why the behavior remains identical]
 - **Test Strategy**: [Verification suite used to confirm no regression]
 - **Verification Command**:
-  ```bash
-  [Execution command, e.g. npm run test]
-  ```
-- **Verification Verdict**: [✅ Validated & Same Behavior | ❌ Failed]
+
+```bash
+[Execution command, e.g. npm run test]
+```
+
+- **Verification Verdict**: [Validated And Same Behavior | Failed]
+
+## 4. Sources #section/sources
+
+- {Sources}

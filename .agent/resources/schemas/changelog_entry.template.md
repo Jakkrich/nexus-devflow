@@ -1,21 +1,54 @@
-# Changelog Entry: {Version}
+---
+id: "changelog-{Version}"
+title: "Changelog Entry: {Version}"
+doc_type: "changelog"
+category: "release"
+status: "draft"
+created: "{Date}"
+updated: "{Date}"
+owner: "{Owner}"
+source_workflow: "/53-Changelog"
+related_task: null
+related_files: []
+tags:
+  - nexus-devflow
+  - changelog
+  - release
+aliases:
+  - "Changelog {Version}"
+summary: "Changelog entry for {Version}."
+metadata_version: 1
+version: "{Version}"
+---
 
-## {Version} - {Date}
+# Changelog Entry: {Version} #doc/changelog #report/release
 
-### Added
+## {Version} - {Date} #section/summary
+
+### Added #section/details
+
 - {Added}
 
-### Changed
+### Changed #section/details
+
 - {Changed}
 
-### Fixed
+### Fixed #section/details
+
 - {Fixed}
 
-### Removed
+### Removed #section/details
+
 - {Removed}
 
-### Security
+### Security #section/findings
+
 - {Security}
 
-### Validation
+### Validation #section/verification
+
 - {Validation}
+
+### Sources #section/sources
+
+- {Sources}

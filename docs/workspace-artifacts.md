@@ -61,6 +61,16 @@ Each PRP task lives under `.workspaces/specs/{ID}-{slug}/`.
 
 JSON files should be changed with `npm run agent -- artifact:*`, `npm run agent -- plan:*`, `npm run agent -- json:repair`, and `npm run agent -- validate` whenever possible.
 
+## Markdown Metadata Contract
+
+Every generated Markdown file in `.workspaces`, `docs`, and agent schema templates should follow the shared Markdown metadata contract in [Markdown Metadata Contract](markdown-metadata-contract.md).
+
+The contract uses:
+
+- YAML frontmatter for document-level metadata that agents, indexes, and Obsidian can query.
+- Obsidian-compatible heading tags for section-level metadata such as `#section/findings`, `#finding/bug`, and `#priority/high`.
+- A hybrid model where every Markdown file shares the same core fields, then adds type-specific fields only when they fit the document.
+
 ## Workflow Relationships
 
 ```text
