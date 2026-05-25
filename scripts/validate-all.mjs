@@ -6,6 +6,7 @@ const checks = [
   ['Framework validation', ['npm.cmd', ['run', 'validate']]],
   ['Bundle sync check', ['npm.cmd', ['run', 'sync:check']]],
   ['PRP CLI contract test', [process.execPath, ['.agent/scripts/test-prp.mjs']]],
+  ['Link project contract test', [process.execPath, ['scripts/test-link-project.mjs']]],
   ['Goal runner contract test', [process.execPath, ['.agent/scripts/test-goal-runner.mjs']]],
   ['Workflow recommendation contract test', [process.execPath, ['.agent/scripts/test-workflow-recommendations.mjs']]],
   ['Wiki contract test', [process.execPath, ['.agent/scripts/test-wiki-contract.mjs']]],

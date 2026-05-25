@@ -7,7 +7,7 @@ This document defines the Phase 1 design contract for upgrading Nexus-DevFlow wi
 PRPs should keep the user-controlled phase flow:
 
 ```text
-/30-Task -> /31-Plan -> /32-Code -> /33-Verify -> /34-Human
+/30-Task -> /31-Plan -> /32-Code -> /33-Verify -> /34-Human-Approve
 ```
 
 The change is how agents create and update JSON. Agents should think, inspect, and decide, but scripts should own JSON structure, normalization, repair, and validation.
@@ -27,7 +27,11 @@ Current command surface:
 
 ```powershell
 npm run agent -- init {ID} "{Title}" {slug} ["Description"]
-npm run agent -- update {ID} --status planning
+npm run agent -- transition {ID} planning
+npm run agent -- transition {ID} in_progress
+npm run agent -- transition {ID} ai_review
+npm run agent -- transition {ID} human_review
+npm run agent -- transition {ID} done --actor "{Reviewer}" --summary "{Approval summary}"
 npm run agent -- update {ID} --subtask {SUBTASK_ID} --substatus completed
 npm run agent -- log {ID} "message" --phase planning
 npm run agent -- event {ID} "message" --event task.info --phase planning
@@ -39,16 +43,15 @@ npm run agent -- json:repair {ID} {artifact}
 npm run agent -- plan:add-phase {ID} "{Name}" --type implementation
 npm run agent -- plan:add-subtask {ID} {PHASE_ID} "{Title}" --service backend
 npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
+npm run agent -- plan:approve {ID} --actor "{Approver}" --summary "{Approval summary}"
+npm run agent -- plan:approval {ID}
 npm run agent -- plan:validate {ID}
+npm run agent -- followup:start {ID} "{Summary}"
 npm run agent -- validate {ID}
 npm run agent -- repair {ID}
 ```
 
-Planned command surface for later phases:
-
-```powershell
-Workflow prompts and agents will be updated to use the script-first commands by default.
-```
+`update --status` remains available for backward compatibility, but lifecycle workflows should use `transition` so approval, QA, and human-review gates are enforced.
 
 ## Prompt Mapping
 
@@ -73,8 +76,8 @@ External prompt libraries can be used as source material, not copied verbatim. P
 | `roadmap_discovery.md` | `/17-Roadmap` | Improve project discovery and roadmap input quality. |
 | `roadmap_features.md` | `/17-Roadmap` | Improve prioritized roadmap generation. |
 | `competitor_analysis.md` | `/16-Competitor`, `/11-Research`, `/12-PRD`, `/17-Roadmap` | Research competitors, user pain points, market gaps, and differentiator opportunities. |
-| `followup_planner.md` | `/35-Followup`, `/34-Human`, `/31-Plan`, `/32-Code` | Add new phases/subtasks to completed work without replacing existing plan state. |
-| `insight_extractor.md` | `/54-Insight`, `/33-Verify`, `/34-Human`, `/53-Changelog`, lessons/memory docs | Extract reusable patterns, gotchas, file insights, and recommendations after implementation. |
+| `followup_planner.md` | `/35-Followup`, `/34-Human-Feedback`, `/31-Plan`, `/32-Code` | Add new phases/subtasks to completed work without replacing existing plan state. |
+| `insight_extractor.md` | `/54-Insight`, `/33-Verify`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/53-Changelog`, lessons/memory docs | Extract reusable patterns, gotchas, file insights, and recommendations after implementation. |
 | `ideation_code_improvements.md` | `/10-Brainstorm`, `/11-Research` | Generate improvement candidates for users to select manually. |
 | `ideation_code_quality.md` | `/41-Simplify`, `/33-Verify` | Find quality debt and refactor opportunities. |
 | `ideation_documentation.md` | `/10-Brainstorm`, `/11-Research`, `/54-Insight`, `/53-Changelog`, `documentation-and-adrs`, `documentation-maintainer` | Keep as skill-backed docs analysis; identify documentation gaps without adding a standalone workflow. |
@@ -130,13 +133,16 @@ Convert these Claude-specific features:
 - Inspect project patterns.
 - Populate `context.json`, `complexity_assessment.json`, and `implementation_plan.json` through script-first commands.
 - Validate plan schema and dependency ordering.
+- Record explicit approval with `plan:approve` before coding.
 
 `/32-Code`:
 
 - Read `implementation_plan.json`.
+- Require `plan_approval.json.approved === true`.
 - Work one pending subtask at a time.
 - Run verification per subtask.
 - Update subtask status through CLI.
+- Transition to `ai_review` only after subtasks are complete and validation passes.
 - Log progress through CLI.
 
 `/33-Verify`:
@@ -144,7 +150,15 @@ Convert these Claude-specific features:
 - Run validation and project checks.
 - Produce `qa_report.md`.
 - If artifacts are invalid, run repair first.
-- If QA fails, route back to `/32-Code` with focused fix guidance.
+- Transition to `human_review` on pass, or back to `in_progress` on fail.
+
+Human action workflows:
+
+- `/34-Human-Approve` transitions reviewed work to `done` with a human summary.
+- `/34-Human-Reject` transitions reviewed work back to `in_progress`, records rejection history, and recommends `/32-Code`.
+- `/34-Human-Feedback` transitions reviewed work back to `in_progress`, records feedback history, and recommends `/32-Code`.
+- `/34-Human-ReCheck` is read-only decision support; it does not transition status by default and recommends approve, reject, feedback, or verify based on evidence.
+- `/34-Human` remains a compatibility dispatcher for legacy action-style commands.
 
 `/90-Agent`:
 

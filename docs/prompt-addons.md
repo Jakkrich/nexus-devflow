@@ -13,10 +13,10 @@ These prompts are not copied verbatim. They are adapted into PRPs workflows, age
 | Roadmap | `roadmap_discovery`, `roadmap_features` | `/17-Roadmap`, roadmap docs, roadmap validation flows | Improve project discovery, audience, gaps, phases, and feature prioritization. Keep output under `.workspaces/roadmap`. |
 | Ideation | `ideation_code_improvements`, `ideation_code_quality`, `ideation_documentation`, `ideation_performance`, `ideation_security`, `ideation_ui_ux` | `/10-Brainstorm`, `/11-Research`, `/13-UI-UX`, `/33-Verify`, `/41-Simplify` | Produce option sets and improvement candidates. No automatic implementation; user chooses the next workflow. |
 | Competitor | `competitor_analysis` | `/16-Competitor`, `/11-Research`, `/12-PRD`, `/17-Roadmap` | Research alternatives, user pain points, gaps, and differentiator opportunities. Requires source attribution when browsing. |
-| Insight | `insight_extractor` | `/54-Insight`, `/33-Verify`, `/34-Human`, `/53-Changelog`, lessons docs | Extract reusable file insights, patterns, gotchas, approach outcomes, and recommendations after completed work. |
+| Insight | `insight_extractor` | `/54-Insight`, `/33-Verify`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/53-Changelog`, lessons docs | Extract reusable file insights, patterns, gotchas, approach outcomes, and recommendations after completed work. |
 | Coder | `coder`, `coder_recovery`, `validation_fixer` | `/32-Code`, `/20-Debug`, `/33-Verify`, `prp-core-coder`, `prp-core-debugger` | Work one subtask at a time, recover from failures, repair artifacts before regenerating. |
 | QA | `qa_reviewer`, `qa_fixer`, `qa_orchestrator_agentic` | `/33-Verify`, `/39-QA-Orchestrate`, `/40-Test`, `code-reviewer`, `test-engineer` | Five-axis review, focused fix routing, and user-controlled QA orchestration. |
-| Follow-up | `followup_planner` | `/35-Followup`, `/34-Human`, `/31-Plan`, `/32-Code` | Extend existing plans without replacing completed subtasks. New phases/subtasks are appended with `plan:*` commands. |
+| Follow-up | `followup_planner` | `/35-Followup`, `/34-Human-Feedback`, `/31-Plan`, `/32-Code` | Extend existing plans without replacing completed subtasks. New phases/subtasks are appended with `plan:*` commands. |
 | GitHub PR | `github/pr_*`, `github/QA_REVIEW_SYSTEM_PROMPT`, `github/spam_detector`, `github/duplicate_detector`, `github/issue_*` | `/51-PR`, `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage`, `code-reviewer`, `security-auditor` | Review PRs, classify findings, validate comments, fill templates, triage issues, and resolve follow-up comments. |
 | Validation Tools | `mcp_tools/api_validation`, `database_validation`, `electron_validation`, `puppeteer_browser` | `/33-Verify`, `/40-Test`, frontend/backend specialist agents | Convert tool-specific assumptions into available IDE/browser/API/database validation steps. |
 | 9arm-skills | `debug-mantra`, `post-mortem`, `scrutinize`, `management-talk` from `thananon/9arm-skills` | `/20-Debug`, `/54-Insight`, `/55-PR-Review`, `/90-Agent`, `/51-PR`, `/53-Changelog`, `/99-Help` | Use as a credited engineering discipline layer adapted for Antigravity IDE. Keep Nexus report formats and artifact destinations unchanged. |
@@ -32,7 +32,7 @@ Use these conversions whenever an external prompt assumes autonomous Claude beha
 | Spawn subagents automatically | Recommend `/90-Agent {agent} {target}`. |
 | WebSearch without citation | Browse or research with source links and note limitations. |
 | Output a JSON object only | Use script-first JSON commands, then validate. |
-| Continue after QA/follow-up automatically | Route to `/32-Code`, `/31-Plan`, or `/34-Human` based on user choice. |
+| Continue after QA/follow-up automatically | Route to `/32-Code`, `/31-Plan`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, or `/34-Human-ReCheck` based on user choice. |
 
 ## Borderline Commands
 

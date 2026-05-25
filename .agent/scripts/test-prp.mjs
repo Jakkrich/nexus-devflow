@@ -57,6 +57,7 @@ const requiredFiles = [
   'task_logs.json',
   'context.json',
   'complexity_assessment.json',
+  'plan_approval.json',
   'spec.md',
 ];
 for (const file of requiredFiles) {
@@ -64,15 +65,31 @@ for (const file of requiredFiles) {
   console.log(`[OK] ${file} created.`);
 }
 
-run(['update', '999', '--status', 'in_progress']);
+runExpectFail(['transition', '999', 'in_progress'], 'before plan approval');
+console.log('[OK] transition gate rejects coding before approval.');
+
+let approvalOutput = run(['plan:approval', '999']);
+assert(approvalOutput.includes('"approved": false'), 'plan:approval should report unapproved default');
+run(['plan:approve', '999', '--actor', 'Test Agent', '--summary', 'Plan reviewed for contract tests']);
+const approval = readJson(path.join(taskDir, 'plan_approval.json'));
+assert(approval.approved === true, 'plan:approve should set approved true');
+assert(approval.actor === 'Test Agent', 'plan:approve should record actor');
+let logs = readJson(path.join(taskDir, 'task_logs.json'));
+assert(logs.events.some((event) => event.event === 'plan.approved'), 'plan:approve should append log event');
+run(['transition', '999', 'in_progress']);
 let plan = readJson(path.join(taskDir, 'implementation_plan.json'));
+assert(plan.status === 'in_progress', 'transition to in_progress failed');
+console.log('[OK] plan approval and transition to coding verified.');
+
+run(['update', '999', '--status', 'in_progress']);
+plan = readJson(path.join(taskDir, 'implementation_plan.json'));
 assert(plan.status === 'in_progress', 'status update failed');
 assert(plan.planStatus === 'approved', 'planStatus mapping failed');
 assert(plan.xstateState === 'coding', 'xstateState mapping failed');
 console.log('[OK] status mapping verified.');
 
 run(['log', '999', 'Testing log entry', '--phase', 'coding']);
-let logs = readJson(path.join(taskDir, 'task_logs.json'));
+logs = readJson(path.join(taskDir, 'task_logs.json'));
 assert(logs.coding.logs.some((line) => line.includes('Testing log entry')), 'phase log failed');
 assert(logs.events.some((event) => event.message.includes('Testing log entry')), 'event log failed');
 console.log('[OK] logs and events verified.');
@@ -91,6 +108,27 @@ run(['artifact:merge', '999', 'complexity', 'metrics', '{"risk":"low"}']);
 const complexity = readJson(path.join(taskDir, 'complexity_assessment.json'));
 assert(complexity.metrics.risk === 'low', 'artifact:merge failed');
 console.log('[OK] artifact:merge verified.');
+
+const validRequirementsAfterMutation = readJson(path.join(taskDir, 'requirements.json'));
+runExpectFail(
+  ['artifact:set', '999', 'requirements', 'extra_contract_drift', 'true'],
+  'Artifact validation failed',
+);
+requirements = readJson(path.join(taskDir, 'requirements.json'));
+assert(!('extra_contract_drift' in requirements), 'invalid artifact:set should not be saved');
+assert(
+  requirements.updated_at === validRequirementsAfterMutation.updated_at,
+  'invalid artifact:set should leave the existing artifact unchanged',
+);
+console.log('[OK] invalid artifact mutation rejected without saving.');
+
+runExpectFail(
+  ['artifact:set', '999', 'requirements', 'workflow_type', 'not-a-real-type'],
+  'Artifact validation failed',
+);
+requirements = readJson(path.join(taskDir, 'requirements.json'));
+assert(requirements.workflow_type === validRequirementsAfterMutation.workflow_type, 'invalid enum mutation should be rolled back');
+console.log('[OK] invalid enum mutation rejected without saving.');
 
 const getOutput = run(['artifact:get', '999', 'requirements', 'task_description']);
 assert(getOutput.includes('Updated through artifact:set'), 'artifact:get failed');
@@ -138,10 +176,19 @@ assert(plan.phases[0].subtasks[0].service === 'backend', 'plan:add-subtask servi
 assert(plan.summary.services_involved.includes('backend'), 'plan summary service update failed');
 console.log('[OK] plan:add-subtask verified.');
 
+runExpectFail(['transition', '999', 'ai_review'], 'until all plan subtasks');
+console.log('[OK] transition gate rejects AI review while subtasks are pending.');
+
 run(['plan:set-subtask-status', '999', plan.phases[0].subtasks[0].id, 'complete']);
 plan = readJson(path.join(taskDir, 'implementation_plan.json'));
 assert(plan.phases[0].subtasks[0].status === 'completed', 'plan:set-subtask-status normalization failed');
 console.log('[OK] plan:set-subtask-status verified.');
+
+run(['transition', '999', 'ai_review']);
+plan = readJson(path.join(taskDir, 'implementation_plan.json'));
+assert(plan.status === 'ai_review', 'transition to ai_review failed');
+runExpectFail(['transition', '999', 'done', '--actor', 'Human Reviewer', '--summary', 'Looks good'], 'before human_review');
+console.log('[OK] transition gates AI review and rejects done before human review.');
 
 run(['plan:validate', '999']);
 console.log('[OK] plan:validate verified.');
@@ -169,6 +216,73 @@ fs.writeFileSync(
 );
 runExpectFail(['markdown:validate', reportPath], 'PLACEHOLDER TEXT');
 console.log('[OK] markdown placeholder rejected in report validation.');
+
+runExpectFail(['init', '998', 'Unsafe Slug', '../bad-slug'], 'Invalid task slug');
+assert(!fs.existsSync(path.join(projectRoot, '.workspaces', 'bad-slug')), 'unsafe slug should not create a parent directory');
+runExpectFail(['init', '../998', 'Unsafe ID', 'unsafe-id'], 'Invalid task ID');
+assert(!fs.existsSync(path.join(projectRoot, '.workspaces', '998-unsafe-id')), 'unsafe id should not create a parent directory');
+console.log('[OK] unsafe init id and slug rejected.');
+
+const qaReportPath = path.join(taskDir, 'qa_report.md');
+fs.writeFileSync(
+  qaReportPath,
+  `# QA Verification Report: 999 - Integration Test #doc/report #report/qa
+
+## 1. Overview #section/summary
+
+- QA Status: PASSED
+- Date Verified: 2026-05-25 00:00
+- Verified By: Test Agent
+
+## 2. Testing Environment #section/context
+
+- Environment: Local contract workspace
+- OS/Browser: Node.js contract runner
+- Commands Used: node .agent/scripts/test-prp.mjs
+
+## 3. Verification Steps Executed #section/evidence
+
+| # | Step | Expected Result | Actual Result | Status |
+|---|---|---|---|---|
+| 1 | Run PRP contract tests | Commands pass | Commands pass | PASS |
+
+## 4. Code Quality And Security Check #section/findings
+
+- Linting/Formatting: Contract runner completed.
+- Security: Path traversal cases rejected.
+- Best Practices: CLI gates use explicit commands.
+- Performance: Not applicable for this contract test.
+
+## 5. Issues Found #section/findings
+
+### Issue 1 #finding/bug #priority/medium
+
+No issues found.
+
+## 6. Manual Verification Required #section/followup
+
+No manual verification required for this contract fixture.
+
+## 7. Final Recommendation #section/decision
+
+Ready for merge.
+
+## 8. Sources #section/sources
+
+- .agent/scripts/test-prp.mjs
+`,
+  'utf8',
+);
+run(['transition', '999', 'human_review']);
+run(['transition', '999', 'done', '--actor', 'Human Reviewer', '--summary', 'Approved after QA report']);
+plan = readJson(path.join(taskDir, 'implementation_plan.json'));
+assert(plan.status === 'done', 'transition to done failed');
+run(['followup:start', '999', 'Add a follow-up contract']);
+plan = readJson(path.join(taskDir, 'implementation_plan.json'));
+assert(plan.status === 'planning', 'followup:start should return task to planning');
+assert(plan.summary.followup_round === 1, 'followup:start should increment follow-up round');
+assert(plan.phases[0].subtasks[0].status === 'completed', 'followup:start should preserve completed subtasks');
+console.log('[OK] human review, done transition, and follow-up start verified.');
 
 const planPath = path.join(taskDir, 'implementation_plan.json');
 const validPlan = readJson(planPath);

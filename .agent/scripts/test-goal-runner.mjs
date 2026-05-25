@@ -37,6 +37,7 @@ const executionLog = readJson(path.join(tempRoot, '.workspaces', 'specs', 'goal_
 
 assert(latest.goal_id === executionLog.goal_id, 'latest session and execution log should match');
 assert(latest.flow_selected === 'RCA / Debug Flow', 'debug goal should route to RCA / Debug Flow');
+assert(latest.execution_mode === 'recommendation_only', 'goal route should be recommendation-only');
 assert(latest.config.max_turns === 15, 'max turn config should be recorded');
 assert(latest.config.parallel_enabled === true, 'parallel config should be recorded');
 assert(latest.metrics.total_turns <= 15, 'total turns should respect max turn budget');

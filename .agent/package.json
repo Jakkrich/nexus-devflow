@@ -1,6 +1,6 @@
 {
   "name": "agent-flow",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "PRP workflow and dashboard contract tools for AI coding agents.",
   "type": "module",
   "bin": {

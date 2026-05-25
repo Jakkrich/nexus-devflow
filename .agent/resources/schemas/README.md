@@ -29,6 +29,7 @@
 | `requirements.json` | รายละเอียดความต้องการเชิงลึก (System-readable) | `spec-driven-development` |
 | `task_metadata.json` | Badges, หมวดหมู่ และการตั้งค่า AI | `spec-driven-development` |
 | `implementation_plan.json` | สถานะ Kanban, แผนงาน และงานย่อย (Hub) | `planning-and-task-breakdown`, `incremental-implementation` |
+| `plan_approval.json` | หลักฐานการอนุมัติแผนก่อนเริ่ม coding | `planning-and-task-breakdown`, `/31-Plan` |
 | `context.json` | ข้อมูลบริบทและไฟล์ที่เกี่ยวข้อง (RAG) | `planning-and-task-breakdown` |
 | `task_logs.json` | Timeline การทำงานแบบ Real-time | ทุก Skills (เมื่อเริ่ม/จบขั้นตอนสำคัญ) |
 | `qa_report.md` | สรุปผลการทดสอบและการตรวจสอบ | `code-review-and-quality`, `shipping-and-launch` |

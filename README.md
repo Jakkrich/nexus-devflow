@@ -35,7 +35,7 @@ The framework keeps the moving parts explicit:
 ```text
   1. Goal              2. Spec + Plan          3. Code + Verify       4. Review + Ship
   ----------------     ----------------        ----------------       ----------------
-  "/05-Goal ..."  ->   /30-Task             -> /32-Code            -> /34-Human
+  "/05-Goal ..."  ->   /30-Task             -> /32-Code            -> /34-Human-Approve
                        /31-Plan                /33-Verify             /50-Commit
                                                                         /51-PR
 ```
@@ -45,7 +45,7 @@ The same flow can start from discovery, debugging, or direct task execution:
 ```text
 Discovery:  /10-Brainstorm -> /12-PRD -> /30-Task -> /31-Plan
 Bug fix:    /20-Debug -> /30-Task -> /31-Plan -> /32-Code -> /33-Verify
-Feature:    /30-Task -> /31-Plan -> /32-Code -> /33-Verify -> /34-Human
+Feature:    /30-Task -> /31-Plan -> /32-Code -> /33-Verify -> /34-Human-Approve
 Release:    /50-Commit -> /51-PR -> /53-Changelog -> /54-Insight
 ```
 
@@ -80,10 +80,12 @@ graph TD
     T --> P["/31-Plan"]
     P --> C["/32-Code"]
     C --> V["/33-Verify"]
-    V -->|pass| H["/34-Human"]
+    V -->|pass| H["/34-Human-Approve"]
     V -->|needs work| C
     H -->|approve| S["/50-Commit and /51-PR"]
-    H -->|feedback| F["/35-Followup"]
+    V -->|needs human decision support| RCH["/34-Human-ReCheck"]
+    RCH -->|reject or feedback| C
+    H -->|follow-up scope| F["/35-Followup"]
     F --> P
     S --> I["/54-Insight or /59-Wiki"]
 ```
@@ -117,7 +119,7 @@ Run a normal feature workflow in chat:
 /31-Plan 001
 /32-Code 001
 /33-Verify 001
-/34-Human Approve 001
+/34-Human-Approve 001
 ```
 
 ---
@@ -168,15 +170,31 @@ npm.cmd run agent -- validate 001
 
 | Group | Commands | Use When |
 | --- | --- | --- |
-| Goal routing | `/05-Goal` | You have a high-level request and want the framework to choose the right path. |
+| Goal routing | `/05-Goal` | You have a high-level request and want the framework to recommend the right path without executing it automatically. |
 | Setup and status | `/00-Init`, `/02-Status` | You need to initialize or inspect project/framework state. |
 | Discovery | `/10-Brainstorm`, `/11-Research`, `/12-PRD` | Scope, requirements, or technical direction are not ready yet. |
 | Debugging | `/20-Debug` | You need root cause analysis before planning a fix. |
-| Core execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` | You are moving work from spec to implementation and validation. |
+| Core execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/34-Human-ReCheck`, `/35-Followup` | You are moving work from spec to implementation, validation, human decision, and follow-up. |
 | Quality | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | You need deeper QA, tests, simplification, or preview checks. |
 | Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight`, `/58-Merge` | You are packaging, releasing, or recording lessons. |
 | Review and triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | You are reviewing PRs, applying comments, or triaging issues. |
 | Knowledge and specialists | `/59-Wiki`, `/60-Graphify`, `/90-Agent`, `/99-Help` | You need wiki output, graph artifacts, specialist agents, or guidance. |
+
+---
+
+## Lifecycle Gates
+
+| Phase | CLI contract |
+| --- | --- |
+| `/31-Plan` | Record human approval with `npm run agent -- plan:approve {ID} --actor "{name}" --summary "{summary}"`. |
+| `/32-Code` | Confirm approval with `plan:approval`, enter coding with `transition {ID} in_progress`, and finish with `transition {ID} ai_review`. |
+| `/33-Verify` | Move to `human_review` or back to `in_progress` with `transition`. |
+| `/34-Human-Approve` | Move to `done` with `transition` and a human approval summary. |
+| `/34-Human-Reject` | Move back to `in_progress` with `transition` and a rejection reason. |
+| `/34-Human-Feedback` | Move back to `in_progress` with `transition` and feedback history. |
+| `/34-Human-ReCheck` | Read-only decision support after verification or completion; status is unchanged by default. |
+| `/34-Human` | Compatibility dispatcher for legacy approve, reject, feedback, and recheck commands. |
+| `/35-Followup` | Start additional scope with `followup:start` before appending phases/subtasks. |
 
 ---
 

@@ -18,7 +18,7 @@ Create a codebase-informed implementation plan using CLI plan helpers instead of
 Use PRP CLI commands to update JSON artifacts:
 
 ```powershell
-npm run agent -- update {ID} --status planning
+npm run agent -- transition {ID} planning
 npm run agent -- artifact:set {ID} complexity level "{simple|standard|complex}"
 npm run agent -- artifact:set {ID} complexity approach "{Planning approach}"
 npm run agent -- artifact:set {ID} context task_description "{Task summary}"
@@ -27,6 +27,7 @@ npm run agent -- plan:add-phase {ID} "{Phase Name}" --phase-id phase-1 --type im
 npm run agent -- plan:add-subtask {ID} phase-1 "{Subtask Title}" --description "{Detailed instruction}" --service backend --modify "src/file.ts" --pattern "src/example.ts" --verify-type command --verify-command "npm test" --verify-expected "tests pass"
 npm run agent -- plan:validate {ID}
 npm run agent -- validate {ID}
+npm run agent -- plan:approve {ID} --actor "{Approver}" --summary "{Approval summary}"
 ```
 
 Raw `implementation_plan.json` rewrites are fallback only. Prefer many small commands over one large JSON response.
@@ -88,7 +89,7 @@ Each subtask should answer:
 
 Create a `plan.md` file in the task workspace (`.workspaces/specs/{ID}-*/plan.md`) that summarizes the JSON plan in a readable format.
 **MANDATORY:** You MUST base the structure of this file strictly on the template provided at `.agent/resources/schemas/plan.template.md`. Before reporting completion, run `npm run agent -- markdown:validate {plan_md_path} plan.template.md` and replace any placeholder/template text with concrete phases, files, commands, dependencies, and verification evidence.
-**MANDATORY:** You MUST present this `plan.md` content to the user for review and wait for their explicit approval before recommending the next command.
+**MANDATORY:** You MUST present this `plan.md` content to the user for review and wait for their explicit approval. After approval, record it with `npm run agent -- plan:approve {ID} --actor "{Approver}" --summary "{Approval summary}"` before recommending `/32-Code`.
 
 ### 6. Validate And Close Planning
 

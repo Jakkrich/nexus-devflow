@@ -284,6 +284,7 @@ function buildSession(config) {
     goal_id: goalId,
     goal_description: config.goal,
     status: config.dryRun ? 'planned' : 'ready',
+    execution_mode: 'recommendation_only',
     config: {
       max_turns: config.maxTurns,
       default_turns: DEFAULT_MAX_TURNS,
@@ -306,16 +307,18 @@ function buildSession(config) {
       makeStep(1, 'routing', 'Boss', `Selected ${route.flow}. ${route.reason}`, timestamps.route),
       makeStep(2, 'decomposition', 'Boss', `Estimated ${complexity} complexity and prepared ${tasks.length} worker task(s).`, timestamps.decompose),
       makeStep(3, 'validation', 'Boss', 'Prepared session log and recommended DevFlow command sequence.', timestamps.validate),
-      makeStep(4, 'synthesis', 'Boss', 'Goal session is ready for human or agent execution.', timestamps.end),
+      makeStep(4, 'synthesis', 'Boss', 'Goal route is ready for human or agent execution of the recommended commands.', timestamps.end),
     ],
     recommended_commands: recommendedCommands,
   };
 }
 
 function printSummary(session, sessionPath) {
+  console.log('Goal Router');
   console.log(`Goal ID: ${session.goal_id}`);
   console.log(`Flow: ${session.flow_selected}`);
   console.log(`Status: ${session.status}`);
+  console.log(`Execution mode: ${session.execution_mode}`);
   console.log(`Complexity: ${session.complexity}`);
   console.log(`Tasks: ${session.tasks_decomposed.length}`);
   console.log(`Session log: ${sessionPath}`);
