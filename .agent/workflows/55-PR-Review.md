@@ -52,14 +52,22 @@ Start with the `scrutinize` lens before detailed lane review:
 - Smaller alternative: can the same outcome be reached with less code, lower risk, or existing patterns?
 - Actual path trace: follow runtime behavior beyond the diff.
 
-Use lanes that match the change:
+Then select only the review lanes that match the scope. Do not run every lane by default; the review should be proportional to the change.
 
-- correctness and business logic
-- security and data exposure
-- code quality and maintainability
-- structure, boundaries, and codebase fit
-- tests and validation coverage
-- user-facing behavior and regressions
+| Lane | Use When |
+| :--- | :--- |
+| Correctness / bugs | Always, unless the user explicitly asks for a narrow non-code review. |
+| Type safety | Typed code, public types, schema changes, casts, `any`, or boundary parsing changed. |
+| Maintainability | The change adds duplication, cross-file patterns, API shape, migration bridges, or technical debt. |
+| Simplicity | The change adds abstractions, indirection, configuration, generalized utilities, or complex control flow. |
+| Testability | Important logic is mixed with IO, hidden state, time, random values, constructors, globals, or hard-coded dependencies. |
+| Coverage | New or changed behavior should have tests, especially bug fixes and business logic. |
+| Docs accuracy | Commands, setup, workflows, schemas, public APIs, examples, or user-visible behavior changed. |
+| AGENTS.md adherence | An `AGENTS.md` or equivalent project instruction file exists for the changed scope. |
+| Security | Auth, authorization, secrets, user input, external data, dependencies, or persistence boundaries changed. |
+| Performance | Queries, loops, rendering, data volume, hot paths, or synchronous work changed. |
+
+When a lane is skipped, briefly note why if the omission could surprise the reader. For tiny reviews, it is acceptable to state only the lanes used.
 
 ### 3. Validate Findings
 
@@ -70,6 +78,10 @@ Before reporting a finding:
 - ensure it is actionable
 - include file and line references when possible
 - avoid style-only comments unless they hide real risk
+- keep each finding in its strongest matching lane; do not report the same issue twice under different labels
+- drop findings that are only suspicions, preferences, or theoretical improvements without a concrete failure mode
+- for AGENTS.md findings, quote the exact project instruction being violated
+- for docs findings, show the mismatch between what the docs say and what the code now does
 
 ### 4. Output Findings First
 

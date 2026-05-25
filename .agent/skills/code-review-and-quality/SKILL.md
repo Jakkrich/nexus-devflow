@@ -80,6 +80,33 @@ For detailed profiling and optimization, see `performance-optimization`. Does th
 - Any missing pagination on list endpoints?
 - Any large objects created in hot paths?
 
+## Review Lenses
+
+For larger or riskier changes, apply focused review lenses inside the five-axis review instead of treating every concern as one generic "code quality" bucket.
+
+| Lens | Use It To Check |
+|---|---|
+| Correctness / bugs | Logic errors, edge cases, race conditions, state inconsistencies, and runtime failures. |
+| Type safety | Unsafe casts, weak types, invalid states, missing narrowing, and boundary parsing in typed code. |
+| Maintainability | DRY issues, dead code, coupling, cohesion, inconsistent patterns, and migration debt. |
+| Simplicity | Whether the solution is more complex than the problem requires. |
+| Testability | Whether important logic is easy to isolate and test. |
+| Coverage | Whether changed behavior is actually tested. |
+| Docs accuracy | Whether docs, comments, commands, and examples still match the code. |
+| AGENTS.md adherence | Whether the change follows explicit project instructions. |
+| Security | Whether the change introduces exploitable risk or leaks sensitive data. |
+| Performance | Whether the change introduces measurable or likely bottlenecks. |
+
+Keep lens boundaries clean:
+
+- Coverage asks "are there tests for this behavior?"
+- Testability asks "is this design easy to test?"
+- Maintainability asks "will this be easy to change safely?"
+- Simplicity asks "is this harder to understand than necessary?"
+- AGENTS.md adherence asks "which exact project rule was violated?"
+
+Only report high-confidence findings. If a concern is speculative, either omit it or list it as an open question with the evidence needed to decide.
+
 ## Change Sizing
 
 Small, focused changes are easier to review, faster to merge, and safer to deploy. Target these sizes:
