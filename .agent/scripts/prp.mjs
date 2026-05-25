@@ -170,33 +170,61 @@ function writeTextIfMissing(file, content) {
 
 function renderInitialSpec({ id, title, description }) {
   const scope = description || title;
-  return `# Specification: ${id} - ${title}
+  const today = new Date().toISOString().slice(0, 10);
+  return `---
+id: "spec-${id}"
+title: "Specification: ${id} - ${title}"
+doc_type: "spec"
+category: "planning"
+status: "draft"
+created: "${today}"
+updated: "${today}"
+owner: "agent"
+source_workflow: "/30-Task"
+related_task: "${id}"
+related_files: []
+tags:
+  - nexus-devflow
+  - spec
+  - planning
+aliases:
+  - "Spec ${id}"
+summary: "Task specification for ${title}."
+metadata_version: 1
+requirement_count: 3
+acceptance_criteria_count: 1
+---
 
-## 1. Overview
+# Specification: ${id} - ${title} #doc/spec #status/draft
+
+## 1. Overview #section/summary
 - **Objective**: Deliver "${title}" according to the requested scope: ${scope}
 - **Business Value**: Turn the request into a tracked, testable task so planning, implementation, and verification can proceed without relying on an empty template.
 - **Target Audience/Users**: The users, maintainers, or reviewers affected by "${title}" as described in the request. Refine the exact roles during clarification if the request does not name them.
 
-## 2. Requirements & Acceptance Criteria
+## 2. Requirements And Acceptance Criteria #section/requirements
 - [ ] Capture the concrete behavior, bug, or deliverable described by: ${scope}
 - [ ] Preserve existing behavior that is not explicitly part of this task.
 - [ ] Add enough validation evidence for reviewers to confirm the task is complete.
 
-## 3. Context & Background
+## 3. Context And Background #section/context
 - **Current State**: The current system needs work related to "${title}". Inspect the relevant code, docs, and artifacts before planning.
 - **Problem Statement**: The request needs to be converted into an implementation-ready specification with clear behavior and verification.
 - **Related Issues/Features**: No related issue was provided during task creation.
 
-## 4. Technical Constraints & Assumptions
+## 4. Technical Constraints And Assumptions #section/constraints
 - **Constraints**: Follow the existing project architecture, coding conventions, and validation commands discovered during planning.
 - **Assumptions**: Any missing product, UX, data, or integration detail must be clarified before implementation or recorded explicitly in the plan.
 
-## 5. UI/UX Considerations (If applicable)
+## 5. UI/UX Considerations #section/ui-ux
 - **Design Guidelines**: Match existing UI patterns when the task affects user-facing screens.
 - **Interactions**: Preserve current interaction behavior unless the request explicitly changes it.
 
-## 6. Out of Scope
+## 6. Out Of Scope #section/scope
 - Changes unrelated to "${title}" are out of scope unless the user approves them as follow-up work.
+
+## 7. Sources #section/sources
+- Initial user request for task ${id}.
 `;
 }
 

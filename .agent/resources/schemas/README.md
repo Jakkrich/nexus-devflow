@@ -37,6 +37,8 @@
 
 ทุก workflow ที่สร้างไฟล์ Markdown ต้องอ่าน template ที่เกี่ยวข้องในโฟลเดอร์นี้ก่อนสร้างหรืออัปเดตไฟล์ และต้องคงหัวข้อหลักตาม template ไว้เสมอ
 
+Generated Markdown files must follow the shared metadata pattern in `docs/markdown-metadata-contract.md`: YAML frontmatter for document-level metadata and Obsidian heading tags for section-level metadata.
+
 ## Markdown Quality Gate
 
 Template มีไว้กำหนดโครง ไม่ใช่ผลลัพธ์สุดท้าย ห้ามบันทึกไฟล์ Markdown ที่ยังเหลือข้อความแนว placeholder เช่น `[What ...]`, `{Placeholder}`, `Requirement 1`, `Option A`, `TODO`, `TBD`, หรือคำอธิบาย generic ที่ไม่ได้อ้างอิง request/code/evidence จริง
