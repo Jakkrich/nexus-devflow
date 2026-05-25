@@ -1,0 +1,4 @@
+interface:
+  display_name: "DevFlow Concept Intake"
+  short_description: "Evaluate repo concepts for DevFlow adoption"
+  default_prompt: "Use $devflow-concept-intake to study this repo or README, critique the concepts, and propose whether Nexus-DevFlow should adopt, adapt, reject, or track them."
