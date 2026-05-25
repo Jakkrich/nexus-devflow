@@ -1,34 +1,96 @@
 <div align="center">
 
-<img src="./docs/logo-nexus-devflow.png" alt="Nexus-DevFlow Logo" width="180" />
+<img src="./docs/logo-nexus-devflow.png" alt="Nexus-DevFlow" width="140" />
 
 # Nexus-DevFlow
 
-Agent-ready PRP workflow framework for turning goals into scoped specs, implementation plans, code tasks, verification reports, and release artifacts.
+### From rough goal to verified development workflow.
+
+**Agent-ready PRP workflow framework** for specs, plans, implementation tasks, validation reports, and release artifacts.
+
+[Setup](./SETUP.md) · [Usage](./USAGE.md) · [Quickstart](./docs/quickstart.md) · [Agents](./AGENTS.md) · [Roadmap](./ROADMAP.md) · [License](./LICENSE)
+
+<sub>MIT · Node >=18.17 · `.agent` bundle · script-first JSON artifacts</sub>
 
 </div>
 
-## Overview
+---
 
-Nexus-DevFlow is a developer workflow framework built around a single `.agent` bundle and project-local `.workspaces` artifacts. It gives human developers and AI coding agents a predictable path for planning, implementing, validating, reviewing, and shipping work.
+## One Workflow Contract For Human And AI Development
 
-The framework is intentionally script-first:
+Nexus-DevFlow gives developers and AI agents a shared operating contract. A task starts as a goal, becomes a scoped specification, turns into an implementation plan, moves through code and verification, then leaves behind reviewable artifacts.
 
-- Use npm scripts and the PRP CLI to create and update structured artifacts.
-- Keep generated task data in `.workspaces`.
-- Keep reusable workflow logic, agents, schemas, and commands in `.agent`.
-- Validate artifacts before moving between workflow phases.
+The framework keeps the moving parts explicit:
 
-## Requirements
+- `.agent` contains reusable workflows, agents, schemas, scripts, skills, and dashboard assets.
+- `.workspaces` contains generated project state: specs, plans, reports, research, debug notes, and wiki artifacts.
+- PRP CLI commands update JSON artifacts instead of hand-editing structured state.
+- Validation gates keep tasks, plans, and framework files reviewable before handoff.
 
-- Node.js `>=18.17`
-- npm
-- git, for repository updates and normal development flow
-- PowerShell on Windows, or an equivalent shell for npm commands
+---
 
-On Windows, prefer `npm.cmd` if PowerShell blocks the `npm` shim.
+## The Flow
 
-## Quickstart
+```text
+  1. Goal              2. Spec + Plan          3. Code + Verify       4. Review + Ship
+  ----------------     ----------------        ----------------       ----------------
+  "/05-Goal ..."  ->   /30-Task             -> /32-Code            -> /34-Human
+                       /31-Plan                /33-Verify             /50-Commit
+                                                                        /51-PR
+```
+
+The same flow can start from discovery, debugging, or direct task execution:
+
+```text
+Discovery:  /10-Brainstorm -> /12-PRD -> /30-Task -> /31-Plan
+Bug fix:    /20-Debug -> /30-Task -> /31-Plan -> /32-Code -> /33-Verify
+Feature:    /30-Task -> /31-Plan -> /32-Code -> /33-Verify -> /34-Human
+Release:    /50-Commit -> /51-PR -> /53-Changelog -> /54-Insight
+```
+
+---
+
+## What Makes It Different
+
+|  |  |
+| --- | --- |
+| **Workflow gates** | Task -> Plan -> Code -> Verify -> Human approval. Each phase has a clear output and handoff point. |
+| **Script-first artifacts** | Requirements, plans, and task state are updated through PRP CLI commands to avoid malformed JSON. |
+| **Agent-ready bundle** | `.agent` packages workflows, specialist agents, schemas, rules, skills, and scripts as one portable framework bundle. |
+| **Project-local state** | `.workspaces` keeps generated artifacts in the target project instead of mixing state across repos. |
+| **Debug-first fixes** | Bug work starts with `/20-Debug` so fixes are based on reproduction, trace, and root-cause notes. |
+| **Validation by default** | Framework validation, doc contract scans, plan validation, and task validation are part of the normal loop. |
+| **Specialist agents** | Use `/90-Agent` for focused roles such as code review, backend, frontend, database, testing, security, docs, and DevOps. |
+| **Open source. MIT.** | Fork it, customize it, ship your own version, and keep the MIT notice with substantial copies. |
+
+---
+
+## How It Works
+
+```mermaid
+graph TD
+    G["Goal or request"] --> R{"Route"}
+    R -->|unclear scope| B["/10-Brainstorm or /12-PRD"]
+    R -->|bug| D["/20-Debug"]
+    R -->|ready task| T["/30-Task"]
+    B --> T
+    D --> T
+    T --> P["/31-Plan"]
+    P --> C["/32-Code"]
+    C --> V["/33-Verify"]
+    V -->|pass| H["/34-Human"]
+    V -->|needs work| C
+    H -->|approve| S["/50-Commit and /51-PR"]
+    H -->|feedback| F["/35-Followup"]
+    F --> P
+    S --> I["/54-Insight or /59-Wiki"]
+```
+
+Each command produces or updates artifacts under `.workspaces`, so the task can be reviewed, resumed, audited, and converted into future project knowledge.
+
+---
+
+## Quick Start
 
 From the framework root:
 
@@ -39,22 +101,14 @@ npm.cmd run validate
 npm.cmd run agent:status
 ```
 
-Create and validate a first task:
+Create a first task:
 
 ```powershell
 npm.cmd run agent -- init 001 "First Task" first-task "Describe the first task"
 npm.cmd run agent -- validate 001
 ```
 
-Generated task artifacts are written under:
-
-```text
-.workspaces/specs/
-```
-
-## Core Workflow
-
-Use the numbered workflow commands as phase gates. The common path for feature work is:
+Run a normal feature workflow in chat:
 
 ```text
 /30-Task "Add password reset"
@@ -62,58 +116,13 @@ Use the numbered workflow commands as phase gates. The common path for feature w
 /32-Code 001
 /33-Verify 001
 /34-Human Approve 001
-/50-Commit "task 001"
 ```
 
-For unclear product work, start with discovery:
+---
 
-```text
-/10-Brainstorm "self-service billing portal"
-/12-PRD "self-service billing portal"
-/30-Task "Build self-service billing portal"
-```
+## PRP CLI Examples
 
-For bugs, start with root cause analysis:
-
-```text
-/20-Debug "checkout fails after payment success"
-/30-Task "Fix checkout success handling"
-/31-Plan 002
-/32-Code 002
-/33-Verify 002
-```
-
-For high-level goals, use goal routing:
-
-```text
-/05-Goal "add password reset with email token and regression tests"
-```
-
-## Workflow Groups
-
-| Group | Commands | Purpose |
-| :--- | :--- | :--- |
-| Goal routing | `/05-Goal` | Classify a high-level request and route it to the right workflow. |
-| Setup and status | `/00-Init`, `/02-Status` | Prepare project context and inspect framework state. |
-| Discovery | `/10-Brainstorm`, `/11-Research`, `/12-PRD` | Clarify intent, research constraints, and produce product/spec inputs. |
-| Debugging | `/20-Debug` | Reproduce, trace, and document root cause before planning a fix. |
-| Core execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` | Move a task from requirements to implementation and validation. |
-| Quality | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | Run deeper QA, testing, simplification, and preview checks. |
-| Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight`, `/58-Merge` | Package, review, release, and record lessons. |
-| Review and triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | Review pull requests, handle comments, and triage issues. |
-| Knowledge and specialists | `/59-Wiki`, `/60-Graphify`, `/90-Agent`, `/99-Help` | Build knowledge artifacts, generate graphs, and invoke specialist agents. |
-
-## PRP CLI
-
-Run the PRP CLI through npm:
-
-```powershell
-npm.cmd run agent -- --help
-npm.cmd run agent -- status
-npm.cmd run agent -- validate 001
-```
-
-Prefer CLI commands over manual JSON edits:
+Use the PRP CLI for structured JSON artifacts:
 
 ```powershell
 npm.cmd run agent -- artifact:get 001 requirements
@@ -125,20 +134,23 @@ npm.cmd run agent -- plan:set-subtask-status 001 subtask-1.1 completed
 npm.cmd run agent -- validate 001
 ```
 
-If an artifact becomes invalid, repair it through the CLI and validate again:
+Repair malformed JSON through the CLI:
 
 ```powershell
 npm.cmd run agent -- json:repair 001 requirements
 npm.cmd run agent -- validate 001
 ```
 
-## npm Scripts
+---
+
+## Command Surface
 
 | Script | Purpose |
-| :--- | :--- |
+| --- | --- |
 | `npm run activate` | Prepare the local `.agent` bundle and workspace defaults. |
 | `npm run validate` | Validate framework files, bundle paths, roadmap artifacts, and generated indexes. |
 | `npm run validate:all` | Run the broader validation suite. |
+| `npm run validate:docs` | Scan documentation contracts. |
 | `npm run agent:status` | Show PRP framework status. |
 | `npm run agent -- <command>` | Run PRP CLI commands. |
 | `npm run index` | Regenerate project index artifacts. |
@@ -147,6 +159,24 @@ npm.cmd run agent -- validate 001
 | `npm run dashboard` | Serve the local dashboard. |
 | `npm run codex:update-global` | Install or update the global Codex Nexus-DevFlow skill. |
 | `npm run codex:check-global` | Validate the global Codex install. |
+
+---
+
+## Workflow Index
+
+| Group | Commands | Use When |
+| --- | --- | --- |
+| Goal routing | `/05-Goal` | You have a high-level request and want the framework to choose the right path. |
+| Setup and status | `/00-Init`, `/02-Status` | You need to initialize or inspect project/framework state. |
+| Discovery | `/10-Brainstorm`, `/11-Research`, `/12-PRD` | Scope, requirements, or technical direction are not ready yet. |
+| Debugging | `/20-Debug` | You need root cause analysis before planning a fix. |
+| Core execution | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human`, `/35-Followup` | You are moving work from spec to implementation and validation. |
+| Quality | `/39-QA-Orchestrate`, `/40-Test`, `/41-Simplify`, `/42-Preview` | You need deeper QA, tests, simplification, or preview checks. |
+| Release | `/50-Commit`, `/51-PR`, `/52-Deploy`, `/53-Changelog`, `/54-Insight`, `/58-Merge` | You are packaging, releasing, or recording lessons. |
+| Review and triage | `/55-PR-Review`, `/56-PR-Followup`, `/57-Issue-Triage` | You are reviewing PRs, applying comments, or triaging issues. |
+| Knowledge and specialists | `/59-Wiki`, `/60-Graphify`, `/90-Agent`, `/99-Help` | You need wiki output, graph artifacts, specialist agents, or guidance. |
+
+---
 
 ## Project Layout
 
@@ -161,18 +191,13 @@ npm.cmd run agent -- validate 001
 |-- SETUP-BY-AI.md                  # AI-assisted installation guide
 |-- USAGE.md                        # Full workflow command reference
 |-- ROADMAP.md                      # Framework roadmap
+|-- LICENSE                         # MIT license
 `-- package.json                    # npm command surface
 ```
 
 Keep `.workspaces` project-specific. Do not share generated workspace artifacts between unrelated projects.
 
-## Artifact Rules
-
-- Treat `.agent` as the reusable framework bundle.
-- Treat `.workspaces` as generated project state.
-- Use PRP CLI commands for JSON artifacts whenever possible.
-- Validate after changing requirements, plans, task state, or framework scripts.
-- Keep framework updates reviewable; avoid duplicating `.agent` into multiple manually maintained bundles.
+---
 
 ## Codex Global Install
 
@@ -192,57 +217,59 @@ The installer manages:
 %USERPROFILE%\.codex\AGENTS.md
 ```
 
-To pull the latest repository changes before updating the global install:
+Pull before updating the global install:
 
 ```powershell
 npm.cmd run codex:update-global:pull
 ```
 
-This command refuses to pull when the working tree is dirty.
+This refuses to pull when the working tree is dirty.
 
-## Validation
+---
 
-Run these before handing off framework changes:
+## Documentation
+
+| Guide | What It Covers |
+| --- | --- |
+| [Setup](./SETUP.md) | Manual install and upgrade instructions. |
+| [Setup By AI](./SETUP-BY-AI.md) | AI-assisted install and upgrade playbook. |
+| [Usage](./USAGE.md) | Full workflow guide and command reference. |
+| [Quickstart](./docs/quickstart.md) | Minimal local startup flow. |
+| [Agent Bundle](./docs/agent-bundle.md) | `.agent` bundle model and rules. |
+| [Workspace Artifacts](./docs/workspace-artifacts.md) | Workspace artifact layout. |
+| [JSON Artifact Contract](./docs/json-artifact-contract.md) | JSON artifact structure and contracts. |
+| [Script-First JSON Workflow](./docs/script-first-json-workflow.md) | CLI-first artifact editing workflow. |
+| [Prompt Addons](./docs/prompt-addons.md) | Prompt addon and specialist workflow notes. |
+| [Agents](./AGENTS.md) | Agent roles and operating instructions. |
+| [Roadmap](./ROADMAP.md) | Planned framework direction. |
+
+---
+
+## Development
 
 ```powershell
 npm.cmd run validate
 npm.cmd run validate:all
 npm.cmd run sync:check
+npm.cmd run roadmap:validate
+npm.cmd run security:scan
 ```
 
-For task-specific validation:
+For task-specific checks:
 
 ```powershell
 npm.cmd run agent -- validate 001
 npm.cmd run agent -- plan:validate 001
 ```
 
-## Documentation
-
-| Document | Use |
-| :--- | :--- |
-| [SETUP.md](./SETUP.md) | Manual install and upgrade instructions. |
-| [SETUP-BY-AI.md](./SETUP-BY-AI.md) | AI-assisted install and upgrade playbook. |
-| [USAGE.md](./USAGE.md) | Full workflow guide and command reference. |
-| [docs/quickstart.md](./docs/quickstart.md) | Minimal local startup flow. |
-| [docs/agent-bundle.md](./docs/agent-bundle.md) | `.agent` bundle model and rules. |
-| [docs/workspace-artifacts.md](./docs/workspace-artifacts.md) | Workspace artifact layout. |
-| [docs/json-artifact-contract.md](./docs/json-artifact-contract.md) | JSON artifact structure and contracts. |
-| [docs/script-first-json-workflow.md](./docs/script-first-json-workflow.md) | CLI-first artifact editing workflow. |
-| [docs/prompt-addons.md](./docs/prompt-addons.md) | Prompt addon and specialist workflow notes. |
-| [AGENTS.md](./AGENTS.md) | Agent roles and operating instructions. |
-| [ROADMAP.md](./ROADMAP.md) | Planned framework direction. |
-
-## Maintainer Notes
-
-- Keep README focused on setup, command surface, and developer workflow.
-- Put detailed command behavior in `USAGE.md`.
-- Put installation details in `SETUP.md` and `SETUP-BY-AI.md`.
-- Update `CHANGELOG.md` when behavior changes.
-- Run validation after modifying `.agent`, `scripts`, artifact schemas, or command documentation.
+---
 
 ## License
 
-Nexus-DevFlow is released under the [MIT License](./LICENSE).
+MIT. See [LICENSE](./LICENSE).
 
-You may use, copy, modify, merge, publish, distribute, sublicense, and sell your own modified versions, as long as the license notice is included with substantial portions of the software.
+<div align="center">
+
+**Nexus-DevFlow: make the work visible, repeatable, and verifiable.**
+
+</div>
