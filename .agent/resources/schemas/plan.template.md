@@ -86,6 +86,12 @@ risk_level: "medium"
 
 > Automated commands are in `implementation_plan.json`.
 
+### Test Decision Gate #section/verification
+
+| Subtask | Decision | Reason | Planned Test Cases Or Checks | Command Or Manual Check | Expected Result |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| [Subtask ID/title] | [Required / Manual/Command Only / Not Required] | [Risk-based reason] | [Happy path, error path, edge case, regression case, or manual check details] | [Exact command or manual check] | [Passing evidence] |
+
 - **Success Criteria**:
   - [ ] [Measurable outcome or behavior]
 - **Required Evidence**:

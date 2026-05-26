@@ -77,6 +77,7 @@ Use the `planner` pattern, but create plan structure through CLI:
 - Include explicit files to modify/create.
 - Include patterns to follow.
 - Include verification command or manual check.
+- Include a test decision for every subtask in the subtask description and the human-readable plan.
 
 Each subtask should answer:
 
@@ -84,11 +85,32 @@ Each subtask should answer:
 - Where to change it
 - Which existing pattern to follow
 - How to verify it
+- Whether automated tests are required, not required, or replaced by manual/command-only verification
+
+### 4.1 Test Decision Gate
+
+For every subtask, decide one of:
+
+- `Required`: automated tests must be created or updated before the subtask can be completed.
+- `Manual/Command Only`: automated tests are not the right fit, but build, lint, typecheck, smoke test, screenshot, or manual verification is required.
+- `Not Required`: no new automated test is needed because the change is docs-only, metadata-only, or otherwise has no behavior surface.
+
+Record the decision with:
+
+- **Reason**: why this decision fits the risk and behavior surface.
+- **Planned cases**: concrete happy path, error path, edge case, or regression cases when tests are required.
+- **Verification command**: the exact command or manual check that proves completion.
+- **Expected result**: what passing evidence should look like.
+
+Default to `Required` for bug fixes, regression fixes, business logic, auth or permission logic, payment or billing, data migration, parsers, API contracts, security-sensitive code, concurrency, persistence, and user-visible behavior with meaningful branching.
+
+If the decision is `Not Required`, explain why automated tests would not add useful confidence and still provide a concrete verification path. Do not use "too simple" as the only reason.
 
 ### 5. Create Human-Readable Plan
 
 Create a `plan.md` file in the task workspace (`.workspaces/specs/{ID}-*/plan.md`) that summarizes the JSON plan in a readable format.
 **MANDATORY:** You MUST base the structure of this file strictly on the template provided at `.agent/resources/schemas/plan.template.md`. Before reporting completion, run `npm run agent -- markdown:validate {plan_md_path} plan.template.md` and replace any placeholder/template text with concrete phases, files, commands, dependencies, and verification evidence.
+**MANDATORY:** The `plan.md` Verification Focus section MUST include the test decision table for every subtask. The user approves this testing strategy together with the implementation plan.
 **MANDATORY:** You MUST present this `plan.md` content to the user for review and wait for their explicit approval. After approval, record it with `npm run agent -- plan:approve {ID} --actor "{Approver}" --summary "{Approval summary}"` before recommending `/32-Code`.
 
 ### 6. Validate And Close Planning
@@ -109,6 +131,7 @@ If validation fails, run repair and update only the broken fields with script co
 - Context references are recorded.
 - Plan phases are ordered by dependency.
 - Every subtask has title, description, service, files, patterns, verification, and status.
+- Every subtask has a test decision, reason, planned cases when needed, command or manual check, and expected result.
 - Human-readable `plan.md` is created and presented.
 - `plan:validate` passes.
 - Next command: `/32-Code {ID}`
