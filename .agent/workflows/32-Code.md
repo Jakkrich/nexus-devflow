@@ -55,11 +55,16 @@ Select the first `pending` or `in_progress` subtask. Work on only one subtask at
 Use the `coder` pattern:
 
 - Read referenced pattern files before editing.
+- Read the subtask test decision from `plan.md` and `implementation_plan.json` before editing.
+- If tests are `Required`, write or update the planned tests first, confirm the failing or missing behavior where practical, then make the smallest useful code change.
+- If verification is `Manual/Command Only` or `Not Required`, preserve the stated reason and perform the planned command or manual check before completion.
 - Make the smallest useful code change.
 - Preserve project style.
 - Run the subtask verification.
 - Update subtask status through `plan:set-subtask-status`.
 - Log the result.
+
+If implementation reveals higher risk than the plan captured, add or strengthen verification before completing the subtask. If the test decision itself must change, return to `/31-Plan {ID}` or update the plan artifacts with script-managed commands before continuing.
 
 ### 3. Recovery
 
@@ -86,6 +91,7 @@ Report:
 - Subtasks completed
 - Files changed
 - Verification commands run
+- Test decisions followed or changed, with reasons
 - Any blocked or manual checks
 - Next command: `/33-Verify {ID}`
 

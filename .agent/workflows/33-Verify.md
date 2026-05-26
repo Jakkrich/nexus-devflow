@@ -39,6 +39,7 @@ Read:
 - `spec.md`
 - `requirements.json`
 - `implementation_plan.json`
+- `plan.md`
 - `task_logs.json`
 - Changed files and test output
 
@@ -56,9 +57,12 @@ Use the `qa_reviewer` pattern:
 - Security
 - Performance
 - Test coverage
+- Test decision alignment
 - Manual verification gaps
 
 Run project validation commands when available: lint, tests, typecheck, build, or targeted command from the plan.
+
+For test decision alignment, verify that every planned subtask has a recorded decision (`Required`, `Manual/Command Only`, or `Not Required`), that the reason still matches the final code, and that the executed evidence matches the planned verification. Treat missing regression tests for bug fixes or changed business logic as a QA finding unless the plan gives a stronger documented reason.
 
 ### 4. QA Report
 
@@ -67,6 +71,7 @@ Create or update `qa_report.md` in the task directory. Include:
 
 - Verdict: pass or fail
 - Evidence: commands and results
+- Test decision alignment: which decisions were honored, changed, or found insufficient
 - Findings grouped by severity
 - Manual checks required
 - Recommended next action
