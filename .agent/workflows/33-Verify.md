@@ -59,6 +59,7 @@ Use the `qa_reviewer` pattern:
 - Test coverage
 - Test decision alignment
 - Manual verification gaps
+- Precision checklist: assumptions handled explicitly, scope stayed surgical, and each success criterion has evidence or a documented gap.
 
 Run project validation commands when available: lint, tests, typecheck, build, or targeted command from the plan.
 

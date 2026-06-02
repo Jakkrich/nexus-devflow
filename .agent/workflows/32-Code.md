@@ -56,6 +56,7 @@ Use the `coder` pattern:
 
 - Read referenced pattern files before editing.
 - Read the subtask test decision from `plan.md` and `implementation_plan.json` before editing.
+- Precision reminder before edits: confirm assumptions, target files, and success criteria; every changed line must trace to the current subtask.
 - If tests are `Required`, write or update the planned tests first, confirm the failing or missing behavior where practical, then make the smallest useful code change.
 - If verification is `Manual/Command Only` or `Not Required`, preserve the stated reason and perform the planned command or manual check before completion.
 - Make the smallest useful code change.
@@ -65,6 +66,8 @@ Use the `coder` pattern:
 - Log the result.
 
 If implementation reveals higher risk than the plan captured, add or strengthen verification before completing the subtask. If the test decision itself must change, return to `/31-Plan {ID}` or update the plan artifacts with script-managed commands before continuing.
+
+If the subtask requires unrelated refactors, unclear ownership, missing target files, or behavior that cannot be inferred safely, stop and surface the uncertainty instead of inventing requirements.
 
 ### 3. Recovery
 

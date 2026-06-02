@@ -102,6 +102,18 @@ description: Core governance rules for the PRP-Framework (Context Engineering).
 
 ---
 
+## DevFlow Precision Rules (Source of Truth)
+
+Keep this section as the canonical rule text. Agents and workflows should add short phase-specific reminders at decision points instead of duplicating the full block.
+
+- **Assumption Check**: State material assumptions before planning or coding. If an assumption could change behavior, scope, data shape, or user-facing output, ask or record it as an open question instead of silently choosing.
+- **Smallest Useful Change**: Implement the smallest change that satisfies the accepted spec. Do not add optional flexibility, new abstractions, extra configuration, or adjacent improvements unless the task or existing project pattern requires them.
+- **Surgical Edit Boundary**: Every changed line must trace to the current task, the chosen implementation path, or cleanup caused by this change. Do not refactor, reformat, rename, or delete unrelated code.
+- **Success Criteria First**: Convert work into verifiable success criteria before implementation. A task is not complete until each criterion has evidence from tests, validation, manual checks, or a documented reason it could not be verified.
+- **Confusion Stop Rule**: If context contains conflicting requirements, missing target files, unclear ownership, or behavior that cannot be inferred safely, stop and surface the uncertainty. Do not invent missing requirements to keep moving.
+
+---
+
 ## ðŸ§ª Validation & Quality
 
 - **The Validation Loop is mandatory**: Any code change in `/03-Code` must be followed by a verification sweep.
