@@ -78,6 +78,7 @@ Use the `planner` pattern, but create plan structure through CLI:
 - Include patterns to follow.
 - Include verification command or manual check.
 - Include a test decision for every subtask in the subtask description and the human-readable plan.
+- Precision reminder: record material assumptions, choose the smallest useful path, map each subtask to target files and verification, and stop if ownership or target files are unclear.
 
 Each subtask should answer:
 

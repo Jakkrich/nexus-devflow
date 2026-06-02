@@ -21,6 +21,8 @@ Execute the plan end-to-end with rigorous self-validation. You are autonomous.
 
 **Golden Rule**: If a validation fails, fix it before moving on. Never accumulate broken state.
 
+**DevFlow Precision Reminder**: Use the canonical DevFlow Precision Rules from the base framework. For coding, state assumptions, change only what the accepted plan requires, keep every changed line traceable to the current task, verify each success criterion, and stop when requirements, ownership, files, or behavior conflict.
+
 **Script-First Artifact Contract**: Use the `json-artifact-handling` skill for PRPs JSON artifacts. Do not manually edit `implementation_plan.json` or `task_logs.json` for progress. Use:
 
 ```powershell

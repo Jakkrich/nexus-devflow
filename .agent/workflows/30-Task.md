@@ -44,6 +44,7 @@ Use the `spec_gatherer` pattern:
 
 - Confirm the task in one sentence.
 - Identify workflow type: `feature`, `bugfix`, `refactor`, `docs`, `test`, `investigation`, `migration`, or `simple`.
+- Precision reminder: capture material assumptions or open questions, convert the request into verifiable acceptance criteria, and stop for clarification when requirements conflict.
 - Ask only necessary clarifying questions.
 - Capture acceptance criteria and constraints before creating the task when the request is vague.
 

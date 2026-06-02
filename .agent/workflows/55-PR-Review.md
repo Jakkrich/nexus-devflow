@@ -51,6 +51,7 @@ Start with the `scrutinize` lens before detailed lane review:
 - Intent check: should this change exist in this form?
 - Smaller alternative: can the same outcome be reached with less code, lower risk, or existing patterns?
 - Actual path trace: follow runtime behavior beyond the diff.
+- Precision check: were assumptions explicit, edits surgical, success criteria verified, and uncertainty surfaced instead of guessed?
 
 Then select only the review lanes that match the scope. Do not run every lane by default; the review should be proportional to the change.
 
