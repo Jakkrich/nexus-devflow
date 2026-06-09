@@ -90,6 +90,48 @@ Help Summary:
 
 ## The Workflow Cycle
 
+## Fast Markdown Workflow
+
+Use the `-fast` workflow family when the user wants lightweight feature work with Markdown handoff files instead of JSON artifacts, PRP CLI state mutation, or dashboard tracking.
+
+Fast task artifacts live under:
+
+```text
+.workspaces/tasks/<task-slug>/
+```
+
+Recommended fast cycle:
+
+```text
+/30-Task-fast "{Title}" "{Description}"
+/31-Plan-fast <task-slug>
+/32-Code-fast <task-slug>
+/33-Verify-fast <task-slug>
+/50-Commit-fast <task-slug>
+```
+
+Optional fast support commands:
+
+```text
+/20-Debug-fast "<symptom or task-slug>"
+/40-Test-fast <task-slug> [target]
+/53-Changelog-fast <task-slug>
+/54-Insight-fast <task-slug>
+/55-PR-Review-fast <task-slug|pr-url|branch|diff-target>
+```
+
+Choose the normal PRP cycle instead when the work needs formal JSON artifacts, dashboard visibility, multi-agent orchestration, long-lived audit history, strict validation gates, or detailed progress tracking:
+
+```text
+/30-Task -> /31-Plan -> /32-Code -> /33-Verify -> /50-Commit
+```
+
+When advising a user:
+
+- Recommend `-fast` for small or medium tasks where Markdown context is enough.
+- Recommend the normal flow for complex, risky, security-sensitive, migration-heavy, or cross-team work.
+- If a fast task grows beyond its original scope, recommend converting it into the normal `/30-Task` flow.
+
 ## 9arm-Skills Communication Lens
 
 When the user asks for a stakeholder-readable summary, status update, talking points, PR explanation, release note, or management-facing explanation, apply `.agent/skills/9arm-skills/management-talk/SKILL.md`.
