@@ -22,12 +22,19 @@ Transform "$ARGUMENTS" into a battle-tested implementation plan through systemat
 - `npm run agent -- validate {ID}`
 
 **Agent Strategy**: Use specialized agents for intelligence gathering:
-- `prp-core:codebase-explorer` — finds WHERE code lives and extracts implementation patterns
-- `prp-core:codebase-analyst` — analyzes HOW integration points work and traces data flow
+- `prp-core:codebase-explorer` — finds WHERE code lives, extracts implementation patterns, and traces HOW integration points work
 - `prp-core:web-researcher` — strategic web research with citations and gap analysis
 
-Launch codebase agents in parallel first, then research agent second.
+Complete unified codebase discovery first, then external research second.
 </objective>
+
+## Ownership And Handoff
+
+- **Owns:** the executable implementation plan, dependency order, scoped tasks, risk treatment, and validation strategy.
+- **Does Not Own:** product intent, requirement approval, implementation, specialist execution coordination, or final code review.
+- **Input:** an approved PRD or task-ready specification plus relevant codebase evidence.
+- **Output:** an implementation-ready plan that follows existing patterns and defines executable validation.
+- **Handoff:** send requirement gaps to `requirements-engineer`, complex multi-agent coordination to `orchestrator`, and an approved plan to `prp-core-coder` or `/32-Code`.
 
 <context>
 Project rules: read `AGENTS.md`, `.agent` workflow docs, and local project guidance before planning.
@@ -134,9 +141,9 @@ So that <benefit/value>
 
 For complex plans, recommend specialist `/90-Agent` calls for the user to run before finalizing the plan. If the IDE supports delegated agents and the user explicitly asked for orchestration, these can be run in parallel; otherwise keep the workflow manual and step-by-step.
 
-### Agent 1: `prp-core:codebase-explorer`
+### Unified Agent: `prp-core:codebase-explorer`
 
-Finds WHERE code lives and extracts implementation patterns.
+Finds WHERE code lives, extracts implementation patterns, and traces HOW integration points work.
 
 Recommended manual command:
 
@@ -159,38 +166,19 @@ LOCATE:
 7. Configuration - relevant config files and settings
 8. Dependencies - relevant libraries already in use
 
-Categorize findings by purpose (implementation, tests, config, types, docs).
-Return ACTUAL code snippets from codebase, not generic examples.
-```
-
-### Agent 2: `prp-core:codebase-analyst`
-
-Analyzes HOW integration points work and traces data flow.
-
-Recommended manual command:
-
-```text
-/90-Agent codebase-analyst {target}
-```
-
-Prompt to provide:
-
-```
-Analyze the implementation details relevant to: [feature description].
-
 TRACE:
-1. Entry points - where new code will connect to existing code
-2. Data flow - how data moves through related components
-3. State changes - side effects in related functions
-4. Contracts - interfaces and expectations between components
-5. Patterns in use - design patterns and architectural decisions
+9. Entry points - where new code will connect to existing code
+10. Data flow - how data moves through related components
+11. State changes and side effects in related functions
+12. Contracts - interfaces and expectations between components
+13. Architecture - module relationships and integration boundaries
 
-Document what exists with precise file:line references. No suggestions or improvements.
+Categorize findings by purpose and return one unified report with ACTUAL code snippets and precise file:line references. No suggestions or improvements.
 ```
 
-### Merge Agent Results
+### Record Unified Results
 
-Combine findings from both agents into a unified discovery table:
+Record the Explorer findings in a unified discovery table:
 
 | Category | File:Lines                                  | Pattern Description  | Code Snippet                              |
 | -------- | ------------------------------------------- | -------------------- | ----------------------------------------- |
@@ -321,12 +309,12 @@ Return findings with:
 
 ## Phase 5: ARCHITECT - Strategic Design
 
-**For complex features with multiple integration points**, use `prp-core:codebase-analyst` to trace how existing architecture works at the integration points identified in Phase 2:
+**For complex features with multiple integration points**, use `prp-core:codebase-explorer` to deepen the trace around the integration points identified in Phase 2:
 
 Recommended manual command:
 
 ```text
-/90-Agent codebase-analyst {suspected area}
+/90-Agent codebase-explorer {suspected area}
 ```
 
 Prompt to provide:
@@ -335,7 +323,7 @@ Prompt to provide:
 Analyze the architecture around these integration points for: [feature description].
 
 INTEGRATION POINTS (from Phase 2):
-- [entry point 1 from explorer/analyst findings]
+- [entry point 1 from explorer findings]
 - [entry point 2]
 
 ANALYZE:
@@ -796,7 +784,7 @@ To start: create a separate task or branch and run `/31-Plan {ID}` for that phas
 
 **CONTEXT_COMPLETENESS:**
 
-- [ ] All patterns from `prp-core:codebase-explorer` and `prp-core:codebase-analyst` documented with file:line references
+- [ ] All patterns and integration traces from `prp-core:codebase-explorer` documented with file:line references
 - [ ] External docs versioned to match package.json
 - [ ] Integration points mapped with specific file paths
 - [ ] Gotchas captured with mitigation strategies
@@ -835,7 +823,7 @@ To start: create a separate task or branch and run `/31-Plan {ID}` for that phas
 </verification>
 
 <success_criteria>
-**CONTEXT_COMPLETE**: All patterns, gotchas, integration points documented from actual codebase via `prp-core:codebase-explorer` and `prp-core:codebase-analyst` agents
+**CONTEXT_COMPLETE**: All patterns, gotchas, and integration points documented from the actual codebase via `prp-core:codebase-explorer`
 **IMPLEMENTATION_READY**: Tasks executable top-to-bottom without questions, research, or clarification
 **PATTERN_FAITHFUL**: Every new file mirrors existing codebase style exactly
 **VALIDATION_DEFINED**: Every task has executable verification command

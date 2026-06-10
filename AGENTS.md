@@ -67,8 +67,7 @@ Use manual JSON editing only as a fallback, then run validation immediately.
 
 | Agent | บทบาท | หน้าที่หลัก |
 | :--- | :--- | :--- |
-| `codebase-explorer` | นักสำรวจโค้ด | ค้นหาโค้ดและ pattern เดิมที่นำกลับมาใช้ได้ |
-| `codebase-analyst` | นักวิเคราะห์ระบบ | วิเคราะห์ data flow และความสัมพันธ์ระหว่างโมดูล |
+| `codebase-explorer` | นักสำรวจโค้ด | ค้นหาโค้ดและ pattern พร้อมวิเคราะห์ architecture, data flow และความสัมพันธ์ระหว่างโมดูล |
 | `web-researcher` | นักวิจัยข้อมูล | ค้นคว้า API, best practices และแหล่งอ้างอิง |
 
 ## 3. Implementation & Development

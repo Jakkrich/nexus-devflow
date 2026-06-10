@@ -52,7 +52,7 @@ Use the `complexity_assessor` pattern:
 
 - `simple`: 1 phase, 1-3 subtasks.
 - `standard`: multiple ordered phases, clear verification per subtask.
-- `complex`: deeper codebase exploration, possible `/90-Agent codebase-analyst` recommendation.
+- `complex`: deeper codebase exploration, possible `/90-Agent codebase-explorer` recommendation.
 
 Store the result through `artifact:set`, then validate.
 
@@ -142,7 +142,7 @@ If validation fails, run repair and update only the broken fields with script co
 - **Primary**: `/32-Code {ID}` after the user approves `plan.md`.
 - **Why**: Approved planning is the gate before implementation.
 - **Alternatives**:
-  - `/90-Agent codebase-analyst .workspaces/specs/{ID}-*/` - choose this when architecture or data flow is unclear.
+  - `/90-Agent codebase-explorer .workspaces/specs/{ID}-*/` - choose this when architecture or data flow is unclear.
   - `/11-Research "{topic}"` - choose this when the plan depends on external docs or APIs.
   - `/30-Task {ID} "{title}"` - choose this only when the spec needs to be rewritten before planning continues.
 

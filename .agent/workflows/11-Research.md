@@ -29,7 +29,7 @@ Use the prompt addon patterns when the topic matches:
 - Use the `--web` flag if external documentation research is needed.
 
 ### Phase 2: Parallel Exploration
-- The agent may recommend `/90-Agent codebase-explorer` or `/90-Agent codebase-analyst` to:
+- The agent may recommend `/90-Agent codebase-explorer` to:
   - Locate relevant code with `file:line` references.
   - Trace data flows and integration points.
   - Extract existing project patterns.
