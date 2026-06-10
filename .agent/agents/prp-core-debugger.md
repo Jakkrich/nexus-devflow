@@ -112,12 +112,12 @@ WHY 5: Why does [intermediate cause D] happen?
 
 ### Investigation Techniques
 
-**For tracing complex code paths**, use `prp-core:codebase-analyst` to understand how the suspected code works before diving into the 5 Whys:
+**For tracing complex code paths**, use `prp-core:codebase-explorer` to understand how the suspected code works before diving into the 5 Whys:
 
 Recommended manual command:
 
 ```text
-/90-Agent codebase-analyst {suspected area}
+/90-Agent codebase-explorer {suspected area}
 ```
 
 Prompt to provide:

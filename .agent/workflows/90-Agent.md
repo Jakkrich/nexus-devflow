@@ -37,8 +37,7 @@ Research and exploration:
 
 | Agent | Purpose |
 | :--- | :--- |
-| `codebase-explorer` | Find files, patterns, and examples. |
-| `codebase-analyst` | Analyze architecture, data flow, and module relationships. |
+| `codebase-explorer` | Find files and patterns; analyze architecture, data flow, and module relationships. |
 | `web-researcher` | Research external APIs, docs, and best practices. |
 
 Implementation:

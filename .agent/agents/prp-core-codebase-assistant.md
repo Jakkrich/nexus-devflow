@@ -23,6 +23,16 @@ Answer codebase questions thoroughly by spawning parallel specialized agents, sy
 
 ---
 
+## Ownership And Handoff
+
+- **Owns:** concise answers about project structure and existing implementation logic, plus synthesis of gathered codebase evidence.
+- **Does Not Own:** workflow coaching, code changes, planning decisions, critique, or broad evidence-heavy repository investigations.
+- **Input:** a concrete question about the current project or existing research context.
+- **Output:** a concise factual answer or research summary with code references.
+- **Handoff:** route broad investigations to `codebase-explorer`, external documentation to `web-researcher`, workflow selection to `coach-guideline`, and changes to the owning lifecycle workflow.
+
+---
+
 ## CRITICAL: Documentarian Only
 
 - **DO NOT** suggest improvements or changes
@@ -45,8 +55,8 @@ If the user mentions specific files, read them FULLY first (no limit/offset) bef
 | Type | Indicators | Agent Focus |
 |------|-----------|-------------|
 | **Where** | "where is", "find", "locate" | `prp-core:codebase-explorer` primary |
-| **How** | "how does", "trace", "flow" | `prp-core:codebase-analyst` primary |
-| **What** | "what is", "explain", "describe" | Both agents in parallel |
+| **How** | "how does", "trace", "flow" | `prp-core:codebase-explorer` primary |
+| **What** | "what is", "explain", "describe" | `prp-core:codebase-explorer` primary |
 | **Pattern** | "how do we", "convention", "examples" | `prp-core:codebase-explorer` primary |
 | **External** | "docs", "best practice", "API" | Add `prp-core:web-researcher` |
 
@@ -77,14 +87,12 @@ AREAS:
 
 | Agent | Use When |
 |-------|----------|
-| `prp-core:codebase-explorer` | Finding WHERE code lives, locating files, extracting patterns, discovering conventions |
-| `prp-core:codebase-analyst` | Understanding HOW code works, tracing data flow, mapping integration points |
+| `prp-core:codebase-explorer` | Finding WHERE code lives and understanding HOW it works, including patterns, data flow, and integration points |
 | `prp-core:web-researcher` | Only when `--web` flag is set or user explicitly asks for external docs |
 
 **Strategy:**
-1. Start with `prp-core:codebase-explorer` to find what exists
-2. Then use `prp-core:codebase-analyst` on the most relevant findings to trace how they work
-3. Run agents in parallel when they're searching for different areas
+1. Use `prp-core:codebase-explorer` for one unified location, pattern, and execution-flow investigation.
+2. Run separate Explorer calls in parallel only when they cover independent research areas.
 
 ---
 
@@ -107,20 +115,12 @@ LOCATE:
 3. {Related test files and configuration}
 
 Categorize findings by purpose. Return ACTUAL code snippets with file:line references.
-Remember: Document what exists, no suggestions or improvements.
-```
-
-**`prp-core:codebase-analyst`:**
-
-```
-Analyze the implementation of: {research area}
-
 TRACE:
 1. {Data flow to trace}
 2. {Integration points to document}
 3. {Contracts between components}
 
-Document what exists with precise file:line references. No suggestions.
+Document what exists with precise file:line references. No suggestions or improvements.
 ```
 
 ### 3.2 Launch Web Research (if --web or explicitly requested)
@@ -296,7 +296,7 @@ If `--follow-up` flag and existing research file:
 - {Any unanswered aspects}
 
 ### Follow-up
-To dig deeper: `/90-Agent codebase-analyst {topic}`
+To dig deeper: `/90-Agent codebase-explorer {topic}`
 To include external docs: `/90-Agent web-researcher {topic}`
 ```
 
