@@ -33,6 +33,8 @@ Read:
 
 Confirm the `Approval` section in `plan.md` is approved. If approval is missing, ask for approval or return to `/31-Plan-fast`.
 
+Confirm the current Git branch with `git branch --show-current` and use that branch as the user's chosen working branch. Do not create, switch, or checkout branches automatically. If a branch change seems advisable, stop and ask the user for an explicit branch instruction before running any branch command.
+
 ### 2. Implement One Checklist Item
 
 For the first incomplete checklist item:

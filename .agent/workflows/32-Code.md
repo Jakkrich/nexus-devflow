@@ -48,6 +48,8 @@ Read:
 
 Confirm `plan_approval.json.approved === true`, preferably with `npm run agent -- plan:approval {ID}`, before coding.
 
+Confirm the current Git branch with `git branch --show-current` and use that branch as the user's chosen working branch. Do not create, switch, or checkout branches automatically. If a branch change seems advisable, stop and ask the user for an explicit branch instruction before running any branch command.
+
 Select the first `pending` or `in_progress` subtask. Work on only one subtask at a time.
 
 ### 2. Implement One Subtask
