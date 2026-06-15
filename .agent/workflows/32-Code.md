@@ -59,7 +59,10 @@ Use the `coder` pattern:
 - Read referenced pattern files before editing.
 - Read the subtask test decision from `plan.md` and `implementation_plan.json` before editing.
 - Precision reminder before edits: confirm assumptions, target files, and success criteria; every changed line must trace to the current subtask.
-- If tests are `Required`, write or update the planned tests first, confirm the failing or missing behavior where practical, then make the smallest useful code change.
+- If tests are `Required`, follow the **Test-Design First & Schema-Driven Design** pattern:
+  1. Define the Schema/Interface Contract first (e.g. Zod schemas or types).
+  2. Implement/update the planned Unit Tests using the contract schema, running them to verify they fail (Red).
+  3. Implement the actual Production Code to satisfy the schema and make the tests pass (Green).
 - If verification is `Manual/Command Only` or `Not Required`, preserve the stated reason and perform the planned command or manual check before completion.
 - Make the smallest useful code change.
 - Preserve project style.

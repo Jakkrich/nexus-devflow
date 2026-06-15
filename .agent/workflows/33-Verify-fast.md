@@ -44,7 +44,7 @@ Review:
 - Architecture fit
 - Security and data handling risk
 - Performance risk
-- Test decision alignment
+- Test decision alignment (including compliance with **Test-Design First & Schema-Driven Design** rules for `Required` subtasks)
 - Manual verification gaps
 
 ### 3. Write `verify.md`

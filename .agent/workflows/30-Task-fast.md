@@ -68,6 +68,14 @@ source_workflow: "/30-Task-fast"
 
 - Constraint or assumption.
 
+## Test Scenarios & Schema Specification
+
+- **Schema/Contract**: [Zod, Pydantic, TypeScript หรือแนวทางการทำ Validation ข้อมูล]
+- **Happy Path**:
+  - [ ] [รายละเอียดการทดสอบกรณีปกติ และผลที่คาดหวัง]
+- **Error/Edge Cases**:
+  - [ ] [รายละเอียดการทดสอบกรณีข้อมูลไม่ถูกต้องหรือสุดขอบ และผลที่คาดหวัง]
+
 ## Open Questions
 
 - Question or `None`.

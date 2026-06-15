@@ -92,7 +92,7 @@ Each subtask should answer:
 
 For every subtask, decide one of:
 
-- `Required`: automated tests must be created or updated before the subtask can be completed.
+- `Required`: automated tests must be created or updated before the subtask can be completed. **MANDATORY (Test-Design First)**: Specify the validation Schema/Contract (e.g. Zod validation, python Pydantic schemas) and the target test file path to implement *before* coding.
 - `Manual/Command Only`: automated tests are not the right fit, but build, lint, typecheck, smoke test, screenshot, or manual verification is required.
 - `Not Required`: no new automated test is needed because the change is docs-only, metadata-only, or otherwise has no behavior surface.
 

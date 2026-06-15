@@ -88,9 +88,11 @@ risk_level: "medium"
 
 ### Test Decision Gate #section/verification
 
-| Subtask | Decision | Reason | Planned Test Cases Or Checks | Command Or Manual Check | Expected Result |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| [Subtask ID/title] | [Required / Manual/Command Only / Not Required] | [Risk-based reason] | [Happy path, error path, edge case, regression case, or manual check details] | [Exact command or manual check] | [Passing evidence] |
+> **Test-Design First Rule**: If a subtask has the `Required` decision, you MUST specify the validation Schema/Contract (e.g. Zod validation, python Pydantic schemas) and the target test file to implement *before* coding.
+
+| Subtask | Decision | Reason | Schema/Contract | Planned Test Cases | Test File & Command | Expected Result |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| [Subtask ID/title] | [Required / Manual / Not Required] | [Risk-based reason] | [e.g., RegisterInputSchema, or N/A] | [Happy path, error path, edge case scenarios] | [e.g., tests/unit/user.test.ts & npm test] | [Passing evidence outcome] |
 
 - **Success Criteria**:
   - [ ] [Measurable outcome or behavior]
