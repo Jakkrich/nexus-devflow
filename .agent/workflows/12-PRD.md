@@ -35,7 +35,7 @@ You are an orchestrator. Your goal is to call the specialized PRD Architect agen
 
 ### Phase 4: Output Generation
 - **MANDATORY:** Before generating the PRD, inspect `.agent/resources/schemas/prd.template.md` and use its required headings and table structure. Before reporting completion, run `npm run agent -- markdown:validate {prd_path} prd.template.md` and replace any placeholder/template text with concrete product details, assumptions, risks, metrics, and open questions.
-- Ensure the PRD is saved as `.workspaces/prds/{slug}.prd.md`.
+- Ensure the PRD is saved as `.workspaces/prds/{date}-{slug}.prd.md` (where `{date}` is today's date in `YYYY-MM-DD` format).
 - Verify the document includes the problem statement, key hypotheses, and implementation phases.
 - Convert any autonomous `spec_orchestrator_agentic` assumptions into explicit next steps. The user should still confirm before `/30-Task` and `/31-Plan`.
 

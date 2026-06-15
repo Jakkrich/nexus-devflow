@@ -97,26 +97,26 @@ Use the `-fast` workflow family when the user wants lightweight feature work wit
 Fast task artifacts live under:
 
 ```text
-.workspaces/tasks/<task-slug>/
+.workspaces/specs/{ID}-{slug}-
 ```
 
 Recommended fast cycle:
 
 ```text
 /30-Task-fast "{Title}" "{Description}"
-/31-Plan-fast <task-slug>
-/32-Code-fast <task-slug>
-/33-Verify-fast <task-slug>
-/50-Commit-fast <task-slug>
+/31-Plan-fast {ID}-{slug}
+/32-Code-fast {ID}-{slug}
+/33-Verify-fast {ID}-{slug}
+/50-Commit-fast {ID}-{slug}
 ```
 
 Optional fast support commands:
 
 ```text
 /20-Debug-fast "<symptom or task-slug>"
-/40-Test-fast <task-slug> [target]
-/53-Changelog-fast <task-slug>
-/54-Insight-fast <task-slug>
+/40-Test-fast {ID}-{slug} [target]
+/53-Changelog-fast {ID}-{slug}
+/54-Insight-fast {ID}-{slug}
 /55-PR-Review-fast <task-slug|pr-url|branch|diff-target>
 ```
 

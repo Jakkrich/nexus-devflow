@@ -42,13 +42,13 @@ When `/brainstorm` is triggered:
 
 Keep this workflow exploratory. Do not create or mutate task JSON unless the user explicitly asks to continue into `/30-Task`.
 
-**MANDATORY RULE:** Before generating the brainstorming report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/brainstorm.template.md` to ensure a consistent output layout. Save the final report to `.workspaces/research/brainstorm-{topic}.md` where `{topic}` is a slugified version of the topic. Before reporting completion, run `npm run agent -- markdown:validate .workspaces/research/brainstorm-{topic}.md brainstorm.template.md` and replace any placeholder/template text with concrete options, tradeoffs, constraints, and recommendation details.
+**MANDATORY RULE:** Before generating the brainstorming report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/brainstorm.template.md` to ensure a consistent output layout. Save the final report to `.workspaces/research/{date}-brainstorm-{topic}.md` where `{date}` is today's date in `YYYY-MM-DD` format and `{topic}` is a slugified version of the topic. Before reporting completion, run `npm run agent -- markdown:validate .workspaces/research/{date}-brainstorm-{topic}.md brainstorm.template.md` and replace any placeholder/template text with concrete options, tradeoffs, constraints, and recommendation details.
 
 ---
 
 ## Output Format
 
-Return a brief summary in the chat, and save the full brainstorming report under `.workspaces/research/brainstorm-{topic}.md` following the template schema:
+Return a brief summary in the chat, and save the full brainstorming report under `.workspaces/research/{date}-brainstorm-{topic}.md` following the template schema:
 
 ```markdown
 ## 🧠 Brainstorm: [Topic]

@@ -8,13 +8,13 @@ Implement the approved fast plan incrementally. Source code edits are allowed in
 ## Usage
 
 ```text
-/32-Code-fast <task-slug>
+/32-Code-fast {ID}-{slug}
 ```
 
 ## Fast Mode Contract
 
-- Read `.workspaces/tasks/<task-slug>/task.md` and `plan.md`.
-- Write or update `.workspaces/tasks/<task-slug>/implementation.md`.
+- Read `.workspaces/specs/{ID}-{slug}-spec.md` and `{ID}-{slug}-plan.md`.
+- Write or update `.workspaces/specs/{ID}-{slug}-task.md`.
 - Do not create or mutate JSON task artifacts.
 - Do not require PRP CLI status transitions.
 - Work one checklist item at a time.
@@ -26,9 +26,9 @@ Implement the approved fast plan incrementally. Source code edits are allowed in
 
 Read:
 
-- `task.md`
+- `spec.md`
 - `plan.md`
-- Existing `implementation.md` if present
+- Existing `{ID}-{slug}-task.md` if present
 - Referenced source files and patterns
 
 Confirm the `Approval` section in `plan.md` is approved. If approval is missing, ask for approval or return to `/31-Plan-fast`.
@@ -47,24 +47,25 @@ For the first incomplete checklist item:
 - Make the smallest useful source change.
 - Preserve project style and existing patterns.
 - Run the planned verification command or manual check.
-- Update `implementation.md` with evidence.
+- Update `task.md` with evidence.
 - Mark the checklist item completed in `plan.md` only after verification evidence is recorded.
 
 If scope changes, update `plan.md` before continuing. If the task becomes complex or risky, recommend escalating to the normal PRP flow.
 
-### 3. Write `implementation.md`
+### 3. Write `task.md` (Save directly as `.workspaces/specs/{ID}-{slug}-task.md`)
 
 Use this structure:
 
 ```markdown
 ---
-id: "<task-slug>"
+id: "{ID}-{slug}"
+doc_type: "task"
 workflow: "fast"
 status: "in_progress"
 source_workflow: "/32-Code-fast"
 ---
 
-# Implementation: <Title>
+# Task: <Title>
 
 ## Completed Items
 
@@ -82,7 +83,7 @@ source_workflow: "/32-Code-fast"
 
 ## Handoff
 
-- Next command: `/33-Verify-fast <task-slug>`
+- Next command: `/33-Verify-fast {ID}-{slug}`
 ```
 
 Do not leave placeholder brackets, `TODO`, or `TBD`.
@@ -91,10 +92,10 @@ Do not leave placeholder brackets, `TODO`, or `TBD`.
 
 When all planned checklist items are completed:
 
-- Set `implementation.md` status to `implemented`.
+- Set `task.md` status to `implemented`.
 - Ensure changed files are listed.
 - Ensure verification evidence is present or gaps are explicit.
-- Recommend `/33-Verify-fast <task-slug>`.
+- Recommend `/33-Verify-fast {ID}-{slug}`.
 
 ## Output
 
@@ -105,9 +106,9 @@ Report:
 - Verification commands run
 - Test decisions followed or changed
 - Blockers or manual checks
-- Next command: `/33-Verify-fast <task-slug>`
+- Next command: `/33-Verify-fast {ID}-{slug}`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/33-Verify-fast <task-slug>` when implementation is complete.
+- **Primary**: `/33-Verify-fast {ID}-{slug}` when implementation is complete.
 - **Alternative**: `/20-Debug-fast` or `/20-Debug` if an unexplained failure blocks progress.
