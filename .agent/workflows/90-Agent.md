@@ -117,7 +117,7 @@ Reports that use the pack should include a short `Source Discipline` note with c
 If a report is substantial, save it to:
 
 ```text
-.workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md
+.workspaces/reports/{date}-{agent-name}-{timestamp}.md
 ```
 
 Before saving a substantial agent report, inspect `.agent/resources/schemas/agent_report.template.md` and use its required headings unless the target workflow provides a more specific template. Before reporting completion, run `npm run agent -- markdown:validate {report_path} agent_report.template.md` and replace any placeholder/template text with concrete files reviewed, findings, recommendations, and validation needs.
@@ -140,4 +140,4 @@ Short reports can be returned directly in chat.
 - **Needed**: `yes` when the agent report captures reusable findings, conventions, gotchas, decisions, or context usage lessons.
 - **Scope**: `project` for target-project knowledge, `framework` for DevFlow/agent behavior knowledge.
 - **Reason**: Specialist reports are valuable wiki sources only when they contain reusable, source-backed conclusions.
-- **Suggested Command**: `/59-Wiki project ingest .workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md`
+- **Suggested Command**: `/59-Wiki project ingest .workspaces/reports/{date}-{agent-name}-{timestamp}.md`

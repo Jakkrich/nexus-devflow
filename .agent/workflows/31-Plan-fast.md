@@ -1,5 +1,5 @@
 ---
-description: Fast Markdown Plan - Create a lightweight implementation plan from task.md without JSON plan helpers or dashboard state.
+description: Fast Markdown Plan - Create a lightweight implementation plan from spec.md without JSON plan helpers or dashboard state.
 ---
 # Phase 31-fast: Plan Fast Markdown Task
 
@@ -10,13 +10,13 @@ Create a codebase-informed Markdown plan that is small enough to execute directl
 ## Usage
 
 ```text
-/31-Plan-fast <task-slug>
+/31-Plan-fast {ID}-{slug}
 ```
 
 ## Fast Mode Contract
 
-- Read `.workspaces/tasks/<task-slug>/task.md`.
-- Write `.workspaces/tasks/<task-slug>/plan.md`.
+- Read `.workspaces/specs/{ID}-{slug}-spec.md`.
+- Write `.workspaces/specs/{ID}-{slug}-plan.md`.
 - Do not create or mutate JSON task artifacts.
 - Do not use `plan:add-phase`, `plan:add-subtask`, or other PRP JSON helpers.
 - Use target project commands for verification planning when known.
@@ -28,7 +28,7 @@ Create a codebase-informed Markdown plan that is small enough to execute directl
 
 Read:
 
-- `.workspaces/tasks/<task-slug>/task.md`
+- `.workspaces/specs/{ID}-{slug}-spec.md`
 - Relevant source files, docs, config, and test scripts needed to plan safely
 
 ### 2. Assess Scope
@@ -43,7 +43,7 @@ Escalate to `/30-Task` and `/31-Plan` if the work is complex, cross-team, securi
 
 ### 3. Build Plan
 
-Create `plan.md` with:
+Create `plan.md` (Save directly as `.workspaces/specs/{ID}-{slug}-plan.md`) with:
 
 - Scope and non-goals
 - Files likely to read or modify
@@ -64,8 +64,9 @@ Use this structure:
 
 ```markdown
 ---
-id: "<task-slug>"
+id: "{ID}-{slug}"
 title: "<Title>"
+doc_type: "plan"
 workflow: "fast"
 status: "planned"
 source_workflow: "/31-Plan-fast"
@@ -97,7 +98,7 @@ source_workflow: "/31-Plan-fast"
 
 ## Handoff
 
-- Next command after approval: `/32-Code-fast <task-slug>`
+- Next command after approval: `/32-Code-fast {ID}-{slug}`
 ```
 
 Do not leave placeholder brackets, `TODO`, or `TBD`. If information is missing, record an explicit assumption or open question.
@@ -115,9 +116,9 @@ Report:
 - Test decisions
 - Verification commands
 - Approval status
-- Next command: `/32-Code-fast <task-slug>` after approval
+- Next command: `/32-Code-fast {ID}-{slug}` after approval
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/32-Code-fast <task-slug>` after the user approves `plan.md`.
+- **Primary**: `/32-Code-fast {ID}-{slug}` after the user approves `plan.md`.
 - **Alternative**: `/30-Task` and `/31-Plan` if planning reveals full PRP tracking is needed.

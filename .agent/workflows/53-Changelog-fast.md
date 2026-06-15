@@ -8,13 +8,13 @@ Draft a changelog entry from fast task evidence and git diff.
 ## Usage
 
 ```text
-/53-Changelog-fast <task-slug>
+/53-Changelog-fast {ID}-{slug}
 ```
 
 ## Fast Mode Contract
 
-- Read `.workspaces/tasks/<task-slug>/task.md`, `implementation.md`, `verify.md`, and `commit.md` when available.
-- Write `.workspaces/tasks/<task-slug>/changelog.md`.
+- Read `.workspaces/specs/{ID}-{slug}-spec.md`, `implementation.md`, `verify.md`, and `commit.md` when available.
+- Write `.workspaces/specs/{ID}-{slug}-changelog.md`.
 - Do not scan or mutate JSON task artifacts.
 - Keep user-facing changes in changelog text and internal gotchas in insight notes.
 
@@ -42,7 +42,7 @@ Use this structure:
 
 ```markdown
 ---
-id: "<task-slug>"
+id: "{ID}-{slug}"
 workflow: "fast"
 status: "draft"
 source_workflow: "/53-Changelog-fast"
@@ -82,5 +82,5 @@ Report:
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/50-Commit-fast <task-slug>` when release notes and verification are ready.
-- **Alternative**: `/54-Insight-fast <task-slug>` when internal lessons should be captured separately.
+- **Primary**: `/50-Commit-fast {ID}-{slug}` when release notes and verification are ready.
+- **Alternative**: `/54-Insight-fast {ID}-{slug}` when internal lessons should be captured separately.

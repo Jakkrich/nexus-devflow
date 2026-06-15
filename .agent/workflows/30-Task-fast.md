@@ -10,15 +10,15 @@ Create a lightweight Markdown-first task workspace for small or medium work that
 ## Usage
 
 ```text
-/30-Task-fast "{Title}" ["Description"]
+/30-Task-fast {ID}-{slug}
 ```
 
 ## Fast Mode Contract
 
-- Keep artifacts in `.workspaces/tasks/<task-slug>/`.
+- Keep artifacts in `.workspaces/specs/{ID}-{slug}-*.md`.
 - Use Markdown files as the handoff source of truth.
 - Do not create or mutate JSON task artifacts.
-- Do not require PRP CLI scripts, dashboard data, or `.workspaces/specs/`.
+- Do not require PRP CLI scripts or dashboard data.
 - Prefer target project verification commands later in the flow.
 - Escalate to normal `/30-Task` when the work needs formal PRP traceability, dashboard tracking, multi-agent orchestration, or long-lived audit history.
 
@@ -33,19 +33,19 @@ Create a lightweight Markdown-first task workspace for small or medium work that
 
 ### 2. Create Workspace
 
-1. Generate a kebab-case slug from the title.
-2. Create `.workspaces/tasks/<task-slug>/`.
-3. Create `task.md`.
+1. Generate {ID}-{slug} format.
+2. Create `.workspaces/specs/{ID}-{slug}-spec.md`.
 4. Do not create or switch branches during task creation. Later implementation, commit, or PR workflows must use the user's current branch unless the user explicitly asks to create or switch to a named branch.
 
-### 3. Write `task.md`
+### 3. Write `spec.md` (Save directly as `.workspaces/specs/{ID}-{slug}-spec.md`)
 
 Use this structure:
 
 ```markdown
 ---
-id: "<task-slug>"
+id: "{ID}-{slug}"
 title: "<Title>"
+doc_type: "spec"
 workflow: "fast"
 workflow_type: "<feature|bugfix|refactor|docs|test|investigation|migration|simple>"
 status: "draft"
@@ -82,7 +82,7 @@ source_workflow: "/30-Task-fast"
 
 ## Handoff
 
-- Next command: `/31-Plan-fast <task-slug>`
+- Next command: `/31-Plan-fast {ID}-{slug}`
 ```
 
 Do not leave placeholder brackets, `TODO`, or `TBD`. If information is missing, record a concrete assumption or open question.
@@ -91,14 +91,14 @@ Do not leave placeholder brackets, `TODO`, or `TBD`. If information is missing, 
 
 Report:
 
-- Task slug and directory
+- Spec slug and directory (`.workspaces/specs/{ID}-{slug}/`)
 - Workflow type
 - Key acceptance criteria
 - Open questions or assumptions
-- Next command: `/31-Plan-fast <task-slug>`
+- Next command: `/31-Plan-fast {ID}-{slug}`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/31-Plan-fast <task-slug>`
+- **Primary**: `/31-Plan-fast {ID}-{slug}`
 - **Why**: The task has a Markdown source of truth and should be turned into a small implementation checklist before coding.
 - **Alternative**: `/30-Task "{Title}" "{Description}"` when the task needs JSON artifacts, dashboard tracking, or strict PRP validation.

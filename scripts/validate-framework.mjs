@@ -136,6 +136,67 @@ function validateWorkflowNumbering(failures) {
   }
 }
 
+function validateReportNamingConvention(failures) {
+  const targetDirs = [
+    '.workspaces/research',
+    '.workspaces/reports',
+    '.workspaces/debug',
+    '.workspaces/prds',
+    '.workspaces/issues'
+  ];
+
+  const allowedLegacyReports = new Set([
+    'research/brainstorm-claude-code-goal.md',
+    'research/brainstorm-date-prefixed-reports.md',
+    'research/brainstorm-human-action-command-split.md',
+    'research/brainstorm-markdown-first-devflow-mode.md',
+    'research/brainstorm-new-system-requirements-interview-agent-skill.md',
+    'research/brainstorm-soul-md.md',
+    'research/brainstorm-test-first-implementation-flow.md',
+    'research/brainstorm-universal-interview-skill.md',
+    'research/Claude Code_goal.md',
+    'research/implementation_plan_goal.md',
+    'reports/project_evaluation_2026-05-21.md',
+    'reports/project_evaluation_fix_report_2026-05-21.md',
+    'reports/project_re_evaluation_2026-05-21.md',
+    'reports/project_re_evaluation_fix_report_2026-05-21.md',
+    'reports/project_re_evaluation_round3_2026-05-21.md',
+    'reports/spec_orchestration-dashboard_upgrade.md',
+    'prds/dashboard-upgrade.prd.md'
+  ]);
+
+  const datePrefixRegex = /^\d{4}-\d{2}-\d{2}-.*\.md$/i;
+  let checkedCount = 0;
+  const invalidFiles = [];
+
+  for (const relativeDir of targetDirs) {
+    const dirPath = path.join(projectRoot, relativeDir);
+    if (!fs.existsSync(dirPath)) continue;
+
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isFile() && entry.name.endsWith('.md')) {
+        const cleanDir = relativeDir.replace('.workspaces/', '');
+        const normalizedPath = `${cleanDir}/${entry.name}`;
+        if (allowedLegacyReports.has(normalizedPath)) continue;
+
+        checkedCount++;
+        if (!datePrefixRegex.test(entry.name)) {
+          invalidFiles.push(`${relativeDir}/${entry.name}`);
+        }
+      }
+    }
+  }
+
+  if (invalidFiles.length > 0) {
+    fail(`Report files must start with yyyy-mm-dd- prefix:\n  ${invalidFiles.join('\n  ')}`, failures);
+  } else if (checkedCount > 0) {
+    ok(`Report naming convention passed for ${checkedCount} files`);
+  } else {
+    ok('No new report files to validate');
+  }
+}
+
 function main() {
   const failures = [];
   generateProjectIndex(projectRoot);
@@ -163,6 +224,7 @@ function main() {
 
   validateRoadmap(failures);
   validateWorkflowNumbering(failures);
+  validateReportNamingConvention(failures);
   if (!roadmapOnly) scanForLegacyReferences(failures);
 
   if (failures.length) {

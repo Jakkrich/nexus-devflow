@@ -59,7 +59,7 @@ Use `/90-Agent` only when helpful:
 
 ### 4. Create QA Orchestration Report
 - **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/qa_orchestration.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} qa_orchestration.template.md` and replace any placeholder/template text with concrete QA scope, matrix results, blockers, and recommendations.
-- Save the final report to `.workspaces/reports/qa_orchestrate_{ID}.md` (where `{ID}` is the target task ID).
+- Save the final report to `.workspaces/reports/{date}-qa-orchestrate-{ID}.md` (where `{date}` is today's date in `YYYY-MM-DD` format and `{ID}` is the target task ID).
 
 ### 5. Route Fixes
 

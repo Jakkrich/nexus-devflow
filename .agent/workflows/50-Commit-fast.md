@@ -8,13 +8,13 @@ Prepare a focused commit from a fast Markdown task, using task evidence and git 
 ## Usage
 
 ```text
-/50-Commit-fast <task-slug> [scope]
+/50-Commit-fast {ID}-{slug} [scope]
 ```
 
 ## Fast Mode Contract
 
-- Read `.workspaces/tasks/<task-slug>/task.md`, `plan.md`, `implementation.md`, and `verify.md`.
-- Write `.workspaces/tasks/<task-slug>/commit.md`.
+- Read `.workspaces/specs/{ID}-{slug}-spec.md`, `plan.md`, `implementation.md`, and `verify.md`.
+- Write `.workspaces/specs/{ID}-{slug}-commit.md`.
 - Do not create or mutate JSON task artifacts.
 - Do not require dashboard state.
 - Commit only files that belong to the verified task.
@@ -31,7 +31,7 @@ Prepare a focused commit from a fast Markdown task, using task evidence and git 
 
 ### 2. Read Verification Evidence
 
-Confirm `verify.md` has a passing verdict. If verification is missing or failed, recommend `/33-Verify-fast <task-slug>` before committing unless the user explicitly asks to commit anyway.
+Confirm `verify.md` has a passing verdict. If verification is missing or failed, recommend `/33-Verify-fast {ID}-{slug}` before committing unless the user explicitly asks to commit anyway.
 
 ### 3. Prepare Commit Summary
 
@@ -39,7 +39,7 @@ Create `commit.md`:
 
 ```markdown
 ---
-id: "<task-slug>"
+id: "{ID}-{slug}"
 workflow: "fast"
 status: "ready_to_commit"
 source_workflow: "/50-Commit-fast"
@@ -94,4 +94,4 @@ Report:
 ## Next Workflow Recommendation
 
 - **Primary**: `/51-PR` after a successful commit when the user wants a pull request.
-- **Alternative**: `/33-Verify-fast <task-slug>` if verification is missing or stale.
+- **Alternative**: `/33-Verify-fast {ID}-{slug}` if verification is missing or stale.

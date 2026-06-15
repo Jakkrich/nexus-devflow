@@ -8,13 +8,13 @@ Capture reusable lessons from a completed or failed fast task without JSON task 
 ## Usage
 
 ```text
-/54-Insight-fast <task-slug>
+/54-Insight-fast {ID}-{slug}
 ```
 
 ## Fast Mode Contract
 
-- Read `.workspaces/tasks/<task-slug>/` Markdown artifacts.
-- Write `.workspaces/tasks/<task-slug>/insight.md` for task-local lessons.
+- Read `.workspaces/specs/{ID}-{slug}-` Markdown artifacts.
+- Write `.workspaces/specs/{ID}-{slug}-insight.md` for task-local lessons.
 - Suggest `.workspaces/lessons.md` or `/59-Wiki` only for durable project knowledge.
 - Do not create or mutate JSON task artifacts.
 
@@ -50,7 +50,7 @@ Use this structure:
 
 ```markdown
 ---
-id: "<task-slug>"
+id: "{ID}-{slug}"
 workflow: "fast"
 status: "captured"
 source_workflow: "/54-Insight-fast"
@@ -82,5 +82,5 @@ Report:
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/59-Wiki project ingest .workspaces/tasks/<task-slug>/insight.md` when the lesson is durable.
-- **Alternative**: `/53-Changelog-fast <task-slug>` when the learning should become user-facing release notes.
+- **Primary**: `/59-Wiki project ingest .workspaces/specs/{ID}-{slug}-insight.md` when the lesson is durable.
+- **Alternative**: `/53-Changelog-fast {ID}-{slug}` when the learning should become user-facing release notes.

@@ -41,7 +41,7 @@ Determine the project's platform (Vercel, Railway, Docker, Fly.io, etc.) and exe
 
 ### Phase 3: Health Check, Verify & Report
 - **Template Verification**: **MANDATORY:** Before final deployment, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/deploy_report.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} deploy_report.template.md` and replace any placeholder/template text with concrete environment, commands, checks, rollback notes, and deployment result.
-- Save the final deployment and pre-flight check report to `.workspaces/reports/deploy_report_{timestamp}.md` (where `{timestamp}` is a clean date/time slug).
+- Save the final deployment and pre-flight check report to `.workspaces/reports/{date}-deploy-report-{timestamp}.md` (where `{date}` is today's date in `YYYY-MM-DD` format and `{timestamp}` is a clean date/time slug).
 - Verify that the deployed application is responding (HTTP 200 OK) and all services (Database, API) are healthy.
 
 ---

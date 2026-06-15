@@ -53,7 +53,7 @@ Assess:
 
 ### 3. Create Issue Triage Report
 - **MANDATORY:** Before generating the final report, the agent MUST inspect the layout, required sections, and format defined in `.agent/resources/schemas/triage.template.md` to ensure a consistent output layout. Before reporting completion, run `npm run agent -- markdown:validate {report_path} triage.template.md` and replace any placeholder/template text with concrete issue summary, classification, impact, routing decision, and next command.
-- Save the final report to `.workspaces/issues/triage_{issue_number}.md` (where `{issue_number}` is the issue number or identifier).
+- Save the final report to `.workspaces/issues/{date}-triage-{issue_number}.md` (where `{date}` is today's date in `YYYY-MM-DD` format and `{issue_number}` is the issue number or identifier).
 
 ### 4. Route
 

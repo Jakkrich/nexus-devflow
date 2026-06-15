@@ -8,13 +8,13 @@ Review implementation quality, run target project verification, and produce a Ma
 ## Usage
 
 ```text
-/33-Verify-fast <task-slug>
+/33-Verify-fast {ID}-{slug}
 ```
 
 ## Fast Mode Contract
 
-- Read `.workspaces/tasks/<task-slug>/task.md`, `plan.md`, and `implementation.md`.
-- Write `.workspaces/tasks/<task-slug>/verify.md`.
+- Read `.workspaces/specs/{ID}-{slug}-spec.md`, `{ID}-{slug}-plan.md`, and `{ID}-{slug}-task.md`.
+- Write `.workspaces/specs/{ID}-{slug}-qa_report.md`.
 - Do not create or mutate JSON task artifacts.
 - Do not require PRP CLI validation.
 - Prefer target project verification commands first.
@@ -26,9 +26,9 @@ Review implementation quality, run target project verification, and produce a Ma
 
 Read:
 
-- `task.md`
+- `spec.md`
 - `plan.md`
-- `implementation.md`
+- `task.md`
 - Git diff or changed files
 - Test output, build output, screenshots, or manual check notes when available
 
@@ -47,19 +47,20 @@ Review:
 - Test decision alignment (including compliance with **Test-Design First & Schema-Driven Design** rules for `Required` subtasks)
 - Manual verification gaps
 
-### 3. Write `verify.md`
+### 3. Write `qa_report.md` (Save directly as `.workspaces/specs/{ID}-{slug}-qa_report.md`)
 
 Use this structure:
 
 ```markdown
 ---
-id: "<task-slug>"
+id: "{ID}-{slug}"
+doc_type: "qa_report"
 workflow: "fast"
 status: "<pass|fail>"
 source_workflow: "/33-Verify-fast"
 ---
 
-# Verify: <Title>
+# QA Report: <Title>
 
 ## Verdict
 
@@ -96,12 +97,12 @@ Do not leave placeholder brackets, `TODO`, or `TBD`. If a section has no finding
 
 If pass:
 
-- Recommend `/50-Commit-fast <task-slug>` or human review when needed.
+- Recommend `/50-Commit-fast {ID}-{slug}` or human review when needed.
 
 If fail:
 
 - Record focused fix instructions.
-- Recommend `/32-Code-fast <task-slug>`.
+- Recommend `/32-Code-fast {ID}-{slug}`.
 
 ## Output
 
@@ -111,9 +112,9 @@ Report:
 - Key findings
 - Commands run
 - Manual checks or gaps
-- Next command: `/50-Commit-fast <task-slug>` if pass, or `/32-Code-fast <task-slug>` if fail
+- Next command: `/50-Commit-fast {ID}-{slug}` if pass, or `/32-Code-fast {ID}-{slug}` if fail
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/50-Commit-fast <task-slug>` when QA passes.
-- **Alternative**: `/32-Code-fast <task-slug>` when QA fails.
+- **Primary**: `/50-Commit-fast {ID}-{slug}` when QA passes.
+- **Alternative**: `/32-Code-fast {ID}-{slug}` when QA fails.

@@ -13,7 +13,7 @@ Find the actual cause of an issue using a lightweight Markdown RCA. Do not jump 
 
 ## Fast Mode Contract
 
-- Save debug evidence in `.workspaces/debug/fast-<slug>.md` or `.workspaces/tasks/<task-slug>/debug.md` when a fast task exists.
+- Save debug evidence in `.workspaces/debug/{date}-{date}-fast-{slug}.md` (where `{date}` is today's date in `YYYY-MM-DD` format) or `.workspaces/specs/{ID}-{slug}-debug.md` when a fast task exists.
 - Do not create or mutate JSON task artifacts.
 - Do not require PRP CLI validation or dashboard state.
 - Use target project commands and logs for reproduction evidence.
@@ -55,7 +55,7 @@ Use this structure:
 
 ```markdown
 ---
-id: "fast-<slug>"
+id: "{ID}-{slug}"
 workflow: "fast"
 status: "<investigating|root_cause_found|blocked>"
 source_workflow: "/20-Debug-fast"
@@ -92,9 +92,9 @@ Report:
 - Root cause or current leading hypothesis
 - Evidence gathered
 - Fix direction
-- Next command: `/30-Task-fast` for an untracked fix, or `/32-Code-fast <task-slug>` for an existing fast task
+- Next command: `/30-Task-fast` for an untracked fix, or `/32-Code-fast {ID}-{slug}` for an existing fast task
 
 ## Next Workflow Recommendation
 
 - **Primary**: `/30-Task-fast "{fix title}"` when the fix is not tracked yet.
-- **Alternative**: `/32-Code-fast <task-slug>` when the fast task exists and the root cause is proven.
+- **Alternative**: `/32-Code-fast {ID}-{slug}` when the fast task exists and the root cause is proven.

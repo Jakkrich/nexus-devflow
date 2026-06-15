@@ -13,8 +13,8 @@ Review a PR, branch, or local diff with findings-first output and save the repor
 
 ## Fast Mode Contract
 
-- Read `.workspaces/tasks/<task-slug>/` Markdown artifacts when a slug is provided.
-- Write `.workspaces/tasks/<task-slug>/review.md` when task-linked, or `.workspaces/reports/pr-review-fast-<slug>.md` for standalone reviews.
+- Read `.workspaces/specs/{ID}-{slug}-` Markdown artifacts when a slug is provided.
+- Write `.workspaces/specs/{ID}-{slug}-review.md` when task-linked, or `.workspaces/reports/pr-review-fast-<slug>.md` for standalone reviews.
 - Do not create or mutate JSON task artifacts.
 - Do not modify source files unless the user explicitly asks for fixes.
 - Keep findings actionable and proportional to the diff.
@@ -95,5 +95,5 @@ Return findings first, ordered by severity, followed by open questions, a short 
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/32-Code-fast <task-slug>` when required fixes are found.
-- **Alternative**: `/50-Commit-fast <task-slug>` when the review is clean and verification has passed.
+- **Primary**: `/32-Code-fast {ID}-{slug}` when required fixes are found.
+- **Alternative**: `/50-Commit-fast {ID}-{slug}` when the review is clean and verification has passed.
