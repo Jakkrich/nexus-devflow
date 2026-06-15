@@ -53,7 +53,7 @@ Use the `spec_gatherer` pattern:
 1. Generate a kebab-case slug from the title.
 2. Run `npm run agent -- init ...`.
 3. Confirm the task directory exists under `.workspaces/specs/{ID}-{slug}/`.
-4. Leave branch creation to implementation, commit, or PR workflows where source edits begin.
+4. Do not create or switch branches during task creation. Later implementation, commit, or PR workflows must use the user's current branch unless the user explicitly asks to create or switch to a named branch.
 
 ### 3. Populate Artifacts
 

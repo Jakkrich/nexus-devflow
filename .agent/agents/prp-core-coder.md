@@ -124,9 +124,10 @@ git worktree list
 | Current State     | Action                                               |
 | ----------------- | ---------------------------------------------------- |
 | In worktree       | Use it (log: "Using worktree")                       |
-| On main, clean    | Create branch: `git checkout -b feature/{plan-slug}` |
-| On main, dirty    | STOP: "Stash or commit changes first"                |
-| On feature branch | Use it (log: "Using existing branch")                |
+| Any current branch | Use it as the user's chosen branch; do not create or switch branches automatically |
+| User explicitly requests a new branch | Create/switch only to the branch the user requested |
+| Branch change seems advisable but was not requested | STOP and ask whether to continue on the current branch or create/switch to a named branch |
+| Dirty working tree | Preserve user changes; continue only when edits can be scoped safely, otherwise ask before touching overlapping files |
 
 ### 2.3 Sync with Remote
 
@@ -137,7 +138,7 @@ git pull --rebase origin main 2>/dev/null || true
 
 **PHASE_2_CHECKPOINT:**
 
-- [ ] On correct branch (not main with uncommitted work)
+- [ ] Current branch confirmed and no automatic branch creation/switching performed
 - [ ] Working directory ready
 - [ ] Up to date with remote
 

@@ -36,7 +36,7 @@ Create a lightweight Markdown-first task workspace for small or medium work that
 1. Generate a kebab-case slug from the title.
 2. Create `.workspaces/tasks/<task-slug>/`.
 3. Create `task.md`.
-4. Leave branch creation to implementation, commit, or PR workflows where source edits begin.
+4. Do not create or switch branches during task creation. Later implementation, commit, or PR workflows must use the user's current branch unless the user explicitly asks to create or switch to a named branch.
 
 ### 3. Write `task.md`
 

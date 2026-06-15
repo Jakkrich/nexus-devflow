@@ -18,7 +18,8 @@ You are an orchestrator. Your goal is to call the specialized Git Committer agen
 - Provide the target description (e.g., "all", "backend only", "staged").
 - The agent will:
   - Check the current Git status and branch.
-  - **MANDATORY RULE:** If the current branch is `main` or `master`, the agent MUST automatically create a new branch (e.g., `git checkout -b feature/{Task-Name}`), checkout that branch, and only then proceed with staging and committing.
+  - **MANDATORY BRANCH RULE:** Use the user's current branch as-is. Do not create, switch, or checkout a branch automatically. Only create or switch branches when the user explicitly asks for that exact branch action in the current request.
+  - If the current branch appears risky for the intended commit (for example `main`/`master` or a protected branch), warn the user and ask whether they want to continue on the current branch or explicitly create/switch to another branch.
   - Interpret your description to stage the correct files.
   - Review the staged changes to understand the context.
 
