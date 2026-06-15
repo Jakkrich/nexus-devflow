@@ -40,7 +40,10 @@ Confirm the current Git branch with `git branch --show-current` and use that bra
 For the first incomplete checklist item:
 
 - Confirm target files and success criteria.
-- If tests are `Required`, add or update the planned tests first where practical.
+- If tests are `Required`, follow the **Test-Design First & Schema-Driven Design** pattern:
+  1. Define the Schema/Interface Contract first (e.g. Zod schemas or types).
+  2. Implement/update the planned Unit Tests using the contract schema, running them to verify they fail (Red).
+  3. Implement the actual Production Code to satisfy the schema and make the tests pass (Green).
 - Make the smallest useful source change.
 - Preserve project style and existing patterns.
 - Run the planned verification command or manual check.

@@ -59,3 +59,12 @@ acceptance_criteria_count: 0
 ## 7. Sources #section/sources
 
 - Link source request, related files, issues, research, or prior artifacts.
+
+## 8. Test Scenarios & Schema Specification #section/testing
+
+- **Interface/Schema Contracts**: กำหนดรายละเอียดและ Schema (เช่น Zod, Pydantic, Types) ที่ใช้ควบคุมอินพุตและเอาต์พุต
+- **Test Cases & Scenarios**:
+  - [ ] **Happy Path**: [คำอธิบายสถานการณ์กรณีทำงานถูกต้อง และผลที่คาดหวัง]
+  - [ ] **Error Handling**: [คำอธิบายสถานการณ์กรณีเกิดข้อผิดพลาด และผลที่คาดหวัง]
+  - [ ] **Edge Cases**: [คำอธิบายกรณีข้อมูลสุดขอบ/ค่าว่าง และผลที่คาดหวัง]
+

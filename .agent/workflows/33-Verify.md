@@ -57,13 +57,13 @@ Use the `qa_reviewer` pattern:
 - Security
 - Performance
 - Test coverage
-- Test decision alignment
+- Test decision alignment (including **Test-Design First & Schema-Driven Design** compliance)
 - Manual verification gaps
 - Precision checklist: assumptions handled explicitly, scope stayed surgical, and each success criterion has evidence or a documented gap.
 
 Run project validation commands when available: lint, tests, typecheck, build, or targeted command from the plan.
 
-For test decision alignment, verify that every planned subtask has a recorded decision (`Required`, `Manual/Command Only`, or `Not Required`), that the reason still matches the final code, and that the executed evidence matches the planned verification. Treat missing regression tests for bug fixes or changed business logic as a QA finding unless the plan gives a stronger documented reason.
+For test decision alignment, verify that every planned subtask has a recorded decision (`Required`, `Manual/Command Only`, or `Not Required`), that the reason still matches the final code, and that the executed evidence matches the planned verification. For `Required` subtasks, verify compliance with the **Test-Design First & Schema-Driven Design** rule (i.e., validation schema and test code structure were declared before the production logic change). Treat missing regression tests for bug fixes or changed business logic as a QA finding unless the plan gives a stronger documented reason.
 
 ### 4. QA Report
 

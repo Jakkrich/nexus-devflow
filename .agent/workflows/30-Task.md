@@ -58,7 +58,7 @@ Use the `spec_gatherer` pattern:
 ### 3. Populate Artifacts
 
 Use script commands to populate `requirements.json`. Edit `spec.md` directly only for the human-readable specification.
-**MANDATORY:** Before creating or updating `spec.md`, inspect `.agent/resources/schemas/spec.template.md` and keep the file aligned to its required headings. The `npm run agent -- init ...` command creates an initial populated draft; manual edits must preserve that structure. Do not leave template text, placeholder brackets, `Requirement 1`, `Acceptance Criterion 1`, `TODO`, or `TBD` in `spec.md`. If information is missing, write a concrete question or explicit assumption. `npm run agent -- validate {ID}` must pass the Markdown quality gate before this phase is complete.
+**MANDATORY:** Before creating or updating `spec.md`, inspect `.agent/resources/schemas/spec.template.md` and keep the file aligned to its required headings (including the newly added '8. Test Scenarios & Schema Specification' section). The `npm run agent -- init ...` command creates an initial populated draft; manual edits must preserve that structure. Do not leave template text, placeholder brackets, `Requirement 1`, `Acceptance Criterion 1`, `TODO`, or `TBD` in `spec.md`. Ensure that the Test Scenarios and validation schemas are explicitly defined before completing this phase. If information is missing, write a concrete question or explicit assumption. `npm run agent -- validate {ID}` must pass the Markdown quality gate before this phase is complete.
 
 ### 4. Validate
 

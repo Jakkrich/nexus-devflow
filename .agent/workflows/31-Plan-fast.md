@@ -48,13 +48,13 @@ Create `plan.md` with:
 - Scope and non-goals
 - Files likely to read or modify
 - Ordered implementation checklist
-- Test decision for each item
+- Test decision for each item (Must follow **Test-Design First** when `Required`)
 - Verification commands or manual checks
 - Risks and rollback notes
 
 For every checklist item, decide one of:
 
-- `Required`: automated tests must be created or updated.
+- `Required`: automated tests must be created or updated. **MANDATORY**: Specify the Schema/Contract (Zod, Pydantic, types) and the target test file to implement *before* coding.
 - `Manual/Command Only`: command, smoke test, screenshot, or manual verification is enough.
 - `Not Required`: no automated tests are useful because the change has no behavior surface.
 
@@ -83,7 +83,9 @@ source_workflow: "/31-Plan-fast"
   - Change:
   - Files:
   - Test decision:
+  - Schema/Contract:
   - Verification:
+```,StartLine:44,TargetContent:
 
 ## Risks
 
