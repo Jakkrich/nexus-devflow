@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/59-Wiki"
+source_workflow: "Wiki"
 related_task: null
 related_files: []
 tags:

@@ -6,7 +6,7 @@ description: Enforces the synchronization and comprehensive update of documentat
 # Workflow Documentation Sync
 
 ## Overview
-This skill ensures that whenever a new workflow is introduced (or an existing one is modified), all associated documents, user guides, manuals, and usage examples are thoroughly and systematically updated. This prevents outdated context and ensures humans and AI agents have an accurate, uniform understanding of the available tools.
+This skill ensures that whenever a DevFlow 2.0 workflow or companion command is introduced or modified, all associated documents, user guides, manuals, and usage examples are thoroughly and systematically updated. This prevents outdated context and ensures humans and AI agents have an accurate, uniform understanding of the available tools.
 
 ## When to Use
 - When creating a new workflow file under `.agent/workflows/*.md`.
@@ -27,7 +27,7 @@ Whenever a workflow is added or modified, compile the list of documents that mus
 
 ### Step 2: Extract Workflow Metadata
 Identify the exact interface changes:
-- What is the **Command trigger**? (e.g., `/58-Merge`)
+- What is the **Command trigger**? (e.g., `/60-Release` or `Brainstorm`)
 - What are the **Arguments**? (e.g., Target Branch, default main)
 - What is the **Process flow**? (Pre-flight -> Execution -> Cleanup)
 - What are the **Mandatory Rules**? (e.g., Enforced branch checks)
@@ -36,7 +36,7 @@ Identify the exact interface changes:
 Update all target files systematically:
 1. **Update USAGE.md**: Locate the quick command index and detail sections. Inject the new workflow command, its purpose, argument syntax, full execution steps, and real-world examples.
 2. **Update Workflow Index**: Add the new workflow to the lists of available command surfaces.
-3. **Create Examples**: If the workflow uses complex parameters or custom scripts, ensure clean, tested example scripts are placed in the task workspace or referenced guides.
+3. **Create Examples**: If the workflow uses complex parameters or stage artifacts, ensure clean, tested examples are placed in the task workspace or referenced guides.
 
 ### Step 4: Verify Alignment
 Ensure that:
@@ -83,5 +83,5 @@ When injecting a new workflow into `USAGE.md`, use the following structure:
 - [ ] Every new/modified workflow has been mapped to `USAGE.md`.
 - [ ] Argument parameters in the markdown guide perfectly match the actual `.md` workflow trigger.
 - [ ] Real-world, copy-pasteable execution examples are provided.
-- [ ] Deprecated or old workflow definitions have been removed to prevent hallucination.
+- [ ] Deprecated or old workflow definitions have been removed or clearly marked as legacy to prevent hallucination.
 - [ ] Verification command output or terminal execution proof is recorded.

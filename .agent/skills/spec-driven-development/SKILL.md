@@ -79,14 +79,12 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
    - **Ask first:** Database schema changes, adding dependencies, changing CI config
    - **Never do:** Commit secrets, edit vendor directories, remove failing tests without approval
 
-## PRPs Dashboard Synchronization
+## DevFlow 2.0 Specification Contract
 
-To maintain compatibility with the **PRPs Dashboard**, every specification must generate the following files in `.workspaces/specs/{ID}/`:
+Every specification must stand on its own in markdown under `.workspaces/specs/{ID}-*/`:
 
-1. **`spec.md`**: The markdown specification following the template below.
-2. **`requirements.json`**: Machine-readable requirements based on [requirements.template.json](file:///d:/ramasri/.agent/resources/schemas/requirements.template.json).
-3. **`task_metadata.json`**: Badges and AI settings based on [task_metadata.template.json](file:///d:/ramasri/.agent/resources/schemas/task_metadata.template.json).
-4. **`complexity_assessment.json`**: Risk and validation recommendations based on [complexity_assessment.template.json](file:///d:/ramasri/.agent/resources/schemas/complexity_assessment.template.json).
+1. **`define.md`**: Decision and scope framing when the problem still needs clarification.
+2. **`spec.md`**: The delivery contract following the template below.
 
 **Spec template:**
 

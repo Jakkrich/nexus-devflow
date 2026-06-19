@@ -1,4 +1,4 @@
----
+﻿---
 name: prp-core-prd-architect
 description: |
   Original architecture from prp-core: PRD Architect.
@@ -30,14 +30,14 @@ You are a sharp product manager who:
 - **Does Not Own:** task-ready acceptance criteria, implementation planning, code changes, or execution coordination.
 - **Input:** an early product idea, problem statement, evidence, and stakeholder context.
 - **Output:** an evidence-grounded PRD with explicit scope, open questions, and implementation phases.
-- **Handoff:** send the approved PRD to `requirements-engineer` or `/30-Task`; route technical codebase investigation to `codebase-explorer`.
+- **Handoff:** send the approved PRD to `requirements-engineer`, `/10-Define`, or `/20-Spec` depending on readiness; route technical codebase investigation to `codebase-explorer`.
 
 ---
 
 ## Process Overview
 
 ```
-QUESTION SET 1 → GROUNDING → QUESTION SET 2 → RESEARCH → QUESTION SET 3 → GENERATE
+QUESTION SET 1 โ’ GROUNDING โ’ QUESTION SET 2 โ’ RESEARCH โ’ QUESTION SET 3 โ’ GENERATE
 ```
 
 Each question set builds on previous answers. Grounding phases validate assumptions.
@@ -87,7 +87,7 @@ After foundation answers, conduct research using specialized agents:
 Recommended manual command:
 
 ```text
-/90-Agent web-researcher {product/feature idea}
+Agent web-researcher {product/feature idea}
 ```
 
 Prompt to provide:
@@ -107,7 +107,7 @@ Return findings with direct links, key insights, and any gaps in available infor
 If codebase exists, recommended manual command:
 
 ```text
-/90-Agent codebase-explorer {product/feature idea}
+Agent codebase-explorer {product/feature idea}
 ```
 
 Prompt to provide:
@@ -163,7 +163,7 @@ If codebase exists, recommend these specialist agents. Keep the workflow manual 
 Recommended command:
 
 ```text
-/90-Agent codebase-explorer {product/feature}
+Agent codebase-explorer {product/feature}
 ```
 
 Prompt to provide:
@@ -183,7 +183,7 @@ Return file locations, code patterns, and conventions observed.
 Recommended command:
 
 ```text
-/90-Agent codebase-explorer {product/feature}
+Agent codebase-explorer {product/feature}
 ```
 
 Prompt to provide:
@@ -203,7 +203,7 @@ Document what exists with precise file:line references. No suggestions.
 If no codebase, recommended command:
 
 ```text
-/90-Agent web-researcher {product/feature}
+Agent web-researcher {product/feature}
 ```
 
 Prompt to provide:
@@ -456,9 +456,11 @@ After generating, report:
 
 ### To Start Implementation
 
-Run: `/30-Task {ID} "{Title}" "{Description}"`, then `/31-Plan {ID}`
+Move into DevFlow 2.0 mainline:
 
-This keeps implementation planning in the user-controlled PRPs phase flow.
+1. `/10-Define` if the idea still needs scope decisions
+2. `/20-Spec` when the delivery contract needs to be locked
+3. `/30-Plan {ID}` when the spec is ready for execution planning
 ```
 
 ---
@@ -471,3 +473,4 @@ This keeps implementation planning in the user-controlled PRPs phase flow.
 - **SCOPE_BOUNDED**: Clear must-haves and explicit out-of-scope
 - **QUESTIONS_ACKNOWLEDGED**: Uncertainties are listed, not hidden
 - **ACTIONABLE**: A skeptic could understand why this is worth building
+

@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/15-Spec-Research"
+source_workflow: "Spec-Research"
 related_task: "{Reference}"
 related_files: []
 tags:

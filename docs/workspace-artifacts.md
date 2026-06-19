@@ -1,6 +1,8 @@
 # Workspace Artifacts
 
-Nexus-DevFlow stores generated project memory and machine-readable workflow artifacts under `.workspaces`.
+Nexus-DevFlow 2.0 ใช้ `.workspaces/` เป็นพื้นที่เก็บ artifact หลักของงาน โดยยึดแนวทาง `markdown-first`
+
+Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projects/nexus-devflow/AGENTS.md:1) and [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
 
 ## Canonical Layout
 
@@ -15,9 +17,8 @@ Nexus-DevFlow stores generated project memory and machine-readable workflow arti
 |-- reports/
 |-- research/
 |-- roadmap/
-|   |-- project_index.json
-|   |-- roadmap_discovery.json
-|   `-- roadmap.json
+|   |-- roadmap-discovery.md
+|   `-- {other roadmap notes}.md
 |-- wiki/
 |   |-- framework/
 |   `-- project/
@@ -26,138 +27,113 @@ Nexus-DevFlow stores generated project memory and machine-readable workflow arti
 
 ## Folder Responsibilities
 
-| Path | Stores | Related Workflows | Keep? |
+| Path | Stores | Related workflows or commands | Keep? |
 | :--- | :--- | :--- | :--- |
-| `.workspaces/specs/` | Per-task workspaces: `spec.md`, `requirements.json`, `implementation_plan.json`, `context.json`, `task_logs.json`, `qa_report.md` | `/30-Task`, `/31-Plan`, `/32-Code`, `/33-Verify`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/34-Human-ReCheck`, `/35-Followup`, `/39-QA-Orchestrate`, `/54-Insight`, `/90-Agent` | Yes. This is the core PRP task store. |
-| `.workspaces/roadmap/` | Product discovery, roadmap phases, feature priorities, roadmap project index | `/16-Competitor`, `/17-Roadmap`, `/18-Spec-Orchestrate` | Yes. Required by `npm run roadmap:validate`. |
-| `.workspaces/research/` | Reusable research reports, integration notes, codebase research, source-backed findings | `/11-Research`, `/15-Spec-Research`, `/16-Competitor`, `/18-Spec-Orchestrate` | Yes. It is the durable research library. |
-| `.workspaces/issues/` | Staged issue analysis, triage notes, duplicate/spam decisions, source issue summaries | `/57-Issue-Triage`, `/20-Debug`, `/30-Task` | Yes. It links external issues to PRP tasks. |
-| `.workspaces/prds/` | Product Requirements Documents generated before task creation | `/12-PRD`, `/18-Spec-Orchestrate`, `/16-Competitor`, `/17-Roadmap` | Yes. It bridges product thinking to executable tasks. |
-| `.workspaces/debug/` | Root cause analysis reports and debugging notes | `/20-Debug`, `/39-QA-Orchestrate`, `/54-Insight` | Yes. It keeps RCA separate from implementation artifacts. |
-| `.workspaces/reports/` | Specialist agent reports and cross-cutting review outputs | `/14-Orchestrate`, `/39-QA-Orchestrate`, `/55-PR-Review`, `/56-PR-Followup`, `/90-Agent` | Yes. It captures reports that are not tied to one task artifact. |
-| `.workspaces/wiki/` | Compiled framework and project knowledge pages with source-backed links | `/54-Insight`, `/59-Wiki`, `/90-Agent`, `/99-Help` | Yes. It is the durable compiled knowledge layer. |
+| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-release.md`, `70-report.md`, `70-report.html` | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Release`, `/70-Report`, `Brainstorm`, `Research`, `Debug`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
+| `.workspaces/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
+| `.workspaces/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
+| `.workspaces/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
+| `.workspaces/prds/` | Product Requirements Documents created before mainline execution | `PRD` and product-definition work | Yes. It bridges product thinking to executable work. |
+| `.workspaces/debug/` | Root cause analysis reports and debugging notes | `Debug`, verify follow-up work | Yes. It keeps RCA separate from implementation artifacts. |
+| `.workspaces/reports/` | Cross-cutting reports that are not tied to one stage file | verification, review, specialist summaries | Yes. It captures reusable reports outside a single run. |
+| `.workspaces/wiki/` | Compiled framework and project knowledge pages with source-backed links | `Wiki`, `Report`, `Help` | Optional. Create it only when wiki capture is actually needed. |
 
 ## Top-Level Files
 
-| File | Purpose | Related Workflows |
+| File | Purpose | Related workflows or commands |
 | :--- | :--- | :--- |
-| `.workspaces/active-agent.json` | Records the active `.agent` bundle and npm command surface | `/00-Init`, `npm run activate` |
-| `.workspaces/project_index.json` | Project-wide structure, services, conventions, and commands | `/00-Init`, `/11-Research`, `/31-Plan`, `npm run index` |
-| `.workspaces/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `/20-Debug`, `/34-Human-Approve`, `/34-Human-Reject`, `/34-Human-Feedback`, `/53-Changelog`, `/54-Insight`, `/99-Help` |
+| `.workspaces/active-agent.json` | Records the active `.agent` bundle and npm command surface | activation/bootstrap tasks |
+| `.workspaces/project_index.json` | Project-wide structure, services, conventions, and commands | indexing, research, planning support during migration |
+| `.workspaces/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `Debug`, `Wiki`, `Report`, release/review follow-up |
 
 ## Task Workspace Files
 
-Each PRP task lives under `.workspaces/specs/{ID}-{slug}/`.
+แต่ละงานหลักอยู่ใต้ `.workspaces/specs/{ID}-{slug}/` และใช้ไฟล์ stage แบบ flat filename ในโฟลเดอร์เดียว
+
+### Mainline Stage Files
 
 | File | Purpose |
 | :--- | :--- |
-| `spec.md` | Human-readable task specification |
-| `requirements.json` | Structured requirements, constraints, acceptance criteria, and metadata |
-| `implementation_plan.json` | Phases, subtasks, dependency order, verification commands, and progress |
-| `context.json` | Relevant codebase context and reusable project patterns |
-| `complexity_assessment.json` | Scope, risk, and complexity classification |
-| `task_logs.json` | Progress logs and structured events |
-| `qa_report.md` | Human-readable verification result |
+| `00-discover.md` | สำรวจโจทย์ บริบท และคำถามต้นทาง |
+| `10-define.md` | ล็อกเป้าหมาย ขอบเขต และ decision หลัก |
+| `20-spec.md` | กำหนดสัญญาส่งมอบและ acceptance criteria |
+| `30-plan.md` | แตกงาน ลำดับงาน ความเสี่ยง และแนวทาง verify |
+| `40-implement.md` | บันทึกการลงมือทำ สิ่งที่เปลี่ยน และ deviation |
+| `50-verify.md` | หลักฐานการตรวจ finding และผลสรุปคุณภาพ |
+| `60-release.md` | สถานะพร้อมปล่อย impact และข้อควรระวัง |
+| `70-report.md` | สรุปรันทั้งหมดแบบอ่านง่าย |
+| `70-report.html` | สรุปรันทั้งหมดในรูปแบบสื่อสารมาตรฐานสำหรับคนอ่านทั่วไป |
 
-JSON files should be changed with `npm run agent -- artifact:*`, `npm run agent -- plan:*`, `npm run agent -- json:repair`, and `npm run agent -- validate` whenever possible.
+### Retired Legacy Files
 
-## Markdown Metadata Contract
+ไฟล์ตระกูล JSON ของ task หรือ roadmap และ `qa_report.md` ไม่ใช่ส่วนหนึ่งของ DevFlow 2.0 workflow surface แล้ว
 
-Every generated Markdown file in `.workspaces`, `docs`, and agent schema templates should follow the shared Markdown metadata contract in [Markdown Metadata Contract](markdown-metadata-contract.md).
+หากพบไฟล์เหล่านี้ใน workspace เก่า:
 
-The contract uses:
-
-- YAML frontmatter for document-level metadata that agents, indexes, and Obsidian can query.
-- Obsidian-compatible heading tags for section-level metadata such as `#section/findings`, `#finding/bug`, and `#priority/high`.
-- A hybrid model where every Markdown file shares the same core fields, then adds type-specific fields only when they fit the document.
+1. ใช้เพื่ออ่านข้อมูลย้อนหลังหรือ migration เท่านั้น
+2. อย่าใช้เป็น source of truth ของงานใหม่
+3. ย้าย context ที่จำเป็นกลับเข้า stage `.md` ที่สอดคล้องกับลำดับงานปัจจุบัน
 
 ## Workflow Relationships
 
 ```text
-Discovery:
-  /10-Brainstorm
-  /11-Research       -> .workspaces/research/
-  /12-PRD            -> .workspaces/prds/
-  /15-Spec-Research  -> .workspaces/research/
-  /16-Competitor     -> .workspaces/research/ and .workspaces/roadmap/
-  /17-Roadmap        -> .workspaces/roadmap/
-  /18-Spec-Orchestrate -> .workspaces/prds/, research/, specs/
+Mainline:
+  /00-Discover       -> .workspaces/specs/{ID}-*/00-discover.md
+  /10-Define         -> .workspaces/specs/{ID}-*/10-define.md
+  /20-Spec           -> .workspaces/specs/{ID}-*/20-spec.md
+  /30-Plan           -> .workspaces/specs/{ID}-*/30-plan.md
+  /40-Implement      -> .workspaces/specs/{ID}-*/40-implement.md
+  /50-Verify         -> .workspaces/specs/{ID}-*/50-verify.md
+  /60-Release        -> .workspaces/specs/{ID}-*/60-release.md
+  /70-Report         -> .workspaces/specs/{ID}-*/70-report.md and 70-report.html
 
-Execution:
-  /30-Task           -> .workspaces/specs/{ID}-*/
-  /31-Plan           -> .workspaces/specs/{ID}-*/implementation_plan.json
-  /32-Code           -> .workspaces/specs/{ID}-*/task_logs.json
-  /33-Verify         -> .workspaces/specs/{ID}-*/qa_report.md
-  /34-Human-Approve -> .workspaces/specs/{ID}-*/implementation_plan.json and .workspaces/lessons.md
-  /34-Human-Reject  -> .workspaces/specs/{ID}-*/qa_report.md and .workspaces/lessons.md
-  /34-Human-Feedback -> .workspaces/specs/{ID}-*/qa_report.md and .workspaces/lessons.md
-  /34-Human-ReCheck -> read-only task artifact review by default
-  /35-Followup       -> .workspaces/specs/{ID}-*/implementation_plan.json
-
-Quality and Review:
-  /20-Debug          -> .workspaces/debug/
-  /39-QA-Orchestrate -> .workspaces/reports/ or task qa_report.md
-  /55-PR-Review      -> .workspaces/reports/
-  /56-PR-Followup    -> .workspaces/reports/ and/or specs/{ID}-*/
-  /57-Issue-Triage   -> .workspaces/issues/
-  /54-Insight        -> .workspaces/lessons.md and task logs
-
-Knowledge:
-  /59-Wiki           -> .workspaces/wiki/framework/ or .workspaces/wiki/project/
+Companion commands:
+  Brainstorm         -> usually .workspaces/research/ or appended notes in discover/define
+  Research           -> .workspaces/research/
+  Debug              -> .workspaces/debug/
+  Roadmap            -> .workspaces/roadmap/roadmap-discovery.md and ROADMAP.md
+  Preview            -> temporary proof or notes in implement/verify
+  Wiki               -> .workspaces/wiki/framework/ or .workspaces/wiki/project/ when the wiki surface is explicitly used
+  Help               -> workflow recommendation or routing note
 ```
+
+## Markdown Metadata Contract
+
+Markdown artifact ใน `.workspaces`, `docs`, และ template ควรอิง contract ร่วมใน [markdown-metadata-contract.md](/D:/Projects/nexus-devflow/docs/markdown-metadata-contract.md)
+
+หลักสำคัญ:
+
+1. ใช้ YAML frontmatter สำหรับ metadata ระดับเอกสาร
+2. ใช้ heading/tag pattern เมื่อเอกสารนั้นเหมาะกับการ query
+3. คงหัวข้อหลักตาม template ของ stage หรือ workflow นั้น
+4. อนุญาตให้เพิ่มหัวข้อท้ายเอกสารได้เมื่อจำเป็น
 
 ## Wiki Layer
 
-DevFlow Wiki stores compiled knowledge, not source truth. Source truth remains in code, specs, QA reports, RCA reports, PR reviews, commits, and research artifacts.
+DevFlow Wiki เป็น compiled knowledge ไม่ใช่ source of truth หลัก
 
-Use `.workspaces/wiki/framework/` for Nexus-DevFlow framework knowledge such as workflow decisions, agent boundaries, command contracts, and token/context lessons.
+Source of truth หลักยังคงอยู่ใน:
 
-Use `.workspaces/wiki/project/` for target-project knowledge such as architecture, domain concepts, decisions, patterns, gotchas, and task lessons.
-
-Every wiki page should include a `Sources` section that links back to the artifacts or commits used to compile it.
-
-Project wiki skeletons are initialized by `npm run activate` or:
-
-```powershell
-npm.cmd run agent -- wiki:init project
-npm.cmd run agent -- wiki:lint project
-```
-
-The project wiki contract is:
-
-```text
-.workspaces/wiki/project/
-|-- index.md
-|-- architecture/
-|-- decisions/
-|-- domain/
-|-- gotchas/
-|-- patterns/
-|-- tasks/
-|-- token-context/
-`-- _drafts/
-```
+- code
+- stage artifacts
+- research notes
+- review and debug evidence
+- release/report outputs
 
 ## Deletion Policy
 
-Do not delete the canonical `.workspaces` folders just because they are empty. Empty folders with `.gitkeep` are intentional staging areas for workflows.
+หลีกเลี่ยงการสร้างโฟลเดอร์งานล่วงหน้าโดยไม่ใช้งานจริง และสามารถลบโฟลเดอร์ว่างที่ยังไม่ถูกอ้างใช้ออกได้
 
 Safe cleanup targets:
 
-- generated test workspaces such as `.agent/.test-workspace-node`
-- obsolete task folders only after the user confirms they are no longer needed
-- temporary research/report files that are not linked from PRDs, tasks, roadmap, or lessons
+- generated test workspaces เช่น `.agent/.test-workspace-node`
+- obsolete temporary files ที่ไม่ถูกอ้างอิงแล้ว
+- migration leftovers ที่ทีมยืนยันแล้วว่าไม่ใช้
 
 Not safe to delete by default:
 
 - `.workspaces/specs`
-- `.workspaces/roadmap`
-- `.workspaces/research`
-- `.workspaces/issues`
-- `.workspaces/prds`
-- `.workspaces/debug`
-- `.workspaces/reports`
-- `.workspaces/wiki`
+- `.workspaces/wiki` once wiki capture has started
 - `.workspaces/lessons.md`
 
 ## Regeneration
@@ -167,21 +143,23 @@ npm.cmd run activate
 npm.cmd run index
 ```
 
-`npm run activate` prepares canonical directories and metadata. `npm run index` refreshes project index files after structure changes.
+## Legacy Migration
+
+Use the migration helper when a project still has legacy run folders such as `.workspaces/001-some-task/00-discover/discover.md`:
+
+```powershell
+npm.cmd run migrate:artifacts -- D:\Projects\some-project
+npm.cmd run migrate:artifacts -- D:\Projects\some-project --write
+```
+
+The command runs as a dry-run by default and moves legacy task artifacts into `.workspaces/specs/{ID}-{slug}/` with flat stage filenames only when `--write` is provided.
 
 ## Validation
 
 ```powershell
-npm.cmd run validate
 npm.cmd run roadmap:validate
+npm.cmd run validate
+npm.cmd run validate:all
 ```
 
-Validation checks JSON syntax, required fields, roadmap feature references, workflow numbering, and expected file locations.
-
-Task-level validation:
-
-```powershell
-npm.cmd run agent -- plan:validate 001
-npm.cmd run agent -- validate 001
-```
-
+Framework validation จะช่วยตรวจโครงสร้างหลัก workflow naming report naming และ roadmap markdown contracts

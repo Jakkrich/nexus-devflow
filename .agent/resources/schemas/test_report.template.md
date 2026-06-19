@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/40-Test"
+source_workflow: "Test"
 related_task: null
 related_files:
   - "{Target Path}"
@@ -26,7 +26,7 @@ risk_level: "medium"
 
 # Test Specification And Coverage Report: {Target} #doc/report #report/qa
 
-> **Source Trigger**: `/40-Test`
+> **Source Trigger**: `Test`
 > **Target File/Feature**: {Target Path}
 > **Test Framework**: {e.g. Vitest, Pytest, Jest}
 

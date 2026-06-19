@@ -22,7 +22,7 @@ Commencing a new task:
 2. **Standardize**: Exploit Issue data to instigate a task directory under `.workspaces/specs/{ID}-{slug}/`.
 3. **Core Files**: Lay down standard requisite AI files:
    - `spec.md`: Elaborate technical nuances coupled with Acceptance Criteria.
-   - `task_metadata.json`: Informative metadata relating to categories, priority, and complexity.
+   - `define.md` / `spec.md` metadata sections: informative context relating to categories, priority, and complexity.
 
 ---
 
@@ -43,10 +43,10 @@ Act as custodian of the "Home Page of Project" warranting it persists as the qui
 ---
 
 ## 🔄 Workflow Guidance (Next Steps)
-Advocate relevant commands following the respective workflow hierarchy:
-1. **Planning**: Once a Spec matures sufficiently, advise executing `/02-Plan {ID}`.
-2. **Implementation**: Ensuing a robust plan setup, endorse launching `/03-Code {ID}`.
-3. **Review**: Subsequent to human confirmation/review, put forward commands under the spectrum of `/10-Human`.
+Advocate relevant commands following the DevFlow 2.0 hierarchy:
+1. **Planning**: Once a spec matures sufficiently, advise executing `/30-Plan {ID}`.
+2. **Implementation**: After the plan is ready, endorse launching `/40-Implement {ID}`.
+3. **Review**: After implementation evidence exists, point the user to `/50-Verify {ID}`, then `/60-Release` or `/70-Report` as appropriate.
 
 ---
 *Note: This skill synergizes most efficiently running alongside the Agent Persona `requirements-engineer`.*

@@ -1,30 +1,38 @@
 ---
-description: Template for creating a minimal context file to optimize token usage.
+description: Minimal context template for DevFlow 2.0 work.
 ---
-# Task {ID}: Minimal Context
 
-## Objective
-{What to do in one sentence}
+# Minimal Context
 
-## Requirements
-- {Requirement 1}
-- {Requirement 2}
-- {Requirement 3}
+Use this template when context must be reduced before handing work to an agent, skill, or workflow.
 
-## Files
-- Create: {file_path}
-- Modify: {file_path}
+## Task
 
-## Pattern Reference
-- {file}#L{start}-{end} - {what pattern to follow}
+- **Objective**: {what needs to happen}
+- **Current Stage**: {discover|define|spec|plan|implement|verify|release|report}
+- **Running ID**: {id-or-none}
+
+## Required Context
+
+- {artifact or file 1}
+- {artifact or file 2}
+- {artifact or file 3}
+
+## Important Constraints
+
+- {constraint 1}
+- {constraint 2}
+
+## Patterns Or Examples
+
+- {file or artifact} - {pattern to follow}
 
 ## Expected Output
-{What should be created/modified}
 
-## Constraints
-- {Constraint 1}
-- {Constraint 2}
+- {what should be produced next}
 
-## Token Budget
-- Target: < {X}K tokens
-- Max: < {Y}K tokens
+## Token Discipline
+
+- Read only the files needed for the next step.
+- Prefer summaries over raw bulk context.
+- Prefer exact references over full-file dumps.

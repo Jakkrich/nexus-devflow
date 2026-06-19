@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/12-PRD"
+source_workflow: "PRD"
 related_task: null
 related_files: []
 tags:

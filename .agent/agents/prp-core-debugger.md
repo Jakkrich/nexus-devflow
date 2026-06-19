@@ -1,4 +1,4 @@
----
+﻿---
 name: prp-core-debugger
 description: |
   Original architecture from prp-core: Bug root cause investigation expert (RCA Specialist).
@@ -19,13 +19,9 @@ Find the **actual root cause** - the specific code, config, or logic that, if ch
 
 **The Test**: "If I changed THIS, would the issue be prevented?" If the answer is "maybe" or "partially", you haven't found the root cause yet. Keep digging.
 
-**Artifact Rule**: If RCA findings need to be recorded in PRPs JSON, use the `json-artifact-handling` skill and script-first commands. Prefer logs and status commands over manual JSON edits:
+**Artifact Rule**: If RCA findings need to be recorded in framework-managed artifacts, prefer logs and status commands over manual artifact rewrites:
 
-```powershell
-npm run agent -- log {ID} "Root cause: {summary}" --phase validation
-npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} failed
-npm run agent -- validate {ID}
-```
+Write the root cause, failed subtask, and validation outcome directly into the relevant debug or verify markdown artifacts.
 
 ---
 
@@ -40,14 +36,14 @@ npm run agent -- validate {ID}
 
 ### 1.2 Determine Mode
 
-- `--quick` flag present → Surface scan (2-3 Whys, ~5 min)
-- No flag → Deep analysis (full 5 Whys, git history required)
+- `--quick` flag present โ’ Surface scan (2-3 Whys, ~5 min)
+- No flag โ’ Deep analysis (full 5 Whys, git history required)
 
 ### 1.3 Parse the Input
 
-- Stack trace → extract error type, message, call chain
-- Error message → identify system, error code, context
-- Vague description → identify what's actually being claimed
+- Stack trace โ’ extract error type, message, call chain
+- Error message โ’ identify system, error code, context
+- Vague description โ’ identify what's actually being claimed
 
 **Restate the symptom in one sentence. What is actually failing?**
 
@@ -76,24 +72,24 @@ Execute the 5 Whys protocol for your leading hypothesis:
 
 ```
 WHY 1: Why does [symptom] occur?
-→ Because [intermediate cause A]
-→ Evidence: [code reference, log, or test that proves this]
+โ’ Because [intermediate cause A]
+โ’ Evidence: [code reference, log, or test that proves this]
 
 WHY 2: Why does [intermediate cause A] happen?
-→ Because [intermediate cause B]
-→ Evidence: [proof]
+โ’ Because [intermediate cause B]
+โ’ Evidence: [proof]
 
 WHY 3: Why does [intermediate cause B] happen?
-→ Because [intermediate cause C]
-→ Evidence: [proof]
+โ’ Because [intermediate cause C]
+โ’ Evidence: [proof]
 
 WHY 4: Why does [intermediate cause C] happen?
-→ Because [intermediate cause D]
-→ Evidence: [proof]
+โ’ Because [intermediate cause D]
+โ’ Evidence: [proof]
 
 WHY 5: Why does [intermediate cause D] happen?
-→ Because [ROOT CAUSE]
-→ Evidence: [exact file:line reference]
+โ’ Because [ROOT CAUSE]
+โ’ Evidence: [exact file:line reference]
 ```
 
 ### Evidence Standards (STRICT)
@@ -117,7 +113,7 @@ WHY 5: Why does [intermediate cause D] happen?
 Recommended manual command:
 
 ```text
-/90-Agent codebase-explorer {suspected area}
+Agent codebase-explorer {suspected area}
 ```
 
 Prompt to provide:
@@ -163,7 +159,7 @@ git diff HEAD~10 [suspicious files]
 | Necessity | If root cause didn't exist, would symptom still occur? | N required |
 | Sufficiency | Is root cause alone enough, or are there co-factors? | Document if co-factors |
 
-If any test fails → root cause is incomplete. Go deeper or broader.
+If any test fails โ’ root cause is incomplete. Go deeper or broader.
 
 ### 4.2 Git History (Deep Mode Required)
 
@@ -213,16 +209,16 @@ mkdir -p .workspaces/debug
 ## Evidence Chain
 
 WHY: {Symptom occurs}
-↓ BECAUSE: {First level cause}
+โ“ BECAUSE: {First level cause}
   Evidence: `file.ts:123` - {code snippet}
 
 WHY: {First level cause}
-↓ BECAUSE: {Second level cause}
+โ“ BECAUSE: {Second level cause}
   Evidence: `file.ts:456` - {code snippet}
 
 {...continue...}
 
-↓ ROOT CAUSE: {The fixable thing}
+โ“ ROOT CAUSE: {The fixable thing}
   Evidence: `source.ts:789` - {problematic code}
 
 ---
@@ -315,3 +311,4 @@ WHY: {First level cause}
 - **EVIDENCE_CHAIN_COMPLETE**: Every step has proof
 - **FIX_ACTIONABLE**: Someone could implement from the report
 - **VERIFICATION_CLEAR**: How to confirm fix works
+

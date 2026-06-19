@@ -48,16 +48,16 @@ Probe the environment prior to starting work:
 ## 🔄 PRP Workflow Integration (Zero-Script)
 For each Task, the Agent must adhere to these principles:
 
-### Phase: Planning (/02-Plan)
+### Phase: Planning (/30-Plan)
 - Designate the files for modification and outline Validation procedures (e.g., executing `phpunit`).
 
-### Phase: Code (/03-Code)
-- Proceed with Subtasks sequentially and subsequently update the status in `implementation_plan.json`.
-- Chronicle the edits in the `qa_report.md` file.
+### Phase: Implement (/40-Implement)
+- Proceed with subtasks sequentially and capture real progress in `implement.md`.
+- Chronicle implementation and verification-relevant notes in `implement.md` and `verify.md` first.
 
 ---
 
 ## 🧪 Testing & Validation
 - **Unit Testing**: Employ `PHPUnit` or any pre-installed testing framework within the project.
 - **Command Line**: Tests typically run via `./vendor/bin/phpunit` or specialized framework commands.
-- **Manual Check**: Specify manual steps required to open a webpage mapping to correctness verification within `qa_report.md`.
+- **Manual Check**: Specify manual verification steps in `verify.md`.

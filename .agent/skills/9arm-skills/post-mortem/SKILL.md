@@ -1,4 +1,4 @@
----
+﻿---
 name: 9arm-skills/post-mortem
 description: Use after a bug, outage, or regression has been fixed and validated. Converts the fix into durable engineering knowledge.
 source_pack: 9arm-skills
@@ -19,9 +19,9 @@ This skill is a credited adaptation of `9arm-skills/post-mortem` for Nexus-DevFl
 
 Use after:
 
-- `/20-Debug` found a root cause
-- `/32-Code` applied a fix
-- `/33-Verify` or manual validation proved the fix
+- `Debug` found a root cause
+- `/40-Implement` applied a fix
+- `/50-Verify` or manual validation proved the fix
 - a production incident, regression, or high-risk bug deserves durable learning
 
 Do not write a confident post-mortem before the fix and validation evidence exist.
@@ -62,9 +62,10 @@ Use these sections inside `.workspaces/lessons.md`, task logs, or a task-linked 
 
 Prefer existing destinations:
 
-- task-specific insight: `npm run agent -- log {ID} "Insight: ..." --phase validation`
+- task-specific insight: record the final lesson in the active markdown artifacts for that running ID, or in `.workspaces/lessons.md`
 - project-wide lesson: `.workspaces/lessons.md` using `.agent/resources/schemas/lessons.template.md`
-- release-facing summary: `/53-Changelog`
+- release-facing summary: `/60-Release`
 - stakeholder summary: `management-talk`
 
 Keep the output concise and actionable. Avoid blame.
+

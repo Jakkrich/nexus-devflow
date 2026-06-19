@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/39-QA-Orchestrate"
+source_workflow: "QA-Orchestrate"
 related_task: "{ID}"
 related_files: []
 tags:
@@ -24,7 +24,7 @@ risk_level: "medium"
 
 # QA Orchestration Plan: Task {ID} - {Task Title} #doc/plan #report/qa
 
-> **Source Trigger**: `/39-QA-Orchestrate`
+> **Source Trigger**: `QA-Orchestrate`
 > **Target Task ID**: {ID}
 > **Status**: QA-PLANNING
 
@@ -42,9 +42,9 @@ To ensure comprehensive test coverage, the following QA lanes are activated:
 
 To drill down into specific areas, the following senior specialist agents are recommended:
 
-- `/90-Agent code-reviewer .workspaces/specs/{ID}-*/` - Codebase fit, architecture check
-- `/90-Agent test-engineer .workspaces/specs/{ID}-*/` - Missing test cases discovery
-- `/90-Agent security-auditor .workspaces/specs/{ID}-*/` - Deep vulnerability check
+- `Agent code-reviewer .workspaces/specs/{ID}-*/` - Codebase fit, architecture check
+- `Agent test-engineer .workspaces/specs/{ID}-*/` - Missing test cases discovery
+- `Agent security-auditor .workspaces/specs/{ID}-*/` - Deep vulnerability check
 
 ## 3. Test Routing And Action Items #section/findings
 
@@ -59,13 +59,13 @@ To drill down into specific areas, the following senior specialist agents are re
 If findings are minor, proceed to:
 
 ```text
-/33-Verify {ID}
+/50-Verify {ID}
 ```
 
 If significant fixes are needed, proceed to:
 
 ```text
-/32-Code {ID}
+/40-Implement {ID}
 ```
 
 ## 5. Sources #section/sources

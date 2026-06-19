@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/41-Simplify"
+source_workflow: "Simplify"
 related_task: null
 related_files:
   - "{Target File/Directory}"
@@ -24,7 +24,7 @@ risk_level: "medium"
 
 # Code Simplification And Refactoring Report: {Target} #doc/report #report/review
 
-> **Source Trigger**: `/41-Simplify`
+> **Source Trigger**: `Simplify`
 > **Target Path**: {Target File/Directory}
 > **Complexity Metric**: [e.g. Cyclomatic Complexity, line count reduction]
 

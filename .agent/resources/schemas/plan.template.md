@@ -7,10 +7,10 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/31-Plan"
+source_workflow: "/30-Plan"
 related_task: "{Task ID}"
 related_files:
-  - ".workspaces/specs/{task-id}/spec.md"
+  - ".workspaces/specs/{task-id}/20-spec.md"
 tags:
   - nexus-devflow
   - plan
@@ -19,17 +19,17 @@ aliases:
   - "Plan {Task ID}"
 summary: "Implementation plan for {Task Title}."
 metadata_version: 1
-source_spec: ".workspaces/specs/{task-id}/spec.md"
-data_hub: "implementation_plan.json"
+source_spec: ".workspaces/specs/{task-id}/20-spec.md"
+data_hub: "30-plan.md"
 phase_count: 0
 risk_level: "medium"
 ---
 
 # Implementation Plan: {Task ID} - {Task Title} #doc/plan #status/draft
 
-> **Source Spec**: [.workspaces/specs/{task-id}/spec.md]
+> **Source Spec**: [.workspaces/specs/{task-id}/20-spec.md]
 > **Status**: IN-PROGRESS
-> **Data Hub**: `implementation_plan.json` (Managed Subtasks And Task Logs)
+> **Data Hub**: `30-plan.md` (Managed Phases, Subtasks, And Validation Notes)
 
 ## 1. Technical Design And Strategy #section/design
 
@@ -84,7 +84,7 @@ risk_level: "medium"
 
 ## 6. Verification Focus #section/verification
 
-> Automated commands are in `implementation_plan.json`.
+> Keep planning details directly in this markdown contract.
 
 ### Test Decision Gate #section/verification
 

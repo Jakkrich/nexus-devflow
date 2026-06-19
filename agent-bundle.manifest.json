@@ -7,12 +7,8 @@
     ".agent/docs",
     ".agent/resources/schemas",
     ".agent/rules",
-    ".agent/scripts/prp.mjs",
     ".agent/skills",
-    ".agent/workflows",
-    ".agent/dashboard/html/dashboard.html",
-    ".agent/dashboard/html/dashboard.css",
-    ".agent/dashboard/html/dashboard.js"
+    ".agent/workflows"
   ],
   "forbidden_legacy_paths": [
     ".cursor",

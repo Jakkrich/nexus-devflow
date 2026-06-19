@@ -29,7 +29,7 @@ When kick-starting a new task or if the environment is ambiguous, I will scan th
 
 Upon detecting a Platform:
 1. **Notification**: I will inform you of the detected Stack (e.g., "Detected: Odoo 13 module").
-2. **Mode Switch**: I will instantly harness the knowledge from the relevant specialized Skill to plan (/02-Plan) and write code (/03-Code).
+2. **Mode Switch**: I will instantly harness the knowledge from the relevant specialized Skill to plan (`/30-Plan`) and write code (`/40-Implement`).
 3. **Fallback**: If an unrecognized Stack is spotted, I will ask you for details or default to the standard **Generic Python/JS** pattern.
 
 ---

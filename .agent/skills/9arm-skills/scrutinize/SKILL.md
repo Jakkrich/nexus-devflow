@@ -1,4 +1,4 @@
----
+﻿---
 name: 9arm-skills/scrutinize
 description: Use for plan, PR, and code review. Starts by challenging whether the change should exist, then checks smaller alternatives and traces actual code paths.
 source_pack: 9arm-skills
@@ -52,7 +52,7 @@ Report actionable findings first, ordered by severity. Avoid style-only comments
 
 ## Nexus-DevFlow Output
 
-When used by `/55-PR-Review`, preserve `.agent/resources/schemas/pr_review.template.md` and add scrutiny context without replacing the required sections.
+When used by `PR-Review`, preserve `.agent/resources/schemas/pr_review.template.md` and add scrutiny context without replacing the required sections.
 
 Recommended extra sections:
 
@@ -68,4 +68,5 @@ Recommended extra sections:
 ## Actual Path Trace
 ```
 
-For `/90-Agent code-reviewer`, save substantial reports under `.workspaces/reports/` unless the invoking workflow has a more specific destination.
+For `Agent code-reviewer`, save substantial reports under `.workspaces/reports/` unless the invoking workflow has a more specific destination.
+

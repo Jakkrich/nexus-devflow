@@ -18,13 +18,12 @@ function listKeyDirectories(root, bundle) {
   const bundleRoot = path.join(root, bundle);
   const definitions = {
     agents: 'Specialist agent persona definitions',
-    workflows: 'Numbered Antigravity workflow prompts',
+    workflows: 'DevFlow 2.0 workflow prompts',
     docs: 'Framework documentation',
-    resources: 'Schemas and templates for structured workflow artifacts',
+    resources: 'Markdown templates and shared delivery contracts',
     rules: 'Agent rules and coding guidance',
-    scripts: 'CLI, task tooling, validation, status, preview, and session helpers',
-    skills: 'Reusable knowledge and automation skills',
-    'dashboard/html': 'Static dashboard UI assets'
+    scripts: 'Validation, activation, goal, preview, and session helpers',
+    skills: 'Reusable knowledge and automation skills'
   };
   const result = {};
   for (const [dir, purpose] of Object.entries(definitions)) {
@@ -40,10 +39,10 @@ function buildAgentService(root) {
     name: 'agent_flow',
     path: path.join(root, '.agent'),
     language: 'JavaScript and Python',
-    framework: 'Antigravity .agent bundle with Node.js ESM CLI and numbered Markdown workflows',
+    framework: 'DevFlow 2.0 .agent bundle with stage-based markdown workflows',
     type: 'library',
     package_manager: 'npm',
-    entry_point: pkg.bin?.prp || './scripts/prp.mjs',
+    entry_point: './workflows',
     key_directories: listKeyDirectories(root, '.agent'),
     dependencies: ['Node.js >=18.17'],
     testing: 'Node.js script tests and framework validation',
@@ -71,7 +70,7 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
         },
         '.workspaces': {
           path: '.workspaces',
-          purpose: 'Canonical generated project, task, research, roadmap, PRD, debug, report, wiki, and lesson artifacts'
+          purpose: 'Canonical generated workspace root for stage artifacts, shared reports, and optional support areas created on demand'
         },
         'scripts': {
           path: 'scripts',
@@ -86,7 +85,7 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
         'Node.js >=18.17',
         'Python 3',
         'Git',
-        'Antigravity IDE .agent workflows'
+        'Codex-compatible .agent workflows'
       ],
       dev_dependencies: [],
       testing: 'npm run validate',
@@ -103,9 +102,9 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
     infrastructure: {},
     conventions: {
       documentation: 'Markdown',
-      artifact_format: 'JSON and Markdown',
+      artifact_format: 'Markdown-first',
       agent_bundle: '.agent',
-      primary_ide: 'Antigravity',
+      primary_ide: 'Codex',
       workspace_directory: '.workspaces',
       package_manager: 'npm',
       legacy_cursor_removed: true
@@ -118,8 +117,7 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
 export function generateProjectIndex(projectRoot = defaultRoot) {
   const index = buildProjectIndex(projectRoot);
   const targets = [
-    path.join(projectRoot, '.workspaces', 'project_index.json'),
-    path.join(projectRoot, '.workspaces', 'roadmap', 'project_index.json')
+    path.join(projectRoot, '.workspaces', 'project_index.json')
   ];
   for (const target of targets) {
     fs.mkdirSync(path.dirname(target), { recursive: true });

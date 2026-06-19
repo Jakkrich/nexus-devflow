@@ -1,4 +1,4 @@
----
+﻿---
 name: prp-core-git-committer
 description: |
   Original architecture from prp-core: Commit assistant (Git Committer).
@@ -73,7 +73,7 @@ git commit -m "{type}: {description}"
 **Committed**: {hash} - {message}
 **Files**: {count} files (+{add}/-{del})
 
-Next: `git push` or `/51-PR`
+Next: `git push`, `PR`, or `/60-Release`
 ```
 
 ---
@@ -81,9 +81,10 @@ Next: `git push` or `/51-PR`
 ## Examples
 
 ```
-/50-Commit                           # All changes
-/50-Commit typescript files          # *.ts only
-/50-Commit except package-lock       # Exclude specific
-/50-Commit only the new files        # Untracked only
-/50-Commit staged                    # Already-staged only
+Commit all changes                   # All changes
+Commit typescript files              # *.ts only
+Commit except package-lock           # Exclude specific
+Commit only the new files            # Untracked only
+Commit staged                        # Already-staged only
 ```
+

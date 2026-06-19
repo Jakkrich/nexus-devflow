@@ -1,70 +1,59 @@
 ---
-id: "spec-{Task ID}"
-title: "Specification: {Task ID} - {Task Title}"
-doc_type: "spec"
-category: "planning"
-status: "draft"
+id: "{running_id}-spec"
+title: "Spec: {Work Title}"
+doc_type: "stage"
+stage: "20-spec"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/30-Task"
-related_task: "{Task ID}"
+status: "draft"
+related_run: "{running_id}"
 related_files: []
-tags:
-  - nexus-devflow
-  - spec
-  - planning
-aliases:
-  - "Spec {Task ID}"
-summary: "Task specification for {Task Title}."
-metadata_version: 1
-requirement_count: 0
-acceptance_criteria_count: 0
 ---
 
-# Specification: {Task ID} - {Task Title} #doc/spec #status/draft
+# Spec: {Work Title}
 
-## 1. Overview #section/summary
+## 1. Purpose
 
-- **Objective**: Write the concrete outcome in one or two sentences, using the user's actual request and the affected system or screen.
-- **Business Value**: Explain why the work matters, who benefits, and what pain or risk it removes.
-- **Target Audience/Users**: Name the real users, maintainers, reviewers, or systems affected by this task.
+- Convert the defined scope into a concrete specification with clear requirements and acceptance criteria.
 
-## 2. Requirements And Acceptance Criteria #section/requirements
+## 2. Inputs
 
-- [ ] Describe a specific expected behavior, data change, UI change, or operational outcome.
-- [ ] Describe another concrete requirement, including boundaries and edge cases when known.
-- [ ] State a measurable acceptance criterion that proves the task is complete.
+- `10-define.md`
+- Supporting research notes if they exist
 
-## 3. Context And Background #section/context
+## 3. Required Content
 
-- **Current State**: Summarize how the system behaves today, based on the user's report or code inspection.
-- **Problem Statement**: State the exact problem, gap, or opportunity being solved.
-- **Related Issues/Features**: Link or name related tasks, issues, files, screens, or say that none were provided.
+### Requirements
 
-## 4. Technical Constraints And Assumptions #section/constraints
+- [Requirement 1]
 
-- **Constraints**: List real technical, compatibility, performance, security, or process constraints.
-- **Assumptions**: List assumptions that planning or implementation depends on, and mark uncertain items as questions to resolve.
+### Acceptance Criteria
 
-## 5. UI/UX Considerations #section/ui-ux
+- [Criterion 1]
 
-- **Design Guidelines**: Describe applicable existing UI patterns, design files, responsive behavior, accessibility, and visual constraints when relevant.
-- **Interactions**: Describe relevant states, transitions, input behavior, loading, empty, error, and success behavior when relevant.
+### Out Of Scope
 
-## 6. Out Of Scope #section/scope
+- [Explicitly excluded items]
 
-- List concrete exclusions that prevent scope creep, such as unrelated screens, refactors, integrations, or behavior changes.
+### Constraints
 
-## 7. Sources #section/sources
+- [Constraints that implementation must respect]
 
-- Link source request, related files, issues, research, or prior artifacts.
+## 4. Decisions
 
-## 8. Test Scenarios & Schema Specification #section/testing
+- [Decision 1]
 
-- **Interface/Schema Contracts**: กำหนดรายละเอียดและ Schema (เช่น Zod, Pydantic, Types) ที่ใช้ควบคุมอินพุตและเอาต์พุต
-- **Test Cases & Scenarios**:
-  - [ ] **Happy Path**: [คำอธิบายสถานการณ์กรณีทำงานถูกต้อง และผลที่คาดหวัง]
-  - [ ] **Error Handling**: [คำอธิบายสถานการณ์กรณีเกิดข้อผิดพลาด และผลที่คาดหวัง]
-  - [ ] **Edge Cases**: [คำอธิบายกรณีข้อมูลสุดขอบ/ค่าว่าง และผลที่คาดหวัง]
+## 5. Outputs
 
+- Ready-to-plan specification
+- Clear acceptance target for implementation and verification
+
+## 6. Next Step Guidance
+
+- Mainline recommendation: `/30-Plan`
+- If missing evidence blocks the spec: use `Research`
+
+## 7. Additional Notes
+
+- Add any extra headings below this section when useful.

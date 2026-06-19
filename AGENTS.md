@@ -1,147 +1,235 @@
 <!-- nexus-devflow:start -->
-# Nexus-DevFlow
+# Nexus-DevFlow 2.0
 
-Use Nexus-DevFlow when the user asks for DevFlow, PRP workflows, or numbered commands such as /05-Goal, /10-Brainstorm, /30-Task, /31-Plan, /32-Code, /33-Verify, /40-Test, /53-Changelog, /55-PR-Review, or /99-Help.
+Use Nexus-DevFlow when the user asks for DevFlow, stage-based workflow, running-id workspaces, or commands such as:
+
+- `/00-Discover`
+- `/10-Define`
+- `/20-Spec`
+- `/30-Plan`
+- `/40-Implement`
+- `/50-Verify`
+- `/60-Release`
+- `/70-Report`
+
+Public companion commands are not part of the numbered mainline and should not use workflow numbers:
+
+- `Goal`
+- `Brainstorm`
+- `Research`
+- `Debug`
+- `PRD`
+- `Issue-Triage`
+- `Wiki`
+- `Help`
 
 Framework root: `d:\Projects\nexus-devflow`
-Framework version: `1.4.0`
+Framework target mode: `workspace-stage-first`
+Artifact contract: `markdown-first`
 
 Before running a workflow:
+
 - Read the matching file under `d:\Projects\nexus-devflow/.agent/workflows/`.
 - Keep target project artifacts in the target project's `.workspaces` directory.
-- Use PRP CLI commands for JSON artifacts whenever possible.
+- Use stage `.md` files as the primary input/output contract.
+- Keep numbered workflows strictly on the mainline only.
 - Run validation before reporting completion.
 
+Mainline rules:
+
+1. Numbered workflows exist only for the linear mainline.
+2. Mainline numbers must move from lower to higher with no backward jump.
+3. If a command is not a true mainline state, do not give it a number.
+4. Companion commands may be suggested by a mainline workflow but do not replace that workflow.
+
 Update/check:
+
 - Check local framework: `npm run validate`
 - Check installed provider integration: inspect this managed block and compare Framework version with `d:\Projects\nexus-devflow/package.json`
 - Upgrade local checkout: check `git status --short`; if clean, pull or ask the user to approve pull; then reapply this block with the new package version.
 <!-- nexus-devflow:end -->
 
-# PRPs Specialist Agents
+# DevFlow 2.0 Operating Model
 
-## Script-First JSON Rule
-
-Agents should use PRP CLI commands for JSON artifacts whenever possible:
-
-```powershell
-npm run agent -- artifact:get {ID} {artifact}
-npm run agent -- artifact:set {ID} {artifact} {field_path} {value}
-npm run agent -- artifact:append {ID} {artifact} {field_path} {value}
-npm run agent -- plan:add-phase {ID} "{Name}"
-npm run agent -- plan:add-subtask {ID} {PHASE_ID} "{Title}"
-npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
-npm run agent -- validate {ID}
-```
-
-Use manual JSON editing only as a fallback, then run validation immediately.
-
-เอกสารนี้สรุป persona หลักที่ใช้ใน Nexus-DevFlow สำหรับทำงานแบบ agentic workflow ผ่าน `.agent` bundle
-
-## วิธีเรียกใช้งาน
+## Mainline Workflow
 
 ```text
-/90-Agent {ชื่อ_AGENT} {ไฟล์_หรือ_โฟลเดอร์_เป้าหมาย}
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
 ```
 
-ตัวอย่าง:
+Each mainline stage owns one primary markdown contract file inside the task workspace.
+
+Example workspace layout:
 
 ```text
-/90-Agent requirements-engineer .workspaces/specs/007/spec.md
+.workspaces/
+  012-auth-refactor/
+    00-discover/
+      discover.md
+    10-define/
+      define.md
+    20-spec/
+      spec.md
+    30-plan/
+      plan.md
+    40-implement/
+      implement.md
+    50-verify/
+      verify.md
+    60-release/
+      release.md
+    70-report/
+      report.md
+      report.html
 ```
 
-## 1. Requirements & Planning
+## Running ID Rule
 
-ใช้ในขั้นตอน `/30-Task`, `/31-Plan`, `/12-PRD`
+- Keep a running ID for each work item.
+- Use the running ID as the stable reference across all stage folders and files.
+- The workflow number is the stage state.
+- The running ID is the work reference.
 
-| Agent | บทบาท | หน้าที่หลัก |
+## Markdown Contract Rule
+
+- Stage `.md` files are the only user-facing handoff contract in DevFlow 2.0.
+- Context that used to live in JSON must move into stage `.md` files.
+- Every stage uses a required template contract with fixed headings.
+- Every template must also end with an open section so AI or the user can add custom headings when needed.
+
+## Public Companion Commands
+
+These are the public non-mainline commands that users may call directly:
+
+| Command | Use when | Typical attachment point |
 | :--- | :--- | :--- |
-| `prp-core-planner` | ผู้วางแผนหลัก | วิเคราะห์โค้ดและสร้าง implementation plan |
-| `requirements-engineer` | วิศวกรข้อกำหนด | ตรวจและขัดเกลา `spec.md` ก่อนเริ่มงาน |
-| `prp-core-prd-architect` | ผู้ออกแบบ PRD | ร่าง PRD จากไอเดียเริ่มต้น |
-| `orchestrator` | ผู้ประสานงานหลัก | ประสาน agent หลายตัวในงานซับซ้อน |
+| `Goal` | The user starts with a broad goal and still needs routing | Before `00-Discover` or before a running ID exists |
+| `Brainstorm` | The task is still fuzzy or has multiple directions | `00-Discover`, `10-Define` |
+| `Research` | More source, codebase, or external knowledge is needed | `00-Discover`, `10-Define`, `20-Spec` |
+| `Debug` | Root-cause investigation is needed | `40-Implement`, `50-Verify` |
+| `PRD` | Product framing is needed before a stable spec exists | `10-Define`, `20-Spec` |
+| `Issue-Triage` | Work starts from an issue intake rather than a stage artifact | Before `10-Define` or `Debug` |
+| `Wiki` | Knowledge should be captured or queried | Any stage |
+| `Help` | The user needs routing or explanation | Any stage |
 
-## 2. Research & Exploration
+## Internal Companion Surfaces
 
-ใช้ในขั้นตอน `/11-Research`
+These files still exist because their prompt bodies contain useful behavior, but they should be treated as internal support surfaces or future skill/agent candidates rather than first-choice public commands:
 
-| Agent | บทบาท | หน้าที่หลัก |
+- `Preview`
+- `Simplify`
+- `Spec-Research`
+- `Competitor`
+- `Roadmap`
+- `Spec-Orchestrate`
+- `Test`
+- `QA-Orchestrate`
+- `Followup`
+- `Human-Approve`
+- `Human-Feedback`
+- `Human-ReCheck`
+- `Human-Reject`
+- `Commit`
+- `PR`
+- `PR-Review`
+- `PR-Followup`
+- `Merge`
+- `Deploy`
+- `Changelog`
+- `Insight`
+- `Agent`
+
+## Workflow, Agent, Skill Boundary
+
+| Type | Meaning | Rule |
 | :--- | :--- | :--- |
-| `codebase-explorer` | นักสำรวจโค้ด | ค้นหาโค้ดและ pattern พร้อมวิเคราะห์ architecture, data flow และความสัมพันธ์ระหว่างโมดูล |
-| `web-researcher` | นักวิจัยข้อมูล | ค้นคว้า API, best practices และแหล่งอ้างอิง |
+| Workflow | A public stage on the mainline | Owns stage state, required input/output, and next-step guidance |
+| Agent | An accountable specialist role | Can be called directly or from a workflow |
+| Skill | A reusable method or discipline | Can be loaded by workflows, agents, or users |
+| Public companion command | A reusable user-facing command outside the numbered mainline | Supports the active stage but does not replace it |
+| Internal companion surface | A retained prompt surface that may later move into a skill or agent | Keep behavior, but do not treat it as the preferred public entry point |
 
-## 3. Implementation & Development
+## Agent Catalog
 
-ใช้ในขั้นตอน `/32-Code`, `/90-Agent`
+### 1. Discovery, Definition, and Planning
 
-| Agent | บทบาท | หน้าที่หลัก |
+Use mainly in `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`
+
+| Agent | Role | Primary responsibility |
 | :--- | :--- | :--- |
-| `prp-core-coder` | นักพัฒนาหลัก | เขียนโค้ดตามแผนและทำ validation loop |
-| `backend-specialist` | ผู้เชี่ยวชาญ Backend | ออกแบบ API, database และ server logic |
-| `frontend-specialist` | ผู้เชี่ยวชาญ Frontend | พัฒนา UI/UX และ frontend implementation |
-| `database-architect` | ผู้ออกแบบฐานข้อมูล | ออกแบบ schema, index และ query |
+| `prp-core-planner` | Planner | Build plans and implementation structure |
+| `requirements-engineer` | Requirements analyst | Refine goals, scope, and requirements |
+| `prp-core-prd-architect` | Product/spec architect | Help shape requirement documents when needed |
+| `orchestrator` | Orchestrator | Coordinate multi-agent work |
+| `prp-core-codebase-assistant` | Codebase assistant | Answer architecture and codebase questions |
+| `codebase-explorer` | Explorer | Find files, patterns, flows, and references |
+| `web-researcher` | Researcher | External docs, APIs, best practices, and citations |
 
-## 4. Quality & Debugging
+### 2. Implementation
 
-ใช้ในขั้นตอน `/33-Verify`, `/20-Debug`, `/40-Test`
+Use mainly in `/40-Implement`
 
-| Agent | บทบาท | หน้าที่หลัก |
+| Agent | Role | Primary responsibility |
 | :--- | :--- | :--- |
-| `test-engineer` | วิศวกรทดสอบ | เขียน unit/integration tests |
-| `prp-core-debugger` | ผู้เชี่ยวชาญ RCA | วิเคราะห์ root cause ของบั๊ก |
-| `code-reviewer` | ผู้ตรวจโค้ดอาวุโส | ตรวจคุณภาพ ความเสี่ยง และมาตรฐานโปรเจค |
-| `security-auditor` | ผู้ตรวจความปลอดภัย | ตรวจช่องโหว่และ logic risk |
-| `performance-engineer` | ผู้ปรับประสิทธิภาพ | วิเคราะห์ bottleneck ด้าน CPU, memory และ latency |
+| `prp-core-coder` | Implementer | Make the code changes |
+| `backend-specialist` | Backend specialist | API, business logic, server architecture |
+| `frontend-specialist` | Frontend specialist | UI/UX and frontend implementation |
+| `database-architect` | Database architect | Schema, indexes, query design |
 
-### 4.1 9arm-Skills Discipline Layer
+### 3. Verification and Hardening
 
-ใช้เป็นหลักคิดเสริมใน flow เดิม ไม่ใช่ agent ที่มาแทน flow เดิม
+Use mainly in `/50-Verify`
 
-Credit เดิม:
-
-- `9arm-skills`
-- `thananon/9arm-skills`
-- https://github.com/thananon/9arm-skills
-
-| 9arm Skill | ใช้กับ Flow | หน้าที่หลัก |
+| Agent | Role | Primary responsibility |
 | :--- | :--- | :--- |
-| `debug-mantra` | `/20-Debug` | บังคับ reproduce, trace fail path, falsify hypothesis, cross-reference breadcrumbs ก่อนเสนอ fix |
-| `post-mortem` | `/54-Insight` | เปลี่ยน bug/incident ที่แก้และ validate แล้วให้เป็นความรู้ทีม |
-| `scrutinize` | `/55-PR-Review`, `/90-Agent code-reviewer` | ตรวจ intent, ทางเลือกที่เล็กกว่า, actual code path, และ risk ก่อน approve |
-| `management-talk` | `/51-PR`, `/53-Changelog`, `/99-Help` | แปลงรายละเอียดวิศวกรรมเป็น status/impact/owner/next step ที่ stakeholder อ่านเข้าใจ |
+| `test-engineer` | Test engineer | Write and run test coverage plans |
+| `prp-core-debugger` | Debugger | Root cause analysis and fix validation |
+| `code-reviewer` | Reviewer | Quality, risk, correctness, maintainability |
+| `security-auditor` | Security auditor | Security and logic-risk review |
+| `performance-engineer` | Performance engineer | Performance bottlenecks and validation |
+| `penetration-tester` | Penetration tester | Offensive security validation when explicitly needed |
 
-### 4.2 Reusable Engineering Skills
+### 4. Release and Documentation
 
-ทักษะเหล่านี้ไม่ใช่ agent แยกแล้ว ให้เรียกผ่าน agent หรือ workflow ที่รับผิดชอบงานนั้นแทน
+Use mainly in `/60-Release`, `/70-Report`
 
-| Skill | ใช้ผ่าน |
+| Agent | Role | Primary responsibility |
+| :--- | :--- | :--- |
+| `prp-core-git-committer` | Commit specialist | Commit preparation and git packaging |
+| `prp-core-git-pr-maker` | PR specialist | Pull request preparation |
+| `documentation-maintainer` | Documentation maintainer | Doc updates and impact notes |
+| `devops-engineer` | DevOps engineer | Deploy, release, and environment readiness |
+| `coach-guideline` | Guide | Help wording, onboarding, and process explanation |
+
+## Reusable Skills
+
+These are not numbered workflows and should be invoked through the active stage, the responsible agent, or by the user directly when needed.
+
+| Skill | Typical use |
 | :--- | :--- |
-| `code-simplification` | `prp-core-coder`, `code-reviewer`, `/41-Simplify` |
-| `type-design` | `backend-specialist`, `frontend-specialist`, `database-architect`, `code-reviewer` |
-| `silent-failure-audit` | `code-reviewer`, `test-engineer`, `backend-specialist`, `security-auditor` |
+| `brainstorming` | Before locking direction in Discover or Define |
+| `preview-local-check` | During Implement or Verify for local preview and smoke checks |
+| `code-simplification` | During Implement or Verify |
+| `spec-research` | During Spec or Verify when integrations need source-backed confirmation |
+| `competitor-analysis` | During PRD, Define, or Roadmap when market context is needed |
+| `roadmap-strategy` | During strategic planning when roadmap work should stay outside the numbered mainline |
+| `spec-orchestration` | During complex discovery or framing when multiple support lanes are needed before spec |
+| `test-execution-and-coverage` | During Implement or Verify for explicit testing evidence |
+| `verification-orchestration` | During Verify when multi-lane QA coordination is needed |
+| `pr-review-analysis` | During Verify or Release when a structured findings-first review is needed |
+| `review-followup-routing` | After review, QA, or human feedback when existing work must be extended or classified |
+| `insight-capture` | After Verify, debugging, or release work when lessons should become durable knowledge |
+| `human-review-decisions` | After Verify when a human approval, feedback, rejection, or recheck gate is needed |
+| `release-git-operations` | During Release for commit, PR, merge, deploy, and changelog support |
+| `type-design` | During Define, Spec, or Verify |
+| `silent-failure-audit` | During Verify |
+| `workflow-documentation-sync` | When updating framework docs and workflow docs |
+| `intelligent-routing` | When deciding which agent or skill to call next |
+| `specialist-agent-routing` | When the user wants direct specialist judgment on a bounded target |
+| `planning-and-task-breakdown` | During Plan |
+| `shipping-and-launch` | During Release |
 
-## 5. Git & Documentation
+## Deprecation Notes
 
-ใช้ในขั้นตอน `/50-Commit`, `/51-PR`
-
-| Agent | บทบาท | หน้าที่หลัก |
-| :--- | :--- | :--- |
-| `prp-core-git-committer` | ผู้เชี่ยวชาญ Git | ช่วยเลือกไฟล์และเขียน commit message |
-| `prp-core-git-pr-maker` | ผู้จัดการ PR | สรุปข้อมูลและสร้าง pull request |
-| `documentation-maintainer` | ผู้ดูแลเอกสาร | วิเคราะห์ผลกระทบต่อเอกสารจากการเปลี่ยนโค้ด |
-
-## 6. Support & Help
-
-ใช้ในขั้นตอน `/99-Help`
-
-| Agent | บทบาท | หน้าที่หลัก |
-| :--- | :--- | :--- |
-| `coach-guideline` | ที่ปรึกษาหลัก | แนะนำ workflow และคำสั่งที่เหมาะสม |
-| `prp-core-codebase-assistant` | ผู้ช่วยโค้ดเบส | ตอบคำถามเกี่ยวกับโครงสร้างและ logic ในโปรเจค |
-| `devops-engineer` | วิศวกร DevOps | ดูแล Docker, pipeline, deployment และ server readiness |
-
-## หมายเหตุ
-
-- `.agent` คือ bundle หลักของ framework
-- ใช้ `npm run validate` เพื่อตรวจความพร้อมของ framework
-- ใช้ `npm run agent -- <command>` เพื่อเรียก PRP CLI จาก Node
+- Dashboard-centered flow is legacy in DevFlow 2.0.
+- Old numbered commands that are not mainline should be treated as retired legacy references, not active workflow choices.

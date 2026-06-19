@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/55-PR-Review"
+source_workflow: "PR-Review"
 related_task: null
 related_files: []
 tags:

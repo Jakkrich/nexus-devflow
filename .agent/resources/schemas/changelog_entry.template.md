@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/53-Changelog"
+source_workflow: "Changelog"
 related_task: null
 related_files: []
 tags:

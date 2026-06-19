@@ -1,4 +1,4 @@
----
+﻿---
 name: prp-core-planner
 description: |
   Original architecture from prp-core: Focuses on planning through codebase exploration and systematic research.
@@ -14,16 +14,11 @@ Transform "$ARGUMENTS" into a battle-tested implementation plan through systemat
 
 **Execution Order**: CODEBASE FIRST, RESEARCH SECOND. Solutions must fit existing patterns before introducing new ones.
 
-**Script-First Artifact Contract**: For PRPs task artifacts, use the `json-artifact-handling` skill. Do not hand-write full JSON artifacts. Create and update planning JSON with:
-- `npm run agent -- artifact:set|append|merge ...`
-- `npm run agent -- plan:add-phase ...`
-- `npm run agent -- plan:add-subtask ...`
-- `npm run agent -- plan:validate {ID}`
-- `npm run agent -- validate {ID}`
+**Stage-First Artifact Contract**: `plan.md` is the primary planning artifact in DevFlow 2.0. Legacy JSON planning files may still exist during migration, but they should not define the new architecture.
 
 **Agent Strategy**: Use specialized agents for intelligence gathering:
-- `prp-core:codebase-explorer` — finds WHERE code lives, extracts implementation patterns, and traces HOW integration points work
-- `prp-core:web-researcher` — strategic web research with citations and gap analysis
+- `prp-core:codebase-explorer` โ€” finds WHERE code lives, extracts implementation patterns, and traces HOW integration points work
+- `prp-core:web-researcher` โ€” strategic web research with citations and gap analysis
 
 Complete unified codebase discovery first, then external research second.
 </objective>
@@ -34,7 +29,7 @@ Complete unified codebase discovery first, then external research second.
 - **Does Not Own:** product intent, requirement approval, implementation, specialist execution coordination, or final code review.
 - **Input:** an approved PRD or task-ready specification plus relevant codebase evidence.
 - **Output:** an implementation-ready plan that follows existing patterns and defines executable validation.
-- **Handoff:** send requirement gaps to `requirements-engineer`, complex multi-agent coordination to `orchestrator`, and an approved plan to `prp-core-coder` or `/32-Code`.
+- **Handoff:** send requirement gaps to `requirements-engineer`, complex multi-agent coordination to `orchestrator`, and an approved plan to `prp-core-coder` or `/40-Implement`.
 
 <context>
 Project rules: read `AGENTS.md`, `.agent` workflow docs, and local project guidance before planning.
@@ -133,13 +128,13 @@ So that <benefit/value>
 - [ ] Complexity assessment has rationale
 - [ ] Affected systems identified
 
-**GATE**: If requirements are AMBIGUOUS → STOP and ASK user for clarification before proceeding.
+**GATE**: If requirements are AMBIGUOUS โ’ STOP and ASK user for clarification before proceeding.
 
 ---
 
 ## Phase 2: EXPLORE - Codebase Intelligence
 
-For complex plans, recommend specialist `/90-Agent` calls for the user to run before finalizing the plan. If the IDE supports delegated agents and the user explicitly asked for orchestration, these can be run in parallel; otherwise keep the workflow manual and step-by-step.
+For complex plans, recommend specialist `Agent` calls for the user to run before finalizing the plan. If the IDE supports delegated agents and the user explicitly asked for orchestration, these can be run in parallel; otherwise keep the workflow manual and step-by-step.
 
 ### Unified Agent: `prp-core:codebase-explorer`
 
@@ -148,7 +143,7 @@ Finds WHERE code lives, extracts implementation patterns, and traces HOW integra
 Recommended manual command:
 
 ```text
-/90-Agent codebase-explorer {target}
+Agent codebase-explorer {target}
 ```
 
 Prompt to provide:
@@ -187,11 +182,11 @@ Record the Explorer findings in a unified discovery table:
 | LOGGING  | `src/core/logging/index.ts:1-10`            | getLogger pattern    | `const logger = getLogger("domain")`      |
 | TESTS    | `src/features/X/tests/service.test.ts:1-30` | describe/it blocks   | `describe("service", () => {`             |
 | TYPES    | `src/features/X/models.ts:1-20`             | Drizzle inference    | `type Thing = typeof things.$inferSelect` |
-| FLOW     | `src/features/X/service.ts:40-60`           | Data transformation  | `input → validate → persist → respond`    |
+| FLOW     | `src/features/X/service.ts:40-60`           | Data transformation  | `input โ’ validate โ’ persist โ’ respond`    |
 
 **PHASE_2_CHECKPOINT:**
 
-- [ ] Codebase exploration and analysis completed, either locally or through `/90-Agent`
+- [ ] Codebase exploration and analysis completed, either locally or through `Agent`
 - [ ] At least 3 similar implementations found with file:line refs
 - [ ] Code snippets are ACTUAL (copy-pasted from codebase, not invented)
 - [ ] Integration points mapped with data flow traces
@@ -206,7 +201,7 @@ Record the Explorer findings in a unified discovery table:
 Recommended manual command when external research is needed:
 
 ```text
-/90-Agent web-researcher {research topic}
+Agent web-researcher {research topic}
 ```
 
 Prompt to provide:
@@ -255,40 +250,40 @@ Return findings with:
 **CREATE ASCII diagrams showing user experience before and after:**
 
 ```
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                              BEFORE STATE                                      ║
-╠═══════════════════════════════════════════════════════════════════════════════╣
-║                                                                               ║
-║   ┌─────────────┐         ┌─────────────┐         ┌─────────────┐            ║
-║   │   Screen/   │ ──────► │   Action    │ ──────► │   Result    │            ║
-║   │  Component  │         │   Current   │         │   Current   │            ║
-║   └─────────────┘         └─────────────┘         └─────────────┘            ║
-║                                                                               ║
-║   USER_FLOW: [describe current step-by-step experience]                       ║
-║   PAIN_POINT: [what's missing, broken, or inefficient]                        ║
-║   DATA_FLOW: [how data moves through the system currently]                    ║
-║                                                                               ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
+โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+โ•‘                              BEFORE STATE                                      โ•‘
+โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+โ•‘                                                                               โ•‘
+โ•‘   โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”            โ•‘
+โ•‘   โ”   Screen/   โ” โ”€โ”€โ”€โ”€โ”€โ”€โ–บ โ”   Action    โ” โ”€โ”€โ”€โ”€โ”€โ”€โ–บ โ”   Result    โ”            โ•‘
+โ•‘   โ”  Component  โ”         โ”   Current   โ”         โ”   Current   โ”            โ•‘
+โ•‘   โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”            โ•‘
+โ•‘                                                                               โ•‘
+โ•‘   USER_FLOW: [describe current step-by-step experience]                       โ•‘
+โ•‘   PAIN_POINT: [what's missing, broken, or inefficient]                        โ•‘
+โ•‘   DATA_FLOW: [how data moves through the system currently]                    โ•‘
+โ•‘                                                                               โ•‘
+โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                               AFTER STATE                                      ║
-╠═══════════════════════════════════════════════════════════════════════════════╣
-║                                                                               ║
-║   ┌─────────────┐         ┌─────────────┐         ┌─────────────┐            ║
-║   │   Screen/   │ ──────► │   Action    │ ──────► │   Result    │            ║
-║   │  Component  │         │    NEW      │         │    NEW      │            ║
-║   └─────────────┘         └─────────────┘         └─────────────┘            ║
-║                                   │                                           ║
-║                                   ▼                                           ║
-║                          ┌─────────────┐                                      ║
-║                          │ NEW_FEATURE │  ◄── [new capability added]          ║
-║                          └─────────────┘                                      ║
-║                                                                               ║
-║   USER_FLOW: [describe new step-by-step experience]                           ║
-║   VALUE_ADD: [what user gains from this change]                               ║
-║   DATA_FLOW: [how data moves through the system after]                        ║
-║                                                                               ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
+โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+โ•‘                               AFTER STATE                                      โ•‘
+โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+โ•‘                                                                               โ•‘
+โ•‘   โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”            โ•‘
+โ•‘   โ”   Screen/   โ” โ”€โ”€โ”€โ”€โ”€โ”€โ–บ โ”   Action    โ” โ”€โ”€โ”€โ”€โ”€โ”€โ–บ โ”   Result    โ”            โ•‘
+โ•‘   โ”  Component  โ”         โ”    NEW      โ”         โ”    NEW      โ”            โ•‘
+โ•‘   โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”         โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”            โ•‘
+โ•‘                                   โ”                                           โ•‘
+โ•‘                                   โ–ผ                                           โ•‘
+โ•‘                          โ”โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”                                      โ•‘
+โ•‘                          โ” NEW_FEATURE โ”  โ—โ”€โ”€ [new capability added]          โ•‘
+โ•‘                          โ””โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”                                      โ•‘
+โ•‘                                                                               โ•‘
+โ•‘   USER_FLOW: [describe new step-by-step experience]                           โ•‘
+โ•‘   VALUE_ADD: [what user gains from this change]                               โ•‘
+โ•‘   DATA_FLOW: [how data moves through the system after]                        โ•‘
+โ•‘                                                                               โ•‘
+โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 ```
 
 **DOCUMENT interaction changes:**
@@ -314,7 +309,7 @@ Return findings with:
 Recommended manual command:
 
 ```text
-/90-Agent codebase-explorer {suspected area}
+Agent codebase-explorer {suspected area}
 ```
 
 Prompt to provide:
@@ -338,7 +333,7 @@ Document what exists with precise file:line references. No suggestions.
 **Then ANALYZE deeply (use extended thinking if needed):**
 
 - ARCHITECTURE_FIT: How does this integrate with the existing architecture?
-- EXECUTION_ORDER: What must happen first → second → third?
+- EXECUTION_ORDER: What must happen first โ’ second โ’ third?
 - FAILURE_MODES: Edge cases, race conditions, error scenarios?
 - PERFORMANCE: Will this scale? Database queries optimized?
 - SECURITY: Attack vectors? Data exposure risks? Auth/authz?
@@ -366,7 +361,7 @@ NOT_BUILDING (explicit scope limits):
 **PHASE_5_CHECKPOINT:**
 
 - [ ] Approach aligns with existing architecture and patterns
-- [ ] Dependencies ordered correctly (types → repository → service → routes)
+- [ ] Dependencies ordered correctly (types โ’ repository โ’ service โ’ routes)
 - [ ] Edge cases identified with specific mitigation strategies
 - [ ] Scope boundaries are explicit and justified
 
@@ -376,26 +371,19 @@ NOT_BUILDING (explicit scope limits):
 
 **OUTPUT_PATH**: `.workspaces/specs/{task-id}/`
 Files to generate:
-- `plan.md` (Markdown summary)
-- `implementation_plan.json` (Dashboard source of truth)
-- `context.json` (RAG intelligence)
-- `task_logs.json` (Timeline log)
+- `plan.md` (primary planning artifact in DevFlow 2.0)
 
-Create or update JSON artifacts through PRP CLI commands. Use direct Markdown editing for `plan.md` only.
+Write the planning narrative in `plan.md` first. Keep the plan understandable from markdown alone.
 
-Recommended command pattern:
+Recommended DevFlow 2.0 pattern:
 
-```powershell
-npm run agent -- update {ID} --status planning
-npm run agent -- artifact:set {ID} context task_description "{Task summary}"
-npm run agent -- artifact:append {ID} context files_to_reference "{pattern file}"
-npm run agent -- artifact:set {ID} complexity level "{simple|standard|complex}"
-npm run agent -- artifact:set {ID} complexity approach "{Brief approach}"
-npm run agent -- plan:add-phase {ID} "{Phase Name}" --phase-id phase-1 --type implementation
-npm run agent -- plan:add-subtask {ID} phase-1 "{Subtask Title}" --description "{Detailed instruction}" --service backend --modify "src/file.ts" --pattern "src/example.ts" --verify-type command --verify-command "npm test" --verify-expected "tests pass"
-npm run agent -- plan:validate {ID}
-npm run agent -- validate {ID}
-```
+1. Draft the execution story, phases, dependencies, and validation gates in `plan.md`.
+2. Keep `plan.md` understandable on its own without requiring any dashboard or JSON viewer.
+3. Use PRP CLI commands only when task-engine state such as phases or subtasks must be synchronized.
+
+Optional task-engine synchronization command pattern:
+
+Capture planning state directly in `plan.md`: task summary, referenced files, complexity notes, phases, subtasks, and validation commands. Keep the markdown artifact self-sufficient without any runtime mutation command.
 
 **PLAN_STRUCTURE** (the template to fill and save):
 
@@ -752,9 +740,7 @@ Use Browser MCP to verify:
 
 **Files Created or Updated**:
 - `.workspaces/specs/{task-id}/plan.md`
-- `.workspaces/specs/{task-id}/implementation_plan.json`
-- `.workspaces/specs/{task-id}/context.json`
-- `.workspaces/specs/{task-id}/task_logs.json`
+- task-engine synchronization artifacts when required by the framework runtime
 
 {If from PRD:}
 **Source PRD**: `{prd-file-path}`
@@ -763,7 +749,7 @@ Use Browser MCP to verify:
 
 {If parallel phases available:}
 **Parallel Opportunity**: Phase {X} can run concurrently in a separate worktree.
-To start: create a separate task or branch and run `/31-Plan {ID}` for that phase.
+To start: create a separate task or branch and run `/30-Plan {ID}` for that phase.
 
 **Summary**: {2-3 sentence feature overview}
 
@@ -774,7 +760,7 @@ To start: create a separate task or branch and run `/31-Plan {ID}` for that phas
 - {M} files to UPDATE
 - {K} total tasks
 
-**Next Step**: To execute, run: `/32-Code {ID}`
+**Next Step**: To execute, run: `/40-Implement {ID}`
 ```
 
 </output>
@@ -789,8 +775,8 @@ To start: create a separate task or branch and run `/31-Plan {ID}` for that phas
 - [ ] Integration points mapped with specific file paths
 - [ ] Gotchas captured with mitigation strategies
 - [ ] Every task has at least one executable validation command
-- [ ] `npm run agent -- plan:validate {ID}` passes
-- [ ] `npm run agent -- validate {ID}` passes
+- [ ] `plan.md` matches the required template contract
+- [ ] `npm run validate` passes when framework files or shared templates changed
 
 **IMPLEMENTATION_READINESS:**
 
@@ -829,3 +815,4 @@ To start: create a separate task or branch and run `/31-Plan {ID}` for that phas
 **VALIDATION_DEFINED**: Every task has executable verification command
 **UX_DOCUMENTED**: Before/After transformation is visually clear with data flows
 </success_criteria>
+

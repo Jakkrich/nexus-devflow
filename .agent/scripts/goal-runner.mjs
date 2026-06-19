@@ -129,7 +129,7 @@ function routeGoal(goal, override = '') {
     return {
       flow: 'Brainstorm Flow',
       reason: 'Goal asks for idea exploration before committing to a task.',
-      nextCommands: ['/10-Brainstorm "{goal}"'],
+      nextCommands: ['Brainstorm "{goal}"'],
     };
   }
 
@@ -137,7 +137,7 @@ function routeGoal(goal, override = '') {
     return {
       flow: 'PRD / Spec Flow',
       reason: 'Goal is requirements-heavy and should produce a spec before implementation.',
-      nextCommands: ['/12-PRD "{goal}"', '/18-Spec-Orchestrate {ID}'],
+      nextCommands: ['PRD "{goal}"', 'Spec-Orchestrate {ID}'],
     };
   }
 
@@ -145,23 +145,23 @@ function routeGoal(goal, override = '') {
     return {
       flow: 'RCA / Debug Flow',
       reason: 'Goal describes a failure or investigation path.',
-      nextCommands: ['/20-Debug "{goal}"'],
+      nextCommands: ['Debug "{goal}"'],
     };
   }
 
   return {
     flow: 'DevFlow Task Execution',
-    reason: 'Goal appears actionable as a standard task that can move through Task -> Plan -> Code -> Verify.',
-    nextCommands: ['/30-Task {next_id} "{goal}"', '/31-Plan {ID}', '/32-Code {ID}', '/33-Verify {ID}'],
+    reason: 'Goal appears actionable as a standard DevFlow 2.0 run that can move through Discover -> Define -> Spec -> Plan -> Implement -> Verify.',
+    nextCommands: ['/00-Discover "{goal}"', '/10-Define {ID}', '/20-Spec {ID}', '/30-Plan {ID}', '/40-Implement {ID}', '/50-Verify {ID}'],
   };
 }
 
 function flowCommands(flow) {
   const normalized = flow.toLowerCase();
-  if (normalized.includes('brainstorm')) return ['/10-Brainstorm "{goal}"'];
-  if (normalized.includes('prd') || normalized.includes('spec')) return ['/12-PRD "{goal}"'];
-  if (normalized.includes('debug') || normalized.includes('rca')) return ['/20-Debug "{goal}"'];
-  return ['/30-Task {next_id} "{goal}"', '/31-Plan {ID}', '/32-Code {ID}', '/33-Verify {ID}'];
+  if (normalized.includes('brainstorm')) return ['Brainstorm "{goal}"'];
+  if (normalized.includes('prd') || normalized.includes('spec')) return ['PRD "{goal}"'];
+  if (normalized.includes('debug') || normalized.includes('rca')) return ['Debug "{goal}"'];
+  return ['/00-Discover "{goal}"', '/10-Define {ID}', '/20-Spec {ID}', '/30-Plan {ID}', '/40-Implement {ID}', '/50-Verify {ID}'];
 }
 
 function estimateComplexity(goal) {

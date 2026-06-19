@@ -48,7 +48,7 @@ Quick-start scaffolding for new projects. **Read the matching template only!**
 
 | Agent | Role |
 |-------|------|
-| `project-planner` | Task breakdown, dependency graph |
+| `prp-core-planner` | Task breakdown, dependency graph |
 | `frontend-specialist` | UI components, pages |
 | `backend-specialist` | API, business logic |
 | `database-architect` | Schema, migrations |

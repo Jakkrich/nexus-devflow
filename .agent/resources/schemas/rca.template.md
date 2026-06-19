@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/20-Debug"
+source_workflow: "Debug"
 related_task: null
 related_files: []
 tags:

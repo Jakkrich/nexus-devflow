@@ -1,0 +1,107 @@
+﻿---
+description: Release stage in DevFlow 2.0 - package verified work for delivery, merge, PR, deployment, or handoff.
+argument-hint: "{running-id or workspace path}"
+---
+
+# Phase 60: Release
+
+$ARGUMENTS
+
+Package verified work for delivery after verification has passed. This stage turns technical completion into release-ready communication and handoff.
+
+## Usage
+
+```text
+/60-Release {running-id or workspace path}
+```
+
+Use this when:
+
+- verification has passed
+- the work needs a release-ready summary or handoff packet
+- downstream stakeholders need delivery notes instead of raw implementation detail
+
+## Markdown-First Contract
+
+Write the primary stage artifact to:
+
+```text
+.workspaces/specs/{ID}-{slug}/60-release.md
+```
+
+using:
+
+```text
+.agent/resources/schemas/release.template.md
+```
+
+## Process
+
+### 1. Load Verified Context
+
+Read:
+
+- `50-verify.md`
+- `40-implement.md`
+- `20-spec.md`
+- any PR, deploy, merge, or handoff notes already captured
+
+### 2. Package The Release Outcome
+
+Summarize:
+
+- what is being delivered
+- what changed in user or system terms
+- what state the work is in for PR, deploy, merge, or handoff
+- what follow-up items remain
+
+### 3. Write `60-release.md`
+
+Keep the language understandable for someone who did not do the work.
+
+Prefer clear release-note style wording:
+
+- what was added
+- what changed
+- what was fixed
+- what is intentionally deferred
+
+### 4. Confirm Readiness
+
+If release readiness changes because unresolved issues are found:
+
+- route back to `/50-Verify` or `/40-Implement`
+
+Do not package unfinished work as release-ready through wording tricks.
+
+## Output
+
+Report:
+
+- delivered scope
+- release, PR, merge, deploy, or handoff state
+- follow-up items
+- recommended next step
+
+## Relationship To DevFlow 2.0
+
+- Classification: Mainline workflow
+- Previous state: `/50-Verify`
+- Next state: `/70-Report` when release packaging or handoff is complete
+- Common companion commands: `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
+
+## Sources
+
+- `AGENTS.md`
+- `docs/workspace-artifacts.md`
+- `.agent/resources/schemas/release.template.md`
+- Related commands: `/50-Verify`, `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `/70-Report`
+
+## Next Workflow Recommendation
+
+- **Primary**: `/70-Report`
+- **Why**: The work is packaged and ready for the final standardized summary.
+- **Alternatives**:
+  - `/50-Verify` - choose this when release readiness becomes uncertain.
+  - `/40-Implement` - choose this when additional fixes are needed before release can proceed.
+

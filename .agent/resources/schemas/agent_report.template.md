@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Agent Name}"
-source_workflow: "/90-Agent"
+source_workflow: "Agent"
 related_task: null
 related_files: []
 tags:
