@@ -7,7 +7,7 @@ status: "active"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/54-Insight"
+source_workflow: "Insight"
 related_task: null
 related_files: []
 tags:
@@ -31,7 +31,7 @@ This file records lessons learned from collaboration between humans and AI on th
 - **Date**: [YYYY-MM-DD]
 - **Task / Reference**: [Task ID/Ref]
 - **Category**: [Category]
-- **Source**: [Where it came from: /34-Human, /20-Debug, /11-Research, or Manual]
+- **Source**: [Where it came from: human review workflow, Debug, Research, or Manual]
 - **Source Discipline**: [Optional: e.g. 9arm-skills/post-mortem, credit: thananon/9arm-skills]
 - **Context**: [The problem encountered or what was discovered]
 - **Lesson**: [The reusable lesson]

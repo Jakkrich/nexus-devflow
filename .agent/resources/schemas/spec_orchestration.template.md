@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "Spec Orchestrator Agent"
-source_workflow: "/18-Spec-Orchestrate"
+source_workflow: "Spec-Orchestrate"
 related_task: null
 related_files: []
 tags:
@@ -22,7 +22,7 @@ metadata_version: 1
 
 # Spec Orchestration Report: {Topic} #doc/report #report/research
 
-> **Source Trigger**: `/18-Spec-Orchestrate`
+> **Source Trigger**: `Spec-Orchestrate`
 > **Orchestrator**: Spec Orchestrator Agent
 > **Date**: {Date}
 
@@ -36,10 +36,10 @@ metadata_version: 1
 
 To assemble the final requirements, the following workflows are recommended in sequential order:
 
-1. **`/15-Spec-Research`**: Research integrations first [Links / Context]
-2. **`/16-Competitor`**: Research competitor gaps and pain points [Context]
-3. **`/12-PRD`**: Synthesize findings into a formal product spec
-4. **`/30-Task`**: Initialize task tracking workspaces
+1. **`Spec-Research`**: Research integrations first [Links / Context]
+2. **`Competitor`**: Research competitor gaps and pain points [Context]
+3. **`PRD`**: Synthesize findings into a formal product spec
+4. **`/00-Discover`**: Anchor the run and create the workspace before definition/spec work
 
 ## 3. Spec Critic Analysis #section/findings
 

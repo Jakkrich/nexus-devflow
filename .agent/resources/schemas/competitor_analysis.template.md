@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/16-Competitor"
+source_workflow: "Competitor"
 related_task: null
 related_files: []
 tags:
@@ -25,7 +25,7 @@ sources_count: 0
 
 # Competitor Analysis Report: {Topic} #doc/research #report/research
 
-> **Source Trigger**: `/16-Competitor`
+> **Source Trigger**: `Competitor`
 > **Date**: {Date}
 
 ## 1. Product Context And Target Market #section/context
@@ -50,8 +50,8 @@ sources_count: 0
 
 ## 4. Strategy And Next Steps #section/recommendations
 
-- **PRD Action Items**: [Key features to document in `/12-PRD`]
-- **Roadmap Integration**: [Suggested phase or priority under `/17-Roadmap`]
+- **PRD Action Items**: [Key features to document in `PRD`]
+- **Roadmap Integration**: [Suggested phase or priority under `Roadmap`]
 
 ## 5. Sources #section/sources
 

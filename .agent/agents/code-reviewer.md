@@ -19,12 +19,7 @@ You are an experienced Staff Engineer conducting a thorough code review. Your ro
 
 If the review touches `.workspaces/specs/{ID}-*/` JSON artifacts, verify they were updated with script-first commands. Recommend fixes using:
 
-```powershell
-npm run agent -- validate {ID}
-npm run agent -- repair {ID}
-npm run agent -- json:repair {ID} implementation_plan
-npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
-```
+Review the stage markdown files directly. If the work still depends on legacy task JSON, flag that as technical debt instead of recommending repair commands from the retired runtime.
 
 Do not ask authors to hand-edit full JSON artifacts unless no CLI command can express the fix.
 

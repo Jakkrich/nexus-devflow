@@ -1,4 +1,4 @@
----
+﻿---
 name: 9arm-skills/debug-mantra
 description: Use during debugging and RCA. Requires reproduction, real fail-path tracing, hypothesis falsification, and breadcrumb cross-reference before proposing a fix.
 source_pack: 9arm-skills
@@ -71,7 +71,7 @@ Keep a breadcrumb ledger so the investigation can be audited later:
 
 ## Nexus-DevFlow Output
 
-When used by `/20-Debug`, preserve the existing RCA output contract:
+When used by `Debug`, preserve the existing RCA output contract:
 
 - inspect `.agent/resources/schemas/rca.template.md`
 - write `.workspaces/debug/rca-{slug}.md`
@@ -83,3 +83,4 @@ Do not replace the RCA template with a custom 9arm-only format.
 ## Hard Stop
 
 If there is no reproduction, no trace, and no falsified hypothesis, the correct output is an investigation plan, not a fix.
+

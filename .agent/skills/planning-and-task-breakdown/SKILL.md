@@ -24,6 +24,8 @@ Decompose work into small, verifiable tasks with explicit acceptance criteria. G
 - You need to communicate scope to a human
 - The implementation order isn't obvious
 
+In DevFlow 2.0, this skill primarily supports `/30-Plan`.
+
 **When NOT to use:** Single-file changes with obvious scope, or when the spec already contains well-defined tasks.
 
 ## The Planning Process
@@ -147,13 +149,12 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 - It touches two or more independent subsystems (e.g., auth and billing)
 - You find yourself writing "and" in the task title (a sign it is two tasks)
 
-## PRPs Dashboard Synchronization
+## DevFlow 2.0 Stage Contract
 
-To maintain compatibility with the **PRPs Dashboard**, every plan must generate/update the following files in `.workspaces/specs/{ID}/`:
+In DevFlow 2.0, every plan must remain understandable from markdown alone inside `.workspaces/specs/{ID}-*/`.
 
-1. **`plan.md`**: The markdown plan following the template below.
-2. **`implementation_plan.json`**: The central state hub for the Dashboard Kanban, based on [implementation_plan.template.json](file:///d:/ramasri/.agent/resources/schemas/implementation_plan.template.json).
-3. **`task_logs.json`**: Initialize or append the planning phase start based on [task_logs.template.json](file:///d:/ramasri/.agent/resources/schemas/task_logs.template.json).
+1. **`plan.md`**: The primary planning artifact following the template below.
+2. The markdown plan must still work even if no dashboard or JSON reader is available.
 
 ## Plan Document Template
 

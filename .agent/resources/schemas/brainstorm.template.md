@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/10-Brainstorm"
+source_workflow: "Brainstorm"
 related_task: null
 related_files: []
 tags:
@@ -24,7 +24,7 @@ recommended_option: null
 
 # Brainstorming Report: {Topic} #doc/report #report/research
 
-> **Source Trigger**: `/10-Brainstorm`
+> **Source Trigger**: `Brainstorm`
 > **Date**: {Date}
 > **Target Goal**: {Goal description}
 
@@ -79,9 +79,10 @@ recommended_option: null
 
 ## 4. Next Suggested Actions #section/followup
 
-- [ ] Run `/11-Research` to investigate specific technical details of the chosen option.
-- [ ] Run `/12-PRD` to formulate a product requirement document.
-- [ ] Run `/30-Task` to initialize the tracking workspace.
+- [ ] Run `Research` to investigate specific technical details of the chosen option.
+- [ ] Run `PRD` to formulate a product requirement document.
+- [ ] Run `/00-Discover` to anchor the request and create the running workspace.
+- [ ] Run `/10-Define` if the direction is already stable enough to lock scope.
 
 ## 5. Sources #section/sources
 

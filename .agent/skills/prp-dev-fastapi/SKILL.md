@@ -82,18 +82,18 @@ class BaseRepository(Generic[ModelType, CreateSchema, UpdateSchema]):
 ## 4. 🔄 PRP Workflow Integration (Pure Agentic)
 For each Task, the Agent must adhere to these principles:
 
-### Phase: Planning (/02-Plan)
+### Phase: Planning (/30-Plan)
 - Designate the files to be created/modified in the `File & Directory Index`.
 - Formulate a comprehensive `Validation Loop`:
     - **Step 1**: Lint & Type Check (`ruff`, `mypy`)
     - **Step 2**: Unit Test (`pytest`)
     - **Step 3**: Integration Test (Start the server and `curl` or use `httpx`)
 
-### Phase: Code (/03-Code)
-- Proceed with Subtasks sequentially and update the status in `implementation_plan.json` instantly.
+### Phase: Implement (/40-Implement)
+- Proceed with subtasks sequentially and update `implement.md` as the primary progress record.
 - When producing a new Endpoint, consistently generate the corresponding Pydantic Schema and Test simultaneously.
 
-### Phase: Verify (/04-Verify)
+### Phase: Verify (/50-Verify)
 - Execute all commands outlined in the `Validation Loop`.
 - Should an Error emerge, the AI must diagnose and rectify it promptly (Fix-Forward).
 
@@ -103,7 +103,7 @@ For each Task, the Agent must adhere to these principles:
 - **Framework**: Utilize `pytest` alongside `pytest-asyncio`.
 - **Mocking**: Adopt `unittest.mock` or `pytest-mock` for External services.
 - **Async Client**: Use `httpx.AsyncClient` to dispatch Requests to FastAPI.
-- **Evidence**: Document passed outcomes in `qa_report.md` to instill confidence for a human review.
+- **Evidence**: Document passed outcomes in `verify.md` as the primary verification record.
 
 ---
 

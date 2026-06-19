@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/17-Roadmap"
+source_workflow: "Roadmap"
 related_task: null
 related_files: []
 tags:
@@ -19,7 +19,7 @@ aliases:
 summary: "Roadmap for {Project Name}."
 metadata_version: 1
 phase_count: 0
-feature_count: 0
+focus_count: 0
 ---
 
 # Roadmap: {Project Name} #doc/roadmap #status/draft
@@ -42,11 +42,11 @@ feature_count: 0
 |---|---|---|---|
 | {Phase} | {Theme} | {Outcome} | {Evidence} |
 
-## 4. Prioritized Features #section/details
+## 4. Current Focus #section/details
 
-| Priority | Feature | Rationale | Source |
+| Priority | Focus Item | Rationale | Source |
 |---|---|---|---|
-| {Priority} | {Feature} | {Rationale} | {Source} |
+| {Priority} | {Focus Item} | {Rationale} | {Source} |
 
 ## 5. Risks And Dependencies #section/risks
 

@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/52-Deploy"
+source_workflow: "Deploy"
 related_task: null
 related_files: []
 tags:
@@ -24,7 +24,7 @@ risk_level: "medium"
 
 # Production Deployment And Pre-Flight Report #doc/report #report/release
 
-> **Source Trigger**: `/52-Deploy`
+> **Source Trigger**: `Deploy`
 > **Target Environment**: {e.g. Staging, Production}
 > **Timestamp**: {Timestamp}
 

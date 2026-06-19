@@ -22,7 +22,7 @@ function skillContent(root) {
   return [
     '---',
     'name: nexus-devflow',
-    'description: Use when the user asks for Nexus-DevFlow, DevFlow, PRP workflows, reusable/global Codex workflows, checking or updating the Codex global install, or numbered workflow commands such as /05-Goal, /30-Task, /31-Plan, /32-Code, /33-Verify, /40-Test, /50-Commit, /55-PR-Review, or /99-Help.',
+    'description: Use when the user asks for Nexus-DevFlow, DevFlow 2.0, reusable/global Codex workflows, checking or updating the Codex global install, or stage commands such as /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Release, /70-Report, or companion commands such as Help.',
     '---',
     '',
     '# Nexus-DevFlow for Codex',
@@ -39,7 +39,7 @@ function skillContent(root) {
     '',
     '- If the user mentions a numbered workflow command, read the matching file under `' + path.join(root, '.agent', 'workflows') + '`.',
     '- If the user asks which workflow to use, read `' + path.join(root, '.agent', 'workflows', '99-Help.md') + '` first.',
-    '- If the user asks for a goal-first flow, read `' + path.join(root, '.agent', 'workflows', '05-Goal.md') + '`.',
+    '- If the user asks for a goal-first flow, route them through Discover or Help first unless a local extension defines another entry point.',
     "- Keep target project artifacts in the target project's `.workspaces` folder. Do not write task artifacts into the Nexus-DevFlow framework repo unless the framework itself is the target.",
     '- Prefer the target project commands for verification, then use Nexus-DevFlow validation commands only when the framework is installed or linked into that project.',
     '',
@@ -67,7 +67,6 @@ function skillContent(root) {
     'npm run codex:update-global',
     'npm run codex:update-global:pull',
     'npm run validate',
-    'npm run agent -- --help',
     '```',
     ''
   ].join('\n');
@@ -80,7 +79,7 @@ function updateGlobalAgents(root) {
     markerStart,
     '# Nexus-DevFlow Global Workflow',
     '',
-    'When the user asks for Nexus-DevFlow, DevFlow, PRP workflows, checking/updating the Codex global install, or numbered commands like /05-Goal, /30-Task, /31-Plan, /32-Code, /33-Verify, /40-Test, /50-Commit, /55-PR-Review, or /99-Help, use the global Codex skill `nexus-devflow`.',
+    'When the user asks for Nexus-DevFlow, DevFlow 2.0, checking/updating the Codex global install, or stage commands like /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Release, /70-Report, or companion commands like Help, use the global Codex skill `nexus-devflow`.',
     '',
     'Framework root: `' + root + '`',
     'Update commands: `npm run codex:check-global`, `npm run codex:update-global`, `npm run codex:update-global:pull`',

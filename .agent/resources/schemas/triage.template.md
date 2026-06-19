@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/57-Issue-Triage"
+source_workflow: "Issue-Triage"
 related_task: "#{Issue_Number}"
 related_files: []
 tags:
@@ -23,7 +23,7 @@ risk_level: "medium"
 
 # GitHub Issue Triage Report: #{Issue_Number} #doc/report #report/review
 
-> **Source Trigger**: `/57-Issue-Triage`
+> **Source Trigger**: `Issue-Triage`
 > **Target Issue Number**: #{Issue_Number}
 > **Title**: {Issue Title}
 
@@ -44,8 +44,8 @@ risk_level: "medium"
 
 - **Triage Action**: [Create PRP Task | Defer | Close | Request Clarification]
 - **Recommended Workflow**:
-  - For bugfixes: Run `/20-Debug "RCA for #{Issue_Number}"`
-  - For features: Run `/12-PRD "PRD for #{Issue_Number}"`
+  - For bugfixes: Run `Debug "RCA for #{Issue_Number}"`
+  - For features: Run `PRD "PRD for #{Issue_Number}"`
 - **Next Command**:
 
 ```text

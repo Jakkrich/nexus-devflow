@@ -208,13 +208,12 @@ After each increment, verify:
 - [ ] The new functionality works as expected
 - [ ] The change is committed with a descriptive message
 
-## PRPs Dashboard Synchronization
+## DevFlow 2.0 Progress Tracking
 
-To maintain synchronization with the **PRPs Dashboard** during implementation:
+During implementation, keep progress visible in markdown first:
 
-1. **Update `implementation_plan.json`**: After completing each task/increment, update the `status` of the corresponding subtask (`pending` -> `in_progress` -> `completed` or `failed`). Update the global `status` and `xstateState` to reflect the current phase.
-2. **Append to `task_logs.json`**: Log major events (start of a task, successful build, test pass, or errors) with appropriate timestamps and tool names.
-3. **Commit JSON updates**: These JSON files should be committed along with the code changes to keep the workspace history consistent.
+1. **Update `implement.md`**: Record the current slice, completed work, validation evidence, blockers, and next step.
+2. **Commit stage artifacts with code changes**: The implementation history should remain understandable from the repository, even without old dashboard tooling.
 
 ## Common Rationalizations
 

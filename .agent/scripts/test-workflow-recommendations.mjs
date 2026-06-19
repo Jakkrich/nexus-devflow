@@ -7,22 +7,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..', '..');
 
 const requiredWorkflows = [
-  '05-Goal.md',
-  '20-Debug.md',
-  '30-Task.md',
-  '31-Plan.md',
-  '32-Code.md',
-  '33-Verify.md',
-  '34-Human.md',
-  '34-Human-Approve.md',
-  '34-Human-Reject.md',
-  '34-Human-Feedback.md',
-  '34-Human-ReCheck.md',
-  '54-Insight.md',
-  '55-PR-Review.md',
-  '59-Wiki.md',
-  '90-Agent.md',
-  '99-Help.md',
+  'Goal.md',
+  'Debug.md',
+  'Human-Approve.md',
+  'Human-Reject.md',
+  'Human-Feedback.md',
+  'Human-ReCheck.md',
+  '40-Implement.md',
+  '50-Verify.md',
+  '60-Release.md',
+  '70-Report.md',
+  'Insight.md',
+  'PR-Review.md',
+  'Wiki.md',
+  'Agent.md',
+  'Help.md',
 ];
 
 function assert(condition, message) {
@@ -45,7 +44,6 @@ for (const file of requiredWorkflows) {
   assert(fs.existsSync(path.join(projectRoot, relativePath)), `${file} should exist`);
   const content = read(relativePath);
   assert(content.includes('## Next Workflow Recommendation'), `${file} should define next workflow recommendation output`);
-  assert(content.includes('## Wiki Update Recommendation'), `${file} should define wiki update recommendation output`);
 }
 
 console.log('workflow recommendation tests passed');

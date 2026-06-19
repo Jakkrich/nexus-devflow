@@ -54,18 +54,18 @@ Every time a new Model is fabricated, it must include:
 ## 🔄 PRP Workflow Integration (Zero-Script)
 For each Task, the Agent must adhere to these principles:
 
-### Phase: Planning (/02-Plan)
+### Phase: Planning (/30-Plan)
 - Designate the files to be created/modified in the `File & Directory Index`.
 - Formulate a `Validation Loop`:
     - **Step 1**: Lint (flake8/pylint-odoo)
     - **Step 2**: Odoo Test (`--test-enable` / `--init` module)
 
-### Phase: Code (/03-Code)
-- Proceed with Subtasks sequentially and update the status in `implementation_plan.json`.
+### Phase: Implement (/40-Implement)
+- Proceed with subtasks sequentially and record status in `implement.md`.
 - **Gotcha**: Be mindful of Odoo's Caching. Following any Python modifications, inevitably Restart the service and update the Module.
 
 ---
 
 ## 🧪 Testing & Validation
 - **Common Case**: Utilize `TransactionCase` to execute Business Logic Tests.
-- **UI Check**: Propose instructions for verification via a Browser (Manual Verification Guide) within `qa_report.md`.
+- **UI Check**: Propose instructions for verification via a Browser inside `verify.md`.

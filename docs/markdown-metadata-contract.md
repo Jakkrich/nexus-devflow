@@ -55,7 +55,7 @@ Required field meanings:
 | `created` | date string | Creation date in `YYYY-MM-DD` format. |
 | `updated` | date string | Last meaningful update date in `YYYY-MM-DD` format. |
 | `owner` | string | Responsible agent, role, or human. |
-| `source_workflow` | string or null | Workflow command that produced the document, such as `/33-Verify`, or `null` if not workflow-generated. |
+| `source_workflow` | string or null | Workflow command that produced the document, such as `/50-Verify`, or `null` if not workflow-generated. |
 | `related_task` | string or null | Task id, issue id, PR id, or `null`. |
 | `related_files` | string array | Repository paths that this document describes or depends on. |
 | `tags` | string array | Obsidian tags without `#`. Use hierarchical tags when useful. |
@@ -88,18 +88,17 @@ requirement_count: 0
 acceptance_criteria_count: 0
 ```
 
-Use `doc_type: "spec"` and `category: "planning"` for `.workspaces/specs/{ID}-*/spec.md`.
+Use `doc_type: "spec"` and `category: "planning"` for `.workspaces/specs/{ID}-*/20-spec.md`.
 
 ### Implementation Plan
 
 ```yaml
-source_spec: ".workspaces/specs/{task-id}/spec.md"
-data_hub: "implementation_plan.json"
+source_spec: ".workspaces/specs/{task-id}/20-spec.md"
 phase_count: 0
 risk_level: "medium"
 ```
 
-Use `doc_type: "plan"` and `category: "planning"` for `.workspaces/specs/{ID}-*/plan.md`.
+Use `doc_type: "plan"` and `category: "planning"` for `.workspaces/specs/{ID}-*/30-plan.md`.
 
 ### Research Report
 

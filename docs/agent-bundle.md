@@ -1,40 +1,38 @@
-﻿# Agent Bundle and npm Activation
+# Agent Bundle
 
 The active framework bundle is `.agent`.
 
-The old model used a Python switcher. The current model uses root npm scripts and does not switch between multiple checked-in IDE bundles.
+DevFlow 2.0 uses a single checked-in bundle plus root automation scripts. It no longer depends on a dashboard UI or PRP task runtime for JSON artifact mutation.
 
 ## Supported Command Surface
 
 ```powershell
 npm run activate
 npm run validate
+npm run validate:all
 npm run index
 npm run sync:check
-npm run agent -- --help
-npm run agent -- artifact:get 001 requirements
-npm run agent -- plan:validate 001
 ```
 
 ## Bundle Rules
 
-- `.agent` contains agents, commands, rules, schemas, scripts, skills, and dashboard assets.
-- `.workspaces` contains generated project and roadmap artifacts.
-- Agents should use script-first JSON commands for structured artifacts instead of rewriting whole JSON files.
-- `scripts/` contains root automation wrappers and validation scripts.
-- Root docs explain how humans should use and maintain the framework.
-- `agent-bundle.manifest.json` defines the required bundle paths and forbidden legacy bundle paths.
-- `.agent/skills/9arm-skills/` contains the credited `thananon/9arm-skills` adaptation for Antigravity IDE. It is used as a discipline layer for existing workflows, not as a replacement bundle.
+- `.agent/workflows/` contains the workflow prompts.
+- `.agent/agents/` contains specialist agent personas.
+- `.agent/skills/` contains reusable methods and discipline layers.
+- `.agent/resources/schemas/` contains markdown templates and shared delivery contracts.
+- `.agent/scripts/` contains framework helpers that still matter in 2.0, such as goal runner tests and preview/session helpers.
+- `scripts/` contains root activation, validation, install, and linking automation.
 
-## Why a Single Bundle
+## What Changed In 2.0
 
-A single bundle avoids duplicate framework trees and makes updates easier to review. If another IDE requires a different layout later, generate that layout from `.agent` or a shared manifest instead of manually maintaining two full copies.
+- Removed dashboard assets from the active bundle contract.
+- Removed PRP runtime commands from the active bundle contract.
+- Retired JSON task schema/template files from the mainline workflow engine.
+- Kept markdown templates as the handoff source of truth.
 
 ## Health Check
 
 ```powershell
+npm run validate
 npm run sync:check
 ```
-
-This confirms `.agent` is present and legacy IDE bundle directories are absent.
-

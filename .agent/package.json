@@ -1,17 +1,8 @@
 {
   "name": "agent-flow",
-  "version": "1.5.0",
-  "description": "PRP workflow and dashboard contract tools for AI coding agents.",
+  "version": "2.0.0",
+  "description": "DevFlow 2.0 workflow, agent, skill, and markdown contract bundle for AI coding agents.",
   "type": "module",
-  "bin": {
-    "prp": "./scripts/prp.mjs",
-    "agent-flow": "./scripts/prp.mjs"
-  },
-  "scripts": {
-    "prp": "node ./scripts/prp.mjs",
-    "test:prp": "node ./scripts/test-prp.mjs",
-    "validate": "node ./scripts/prp.mjs validate"
-  },
   "files": [
     "agents",
     "docs",
@@ -19,8 +10,7 @@
     "rules",
     "scripts",
     "skills",
-    "workflows",
-    "PRPs/html"
+    "workflows"
   ],
   "engines": {
     "node": ">=18.17"

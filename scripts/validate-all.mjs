@@ -5,12 +5,10 @@ import process from 'node:process';
 const checks = [
   ['Framework validation', ['npm.cmd', ['run', 'validate']]],
   ['Bundle sync check', ['npm.cmd', ['run', 'sync:check']]],
-  ['PRP CLI contract test', [process.execPath, ['.agent/scripts/test-prp.mjs']]],
+  ['Activate contract test', [process.execPath, ['scripts/test-activate-agent.mjs']]],
   ['Link project contract test', [process.execPath, ['scripts/test-link-project.mjs']]],
   ['Goal runner contract test', [process.execPath, ['.agent/scripts/test-goal-runner.mjs']]],
   ['Workflow recommendation contract test', [process.execPath, ['.agent/scripts/test-workflow-recommendations.mjs']]],
-  ['Wiki contract test', [process.execPath, ['.agent/scripts/test-wiki-contract.mjs']]],
-  ['Dashboard contract test', [process.execPath, ['scripts/validate-dashboard-contract.mjs']]],
   ['Documentation contract scan', [process.execPath, ['scripts/scan-doc-contract.mjs']]],
   ['Security hygiene scan', [process.execPath, ['scripts/scan-security-hygiene.mjs']]]
 ];

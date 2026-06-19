@@ -30,12 +30,7 @@ You are a Worker agent for `/goal` execution in Nexus-DevFlow. You receive one b
 
 Use commands like:
 
-```powershell
-npm run agent -- artifact:set {ID} {artifact} {field_path} {value}
-npm run agent -- artifact:append {ID} {artifact} {field_path} {value}
-npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
-npm run agent -- validate {ID}
-```
+Update the relevant stage markdown files for the running ID directly and leave a clear completion note for the subtask you handled.
 
 Manual JSON editing is fallback only, and must be followed by validation.
 

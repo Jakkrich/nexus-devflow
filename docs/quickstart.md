@@ -1,6 +1,6 @@
 # Quickstart
 
-This guide gets Nexus-DevFlow ready for local use with the `.agent` bundle.
+This guide gets Nexus-DevFlow ready for local use with the `.agent` bundle and the DevFlow 2.0 stage-based model.
 
 ## 1. Activate
 
@@ -14,57 +14,74 @@ npm.cmd run activate
 npm.cmd run validate
 ```
 
-## 3. Check Status
-
-```powershell
-npm.cmd run agent:status
-```
-
-## 4. Create a First Task
-
-```powershell
-npm.cmd run agent -- init 001 "First Task" first-task "Describe the first task"
-npm.cmd run agent -- validate 001
-```
-
-The task files are created under:
+## 3. Understand The Mainline
 
 ```text
-.workspaces/specs/
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
 ```
 
-## 5. Update JSON Artifacts
+Public companion commands:
 
-Prefer PRP CLI commands over hand-editing JSON:
-
-```powershell
-npm.cmd run agent -- artifact:get 001 requirements
-npm.cmd run agent -- artifact:set 001 requirements priority high
-npm.cmd run agent -- artifact:append 001 requirements constraints "Use IDE-controlled step-by-step workflow"
-npm.cmd run agent -- validate 001
+```text
+Goal
+Brainstorm
+Research
+Debug
+PRD
+Issue-Triage
+Wiki
+Help
 ```
 
-## 6. Build A Plan
+For the full current command policy, see [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1).
 
-```powershell
-npm.cmd run agent -- plan:add-phase 001 "Prepare implementation" --type implementation
-npm.cmd run agent -- plan:add-subtask 001 phase-1 "Confirm artifact flow" --service docs --verify-type command --verify-command "npm.cmd run validate"
-npm.cmd run agent -- plan:validate 001
+## 4. Workspace Model
+
+DevFlow 2.0 uses markdown-first stage artifacts under `.workspaces/specs/`.
+
+Typical running-id layout:
+
+```text
+.workspaces/specs/{ID}-{slug}/
+  00-discover.md
+  10-define.md
+  20-spec.md
+  30-plan.md
+  40-implement.md
+  50-verify.md
+  60-release.md
+  70-report.md
+  70-report.html
 ```
 
-## 7. Useful Commands
+See [workspace-artifacts.md](workspace-artifacts.md) for the canonical artifact contract.
+
+## 5. First Useful Commands
 
 ```powershell
-npm.cmd run index
-npm.cmd run sync:check
+npm.cmd run activate
+npm.cmd run validate
 npm.cmd run roadmap:validate
+npm.cmd run migrate:artifacts -- <project-root>
 ```
+
+## 6. Recommended Starting Points
+
+- For new work: start at `/00-Discover`
+- For partially clear work: start at `/10-Define`
+- For work that already has a stable contract: start at `/20-Spec` or `/30-Plan`
+- For route guidance: use `Help`
+- For product framing before a stable spec: use `PRD`
+- For issue-driven intake: use `Issue-Triage`
+
+## Internal Surfaces
+
+Some additional workflow files still exist under `.agent/workflows/`, but they are now considered internal support surfaces or future skill/agent candidates. Do not treat them as the default public command set unless a stage document explicitly points to them.
 
 ## Troubleshooting
 
-- If validation says a JSON artifact is missing, run `npm run activate`.
-- If project structure changed, run `npm run index`.
-- If JSON is malformed, run `npm.cmd run agent -- json:repair {ID} {artifact}` and then `npm.cmd run agent -- validate {ID}`.
 - If `.agent` files are missing, restore the framework bundle before running validation.
+- If `.workspaces/specs/` is missing, run `npm.cmd run activate`.
+- If validation fails after structural edits, fix the missing files or docs, then re-run `npm.cmd run validate`.
 
-For the full command flow, see [Script-First JSON Workflow](script-first-json-workflow.md).
+Do not route new work through retired JSON artifacts. Use the stage markdown templates under `.agent/resources/schemas/` instead.

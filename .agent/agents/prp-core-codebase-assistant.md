@@ -1,4 +1,4 @@
----
+﻿---
 name: prp-core-codebase-assistant
 description: |
   Original architecture from prp-core: Codebase exploration assistant (Codebase Assistant).
@@ -78,9 +78,9 @@ Break the query into 2-5 composable research areas:
 RESEARCH QUESTION: {user's question}
 
 AREAS:
-1. {Area} → Agent: {which agent}
-2. {Area} → Agent: {which agent}
-3. {Area} → Agent: {which agent}
+1. {Area} โ’ Agent: {which agent}
+2. {Area} โ’ Agent: {which agent}
+3. {Area} โ’ Agent: {which agent}
 ```
 
 ### 2.2 Agent Selection
@@ -100,7 +100,7 @@ AREAS:
 
 ### 3.1 Launch Codebase Agents
 
-Recommend `/90-Agent` specialist calls for deeper exploration. Keep the workflow manual unless the user explicitly asks for parallel agent work.
+Recommend `Agent` specialist calls for deeper exploration. Keep the workflow manual unless the user explicitly asks for parallel agent work.
 
 For each research area, use the appropriate agent:
 
@@ -296,8 +296,8 @@ If `--follow-up` flag and existing research file:
 - {Any unanswered aspects}
 
 ### Follow-up
-To dig deeper: `/90-Agent codebase-explorer {topic}`
-To include external docs: `/90-Agent web-researcher {topic}`
+To dig deeper: `Agent codebase-explorer {topic}`
+To include external docs: `Agent web-researcher {topic}`
 ```
 
 ---
@@ -328,3 +328,4 @@ To include external docs: `/90-Agent web-researcher {topic}`
 - **DOCUMENT_CREATED**: Research file saved at `.workspaces/research/`
 - **NO_OPINIONS**: Document describes what exists, not what should change
 - **PERMALINKS_ADDED**: GitHub links included when possible
+

@@ -56,7 +56,7 @@ Map the concept to the smallest fitting DevFlow surface:
 | Option guide | The idea is useful only as an optional bundle of practices. |
 | Wiki/docs | The idea is knowledge, not behavior. |
 
-Prefer skill-backed or option-guide adoption before adding new slash workflows. Keep the canonical `/30-Task -> /31-Plan -> /32-Code -> /33-Verify` path stable unless the concept improves a core invariant.
+Prefer skill-backed or option-guide adoption before adding new slash workflows. Keep the canonical `/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report` path stable unless the concept improves a core invariant.
 
 ### 4. Coupled Concepts And Option Packs
 
@@ -96,7 +96,7 @@ Favor concepts that:
 - Reduce ambiguity in agent work.
 - Improve traceability, validation, or recovery.
 - Strengthen user-controlled phase gates.
-- Fit the script-first JSON artifact contract.
+- Fit the markdown-first stage artifact contract.
 - Can be explained as a small rule, skill, option, or workflow addition.
 - Preserve source credit and make upstream drift visible.
 

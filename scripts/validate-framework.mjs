@@ -9,14 +9,9 @@ const projectRoot = path.resolve(__dirname, '..');
 const args = new Set(process.argv.slice(2));
 const manifest = readJson('agent-bundle.manifest.json', []);
 const roadmapOnly = args.has('--roadmap-only');
-const roadmapJsonArtifacts = [
-  '.workspaces/roadmap/roadmap_discovery.json',
-  '.workspaces/roadmap/roadmap.json'
-];
-
-const requiredJson = [
-  '.workspaces/project_index.json',
-  '.workspaces/roadmap/project_index.json'
+const roadmapMarkdownArtifacts = [
+  '.workspaces/roadmap/roadmap-discovery.md',
+  'ROADMAP.md'
 ];
 
 const requiredPaths = [
@@ -45,6 +40,16 @@ function readJson(relativePath, failures) {
     return JSON.parse(fs.readFileSync(target, 'utf8'));
   } catch (error) {
     fail(`${relativePath} is not valid JSON: ${error.message}`, failures);
+    return null;
+  }
+}
+
+function readText(relativePath, failures) {
+  const target = path.join(projectRoot, relativePath);
+  try {
+    return fs.readFileSync(target, 'utf8');
+  } catch (error) {
+    fail(`Could not read ${relativePath}: ${error.message}`, failures);
     return null;
   }
 }
@@ -89,35 +94,65 @@ function validateRoadmap(failures) {
     return;
   }
 
-  const roadmap = readJson('.workspaces/roadmap/roadmap.json', failures);
-  if (!roadmap) return;
-  if (!Array.isArray(roadmap.phases) || roadmap.phases.length < 1) {
-    fail('roadmap.json must contain at least one phase', failures);
+  const roadmap = readText('ROADMAP.md', failures);
+  const discovery = readText('.workspaces/roadmap/roadmap-discovery.md', failures);
+  if (!roadmap || !discovery) return;
+
+  for (const heading of [
+    '## Strategic Direction',
+    '## Phases',
+    '## Current Focus',
+    '## Validation'
+  ]) {
+    if (!roadmap.includes(heading)) fail(`ROADMAP.md is missing required heading: ${heading}`, failures);
   }
-  if (!Array.isArray(roadmap.features) || roadmap.features.length < 3) {
-    fail('roadmap.json must contain at least three features', failures);
-    return;
+
+  for (const heading of [
+    '## 1. Purpose And Scope',
+    '## 2. Target Users And Value',
+    '## 3. Current State',
+    '## 4. Constraints And Signals',
+    '## 5. Strategy Inputs',
+    '## 6. Sources'
+  ]) {
+    if (!discovery.includes(heading)) fail(`roadmap-discovery.md is missing required heading: ${heading}`, failures);
   }
-  const featureIds = new Set(roadmap.features.map((feature) => feature.id));
-  for (const feature of roadmap.features) {
-    for (const field of ['id', 'title', 'priority', 'phase_id']) {
-      if (!feature[field]) fail(`Feature is missing ${field}: ${JSON.stringify(feature)}`, failures);
-    }
+
+  const phaseRows = countMarkdownTableRows(roadmap, '## Phases', '## Current Focus');
+  if (phaseRows < 1) {
+    fail('ROADMAP.md must contain at least one roadmap phase row', failures);
   }
-  for (const phase of roadmap.phases || []) {
-    for (const id of phase.features || []) {
-      if (!featureIds.has(id)) fail(`Phase ${phase.id} references missing feature ${id}`, failures);
-    }
+
+  const focusRows = countMarkdownTableRows(roadmap, '## Current Focus', '## Machine-Readable Sources');
+  if (focusRows < 3) {
+    fail('ROADMAP.md must contain at least three current focus rows', failures);
   }
-  ok(`Roadmap has ${roadmap.phases.length} phases and ${roadmap.features.length} features`);
+
+  ok(`Roadmap markdown passed with ${phaseRows} phases and ${focusRows} focus items`);
 }
 
 function shouldValidateRoadmap() {
-  return roadmapOnly || roadmapJsonArtifacts.some((item) => fs.existsSync(path.join(projectRoot, item)));
+  return roadmapOnly || roadmapMarkdownArtifacts.some((item) => fs.existsSync(path.join(projectRoot, item)));
 }
 
 function requiredRoadmapPaths() {
-  return shouldValidateRoadmap() ? ['ROADMAP.md'] : [];
+  return shouldValidateRoadmap() ? roadmapMarkdownArtifacts : [];
+}
+
+function countMarkdownTableRows(content, startHeading, endHeading) {
+  const start = content.indexOf(startHeading);
+  if (start === -1) return 0;
+  const end = endHeading ? content.indexOf(endHeading, start + startHeading.length) : -1;
+  const block = content.slice(start, end === -1 ? undefined : end);
+  return block
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) =>
+      line.startsWith('|') &&
+      !/^\|\s*[-:]+\s*(\|\s*[-:]+\s*)+\|?$/.test(line) &&
+      !/^\|\s*Phase\s*\|/i.test(line) &&
+      !/^\|\s*Priority\s*\|/i.test(line)
+    ).length;
 }
 
 function validateWorkflowNumbering(failures) {
@@ -126,13 +161,43 @@ function validateWorkflowNumbering(failures) {
     fail('Missing .agent/workflows directory', failures);
     return;
   }
+  const numberedMainline = new Set([
+    '00-Discover.md',
+    '10-Define.md',
+    '20-Spec.md',
+    '30-Plan.md',
+    '40-Implement.md',
+    '50-Verify.md',
+    '60-Release.md',
+    '70-Report.md'
+  ]);
   const files = fs.readdirSync(workflowDir)
     .filter((name) => name.endsWith('.md') && name !== 'README.md');
-  const invalid = files.filter((name) => !/^\d{2}-[A-Za-z0-9][A-Za-z0-9-]*\.md$/.test(name));
+  const invalid = [];
+
+  for (const name of files) {
+    const isNumbered = /^\d{2}-[A-Za-z0-9][A-Za-z0-9-]*\.md$/.test(name);
+    const isUnnumbered = /^[A-Za-z0-9][A-Za-z0-9-]*\.md$/.test(name);
+
+    if (numberedMainline.has(name)) {
+      if (!isNumbered) invalid.push(`${name} (mainline workflows must keep numbering)`);
+      continue;
+    }
+
+    if (isNumbered) {
+      invalid.push(`${name} (non-mainline workflows must not use numbering)`);
+      continue;
+    }
+
+    if (!isUnnumbered) {
+      invalid.push(`${name} (workflow filename format is invalid)`);
+    }
+  }
+
   if (invalid.length) {
-    fail(`Workflow files must start with a two-digit category number: ${invalid.join(', ')}`, failures);
+    fail(`Workflow naming is invalid under DevFlow 2.0:\n  ${invalid.join('\n  ')}`, failures);
   } else {
-    ok(`Workflow numbering passed for ${files.length} workflow files`);
+    ok(`Workflow naming passed for ${files.length} workflow files`);
   }
 }
 
@@ -197,6 +262,78 @@ function validateReportNamingConvention(failures) {
   }
 }
 
+function validateStageArtifactConventions(failures) {
+  const filesToCheck = [
+    '.agent/workflows/00-Discover.md',
+    '.agent/workflows/10-Define.md',
+    '.agent/workflows/20-Spec.md',
+    '.agent/workflows/30-Plan.md',
+    '.agent/workflows/40-Implement.md',
+    '.agent/workflows/50-Verify.md',
+    '.agent/workflows/60-Release.md',
+    '.agent/workflows/70-Report.md',
+    '.agent/resources/schemas/discover.template.md',
+    '.agent/resources/schemas/define.template.md',
+    '.agent/resources/schemas/spec.template.md',
+    '.agent/resources/schemas/implement.template.md',
+    '.agent/resources/schemas/verify.template.md',
+    '.agent/resources/schemas/release.template.md',
+    '.agent/resources/schemas/report.template.md',
+    'docs/quickstart.md',
+    'docs/workspace-artifacts.md'
+  ];
+  const forbiddenPhrases = ['เจ้านาย', 'boss ordered', 'boss request'];
+  const legacyStagePaths = [
+    '/00-discover/discover.md',
+    '/10-define/define.md',
+    '/20-spec/spec.md',
+    '/30-plan/plan.md',
+    '/40-implement/implement.md',
+    '/50-verify/verify.md',
+    '/60-release/release.md',
+    '/70-report/report.md'
+  ];
+  const requiredStageNames = [
+    '00-discover.md',
+    '10-define.md',
+    '20-spec.md',
+    '30-plan.md',
+    '40-implement.md',
+    '50-verify.md',
+    '60-release.md',
+    '70-report.md'
+  ];
+
+  for (const relativePath of filesToCheck) {
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+
+    for (const phrase of forbiddenPhrases) {
+      if (content.includes(phrase)) {
+        fail(`${relativePath} contains non-anonymous stakeholder wording: ${phrase}`, failures);
+      }
+    }
+
+    const allowLegacyExamples = relativePath === 'docs/workspace-artifacts.md';
+    for (const legacyPath of legacyStagePaths) {
+      if (!allowLegacyExamples && content.includes(legacyPath)) {
+        fail(`${relativePath} still references legacy nested stage path: ${legacyPath}`, failures);
+      }
+    }
+  }
+
+  const workspaceDocs = readText('docs/workspace-artifacts.md', failures);
+  if (workspaceDocs) {
+    for (const stageName of requiredStageNames) {
+      if (!workspaceDocs.includes(stageName)) {
+        fail(`docs/workspace-artifacts.md must mention stage artifact ${stageName}`, failures);
+      }
+    }
+  }
+
+  ok('Stage artifact naming and anonymous wording checks passed');
+}
+
 function main() {
   const failures = [];
   generateProjectIndex(projectRoot);
@@ -214,17 +351,10 @@ function main() {
     else ok(`Legacy path absent: ${item}`);
   }
 
-  for (const item of [...requiredJson, ...(shouldValidateRoadmap() ? roadmapJsonArtifacts : [])]) {
-    if (!fs.existsSync(path.join(projectRoot, item))) {
-      fail(`Missing JSON artifact: ${item}`, failures);
-      continue;
-    }
-    if (readJson(item, failures)) ok(`Valid JSON: ${item}`);
-  }
-
   validateRoadmap(failures);
   validateWorkflowNumbering(failures);
   validateReportNamingConvention(failures);
+  validateStageArtifactConventions(failures);
   if (!roadmapOnly) scanForLegacyReferences(failures);
 
   if (failures.length) {

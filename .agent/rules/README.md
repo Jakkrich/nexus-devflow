@@ -1,46 +1,18 @@
-﻿---
-description: Overview of project rules and governance templates in the PRP framework.
 ---
-# ðŸ“‹ PRPs Rules Templates
-
-Contains "Standardized Iron Rules" for controlling code quality and AI behavior across different languages and frameworks. These templates ensure that the project consistently maintains high standards, regardless of the IDE used.
-
-## ðŸ“‘ Template List
-- **`rules.template-base-fastapi`**: Rules for Python/FastAPI (Async, Pydantic, Code modularity).
-- **`rules.template-base-odoo`**: Rules for Odoo ERP (Models, Views, Security, Version detection).
-- **`rules.template-base-php`**: Rules for PHP (MVC patterns, Security, SQL injection prevention).
-
+description: Active rule references for Nexus-DevFlow 2.0.
 ---
 
-## ðŸš€ How to Use
+# DevFlow 2.0 Rules
 
-### 1. Via `/00-Init` Workflow (Recommended)
-When you run the `/00-Init` workflow, the AI will:
-1. **Auto-Detect**: Inspect the codebase to determine the technology stack.
-2. **Auto-Apply**: Copy rules from the matching template to create or update the rules file at the root of the project (e.g., `.antigravityrules`, `.antigravityrules`, or `.antigravityrules`).
+This folder keeps lightweight rule references that still matter to the active DevFlow 2.0 surface.
 
-### 2. Manual Use
-You can copy the contents of your desired template file and paste them into your active rules file to activate those rules in the AI Chat immediately.
+## Active Rule Files
 
----
+- `minimal-context.md`: a compact context template for handoff and token discipline
+- `graphify.md`: optional guidance when a project actively uses Graphify artifacts
 
-## ðŸ”„ Multi-IDE Folder Mapping
-Depending on your active IDE, this folder may have a different name. Use `npm run activate` to switch:
+## Current Policy
 
-| IDE | Folder Location | Rules File Created |
-| :--- | :--- | :--- |
-| **Cursor** | `.claude/rules/` | `.antigravityrules` |
-| **Antigravity** | `.claude/rules/` | `.antigravityrules` |
-| **Windsurf** | `.claude/rules/` | `.antigravityrules` |
-
----
-
-## ðŸ› ï¸ Adding a New Template
-If you have a new stack (e.g., Node.js, React, Go):
-1. Create a new file using the format `rules.template-base-{stack_name}`.
-2. Define important rules such as naming conventions, file size limits, and AI behavior.
-3. Update the logic in the `/00-Init` workflow to support detecting this new stack.
-
----
-*Note: These files serve as the "central standard" for the team. Any changes should be carefully considered regarding their broader impact across all supported IDEs.*
-
+- Framework-wide operating rules live primarily in `AGENTS.md`, `.antigravityrules`, and active workflow or skill docs.
+- Rule files here should stay small, readable, and compatible with the current markdown-first DevFlow 2.0 model.
+- Do not add retired dashboard-first or task-JSON-first guidance back into this folder.

@@ -1,104 +1,34 @@
-﻿# 📋 มาตรฐานและเทมเพลตสำหรับ PRPs Framework
+# DevFlow 2.0 Schema And Template Guide
 
-โฟลเดอร์นี้ทำหน้าที่เป็น **Source of Truth** สำหรับไฟล์ JSON และ Markdown ทั้งหมดที่ใช้ใน Nexus-DevFlow เพื่อให้มั่นใจว่าการสื่อสารกับ **PRPs Dashboard** มีความต่อเนื่องและเป็นมาตรฐานเดียวกันสำหรับ AI Agents ทุกตัว
+โฟลเดอร์นี้เป็นแหล่งกลางของ template และ contract สำหรับ DevFlow 2.0 แบบ `markdown-first`
 
-> 📖 **ข้อมูลอ้างอิงมาตรฐาน**: สำหรับรายละเอียดของ Attributes ทั้งหมดและค่าที่อนุญาต โปรดดูที่ [SCHEMA.md](./SCHEMA.md)
+อ่านกติกาหลักเพิ่มเติมได้ที่ [SCHEMA.md](./SCHEMA.md)
 
-> 💡 **หมายเหตุเกี่ยวกับ Framework**: เทมเพลตเหล่านี้คือ "Core DNA" ของระบบ โดยจะเก็บไว้ในโฟลเดอร์โครงการ (เช่น `.agent/resources/schemas/`) แต่ข้อมูลที่ใช้งานจริงจะถูกจัดการภายในโฟลเดอร์โปรเจกต์ภายใต้ `.workspaces/`
+## แนวทางหลัก
 
----
+1. ใช้ไฟล์ `.md` เป็น artifact หลักของแต่ละ stage
+2. เก็บไฟล์งานจริงไว้ใน `.workspaces/` ของโปรเจกต์เป้าหมาย
+3. แต่ละ stage ต้องมี input, output, และ template ของตัวเอง
+4. คงหัวข้อหลักจาก template ไว้เสมอ แต่อนุญาตให้เพิ่มหัวข้อเสริมท้ายเอกสารได้ตามบริบท
+5. JSON schema/template ถูกถอดออกจากเส้นหลัก 2.0 แล้ว
 
-## 🔄 ตารางความสัมพันธ์ของสถานะ (State Mapping Table)
+## Mainline Workflow Mapping
 
-| Dashboard Column | `status` | `planStatus` | `xstateState` |
-| :--- | :--- | :--- | :--- |
-| **Backlog** | `backlog` | `pending` | `backlog` |
-| **Planning** | `in_progress` | `planning` | `planning` |
-| **In Progress** | `in_progress` | `approved` | `coding` |
-| **AI Review** | `ai_review` | `review` | `qa_review` |
-| **Human Review** | `human_review` | `review` | `human_review` |
-| **Done** | `done` | `done` | `done` |
-
----
-
-## 📋 รายการไฟล์และวัตถุประสงค์ (File Manifest & Purpose)
-
-| ชื่อไฟล์ | วัตถุประสงค์หลัก | สร้าง/อัปเดตเมื่อ (Skills) |
+| Stage | Command | Primary artifact |
 | :--- | :--- | :--- |
-| `spec.md` | ข้อกำหนดความต้องการ (Human-readable) | `spec-driven-development` |
-| `requirements.json` | รายละเอียดความต้องการเชิงลึก (System-readable) | `spec-driven-development` |
-| `task_metadata.json` | Badges, หมวดหมู่ และการตั้งค่า AI | `spec-driven-development` |
-| `implementation_plan.json` | สถานะ Kanban, แผนงาน และงานย่อย (Hub) | `planning-and-task-breakdown`, `incremental-implementation` |
-| `plan_approval.json` | หลักฐานการอนุมัติแผนก่อนเริ่ม coding | `planning-and-task-breakdown`, `/31-Plan` |
-| `context.json` | ข้อมูลบริบทและไฟล์ที่เกี่ยวข้อง (RAG) | `planning-and-task-breakdown` |
-| `task_logs.json` | Timeline การทำงานแบบ Real-time | ทุก Skills (เมื่อเริ่ม/จบขั้นตอนสำคัญ) |
-| `qa_report.md` | สรุปผลการทดสอบและการตรวจสอบ | `code-review-and-quality`, `shipping-and-launch` |
+| Discover | `/00-Discover` | `00-discover.md` |
+| Define | `/10-Define` | `10-define.md` |
+| Spec | `/20-Spec` | `20-spec.md` |
+| Plan | `/30-Plan` | `30-plan.md` |
+| Implement | `/40-Implement` | `40-implement.md` |
+| Verify | `/50-Verify` | `50-verify.md` |
+| Release | `/60-Release` | `60-release.md` |
+| Report | `/70-Report` | `70-report.md`, `70-report.html` |
 
-### Markdown Template Manifest
+## Legacy Note
 
-ทุก workflow ที่สร้างไฟล์ Markdown ต้องอ่าน template ที่เกี่ยวข้องในโฟลเดอร์นี้ก่อนสร้างหรืออัปเดตไฟล์ และต้องคงหัวข้อหลักตาม template ไว้เสมอ
+ถ้าพบไฟล์ JSON เก่าระหว่าง migration:
 
-Generated Markdown files must follow the shared metadata pattern in `docs/markdown-metadata-contract.md`: YAML frontmatter for document-level metadata and Obsidian heading tags for section-level metadata.
-
-## Markdown Quality Gate
-
-Template มีไว้กำหนดโครง ไม่ใช่ผลลัพธ์สุดท้าย ห้ามบันทึกไฟล์ Markdown ที่ยังเหลือข้อความแนว placeholder เช่น `[What ...]`, `{Placeholder}`, `Requirement 1`, `Option A`, `TODO`, `TBD`, หรือคำอธิบาย generic ที่ไม่ได้อ้างอิง request/code/evidence จริง
-
-ก่อนรายงานว่า Markdown artifact เสร็จแล้ว ให้รัน:
-
-```powershell
-npm.cmd run agent -- markdown:validate {path} {template_name}
-```
-
-สำหรับ `.workspaces/specs/{ID}-*/spec.md` คำสั่ง `npm.cmd run agent -- validate {ID}` จะตรวจ heading และ placeholder-free content ให้ด้วย ถ้าข้อมูลยังไม่พอ ให้เขียนเป็นคำถามหรือ assumption ที่ชัดเจนแทนการปล่อยช่องว่างจาก template
-
-| Output file | Template | Workflow หลัก |
-| :--- | :--- | :--- |
-| `INITIAL.md` | `initial.template.md` | `/00-Init` |
-| `ROADMAP.md` | `roadmap.template.md` | `/17-Roadmap` |
-| `CHANGELOG.md` entry | `changelog_entry.template.md` | `/53-Changelog` |
-| `.workspaces/specs/{ID}-*/spec.md` | `spec.template.md` | `/30-Task` |
-| `.workspaces/specs/{ID}-*/plan.md` | `plan.template.md` | `/31-Plan` |
-| `.workspaces/specs/{ID}-*/qa_report.md` | `qa_report.template.md` | `/33-Verify`, `/34-Human` |
-| `.workspaces/specs/{ID}-*/pr_review.md` | `pr_review.template.md` | `/55-PR-Review` |
-| `.workspaces/research/{date}-{slug}.md` | `research.template.md` | `/11-Research` |
-| `.workspaces/prds/{slug}.prd.md` | `prd.template.md` | `/12-PRD` |
-| `.workspaces/research/{date}-{slug}-spec-research.md` | `spec_research.template.md` | `/15-Spec-Research` |
-| `.workspaces/debug/rca-{slug}.md` | `rca.template.md` | `/20-Debug` |
-| `.workspaces/research/brainstorm-{topic}.md` | `brainstorm.template.md` | `/10-Brainstorm` |
-| `.workspaces/research/{date}-{slug}-competitor-analysis.md` | `competitor_analysis.template.md` | `/16-Competitor` |
-| `.workspaces/reports/ui-ux-{topic}.md` | `ui_ux.template.md` | `/13-UI-UX` |
-| `.workspaces/reports/spec_orchestration-{slug}.md` | `spec_orchestration.template.md` | `/18-Spec-Orchestrate` |
-| `.workspaces/reports/qa_orchestrate_{ID}.md` | `qa_orchestration.template.md` | `/39-QA-Orchestrate` |
-| `.workspaces/reports/test_report_{target}.md` | `test_report.template.md` | `/40-Test` |
-| `.workspaces/reports/refactoring_{slug}.md` | `refactoring.template.md` | `/41-Simplify` |
-| `.workspaces/reports/deploy_report_{timestamp}.md` | `deploy_report.template.md` | `/52-Deploy` |
-| `.workspaces/reports/pr_followup_{ID}.md` | `pr_followup.template.md` | `/56-PR-Followup` |
-| `.workspaces/issues/triage_{issue_number}.md` | `triage.template.md` | `/57-Issue-Triage` |
-| `.workspaces/reports/{AGENT_NAME}_{TIMESTAMP}.md` | `agent_report.template.md` | `/90-Agent` |
-| `.workspaces/lessons.md` | `lessons.template.md` | `/20-Debug`, `/34-Human`, `/54-Insight` |
-
----
-
-## 🛡️ กฎเหล็กสำหรับ AI (Critical Rules for AI)
-
-1. **ตรวจสอบเทมเพลตเสมอ**: ต้องตรวจสอบไฟล์ `*.template.json` หรือ `*.template.md` ในโฟลเดอร์นี้ทุกครั้งก่อนสร้างไฟล์ใหม่
-2. **ห้ามลบ Attributes**: เก็บ Keys ทั้งหมดไว้เสมอ แม้ว่าจะไม่มีข้อมูลก็ตาม
-3. **ID ต้องเป็น String**: ตัวเลขงานย่อย เช่น `"1.1"` ต้องกำหนดเป็น String
-4. **มาตรฐาน ISO Date**: Timestamps ทั้งหมดต้องใช้รูปแบบ ISO 8601 (UTC)
-5. **Phase ต้องเป็น Integer**: หมายเลขลำดับเฟสต้องเป็นตัวเลขจำนวนเต็ม
-6. **บันทึก Timeline อย่างต่อเนื่อง**: อัปเดต `task_logs.json` ทุกครั้งหลังจบการใช้เครื่องมือ (Tool) หรือขั้นตอนสำคัญ
-7. **ใช้ Node CLI เป็นทางหลัก**: ใช้ `npm.cmd run agent -- ...` สำหรับ init/update/log/event/validate/repair แทนการเขียน JSON โดยตรง
-8. **ผ่าน JSON Schema Gate**: ทุก phase ต้องจบด้วย `npm.cmd run agent -- validate {ID}` และถ้า fail ให้ใช้ `npm.cmd run agent -- repair {ID}` ก่อนเดินต่อ
-9. **ผ่าน Markdown Quality Gate**: ทุก Markdown artifact ต้องไม่มี placeholder และต้องผ่าน `npm.cmd run agent -- markdown:validate {path} {template_name}` เมื่อเป็นรายงาน/เอกสารที่ reusable
-
----
-
-## 🏷️ ค่าที่อนุญาต (Allowed Values)
-
-- **Category**: `feat`, `bug_fix`, `refactoring`, `documentation`, `security`, `performance`, `ui_ux`, `infrastructure`, `testing`
-- **Complexity**: `trivial`, `small`, `medium`, `large`, `complex`
-- **Priority**: `low`, `medium`, `high`, `urgent`
-- **Impact**: `low`, `medium`, `high`, `critical`
-
-
+1. ใช้อ่านย้อนหลังเท่านั้น
+2. อย่าใช้สร้างงานใหม่
+3. ย้ายสาระสำคัญที่ยังต้องส่งต่อไปไว้ใน stage markdown ที่เกี่ยวข้อง

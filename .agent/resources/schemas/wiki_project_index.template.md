@@ -7,7 +7,7 @@ status: "active"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/59-Wiki"
+source_workflow: "Wiki"
 related_task: null
 related_files: []
 tags:
@@ -44,6 +44,6 @@ This wiki compiles reusable knowledge about the current project. It is not the s
 
 ## Sources #section/sources
 
-- `.agent/workflows/59-Wiki.md`
+- `.agent/workflows/Wiki.md`
 - `docs/workspace-artifacts.md`
 - `.workspaces/project_index.json`

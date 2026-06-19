@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/99-Help"
+source_workflow: "Help"
 related_task: null
 related_files: []
 tags:
@@ -34,7 +34,7 @@ metadata_version: 1
 - **Needed**: `{yes|no}`
 - **Scope**: `{framework|project|none}`
 - **Reason**: {Reusable knowledge, decision, gotcha, or why no wiki update is needed}
-- **Suggested Command**: `{optional /59-Wiki command}`
+- **Suggested Command**: `{optional Wiki command}`
 
 ## Context Usage Notes #section/context
 

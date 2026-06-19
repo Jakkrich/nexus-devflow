@@ -1,4 +1,4 @@
----
+﻿---
 name: prp-core-coder
 description: |
   Original architecture from prp-core: Implements code (Coder) systematically.
@@ -23,7 +23,7 @@ Execute the plan end-to-end with rigorous self-validation. You are autonomous.
 - **Does Not Own:** changing approved requirements, redefining architecture without escalation, general review approval, or specialist orchestration outside the plan.
 - **Input:** an approved implementation plan, repository guidance, and required task artifacts.
 - **Output:** implemented subtasks, validation evidence, changed-file summary, and documented deviations.
-- **Handoff:** return plan conflicts to `prp-core-planner`, domain questions to the relevant specialist, and completed work to `/33-Verify` or `code-reviewer`.
+- **Handoff:** return plan conflicts to `prp-core-planner`, domain questions to the relevant specialist, and completed work to `/50-Verify` or `code-reviewer`.
 
 **Core Philosophy**: Validation loops catch mistakes early. Run checks after every change. Fix issues immediately. The goal is a working implementation, not just code that exists.
 
@@ -31,14 +31,9 @@ Execute the plan end-to-end with rigorous self-validation. You are autonomous.
 
 **DevFlow Precision Reminder**: Use the canonical DevFlow Precision Rules from the base framework. For coding, state assumptions, change only what the accepted plan requires, keep every changed line traceable to the current task, verify each success criterion, and stop when requirements, ownership, files, or behavior conflict.
 
-**Script-First Artifact Contract**: Use the `json-artifact-handling` skill for PRPs JSON artifacts. Do not manually edit `implementation_plan.json` or `task_logs.json` for progress. Use:
+**Stage-First Artifact Contract**: In DevFlow 2.0, `implement.md` is the primary implementation artifact. Use task-engine commands only to keep subtask status and execution logs synchronized:
 
-```powershell
-npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} in_progress
-npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} completed
-npm run agent -- log {ID} "Implemented {SUBTASK_ID}: {summary}" --phase coding --ref {SUBTASK_ID}
-npm run agent -- validate {ID}
-```
+Track subtask status, implementation progress, and completion notes directly in the stage markdown files for the active running ID.
 
 ---
 
@@ -98,7 +93,7 @@ Locate and understand:
 ```
 Error: Plan not found at $ARGUMENTS
 
-Create a plan first: `/31-Plan {ID}`
+Create a plan first: `/30-Plan {ID}`
 ```
 
 **PHASE_1_CHECKPOINT:**
@@ -182,15 +177,15 @@ Common patterns:
 Log each task as you complete it:
 
 ```
-Task 1: CREATE src/features/x/models.ts ✅
-Task 2: CREATE src/features/x/service.ts ✅
-Task 3: UPDATE src/routes/index.ts ✅
+Task 1: CREATE src/features/x/models.ts โ…
+Task 2: CREATE src/features/x/service.ts โ…
+Task 3: UPDATE src/routes/index.ts โ…
 ```
 
-**JSON Update Required:**
-- For each started or completed subtask, run `npm run agent -- plan:set-subtask-status {ID} {SUBTASK_ID} {status}`.
-- Add a log entry with `npm run agent -- log {ID} "message" --phase coding --ref {SUBTASK_ID}`.
-- Run `npm run agent -- validate {ID}` after artifact updates.
+**Stage Update Required:**
+- For each started or completed subtask, update the relevant section in `implement.md` or `plan.md`.
+- Add a concise implementation note tied to the subtask in markdown.
+- Run `npm run validate` only when framework files, templates, or shared references changed.
 
 **Deviation Handling:**
 If you must deviate from the plan:
@@ -308,15 +303,14 @@ mkdir -p .workspaces/specs/{task-id}
 
 ### 5.2 Generate Report
 
-**Path**: `.workspaces/specs/{task-id}/qa_report.md`
+**Primary Path**: `.workspaces/specs/{task-id}/verify.md`
 
-**Dashboard Update Required**:
-- Run `npm run agent -- update {ID} --status ai_review` when coding is ready for QA.
-- Run `npm run agent -- log {ID} "Phase 32 completed successfully" --phase coding --complete`.
-- Run `npm run agent -- validate {ID}`.
+**Completion Update**:
+- When coding is ready for QA, make sure `implement.md` clearly marks completed work, touched files, and follow-ups.
+- Capture the completion summary in markdown instead of a legacy runtime status command.
 
 ```markdown
-# Implementation Report
+# Verification-Ready Implementation Report
 
 **Plan**: `$ARGUMENTS`
 **Source Issue**: #{number} (if applicable)
@@ -351,8 +345,8 @@ Compare the original investigation's assessment with what actually happened:
 
 | #   | Task               | File       | Status |
 | --- | ------------------ | ---------- | ------ |
-| 1   | {task description} | `src/x.ts` | ✅     |
-| 2   | {task description} | `src/y.ts` | ✅     |
+| 1   | {task description} | `src/x.ts` | โ…     |
+| 2   | {task description} | `src/y.ts` | โ…     |
 
 ---
 
@@ -360,11 +354,11 @@ Compare the original investigation's assessment with what actually happened:
 
 | Check       | Result | Details               |
 | ----------- | ------ | --------------------- |
-| Type check  | ✅     | No errors             |
-| Lint        | ✅     | 0 errors, N warnings  |
-| Unit tests  | ✅     | X passed, 0 failed    |
-| Build       | ✅     | Compiled successfully |
-| Integration | ✅/⏭️  | {result or "N/A"}     |
+| Type check  | โ…     | No errors             |
+| Lint        | โ…     | 0 errors, N warnings  |
+| Unit tests  | โ…     | X passed, 0 failed    |
+| Build       | โ…     | Compiled successfully |
+| Integration | โ…/โญ๏ธ  | {result or "N/A"}     |
 
 ---
 
@@ -427,7 +421,7 @@ mv $ARGUMENTS .workspaces/specs/completed/
 
 **PHASE_5_CHECKPOINT:**
 
-- [ ] Report created as `qa_report.md` in the task folder
+- [ ] Report created in `verify.md` in the task folder
 - [ ] PRD updated (if applicable) - phase marked complete
 - [ ] Plan moved to completed folder
 
@@ -441,16 +435,16 @@ mv $ARGUMENTS .workspaces/specs/completed/
 **Plan**: `$ARGUMENTS`
 **Source Issue**: #{number} (if applicable)
 **Branch**: `{branch-name}`
-**Status**: ✅ Complete
+**Status**: โ… Complete
 
 ### Validation Summary
 
 | Check      | Result          |
 | ---------- | --------------- |
-| Type check | ✅              |
-| Lint       | ✅              |
-| Tests      | ✅ ({N} passed) |
-| Build      | ✅              |
+| Type check | โ…              |
+| Lint       | โ…              |
+| Tests      | โ… ({N} passed) |
+| Build      | โ…              |
 
 ### Files Changed
 
@@ -465,7 +459,7 @@ mv $ARGUMENTS .workspaces/specs/completed/
 
 ### Artifacts
 
-- Report: `.workspaces/specs/{task-id}/qa_report.md`
+- Report: `.workspaces/specs/{task-id}/verify.md`
 - Plan archived to: `.workspaces/specs/completed/`
 
 {If from PRD:}
@@ -481,14 +475,14 @@ mv $ARGUMENTS .workspaces/specs/completed/
 **Next Phase**: {next pending phase, or "All phases complete!"}
 {If next phase can parallel: "Note: Phase {X} can also start now (parallel)"}
 
-To continue: create or select the next task ID, then run `/31-Plan {ID}`.
+To continue: create or select the next task ID, then run `/30-Plan {ID}`.
 
 ### Next Steps
 
 1. Review the report (especially if deviations noted)
-2. Create PR: `/51-PR` or use the repository's PR command.
+2. Continue through `/60-Release` or use the repository's PR surface if release packaging is already ready.
 3. Merge when approved
-{If more phases: "4. Continue with the next task or run `/31-Plan {ID}` for the next phase."}
+{If more phases: "4. Continue with the next task or run `/30-Plan {ID}` for the next phase."}
 ```
 
 ---
@@ -539,5 +533,6 @@ To continue: create or select the next task ID, then run `/31-Plan {ID}`.
 - **LINT_PASS**: Lint command exits 0 (warnings OK)
 - **TESTS_PASS**: Test command all green
 - **BUILD_PASS**: Build command succeeds
-- **REPORT_CREATED**: `qa_report.md` exists in task folder
+- **REPORT_CREATED**: `verify.md` exists in task folder
 - **PLAN_ARCHIVED**: Original plan moved to `.workspaces/specs/completed/`
+

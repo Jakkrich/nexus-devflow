@@ -7,7 +7,7 @@ status: "draft"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-source_workflow: "/56-PR-Followup"
+source_workflow: "PR-Followup"
 related_task: "{ID}"
 related_files: []
 tags:
@@ -24,7 +24,7 @@ finding_count: 0
 
 # PR Follow-Up And Review Comment Triage: Task {ID} #doc/report #report/review
 
-> **Source Trigger**: `/56-PR-Followup`
+> **Source Trigger**: `PR-Followup`
 > **Target Task ID**: {ID}
 > **Pull Request Link**: [Link or #PR]
 
@@ -50,7 +50,7 @@ Actionable PR fixes are mapped directly to coding subtasks:
 - **Next Command**:
 
 ```text
-/32-Code {ID}
+/40-Implement {ID}
 ```
 
 ## 3. Sources #section/sources

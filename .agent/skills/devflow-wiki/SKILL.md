@@ -1,4 +1,4 @@
----
+﻿---
 name: devflow-wiki
 description: Use when creating, updating, linting, querying, or deciding whether to ingest Nexus-DevFlow framework or project wiki knowledge under .workspaces/wiki.
 ---
@@ -27,14 +27,9 @@ Promote project pages to framework only when the lesson applies beyond one proje
 
 ## Commands
 
-```powershell
-npm run agent -- wiki:init project
-npm run agent -- wiki:init framework
-npm run agent -- wiki:lint project
-npm run agent -- wiki:lint framework
-```
+Initialize and maintain wiki pages through the documented markdown structure under `.workspaces/wiki/`. Do not rely on the retired PRP runtime for wiki commands.
 
-Use `/59-Wiki {scope} ingest {source}` for workflow-level ingestion and route reporting.
+Use `Wiki {scope} ingest {source}` for workflow-level ingestion and route reporting.
 
 ## Project Wiki Contract
 
@@ -77,3 +72,4 @@ Always report:
 - lint result or remaining issue
 - next workflow recommendation
 - wiki update recommendation
+

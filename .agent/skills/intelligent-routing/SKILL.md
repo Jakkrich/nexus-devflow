@@ -1,335 +1,115 @@
 ---
 name: intelligent-routing
-description: Automatic agent selection and intelligent task routing. Analyzes user requests and automatically selects the best specialist agent(s) without requiring explicit user mentions.
-version: 1.0.0
+description: Automatic agent and stage routing for DevFlow 2.0. Use when deciding which active workflow, skill, or specialist should own the next step.
+version: 2.0.0
 ---
 
-# Intelligent Agent Routing
+# Intelligent Routing For DevFlow 2.0
 
-**Purpose**: Automatically analyze user requests and route them to the most appropriate specialist agent(s) without requiring explicit user mentions.
+## Purpose
 
-## Core Principle
-
-> **The AI should act as an intelligent Project Manager**, analyzing each request and automatically selecting the best specialist(s) for the job.
-
-## How It Works
-
-### 1. Request Analysis
-
-Before responding to ANY user request, perform automatic analysis:
-
-```mermaid
-graph TD
-    A[User Request: Add login] --> B[ANALYZE]
-    B --> C[Keywords]
-    B --> D[Domains]
-    B --> E[Complexity]
-    C --> F[SELECT AGENT]
-    D --> F
-    E --> F
-    F --> G[security-auditor + backend-specialist]
-    G --> H[AUTO-INVOKE with context]
-```
+Analyze a user request and route it to the correct DevFlow 2.0 surface without requiring the user to name the exact workflow, skill, or agent.
 
-### 2. Agent Selection Matrix
+## Canonical Routing Order
 
-**Use this matrix to automatically select agents:**
+Always route in this order:
 
-| User Intent         | Keywords                                   | Selected Agent(s)                           | Auto-invoke? |
-| ------------------- | ------------------------------------------ | ------------------------------------------- | ------------ |
-| **Authentication**  | "login", "auth", "signup", "password"      | `security-auditor` + `backend-specialist`   | ✅ YES       |
-| **UI Component**    | "button", "card", "layout", "style"        | `frontend-specialist`                       | ✅ YES       |
-| **Mobile UI**       | "screen", "navigation", "touch", "gesture" | `mobile-developer`                          | ✅ YES       |
-| **API Endpoint**    | "endpoint", "route", "API", "POST", "GET"  | `backend-specialist`                        | ✅ YES       |
-| **Database**        | "schema", "migration", "query", "table"    | `database-architect` + `backend-specialist` | ✅ YES       |
-| **Bug Fix**         | "error", "bug", "not working", "broken"    | `debugger`                                  | ✅ YES       |
-| **Test**            | "test", "coverage", "unit", "e2e"          | `test-engineer`                             | ✅ YES       |
-| **Deployment**      | "deploy", "production", "CI/CD", "docker"  | `devops-engineer`                           | ✅ YES       |
-| **Security Review** | "security", "vulnerability", "exploit"     | `security-auditor` + `penetration-tester`   | ✅ YES       |
-| **Performance**     | "slow", "optimize", "performance", "speed" | `performance-engineer`                     | ✅ YES       |
-| **Product Def**     | "requirements", "user story", "backlog", "MVP" | `product-owner`                             | ✅ YES       |
-| **New Feature**     | "build", "create", "implement", "new app"  | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
-| **Complex Task**    | Multiple domains detected                  | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
+1. Mainline stage if the request is lifecycle work
+2. Public companion command if the request is support work
+3. Specialist agent if the user needs focused expert judgment
+4. Internal companion or skill only when the public surface should stay thin
 
-### 3. Automatic Routing Protocol
+Do not route new work into retired JSON-first commands, dashboard-first flows, or removed aliases.
 
-## TIER 0 - Automatic Analysis (ALWAYS ACTIVE)
+## Mainline Stages
 
-Before responding to ANY request:
+`/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report`
 
-```javascript
-// Pseudo-code for decision tree
-function analyzeRequest(userMessage) {
-    // 1. Classify request type
-    const requestType = classifyRequest(userMessage);
+## Public Companion Commands
 
-    // 2. Detect domains
-    const domains = detectDomains(userMessage);
+- `Goal`
+- `Brainstorm`
+- `Research`
+- `Debug`
+- `PRD`
+- `Issue-Triage`
+- `Wiki`
+- `Help`
 
-    // 3. Determine complexity
-    const complexity = assessComplexity(domains);
+## Specialist Agent Routing
 
-    // 4. Select agent(s)
-    if (complexity === "SIMPLE" && domains.length === 1) {
-        return selectSingleAgent(domains[0]);
-    } else if (complexity === "MODERATE" && domains.length <= 2) {
-        return selectMultipleAgents(domains);
-    } else {
-        return "orchestrator"; // Complex task
-    }
-}
-```
+Use these agent mappings when expert judgment is the best next step:
 
-## 4. Response Format
+| Request Type | Route To |
+|---|---|
+| requirements clarification | `requirements-engineer` |
+| product framing | `prp-core-prd-architect` |
+| planning breakdown | `prp-core-planner` |
+| codebase exploration | `codebase-explorer` |
+| backend implementation or API review | `backend-specialist` |
+| frontend implementation or UI review | `frontend-specialist` |
+| schema and query design | `database-architect` |
+| implementation execution | `prp-core-coder` |
+| tests and coverage | `test-engineer` |
+| code review and risk review | `code-reviewer` |
+| security review | `security-auditor` |
+| performance review | `performance-engineer` |
+| root-cause debugging | `prp-core-debugger` |
+| release packaging and commit scope | `prp-core-git-committer`, `prp-core-git-pr-maker` |
+| broad orchestration across domains | `orchestrator` |
 
-**When auto-selecting an agent, inform the user concisely:**
+## Lifecycle Routing Rules
 
-```markdown
-🤖 **Applying knowledge of `@security-auditor` + `@backend-specialist`...**
+| User State | Recommended Route |
+|---|---|
+| vague request, still exploring | `/00-Discover` or `Brainstorm` |
+| knows the problem, scope still fuzzy | `/10-Define` |
+| needs requirements and acceptance criteria | `/20-Spec` |
+| has a stable spec and needs execution plan | `/30-Plan` |
+| needs implementation work | `/40-Implement` |
+| needs testing, review, or validation evidence | `/50-Verify` |
+| needs packaging, commit, PR, or release handling | `/60-Release` |
+| needs the final summary or handoff narrative | `/70-Report` |
 
-[Proceed with specialized response]
-```
+## Routing Heuristics
 
-**Benefits:**
+### Use a mainline stage when:
 
-- ✅ User sees which expertise is being applied
-- ✅ Transparent decision-making
-- ✅ Still automatic (no /commands needed)
+- the request advances a task through its lifecycle
+- the user needs an artifact in `.workspaces`
+- the next step should change stage ownership
 
-## Domain Detection Rules
+### Use a public companion command when:
 
-### Single-Domain Tasks (Auto-invoke Single Agent)
+- the request supports a stage rather than replacing it
+- the user needs exploration, research, debugging, or help
+- the output is advisory or investigative
 
-| Domain          | Patterns                                   | Agent                   |
-| --------------- | ------------------------------------------ | ----------------------- |
-| **Security**    | auth, login, jwt, password, hash, token    | `security-auditor`      |
-| **Frontend**    | component, react, vue, css, html, tailwind | `frontend-specialist`   |
-| **Backend**     | api, server, express, fastapi, node        | `backend-specialist`    |
-| **Mobile**      | react native, flutter, ios, android, expo  | `mobile-developer`      |
-| **Database**    | prisma, sql, mongodb, schema, migration    | `database-architect`    |
-| **Testing**     | test, jest, vitest, playwright, cypress    | `test-engineer`         |
-| **DevOps**      | docker, kubernetes, ci/cd, pm2, nginx      | `devops-engineer`       |
-| **Debug**       | error, bug, crash, not working, issue      | `debugger`              |
-| **Performance** | slow, lag, optimize, cache, performance    | `performance-engineer` |
-| **SEO**         | seo, meta, analytics, sitemap, robots      | `seo-specialist`        |
-| **Game**        | unity, godot, phaser, game, multiplayer    | `game-developer`        |
+### Use a specialist agent when:
 
-### Multi-Domain Tasks (Auto-invoke Orchestrator)
+- the user explicitly asks for one
+- a narrow expert lens is more useful than a workflow shell
+- the active stage already exists and only specialist judgment is missing
 
-If request matches **2+ domains from different categories**, automatically use `orchestrator`:
+## Examples
 
-```text
-Example: "Create a secure login system with dark mode UI"
-→ Detected: Security + Frontend
-→ Auto-invoke: orchestrator
-→ Orchestrator will handle: security-auditor, frontend-specialist, test-engineer
-```
+| User Request | Route |
+|---|---|
+| "I have an idea but not the shape yet" | `Brainstorm` then `/10-Define` |
+| "Turn this stable goal into requirements" | `/20-Spec` |
+| "Fix this broken auth flow" | `Debug` or `Agent prp-core-debugger ...`, then `/40-Implement` or `/50-Verify` |
+| "Review this implementation for risks" | `/50-Verify` or `Agent code-reviewer ...` |
+| "Help me figure out which command to use" | `Help` |
 
-## Complexity Assessment
+## Guardrails
 
-### SIMPLE (Direct agent invocation)
+- Do not recommend removed numeric aliases such as old task/code/verify commands.
+- Do not mention legacy external control files as part of the routing model.
+- Do not invent agent names that are not present in the current repo.
+- If the request spans multiple domains and the owner is unclear, route to `orchestrator`.
 
-- Single file edit
-- Clear, specific task
-- One domain only
-- Example: "Fix the login button style"
+## Output Pattern
 
-**Action**: Auto-invoke respective agent
+When applying this skill, answer in one short line before proceeding:
 
-### MODERATE (2-3 agents)
-
-- 2-3 files affected
-- Clear requirements
-- 2 domains max
-- Example: "Add API endpoint for user profile"
-
-**Action**: Auto-invoke relevant agents sequentially
-
-### COMPLEX (Orchestrator required)
-
-- Multiple files/domains
-- Architectural decisions needed
-- Unclear requirements
-- Example: "Build a social media app"
-
-**Action**: Auto-invoke `orchestrator` → will ask Socratic questions
-
-## Implementation Rules
-
-### Rule 1: Silent Analysis
-
-#### DO NOT announce "I'm analyzing your request..."
-
-- ✅ Analyze silently
-- ✅ Inform which agent is being applied
-- ❌ Avoid verbose meta-commentary
-
-### Rule 2: Inform Agent Selection
-
-**DO inform which expertise is being applied:**
-
-```markdown
-🤖 **Applying knowledge of `@frontend-specialist`...**
-
-I will create the component with the following characteristics:
-[Continue with specialized response]
-```
-
-### Rule 3: Seamless Experience
-
-**The user should not notice a difference from talking to the right specialist directly.**
-
-### Rule 4: Override Capability
-
-**User can still explicitly mention agents:**
-
-```text
-User: "Use @backend-specialist to review this"
-→ Override auto-selection
-→ Use explicitly mentioned agent
-```
-
-## Edge Cases
-
-### Case 1: Generic Question
-
-```text
-User: "How does React work?"
-→ Type: QUESTION
-→ No agent needed
-→ Respond directly with explanation
-```
-
-### Case 2: Extremely Vague Request
-
-```text
-User: "Make it better"
-→ Complexity: UNCLEAR
-→ Action: Ask clarifying questions first
-→ Then route to appropriate agent
-```
-
-### Case 3: Contradictory Patterns
-
-```text
-User: "Add mobile support to the web app"
-→ Conflict: mobile vs web
-→ Action: Ask: "Do you want responsive web or native mobile app?"
-→ Then route accordingly
-```
-
-## Integration with Existing Workflows
-
-### With /orchestrate Command
-
-- **User types `/orchestrate`**: Explicit orchestration mode
-- **AI detects complex task**: Auto-invoke orchestrator (same result)
-
-**Difference**: User doesn't need to know the command exists.
-
-### With Socratic Gate
-
-- **Auto-routing does NOT bypass Socratic Gate**
-- If task is unclear, still ask questions first
-- Then route to appropriate agent
-
-### With GEMINI.md Rules
-
-- **Priority**: GEMINI.md rules > intelligent-routing
-- If GEMINI.md specifies explicit routing, follow it
-- Intelligent routing is the DEFAULT when no explicit rule exists
-
-## Testing the System
-
-### Test Cases
-
-#### Test 1: Simple Frontend Task
-
-```text
-User: "Create a dark mode toggle button"
-Expected: Auto-invoke frontend-specialist
-Verify: Response shows "Using @frontend-specialist"
-```
-
-#### Test 2: Security Task
-
-```text
-User: "Review the authentication flow for vulnerabilities"
-Expected: Auto-invoke security-auditor
-Verify: Security-focused analysis
-```
-
-#### Test 3: Complex Multi-Domain
-
-```text
-User: "Build a chat application with real-time notifications"
-Expected: Auto-invoke orchestrator
-Verify: Multiple agents coordinated (backend, frontend, test)
-```
-
-#### Test 4: Bug Fix
-
-```text
-User: "Login is not working, getting 401 error"
-Expected: Auto-invoke debugger
-Verify: Systematic debugging approach
-```
-
-## Performance Considerations
-
-### Token Usage
-
-- Analysis adds ~50-100 tokens per request
-- Tradeoff: Better accuracy vs slight overhead
-- Overall SAVES tokens by reducing back-and-forth
-
-### Response Time
-
-- Analysis is instant (pattern matching)
-- No additional API calls required
-- Agent selection happens before first response
-
-## User Education
-
-### Optional: First-Time Explanation
-
-If this is the first interaction in a project:
-
-```markdown
-💡 **Tip**: I am configured with automatic specialist agent selection.
-I will always choose the most suitable specialist for your task. You can
-still mention agents explicitly with `@agent-name` if you prefer.
-```
-
-## Debugging Agent Selection
-
-### Enable Debug Mode (for development)
-
-Add to GEMINI.md temporarily:
-
-```markdown
-## DEBUG: Intelligent Routing
-
-Show selection reasoning:
-
-- Detected domains: [list]
-- Selected agent: [name]
-- Reasoning: [why]
-```
-
-## Summary
-
-**intelligent-routing skill enables:**
-
-✅ Zero-command operation (no need for `/orchestrate`)  
-✅ Automatic specialist selection based on request analysis  
-✅ Transparent communication of which expertise is being applied  
-✅ Seamless integration with existing workflows  
-✅ Override capability for explicit agent mentions  
-✅ Fallback to orchestrator for complex tasks
-
-**Result**: User gets specialist-level responses without needing to know the system architecture.
-
----
-
-**Next Steps**: Integrate this skill into GEMINI.md TIER 0 rules.
+`Applying DevFlow 2.0 routing: <chosen route> because <reason>.`
