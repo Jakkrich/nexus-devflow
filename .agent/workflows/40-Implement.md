@@ -27,6 +27,8 @@ Read:
 
 - `30-plan.md`
 - `20-spec.md`
+- `checklists/master-checklist.md` when present
+- `checklists/implementation-checklist.md` when present
 - referenced pattern files
 - `10-define.md` when the intent needs a quick reminder
 
@@ -46,6 +48,7 @@ Use the original coder discipline, adapted to 2.0:
 - preserve project style
 - run the planned verification
 - record the result in `40-implement.md`
+- update checklist item status, timestamps, and evidence links as work progresses
 
 If tests are `Required`:
 
@@ -70,6 +73,7 @@ When the scoped work is complete:
 - list changed files
 - record verification performed
 - record deviations, blockers, and manual checks
+- make sure checklist statuses match the actual state of the code and tests
 - make sure `40-implement.md` is ready for Verify
 
 ## Output

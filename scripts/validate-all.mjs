@@ -7,6 +7,8 @@ const checks = [
   ['Bundle sync check', ['npm.cmd', ['run', 'sync:check']]],
   ['Activate contract test', [process.execPath, ['scripts/test-activate-agent.mjs']]],
   ['Link project contract test', [process.execPath, ['scripts/test-link-project.mjs']]],
+  ['Report HTML generator test', [process.execPath, ['scripts/test-generate-report-html.mjs']]],
+  ['Checklist validation test', [process.execPath, ['scripts/test-validate-checklists.mjs']]],
   ['Goal runner contract test', [process.execPath, ['.agent/scripts/test-goal-runner.mjs']]],
   ['Workflow recommendation contract test', [process.execPath, ['.agent/scripts/test-workflow-recommendations.mjs']]],
   ['Documentation contract scan', [process.execPath, ['scripts/scan-doc-contract.mjs']]],

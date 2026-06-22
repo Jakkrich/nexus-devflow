@@ -34,6 +34,7 @@ using:
 
 ```text
 .agent/resources/schemas/report.template.md
+.agent/resources/schemas/report.template.html
 ```
 
 ## Process
@@ -49,6 +50,9 @@ Read all relevant stage artifacts:
 - `40-implement.md`
 - `50-verify.md`
 - `60-release.md`
+- `checklists/master-checklist.md` when present
+- `checklists/implementation-checklist.md` when present
+- `checklists/verification-checklist.md` when present
 
 Include supporting artifacts only when they add real context.
 
@@ -60,6 +64,7 @@ Explain:
 - what direction was chosen
 - what was implemented
 - how it was verified
+- how checklist progress moved across the run
 - what the final outcome was
 - what follow-up items still exist
 
@@ -70,6 +75,21 @@ Write:
 - a readable Markdown report for contributors
 - a consistent HTML report for stakeholder sharing
 
+Use the canonical HTML scaffold in `.agent/resources/schemas/report.template.html` so every run keeps the same structure, navigation, header metadata, checklist snapshot, and footer style.
+
+To render the HTML consistently from the markdown report and checklist artifacts, use:
+
+```text
+npm run report:html -- <workspace-path-or-running-id>
+```
+
+Both outputs should summarize checklist state when checklist artifacts exist, including:
+
+- completion progress
+- blocked or skipped items
+- notable evidence snapshots
+- remaining follow-up work
+
 The HTML should stay structurally consistent across runs.
 
 ### 4. Keep The Audience In Mind
@@ -78,13 +98,21 @@ Prefer clarity over internal detail.
 
 Do not bury the outcome inside implementation trivia. The report should help a reader understand the run without replaying the whole workflow.
 
+When checklists exist, use them as the most human-readable operational record of what actually happened.
+
 ## Output
 
 Report:
 
 - what the run accomplished
+- checklist completion status and remaining items
 - important remaining follow-ups
 - where `70-report.md` and `70-report.html` were written
+- render command used or recommended:
+
+```text
+npm run report:html -- <workspace-path-or-running-id>
+```
 
 ## Relationship To DevFlow 2.0
 
@@ -103,5 +131,6 @@ Report:
 ## Next Workflow Recommendation
 
 - **Primary**: End of mainline flow
+- **Render HTML**: `npm run report:html -- {ID}` after `70-report.md` is finalized so the standardized stakeholder HTML stays in sync
 - **Alternative**: `Wiki` when the completed run should be promoted into durable reusable knowledge
 

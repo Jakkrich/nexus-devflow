@@ -21,6 +21,8 @@ related_files: []
 
 - `40-implement.md`
 - `20-spec.md`
+- `checklists/master-checklist.md`
+- `checklists/verification-checklist.md`
 - Supporting debug, preview, or review notes if they exist
 
 ## 3. Required Content
@@ -41,6 +43,10 @@ related_files: []
 
 - [Merge/rework recommendation]
 
+### Checklist Alignment
+
+- [Confirm checklist statuses, evidence links, and any blocked items]
+
 ## 4. Decisions
 
 - [Decision 1]
@@ -50,6 +56,7 @@ related_files: []
 - Verification verdict
 - Release blockers, if any
 - Manual checks still required, if any
+- Checklist updates required before release, if any
 
 ## 6. Next Step Guidance
 

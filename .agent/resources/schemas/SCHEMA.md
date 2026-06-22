@@ -22,6 +22,7 @@ DevFlow 2.0 is not:
 ```
 
 Each stage must produce one primary markdown file.
+Runs may also produce supporting checklist markdown files under `checklists/` when detailed operational tracking is needed.
 
 ## 2. Shared Markdown Contract Shape
 
@@ -66,7 +67,31 @@ Rules:
 4. Stage files are contracts for handoff.
 5. Context that used to be stored in JSON must now be stored in markdown sections.
 
-## 3. Legacy Artifacts
+## 3. Checklist Contracts
+
+Detailed run tracking may be stored under:
+
+```text
+.workspaces/specs/{ID}-{slug}/checklists/
+```
+
+Checklist files are supporting operational contracts, not replacements for stage files.
+
+Recommended files:
+
+- `master-checklist.md`
+- `implementation-checklist.md`
+- `verification-checklist.md`
+
+Rules:
+
+1. Checklist items must map back to a running ID.
+2. Checklist status must reflect current reality, not only the original plan.
+3. Checklist items should include owner, updated timestamp, and evidence.
+4. Checklist files support `/30-Plan`, `/40-Implement`, `/50-Verify`, and `/60-Release`.
+5. The stage markdown files remain the mainline source of truth for handoff and decisions.
+
+## 4. Legacy Artifacts
 
 The following categories are retired from the DevFlow 2.0 mainline:
 

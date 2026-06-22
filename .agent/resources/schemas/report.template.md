@@ -26,6 +26,9 @@ related_files: []
 - `40-implement.md`
 - `50-verify.md`
 - `60-release.md`
+- `checklists/master-checklist.md` when present
+- `checklists/implementation-checklist.md` when present
+- `checklists/verification-checklist.md` when present
 
 ## 3. Required Content
 
@@ -40,6 +43,12 @@ related_files: []
 ### Validation Outcome
 
 - [What verification proved]
+
+### Checklist Summary
+
+- [Overall checklist completion status]
+- [Blocked or skipped items that matter]
+- [Evidence highlights pulled from checklist tracking]
 
 ### Open Risks
 
@@ -57,6 +66,29 @@ related_files: []
 
 - Final markdown summary
 - Final HTML summary
+
+### HTML Report Structure
+
+Use the canonical HTML scaffold:
+
+```text
+.agent/resources/schemas/report.template.html
+```
+
+Use the placeholder source guide:
+
+```text
+docs/report-html-placeholder-mapping.md
+```
+
+The `70-report.html` output should include:
+
+- executive summary
+- work completed
+- validation outcome
+- checklist completion snapshot
+- blocked or skipped items
+- next actions
 
 ## 6. Next Step Guidance
 

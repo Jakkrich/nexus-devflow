@@ -29,7 +29,7 @@ Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projec
 
 | Path | Stores | Related workflows or commands | Keep? |
 | :--- | :--- | :--- | :--- |
-| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-release.md`, `70-report.md`, `70-report.html` | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Release`, `/70-Report`, `Brainstorm`, `Research`, `Debug`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
+| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-release.md`, `70-report.md`, `70-report.html`, and optional `checklists/` tracking files | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Release`, `/70-Report`, `Brainstorm`, `Research`, `Debug`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
 | `.workspaces/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
 | `.workspaces/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
 | `.workspaces/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
@@ -64,6 +64,32 @@ Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projec
 | `70-report.md` | สรุปรันทั้งหมดแบบอ่านง่าย |
 | `70-report.html` | สรุปรันทั้งหมดในรูปแบบสื่อสารมาตรฐานสำหรับคนอ่านทั่วไป |
 
+### Checklist Layer
+
+Use a dedicated checklist folder when people need a live view of task execution:
+
+```text
+.workspaces/specs/{ID}-{slug}/checklists/
+  master-checklist.md
+  implementation-checklist.md
+  verification-checklist.md
+```
+
+Principles:
+
+1. Checklist files are tied to one running ID.
+2. Checklist files make work visible during the run, not only after it finishes.
+3. Checklist items should include `status`, `owner`, `updated`, and `evidence`.
+4. Checklist files support the stage files. They do not replace `30-plan.md`, `40-implement.md`, or `50-verify.md`.
+
+Recommended use:
+
+- Create initial checklist files during `/30-Plan`
+- Update implementation status during `/40-Implement`
+- Update validation status and release gates during `/50-Verify`
+- Carry any final gate items into `/60-Release`
+- Summarize completion, blockers, and evidence snapshots during `/70-Report`
+
 ### Retired Legacy Files
 
 ไฟล์ตระกูล JSON ของ task หรือ roadmap และ `qa_report.md` ไม่ใช่ส่วนหนึ่งของ DevFlow 2.0 workflow surface แล้ว
@@ -86,6 +112,7 @@ Mainline:
   /50-Verify         -> .workspaces/specs/{ID}-*/50-verify.md
   /60-Release        -> .workspaces/specs/{ID}-*/60-release.md
   /70-Report         -> .workspaces/specs/{ID}-*/70-report.md and 70-report.html
+  Checklist layer    -> .workspaces/specs/{ID}-*/checklists/*.md
 
 Companion commands:
   Brainstorm         -> usually .workspaces/research/ or appended notes in discover/define

@@ -23,7 +23,11 @@
 | Implement | `/40-Implement` | `40-implement.md` |
 | Verify | `/50-Verify` | `50-verify.md` |
 | Release | `/60-Release` | `60-release.md` |
-| Report | `/70-Report` | `70-report.md`, `70-report.html` |
+| Report | `/70-Report` | `70-report.md`, `70-report.html`, `report.template.html` |
+
+Use [report-html-placeholder-mapping.md](/D:/Projects/nexus-devflow/docs/report-html-placeholder-mapping.md) for the canonical placeholder-to-source mapping used by the HTML generator.
+
+Checklist support files may also be created under `.workspaces/specs/{ID}-{slug}/checklists/` and should be reflected in `70-report.md` and `70-report.html` when present.
 
 ## Legacy Note
 

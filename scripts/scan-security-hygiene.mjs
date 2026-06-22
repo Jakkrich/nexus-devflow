@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
 
-const excludedDirs = new Set(['.git', 'node_modules', '.test-workspace-node']);
+const excludedDirs = new Set(['.git', 'node_modules', '.test-workspace-node', '.local-tools', '.specify']);
 const allowedFiles = new Set([
   path.normalize('scripts/scan-security-hygiene.mjs')
 ]);
