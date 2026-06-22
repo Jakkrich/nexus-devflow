@@ -24,6 +24,10 @@
 # ------------------------------
 # 3. BACKEND & TOOLS
 # ------------------------------
+# Local-only third-party tool checkouts
+.local-tools/
+.specify/
+
 # Python Virtual Environments
 venv/
 .venv/

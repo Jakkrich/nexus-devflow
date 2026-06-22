@@ -26,6 +26,7 @@ The framework keeps that lifecycle explicit:
 
 - `.agent` contains workflows, agents, skills, rules, templates, and framework helpers
 - `.workspaces` contains project-local artifacts produced by the running flow
+- optional `checklists/` folders inside each running ID keep human-visible live task tracking
 - numbered workflows represent only true mainline stage states
 - companion commands stay available for discovery, research, debugging, roadmap work, review, and specialist routing
 - stage handoff lives in Markdown, not task JSON
@@ -113,6 +114,7 @@ Every stage writes its own artifact under `.workspaces/specs/{RUNNING_ID}/`, so 
 | **Numbered mainline only** | Workflow numbers now belong only to real lifecycle stages. Companion commands do not compete with the mainline. |
 | **Markdown-first contracts** | `discover.md`, `define.md`, `spec.md`, `plan.md`, `implement.md`, `verify.md`, `release.md`, and `report.md` are the source of truth. |
 | **Running-ID discipline** | Artifacts stay grouped by running ID, making long tasks easier to track and resume. |
+| **Checklist visibility** | Optional `checklists/` artifacts make execution status visible throughout the run, not only in final notes. |
 | **Companion, skill, and agent separation** | Mainline state, reusable behavior, and specialist roles are modeled separately instead of mixing everything into workflows. |
 | **Report-ready output** | The flow ends in a consistent summary format, including HTML output for human communication. |
 | **Project-local workspaces** | Generated work stays inside the target project's `.workspaces`, not in a cross-project runtime store. |
@@ -212,6 +214,7 @@ Use validation whenever the framework surface, templates, workflow names, docs, 
 | [Agent Bundle](./docs/agent-bundle.md) | `.agent` bundle structure and rules |
 | [Workspace Artifacts](./docs/workspace-artifacts.md) | `.workspaces` layout and stage artifact contracts |
 | [Prompt Addons](./docs/prompt-addons.md) | How external prompt families map into DevFlow 2.0 |
+| [Spec Kit Rules](./docs/spec-kit-devflow-rules.md) | How Spec Kit may support DevFlow development without becoming user-facing surface |
 | [Agents](./AGENTS.md) | Specialist agent catalog and operating notes |
 | [Roadmap](./ROADMAP.md) | Current framework direction |
 

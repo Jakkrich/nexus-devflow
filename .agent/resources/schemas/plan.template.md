@@ -30,6 +30,7 @@ risk_level: "medium"
 > **Source Spec**: [.workspaces/specs/{task-id}/20-spec.md]
 > **Status**: IN-PROGRESS
 > **Data Hub**: `30-plan.md` (Managed Phases, Subtasks, And Validation Notes)
+> **Checklist Layer**: `.workspaces/specs/{task-id}/checklists/master-checklist.md`
 
 ## 1. Technical Design And Strategy #section/design
 
@@ -101,7 +102,19 @@ risk_level: "medium"
   - [ ] [e.g. Full test suite output log]
 - **Manual Verification**: [Specific instructions for the human reviewer]
 
-## 7. Sources #section/sources
+## 7. Checklist Initialization #section/checklists
+
+> Create the initial checklist set for human-visible execution tracking.
+
+- **Checklist Directory**: `.workspaces/specs/{task-id}/checklists/`
+- **Required Files**:
+  - `master-checklist.md`
+  - `implementation-checklist.md`
+  - `verification-checklist.md`
+- **Checklist Rule**: Convert approved phases and subtasks into live checklist items with status, owner, updated timestamp, and evidence fields.
+- **Synchronization Rule**: When the plan changes materially, update the checklist items so people can still follow the run without re-reading the whole plan.
+
+## 8. Sources #section/sources
 
 - Link spec, context files, implementation plan JSON, and research used to create this plan.
 

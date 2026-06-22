@@ -55,7 +55,7 @@ function readText(relativePath, failures) {
 }
 
 function scanForLegacyReferences(failures) {
-  const excluded = new Set(['.git', 'node_modules', '.venv', 'venv', 'env']);
+  const excluded = new Set(['.git', 'node_modules', '.venv', 'venv', 'env', '.local-tools', '.specify']);
   const allowedLegacyMentions = new Set([
     path.normalize('scripts/activate-agent.mjs'),
     path.normalize('agent-bundle.manifest.json'),
@@ -334,6 +334,108 @@ function validateStageArtifactConventions(failures) {
   ok('Stage artifact naming and anonymous wording checks passed');
 }
 
+function validateChecklistContracts(failures) {
+  const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
+  if (!fs.existsSync(specsRoot)) {
+    ok('No spec workspaces found for checklist validation');
+    return;
+  }
+
+  const allowedStatuses = new Set(['pending', 'in_progress', 'blocked', 'done', 'skipped', 'complete', 'completed', 'released']);
+  let checkedRuns = 0;
+
+  for (const entry of fs.readdirSync(specsRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const runDir = path.join(specsRoot, entry.name);
+    const relRun = path.relative(projectRoot, runDir);
+    const planPath = path.join(runDir, '30-plan.md');
+    const implementPath = path.join(runDir, '40-implement.md');
+    const verifyPath = path.join(runDir, '50-verify.md');
+    const reportMdPath = path.join(runDir, '70-report.md');
+    const reportHtmlPath = path.join(runDir, '70-report.html');
+    const checklistDir = path.join(runDir, 'checklists');
+
+    if (fs.existsSync(reportMdPath) && !fs.existsSync(reportHtmlPath)) {
+      fail(`${relRun}: 70-report.md exists but 70-report.html is missing. Run \`npm.cmd run report:html -- ${entry.name}\``, failures);
+    }
+
+    if (!fs.existsSync(checklistDir)) continue;
+    checkedRuns++;
+
+    if (!fs.existsSync(planPath)) {
+      fail(`${relRun}: checklist directory exists but 30-plan.md is missing`, failures);
+    }
+
+    const checklistFiles = [
+      { name: 'master-checklist.md', requires: planPath },
+      { name: 'implementation-checklist.md', requires: implementPath },
+      { name: 'verification-checklist.md', requires: verifyPath }
+    ];
+
+    for (const item of checklistFiles) {
+      const filePath = path.join(checklistDir, item.name);
+      if (!fs.existsSync(filePath)) continue;
+
+      if (!fs.existsSync(item.requires)) {
+        fail(`${relRun}: ${item.name} exists but required stage artifact is missing: ${path.basename(item.requires)}`, failures);
+      }
+
+      const content = fs.readFileSync(filePath, 'utf8');
+      const tableValidation = validateChecklistTable(content, allowedStatuses);
+      if (!tableValidation.ok) {
+        fail(`${relRun}: ${item.name} ${tableValidation.message}`, failures);
+      }
+    }
+  }
+
+  ok(`Checklist contract validation passed for ${checkedRuns} run(s) with checklist directories`);
+}
+
+function validateChecklistTable(content, allowedStatuses) {
+  const lines = content.split(/\r?\n/);
+  let foundTable = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const header = lines[i].trim();
+    const divider = lines[i + 1]?.trim() || '';
+    if (!header.startsWith('|') || !divider.startsWith('|')) continue;
+    if (!/^\|\s*[:\- ]+\|/.test(divider)) continue;
+
+    const headers = header.split('|').slice(1, -1).map((cell) => cell.trim().toLowerCase());
+    const statusIndex = headers.indexOf('status');
+    if (statusIndex === -1) continue;
+
+    foundTable = true;
+    i += 2;
+    let rowCount = 0;
+
+    while (i < lines.length && lines[i].trim().startsWith('|')) {
+      rowCount++;
+      const cells = lines[i].split('|').slice(1, -1).map((cell) => cell.trim());
+      const status = (cells[statusIndex] || '').toLowerCase();
+      if (!status) {
+        return { ok: false, message: `contains a checklist row with empty status` };
+      }
+      if (!allowedStatuses.has(status)) {
+        return { ok: false, message: `contains unsupported status "${status}"` };
+      }
+      i++;
+    }
+
+    if (rowCount === 0) {
+      return { ok: false, message: `contains a checklist table with no data rows` };
+    }
+
+    return { ok: true };
+  }
+
+  if (!foundTable) {
+    return { ok: false, message: `does not contain a markdown table with a Status column` };
+  }
+
+  return { ok: true };
+}
+
 function main() {
   const failures = [];
   generateProjectIndex(projectRoot);
@@ -355,6 +457,7 @@ function main() {
   validateWorkflowNumbering(failures);
   validateReportNamingConvention(failures);
   validateStageArtifactConventions(failures);
+  validateChecklistContracts(failures);
   if (!roadmapOnly) scanForLegacyReferences(failures);
 
   if (failures.length) {

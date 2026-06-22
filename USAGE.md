@@ -7,6 +7,7 @@ This guide describes the active DevFlow 2.0 surface used in the current reposito
 - Use the numbered mainline as the primary delivery path.
 - Use public companion commands only when the task needs routing, ideation, research, debugging, PRD framing, issue intake, wiki access, or help.
 - Treat stage markdown files as the source of truth.
+- Use `checklists/` under the running ID when people need live execution visibility across stages.
 - Treat skills and agents as support layers, not as replacements for the mainline.
 - Do not start new work from retired workflows or legacy dashboard/JSON-driven patterns.
 
@@ -149,6 +150,7 @@ Common paths:
 | Path | Purpose |
 | :--- | :--- |
 | `.workspaces/specs/` | stage artifacts grouped by running ID |
+| `.workspaces/specs/{ID}-{slug}/checklists/` | live operational tracking for plan, implementation, verification, and release gates |
 | `.workspaces/research/` | research and brainstorm outputs when used |
 | `.workspaces/prds/` | PRD artifacts when used |
 | `.workspaces/roadmap/` | roadmap discovery notes |
@@ -193,6 +195,27 @@ Notes:
 
 - goal session logs are internal runtime detail, not the main workflow surface
 - do not use goal logs as a replacement for stage markdown artifacts
+
+## Checklist Layer
+
+When a team wants detailed follow-through, create checklist artifacts inside the run:
+
+```text
+.workspaces/specs/{ID}-{slug}/checklists/
+  master-checklist.md
+  implementation-checklist.md
+  verification-checklist.md
+```
+
+Use this layer to:
+
+- expose current status to humans at a glance
+- track units of work across `/30-Plan`, `/40-Implement`, and `/50-Verify`
+- attach evidence directly to checklist items
+- record blockers without hiding them inside long notes
+- feed final completion and blocker summaries into `/70-Report`
+
+Treat checklist files as the live operational view. Treat stage files as the formal handoff and decision record.
 
 ## Skill And Agent Boundary
 

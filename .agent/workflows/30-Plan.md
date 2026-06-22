@@ -107,6 +107,20 @@ Review `{plan_md_path}` against `plan.template.md`, keep the required headings, 
 
 Replace every placeholder with concrete phases, files, commands, dependencies, and verification evidence.
 
+Create the checklist directory when detailed execution tracking is needed:
+
+```text
+.workspaces/specs/{ID}-*/checklists/
+```
+
+Seed at least:
+
+- `master-checklist.md`
+- `implementation-checklist.md`
+- `verification-checklist.md`
+
+Use the schema templates under `.agent/resources/schemas/` and turn approved phases/subtasks into live checklist items so humans can follow the run without reading the full planning narrative.
+
 ### 6. Validate And Close Planning
 
 Run:

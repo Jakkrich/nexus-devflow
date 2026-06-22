@@ -28,6 +28,8 @@ Read:
 - `20-spec.md`
 - `30-plan.md`
 - `40-implement.md`
+- `checklists/master-checklist.md` when present
+- `checklists/verification-checklist.md` when present
 - changed files
 - test output, command output, screenshots, or manual-check evidence
 
@@ -71,6 +73,7 @@ Include:
 - verdict: pass or fail
 - evidence: commands and results
 - test-decision alignment
+- checklist alignment and any stale status corrections
 - findings grouped by severity
 - manual checks required
 - recommended next action
