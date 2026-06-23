@@ -88,6 +88,14 @@ Checklist data is aggregated from any of these files when present:
 
 The generator parses markdown tables first and falls back to checkbox lines when needed.
 
+Supported checklist line markers:
+
+- `[ ]` -> `pending`
+- `[x]` -> `done`
+- `[/]` or `[~]` -> `in_progress`
+- `[!]` -> `blocked`
+- `[-]` -> `skipped`
+
 | Placeholder | Filled from | Notes |
 | :--- | :--- | :--- |
 | `{{checklist_total}}` | total parsed checklist items | All checklist sources combined |

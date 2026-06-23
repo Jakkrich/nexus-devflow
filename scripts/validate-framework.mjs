@@ -381,9 +381,9 @@ function validateChecklistContracts(failures) {
       }
 
       const content = fs.readFileSync(filePath, 'utf8');
-      const tableValidation = validateChecklistTable(content, allowedStatuses);
-      if (!tableValidation.ok) {
-        fail(`${relRun}: ${item.name} ${tableValidation.message}`, failures);
+      const checklistValidation = validateChecklistContent(content, allowedStatuses);
+      if (!checklistValidation.ok) {
+        fail(`${relRun}: ${item.name} ${checklistValidation.message}`, failures);
       }
     }
   }
@@ -391,9 +391,9 @@ function validateChecklistContracts(failures) {
   ok(`Checklist contract validation passed for ${checkedRuns} run(s) with checklist directories`);
 }
 
-function validateChecklistTable(content, allowedStatuses) {
+function validateChecklistContent(content, allowedStatuses) {
   const lines = content.split(/\r?\n/);
-  let foundTable = false;
+  let sawTableHeader = false;
 
   for (let i = 0; i < lines.length; i++) {
     const header = lines[i].trim();
@@ -405,7 +405,7 @@ function validateChecklistTable(content, allowedStatuses) {
     const statusIndex = headers.indexOf('status');
     if (statusIndex === -1) continue;
 
-    foundTable = true;
+    sawTableHeader = true;
     i += 2;
     let rowCount = 0;
 
@@ -429,8 +429,43 @@ function validateChecklistTable(content, allowedStatuses) {
     return { ok: true };
   }
 
-  if (!foundTable) {
-    return { ok: false, message: `does not contain a markdown table with a Status column` };
+  if (sawTableHeader) {
+    return { ok: false, message: `contains a checklist table with no data rows` };
+  }
+
+  return validateChecklistLines(lines, allowedStatuses);
+}
+
+function validateChecklistLines(lines, allowedStatuses) {
+  const supportedMarkers = new Set([' ', 'x', 'X', '/', '~', '!', '-']);
+  let rowCount = 0;
+  let sawChecklistLikeLine = false;
+
+  for (const line of lines) {
+    const markerMatch = line.match(/^\s*-\s*\[(.)\]\s+(.+)$/);
+    if (!markerMatch) continue;
+
+    sawChecklistLikeLine = true;
+    const marker = markerMatch[1];
+    if (!supportedMarkers.has(marker)) {
+      return { ok: false, message: `contains unsupported checklist marker "[${marker}]"` };
+    }
+
+    rowCount++;
+    const explicitStatus = markerMatch[2].match(/\((pending|in[_ -]?progress|blocked|skipped|done|complete|completed|released)\)\s*$/i);
+    if (!explicitStatus) continue;
+
+    const normalizedStatus = explicitStatus[1].toLowerCase().replace(/[ -]/g, '_');
+    if (!allowedStatuses.has(normalizedStatus)) {
+      return { ok: false, message: `contains unsupported status "${normalizedStatus}"` };
+    }
+  }
+
+  if (rowCount === 0) {
+    if (sawChecklistLikeLine) {
+      return { ok: false, message: `contains checklist lines but no valid checklist rows` };
+    }
+    return { ok: false, message: `does not contain a markdown table with a Status column or checklist lines` };
   }
 
   return { ok: true };

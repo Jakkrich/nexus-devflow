@@ -96,12 +96,33 @@ Use a dedicated checklist folder when people need a live view of task execution:
   verification-checklist.md
 ```
 
+Preferred live checklist format:
+
+```markdown
+- [ ] Pending item
+- [x] Completed item
+- [/] In-progress item
+- [!] Blocked item
+- [-] Skipped item
+```
+
+Supported marker mapping:
+
+| Marker | Status |
+| :--- | :--- |
+| `[ ]` | `pending` |
+| `[x]` | `done` |
+| `[/]` or `[~]` | `in_progress` |
+| `[!]` | `blocked` |
+| `[-]` | `skipped` |
+
 Principles:
 
 1. Checklist files are tied to one running ID.
 2. Checklist files make work visible during the run, not only after it finishes.
 3. Checklist items should include `status`, `owner`, `updated`, and `evidence`.
 4. Checklist files support the stage files. They do not replace `30-plan.md`, `40-implement.md`, or `50-verify.md`.
+5. Markdown tables with a `Status` column remain supported for backward compatibility, but checklist UI lines are the preferred human-facing format.
 
 Recommended use:
 

@@ -100,11 +100,9 @@ related_run: "999"
 - Stakeholder demo is ready.
 `);
 
-  writeFile(path.join(checklistDir, 'master-checklist.md'), `| ID | Item | Stage | Status | Owner | Depends On | Updated | Evidence | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| T1 | Add reset request endpoint | /40-Implement | done | codex | none | 2026-06-22 10:00 | src/api/auth.ts | complete |
-| T2 | Add regression tests | /50-Verify | done | codex | T1 | 2026-06-22 10:15 | npm test | complete |
-| T3 | Publish release note | /60-Release | skipped | codex | T2 | 2026-06-22 10:30 | deferred | deferred to marketing |
+  writeFile(path.join(checklistDir, 'master-checklist.md'), `- [x] Add reset request endpoint
+- [x] Add regression tests
+- [-] Publish release note
 `);
 
   writeFile(path.join(checklistDir, 'implementation-checklist.md'), `| ID | Unit | Plan Phase | Status | Owner | Files | Updated | Verification | Evidence |

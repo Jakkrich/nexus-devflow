@@ -56,16 +56,17 @@ related_run: "999"
   const checklistDir = path.join(workspaceDir, 'checklists');
   writeFile(path.join(workspaceDir, '70-report.md'), markdown);
 
-  writeFile(path.join(checklistDir, 'master-checklist.md'), `| ID | Item | Stage | Status | Owner | Depends On | Updated | Evidence | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| T1 | Build report adapter | /40-Implement | done | codex | none | 2026-06-23 10:00 | node test | complete |
-| T2 | Verify html output | /50-Verify | blocked | codex | T1 | 2026-06-23 10:15 | pending | renderer mismatch |
+  writeFile(path.join(checklistDir, 'master-checklist.md'), `- [x] Build report adapter
+- [/] Review adapter wiring
+- [!] Verify html output
+- [-] Publish release summary
 `);
 
   const adapterResult = renderReportStageWorkspace({ workspaceDir, projectRoot: process.cwd() });
   assert(adapterResult.outputPath.endsWith('70-report.html'), 'adapter should target 70-report.html');
   assert(adapterResult.html.includes('Adapter Smoke Test'), 'adapter should include report title');
   assert(adapterResult.html.includes('Verify html output'), 'adapter should render blocked checklist item');
+  assert(adapterResult.html.includes('Checklist items: 4'), 'adapter should count checkbox checklist rows');
 
   const flatWorkspaceDir = path.join(scratchRoot, '.workspaces', '999-shadow-stage');
   writeFile(path.join(flatWorkspaceDir, '70-report.md'), '# Shadow\n');

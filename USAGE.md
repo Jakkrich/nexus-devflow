@@ -236,6 +236,24 @@ When a team wants detailed follow-through, create checklist artifacts inside the
   verification-checklist.md
 ```
 
+Preferred checklist UI format:
+
+```markdown
+- [ ] Draft verification steps
+- [x] Ship implemented task
+- [/] Run active smoke test
+- [!] Waiting on external dependency
+- [-] Skip optional release task
+```
+
+Status markers:
+
+- `[ ]` = `pending`
+- `[x]` = `done`
+- `[/]` or `[~]` = `in_progress`
+- `[!]` = `blocked`
+- `[-]` = `skipped`
+
 Use this layer to:
 
 - expose current status to humans at a glance
@@ -245,6 +263,8 @@ Use this layer to:
 - feed final completion and blocker summaries into `/70-Report`
 
 Treat checklist files as the live operational view. Treat stage files as the formal handoff and decision record.
+
+Markdown tables with a `Status` column are still accepted for older runs, but checklist lines are now the preferred UI.
 
 ## Skill And Agent Boundary
 
