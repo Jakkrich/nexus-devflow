@@ -10,6 +10,8 @@
     "index": "node ./scripts/generate-project-index.mjs",
     "link-project": "node ./scripts/link-project.mjs",
     "migrate:artifacts": "node ./scripts/migrate-stage-artifacts.mjs",
+    "render:html": "node ./scripts/render-html.mjs",
+    "render:html:test": "node ./scripts/test-render-html-core.mjs",
     "report:html": "node ./scripts/generate-report-html.mjs",
     "report:html:test": "node ./scripts/test-generate-report-html.mjs",
     "validate:checklists:test": "node ./scripts/test-validate-checklists.mjs",
