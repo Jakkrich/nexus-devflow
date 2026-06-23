@@ -38,6 +38,7 @@ created: "{date}"
 updated: "{date}"
 owner: "{owner}"
 status: "draft"
+artifact_language: "en"
 related_run: "{running_id}"
 related_files: []
 ---
@@ -66,6 +67,8 @@ Rules:
 3. AI must not remove required headings.
 4. Stage files are contracts for handoff.
 5. Context that used to be stored in JSON must now be stored in markdown sections.
+6. Every `.template.md` file must declare `artifact_language: "th"` or `"en"` in frontmatter.
+7. Before creating a markdown artifact, the workflow must read `artifact_language` from the template and write the artifact in that language.
 
 ## 3. Checklist Contracts
 

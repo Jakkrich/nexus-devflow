@@ -38,6 +38,7 @@ For the full current command policy, see [workflow-surface-map.md](/D:/Projects/
 ## 4. Workspace Model
 
 DevFlow 2.0 uses markdown-first stage artifacts under `.workspaces/specs/`.
+In phase 1, markdown artifact language is controlled by `artifact_language` in the matching schema template under `.agent/resources/schemas/`.
 
 Typical running-id layout:
 
@@ -49,12 +50,16 @@ Typical running-id layout:
   30-plan.md
   40-implement.md
   50-verify.md
+  50-verify-impact.md
   60-release.md
   70-report.md
   70-report.html
 ```
 
+`50-verify-impact.md` is optional and is typically created during `/50-Verify` when the run needs explicit impact, regression-risk, or rollback analysis.
+
 See [workspace-artifacts.md](workspace-artifacts.md) for the canonical artifact contract.
+Use `npm.cmd run artifact-language:switch -- en` or `npm.cmd run artifact-language:switch -- th` to change the template default for all markdown artifacts.
 
 ## 5. First Useful Commands
 

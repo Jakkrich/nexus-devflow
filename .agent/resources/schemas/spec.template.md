@@ -1,4 +1,4 @@
----
+﻿---
 id: "{running_id}-spec"
 title: "Spec: {Work Title}"
 doc_type: "stage"
@@ -6,7 +6,8 @@ stage: "20-spec"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 related_run: "{running_id}"
 related_files: []
 ---
@@ -57,3 +58,4 @@ related_files: []
 ## 7. Additional Notes
 
 - Add any extra headings below this section when useful.
+

@@ -1,9 +1,10 @@
----
+﻿---
 id: "pr-followup-{ID}"
 title: "PR Follow-Up And Review Comment Triage: Task {ID}"
 doc_type: "report"
 category: "review"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -56,3 +57,4 @@ Actionable PR fixes are mapped directly to coding subtasks:
 ## 3. Sources #section/sources
 
 - {Sources}
+

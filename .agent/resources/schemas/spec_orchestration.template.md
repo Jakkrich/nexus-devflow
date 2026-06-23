@@ -1,9 +1,10 @@
----
+﻿---
 id: "spec-orchestration-{Topic Slug}"
 title: "Spec Orchestration Report: {Topic}"
 doc_type: "report"
 category: "planning"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "Spec Orchestrator Agent"
@@ -61,3 +62,4 @@ Run this command to proceed with discovery/planning:
 ## 5. Sources #section/sources
 
 - {Sources}
+

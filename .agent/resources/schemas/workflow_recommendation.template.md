@@ -1,9 +1,10 @@
----
+﻿---
 id: "workflow-recommendation-{Date}"
 title: "Workflow Recommendations"
 doc_type: "guide"
 category: "workflow"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -44,3 +45,4 @@ metadata_version: 1
 ## Sources #section/sources
 
 - {Sources}
+

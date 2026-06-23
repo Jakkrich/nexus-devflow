@@ -1,7 +1,7 @@
 ---
 title: Report HTML Placeholder Mapping
 status: active
-updated: 2026-06-22
+updated: 2026-06-24
 ---
 
 # Report HTML Placeholder Mapping
@@ -10,6 +10,7 @@ This guide maps every `{{...}}` placeholder in:
 
 ```text
 .agent/resources/schemas/report.template.html
+.agent/resources/schemas/report.template.th.html
 ```
 
 to the source field or derived value used by the report HTML generator.
@@ -19,6 +20,13 @@ Generator:
 ```text
 scripts/generate-report-html.mjs
 npm run report:html -- <workspace-path-or-running-id>
+```
+
+Locale selection:
+
+```text
+70-report.md frontmatter: artifact_language: "en" | "th"
+default: "en"
 ```
 
 Shared renderer boundary:
@@ -34,7 +42,9 @@ Current responsibility split:
 - `scripts/render-html.mjs` exposes the shared DevFlow-native HTML CLI
 - `scripts/generate-report-html.mjs` stays as the compatibility wrapper for `70-report`
 - `scripts/lib/render-html/stage-adapters/report-stage.mjs` maps `70-report.md` and checklist artifacts into renderer metadata
-- `scripts/lib/render-html/presets/report.mjs` applies the canonical `.agent/resources/schemas/report.template.html` scaffold
+- `scripts/lib/render-html/presets/report.mjs` selects the canonical HTML scaffold:
+  - `.agent/resources/schemas/report.template.html` for `artifact_language: "en"`
+  - `.agent/resources/schemas/report.template.th.html` for `artifact_language: "th"`
 
 ## Source Priority
 
@@ -44,6 +54,11 @@ Current responsibility split:
 4. workspace path or running ID derived values
 5. template-safe fallback values
 
+`artifact_language` is read from `70-report.md` frontmatter first and controls both:
+
+- the HTML shell template language
+- derived fallback labels emitted by `report-stage.mjs`
+
 ## Text Placeholders
 
 | Placeholder | Filled from | Notes |
@@ -52,6 +67,7 @@ Current responsibility split:
 | `{{report_id}}` | `id` frontmatter in `70-report.md` | Falls back to `{running_id}-report` |
 | `{{doc_type}}` | `doc_type` frontmatter | Falls back to `stage` |
 | `{{stage}}` | `stage` frontmatter | Falls back to `70-report` |
+| `artifact_language` | `artifact_language` frontmatter | Falls back to `en`; used by the renderer to select the HTML shell and locale-aware fallback strings |
 | `{{created}}` | `created` frontmatter | Falls back to `updated`, then current date |
 | `{{updated}}` | `updated` frontmatter | Falls back to `created`, then current date |
 | `{{owner}}` | `owner` frontmatter | Falls back to `unknown` |
@@ -67,7 +83,7 @@ These placeholders are filled with rendered HTML fragments, not plain text.
 | `{{executive_summary_html}}` | `### Executive Summary` | Markdown converted to HTML |
 | `{{work_completed_html}}` | `### Work Completed` | Markdown converted to HTML |
 | `{{validation_outcome_html}}` | `### Validation Outcome` | Markdown converted to HTML |
-| `{{checklist_summary_html}}` | `### Checklist Summary` | If empty, generator writes a derived summary from checklist stats |
+| `{{checklist_summary_html}}` | `### Checklist Summary` | If empty, generator writes a locale-aware summary from checklist stats |
 | `{{open_risks_html}}` | `### Open Risks` | Markdown converted to HTML |
 | `{{next_actions_html}}` | `### Next Actions` | Markdown converted to HTML |
 | `{{additional_notes_html}}` | content under `## 7. Additional Notes` | Markdown converted to HTML |
@@ -102,7 +118,7 @@ Supported checklist line markers:
 | `{{checklist_complete}}` | items with status `done` or `completed` | Case-insensitive |
 | `{{checklist_blocked}}` | items with status `blocked` | Case-insensitive |
 | `{{checklist_skipped}}` | items with status `skipped` | Case-insensitive |
-| `{{checklist_rows_html}}` | blocked/skipped checklist rows | Builds HTML table rows with status tags and evidence/note text |
+| `{{checklist_rows_html}}` | blocked/skipped checklist rows | Builds HTML table rows with status tags and evidence or note text |
 
 ## File List Placeholders
 
@@ -116,13 +132,14 @@ Supported checklist line markers:
 | Derived value | Source | Notes |
 | :--- | :--- | :--- |
 | `running_id` | `related_run` frontmatter, or workspace folder prefix | Example: `001` from `001-sample-task` |
-| `work_title` | `title` frontmatter with `Report:` removed, or workspace slug | Used for fallback title generation |
+| `work_title` | `title` frontmatter with `Report:` or `รายงานสรุป:` removed, or workspace slug | Used for fallback title generation |
 
 ## Fallback Rules
 
-- Missing markdown section -> generator inserts a placeholder paragraph
-- Missing checklist files -> checklist stats become `0`, blocked/skipped table shows “No blocked or skipped items.”
+- Missing markdown section -> generator inserts a locale-aware placeholder paragraph
+- Missing checklist files -> checklist stats become `0`, blocked/skipped table shows a locale-aware fallback row
 - Missing frontmatter values -> generator fills safe defaults
+- Missing `artifact_language` -> generator uses English (`en`) for HTML output
 - Missing workspace path argument -> generator exits with usage error
 
 ## Expected Workspace Inputs

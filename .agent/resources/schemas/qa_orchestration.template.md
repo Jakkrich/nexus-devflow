@@ -1,9 +1,10 @@
----
+﻿---
 id: "qa-orchestration-{ID}"
 title: "QA Orchestration Plan: Task {ID} - {Task Title}"
 doc_type: "plan"
 category: "qa"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -71,3 +72,4 @@ If significant fixes are needed, proceed to:
 ## 5. Sources #section/sources
 
 - {Sources}
+

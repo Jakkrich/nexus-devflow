@@ -35,6 +35,8 @@ using:
 .agent/resources/schemas/discover.template.md
 ```
 
+Before writing `00-discover.md`, read `artifact_language` from `discover.template.md` and produce the artifact in that language.
+
 Do not route new DevFlow 2.0 work through JSON-first task initialization.
 
 ## Process
@@ -66,6 +68,7 @@ Do not pretend the request is well-defined if it is still ambiguous.
 ### 4. Write `00-discover.md`
 
 - preserve the template headings
+- follow the `artifact_language` configured in `discover.template.md`
 - replace placeholders with concrete context
 - capture open questions explicitly
 - capture assumptions only when they are necessary and visible

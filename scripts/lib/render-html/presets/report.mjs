@@ -4,7 +4,10 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
-const templatePath = path.join(projectRoot, '.agent', 'resources', 'schemas', 'report.template.html');
+const templatePaths = {
+  en: path.join(projectRoot, '.agent', 'resources', 'schemas', 'report.template.html'),
+  th: path.join(projectRoot, '.agent', 'resources', 'schemas', 'report.template.th.html')
+};
 
 function escapeHtml(value) {
   return String(value)
@@ -18,6 +21,8 @@ function escapeHtml(value) {
 export const reportPreset = {
   name: 'report',
   render({ metadata }) {
+    const locale = metadata.artifact_language === 'th' ? 'th' : 'en';
+    const templatePath = templatePaths[locale] || templatePaths.en;
     const template = fs.readFileSync(templatePath, 'utf8');
     const safeMetadata = Object.fromEntries(
       Object.entries(metadata).map(([key, value]) => [

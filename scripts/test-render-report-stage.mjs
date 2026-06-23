@@ -23,9 +23,10 @@ function writeFile(filePath, content) {
 const scratchRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'nexus-report-stage-'));
 
 try {
-  const markdown = `---
+const markdown = `---
 id: "999-report"
 title: "Report: Adapter Smoke Test"
+artifact_language: "en"
 related_run: "999"
 ---
 
@@ -65,8 +66,33 @@ related_run: "999"
   const adapterResult = renderReportStageWorkspace({ workspaceDir, projectRoot: process.cwd() });
   assert(adapterResult.outputPath.endsWith('70-report.html'), 'adapter should target 70-report.html');
   assert(adapterResult.html.includes('Adapter Smoke Test'), 'adapter should include report title');
+  assert(adapterResult.html.includes('Executive Summary'), 'adapter should use english html scaffold by default');
   assert(adapterResult.html.includes('Verify html output'), 'adapter should render blocked checklist item');
   assert(adapterResult.html.includes('Checklist items: 4'), 'adapter should count checkbox checklist rows');
+
+  const thaiWorkspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '998-render-stage-th');
+  const thaiChecklistDir = path.join(thaiWorkspaceDir, 'checklists');
+  writeFile(path.join(thaiWorkspaceDir, '70-report.md'), `---
+id: "998-report"
+title: "รายงานสรุป: ทดสอบภาษาไทย"
+artifact_language: "th"
+related_run: "998"
+---
+
+# รายงานสรุป: ทดสอบภาษาไทย
+
+## 3. Required Content
+
+### Executive Summary
+
+- รายงานนี้ควรใช้ scaffold ภาษาไทย
+`);
+  writeFile(path.join(thaiChecklistDir, 'master-checklist.md'), `- [!] ตรวจสอบ html ภาษาไทย
+`);
+
+  const thaiAdapterResult = renderReportStageWorkspace({ workspaceDir: thaiWorkspaceDir, projectRoot: process.cwd() });
+  assert(thaiAdapterResult.html.includes('สรุปภาพรวม'), 'thai adapter should use thai html scaffold');
+  assert(thaiAdapterResult.html.includes('เปลี่ยนธีม'), 'thai adapter should keep thai chrome text');
 
   const flatWorkspaceDir = path.join(scratchRoot, '.workspaces', '999-shadow-stage');
   writeFile(path.join(flatWorkspaceDir, '70-report.md'), '# Shadow\n');
@@ -99,7 +125,7 @@ related_run: "999"
   assert(ambiguousRun.status !== 0, 'ambiguous spec workspaces should fail');
   assert(ambiguousRun.stderr.includes('Multiple workspace directories match "123"'), 'ambiguous error should stay explicit');
 
-  console.log('[OK] report-stage helpers preserve report generator extraction behavior.');
+  console.log('[OK] report-stage helpers preserve locale-aware report generator extraction behavior.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });
 }

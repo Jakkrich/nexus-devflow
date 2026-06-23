@@ -37,6 +37,8 @@ using:
 .agent/resources/schemas/report.template.html
 ```
 
+Before writing `70-report.md`, read `artifact_language` from `report.template.md` and produce the markdown artifact in that language.
+
 ## Process
 
 ### 1. Gather Full Run Context
@@ -74,6 +76,8 @@ Write:
 
 - a readable Markdown report for contributors
 - a consistent HTML report for stakeholder sharing
+
+In phase 1, `artifact_language` governs the markdown report text. HTML output remains derived from the markdown report plus the current renderer behavior.
 
 Use the canonical HTML scaffold in `.agent/resources/schemas/report.template.html` so every run keeps the same structure, navigation, header metadata, checklist snapshot, and footer style.
 

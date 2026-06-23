@@ -101,11 +101,14 @@ Create `30-plan.md` in the task workspace and base its structure on:
 .agent/resources/schemas/plan.template.md
 ```
 
+Before writing `30-plan.md`, read `artifact_language` from `plan.template.md` and produce the artifact in that language.
+
 Before reporting completion:
 
 Review `{plan_md_path}` against `plan.template.md`, keep the required headings, and remove placeholder text before completion.
 
 Replace every placeholder with concrete phases, files, commands, dependencies, and verification evidence.
+Follow the `artifact_language` configured in `plan.template.md` for all plan narrative text.
 
 Create the checklist directory when detailed execution tracking is needed:
 

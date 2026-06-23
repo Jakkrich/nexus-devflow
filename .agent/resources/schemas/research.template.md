@@ -1,9 +1,10 @@
----
+﻿---
 id: "research-{Topic Slug}"
 title: "Research Report: {Topic}"
 doc_type: "research"
 category: "research"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -63,3 +64,4 @@ sources_count: 0
 ## 7. Sources #section/sources
 
 - {Sources}
+

@@ -1,9 +1,10 @@
----
+﻿---
 id: "triage-{Issue_Number}"
 title: "GitHub Issue Triage Report: #{Issue_Number}"
 doc_type: "report"
 category: "triage"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -55,3 +56,4 @@ risk_level: "medium"
 ## 4. Sources #section/sources
 
 - {Sources}
+

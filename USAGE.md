@@ -24,7 +24,7 @@ Short meaning:
 - `/20-Spec`: write the delivery contract and acceptance criteria
 - `/30-Plan`: create the execution plan
 - `/40-Implement`: do the implementation work
-- `/50-Verify`: validate behavior, quality, and evidence
+- `/50-Verify`: validate behavior, quality, and evidence, with optional `50-verify-impact.md` when impact and rollback analysis are needed
 - `/60-Release`: prepare release-facing outputs
 - `/70-Report`: produce the final summary
 
@@ -203,6 +203,15 @@ Meaning:
 - `roadmap:validate`: validate roadmap markdown contracts
 - `validate`: validate the core framework surface
 - `validate:all`: run the broader validation and hygiene set
+
+Artifact language default:
+
+```powershell
+npm.cmd run artifact-language:switch -- en
+npm.cmd run artifact-language:switch -- th
+```
+
+In phase 1, this updates `artifact_language` across markdown schema templates so new markdown artifacts should be written in the selected language.
 
 ## Goal Runner
 

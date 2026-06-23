@@ -1,4 +1,4 @@
----
+﻿---
 id: "{running_id}-report"
 title: "Report: {Work Title}"
 doc_type: "stage"
@@ -6,7 +6,8 @@ stage: "70-report"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 related_run: "{running_id}"
 related_files: []
 ---
@@ -98,3 +99,4 @@ The `70-report.html` output should include:
 ## 7. Additional Notes
 
 - Add any extra headings below this section when useful.
+

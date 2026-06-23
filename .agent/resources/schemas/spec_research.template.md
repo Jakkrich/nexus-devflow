@@ -1,9 +1,10 @@
----
+﻿---
 id: "spec-research-{Topic Slug}"
 title: "Spec Research: {Topic}"
 doc_type: "research"
 category: "spec-research"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -66,3 +67,4 @@ sources_count: 0
 ## 7. Sources #section/sources
 
 - {Sources}
+

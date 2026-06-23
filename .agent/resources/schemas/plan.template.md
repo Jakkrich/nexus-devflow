@@ -1,9 +1,10 @@
----
+﻿---
 id: "plan-{Task ID}"
 title: "Implementation Plan: {Task ID} - {Task Title}"
 doc_type: "plan"
 category: "planning"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -121,3 +122,4 @@ risk_level: "medium"
 ---
 
 Technical plan generated via Nexus-DevFlow Manager.
+

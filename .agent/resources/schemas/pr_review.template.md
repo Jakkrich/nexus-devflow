@@ -1,9 +1,10 @@
----
+﻿---
 id: "pr-review-{PR Reference}"
 title: "PR Review: {PR Reference}"
 doc_type: "report"
 category: "review"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -56,3 +57,4 @@ finding_count: 0
 ## 6. Sources #section/sources
 
 - {Sources}
+

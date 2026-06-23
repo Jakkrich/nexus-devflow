@@ -1,9 +1,10 @@
----
+﻿---
 id: "{running_id}-master-checklist"
 title: "Master Checklist: {Work Title}"
 doc_type: "checklist"
 category: "execution-tracking"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -91,3 +92,4 @@ metadata_version: 1
 ## 8. Additional Notes
 
 - Add custom sections below when a run needs more detailed operational tracking.
+

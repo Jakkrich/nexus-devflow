@@ -1,9 +1,10 @@
----
+﻿---
 id: "roadmap-{Project Slug}"
 title: "Roadmap: {Project Name}"
 doc_type: "roadmap"
 category: "planning"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -57,3 +58,4 @@ focus_count: 0
 ## 6. Sources #section/sources
 
 - {Sources}
+

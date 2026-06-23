@@ -1,9 +1,10 @@
----
+﻿---
 id: "project-lessons"
 title: "Project Lessons Learned"
 doc_type: "lesson"
 category: "knowledge"
-status: "active"
+status: "active"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -57,3 +58,4 @@ Append a new lesson entry under `Chronological Lessons` with concrete context, l
 ## Sources #section/sources
 
 - {Sources}
+

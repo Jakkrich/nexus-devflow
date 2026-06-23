@@ -1,9 +1,10 @@
----
+﻿---
 id: "refactoring-{Target Slug}"
 title: "Code Simplification And Refactoring Report: {Target}"
 doc_type: "report"
 category: "refactoring"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -60,3 +61,4 @@ risk_level: "medium"
 ## 4. Sources #section/sources
 
 - {Sources}
+

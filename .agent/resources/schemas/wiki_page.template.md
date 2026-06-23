@@ -1,9 +1,10 @@
----
+﻿---
 id: "wiki-{Title Slug}"
 title: "{Title}"
 doc_type: "wiki"
 category: "knowledge"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -41,3 +42,4 @@ metadata_version: 1
 ## Sources #section/sources
 
 - {Source artifact, file path, report, commit, or command output.}
+

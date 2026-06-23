@@ -277,8 +277,11 @@ function validateStageArtifactConventions(failures) {
     '.agent/resources/schemas/spec.template.md',
     '.agent/resources/schemas/implement.template.md',
     '.agent/resources/schemas/verify.template.md',
+    '.agent/resources/schemas/verify-impact.template.md',
     '.agent/resources/schemas/release.template.md',
     '.agent/resources/schemas/report.template.md',
+    '.agent/resources/schemas/report.template.html',
+    '.agent/resources/schemas/report.template.th.html',
     'docs/quickstart.md',
     'docs/workspace-artifacts.md'
   ];
@@ -332,6 +335,118 @@ function validateStageArtifactConventions(failures) {
   }
 
   ok('Stage artifact naming and anonymous wording checks passed');
+}
+
+function validateArtifactLanguageContracts(failures) {
+  const schemasDir = path.join(projectRoot, '.agent', 'resources', 'schemas');
+  const validLanguages = new Set(['th', 'en']);
+  const templateFiles = fs.readdirSync(schemasDir, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.template.md'))
+    .map((entry) => path.join(schemasDir, entry.name));
+
+  for (const filePath of templateFiles) {
+    const relativePath = path.relative(projectRoot, filePath);
+    const content = fs.readFileSync(filePath, 'utf8');
+    const match = content.match(/^artifact_language:\s*"(.*)"\s*$/m);
+    if (!match) {
+      fail(`${relativePath} is missing required frontmatter field: artifact_language`, failures);
+      continue;
+    }
+    if (!validLanguages.has(match[1])) {
+      fail(`${relativePath} has unsupported artifact_language "${match[1]}"`, failures);
+    }
+  }
+
+  ok(`Artifact language contract passed for ${templateFiles.length} template file(s)`);
+}
+
+function validateArtifactLanguageWorkflowSurface(failures) {
+  const workflowFiles = [
+    '.agent/workflows/00-Discover.md',
+    '.agent/workflows/10-Define.md',
+    '.agent/workflows/20-Spec.md',
+    '.agent/workflows/30-Plan.md',
+    '.agent/workflows/40-Implement.md',
+    '.agent/workflows/50-Verify.md',
+    '.agent/workflows/60-Release.md',
+    '.agent/workflows/70-Report.md',
+    '.agent/resources/schemas/SCHEMA.md',
+    '.agent/resources/schemas/README.md',
+    'docs/quickstart.md',
+    'docs/workspace-artifacts.md'
+  ];
+
+  for (const relativePath of workflowFiles) {
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+    if (!content.includes('artifact_language')) {
+      fail(`${relativePath} must mention artifact_language`, failures);
+    }
+  }
+
+  ok('Artifact language workflow/docs surface is aligned');
+}
+
+function validateVerifyImpactContracts(failures) {
+  const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
+  if (!fs.existsSync(specsRoot)) {
+    ok('No spec workspaces found for verify impact validation');
+    return;
+  }
+
+  const requiredHeadings = [
+    '## 1. Changed Files',
+    '## 2. Client Impact Analysis',
+    '## 3. Verification Metrics',
+    '### A. Unit Verification',
+    '### B. Integration Verification',
+    '## 4. Rollback & Mitigation Plan'
+  ];
+  let checkedRuns = 0;
+
+  for (const entry of fs.readdirSync(specsRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const runDir = path.join(specsRoot, entry.name);
+    const relRun = path.relative(projectRoot, runDir);
+    const verifyPath = path.join(runDir, '50-verify.md');
+    const impactPath = path.join(runDir, '50-verify-impact.md');
+    if (!fs.existsSync(impactPath)) continue;
+
+    checkedRuns++;
+    if (!fs.existsSync(verifyPath)) {
+      fail(`${relRun}: 50-verify-impact.md exists but required stage artifact is missing: 50-verify.md`, failures);
+      continue;
+    }
+
+    const content = fs.readFileSync(impactPath, 'utf8');
+    for (const heading of requiredHeadings) {
+      if (!content.includes(heading)) {
+        fail(`${relRun}: 50-verify-impact.md is missing required heading: ${heading}`, failures);
+      }
+    }
+  }
+
+  ok(`Verify impact artifact validation passed for ${checkedRuns} run(s) with impact reports`);
+}
+
+function validateVerifyImpactSurface(failures) {
+  const requiredMentions = [
+    '.agent/workflows/50-Verify.md',
+    '.agent/resources/schemas/verify.template.md',
+    '.agent/resources/schemas/README.md',
+    'docs/workspace-artifacts.md',
+    'docs/quickstart.md'
+  ];
+
+  for (const relativePath of requiredMentions) {
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+    if (!content.includes('50-verify-impact.md')) {
+      fail(`${relativePath} must mention 50-verify-impact.md`, failures);
+    }
+  }
+
+  ok('Verify impact workflow/template/docs surface is aligned');
 }
 
 function validateChecklistContracts(failures) {
@@ -492,7 +607,11 @@ function main() {
   validateWorkflowNumbering(failures);
   validateReportNamingConvention(failures);
   validateStageArtifactConventions(failures);
+  validateArtifactLanguageContracts(failures);
+  validateArtifactLanguageWorkflowSurface(failures);
   validateChecklistContracts(failures);
+  validateVerifyImpactContracts(failures);
+  validateVerifyImpactSurface(failures);
   if (!roadmapOnly) scanForLegacyReferences(failures);
 
   if (failures.length) {

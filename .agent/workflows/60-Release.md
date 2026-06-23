@@ -35,6 +35,8 @@ using:
 .agent/resources/schemas/release.template.md
 ```
 
+Before writing `60-release.md`, read `artifact_language` from `release.template.md` and produce the artifact in that language.
+
 ## Process
 
 ### 1. Load Verified Context
@@ -58,6 +60,7 @@ Summarize:
 ### 3. Write `60-release.md`
 
 Keep the language understandable for someone who did not do the work.
+Follow the `artifact_language` configured in `release.template.md`.
 
 Prefer clear release-note style wording:
 

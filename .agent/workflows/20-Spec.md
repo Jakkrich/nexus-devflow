@@ -35,6 +35,8 @@ using:
 .agent/resources/schemas/spec.template.md
 ```
 
+Before writing `20-spec.md`, read `artifact_language` from `spec.template.md` and produce the artifact in that language.
+
 ## Process
 
 ### 1. Read Definition Artifacts
@@ -68,6 +70,7 @@ Do not hide uncertainty inside vague requirement text.
 ### 4. Finalize `20-spec.md`
 
 - preserve the template headings
+- follow the `artifact_language` configured in `spec.template.md`
 - replace all placeholders
 - keep implementation details out unless they are true constraints
 - make sure the acceptance criteria can actually be checked

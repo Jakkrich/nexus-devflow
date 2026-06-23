@@ -1,9 +1,10 @@
----
+﻿---
 id: "test-report-{Target Slug}"
 title: "Test Specification And Coverage Report: {Target}"
 doc_type: "report"
 category: "testing"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -57,3 +58,4 @@ risk_level: "medium"
 ## 4. Sources #section/sources
 
 - {Sources}
+

@@ -1,9 +1,10 @@
----
+﻿---
 id: "roadmap-discovery-{Project Slug}"
 title: "Roadmap Discovery: {Project Name}"
 doc_type: "roadmap-discovery"
 category: "planning"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -52,3 +53,4 @@ metadata_version: 1
 ## 6. Sources #section/sources
 
 - {Sources}
+

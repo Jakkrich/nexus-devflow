@@ -152,10 +152,10 @@ export function renderMarkdownToHtml(markdown, fallback = '<p class="placeholder
   return html.join('\n') || fallback;
 }
 
-export function renderDecisionHtml(markdown) {
+export function renderDecisionHtml(markdown, fallback = '<div class="decision-item placeholder">[Decision 1]</div>') {
   const trimmed = markdown.trim();
   if (!trimmed) {
-    return '<div class="decision-item placeholder">[Decision 1]</div>';
+    return fallback;
   }
 
   const lines = normalizeLineEndings(trimmed).split('\n').map((line) => line.trim()).filter(Boolean);
@@ -190,7 +190,7 @@ export function deriveRunningId(workspaceDir, frontmatter) {
 
 export function deriveWorkTitle(frontmatter, workspaceDir) {
   if (frontmatter.title) {
-    return frontmatter.title.replace(/^Report:\s*/, '').trim();
+    return frontmatter.title.replace(/^(Report:|รายงานสรุป:)\s*/, '').trim();
   }
   return path.basename(workspaceDir).replace(/^\d+-/, '').replace(/-/g, ' ').trim() || 'Untitled Work';
 }

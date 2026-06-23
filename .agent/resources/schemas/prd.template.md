@@ -1,9 +1,10 @@
----
+﻿---
 id: "prd-{Feature Slug}"
 title: "Product Requirements Document: {Feature Name}"
 doc_type: "prd"
 category: "planning"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -67,3 +68,4 @@ success_metrics_count: 0
 ## 8. Sources #section/sources
 
 - {Sources}
+
