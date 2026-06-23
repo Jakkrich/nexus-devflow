@@ -32,6 +32,7 @@ try {
   writeFile(path.join(workspaceDir, '70-report.md'), `---
 id: "999-report"
 title: "Report: Sample Password Reset"
+artifact_language: "en"
 doc_type: "stage"
 stage: "70-report"
 created: "2026-06-22"
@@ -125,6 +126,8 @@ related_run: "999"
 
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert(html.includes('<title>Report: Sample Password Reset</title>'), 'html should include rendered title');
+  assert(html.includes('Executive Summary'), 'html should use english report scaffold by default');
+  assert(html.includes('Toggle Theme'), 'html should use english chrome text by default');
   assert(html.includes('Checklist items: 7'), 'html footer should include checklist total');
   assert(html.includes('Build reset confirmation API'), 'html should include blocked checklist row');
   assert(html.includes('Publish release note'), 'html should include skipped checklist row');
@@ -134,7 +137,38 @@ related_run: "999"
   assert(html.includes('class="num-big">2<'), 'html should include blocked checklist count');
   assert(html.includes('class="num-big">1<'), 'html should include skipped checklist count');
 
-  console.log('[OK] generate-report-html renders standardized report HTML from markdown report and checklist tables.');
+  const thaiWorkspaceDir = path.join(scratchRoot, 'project', '.workspaces', 'specs', '998-sample-report-th');
+  writeFile(path.join(thaiWorkspaceDir, '70-report.md'), `---
+id: "998-report"
+title: "รายงานสรุป: ตัวอย่างภาษาไทย"
+artifact_language: "th"
+doc_type: "stage"
+stage: "70-report"
+created: "2026-06-22"
+updated: "2026-06-22"
+owner: "codex"
+status: "completed"
+related_run: "998"
+---
+
+# รายงานสรุป: ตัวอย่างภาษาไทย
+
+## 3. Required Content
+
+### Executive Summary
+
+- สรุปรายงานภาษาไทย
+`);
+  writeFile(path.join(thaiWorkspaceDir, 'checklists', 'master-checklist.md'), `- [!] ตรวจสอบผลลัพธ์ภาษาไทย
+`);
+
+  const thaiResult = run([thaiWorkspaceDir]);
+  assert(thaiResult.status === 0, `thai report html generation should pass:\n${thaiResult.stdout}\n${thaiResult.stderr}`);
+  const thaiHtml = fs.readFileSync(path.join(thaiWorkspaceDir, '70-report.html'), 'utf8');
+  assert(thaiHtml.includes('สรุปภาพรวม'), 'thai html should use thai report scaffold');
+  assert(thaiHtml.includes('เปลี่ยนธีม'), 'thai html should use thai chrome text');
+
+  console.log('[OK] generate-report-html renders locale-aware report HTML from markdown report and checklist tables.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });
 }

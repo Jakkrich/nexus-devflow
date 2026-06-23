@@ -1,9 +1,10 @@
----
+﻿---
 id: "competitor-analysis-{Topic Slug}"
 title: "Competitor Analysis Report: {Topic}"
 doc_type: "research"
 category: "competitor-analysis"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -56,3 +57,4 @@ sources_count: 0
 ## 5. Sources #section/sources
 
 - {Sources}
+

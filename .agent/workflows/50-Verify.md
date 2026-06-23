@@ -14,10 +14,13 @@ Review implementation quality, run validation, produce a verification report, an
 ## Markdown-First Contract
 
 Use `50-verify.md` as the primary verification artifact.
+Use `50-verify-impact.md` as an optional companion artifact when the run changes behavior, touches core logic, crosses integration boundaries, or needs explicit rollback and client impact analysis.
+Before writing either verification artifact, read `artifact_language` from the matching template and produce the markdown output in that language.
 
 Use these commands only to keep workflow status aligned with the task engine:
 
 Record verification start, results, open issues, and approval direction directly in `50-verify.md`. Use the stage markdown itself to indicate whether the work is ready for human review or needs to return to implementation.
+If an impact report is needed, create it in the same task directory and summarize its conclusions from `50-verify.md`.
 
 ## Process
 
@@ -59,14 +62,17 @@ For test-decision alignment, verify that planned verification was actually execu
 ### 4. Verification Report
 
 Create or update `50-verify.md` in the task directory.
+Create or update `50-verify-impact.md` when the run includes behavior changes, client-facing flow changes, integration risk, or rollback considerations worth reviewing separately.
 
 Base the structure on:
 
 ```text
 .agent/resources/schemas/verify.template.md
+.agent/resources/schemas/verify-impact.template.md
 ```
 
 Before reporting completion, validate the markdown and replace all placeholders with concrete command output, manual checks, failures, screenshots, and residual risks.
+Follow the `artifact_language` configured in the selected template for both `50-verify.md` and `50-verify-impact.md`.
 
 Include:
 
@@ -77,6 +83,7 @@ Include:
 - findings grouped by severity
 - manual checks required
 - recommended next action
+- impact report summary or explicit note that no impact report was needed
 
 ### 5. Decision
 
@@ -100,6 +107,7 @@ Report:
 - key findings
 - commands run
 - validation status
+- impact and rollback analysis when `50-verify-impact.md` is present
 - next command: `/60-Release {ID}` if pass, or `/40-Implement {ID}` if fail
 
 ## Relationship To DevFlow 2.0
@@ -114,6 +122,7 @@ Report:
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/verify.template.md`
+- `.agent/resources/schemas/verify-impact.template.md`
 - Related commands: `/40-Implement`, `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `/60-Release`
 
 ## Next Workflow Recommendation

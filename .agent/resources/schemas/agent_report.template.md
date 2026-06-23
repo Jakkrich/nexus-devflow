@@ -1,9 +1,10 @@
----
+﻿---
 id: "agent-report-{Agent Name}-{Timestamp}"
 title: "Agent Report: {Agent Name}"
 doc_type: "report"
 category: "agent"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Agent Name}"
@@ -61,3 +62,4 @@ finding_count: 0
 ## 7. Sources #section/sources
 
 - {Sources}
+

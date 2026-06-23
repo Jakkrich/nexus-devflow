@@ -1,9 +1,10 @@
----
+﻿---
 id: "project-wiki-index"
 title: "Project Wiki"
 doc_type: "wiki"
 category: "knowledge"
-status: "active"
+status: "active"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -47,3 +48,4 @@ This wiki compiles reusable knowledge about the current project. It is not the s
 - `.agent/workflows/Wiki.md`
 - `docs/workspace-artifacts.md`
 - `.workspaces/project_index.json`
+

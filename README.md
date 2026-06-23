@@ -46,7 +46,7 @@ This is the canonical DevFlow 2.0 path.
 - `20-Spec`: write the delivery contract and acceptance criteria
 - `30-Plan`: create an executable implementation plan
 - `40-Implement`: perform the code changes and implementation work
-- `50-Verify`: validate behavior, quality, and evidence
+- `50-Verify`: validate behavior, quality, and evidence, optionally producing `50-verify-impact.md` for impact and rollback analysis
 - `60-Release`: package release-facing outputs such as commit, PR, merge, or deploy coordination
 - `70-Report`: produce the final standardized summary in Markdown and HTML
 
@@ -204,7 +204,11 @@ Current commands:
 ```powershell
 npm.cmd run report:html -- <workspace-path-or-running-id>
 npm.cmd run render:html -- --stage 70-report <workspace-path-or-running-id>
+npm.cmd run artifact-language:switch -- en
+npm.cmd run artifact-language:switch -- th
 ```
+
+In phase 1, `artifact_language` controls markdown template defaults. Switch it when you want newly written markdown artifacts to default to Thai or English.
 
 ---
 

@@ -1,9 +1,10 @@
----
+﻿---
 id: "deploy-report-{Timestamp}"
 title: "Production Deployment And Pre-Flight Report"
 doc_type: "report"
 category: "release"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -57,3 +58,4 @@ risk_level: "medium"
 ## 4. Sources #section/sources
 
 - {Sources}
+

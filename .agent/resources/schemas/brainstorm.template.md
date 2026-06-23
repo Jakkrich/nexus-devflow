@@ -1,9 +1,10 @@
----
+﻿---
 id: "brainstorm-{Topic Slug}"
 title: "Brainstorming Report: {Topic}"
 doc_type: "report"
 category: "brainstorm"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -87,3 +88,4 @@ recommended_option: null
 ## 5. Sources #section/sources
 
 - {Sources}
+

@@ -1,4 +1,4 @@
----
+﻿---
 id: "{running_id}-verify"
 title: "Verify: {Work Title}"
 doc_type: "stage"
@@ -6,7 +6,8 @@ stage: "50-verify"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 related_run: "{running_id}"
 related_files: []
 ---
@@ -23,6 +24,7 @@ related_files: []
 - `20-spec.md`
 - `checklists/master-checklist.md`
 - `checklists/verification-checklist.md`
+- `50-verify-impact.md` when impact analysis is needed
 - Supporting debug, preview, or review notes if they exist
 
 ## 3. Required Content
@@ -47,6 +49,10 @@ related_files: []
 
 - [Confirm checklist statuses, evidence links, and any blocked items]
 
+### Impact Report Status
+
+- [State whether `50-verify-impact.md` was created. If not, explain why it was not needed.]
+
 ## 4. Decisions
 
 - [Decision 1]
@@ -57,6 +63,7 @@ related_files: []
 - Release blockers, if any
 - Manual checks still required, if any
 - Checklist updates required before release, if any
+- Reference to `50-verify-impact.md`, if created
 
 ## 6. Next Step Guidance
 
@@ -67,3 +74,4 @@ related_files: []
 ## 7. Additional Notes
 
 - Add any extra headings below this section when useful.
+

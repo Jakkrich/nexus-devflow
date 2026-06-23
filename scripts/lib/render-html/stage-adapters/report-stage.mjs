@@ -13,8 +13,125 @@ import {
 } from '../markdown.mjs';
 import { resolveWorkspaceDir as resolveSharedWorkspaceDir } from '../workspace-resolver.mjs';
 
+const REPORT_LOCALE = {
+  en: {
+    locale: 'en',
+    reportTitlePrefix: 'Report',
+    unknownItem: 'Unknown item',
+    noBlockedOrSkipped: 'No blocked or skipped items.',
+    noEvidence: '[No note or evidence provided]',
+    checklistSummary: {
+      progress: 'Overall progress',
+      blocked: 'Blocked items',
+      skipped: 'Skipped items',
+      noFiles: '[No checklist files were included in this run]'
+    },
+    statusDisplay: {
+      completed: 'Completed',
+      complete: 'Completed',
+      done: 'Done',
+      blocked: 'Blocked',
+      failed: 'Failed',
+      draft: 'Draft',
+      pending: 'Pending',
+      in_progress: 'In Progress',
+      released: 'Released'
+    },
+    statusTag: {
+      blocked: 'Blocked',
+      skipped: 'Skipped',
+      done: 'Done',
+      pending: 'Pending',
+      in_progress: 'In Progress',
+      completed: 'Completed',
+      complete: 'Complete',
+      released: 'Released'
+    },
+    placeholders: {
+      executiveSummary: '[Summarize the overall outcome of the run]',
+      workCompleted: '[List the work completed in this run]',
+      validationOutcome: '[Summarize the verification and validation outcome]',
+      openRisks: '[List any open risks or unresolved concerns]',
+      nextActions: '[List any remaining next actions]',
+      additionalNotes: '[Add any extra notes here when useful]',
+      decision: '[Decision 1]'
+    },
+    fileList: {
+      present: 'present',
+      markdownReport: 'Markdown summary',
+      htmlReport: 'HTML summary'
+    },
+    footer: {
+      generatedFrom: 'Generated from 70-report.md',
+      nextStep: 'Mainline next step: end of flow',
+      checklistItems: 'Checklist items'
+    }
+  },
+  th: {
+    locale: 'th',
+    reportTitlePrefix: 'รายงานสรุป',
+    unknownItem: 'Unknown item',
+    noBlockedOrSkipped: 'ไม่มีรายการที่ติดขัดหรือข้ามไป',
+    noEvidence: '[ไม่มีหมายเหตุหรือหลักฐาน]',
+    checklistSummary: {
+      progress: 'ความคืบหน้าภาพรวม',
+      blocked: 'รายการที่ติดขัด',
+      skipped: 'รายการที่ข้ามไป',
+      noFiles: '[ไม่มีไฟล์เช็คลิสต์ในการรันครั้งนี้]'
+    },
+    statusDisplay: {
+      completed: 'เสร็จสมบูรณ์',
+      complete: 'เสร็จสมบูรณ์',
+      done: 'เสร็จสิ้น',
+      blocked: 'ติดขัด',
+      failed: 'ล้มเหลว',
+      draft: 'ร่าง (Draft)',
+      pending: 'รอดำเนินการ',
+      in_progress: 'กำลังดำเนินการ',
+      released: 'ปล่อยใช้งานแล้ว'
+    },
+    statusTag: {
+      blocked: 'ติดขัด',
+      skipped: 'ข้ามไป',
+      done: 'เสร็จสิ้น',
+      pending: 'รอดำเนินการ',
+      in_progress: 'กำลังดำเนินการ',
+      completed: 'เสร็จสมบูรณ์',
+      complete: 'เสร็จสมบูรณ์',
+      released: 'ปล่อยใช้งานแล้ว'
+    },
+    placeholders: {
+      executiveSummary: '[สรุปภาพรวมของงานทั้งหมด]',
+      workCompleted: '[งานที่เสร็จสิ้น]',
+      validationOutcome: '[ผลการทดสอบระบบ]',
+      openRisks: '[ความเสี่ยงที่พบ]',
+      nextActions: '[งานขั้นถัดไป]',
+      additionalNotes: '[สามารถระบุหัวข้อหรือบันทึกเพิ่มเติมได้ที่นี่เมื่อต้องการ]',
+      decision: '[การตัดสินใจ 1]'
+    },
+    fileList: {
+      present: 'มีอยู่',
+      markdownReport: 'รายงานสรุป Markdown',
+      htmlReport: 'รายงานสรุป HTML'
+    },
+    footer: {
+      generatedFrom: 'สร้างจาก 70-report.md',
+      nextStep: 'ขั้นถัดไปของ Mainline: สิ้นสุดกระบวนการทำงาน',
+      checklistItems: 'Checklist items'
+    }
+  }
+};
+
 function readFileSafe(filePath) {
   return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null;
+}
+
+function resolveArtifactLanguage(frontmatter) {
+  return frontmatter.artifact_language === 'th' ? 'th' : 'en';
+}
+
+function getReportLocale(frontmatter) {
+  return REPORT_LOCALE[resolveArtifactLanguage(frontmatter)] || REPORT_LOCALE.en;
 }
 
 function parseMarkdownTable(markdown) {
@@ -45,7 +162,7 @@ function parseMarkdownTable(markdown) {
 function parseCheckboxRows(markdown) {
   const rows = [];
   const lines = markdown.replace(/\r\n/g, '\n').split('\n');
-  const MARKER_STATUS = {
+  const markerStatus = {
     ' ': 'pending',
     x: 'done',
     X: 'done',
@@ -60,7 +177,7 @@ function parseCheckboxRows(markdown) {
     if (!match) continue;
     const marker = match[1];
     const text = match[2].trim();
-    let status = MARKER_STATUS[marker] || 'pending';
+    let status = markerStatus[marker] || 'pending';
     const explicitStatus = text.match(/\((pending|in[_ -]?progress|blocked|skipped|done|complete|completed|released)\)\s*$/i);
     if (explicitStatus) {
       status = explicitStatus[1].toLowerCase().replace(/[ -]/g, '_');
@@ -72,6 +189,7 @@ function parseCheckboxRows(markdown) {
       notes: text
     });
   }
+
   return rows;
 }
 
@@ -79,7 +197,7 @@ function normalizeChecklistRows(markdown) {
   const tableRows = parseMarkdownTable(markdown);
   if (tableRows.length) {
     return tableRows.map((row) => ({
-      item: row.item || row.unit || row.check || row.subtask || row.id || 'Unknown item',
+      item: row.item || row.unit || row.check || row.subtask || row.id || '',
       status: (row.status || 'pending').toLowerCase(),
       evidence: row.evidence || row.verification || row['note / evidence'] || '',
       notes: row.notes || row['important context'] || row.reason || row['finding severity'] || ''
@@ -118,24 +236,18 @@ function summarizeChecklists(workspaceDir) {
   return { totals, blockedOrSkipped, files };
 }
 
-function renderChecklistRowsHtml(rows) {
+function renderChecklistRowsHtml(rows, localeText) {
   if (!rows.length) {
-    return '<tr><td colspan="3" class="placeholder">ไม่มีรายการที่ติดขัดหรือข้ามไป</td></tr>';
+    return `<tr><td colspan="3" class="placeholder">${escapeHtml(localeText.noBlockedOrSkipped)}</td></tr>`;
   }
-
-  const STATUS_TH = {
-    blocked: 'ติดขัด',
-    skipped: 'ข้ามไป',
-    done: 'เสร็จสิ้น',
-    pending: 'รอดำเนินการ'
-  };
 
   return rows.map((row) => {
     const status = String(row.status || '').toLowerCase();
     const tagClass = status === 'blocked' ? 'blocked' : 'skipped';
-    const statusText = STATUS_TH[status] || status;
-    const note = row.evidence || row.notes || '[ไม่มีหมายเหตุ]';
-    return `<tr><td>${escapeHtml(row.item)}</td><td><span class="tag ${tagClass}">${escapeHtml(statusText)}</span></td><td>${escapeHtml(note)}</td></tr>`;
+    const statusText = localeText.statusTag[status] || status;
+    const note = row.evidence || row.notes || localeText.noEvidence;
+    const item = row.item || localeText.unknownItem;
+    return `<tr><td>${escapeHtml(item)}</td><td><span class="tag ${tagClass}">${escapeHtml(statusText)}</span></td><td>${escapeHtml(note)}</td></tr>`;
   }).join('\n');
 }
 
@@ -177,6 +289,7 @@ export function renderReportStageWorkspace({ workspaceDir }) {
   }
 
   const { data: frontmatter, body } = parseFrontmatter(reportMarkdown);
+  const localeText = getReportLocale(frontmatter);
   const runningId = deriveRunningId(workspaceDir, frontmatter);
   const workTitle = deriveWorkTitle(frontmatter, workspaceDir);
   const checklist = summarizeChecklists(workspaceDir);
@@ -184,10 +297,10 @@ export function renderReportStageWorkspace({ workspaceDir }) {
   const checklistSummarySource = extractH3Section(body, 'Checklist Summary');
   const derivedChecklistSummary = checklist.totals.total
     ? renderMarkdownToHtml(
-        `- ความคืบหน้าภาพรวม: ${checklist.totals.complete}/${checklist.totals.total}\n- รายการที่ติดขัด: ${checklist.totals.blocked}\n- รายการที่ข้ามไป: ${checklist.totals.skipped}`,
+        `- ${localeText.checklistSummary.progress}: ${checklist.totals.complete}/${checklist.totals.total}\n- ${localeText.checklistSummary.blocked}: ${checklist.totals.blocked}\n- ${localeText.checklistSummary.skipped}: ${checklist.totals.skipped}`,
         ''
       )
-    : '<p class="placeholder">[ไม่มีไฟล์เช็คลิสต์ในการรันครั้งนี้]</p>';
+    : `<p class="placeholder">${escapeHtml(localeText.checklistSummary.noFiles)}</p>`;
 
   const inputFiles = [
     '00-discover.md',
@@ -204,24 +317,15 @@ export function renderReportStageWorkspace({ workspaceDir }) {
     .filter((file) => fs.existsSync(file))
     .map((file) => {
       const rel = path.relative(workspaceDir, file).replace(/\\/g, '/');
-      return renderFileListItem(rel, rel, '&#128203;', 'มีอยู่');
+      return renderFileListItem(rel, rel, '&#128203;', localeText.fileList.present);
     });
 
-  const STATUS_DISPLAY_TH = {
-    completed: 'เสร็จสมบูรณ์',
-    complete: 'เสร็จสมบูรณ์',
-    done: 'เสร็จสิ้น',
-    blocked: 'ติดขัด',
-    failed: 'ล้มเหลว',
-    draft: 'ร่าง (Draft)',
-    pending: 'รอดำเนินการ'
-  };
-
   const statusRaw = frontmatter.status || 'draft';
-  const statusDisplay = STATUS_DISPLAY_TH[String(statusRaw).toLowerCase()] || statusRaw;
+  const statusDisplay = localeText.statusDisplay[String(statusRaw).toLowerCase()] || statusRaw;
 
   const metadata = {
-    report_title: frontmatter.title || `รายงานสรุป: ${workTitle}`,
+    artifact_language: localeText.locale,
+    report_title: frontmatter.title || `${localeText.reportTitlePrefix}: ${workTitle}`,
     report_id: frontmatter.id || `${runningId}-report`,
     doc_type: frontmatter.doc_type || 'stage',
     stage: frontmatter.stage || '70-report',
@@ -230,25 +334,25 @@ export function renderReportStageWorkspace({ workspaceDir }) {
     owner: frontmatter.owner || 'unknown',
     status: statusRaw,
     status_display: statusDisplay,
-    executive_summary_html: renderMarkdownToHtml(extractH3Section(body, 'Executive Summary'), '<p class="placeholder">[สรุปภาพรวมของงานทั้งหมด]</p>'),
-    work_completed_html: renderMarkdownToHtml(extractH3Section(body, 'Work Completed'), '<p class="placeholder">[งานที่เสร็จสิ้น]</p>'),
-    validation_outcome_html: renderMarkdownToHtml(extractH3Section(body, 'Validation Outcome'), '<p class="placeholder">[ผลการทดสอบระบบ]</p>'),
+    executive_summary_html: renderMarkdownToHtml(extractH3Section(body, 'Executive Summary'), `<p class="placeholder">${escapeHtml(localeText.placeholders.executiveSummary)}</p>`),
+    work_completed_html: renderMarkdownToHtml(extractH3Section(body, 'Work Completed'), `<p class="placeholder">${escapeHtml(localeText.placeholders.workCompleted)}</p>`),
+    validation_outcome_html: renderMarkdownToHtml(extractH3Section(body, 'Validation Outcome'), `<p class="placeholder">${escapeHtml(localeText.placeholders.validationOutcome)}</p>`),
     checklist_summary_html: renderMarkdownToHtml(checklistSummarySource, derivedChecklistSummary),
     checklist_complete: String(checklist.totals.complete),
     checklist_blocked: String(checklist.totals.blocked),
     checklist_skipped: String(checklist.totals.skipped),
     checklist_total: String(checklist.totals.total),
-    checklist_rows_html: renderChecklistRowsHtml(checklist.blockedOrSkipped),
-    open_risks_html: renderMarkdownToHtml(extractH3Section(body, 'Open Risks'), '<p class="placeholder">[ความเสี่ยงที่พบ]</p>'),
-    next_actions_html: renderMarkdownToHtml(extractH3Section(body, 'Next Actions'), '<p class="placeholder">[งานขั้นถัดไป]</p>'),
-    decisions_html: renderDecisionHtml(extractH2Section(body, '4. Decisions', '5. Outputs')),
+    checklist_rows_html: renderChecklistRowsHtml(checklist.blockedOrSkipped, localeText),
+    open_risks_html: renderMarkdownToHtml(extractH3Section(body, 'Open Risks'), `<p class="placeholder">${escapeHtml(localeText.placeholders.openRisks)}</p>`),
+    next_actions_html: renderMarkdownToHtml(extractH3Section(body, 'Next Actions'), `<p class="placeholder">${escapeHtml(localeText.placeholders.nextActions)}</p>`),
+    decisions_html: renderDecisionHtml(extractH2Section(body, '4. Decisions', '5. Outputs'), `<div class="decision-item placeholder">${escapeHtml(localeText.placeholders.decision)}</div>`),
     inputs_list_html: [...inputFiles, ...checklistInputFiles].join('\n'),
     outputs_list_html: [
-      renderFileListItem('70-report.md', '70-report.md', '&#128196;', 'รายงานสรุป Markdown'),
-      renderFileListItem('70-report.html', '70-report.html', '&#127760;', 'รายงานสรุป HTML')
+      renderFileListItem('70-report.md', '70-report.md', '&#128196;', localeText.fileList.markdownReport),
+      renderFileListItem('70-report.html', '70-report.html', '&#127760;', localeText.fileList.htmlReport)
     ].join('\n'),
-    additional_notes_html: renderMarkdownToHtml(extractH2Section(body, '7. Additional Notes'), '<p class="placeholder">[สามารถระบุหัวข้อหรือบันทึกเพิ่มเติมได้ที่นี่เมื่อต้องการ]</p>'),
-    footer_text: `สร้างจาก 70-report.md | ขั้นถัดไปของ Mainline: สิ้นสุดกระบวนการทำงาน | Checklist items: ${checklist.totals.total}`
+    additional_notes_html: renderMarkdownToHtml(extractH2Section(body, '7. Additional Notes'), `<p class="placeholder">${escapeHtml(localeText.placeholders.additionalNotes)}</p>`),
+    footer_text: `${localeText.footer.generatedFrom} | ${localeText.footer.nextStep} | ${localeText.footer.checklistItems}: ${checklist.totals.total}`
   };
 
   const outputPath = path.join(workspaceDir, '70-report.html');

@@ -1,9 +1,10 @@
----
+﻿---
 id: "{running_id}-implementation-checklist"
 title: "Implementation Checklist: {Work Title}"
 doc_type: "checklist"
 category: "implementation-tracking"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -61,3 +62,4 @@ metadata_version: 1
 ## 6. Additional Notes
 
 - Add more sections when the implementation stream needs richer tracking.
+

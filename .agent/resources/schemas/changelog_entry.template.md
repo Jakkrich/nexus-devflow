@@ -1,9 +1,10 @@
----
+﻿---
 id: "changelog-{Version}"
 title: "Changelog Entry: {Version}"
 doc_type: "changelog"
 category: "release"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -52,3 +53,4 @@ version: "{Version}"
 ### Sources #section/sources
 
 - {Sources}
+

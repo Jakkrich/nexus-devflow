@@ -14,6 +14,7 @@ Implement the approved plan incrementally. Source code edits are allowed in this
 ## Markdown-First Contract
 
 Use `40-implement.md` as the primary implementation artifact.
+Before writing `40-implement.md`, read `artifact_language` from `.agent/resources/schemas/implement.template.md` and produce the artifact in that language.
 
 Use controlled task-engine commands when progress state must be synchronized:
 
@@ -73,6 +74,7 @@ When the scoped work is complete:
 - list changed files
 - record verification performed
 - record deviations, blockers, and manual checks
+- follow the `artifact_language` configured in `implement.template.md`
 - make sure checklist statuses match the actual state of the code and tests
 - make sure `40-implement.md` is ready for Verify
 

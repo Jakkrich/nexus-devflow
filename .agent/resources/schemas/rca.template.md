@@ -1,9 +1,10 @@
----
+﻿---
 id: "rca-{Issue Slug}"
 title: "Root Cause Analysis: {Issue}"
 doc_type: "report"
 category: "debug"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -77,3 +78,4 @@ fixed_by: null
 ## 9. Sources #section/sources
 
 - {Sources}
+

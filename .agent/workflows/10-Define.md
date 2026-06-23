@@ -35,6 +35,8 @@ using:
 .agent/resources/schemas/define.template.md
 ```
 
+Before writing `10-define.md`, read `artifact_language` from `define.template.md` and produce the artifact in that language.
+
 ## Process
 
 ### 1. Load Discovery Context
@@ -75,6 +77,7 @@ Do not move to Spec if the work can still be interpreted in materially different
 ### 4. Write `10-define.md`
 
 - preserve the template headings
+- follow the `artifact_language` configured in `define.template.md`
 - make the scope and success framing explicit
 - keep implementation details out unless they are hard constraints
 

@@ -27,11 +27,12 @@ try {
     report_id: 'smoke-report',
     doc_type: 'stage',
     stage: '70-report',
+    artifact_language: 'en',
     created: '2026-06-23',
     updated: '2026-06-23',
     owner: 'codex',
     status: 'draft',
-    status_display: 'ร่าง (Draft)',
+    status_display: 'Draft',
     executive_summary_html: '<p>Shared renderer is active.</p>',
     work_completed_html: '<p>Pending</p>',
     validation_outcome_html: '<p>Pending</p>',
@@ -64,6 +65,7 @@ try {
   assert(result.warnings.length === 0, 'warnings should be empty when all placeholders are populated');
   assert(fs.existsSync(outputPath), 'renderer should write output file');
   assert(result.html.includes('Shared Renderer Smoke Test'), 'html should include report title');
+  assert(result.html.includes('Executive Summary'), 'report preset should use english html scaffold by default');
 
   const warningResult = renderMarkdownDocument({
     sourcePath,

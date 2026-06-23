@@ -1,9 +1,10 @@
----
+﻿---
 id: "{running_id}-verification-checklist"
 title: "Verification Checklist: {Work Title}"
 doc_type: "checklist"
 category: "verification-tracking"
-status: "draft"
+status: "draft"
+artifact_language: "en"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -50,3 +51,4 @@ metadata_version: 1
 ## 6. Additional Notes
 
 - Add more sections when the verification stream needs deeper detail.
+
