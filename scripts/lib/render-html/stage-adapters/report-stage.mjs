@@ -108,14 +108,22 @@ function summarizeChecklists(workspaceDir) {
 
 function renderChecklistRowsHtml(rows) {
   if (!rows.length) {
-    return '<tr><td colspan="3" class="placeholder">No blocked or skipped items.</td></tr>';
+    return '<tr><td colspan="3" class="placeholder">ไม่มีรายการที่ติดขัดหรือข้ามไป</td></tr>';
   }
+
+  const STATUS_TH = {
+    blocked: 'ติดขัด',
+    skipped: 'ข้ามไป',
+    done: 'เสร็จสิ้น',
+    pending: 'รอดำเนินการ'
+  };
 
   return rows.map((row) => {
     const status = String(row.status || '').toLowerCase();
     const tagClass = status === 'blocked' ? 'blocked' : 'skipped';
-    const note = row.evidence || row.notes || '[no note]';
-    return `<tr><td>${escapeHtml(row.item)}</td><td><span class="tag ${tagClass}">${escapeHtml(status)}</span></td><td>${escapeHtml(note)}</td></tr>`;
+    const statusText = STATUS_TH[status] || status;
+    const note = row.evidence || row.notes || '[ไม่มีหมายเหตุ]';
+    return `<tr><td>${escapeHtml(row.item)}</td><td><span class="tag ${tagClass}">${escapeHtml(statusText)}</span></td><td>${escapeHtml(note)}</td></tr>`;
   }).join('\n');
 }
 
@@ -164,10 +172,10 @@ export function renderReportStageWorkspace({ workspaceDir }) {
   const checklistSummarySource = extractH3Section(body, 'Checklist Summary');
   const derivedChecklistSummary = checklist.totals.total
     ? renderMarkdownToHtml(
-        `- Overall completion: ${checklist.totals.complete}/${checklist.totals.total}\n- Blocked items: ${checklist.totals.blocked}\n- Skipped items: ${checklist.totals.skipped}`,
+        `- ความคืบหน้าภาพรวม: ${checklist.totals.complete}/${checklist.totals.total}\n- รายการที่ติดขัด: ${checklist.totals.blocked}\n- รายการที่ข้ามไป: ${checklist.totals.skipped}`,
         ''
       )
-    : '<p class="placeholder">[No checklist files were present for this run]</p>';
+    : '<p class="placeholder">[ไม่มีไฟล์เช็คลิสต์ในการรันครั้งนี้]</p>';
 
   const inputFiles = [
     '00-discover.md',
@@ -184,37 +192,51 @@ export function renderReportStageWorkspace({ workspaceDir }) {
     .filter((file) => fs.existsSync(file))
     .map((file) => {
       const rel = path.relative(workspaceDir, file).replace(/\\/g, '/');
-      return renderFileListItem(rel, rel, '&#128203;', 'present');
+      return renderFileListItem(rel, rel, '&#128203;', 'มีอยู่');
     });
 
+  const STATUS_DISPLAY_TH = {
+    completed: 'เสร็จสมบูรณ์',
+    complete: 'เสร็จสมบูรณ์',
+    done: 'เสร็จสิ้น',
+    blocked: 'ติดขัด',
+    failed: 'ล้มเหลว',
+    draft: 'ร่าง (Draft)',
+    pending: 'รอดำเนินการ'
+  };
+
+  const statusRaw = frontmatter.status || 'draft';
+  const statusDisplay = STATUS_DISPLAY_TH[String(statusRaw).toLowerCase()] || statusRaw;
+
   const metadata = {
-    report_title: frontmatter.title || `Report: ${workTitle}`,
+    report_title: frontmatter.title || `รายงานสรุป: ${workTitle}`,
     report_id: frontmatter.id || `${runningId}-report`,
     doc_type: frontmatter.doc_type || 'stage',
     stage: frontmatter.stage || '70-report',
     created: frontmatter.created || frontmatter.updated || new Date().toISOString().slice(0, 10),
     updated: frontmatter.updated || frontmatter.created || new Date().toISOString().slice(0, 10),
     owner: frontmatter.owner || 'unknown',
-    status: frontmatter.status || 'draft',
-    executive_summary_html: renderMarkdownToHtml(extractH3Section(body, 'Executive Summary'), '<p class="placeholder">[Short summary of the whole job]</p>'),
-    work_completed_html: renderMarkdownToHtml(extractH3Section(body, 'Work Completed'), '<p class="placeholder">[What was completed]</p>'),
-    validation_outcome_html: renderMarkdownToHtml(extractH3Section(body, 'Validation Outcome'), '<p class="placeholder">[What verification proved]</p>'),
+    status: statusRaw,
+    status_display: statusDisplay,
+    executive_summary_html: renderMarkdownToHtml(extractH3Section(body, 'Executive Summary'), '<p class="placeholder">[สรุปภาพรวมของงานทั้งหมด]</p>'),
+    work_completed_html: renderMarkdownToHtml(extractH3Section(body, 'Work Completed'), '<p class="placeholder">[งานที่เสร็จสิ้น]</p>'),
+    validation_outcome_html: renderMarkdownToHtml(extractH3Section(body, 'Validation Outcome'), '<p class="placeholder">[ผลการทดสอบระบบ]</p>'),
     checklist_summary_html: renderMarkdownToHtml(checklistSummarySource, derivedChecklistSummary),
     checklist_complete: String(checklist.totals.complete),
     checklist_blocked: String(checklist.totals.blocked),
     checklist_skipped: String(checklist.totals.skipped),
     checklist_total: String(checklist.totals.total),
     checklist_rows_html: renderChecklistRowsHtml(checklist.blockedOrSkipped),
-    open_risks_html: renderMarkdownToHtml(extractH3Section(body, 'Open Risks'), '<p class="placeholder">[Remaining concerns]</p>'),
-    next_actions_html: renderMarkdownToHtml(extractH3Section(body, 'Next Actions'), '<p class="placeholder">[What happens next, if anything]</p>'),
+    open_risks_html: renderMarkdownToHtml(extractH3Section(body, 'Open Risks'), '<p class="placeholder">[ความเสี่ยงที่พบ]</p>'),
+    next_actions_html: renderMarkdownToHtml(extractH3Section(body, 'Next Actions'), '<p class="placeholder">[งานขั้นถัดไป]</p>'),
     decisions_html: renderDecisionHtml(extractH2Section(body, '4. Decisions', '5. Outputs')),
     inputs_list_html: [...inputFiles, ...checklistInputFiles].join('\n'),
     outputs_list_html: [
-      renderFileListItem('70-report.md', '70-report.md', '&#128196;', 'final markdown summary'),
-      renderFileListItem('70-report.html', '70-report.html', '&#127760;', 'final HTML summary')
+      renderFileListItem('70-report.md', '70-report.md', '&#128196;', 'รายงานสรุป Markdown'),
+      renderFileListItem('70-report.html', '70-report.html', '&#127760;', 'รายงานสรุป HTML')
     ].join('\n'),
-    additional_notes_html: renderMarkdownToHtml(extractH2Section(body, '7. Additional Notes'), '<p class="placeholder">[Add any extra headings below this section when useful]</p>'),
-    footer_text: `Generated from 70-report.md | Mainline next step: end of flow | Checklist items: ${checklist.totals.total}`
+    additional_notes_html: renderMarkdownToHtml(extractH2Section(body, '7. Additional Notes'), '<p class="placeholder">[สามารถระบุหัวข้อหรือบันทึกเพิ่มเติมได้ที่นี่เมื่อต้องการ]</p>'),
+    footer_text: `สร้างจาก 70-report.md | ขั้นถัดไปของ Mainline: สิ้นสุดกระบวนการทำงาน | Checklist items: ${checklist.totals.total}`
   };
 
   const outputPath = path.join(workspaceDir, '70-report.html');

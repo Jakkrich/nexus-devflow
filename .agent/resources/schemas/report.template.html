@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="th" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -237,76 +237,76 @@
 <body>
   <div class="topbar">
     <nav class="toc">
-      <a href="#executive-summary">Summary</a>
-      <a href="#work-completed">Work Completed</a>
-      <a href="#validation-outcome">Validation</a>
-      <a href="#checklist-summary">Checklist</a>
-      <a href="#open-risks">Risks</a>
-      <a href="#next-actions">Next Actions</a>
-      <a href="#decisions">Decisions</a>
-      <a href="#inputs">Inputs</a>
-      <a href="#outputs">Outputs</a>
+      <a href="#executive-summary">สรุปภาพรวม</a>
+      <a href="#work-completed">งานที่เสร็จสิ้น</a>
+      <a href="#validation-outcome">การทดสอบระบบ</a>
+      <a href="#checklist-summary">ตารางเช็คลิสต์</a>
+      <a href="#open-risks">ความเสี่ยง</a>
+      <a href="#next-actions">งานขั้นถัดไป</a>
+      <a href="#decisions">การตัดสินใจ</a>
+      <a href="#inputs">ไฟล์อินพุต</a>
+      <a href="#outputs">ไฟล์เอาต์พุต</a>
     </nav>
-    <button class="theme-toggle" id="theme-toggle" type="button">Theme</button>
+    <button class="theme-toggle" id="theme-toggle" type="button">เปลี่ยนธีม</button>
   </div>
 
 <div class="wrap">
   <header class="report-header">
     <h1>{{report_title}}</h1>
-    <div class="doc-subtitle">Stage 70 &middot; Final Report &middot; id: {{report_id}}</div>
+    <div class="doc-subtitle">เฟส 70 &middot; รายงานผลสัมฤทธิ์ &middot; id: {{report_id}}</div>
 
     <div class="meta-grid">
-      <div><span class="k">Doc Type</span><span class="v">{{doc_type}}</span></div>
-      <div><span class="k">Stage</span><span class="v">{{stage}}</span></div>
-      <div><span class="k">Created</span><span class="v">{{created}}</span></div>
-      <div><span class="k">Updated</span><span class="v">{{updated}}</span></div>
-      <div><span class="k">Owner</span><span class="v">{{owner}}</span></div>
-      <div><span class="k">Status</span><span class="status-pill draft" id="status-pill" data-status="{{status}}">{{status}}</span></div>
+      <div><span class="k">ประเภทเอกสาร</span><span class="v">{{doc_type}}</span></div>
+      <div><span class="k">เฟสงาน</span><span class="v">{{stage}}</span></div>
+      <div><span class="k">สร้างเมื่อ</span><span class="v">{{created}}</span></div>
+      <div><span class="k">อัปเดตเมื่อ</span><span class="v">{{updated}}</span></div>
+      <div><span class="k">ผู้รับผิดชอบ</span><span class="v">{{owner}}</span></div>
+      <div><span class="k">สถานะ</span><span class="status-pill draft" id="status-pill" data-status="{{status}}">{{status_display}}</span></div>
     </div>
   </header>
 
   <section id="executive-summary">
-    <h2><span class="num">01</span> Executive Summary</h2>
+    <h2><span class="num">01</span> สรุปภาพรวม</h2>
     <div class="content-block">{{executive_summary_html}}</div>
   </section>
 
   <section id="work-completed">
-    <h2><span class="num">02</span> Work Completed</h2>
+    <h2><span class="num">02</span> งานที่เสร็จสิ้น</h2>
     <div class="content-block">{{work_completed_html}}</div>
   </section>
 
   <section id="validation-outcome">
-    <h2><span class="num">03</span> Validation Outcome</h2>
+    <h2><span class="num">03</span> การทดสอบระบบ</h2>
     <div class="content-block">{{validation_outcome_html}}</div>
   </section>
 
   <section id="checklist-summary">
-    <h2><span class="num">04</span> Checklist Summary</h2>
+    <h2><span class="num">04</span> สรุปเช็คลิสต์</h2>
     <div class="content-block">{{checklist_summary_html}}</div>
 
     <div class="checklist-summary">
       <div class="stat-card ok">
         <div class="num-big">{{checklist_complete}}</div>
-        <div class="label">Completed</div>
+        <div class="label">เสร็จสิ้น</div>
       </div>
       <div class="stat-card warn">
         <div class="num-big">{{checklist_blocked}}</div>
-        <div class="label">Blocked</div>
+        <div class="label">ติดขัด (Blocked)</div>
       </div>
       <div class="stat-card bad">
         <div class="num-big">{{checklist_skipped}}</div>
-        <div class="label">Skipped</div>
+        <div class="label">ข้าม (Skipped)</div>
       </div>
       <div class="stat-card">
         <div class="num-big">{{checklist_total}}</div>
-        <div class="label">Total Items</div>
+        <div class="label">งานทั้งหมด</div>
       </div>
     </div>
 
-    <h3 style="font-size:.85rem;color:var(--text-dim);margin:18px 0 8px;">Blocked / Skipped Items</h3>
+    <h3 style="font-size:.85rem;color:var(--text-dim);margin:18px 0 8px;">รายการที่ติดขัด / ข้ามไป</h3>
     <table>
       <thead>
-        <tr><th>Item</th><th>Status</th><th>Note / Evidence</th></tr>
+        <tr><th>รายการ</th><th>สถานะ</th><th>หมายเหตุ / หลักฐาน</th></tr>
       </thead>
       <tbody id="checklist-table-body">
         {{checklist_rows_html}}
@@ -315,36 +315,36 @@
   </section>
 
   <section id="open-risks">
-    <h2><span class="num">05</span> Open Risks</h2>
+    <h2><span class="num">05</span> ความเสี่ยง</h2>
     <div class="content-block">{{open_risks_html}}</div>
   </section>
 
   <section id="next-actions">
-    <h2><span class="num">06</span> Next Actions</h2>
+    <h2><span class="num">06</span> งานขั้นถัดไป</h2>
     <div class="content-block">{{next_actions_html}}</div>
   </section>
 
   <section id="decisions">
-    <h2><span class="num">07</span> Decisions</h2>
+    <h2><span class="num">07</span> การตัดสินใจ</h2>
     {{decisions_html}}
   </section>
 
   <section id="inputs">
-    <h2><span class="num">08</span> Inputs</h2>
+    <h2><span class="num">08</span> ไฟล์อินพุต</h2>
     <ul class="file-list">
       {{inputs_list_html}}
     </ul>
   </section>
 
   <section id="outputs">
-    <h2><span class="num">09</span> Outputs</h2>
+    <h2><span class="num">09</span> ไฟล์เอาต์พุต</h2>
     <ul class="file-list">
       {{outputs_list_html}}
     </ul>
   </section>
 
   <section id="additional-notes">
-    <h2><span class="num">+</span> Additional Notes</h2>
+    <h2><span class="num">+</span> บันทึกเพิ่มเติม</h2>
     <div class="content-block">{{additional_notes_html}}</div>
   </section>
 
