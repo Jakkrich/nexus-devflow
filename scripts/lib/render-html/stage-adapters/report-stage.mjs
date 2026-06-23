@@ -45,14 +45,26 @@ function parseMarkdownTable(markdown) {
 function parseCheckboxRows(markdown) {
   const rows = [];
   const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+  const MARKER_STATUS = {
+    ' ': 'pending',
+    x: 'done',
+    X: 'done',
+    '/': 'in_progress',
+    '~': 'in_progress',
+    '!': 'blocked',
+    '-': 'skipped'
+  };
+
   for (const line of lines) {
-    const match = line.match(/^\s*-\s*\[( |x|X)\]\s*(.+)$/);
+    const match = line.match(/^\s*-\s*\[([ xX\/~!\-])\]\s*(.+)$/);
     if (!match) continue;
-    const checked = match[1].toLowerCase() === 'x';
+    const marker = match[1];
     const text = match[2].trim();
-    let status = checked ? 'done' : 'pending';
-    if (/\(BLOCKED:/i.test(text)) status = 'blocked';
-    if (/\(SKIPPED:/i.test(text)) status = 'skipped';
+    let status = MARKER_STATUS[marker] || 'pending';
+    const explicitStatus = text.match(/\((pending|in[_ -]?progress|blocked|skipped|done|complete|completed|released)\)\s*$/i);
+    if (explicitStatus) {
+      status = explicitStatus[1].toLowerCase().replace(/[ -]/g, '_');
+    }
     rows.push({
       item: text,
       status,

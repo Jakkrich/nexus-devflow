@@ -26,7 +26,7 @@ The framework keeps that lifecycle explicit:
 
 - `.agent` contains workflows, agents, skills, rules, templates, and framework helpers
 - `.workspaces` contains project-local artifacts produced by the running flow
-- optional `checklists/` folders inside each running ID keep human-visible live task tracking
+- optional `checklists/` folders inside each running ID keep human-visible live task tracking, now with checklist-style markers such as `[ ]`, `[x]`, `[/]`, `[!]`, and `[-]`
 - numbered workflows represent only true mainline stage states
 - companion commands stay available for discovery, research, debugging, roadmap work, review, and specialist routing
 - stage handoff lives in Markdown, not task JSON

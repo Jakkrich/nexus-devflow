@@ -34,7 +34,7 @@ try {
   writeFile(path.join(runDir, '70-report.html'), '<html></html>\n');
   writeFile(path.join(runDir, 'checklists', 'master-checklist.md'), `| ID | Item | Stage | Status |\n| :--- | :--- | :--- | :--- |\n| T1 | Work item | /40-Implement | done |\n`);
   writeFile(path.join(runDir, 'checklists', 'implementation-checklist.md'), `| ID | Unit | Plan Phase | Status |\n| :--- | :--- | :--- | :--- |\n| I1 | Work unit | Phase 1 | blocked |\n`);
-  writeFile(path.join(runDir, 'checklists', 'verification-checklist.md'), `| ID | Check | Source | Status |\n| :--- | :--- | :--- | :--- |\n| V1 | Verify item | verify | skipped |\n`);
+  writeFile(path.join(runDir, 'checklists', 'verification-checklist.md'), `- [x] Verify completed integration path\n- [!] Investigate flaky preview gate\n- [-] Skip release smoke on sandbox only run\n`);
 
   const okRun = runValidate();
   assert(okRun.status === 0, `valid checklist workspace should pass:\n${okRun.stdout}\n${okRun.stderr}`);
@@ -45,10 +45,10 @@ try {
   assert(missingHtmlRun.stderr.includes('70-report.md exists but 70-report.html is missing'), 'missing html error should mention report html requirement');
 
   writeFile(path.join(runDir, '70-report.html'), '<html></html>\n');
-  writeFile(path.join(runDir, 'checklists', 'verification-checklist.md'), `| ID | Check | Source | Status |\n| :--- | :--- | :--- | :--- |\n| V1 | Verify item | verify | invalid_status |\n`);
+  writeFile(path.join(runDir, 'checklists', 'verification-checklist.md'), `- [?] Unknown marker should fail\n`);
   const badStatusRun = runValidate();
-  assert(badStatusRun.status !== 0, 'invalid checklist status should fail validation');
-  assert(badStatusRun.stderr.includes('unsupported status "invalid_status"'), 'invalid status error should be explicit');
+  assert(badStatusRun.status !== 0, 'invalid checklist marker should fail validation');
+  assert(badStatusRun.stderr.includes('unsupported checklist marker "[?]"'), 'invalid checklist marker error should be explicit');
 
   console.log('[OK] validate-framework enforces checklist/report consistency and checklist status contracts.');
 } finally {
