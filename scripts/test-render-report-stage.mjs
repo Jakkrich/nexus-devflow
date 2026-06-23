@@ -79,6 +79,14 @@ related_run: "999"
     'compatibility wrapper should remain safe to import and resolve workspaces'
   );
 
+  const cliRun = spawnSync(
+    process.execPath,
+    [path.join(path.resolve('scripts'), 'render-html.mjs'), '--stage', '70-report', workspaceDir],
+    { cwd: path.resolve('.'), encoding: 'utf8' }
+  );
+  assert(cliRun.status === 0, `stage-aware render-html CLI should pass:\n${cliRun.stdout}\n${cliRun.stderr}`);
+  assert(fs.existsSync(path.join(workspaceDir, '70-report.html')), 'stage-aware render-html CLI should write 70-report.html');
+
   const ambiguousRoot = path.join(scratchRoot, 'ambiguous-project');
   writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-first', '70-report.md'), '# First\n');
   writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-second', '70-report.md'), '# Second\n');
