@@ -92,6 +92,11 @@ Examples of internal companions include:
 
 ### 1. Standard new work
 
+```mermaid
+flowchart LR
+    D00["/00-Discover"] --> D10["/10-Define"] --> D20["/20-Spec"] --> D30["/30-Plan"] --> D40["/40-Implement"] --> D50["/50-Verify"] --> D60["/60-Release"] --> D70["/70-Report"]
+```
+
 ```text
 /00-Discover "Add password reset"
 /10-Define
@@ -105,6 +110,12 @@ Examples of internal companions include:
 
 ### 2. Idea still needs shaping
 
+```mermaid
+flowchart LR
+    D00["/00-Discover"] --> B["Brainstorm"]
+    B --> D10["/10-Define"] --> D20["/20-Spec"]
+```
+
 ```text
 /00-Discover "Improve onboarding"
 Brainstorm
@@ -113,6 +124,12 @@ Brainstorm
 ```
 
 ### 3. Needs extra integration knowledge
+
+```mermaid
+flowchart LR
+    D10["/10-Define"] --> R["Research"]
+    R --> D20["/20-Spec"] --> D30["/30-Plan"]
+```
 
 ```text
 /10-Define "Subscription billing"
@@ -123,6 +140,13 @@ Research "Stripe subscription webhook and customer portal"
 
 ### 4. Needs product and market framing
 
+```mermaid
+flowchart LR
+    D10["/10-Define"] --> R["Research"]
+    R --> P["PRD"]
+    P --> D20["/20-Spec"]
+```
+
 ```text
 /10-Define "AI workflow product direction"
 Research "AI coding workflow tools and market context"
@@ -131,6 +155,11 @@ PRD "Top priority initiative"
 ```
 
 ### 5. Starts from a bug
+
+```mermaid
+flowchart LR
+    X["Debug"] --> D10["/10-Define"] --> D20["/20-Spec"] --> D30["/30-Plan"] --> D40["/40-Implement"] --> D50["/50-Verify"]
+```
 
 ```text
 Debug "Login redirects forever after session expiry"
