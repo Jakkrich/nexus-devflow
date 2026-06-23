@@ -21,6 +21,21 @@ scripts/generate-report-html.mjs
 npm run report:html -- <workspace-path-or-running-id>
 ```
 
+Shared renderer boundary:
+
+```text
+scripts/render-html.mjs
+scripts/lib/render-html/stage-adapters/report-stage.mjs
+scripts/lib/render-html/presets/report.mjs
+```
+
+Current responsibility split:
+
+- `scripts/render-html.mjs` exposes the shared DevFlow-native HTML CLI
+- `scripts/generate-report-html.mjs` stays as the compatibility wrapper for `70-report`
+- `scripts/lib/render-html/stage-adapters/report-stage.mjs` maps `70-report.md` and checklist artifacts into renderer metadata
+- `scripts/lib/render-html/presets/report.mjs` applies the canonical `.agent/resources/schemas/report.template.html` scaffold
+
 ## Source Priority
 
 1. `70-report.md` frontmatter

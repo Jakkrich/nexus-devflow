@@ -50,6 +50,13 @@ Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projec
 
 แต่ละงานหลักอยู่ใต้ `.workspaces/specs/{ID}-{slug}/` และใช้ไฟล์ stage แบบ flat filename ในโฟลเดอร์เดียว
 
+### Markdown And HTML Policy
+
+- Markdown stage files are the source of truth across the mainline
+- HTML files are derived artifacts created only when a stage policy requires or enables them
+- In the current framework round, `70-report.html` is the only required HTML stage artifact
+- Future stage HTML outputs should be rendered through the shared renderer path instead of re-implementing markdown-to-html logic per stage
+
 ### Mainline Stage Files
 
 | File | Purpose |
@@ -63,6 +70,20 @@ Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projec
 | `60-release.md` | สถานะพร้อมปล่อย impact และข้อควรระวัง |
 | `70-report.md` | สรุปรันทั้งหมดแบบอ่านง่าย |
 | `70-report.html` | สรุปรันทั้งหมดในรูปแบบสื่อสารมาตรฐานสำหรับคนอ่านทั่วไป |
+
+### HTML Rendering Commands
+
+Use the existing report wrapper when rendering the final report:
+
+```powershell
+npm.cmd run report:html -- <workspace-path-or-running-id>
+```
+
+Use the shared renderer CLI when you want the stage-aware renderer surface directly:
+
+```powershell
+npm.cmd run render:html -- --stage 70-report <workspace-path-or-running-id>
+```
 
 ### Checklist Layer
 
