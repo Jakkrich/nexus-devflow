@@ -1,5 +1,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  deriveRunningId,
+  deriveWorkTitle,
+  escapeHtml,
+  extractH2Section,
+  extractH3Section,
+  parseFrontmatter,
+  renderDecisionHtml,
+  renderMarkdownToHtml
+} from './lib/render-html/markdown.mjs';
+import { resolveWorkspaceDir as resolveSharedWorkspaceDir } from './lib/render-html/workspace-resolver.mjs';
 
 const projectRoot = process.cwd();
 const templatePath = path.join(projectRoot, '.agent', 'resources', 'schemas', 'report.template.html');
@@ -13,206 +25,25 @@ function readFileSafe(filePath) {
   return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null;
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function stripQuotes(value) {
-  const trimmed = value.trim();
-  if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
-    return trimmed.slice(1, -1);
-  }
-  return trimmed;
-}
-
-function parseFrontmatter(markdown) {
-  if (!markdown.startsWith('---')) {
-    return { data: {}, body: markdown };
-  }
-
-  const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  if (!match) {
-    return { data: {}, body: markdown };
-  }
-
-  const raw = match[1];
-  const body = match[2];
-  const data = {};
-  let currentArrayKey = null;
-
-  for (const line of raw.split(/\r?\n/)) {
-    if (!line.trim()) continue;
-
-    const arrayItem = line.match(/^\s*-\s+(.*)$/);
-    if (arrayItem && currentArrayKey) {
-      data[currentArrayKey].push(stripQuotes(arrayItem[1]));
-      continue;
-    }
-
-    const keyValue = line.match(/^([A-Za-z0-9_]+):\s*(.*)$/);
-    if (!keyValue) {
-      currentArrayKey = null;
-      continue;
-    }
-
-    const [, key, rawValue] = keyValue;
-    if (!rawValue.trim()) {
-      data[key] = [];
-      currentArrayKey = key;
-      continue;
-    }
-
-    data[key] = stripQuotes(rawValue);
-    currentArrayKey = null;
-  }
-
-  return { data, body };
-}
-
-function normalizeLineEndings(text) {
-  return text.replace(/\r\n/g, '\n');
-}
-
-function escapeRegex(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function extractH3Section(body, heading) {
-  const normalized = normalizeLineEndings(body);
-  const regex = new RegExp(`^### ${escapeRegex(heading)}\\n([\\s\\S]*?)(?=^### |^## )`, 'm');
-  const match = normalized.match(regex);
-  return match ? match[1].trim() : '';
-}
-
-function extractH2Section(body, headingLabel, nextHeadingLabel = null) {
-  const normalized = normalizeLineEndings(body);
-  const headingToken = `## ${headingLabel}`;
-  const startIndex = normalized.indexOf(headingToken);
-  if (startIndex === -1) return '';
-
-  const contentStart = normalized.indexOf('\n', startIndex);
-  if (contentStart === -1) return '';
-
-  const nextIndex = nextHeadingLabel
-    ? normalized.indexOf(`\n## ${nextHeadingLabel}`, contentStart + 1)
-    : -1;
-
-  const content = nextIndex === -1
-    ? normalized.slice(contentStart + 1)
-    : normalized.slice(contentStart + 1, nextIndex);
-
-  return content.trim();
-}
-
-function renderInline(text) {
-  let escaped = escapeHtml(text);
-  escaped = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
-  escaped = escaped.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-  return escaped;
-}
-
-function renderMarkdownToHtml(markdown, fallback = '<p class="placeholder">[No content provided]</p>') {
-  const trimmed = markdown.trim();
-  if (!trimmed) return fallback;
-
-  const lines = normalizeLineEndings(trimmed).split('\n');
-  const html = [];
-  let i = 0;
-
-  while (i < lines.length) {
-    const line = lines[i].trimEnd();
-    if (!line.trim()) {
-      i++;
-      continue;
-    }
-
-    if (line.startsWith('```')) {
-      const codeLines = [];
-      i++;
-      while (i < lines.length && !lines[i].startsWith('```')) {
-        codeLines.push(lines[i]);
-        i++;
-      }
-      if (i < lines.length) i++;
-      html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
-      continue;
-    }
-
-    if (/^- /.test(line)) {
-      const items = [];
-      while (i < lines.length && /^- /.test(lines[i].trim())) {
-        items.push(`<li>${renderInline(lines[i].trim().slice(2))}</li>`);
-        i++;
-      }
-      html.push(`<ul>${items.join('')}</ul>`);
-      continue;
-    }
-
-    const paragraph = [];
-    while (i < lines.length && lines[i].trim() && !/^- /.test(lines[i].trim()) && !lines[i].startsWith('```')) {
-      paragraph.push(renderInline(lines[i].trim()));
-      i++;
-    }
-    html.push(`<p>${paragraph.join('<br>')}</p>`);
-  }
-
-  return html.join('\n') || fallback;
-}
-
-function renderDecisionHtml(markdown) {
-  const trimmed = markdown.trim();
-  if (!trimmed) {
-    return '<div class="decision-item placeholder">[Decision 1]</div>';
-  }
-
-  const lines = normalizeLineEndings(trimmed).split('\n').map((line) => line.trim()).filter(Boolean);
-  const items = [];
-  let buffer = [];
-
-  const flushBuffer = () => {
-    if (!buffer.length) return;
-    items.push(`<div class="decision-item">${renderInline(buffer.join(' '))}</div>`);
-    buffer = [];
-  };
-
-  for (const line of lines) {
-    if (/^- /.test(line)) {
-      flushBuffer();
-      items.push(`<div class="decision-item">${renderInline(line.slice(2))}</div>`);
-    } else {
-      buffer.push(line);
-    }
-  }
-  flushBuffer();
-
-  return items.join('\n');
-}
-
 function parseMarkdownTable(markdown) {
   const rows = [];
-  const lines = normalizeLineEndings(markdown).split('\n');
+  const lines = markdown.replace(/\r\n/g, '\n').split('\n');
 
-  for (let i = 0; i < lines.length; i++) {
-    if (!/^\|/.test(lines[i].trim())) continue;
-    if (i + 1 >= lines.length || !/^\|\s*[:\- ]+\|/.test(lines[i + 1].trim())) continue;
+  for (let index = 0; index < lines.length; index++) {
+    if (!/^\|/.test(lines[index].trim())) continue;
+    if (index + 1 >= lines.length || !/^\|\s*[:\- ]+\|/.test(lines[index + 1].trim())) continue;
 
-    const headers = lines[i].split('|').slice(1, -1).map((cell) => cell.trim().toLowerCase());
-    i += 2;
+    const headers = lines[index].split('|').slice(1, -1).map((cell) => cell.trim().toLowerCase());
+    index += 2;
 
-    while (i < lines.length && /^\|/.test(lines[i].trim())) {
-      const cells = lines[i].split('|').slice(1, -1).map((cell) => cell.trim());
+    while (index < lines.length && /^\|/.test(lines[index].trim())) {
+      const cells = lines[index].split('|').slice(1, -1).map((cell) => cell.trim());
       const row = {};
-      headers.forEach((header, index) => {
-        row[header] = cells[index] ?? '';
+      headers.forEach((header, cellIndex) => {
+        row[header] = cells[cellIndex] ?? '';
       });
       rows.push(row);
-      i++;
+      index++;
     }
   }
 
@@ -221,7 +52,7 @@ function parseMarkdownTable(markdown) {
 
 function parseCheckboxRows(markdown) {
   const rows = [];
-  const lines = normalizeLineEndings(markdown).split('\n');
+  const lines = markdown.replace(/\r\n/g, '\n').split('\n');
   for (const line of lines) {
     const match = line.match(/^\s*-\s*\[( |x|X)\]\s*(.+)$/);
     if (!match) continue;
@@ -301,47 +132,37 @@ function renderFileListItem(href, label, icon, opt = '') {
   return `<li><span class="icon">${icon}</span><a href="${escapeHtml(href)}">${escapeHtml(label)}</a>${optHtml}</li>`;
 }
 
-function deriveRunningId(workspaceDir, frontmatter) {
-  if (frontmatter.related_run) return frontmatter.related_run;
-  const base = path.basename(workspaceDir);
-  const match = base.match(/^(\d+)/);
-  return match ? match[1] : base;
-}
-
-function deriveWorkTitle(frontmatter, workspaceDir) {
-  if (frontmatter.title) {
-    return frontmatter.title.replace(/^Report:\s*/, '').trim();
-  }
-  return path.basename(workspaceDir).replace(/^\d+-/, '').replace(/-/g, ' ').trim() || 'Untitled Work';
-}
-
-function resolveWorkspaceDir(argument) {
+export function resolveWorkspaceDir(argument, rootOverride = projectRoot) {
   if (!argument) {
     fail('Usage: node scripts/generate-report-html.mjs <workspace-path-or-running-id>');
   }
 
-  const directPath = path.resolve(projectRoot, argument);
+  const directPath = path.resolve(rootOverride, argument);
   if (fs.existsSync(directPath)) {
     const stats = fs.statSync(directPath);
     if (stats.isDirectory()) return directPath;
     if (stats.isFile() && path.basename(directPath) === '70-report.md') return path.dirname(directPath);
   }
 
-  const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
-  if (!fs.existsSync(specsRoot)) {
-    fail('Could not find .workspaces/specs to resolve running ID.');
+  const specsRoot = path.join(rootOverride, '.workspaces', 'specs');
+  if (fs.existsSync(specsRoot) && fs.statSync(specsRoot).isDirectory()) {
+    const specCandidates = fs.readdirSync(specsRoot, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && entry.name.startsWith(argument))
+      .map((entry) => path.join(specsRoot, entry.name));
+
+    if (specCandidates.length === 1) {
+      return specCandidates[0];
+    }
+    if (specCandidates.length > 1) {
+      fail(`Multiple workspace directories match "${argument}". Use an explicit path.`);
+    }
   }
 
-  const candidates = fs.readdirSync(specsRoot, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && entry.name.startsWith(argument))
-    .map((entry) => path.join(specsRoot, entry.name));
-
-  if (candidates.length === 1) return candidates[0];
-  if (candidates.length > 1) {
-    fail(`Multiple workspace directories match "${argument}". Use an explicit path.`);
+  try {
+    return resolveSharedWorkspaceDir({ argument, projectRoot: rootOverride });
+  } catch (error) {
+    fail(error.message);
   }
-
-  fail(`Could not resolve workspace path or running ID: ${argument}`);
 }
 
 function replaceAll(template, replacements) {
@@ -458,4 +279,7 @@ function main() {
   console.log(`Generated ${outputPath}`);
 }
 
-main();
+const isEntrypoint = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isEntrypoint) {
+  main();
+}
