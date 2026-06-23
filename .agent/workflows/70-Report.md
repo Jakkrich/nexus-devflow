@@ -1,4 +1,4 @@
-﻿---
+---
 description: Report stage in DevFlow 2.0 - produce the final standardized markdown and HTML summary for the full running flow.
 argument-hint: "{running-id or workspace path}"
 ---
@@ -77,10 +77,11 @@ Write:
 
 Use the canonical HTML scaffold in `.agent/resources/schemas/report.template.html` so every run keeps the same structure, navigation, header metadata, checklist snapshot, and footer style.
 
-To render the HTML consistently from the markdown report and checklist artifacts, use:
+To render the HTML consistently from the markdown report and checklist artifacts, use one of:
 
 ```text
 npm run report:html -- <workspace-path-or-running-id>
+npm run render:html -- --stage 70-report <workspace-path-or-running-id>
 ```
 
 Both outputs should summarize checklist state when checklist artifacts exist, including:
@@ -133,4 +134,3 @@ npm run report:html -- <workspace-path-or-running-id>
 - **Primary**: End of mainline flow
 - **Render HTML**: `npm run report:html -- {ID}` after `70-report.md` is finalized so the standardized stakeholder HTML stays in sync
 - **Alternative**: `Wiki` when the completed run should be promoted into durable reusable knowledge
-

@@ -31,6 +31,7 @@ try {
     updated: '2026-06-23',
     owner: 'codex',
     status: 'draft',
+    status_display: 'ร่าง (Draft)',
     executive_summary_html: '<p>Shared renderer is active.</p>',
     work_completed_html: '<p>Pending</p>',
     validation_outcome_html: '<p>Pending</p>',
