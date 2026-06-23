@@ -8,7 +8,8 @@ import {
   parseFrontmatter,
   renderMarkdownToHtml
 } from './lib/render-html/markdown.mjs';
-import { resolveWorkspaceDir } from './generate-report-html.mjs';
+import { resolveWorkspaceDir as resolveWrapperWorkspaceDir } from './generate-report-html.mjs';
+import { renderReportStageWorkspace, resolveReportWorkspaceDir } from './lib/render-html/stage-adapters/report-stage.mjs';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -53,6 +54,7 @@ related_run: "999"
 
   const workspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '999-render-stage');
   const checklistDir = path.join(workspaceDir, 'checklists');
+  writeFile(path.join(workspaceDir, '70-report.md'), markdown);
 
   writeFile(path.join(checklistDir, 'master-checklist.md'), `| ID | Item | Stage | Status | Owner | Depends On | Updated | Evidence | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -60,12 +62,21 @@ related_run: "999"
 | T2 | Verify html output | /50-Verify | blocked | codex | T1 | 2026-06-23 10:15 | pending | renderer mismatch |
 `);
 
+  const adapterResult = renderReportStageWorkspace({ workspaceDir, projectRoot: process.cwd() });
+  assert(adapterResult.outputPath.endsWith('70-report.html'), 'adapter should target 70-report.html');
+  assert(adapterResult.html.includes('Adapter Smoke Test'), 'adapter should include report title');
+  assert(adapterResult.html.includes('Verify html output'), 'adapter should render blocked checklist item');
+
   const flatWorkspaceDir = path.join(scratchRoot, '.workspaces', '999-shadow-stage');
   writeFile(path.join(flatWorkspaceDir, '70-report.md'), '# Shadow\n');
 
   assert(
-    resolveWorkspaceDir('999', scratchRoot) === workspaceDir,
+    resolveReportWorkspaceDir('999', scratchRoot) === workspaceDir,
     'report generator should prefer .workspaces/specs when both layouts share a running id'
+  );
+  assert(
+    resolveWrapperWorkspaceDir('999', scratchRoot) === workspaceDir,
+    'compatibility wrapper should remain safe to import and resolve workspaces'
   );
 
   const ambiguousRoot = path.join(scratchRoot, 'ambiguous-project');
