@@ -190,6 +190,24 @@ If you see those concepts in older documents, read them as migration or historic
 
 ---
 
+## HTML Rendering
+
+DevFlow keeps markdown as the source of truth for stage artifacts.
+
+HTML is a derived artifact controlled by stage policy. In the current framework round:
+
+- `70-report` requires `70-report.html`
+- other stages remain markdown-first unless they explicitly opt into HTML rendering later
+
+Current commands:
+
+```powershell
+npm.cmd run report:html -- <workspace-path-or-running-id>
+npm.cmd run render:html -- --stage 70-report <workspace-path-or-running-id>
+```
+
+---
+
 ## Validation
 
 ```powershell
