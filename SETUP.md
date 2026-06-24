@@ -33,6 +33,7 @@ npm.cmd run validate:all
 cd D:\Projects\nexus-devflow
 npm.cmd run codex:update-global
 npm.cmd run codex:check-global
+npm.cmd run validate
 ```
 
 This installs:
@@ -48,13 +49,18 @@ If your local checkout is already at the version you want:
 ```powershell
 npm.cmd run codex:update-global
 npm.cmd run codex:check-global
+npm.cmd run validate
 ```
 
 If you want to pull latest first:
 
 ```powershell
 npm.cmd run codex:update-global:pull
+npm.cmd run codex:check-global
+npm.cmd run validate
 ```
+
+If any install, check, or update step fails, use [docs/install-update-troubleshooting.md](./docs/install-update-troubleshooting.md).
 
 ## 5. Use In A Project
 
@@ -106,7 +112,7 @@ git-repo: https://github.com/Jakkrich/nexus-devflow
 
 ## Troubleshooting
 
-- If `codex:check-global` reports mismatch, run `npm.cmd run codex:update-global`
-- If `codex:update-global:pull` refuses to pull, inspect `git status --short`
+- After install or upgrade, always run `npm.cmd run codex:check-global` and `npm.cmd run validate`
+- If install, check, or update behavior is unexpected, use [docs/install-update-troubleshooting.md](./docs/install-update-troubleshooting.md)
 - If old notes mention task JSON or dashboard runtime, treat them as legacy 1.x history
 - If `.agent` files are missing after a project-local install, relink or recopy the framework bundle
