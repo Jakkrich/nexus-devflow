@@ -24,8 +24,20 @@ function runValidate() {
   });
 }
 
+function assertTemplateUsesChecklistMarkers(relativePath) {
+  const content = fs.readFileSync(path.join(rootDir, relativePath), 'utf8');
+  assert(
+    /(^|\n)- \[[ xX\/~!\-]\] /m.test(content),
+    `${relativePath} should seed checklist items with markdown checkbox markers`
+  );
+}
+
 try {
   fs.rmSync(runDir, { recursive: true, force: true });
+
+  assertTemplateUsesChecklistMarkers('.agent/resources/schemas/master_checklist.template.md');
+  assertTemplateUsesChecklistMarkers('.agent/resources/schemas/implementation_checklist.template.md');
+  assertTemplateUsesChecklistMarkers('.agent/resources/schemas/verification_checklist.template.md');
 
   writeFile(path.join(runDir, '30-plan.md'));
   writeFile(path.join(runDir, '40-implement.md'));

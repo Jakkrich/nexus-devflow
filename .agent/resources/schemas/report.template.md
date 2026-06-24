@@ -70,13 +70,13 @@ related_files: []
 
 ### HTML Report Structure
 
-Use the canonical HTML scaffold:
+Render `70-report.html` directly from `70-report.md` with the shared renderer:
 
 ```text
-.agent/resources/schemas/report.template.html
+npm run report:html -- <workspace-path-or-running-id>
 ```
 
-Use the placeholder source guide:
+For renderer behavior and source-of-truth notes, use:
 
 ```text
 docs/report-html-placeholder-mapping.md
@@ -90,6 +90,7 @@ The `70-report.html` output should include:
 - checklist completion snapshot
 - blocked or skipped items
 - next actions
+- any additional markdown sections that help explain the outcome
 
 ## 6. Next Step Guidance
 

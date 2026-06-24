@@ -23,7 +23,7 @@ function writeFile(filePath, content) {
 const scratchRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'nexus-report-stage-'));
 
 try {
-const markdown = `---
+  const markdown = `---
 id: "999-report"
 title: "Report: Adapter Smoke Test"
 artifact_language: "en"
@@ -66,33 +66,34 @@ related_run: "999"
   const adapterResult = renderReportStageWorkspace({ workspaceDir, projectRoot: process.cwd() });
   assert(adapterResult.outputPath.endsWith('70-report.html'), 'adapter should target 70-report.html');
   assert(adapterResult.html.includes('Adapter Smoke Test'), 'adapter should include report title');
-  assert(adapterResult.html.includes('Executive Summary'), 'adapter should use english html scaffold by default');
-  assert(adapterResult.html.includes('Verify html output'), 'adapter should render blocked checklist item');
-  assert(adapterResult.html.includes('Checklist items: 4'), 'adapter should count checkbox checklist rows');
+  assert(adapterResult.html.includes('<h2>3. Required Content</h2>'), 'adapter should render report markdown headings');
+  assert(adapterResult.html.includes('<li>Adapter path renders this report.</li>'), 'adapter should render markdown list items');
+  assert(!adapterResult.html.includes('Verify html output'), 'adapter should not inject checklist summaries from the legacy template path');
 
   const thaiWorkspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '998-render-stage-th');
   const thaiChecklistDir = path.join(thaiWorkspaceDir, 'checklists');
   writeFile(path.join(thaiWorkspaceDir, '70-report.md'), `---
 id: "998-report"
-title: "รายงานสรุป: ทดสอบภาษาไทย"
+title: "Thai Adapter Report"
 artifact_language: "th"
 related_run: "998"
 ---
 
-# รายงานสรุป: ทดสอบภาษาไทย
+# Thai Adapter Report
 
 ## 3. Required Content
 
 ### Executive Summary
 
-- รายงานนี้ควรใช้ scaffold ภาษาไทย
+- Thai adapter summary
 `);
-  writeFile(path.join(thaiChecklistDir, 'master-checklist.md'), `- [!] ตรวจสอบ html ภาษาไทย
+  writeFile(path.join(thaiChecklistDir, 'master-checklist.md'), `- [!] Thai adapter checklist item
 `);
 
   const thaiAdapterResult = renderReportStageWorkspace({ workspaceDir: thaiWorkspaceDir, projectRoot: process.cwd() });
-  assert(thaiAdapterResult.html.includes('สรุปภาพรวม'), 'thai adapter should use thai html scaffold');
-  assert(thaiAdapterResult.html.includes('เปลี่ยนธีม'), 'thai adapter should keep thai chrome text');
+  assert(thaiAdapterResult.html.includes('<html lang="th">'), 'thai adapter should set the html lang from frontmatter');
+  assert(thaiAdapterResult.html.includes('Thai Adapter Report'), 'thai adapter should render thai markdown content');
+  assert(!thaiAdapterResult.html.includes('Toggle Theme'), 'thai adapter should not rely on the html template');
 
   const flatWorkspaceDir = path.join(scratchRoot, '.workspaces', '999-shadow-stage');
   writeFile(path.join(flatWorkspaceDir, '70-report.md'), '# Shadow\n');
@@ -125,7 +126,7 @@ related_run: "998"
   assert(ambiguousRun.status !== 0, 'ambiguous spec workspaces should fail');
   assert(ambiguousRun.stderr.includes('Multiple workspace directories match "123"'), 'ambiguous error should stay explicit');
 
-  console.log('[OK] report-stage helpers preserve locale-aware report generator extraction behavior.');
+  console.log('[OK] report-stage helpers render report markdown through the shared stage pipeline.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });
 }

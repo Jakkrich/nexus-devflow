@@ -18,43 +18,22 @@ const scratchRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'nexus-render-core-'))
 const outputPath = path.join(scratchRoot, 'sample.html');
 
 try {
+  assert(!fs.existsSync(path.join(projectRoot, '.agent', 'resources', 'schemas', 'report.template.html')), 'legacy report.template.html should be removed');
+  assert(!fs.existsSync(path.join(projectRoot, '.agent', 'resources', 'schemas', 'report.template.th.html')), 'legacy report.template.th.html should be removed');
+
   const sourcePath = path.join(scratchRoot, 'sample.md');
   const metadataPath = path.join(scratchRoot, 'metadata.json');
   fs.writeFileSync(sourcePath, '# Sample\n', 'utf8');
 
   const fullMetadata = {
     report_title: 'Report: Shared Renderer Smoke Test',
-    report_id: 'smoke-report',
-    doc_type: 'stage',
-    stage: '70-report',
-    artifact_language: 'en',
-    created: '2026-06-23',
-    updated: '2026-06-23',
-    owner: 'codex',
-    status: 'draft',
-    status_display: 'Draft',
-    executive_summary_html: '<p>Shared renderer is active.</p>',
-    work_completed_html: '<p>Pending</p>',
-    validation_outcome_html: '<p>Pending</p>',
-    checklist_summary_html: '<p>Pending</p>',
-    checklist_complete: '0',
-    checklist_blocked: '0',
-    checklist_skipped: '0',
-    checklist_total: '0',
-    checklist_rows_html: '<tr><td colspan="3">None</td></tr>',
-    open_risks_html: '<p>None</p>',
-    next_actions_html: '<p>None</p>',
-    decisions_html: '<div class="decision-item">Adopt shared renderer</div>',
-    inputs_list_html: '<li>70-report.md</li>',
-    outputs_list_html: '<li>70-report.html</li>',
-    additional_notes_html: '<p>n/a</p>',
-    footer_text: 'Generated from smoke test'
+    artifact_language: 'en'
   };
   fs.writeFileSync(metadataPath, JSON.stringify(fullMetadata, null, 2), 'utf8');
 
   const result = renderMarkdownDocument({
     sourcePath,
-    markdown: '### Executive Summary\n\n- Shared renderer is active.',
+    markdown: '# Report: Shared Renderer Smoke Test\n\n### Executive Summary\n\n- Shared renderer is active.',
     preset: 'report',
     outputPath,
     metadata: fullMetadata
@@ -62,10 +41,10 @@ try {
 
   assert(result.presetUsed === 'report', 'presetUsed should equal report');
   assert(result.outputPath === outputPath, 'outputPath should be preserved');
-  assert(result.warnings.length === 0, 'warnings should be empty when all placeholders are populated');
+  assert(result.warnings.length === 0, 'warnings should be empty for direct markdown rendering');
   assert(fs.existsSync(outputPath), 'renderer should write output file');
   assert(result.html.includes('Shared Renderer Smoke Test'), 'html should include report title');
-  assert(result.html.includes('Executive Summary'), 'report preset should use english html scaffold by default');
+  assert(result.html.includes('<h3>Executive Summary</h3>'), 'report preset should render markdown headings directly');
 
   const warningResult = renderMarkdownDocument({
     sourcePath,
@@ -77,7 +56,7 @@ try {
     }
   });
 
-  assert(warningResult.warnings.length > 0, 'warnings should report unresolved template placeholders');
+  assert(warningResult.warnings.length === 0, 'report preset should not emit placeholder warnings');
 
   const escapedReportResult = renderMarkdownDocument({
     sourcePath,
@@ -90,7 +69,7 @@ try {
   });
   assert(
     escapedReportResult.html.includes('&lt;Unsafe &quot;Title&quot;&gt;'),
-    'report preset should escape plain-text metadata before template substitution'
+    'report preset should escape plain-text metadata in the generated document title'
   );
 
   const defaultResult = renderMarkdownDocument({

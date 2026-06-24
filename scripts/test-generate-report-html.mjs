@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
-import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -126,21 +126,16 @@ related_run: "999"
 
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert(html.includes('<title>Report: Sample Password Reset</title>'), 'html should include rendered title');
-  assert(html.includes('Executive Summary'), 'html should use english report scaffold by default');
-  assert(html.includes('Toggle Theme'), 'html should use english chrome text by default');
-  assert(html.includes('Checklist items: 7'), 'html footer should include checklist total');
-  assert(html.includes('Build reset confirmation API'), 'html should include blocked checklist row');
-  assert(html.includes('Publish release note'), 'html should include skipped checklist row');
-  assert(html.includes('Stakeholder demo is ready.'), 'html should include additional notes');
-  assert(html.includes('checklists/master-checklist.md'), 'html should include checklist input links');
-  assert(html.includes('class="num-big">4<'), 'html should include completed checklist count');
-  assert(html.includes('class="num-big">2<'), 'html should include blocked checklist count');
-  assert(html.includes('class="num-big">1<'), 'html should include skipped checklist count');
+  assert(html.includes('<h1>Report: Sample Password Reset</h1>'), 'html should render the markdown document title');
+  assert(html.includes('<h2>1. Purpose</h2>'), 'html should render markdown headings from the report body');
+  assert(html.includes('<li>Stakeholder demo is ready.</li>'), 'html should include additional notes from markdown');
+  assert(!html.includes('Toggle Theme'), 'html should not depend on the legacy report template chrome');
+  assert(!html.includes('checklists/master-checklist.md'), 'html should not inject checklist template sections');
 
   const thaiWorkspaceDir = path.join(scratchRoot, 'project', '.workspaces', 'specs', '998-sample-report-th');
   writeFile(path.join(thaiWorkspaceDir, '70-report.md'), `---
 id: "998-report"
-title: "รายงานสรุป: ตัวอย่างภาษาไทย"
+title: "Thai Report Title"
 artifact_language: "th"
 doc_type: "stage"
 stage: "70-report"
@@ -151,24 +146,25 @@ status: "completed"
 related_run: "998"
 ---
 
-# รายงานสรุป: ตัวอย่างภาษาไทย
+# Thai Report Title
 
 ## 3. Required Content
 
 ### Executive Summary
 
-- สรุปรายงานภาษาไทย
+- Thai summary line
 `);
-  writeFile(path.join(thaiWorkspaceDir, 'checklists', 'master-checklist.md'), `- [!] ตรวจสอบผลลัพธ์ภาษาไทย
+  writeFile(path.join(thaiWorkspaceDir, 'checklists', 'master-checklist.md'), `- [!] Thai checklist item
 `);
 
   const thaiResult = run([thaiWorkspaceDir]);
   assert(thaiResult.status === 0, `thai report html generation should pass:\n${thaiResult.stdout}\n${thaiResult.stderr}`);
   const thaiHtml = fs.readFileSync(path.join(thaiWorkspaceDir, '70-report.html'), 'utf8');
-  assert(thaiHtml.includes('สรุปภาพรวม'), 'thai html should use thai report scaffold');
-  assert(thaiHtml.includes('เปลี่ยนธีม'), 'thai html should use thai chrome text');
+  assert(thaiHtml.includes('<html lang="th">'), 'thai html should set the html lang from frontmatter');
+  assert(thaiHtml.includes('<h1>Thai Report Title</h1>'), 'thai html should render the markdown title');
+  assert(!thaiHtml.includes('Toggle Theme'), 'thai html should not depend on the html template chrome');
 
-  console.log('[OK] generate-report-html renders locale-aware report HTML from markdown report and checklist tables.');
+  console.log('[OK] generate-report-html renders report markdown directly into html output.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });
 }

@@ -45,11 +45,12 @@ metadata_version: 1
 - Link each completed item to concrete evidence instead of relying on memory.
 - Record blockers explicitly. Do not silently skip stalled work.
 
-## 3. Master Checklist Table
+## 3. Master Checklist Items
 
-| ID | Item | Stage | Status | Owner | Depends On | Updated | Evidence | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| T1 | [Short actionable item] | [/30-Plan or /40-Implement or /50-Verify or /60-Release] | [pending / in_progress / blocked / done / skipped] | [person/agent] | [T0 or none] | [YYYY-MM-DD HH:mm] | [file, command, screenshot, or note] | [important context] |
+- [ ] T1: [Short actionable item] | stage: /40-Implement | owner: {Owner} | depends: none | updated: {Date} | evidence: pending
+- [/] T2: [Active implementation or verification item] | stage: /50-Verify | owner: [person/agent] | depends: T1 | updated: [YYYY-MM-DD HH:mm] | evidence: [command, file, or note]
+- [!] T3: [Blocked item that needs attention] | stage: /40-Implement | owner: [person/agent] | depends: T1 | updated: [YYYY-MM-DD HH:mm] | evidence: [blocker note]
+- [-] T4: [Explicitly skipped item] | stage: /60-Release | owner: [person/agent] | depends: none | updated: [YYYY-MM-DD HH:mm] | evidence: [reason for skip]
 
 ## 4. Detailed Item Notes
 
@@ -71,16 +72,14 @@ metadata_version: 1
 
 ## 5. Stage Summary
 
-| Stage | Summary | Status |
-| :--- | :--- | :--- |
-| `/30-Plan` | [Checklist created from approved plan] | [pending / in_progress / done] |
-| `/40-Implement` | [Implementation progress summary] | [pending / in_progress / blocked / done] |
-| `/50-Verify` | [Verification progress summary] | [pending / in_progress / blocked / done] |
-| `/60-Release` | [Release gate summary if needed] | [pending / in_progress / blocked / done] |
+- [x] `/30-Plan`: [Checklist created from approved plan]
+- [ ] `/40-Implement`: [Implementation progress summary]
+- [ ] `/50-Verify`: [Verification progress summary]
+- [ ] `/60-Release`: [Release gate summary if needed]
 
 ## 6. Open Blockers
 
-- [Blocker with owner and next action]
+- [!] [Blocker with owner and next action]
 
 ## 7. Evidence Index
 

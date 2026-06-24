@@ -112,7 +112,7 @@ risk_level: "medium"
   - `master-checklist.md`
   - `implementation-checklist.md`
   - `verification-checklist.md`
-- **Checklist Rule**: Convert approved phases and subtasks into live checklist items with status, owner, updated timestamp, and evidence fields.
+- **Checklist Rule**: Convert approved phases and subtasks into live markdown checklist items using task markers such as `- [ ]`, `- [/]`, `- [!]`, and `- [-]`, while keeping status, owner, updated timestamp, and evidence fields in the line text or note sections.
 - **Synchronization Rule**: When the plan changes materially, update the checklist items so people can still follow the run without re-reading the whole plan.
 
 ## 8. Sources #section/sources

@@ -104,11 +104,8 @@ export function renderInline(text) {
   return escaped;
 }
 
-export function renderMarkdownToHtml(markdown, fallback = '<p class="placeholder">[No content provided]</p>') {
-  const trimmed = markdown.trim();
-  if (!trimmed) return fallback;
-
-  const lines = normalizeLineEndings(trimmed).split('\n');
+export function renderMarkdownBody(markdown) {
+  const lines = normalizeLineEndings(markdown).split('\n');
   const html = [];
   let index = 0;
 
@@ -126,12 +123,22 @@ export function renderMarkdownToHtml(markdown, fallback = '<p class="placeholder
         codeLines.push(lines[index]);
         index++;
       }
-      if (index < lines.length) index++;
+      if (index < lines.length) {
+        index++;
+      }
       html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
       continue;
     }
 
-    if (/^- /.test(line)) {
+    const headingMatch = line.match(/^(#{1,6})\s+(.*)$/);
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      html.push(`<h${level}>${renderInline(headingMatch[2])}</h${level}>`);
+      index++;
+      continue;
+    }
+
+    if (/^- /.test(line.trim())) {
       const items = [];
       while (index < lines.length && /^- /.test(lines[index].trim())) {
         items.push(`<li>${renderInline(lines[index].trim().slice(2))}</li>`);
@@ -142,14 +149,26 @@ export function renderMarkdownToHtml(markdown, fallback = '<p class="placeholder
     }
 
     const paragraph = [];
-    while (index < lines.length && lines[index].trim() && !/^- /.test(lines[index].trim()) && !lines[index].startsWith('```')) {
+    while (
+      index < lines.length &&
+      lines[index].trim() &&
+      !/^#{1,6}\s+/.test(lines[index].trim()) &&
+      !/^- /.test(lines[index].trim()) &&
+      !lines[index].startsWith('```')
+    ) {
       paragraph.push(renderInline(lines[index].trim()));
       index++;
     }
     html.push(`<p>${paragraph.join('<br>')}</p>`);
   }
 
-  return html.join('\n') || fallback;
+  return html.join('\n');
+}
+
+export function renderMarkdownToHtml(markdown, fallback = '<p class="placeholder">[No content provided]</p>') {
+  const trimmed = markdown.trim();
+  if (!trimmed) return fallback;
+  return renderMarkdownBody(trimmed) || fallback;
 }
 
 export function renderDecisionHtml(markdown, fallback = '<div class="decision-item placeholder">[Decision 1]</div>') {
