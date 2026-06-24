@@ -52,6 +52,7 @@ Debug
 PRD
 Issue-Triage
 Wiki
+Check-For-Updates
 Help
 ```
 

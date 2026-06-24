@@ -24,6 +24,14 @@ function runValidate() {
   });
 }
 
+function combinedOutput(result) {
+  return `${result.stdout ?? ''}\n${result.stderr ?? ''}`;
+}
+
+function includesAny(text, candidates) {
+  return candidates.some((candidate) => text.includes(candidate));
+}
+
 const validImpactReport = `---
 id: "997-verify-impact"
 title: "Impact & Safety Report: Verify Impact Contract"
@@ -81,13 +89,22 @@ try {
   fs.rmSync(path.join(runDir, '50-verify.md'));
   const missingVerifyRun = runValidate();
   assert(missingVerifyRun.status !== 0, 'verify impact artifact without 50-verify.md should fail validation');
-  assert(missingVerifyRun.stderr.includes('50-verify-impact.md exists but required stage artifact is missing: 50-verify.md'), 'missing verify error should be explicit');
+  assert(
+    combinedOutput(missingVerifyRun).includes('50-verify-impact.md exists but required stage artifact is missing: 50-verify.md'),
+    'missing verify error should be explicit'
+  );
 
   writeFile(path.join(runDir, '50-verify.md'));
   writeFile(path.join(runDir, '50-verify-impact.md'), `# Impact & Safety Report: Broken\n\n## 1. Changed Files\n`);
   const badHeadingRun = runValidate();
   assert(badHeadingRun.status !== 0, 'verify impact artifact missing required headings should fail validation');
-  assert(badHeadingRun.stderr.includes('50-verify-impact.md is missing required heading: ## 2. Client Impact Analysis'), 'missing heading error should be explicit');
+  assert(
+    includesAny(combinedOutput(badHeadingRun), [
+      '50-verify-impact.md is missing required heading: ## 2. Client Impact Analysis',
+      '50-verify-impact.md is missing required heading (or its Thai equivalent): ## 2. Client Impact Analysis'
+    ]),
+    'missing heading error should be explicit'
+  );
 
   console.log('[OK] validate-framework enforces verify impact artifact contracts.');
 } finally {

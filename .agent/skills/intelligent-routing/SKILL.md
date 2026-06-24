@@ -34,6 +34,7 @@ Do not route new work into retired JSON-first commands, dashboard-first flows, o
 - `PRD`
 - `Issue-Triage`
 - `Wiki`
+- `Check-For-Updates`
 - `Help`
 
 ## Specialist Agent Routing
@@ -99,6 +100,7 @@ Use these agent mappings when expert judgment is the best next step:
 | "Turn this stable goal into requirements" | `/20-Spec` |
 | "Fix this broken auth flow" | `Debug` or `Agent prp-core-debugger ...`, then `/40-Implement` or `/50-Verify` |
 | "Review this implementation for risks" | `/50-Verify` or `Agent code-reviewer ...` |
+| "Install or upgrade Nexus-DevFlow on this machine" | `Check-For-Updates` |
 | "Help me figure out which command to use" | `Help` |
 
 ## Guardrails

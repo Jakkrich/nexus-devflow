@@ -21,6 +21,7 @@ Public companion commands are not part of the numbered mainline and should not u
 - `PRD`
 - `Issue-Triage`
 - `Wiki`
+- `Check-For-Updates`
 - `Help`
 
 Framework root: `d:\Projects\nexus-devflow`
@@ -110,6 +111,7 @@ These are the public non-mainline commands that users may call directly:
 | `PRD` | Product framing is needed before a stable spec exists | `10-Define`, `20-Spec` |
 | `Issue-Triage` | Work starts from an issue intake rather than a stage artifact | Before `10-Define` or `Debug` |
 | `Wiki` | Knowledge should be captured or queried | Any stage |
+| `Check-For-Updates` | Install, upgrade, or verify Nexus-DevFlow setup for a machine or project | Before using DevFlow or when updating framework integration |
 | `Help` | The user needs routing or explanation | Any stage |
 
 ## Internal Companion Surfaces
