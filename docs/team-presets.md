@@ -19,16 +19,17 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 ### Minimum Artifact Set
 
 - `00-discover/discover.md`
-- `10-define/define.md`
-- `20-spec/spec.md`
-- `30-plan/plan.md`
-- `40-implement/implement.md`
-- `50-verify/verify.md`
-- `70-report/report.md`
+- `00-discover.md`
+- `10-define.md`
+- `20-spec.md`
+- `30-plan.md`
+- `40-implement.md`
+- `50-verify.md`
+- `70-report.md`
 
 ### Optional Layers
 
-- Add `60-release/release.md` when release-facing packaging or coordination matters
+- Add `60-release.md` when release-facing packaging or coordination matters
 - Add `checklists/` when the team wants live execution visibility across planning, implementation, and verification
 - Add `PRD` artifacts when product framing needs to mature before or during spec work
 - Skip early companion layers when the request is already clear and `/10-Define` can start immediately
@@ -47,16 +48,16 @@ Teams handling defects, regressions, incidents, operational fixes, or smaller re
 
 ### Minimum Artifact Set
 
-- `10-define/define.md`
-- `20-spec/spec.md`
-- `30-plan/plan.md`
-- `40-implement/implement.md`
-- `50-verify/verify.md`
+- `10-define.md`
+- `20-spec.md`
+- `30-plan.md`
+- `40-implement.md`
+- `50-verify.md`
 
 ### Optional Layers
 
-- Add `00-discover/discover.md` when the issue is still ambiguous or multiple failure modes are competing
-- Add `70-report/report.md` when the fix needs a durable wrap-up for handoff, incident learning, or stakeholder visibility
+- Add `00-discover.md` when the issue is still ambiguous or multiple failure modes are competing
+- Add `70-report.md` when the fix needs a durable wrap-up for handoff, incident learning, or stakeholder visibility
 - Add `50-verify-impact.md` when rollback, blast radius, or impact analysis should be captured explicitly
 - Skip heavier discovery or PRD-style framing when the issue is narrow and urgency is high
 
@@ -81,8 +82,8 @@ Maintainers evolving the Nexus-DevFlow framework itself, especially when the wor
 
 ### Optional Layers
 
-- Add `30-plan/plan.md` when the change spans multiple docs, scripts, or policy surfaces
-- Add `70-report/report.md` when the change needs a durable release or governance summary
+- Add `30-plan.md` when the change spans multiple docs, scripts, or policy surfaces
+- Add `70-report.md` when the change needs a durable release or governance summary
 - Add roadmap or governance documentation updates when the work changes stable expectations
 - Skip broader discovery layers when the change is already tightly scoped and the required surfaces are known
 
