@@ -27,11 +27,12 @@ metadata_version: 1
 
 - Track required validation, review, and release-gate checks in a human-readable way.
 
-## 2. Verification Checklist Table
+## 2. Verification Checklist Items
 
-| ID | Check | Source | Status | Owner | Updated | Evidence | Finding Severity | Notes |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| V1 | [Check item] | [plan/spec/verify] | [pending / in_progress / blocked / done / skipped] | [person/agent] | [YYYY-MM-DD HH:mm] | [command, screenshot, or note] | [none / low / medium / high / critical] | [important context] |
+- [ ] V1: [Check item] | source: [plan/spec/verify] | owner: {Owner} | updated: {Date} | evidence: pending | severity: none
+- [/] V2: [Validation in progress] | source: [verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [command or manual check] | severity: low
+- [!] V3: [Blocked or failed gate] | source: [plan/spec/verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [failure note] | severity: high
+- [-] V4: [Skipped validation step] | source: [verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [reason for skip] | severity: none
 
 ## 3. Required Commands And Manual Checks
 
@@ -40,7 +41,7 @@ metadata_version: 1
 
 ## 4. Findings To Carry Into Verify
 
-- [Finding summary with severity]
+- [!] [Finding summary with severity]
 
 ## 5. Approval Gate
 

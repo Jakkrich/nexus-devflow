@@ -34,7 +34,6 @@ using:
 
 ```text
 .agent/resources/schemas/report.template.md
-.agent/resources/schemas/report.template.html
 ```
 
 Before writing `70-report.md`, read `artifact_language` from `report.template.md` and produce the markdown artifact in that language.
@@ -77,16 +76,16 @@ Write:
 - a readable Markdown report for contributors
 - a consistent HTML report for stakeholder sharing
 
-In phase 1, `artifact_language` governs the markdown report text. HTML output remains derived from the markdown report plus the current renderer behavior.
+In phase 1, `artifact_language` governs the markdown report text. HTML output is derived directly from `70-report.md` through the shared markdown-to-html renderer.
 
-Use the canonical HTML scaffold in `.agent/resources/schemas/report.template.html` so every run keeps the same structure, navigation, header metadata, checklist snapshot, and footer style.
-
-To render the HTML consistently from the markdown report and checklist artifacts, use one of:
+To render the HTML consistently from the markdown report, use one of:
 
 ```text
 npm run report:html -- <workspace-path-or-running-id>
 npm run render:html -- --stage 70-report <workspace-path-or-running-id>
 ```
+
+Keep checklist summaries and follow-up status inside `70-report.md` so they carry through into the rendered HTML.
 
 Both outputs should summarize checklist state when checklist artifacts exist, including:
 
@@ -95,7 +94,7 @@ Both outputs should summarize checklist state when checklist artifacts exist, in
 - notable evidence snapshots
 - remaining follow-up work
 
-The HTML should stay structurally consistent across runs.
+The HTML should stay visually consistent across runs while preserving the report markdown as the source of truth.
 
 ### 4. Keep The Audience In Mind
 

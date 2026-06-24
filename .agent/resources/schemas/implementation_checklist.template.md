@@ -34,11 +34,12 @@ metadata_version: 1
 - `done`: completed with evidence
 - `skipped`: intentionally not done with reason recorded
 
-## 3. Implementation Checklist Table
+## 3. Implementation Checklist Items
 
-| ID | Unit | Plan Phase | Status | Owner | Files | Updated | Verification | Evidence |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| I1 | [Scoped implementation unit] | [Phase 1] | [pending / in_progress / blocked / done / skipped] | [person/agent] | [`file/a.ts`, `file/b.ts`] | [YYYY-MM-DD HH:mm] | [test or manual check] | [command output or note] |
+- [ ] I1: [Scoped implementation unit] | phase: Phase 1 | owner: {Owner} | files: `file/a.ts`, `file/b.ts` | updated: {Date} | verification: [test or manual check] | evidence: pending
+- [/] I2: [Implementation currently in progress] | phase: Phase 2 | owner: [person/agent] | files: `file/c.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [command] | evidence: [latest result]
+- [!] I3: [Blocked implementation unit] | phase: Phase 2 | owner: [person/agent] | files: `file/d.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [pending check] | evidence: [blocker note]
+- [-] I4: [Skipped implementation unit] | phase: Phase 3 | owner: [person/agent] | files: `file/e.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [not run] | evidence: [reason for skip]
 
 ## 4. Detailed Unit Notes
 
@@ -57,7 +58,7 @@ metadata_version: 1
 
 ## 5. Blockers And Deviations
 
-- [Deviation from plan or blocker with reason]
+- [!] [Deviation from plan or blocker with reason]
 
 ## 6. Additional Notes
 

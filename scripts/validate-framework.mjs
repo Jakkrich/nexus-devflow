@@ -280,8 +280,6 @@ function validateStageArtifactConventions(failures) {
     '.agent/resources/schemas/verify-impact.template.md',
     '.agent/resources/schemas/release.template.md',
     '.agent/resources/schemas/report.template.md',
-    '.agent/resources/schemas/report.template.html',
-    '.agent/resources/schemas/report.template.th.html',
     'docs/quickstart.md',
     'docs/workspace-artifacts.md'
   ];

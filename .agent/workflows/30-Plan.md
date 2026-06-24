@@ -122,7 +122,7 @@ Seed at least:
 - `implementation-checklist.md`
 - `verification-checklist.md`
 
-Use the schema templates under `.agent/resources/schemas/` and turn approved phases/subtasks into live checklist items so humans can follow the run without reading the full planning narrative.
+Use the schema templates under `.agent/resources/schemas/` and turn approved phases/subtasks into live markdown checklist items using task markers such as `- [ ]`, `- [/]`, `- [!]`, and `- [-]` so humans can follow the run without reading the full planning narrative.
 
 ### 6. Validate And Close Planning
 
