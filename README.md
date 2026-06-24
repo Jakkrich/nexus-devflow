@@ -63,6 +63,7 @@ DevFlow 2.0 keeps a smaller public companion surface around the mainline:
 - `PRD`
 - `Issue-Triage`
 - `Wiki`
+- `Check-For-Updates`
 - `Help`
 
 These commands support the mainline, but they do not replace it.

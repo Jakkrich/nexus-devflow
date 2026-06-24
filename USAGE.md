@@ -48,6 +48,7 @@ These are the public non-mainline commands:
 | `PRD` | product framing is needed before spec work |
 | `Issue-Triage` | the work starts from issue intake |
 | `Wiki` | knowledge needs to be queried or captured |
+| `Check-For-Updates` | Nexus-DevFlow setup or upgrade needs to be installed, checked, or repaired |
 | `Help` | the next route is unclear |
 
 See [workflow-surface-map.md](D:/Projects/nexus-devflow/docs/workflow-surface-map.md) for the current distinction between public commands, internal companions, and archive/history surfaces.

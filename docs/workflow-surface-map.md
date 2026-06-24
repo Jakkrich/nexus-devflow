@@ -28,6 +28,7 @@ This document decides which workflow surfaces should remain public commands, whi
 | `PRD.md` | `public command` | Product framing still matters before a stable spec exists. |
 | `Issue-Triage.md` | `public command` | Issue-driven intake is a clear standalone use case. |
 | `Wiki.md` | `public command` | It supports direct knowledge query and capture. |
+| `Check-For-Updates.md` | `public command` | Install and upgrade verification is a distinct maintainer and onboarding need. |
 | `Help.md` | `public command` | It remains the primary routing and onboarding command. |
 
 ## Keep Internal For Now

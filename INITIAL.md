@@ -24,6 +24,7 @@ Use this file as a human-readable starting point for Nexus-DevFlow 2.0.
 - `PRD`
 - `Issue-Triage`
 - `Wiki`
+- `Check-For-Updates`
 - `Help`
 
 ### Important Files

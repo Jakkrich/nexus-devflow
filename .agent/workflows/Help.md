@@ -94,6 +94,7 @@ These are not numbered stages and may be called directly by users:
 - `PRD`
 - `Issue-Triage`
 - `Wiki`
+- `Check-For-Updates`
 - `Help`
 
 ## Internal Companion Surfaces

@@ -55,7 +55,7 @@ function readText(relativePath, failures) {
 }
 
 function scanForLegacyReferences(failures) {
-  const excluded = new Set(['.git', 'node_modules', '.venv', 'venv', 'env', '.local-tools', '.specify']);
+  const excluded = new Set(['.git', 'node_modules', '.venv', 'venv', 'env', '.local-tools', '.specify', '.uv_cache', '.pytest_cache', 'model_cache', 'rag_storage']);
   const allowedLegacyMentions = new Set([
     path.normalize('scripts/activate-agent.mjs'),
     path.normalize('agent-bundle.manifest.json'),
@@ -392,13 +392,13 @@ function validateVerifyImpactContracts(failures) {
     return;
   }
 
-  const requiredHeadings = [
-    '## 1. Changed Files',
-    '## 2. Client Impact Analysis',
-    '## 3. Verification Metrics',
-    '### A. Unit Verification',
-    '### B. Integration Verification',
-    '## 4. Rollback & Mitigation Plan'
+  const requiredHeadingsAlternatives = [
+    ['## 1. Changed Files', '## 1. ไฟล์ที่มีการเปลี่ยนแปลง (Changed Files)'],
+    ['## 2. Client Impact Analysis', '## 2. การวิเคราะห์ผลกระทบต่อผู้ใช้งาน (Client Impact Analysis)'],
+    ['## 3. Verification Metrics', '## 3. ข้อมูลการยืนยันและการตรวจสอบ (Verification Metrics)'],
+    ['### A. Unit Verification', '### ก. การตรวจสอบระบบแบบรายชิ้น (Unit Verification)', '### ก. การตรวจสอบการทำงานรายหน่วย (Unit Verification)'],
+    ['### B. Integration Verification', '### ข. การตรวจสอบระบบร่วมกัน (Integration Verification)', '### ข. การตรวจสอบความสอดคล้องและการเชื่อมต่อ (Integration Verification)'],
+    ['## 4. Rollback & Mitigation Plan', '## 4. แผนย้อนคืนและการลดความเสี่ยง (Rollback & Mitigation Plan)']
   ];
   let checkedRuns = 0;
 
@@ -417,9 +417,10 @@ function validateVerifyImpactContracts(failures) {
     }
 
     const content = fs.readFileSync(impactPath, 'utf8');
-    for (const heading of requiredHeadings) {
-      if (!content.includes(heading)) {
-        fail(`${relRun}: 50-verify-impact.md is missing required heading: ${heading}`, failures);
+    for (const alts of requiredHeadingsAlternatives) {
+      const found = alts.some((heading) => content.includes(heading));
+      if (!found) {
+        fail(`${relRun}: 50-verify-impact.md is missing required heading: ${alts[0]}`, failures);
       }
     }
   }
@@ -515,7 +516,10 @@ function validateChecklistContent(content, allowedStatuses) {
     if (!/^\|\s*[:\- ]+\|/.test(divider)) continue;
 
     const headers = header.split('|').slice(1, -1).map((cell) => cell.trim().toLowerCase());
-    const statusIndex = headers.indexOf('status');
+    let statusIndex = headers.indexOf('status');
+    if (statusIndex === -1) {
+      statusIndex = headers.indexOf('สถานะ');
+    }
     if (statusIndex === -1) continue;
 
     sawTableHeader = true;
@@ -525,7 +529,7 @@ function validateChecklistContent(content, allowedStatuses) {
     while (i < lines.length && lines[i].trim().startsWith('|')) {
       rowCount++;
       const cells = lines[i].split('|').slice(1, -1).map((cell) => cell.trim());
-      const status = (cells[statusIndex] || '').toLowerCase();
+      const status = (cells[statusIndex] || '').toLowerCase().trim().replace(/`/g, '');
       if (!status) {
         return { ok: false, message: `contains a checklist row with empty status` };
       }
