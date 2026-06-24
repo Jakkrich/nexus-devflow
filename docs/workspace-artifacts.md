@@ -162,11 +162,12 @@ Mainline:
   Checklist layer    -> .workspaces/specs/{ID}-*/checklists/*.md
 
 Companion commands:
+  Goal               -> routing before a running ID exists or before mainline entry
   Brainstorm         -> usually .workspaces/research/ or appended notes in discover/define
   Research           -> .workspaces/research/
   Debug              -> .workspaces/debug/
-  Roadmap            -> .workspaces/roadmap/roadmap-discovery.md and ROADMAP.md
-  Preview            -> temporary proof or notes in implement/verify
+  PRD                -> .workspaces/prds/
+  Issue-Triage       -> .workspaces/issues/
   Wiki               -> .workspaces/wiki/framework/ or .workspaces/wiki/project/ when the wiki surface is explicitly used
   Help               -> workflow recommendation or routing note
 ```
