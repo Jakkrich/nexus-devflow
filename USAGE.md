@@ -2,6 +2,13 @@
 
 This guide describes the active DevFlow 2.0 surface used in the current repository.
 
+## New To DevFlow?
+
+- Start with `docs/quickstart.md` if you need the fastest valid setup path
+- Start with `/00-Discover` if the work is new
+- Start with `Help` if you do not know which command fits
+- Read `docs/example-runs.md` if you want concrete flow examples before starting
+
 ## Core Rules
 
 - Use the numbered mainline as the primary delivery path.
