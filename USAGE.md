@@ -183,6 +183,12 @@ Maintainers who need to recommend a lighter or heavier adoption shape should use
 
 Presets sit on top of the same mainline and public companion commands described in this guide. They do not replace the workflow, create new command families, or introduce alternate DevFlow systems.
 
+## Maintainer Governance Guidance
+
+Maintainers who are deciding where a future framework change belongs should use [docs/governance-rules.md](D:/Projects/nexus-devflow/docs/governance-rules.md).
+
+The governance guide keeps workflow, skill, script, validation, and high-surface doc placement aligned without changing the public onboarding story or command model.
+
 ## Workspace Layout
 
 See the full contract in [workspace-artifacts.md](D:/Projects/nexus-devflow/docs/workspace-artifacts.md).

@@ -215,6 +215,7 @@ Use validation whenever the framework surface, templates, workflow names, docs, 
 | [Usage](./USAGE.md) | Workflow usage and command routing |
 | [Quickstart](./docs/quickstart.md) | Fastest valid local startup path |
 | [Team Presets](./docs/team-presets.md) | Maintainer-facing guidance for recommending DevFlow adoption shapes |
+| [Governance Rules](./docs/governance-rules.md) | Maintainer-facing rules for placing future framework changes without expanding the public surface |
 | [Agent Bundle](./docs/agent-bundle.md) | `.agent` bundle structure and rules |
 | [Workspace Artifacts](./docs/workspace-artifacts.md) | `.workspaces` layout and stage artifact contracts |
 | [Prompt Addons](./docs/prompt-addons.md) | How external prompt families map into DevFlow 2.0 |

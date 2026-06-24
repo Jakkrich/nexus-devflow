@@ -149,6 +149,11 @@ These files still exist because their prompt bodies contain useful behavior, but
 | Public companion command | A reusable user-facing command outside the numbered mainline | Supports the active stage but does not replace it |
 | Internal companion surface | A retained prompt surface that may later move into a skill or agent | Keep behavior, but do not treat it as the preferred public entry point |
 
+Maintainer note:
+
+- Use `docs/governance-rules.md` when deciding whether a future framework change belongs in a workflow, skill, script, validation rule, or focused maintainer doc.
+- Keep the public surface stable unless the change truly needs a new user-facing command or lifecycle state.
+
 ## Agent Catalog
 
 ### 1. Discovery, Definition, and Planning
