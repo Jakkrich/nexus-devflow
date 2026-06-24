@@ -177,6 +177,12 @@ Debug "Login redirects forever after session expiry"
 /50-Verify
 ```
 
+## Maintainer Preset Guidance
+
+Maintainers who need to recommend a lighter or heavier adoption shape should use [docs/team-presets.md](D:/Projects/nexus-devflow/docs/team-presets.md) as recommendation guidance only.
+
+Presets sit on top of the same mainline and public companion commands described in this guide. They do not replace the workflow, create new command families, or introduce alternate DevFlow systems.
+
 ## Workspace Layout
 
 See the full contract in [workspace-artifacts.md](D:/Projects/nexus-devflow/docs/workspace-artifacts.md).
