@@ -1,6 +1,6 @@
 # Workspace Artifacts
 
-Nexus-DevFlow 2.0 ใช้ `.workspaces/` เป็นพื้นที่เก็บ artifact หลักของงาน โดยยึดแนวทาง `markdown-first`
+Nexus-DevFlow 2.0 uses `.workspaces/` as the primary store for task artifacts and supporting run history, following the framework's `markdown-first` contract.
 
 Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projects/nexus-devflow/AGENTS.md:1) and [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
 
@@ -50,28 +50,28 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 
 ## Task Workspace Files
 
-แต่ละงานหลักอยู่ใต้ `.workspaces/specs/{ID}-{slug}/` และใช้ไฟล์ stage แบบ flat filename ในโฟลเดอร์เดียว
+Each mainline run lives under `.workspaces/specs/{ID}-{slug}/` and uses flat stage filenames in one directory so the work stays easy to inspect, resume, and validate.
 
 ### Markdown And HTML Policy
 
-- Markdown stage files are the source of truth across the mainline
-- HTML files are derived artifacts created only when a stage policy requires or enables them
-- In the current framework round, `70-report.html` is the only required HTML stage artifact
-- Future stage HTML outputs should be rendered through the shared renderer path instead of re-implementing markdown-to-html logic per stage
+- Markdown stage files are the source of truth across the mainline.
+- HTML files are derived artifacts created only when a stage policy requires or enables them.
+- In the current framework round, `70-report.html` is the only required HTML stage artifact.
+- Future stage HTML outputs should be rendered through the shared renderer path instead of re-implementing markdown-to-html logic per stage.
 
 ### Mainline Stage Files
 
 | File | Purpose |
 | :--- | :--- |
-| `00-discover.md` | สำรวจโจทย์ บริบท และคำถามต้นทาง |
-| `10-define.md` | ล็อกเป้าหมาย ขอบเขต และ decision หลัก |
-| `20-spec.md` | กำหนดสัญญาส่งมอบและ acceptance criteria |
-| `30-plan.md` | แตกงาน ลำดับงาน ความเสี่ยง และแนวทาง verify |
-| `40-implement.md` | บันทึกการลงมือทำ สิ่งที่เปลี่ยน และ deviation |
-| `50-verify.md` | หลักฐานการตรวจ finding และผลสรุปคุณภาพ |
-| `60-release.md` | สถานะพร้อมปล่อย impact และข้อควรระวัง |
-| `70-report.md` | สรุปรันทั้งหมดแบบอ่านง่าย |
-| `70-report.html` | สรุปรันทั้งหมดในรูปแบบสื่อสารมาตรฐานสำหรับคนอ่านทั่วไป |
+| `00-discover.md` | Captures the request, context, and opening questions. |
+| `10-define.md` | Locks scope, decisions, constraints, and success criteria. |
+| `20-spec.md` | Defines the delivery contract and acceptance criteria. |
+| `30-plan.md` | Breaks the work down into execution order, risks, and verification approach. |
+| `40-implement.md` | Records the implementation work, key changes, and any meaningful deviation. |
+| `50-verify.md` | Stores verification evidence, findings, and the quality conclusion. |
+| `60-release.md` | Records release readiness, impact, and release-facing cautions. |
+| `70-report.md` | Produces the readable final run summary. |
+| `70-report.html` | Produces the human-facing rendered version of the final report. |
 
 `50-verify-impact.md` is an optional companion artifact. Create it during `/50-Verify` when the run needs explicit impact, regression-risk, or rollback analysis.
 
@@ -130,21 +130,21 @@ Principles:
 
 Recommended use:
 
-- Create initial checklist files during `/30-Plan`
-- Update implementation status during `/40-Implement`
-- Update validation status and release gates during `/50-Verify`
-- Carry any final gate items into `/60-Release`
-- Summarize completion, blockers, and evidence snapshots during `/70-Report`
+- Create initial checklist files during `/30-Plan`.
+- Update implementation status during `/40-Implement`.
+- Update validation status and release gates during `/50-Verify`.
+- Carry any final gate items into `/60-Release`.
+- Summarize completion, blockers, and evidence snapshots during `/70-Report`.
 
 ### Retired Legacy Files
 
-ไฟล์ตระกูล JSON ของ task หรือ roadmap และ `qa_report.md` ไม่ใช่ส่วนหนึ่งของ DevFlow 2.0 workflow surface แล้ว
+Legacy task JSON files, roadmap JSON files, and `qa_report.md` are no longer part of the active DevFlow 2.0 workflow surface.
 
-หากพบไฟล์เหล่านี้ใน workspace เก่า:
+If you find those files in an older workspace:
 
-1. ใช้เพื่ออ่านข้อมูลย้อนหลังหรือ migration เท่านั้น
-2. อย่าใช้เป็น source of truth ของงานใหม่
-3. ย้าย context ที่จำเป็นกลับเข้า stage `.md` ที่สอดคล้องกับลำดับงานปัจจุบัน
+1. Use them only for historical reading or migration work.
+2. Do not treat them as the source of truth for new work.
+3. Move any still-needed context back into the relevant stage `.md` file for the current run.
 
 ## Workflow Relationships
 
@@ -173,36 +173,36 @@ Companion commands:
 
 ## Markdown Metadata Contract
 
-Markdown artifact ใน `.workspaces`, `docs`, และ template ควรอิง contract ร่วมใน [markdown-metadata-contract.md](/D:/Projects/nexus-devflow/docs/markdown-metadata-contract.md)
+Markdown artifacts in `.workspaces`, `docs`, and the template set should follow the shared rules in [markdown-metadata-contract.md](/D:/Projects/nexus-devflow/docs/markdown-metadata-contract.md).
 
-หลักสำคัญ:
+Core rules:
 
-1. ใช้ YAML frontmatter สำหรับ metadata ระดับเอกสาร
-2. ใช้ heading/tag pattern เมื่อเอกสารนั้นเหมาะกับการ query
-3. คงหัวข้อหลักตาม template ของ stage หรือ workflow นั้น
-4. อนุญาตให้เพิ่มหัวข้อท้ายเอกสารได้เมื่อจำเป็น
+1. Use YAML frontmatter for document-level metadata.
+2. Use heading and tag patterns when the artifact needs to support querying.
+3. Keep the required primary headings defined by the relevant stage or workflow template.
+4. Allow an open-ended final section when extra context is needed.
 
 ## Wiki Layer
 
-DevFlow Wiki เป็น compiled knowledge ไม่ใช่ source of truth หลัก
+The DevFlow wiki is compiled knowledge, not the primary source of truth.
 
-Source of truth หลักยังคงอยู่ใน:
+Primary source-of-truth material still lives in:
 
 - code
 - stage artifacts
 - research notes
 - review and debug evidence
-- release/report outputs
+- release and report outputs
 
 ## Deletion Policy
 
-หลีกเลี่ยงการสร้างโฟลเดอร์งานล่วงหน้าโดยไม่ใช้งานจริง และสามารถลบโฟลเดอร์ว่างที่ยังไม่ถูกอ้างใช้ออกได้
+Avoid creating speculative workspace folders that are never used, and feel free to remove empty or obsolete folders that are no longer referenced.
 
 Safe cleanup targets:
 
-- generated test workspaces เช่น `.agent/.test-workspace-node`
-- obsolete temporary files ที่ไม่ถูกอ้างอิงแล้ว
-- migration leftovers ที่ทีมยืนยันแล้วว่าไม่ใช้
+- generated test workspaces such as `.agent/.test-workspace-node`
+- obsolete temporary files that are no longer referenced
+- migration leftovers that the team has already confirmed are unused
 
 Not safe to delete by default:
 
@@ -236,4 +236,4 @@ npm.cmd run validate
 npm.cmd run validate:all
 ```
 
-Framework validation จะช่วยตรวจโครงสร้างหลัก workflow naming report naming และ roadmap markdown contracts
+Framework validation checks the main workspace structure, workflow naming, report naming, and roadmap markdown contracts.
