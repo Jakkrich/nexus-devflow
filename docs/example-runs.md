@@ -52,7 +52,7 @@ Why this route fits:
 
 ## 3. Verification-Heavy Work
 
-For work where proof matters as much as implementation, use a tracked run and let the stage markdown files stay the source of truth. A concrete repository example already exists at [.workspaces/specs/001-integrate-md2html/](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/).
+For work where proof matters as much as implementation, use a tracked run and let the stage markdown files stay the source of truth. A concrete repository example already exists at [.workspaces/specs/001-integrate-md2html/](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/). This run still follows the full mainline overall. The sequence below is the verification-focused portion after the earlier discovery, definition, and spec stages are already in place.
 
 ```text
 /30-Plan
@@ -69,11 +69,11 @@ How the tracked run artifacts relate:
 - [checklists/implementation-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/implementation-checklist.md) tracks implementation completion against the planned tasks.
 - [checklists/verification-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/verification-checklist.md) tracks the required evidence and validation work for `/50-Verify`.
 - [50-verify.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/50-verify.md) records the checks run, the results, the verdict, and the route to the next stage.
-- [70-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.md) turns the completed run into the final written summary, and [70-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.html) is the rendered report artifact produced from that summary.
+- [70-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.md) is the source report, and [70-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.html) is the primary human-friendly output for reading the final result.
 
 Reading order for this kind of run:
 
 1. Start with [30-plan.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/30-plan.md) to understand the intended phases and validation gates.
 2. Check the files under [checklists/](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists) to see live execution and verification status.
 3. Read [50-verify.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/50-verify.md) for evidence and the release verdict.
-4. Finish with [70-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.md) for the final narrative summary.
+4. Finish with [70-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.html) for the readable final output, and use [70-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.md) when you need the source markdown behind it.

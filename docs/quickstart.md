@@ -20,7 +20,23 @@ npm.cmd run validate
 - Start with `Help` when the route is unclear
 - Start with `Debug` when you need root-cause investigation before scoping the fix
 
-## 4. Understand The Mainline
+## 4. First Example Path
+
+If you are starting new feature work:
+
+```text
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan
+```
+
+If you are fixing a bug:
+
+```text
+Debug -> /10-Define -> /20-Spec -> /30-Plan
+```
+
+See [docs/example-runs.md](example-runs.md) for a fuller walkthrough.
+
+## 5. Understand The Mainline
 
 ```text
 /00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
@@ -41,7 +57,7 @@ Help
 
 For the full current command policy, see [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1).
 
-## 5. Workspace Model
+## 6. Workspace Model
 
 DevFlow 2.0 uses markdown-first stage artifacts under `.workspaces/specs/`.
 In phase 1, markdown artifact language is controlled by `artifact_language` in the matching schema template under `.agent/resources/schemas/`.
@@ -66,22 +82,6 @@ Typical running-id layout:
 
 See [workspace-artifacts.md](workspace-artifacts.md) for the canonical artifact contract.
 Use `npm.cmd run artifact-language:switch -- en` or `npm.cmd run artifact-language:switch -- th` to change the template default for all markdown artifacts.
-
-## 6. First Example Path
-
-If you are starting new feature work:
-
-```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan
-```
-
-If you are fixing a bug:
-
-```text
-Debug -> /10-Define -> /20-Spec -> /30-Plan
-```
-
-See `docs/example-runs.md` for a fuller walkthrough.
 
 ## Internal Surfaces
 
