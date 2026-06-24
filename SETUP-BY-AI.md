@@ -57,6 +57,7 @@ Use when the user wants Nexus-DevFlow available from any project in Codex.
 cd D:\Projects\nexus-devflow
 npm.cmd run codex:update-global
 npm.cmd run codex:check-global
+npm.cmd run validate
 ```
 
 Confirm:
@@ -117,16 +118,21 @@ If the tree is dirty:
 
 1. do not pull
 2. report dirty files
-3. ask whether to commit, stash, discard, or skip pull
+3. ask whether to commit, stash, or skip pull
 
 If clean and the user wants latest:
 
 ```powershell
-git pull --ff-only
-npm.cmd run validate
+npm.cmd run codex:update-global:pull
 ```
 
 Then reapply the install mode used before.
+
+If the local checkout is already at the intended version, use:
+
+```powershell
+npm.cmd run codex:update-global
+```
 
 ## Validation Checklist
 
@@ -142,9 +148,12 @@ For Codex global install:
 
 ```powershell
 npm.cmd run codex:check-global
+npm.cmd run validate
 ```
 
 For project-local install, also validate from the target project.
+
+If setup or update behavior is unexpected, use [docs/install-update-troubleshooting.md](./docs/install-update-troubleshooting.md).
 
 ## Final Report Format
 
