@@ -128,34 +128,15 @@ Every stage writes its own artifact under `.workspaces/specs/{RUNNING_ID}/`, so 
 From the framework root:
 
 ```powershell
-cd D:\Projects\nexus-devflow
 npm.cmd run activate
-npm.cmd run roadmap:validate
 npm.cmd run validate
-npm.cmd run validate:all
 ```
 
-Then use the flow from your AI tool:
+If you are new to DevFlow:
 
-```text
-/00-Discover "Add password reset"
-/10-Define
-/20-Spec
-/30-Plan
-/40-Implement
-/50-Verify
-/60-Release
-/70-Report
-```
-
-If the request is not stable yet:
-
-```text
-/00-Discover "Improve onboarding"
-Brainstorm
-/10-Define
-/20-Spec
-```
+1. Read `docs/quickstart.md`
+2. Use `/00-Discover` for new work or `Help` if the route is unclear
+3. Use `docs/example-runs.md` for concrete flow examples
 
 ---
 
