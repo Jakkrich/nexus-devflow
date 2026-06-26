@@ -27,7 +27,6 @@ related_files: []
 - `40-implement.md`
 - `50-verify.md`
 - `60-release.md`
-- `checklists/master-checklist.md` when present
 - `checklists/implementation-checklist.md` when present
 - `checklists/verification-checklist.md` when present
 

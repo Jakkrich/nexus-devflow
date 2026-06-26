@@ -481,7 +481,6 @@ function validateChecklistContracts(failures) {
     }
 
     const checklistFiles = [
-      { name: 'master-checklist.md', requires: planPath },
       { name: 'implementation-checklist.md', requires: implementPath },
       { name: 'verification-checklist.md', requires: verifyPath }
     ];

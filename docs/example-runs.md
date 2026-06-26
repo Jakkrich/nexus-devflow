@@ -65,8 +65,7 @@ For work where proof matters as much as implementation, use a tracked run and le
 How the tracked run artifacts relate:
 
 - [30-plan.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/30-plan.md) is the planning hub for the run. It defines the execution phases, planned checks, success criteria, and the checklist layer.
-- [checklists/master-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/master-checklist.md) gives the live cross-stage view of plan items as work moves through `/40-Implement`, `/50-Verify`, and `/60-Release`.
-- [checklists/implementation-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/implementation-checklist.md) tracks implementation completion against the planned tasks.
+- [checklists/implementation-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/implementation-checklist.md) is the live execution source of truth and tracks implementation completion against the planned tasks.
 - [checklists/verification-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/verification-checklist.md) tracks the required evidence and validation work for `/50-Verify`.
 - [50-verify.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/50-verify.md) records the checks run, the results, the verdict, and the route to the next stage.
 - [70-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.md) is the source report, and [70-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.html) is the primary human-friendly output for reading the final result.

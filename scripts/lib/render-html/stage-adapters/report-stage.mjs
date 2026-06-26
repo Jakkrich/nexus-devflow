@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { renderMarkdownDocument } from '../core.mjs';
+import { renderReportWithMd2HtmlTemplate } from '../md2html-report.mjs';
 import { parseFrontmatter } from '../markdown.mjs';
 import { resolveWorkspaceDir as resolveSharedWorkspaceDir } from '../workspace-resolver.mjs';
 
@@ -43,16 +43,14 @@ export function renderReportStageWorkspace({ workspaceDir }) {
   const { data: frontmatter } = parseFrontmatter(reportMarkdown);
   const outputPath = path.join(workspaceDir, '70-report.html');
 
-  return renderMarkdownDocument({
+  return renderReportWithMd2HtmlTemplate({
     sourcePath: reportPath,
     markdown: reportMarkdown,
-    preset: 'report',
     outputPath,
     metadata: {
       artifact_language: frontmatter.artifact_language || 'en',
       title: frontmatter.title || 'Report'
-    },
-    stagePolicy: { htmlRequired: true }
+    }
   });
 }
 

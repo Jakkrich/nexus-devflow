@@ -95,7 +95,6 @@ Use a dedicated checklist folder when people need a live view of task execution:
 
 ```text
 .workspaces/specs/{ID}-{slug}/checklists/
-  master-checklist.md
   implementation-checklist.md
   verification-checklist.md
 ```

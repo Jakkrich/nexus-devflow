@@ -22,7 +22,6 @@ related_files: []
 
 - `40-implement.md`
 - `20-spec.md`
-- `checklists/master-checklist.md`
 - `checklists/verification-checklist.md`
 - `50-verify-impact.md` when impact analysis is needed
 - Supporting debug, preview, or review notes if they exist

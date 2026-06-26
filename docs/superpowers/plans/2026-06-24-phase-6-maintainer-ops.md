@@ -395,7 +395,7 @@ git commit -m "docs: add phase 6 governance guidance"
 ## 7. Checklist Initialization
 
 - **Checklist Directory**: Not required for this planning artifact unless Phase 6 execution is moved into a numbered DevFlow run under `.workspaces/specs/`.
-- **Required Files**: If execution is promoted into `/30-Plan` inside a tracked run, create `master-checklist.md`, `implementation-checklist.md`, and `verification-checklist.md` before `/40-Implement`.
+- **Required Files**: If execution is promoted into `/30-Plan` inside a tracked run, create `implementation-checklist.md` and `verification-checklist.md` before `/40-Implement`.
 - **Checklist Rule**: Convert the four tasks above into live checklist items if maintainers want visible execution tracking across release, setup, presets, and governance work.
 - **Synchronization Rule**: Keep commit boundaries aligned with the four workstreams so evidence stays easy to audit and report.
 

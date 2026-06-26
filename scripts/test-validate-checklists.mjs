@@ -35,7 +35,6 @@ function assertTemplateUsesChecklistMarkers(relativePath) {
 try {
   fs.rmSync(runDir, { recursive: true, force: true });
 
-  assertTemplateUsesChecklistMarkers('.agent/resources/schemas/master_checklist.template.md');
   assertTemplateUsesChecklistMarkers('.agent/resources/schemas/implementation_checklist.template.md');
   assertTemplateUsesChecklistMarkers('.agent/resources/schemas/verification_checklist.template.md');
 
@@ -44,7 +43,6 @@ try {
   writeFile(path.join(runDir, '50-verify.md'));
   writeFile(path.join(runDir, '70-report.md'));
   writeFile(path.join(runDir, '70-report.html'), '<html></html>\n');
-  writeFile(path.join(runDir, 'checklists', 'master-checklist.md'), `| ID | Item | Stage | Status |\n| :--- | :--- | :--- | :--- |\n| T1 | Work item | /40-Implement | done |\n`);
   writeFile(path.join(runDir, 'checklists', 'implementation-checklist.md'), `| ID | Unit | Plan Phase | Status |\n| :--- | :--- | :--- | :--- |\n| I1 | Work unit | Phase 1 | blocked |\n`);
   writeFile(path.join(runDir, 'checklists', 'verification-checklist.md'), `- [x] Verify completed integration path\n- [!] Investigate flaky preview gate\n- [-] Skip release smoke on sandbox only run\n`);
 

@@ -118,7 +118,6 @@ Create the checklist directory when detailed execution tracking is needed:
 
 Seed at least:
 
-- `master-checklist.md`
 - `implementation-checklist.md`
 - `verification-checklist.md`
 
