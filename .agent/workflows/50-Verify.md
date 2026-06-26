@@ -31,7 +31,6 @@ Read:
 - `20-spec.md`
 - `30-plan.md`
 - `40-implement.md`
-- `checklists/master-checklist.md` when present
 - `checklists/verification-checklist.md` when present
 - changed files
 - test output, command output, screenshots, or manual-check evidence

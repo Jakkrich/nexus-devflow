@@ -727,7 +727,7 @@ git commit -m "docs: describe shared html renderer"
 ## 7. Checklist Initialization
 
 - **Checklist Directory**: Not required for this framework-internal planning artifact unless the implementation is moved into a numbered DevFlow running-ID workspace.
-- **Required Files**: If execution is promoted into a `/30-Plan` run under `.workspaces/specs/`, create `master-checklist.md`, `implementation-checklist.md`, and `verification-checklist.md` there before `/40-Implement`.
+- **Required Files**: If execution is promoted into a `/30-Plan` run under `.workspaces/specs/`, create `implementation-checklist.md` and `verification-checklist.md` there before `/40-Implement`.
 - **Checklist Rule**: Convert the five tasks above into live checklist items if execution moves into a tracked running-ID workspace.
 - **Synchronization Rule**: Keep commit boundaries aligned with task boundaries so checklist evidence stays easy to update.
 

@@ -101,11 +101,6 @@ related_run: "999"
 - Stakeholder demo is ready.
 `);
 
-  writeFile(path.join(checklistDir, 'master-checklist.md'), `- [x] Add reset request endpoint
-- [x] Add regression tests
-- [-] Publish release note
-`);
-
   writeFile(path.join(checklistDir, 'implementation-checklist.md'), `| ID | Unit | Plan Phase | Status | Owner | Files | Updated | Verification | Evidence |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | I1 | Build reset request API | Phase 1 | done | codex | src/api/auth.ts | 2026-06-22 09:40 | npm test | passed |
@@ -126,11 +121,12 @@ related_run: "999"
 
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert(html.includes('<title>Report: Sample Password Reset</title>'), 'html should include rendered title');
-  assert(html.includes('<h1>Report: Sample Password Reset</h1>'), 'html should render the markdown document title');
-  assert(html.includes('<h2>1. Purpose</h2>'), 'html should render markdown headings from the report body');
+  assert(html.includes('>Report: Sample Password Reset</h1>'), 'html should render the markdown document title');
+  assert(html.includes('>1. Purpose</h2>'), 'html should render markdown headings from the report body');
   assert(html.includes('<li>Stakeholder demo is ready.</li>'), 'html should include additional notes from markdown');
-  assert(!html.includes('Toggle Theme'), 'html should not depend on the legacy report template chrome');
-  assert(!html.includes('checklists/master-checklist.md'), 'html should not inject checklist template sections');
+  assert(html.includes('Toggle theme'), 'html should render through the md2html template chrome');
+  assert(html.includes('id="toc-nav"'), 'html should include the md2html toc shell');
+  assert(!html.includes('checklists/implementation-checklist.md'), 'html should not inject checklist template sections');
 
   const thaiWorkspaceDir = path.join(scratchRoot, 'project', '.workspaces', 'specs', '998-sample-report-th');
   writeFile(path.join(thaiWorkspaceDir, '70-report.md'), `---
@@ -154,15 +150,16 @@ related_run: "998"
 
 - Thai summary line
 `);
-  writeFile(path.join(thaiWorkspaceDir, 'checklists', 'master-checklist.md'), `- [!] Thai checklist item
+  writeFile(path.join(thaiWorkspaceDir, 'checklists', 'verification-checklist.md'), `- [!] Thai checklist item
 `);
 
   const thaiResult = run([thaiWorkspaceDir]);
   assert(thaiResult.status === 0, `thai report html generation should pass:\n${thaiResult.stdout}\n${thaiResult.stderr}`);
   const thaiHtml = fs.readFileSync(path.join(thaiWorkspaceDir, '70-report.html'), 'utf8');
-  assert(thaiHtml.includes('<html lang="th">'), 'thai html should set the html lang from frontmatter');
-  assert(thaiHtml.includes('<h1>Thai Report Title</h1>'), 'thai html should render the markdown title');
-  assert(!thaiHtml.includes('Toggle Theme'), 'thai html should not depend on the html template chrome');
+  assert(thaiHtml.includes('<html lang="th"'), 'thai html should set the html lang from frontmatter');
+  assert(thaiHtml.includes('>Thai Report Title</h1>'), 'thai html should render the markdown title');
+  assert(thaiHtml.includes('เปลี่ยนธีม'), 'thai html should localize the md2html theme tooltip');
+  assert(thaiHtml.includes('id="toc-nav"'), 'thai html should include the md2html toc shell');
 
   console.log('[OK] generate-report-html renders report markdown directly into html output.');
 } finally {

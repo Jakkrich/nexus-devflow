@@ -31,7 +31,7 @@ risk_level: "medium"
 > **Source Spec**: [.workspaces/specs/{task-id}/20-spec.md]
 > **Status**: IN-PROGRESS
 > **Data Hub**: `30-plan.md` (Managed Phases, Subtasks, And Validation Notes)
-> **Checklist Layer**: `.workspaces/specs/{task-id}/checklists/master-checklist.md`
+> **Checklist Layer**: `.workspaces/specs/{task-id}/checklists/`
 
 ## 1. Technical Design And Strategy #section/design
 
@@ -109,7 +109,6 @@ risk_level: "medium"
 
 - **Checklist Directory**: `.workspaces/specs/{task-id}/checklists/`
 - **Required Files**:
-  - `master-checklist.md`
   - `implementation-checklist.md`
   - `verification-checklist.md`
 - **Checklist Rule**: Convert approved phases and subtasks into live markdown checklist items using task markers such as `- [ ]`, `- [/]`, `- [!]`, and `- [-]`, while keeping status, owner, updated timestamp, and evidence fields in the line text or note sections.

@@ -343,7 +343,7 @@ git commit -m "docs: repair workflow and workspace reference pages"
 ## 7. Checklist Initialization
 
 - **Checklist Directory**: Not required for this planning artifact unless execution is moved into a numbered DevFlow run under `.workspaces/specs/`.
-- **Required Files**: If Phase 4 execution is promoted into `/30-Plan` under a tracked run, create `master-checklist.md`, `implementation-checklist.md`, and `verification-checklist.md`.
+- **Required Files**: If Phase 4 execution is promoted into `/30-Plan` under a tracked run, create `implementation-checklist.md` and `verification-checklist.md`.
 - **Checklist Rule**: Convert the four tasks above into live checklist items before `/40-Implement` if the team wants visible progress tracking.
 - **Synchronization Rule**: Keep each commit aligned to one task so checklist evidence and report summaries stay easy to reconstruct.
 

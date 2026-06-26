@@ -28,7 +28,6 @@ Read:
 
 - `30-plan.md`
 - `20-spec.md`
-- `checklists/master-checklist.md` when present
 - `checklists/implementation-checklist.md` when present
 - referenced pattern files
 - `10-define.md` when the intent needs a quick reminder

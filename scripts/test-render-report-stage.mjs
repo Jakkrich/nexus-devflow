@@ -57,17 +57,21 @@ related_run: "999"
   const checklistDir = path.join(workspaceDir, 'checklists');
   writeFile(path.join(workspaceDir, '70-report.md'), markdown);
 
-  writeFile(path.join(checklistDir, 'master-checklist.md'), `- [x] Build report adapter
+  writeFile(path.join(checklistDir, 'implementation-checklist.md'), `- [x] Build report adapter
 - [/] Review adapter wiring
-- [!] Verify html output
+`);
+  writeFile(path.join(checklistDir, 'verification-checklist.md'), `- [!] Verify html output
 - [-] Publish release summary
 `);
 
   const adapterResult = renderReportStageWorkspace({ workspaceDir, projectRoot: process.cwd() });
   assert(adapterResult.outputPath.endsWith('70-report.html'), 'adapter should target 70-report.html');
   assert(adapterResult.html.includes('Adapter Smoke Test'), 'adapter should include report title');
-  assert(adapterResult.html.includes('<h2>3. Required Content</h2>'), 'adapter should render report markdown headings');
+  assert(adapterResult.html.includes('>3. Required Content</h2>'), 'adapter should render report markdown headings');
   assert(adapterResult.html.includes('<li>Adapter path renders this report.</li>'), 'adapter should render markdown list items');
+  assert(adapterResult.html.includes('{{TOC_TITLE}}') === false, 'adapter should resolve md2html placeholders');
+  assert(adapterResult.html.includes('id="toc-nav"'), 'adapter should include the md2html toc shell');
+  assert(adapterResult.html.includes('Toggle theme'), 'adapter should include md2html theme chrome');
   assert(!adapterResult.html.includes('Verify html output'), 'adapter should not inject checklist summaries from the legacy template path');
 
   const thaiWorkspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '998-render-stage-th');
@@ -87,13 +91,14 @@ related_run: "998"
 
 - Thai adapter summary
 `);
-  writeFile(path.join(thaiChecklistDir, 'master-checklist.md'), `- [!] Thai adapter checklist item
+  writeFile(path.join(thaiChecklistDir, 'verification-checklist.md'), `- [!] Thai adapter checklist item
 `);
 
   const thaiAdapterResult = renderReportStageWorkspace({ workspaceDir: thaiWorkspaceDir, projectRoot: process.cwd() });
-  assert(thaiAdapterResult.html.includes('<html lang="th">'), 'thai adapter should set the html lang from frontmatter');
+  assert(thaiAdapterResult.html.includes('<html lang="th"'), 'thai adapter should set the html lang from frontmatter');
   assert(thaiAdapterResult.html.includes('Thai Adapter Report'), 'thai adapter should render thai markdown content');
-  assert(!thaiAdapterResult.html.includes('Toggle Theme'), 'thai adapter should not rely on the html template');
+  assert(thaiAdapterResult.html.includes('id="toc-nav"'), 'thai adapter should include the md2html toc shell');
+  assert(thaiAdapterResult.html.includes('เปลี่ยนธีม'), 'thai adapter should localize the md2html theme tooltip');
 
   const flatWorkspaceDir = path.join(scratchRoot, '.workspaces', '999-shadow-stage');
   writeFile(path.join(flatWorkspaceDir, '70-report.md'), '# Shadow\n');

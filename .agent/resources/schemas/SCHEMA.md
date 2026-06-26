@@ -82,7 +82,6 @@ Checklist files are supporting operational contracts, not replacements for stage
 
 Recommended files:
 
-- `master-checklist.md`
 - `implementation-checklist.md`
 - `verification-checklist.md`
 
