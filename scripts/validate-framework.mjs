@@ -55,7 +55,7 @@ function readText(relativePath, failures) {
 }
 
 function scanForLegacyReferences(failures) {
-  const excluded = new Set(['.git', 'node_modules', '.venv', 'venv', 'env', '.local-tools', '.specify', '.uv_cache', '.pytest_cache', 'model_cache', 'rag_storage', 'benchmarks']);
+  const excluded = new Set(['.git', 'node_modules', '.venv', 'venv', 'env', '.local-tools', '.specify', '.uv_cache', '.pytest_cache', 'model_cache', 'rag_storage']);
   const allowedLegacyMentions = new Set([
     path.normalize('scripts/activate-agent.mjs'),
     path.normalize('agent-bundle.manifest.json'),
@@ -206,7 +206,6 @@ function validateReportNamingConvention(failures) {
     '.workspaces/research',
     '.workspaces/reports',
     '.workspaces/debug',
-    '.workspaces/benchmarks',
     '.workspaces/prds',
     '.workspaces/issues'
   ];

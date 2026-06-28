@@ -21,15 +21,6 @@ npm.cmd run validate:all
 
 Release only after the validation path is green. If a documentation-only change fails validation, fix the contract problem before continuing.
 
-For framework behavior changes, also run a feature benchmark:
-
-```powershell
-npm.cmd run benchmark:feature -- --feature <release-or-feature-slug>
-npm.cmd run benchmark:html
-```
-
-Use the latest comparable `.workspaces/benchmarks/*.benchmark.json` as `--baseline` when one exists. Document any negative delta or accepted trade-off in the release notes.
-
 ## Install And Upgrade Verification
 
 Use the real global lifecycle commands to verify that the released framework can still be checked and updated intentionally:
