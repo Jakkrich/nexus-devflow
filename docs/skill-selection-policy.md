@@ -59,6 +59,19 @@ Apply these gates in order:
 | `review` vs `/50-Verify` | `/50-Verify` | Verify owns validation evidence; review is one verification lane. |
 | `handoff` vs `/70-Report` | `/70-Report` for final stage report, `handoff` for temporary context transfer | Report is durable lifecycle closure; handoff is operational continuity. |
 
+## Grill-With-Docs Loop Safety Contract
+
+`grill-with-docs` is allowed to ask until material ambiguity is resolved. Loop safety must make the interview sharper, not shorter.
+
+Rules:
+
+- **Question Budget**: do not cap the total number of useful questions while unresolved scope, terminology, constraints, acceptance criteria, risk, or irreversible decisions remain.
+- **Repeat Budget**: cap repeated attempts on the same unresolved topic at two rounds.
+- **Topic Budget**: group questions by topic so the owning stage can see what remains unresolved.
+- **Exit Reason**: stop when each material ambiguity is resolved, accepted as an assumption, routed back to the owning stage, or marked blocked with the exact missing input.
+- **Anti-Perfection Rule**: do not ask polish-only questions once the owning stage stop condition is met.
+- **Blocked Rule**: if a necessary answer is missing after the repeat budget, record a blocked item instead of rephrasing indefinitely.
+
 ## Stage Defaults
 
 | Stage or companion | Default support skills | Escalate when |

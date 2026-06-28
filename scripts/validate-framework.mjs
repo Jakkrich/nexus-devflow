@@ -463,7 +463,31 @@ function validateSkillSelectionPolicySurface(failures) {
 
   validateImportedSupportSkills(failures);
   validateWorkflowSupportSkillHints(failures);
+  validateGrillWithDocsLoopSafety(failures);
   ok('Skill selection policy surface is aligned');
+}
+
+function validateGrillWithDocsLoopSafety(failures) {
+  const requiredMarkers = [
+    'Loop Safety Contract',
+    'Question Budget',
+    'Repeat Budget',
+    'Topic Budget',
+    'Exit Reason',
+    'Anti-Perfection Rule',
+    'Blocked Rule'
+  ];
+  const skill = readText('.agent/skills/grill-with-docs/SKILL.md', failures);
+  const policy = readText('docs/skill-selection-policy.md', failures);
+
+  for (const marker of requiredMarkers) {
+    if (skill && !skill.includes(marker)) {
+      fail(`.agent/skills/grill-with-docs/SKILL.md is missing loop safety marker: ${marker}`, failures);
+    }
+    if (policy && !policy.includes(marker)) {
+      fail(`docs/skill-selection-policy.md is missing grill-with-docs loop safety marker: ${marker}`, failures);
+    }
+  }
 }
 
 function validateImportedSupportSkills(failures) {
