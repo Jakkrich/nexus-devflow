@@ -67,6 +67,7 @@ Define:
 If the direction is still unstable:
 
 - use `Brainstorm` for option comparison
+- use `grill-with-docs` when fuzzy terms, scope boundaries, or decision points need a rigorous interview before they can be locked
 
 If evidence is missing:
 
@@ -97,7 +98,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/00-Discover`
 - Next state: `/20-Spec` when scope, decisions, and constraints are stable
-- Common companion commands: `Brainstorm` for unresolved options, `Research` for missing evidence
+- Common companion commands: `Brainstorm` for unresolved options, `Research` for missing evidence; support skills: `grill-with-docs` and `domain-modeling` when terminology, boundaries, or decisions need sharpening
 
 ## Sources
 
@@ -113,4 +114,5 @@ Report:
 - **Alternatives**:
   - `Brainstorm` - choose this when multiple strategic directions are still open.
   - `Research` - choose this when missing evidence still blocks a confident spec.
+  - `grill-with-docs` - choose this when the definition is almost stable but still has overloaded terms, weak boundaries, or untested decision points.
 

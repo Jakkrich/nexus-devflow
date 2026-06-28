@@ -385,6 +385,37 @@ function validateArtifactLanguageWorkflowSurface(failures) {
   ok('Artifact language workflow/docs surface is aligned');
 }
 
+function validateStageLocalLoopContracts(failures) {
+  const loopEnabledWorkflows = [
+    '.agent/workflows/30-Plan.md',
+    '.agent/workflows/40-Implement.md',
+    '.agent/workflows/50-Verify.md'
+  ];
+  const requiredMarkers = [
+    '### Loop Contract',
+    'Intent',
+    'Context',
+    'Action',
+    'Observation',
+    'Adjustment',
+    'Stop Condition',
+    'Handoff'
+  ];
+
+  for (const relativePath of loopEnabledWorkflows) {
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+
+    for (const marker of requiredMarkers) {
+      if (!content.includes(marker)) {
+        fail(`${relativePath} is missing stage-local loop contract marker: ${marker}`, failures);
+      }
+    }
+  }
+
+  ok(`Stage-local loop contract validation passed for ${loopEnabledWorkflows.length} workflow file(s)`);
+}
+
 function validateVerifyImpactContracts(failures) {
   const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
   if (!fs.existsSync(specsRoot)) {
@@ -610,6 +641,7 @@ function main() {
   validateStageArtifactConventions(failures);
   validateArtifactLanguageContracts(failures);
   validateArtifactLanguageWorkflowSurface(failures);
+  validateStageLocalLoopContracts(failures);
   validateChecklistContracts(failures);
   validateVerifyImpactContracts(failures);
   validateVerifyImpactSurface(failures);

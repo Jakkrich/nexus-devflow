@@ -63,6 +63,7 @@ The spec should be strong enough that planning can break it into executable unit
 If the spec cannot be written confidently:
 
 - call `Research` when facts are missing
+- use `grill-with-docs` when requirements, acceptance criteria, constraints, or out-of-scope items need to be stress-tested against scenarios and domain language
 - record assumptions explicitly when they are unavoidable
 
 Do not hide uncertainty inside vague requirement text.
@@ -90,7 +91,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/10-Define`
 - Next state: `/30-Plan` when the contract is implementation-ready
-- Common companion commands: `PRD`, `Spec-Research`, `Competitor`, `Spec-Orchestrate` when product or integration context is still incomplete
+- Common companion commands: `PRD`, `Spec-Research`, `Competitor`, `Spec-Orchestrate` when product or integration context is still incomplete; support skills: `grill-with-docs` and `domain-modeling` when the spec depends on precise domain language or durable decisions
 
 ## Sources
 
@@ -105,5 +106,6 @@ Report:
 - **Why**: The specification is now concrete enough to break into executable work.
 - **Alternatives**:
   - `Research` - choose this when the spec still depends on missing facts.
+  - `grill-with-docs` - choose this when the spec is readable but not yet tough enough to plan from.
   - `/10-Define` - choose this when the scope itself is still unstable.
 

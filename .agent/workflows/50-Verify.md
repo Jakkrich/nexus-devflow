@@ -24,6 +24,18 @@ If an impact report is needed, create it in the same task directory and summariz
 
 ## Process
 
+### Loop Contract
+
+Run verification as an evidence review loop, not as a single pass/fail guess.
+
+- **Intent**: decide whether the implementation satisfies the spec and plan without introducing unacceptable regression risk.
+- **Context**: read `20-spec.md`, `30-plan.md`, `40-implement.md`, checklist state, changed files, test decisions, and available command/manual evidence.
+- **Action**: run or inspect validation, compare implementation evidence against the contract, review risk areas, and record findings by severity.
+- **Observation**: use concrete evidence from test output, validation output, diff review, manual checks, skipped checks, and impact notes.
+- **Adjustment**: if evidence is missing or failing, request targeted implementation follow-up, route to `Debug`, or return to `/40-Implement` with the exact evidence gap.
+- **Stop Condition**: stop only with a clear verdict: pass, fail, or blocked; include the evidence, residual risks, and next route.
+- **Handoff**: `50-verify.md` must tell `/60-Release` why the work is ready, or tell `/40-Implement` exactly what must change before verification resumes.
+
 ### 1. Context Gathering
 
 Read:
@@ -44,6 +56,7 @@ Run the necessary validation for the current state before doing the full review.
 Use the old QA reviewer discipline, adapted to 2.0:
 
 - **STRICT MANDATE (กฎเหล็ก Unit Test)**: ตรวจสอบว่าโค้ดใหม่หรือการแก้ไข Bug (ที่มี behavior change) มีการสร้างหรืออัปเดต Unit Test คู่กันมาด้วยหรือไม่ หากไม่มีให้ทำเครื่องหมายว่า FAIL ทันที
+- compare claimed implementation evidence against the spec, plan, diff, and test decisions before forming a verdict
 - correctness
 - readability
 - architecture (DIP, SRP, Loose Coupling)
@@ -77,6 +90,7 @@ Include:
 
 - verdict: pass or fail
 - evidence: commands and results
+- loop observation, adjustment, stop condition, and handoff notes
 - test-decision alignment
 - checklist alignment and any stale status corrections
 - findings grouped by severity
@@ -90,11 +104,11 @@ Include:
 
 If pass:
 
-- route to `/60-Release`
+- route to `/60-Release` with release-ready evidence and residual risks
 
 If fail:
 
-- route back to `/40-Implement`
+- route back to `/40-Implement` with exact failed evidence, missing checks, or required changes
 
 Use `Debug` when investigation is needed before implementation can resume.
 
