@@ -54,6 +54,7 @@ Use the old planning discipline:
 
 If architecture or data flow is still unclear, recommend `Research` or `Agent codebase-explorer` before pretending the plan is stable.
 If domain terms, boundaries, or hard-to-reverse design choices are still questionable, use `grill-with-docs` before locking the plan.
+Use `codebase-design` when phases depend on seam placement or module interfaces. Use `tdd` when behavior-change subtasks need red-green-refactor test cases.
 
 ### 3. Explore Codebase Patterns
 
@@ -161,7 +162,7 @@ If validation fails, repair only what is necessary and keep `30-plan.md` aligned
 - Classification: Mainline workflow
 - Previous state: `/20-Spec`
 - Next state: `/40-Implement` when execution steps and verification are clear
-- Common companion commands: `Research` or `Agent` when architecture, data flow, or external constraints still need investigation; support skills: `grill-with-docs` and `domain-modeling` for final design stress-testing and durable terminology capture
+- Common companion commands: `Research` or `Agent` when architecture, data flow, or external constraints still need investigation; support skills: `grill-with-docs`, `domain-modeling`, `codebase-design`, `tdd`, and `to-issues` for final design stress-testing, durable terminology capture, test planning, and issue packaging
 
 ## Sources
 
@@ -178,6 +179,7 @@ If validation fails, repair only what is necessary and keep `30-plan.md` aligned
   - `Research` - choose this when the plan still depends on missing evidence.
   - `Agent codebase-explorer .workspaces/specs/{ID}-*/` - choose this when architecture or data flow is unclear.
   - `grill-with-docs` - choose this when plan assumptions or design boundaries need one last adversarial pass.
+  - `codebase-design` - choose this when a plan needs clearer seams, interfaces, or test surfaces.
   - `/20-Spec {ID}` - choose this when the spec itself is not strong enough for planning.
 
 ## Wiki Update Recommendation

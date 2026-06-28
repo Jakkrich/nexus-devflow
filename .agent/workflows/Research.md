@@ -21,6 +21,8 @@ Use it when:
 - the codebase or external docs need deeper investigation
 - Discover, Define, or Spec cannot proceed confidently without evidence
 
+Use `prototype` when the fastest reliable evidence is a runnable throwaway experiment rather than more reading.
+
 Preferred DevFlow 2.0 pairing:
 
 - from `/00-Discover`
@@ -124,6 +126,7 @@ Research whether this API version is compatible
 - `AGENTS.md`
 - `.agent/resources/schemas/research.template.md`
 - Related commands: `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `Spec-Research`, `Agent`
+- Support skills: `prototype`, `spec-research`, `competitor-analysis`, `insight-capture`
 
 ## Next Workflow Recommendation
 

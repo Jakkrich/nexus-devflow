@@ -8,6 +8,7 @@ description: Strategic PRD Generator (Orchestration) - Transform a product or fe
 Transform a product or feature idea into a problem-first, hypothesis-driven Product Requirements Document (PRD).
 
 In DevFlow 2.0, this is a supporting workflow, not part of the numbered mainline state path. Use it when the idea is still too product-shaped for `/10-Define` or `/20-Spec` to proceed cleanly.
+Use `to-prd` when existing conversation, discovery, or codebase context is already sufficient and the job is synthesis rather than another interview.
 
 ---
 
@@ -109,6 +110,7 @@ Return:
 - `AGENTS.md`
 - `.agent/resources/schemas/prd.template.md`
 - Related commands: `Brainstorm`, `Research`, `/10-Define`, `/20-Spec`, `Roadmap`, `Spec-Orchestrate`
+- Support skills: `to-prd`, `grill-with-docs`, `domain-modeling`
 
 ## Next Workflow Recommendation
 

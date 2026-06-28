@@ -76,6 +76,7 @@ If release readiness changes because unresolved issues are found:
 - route back to `/50-Verify` or `/40-Implement`
 
 Do not package unfinished work as release-ready through wording tricks.
+Use `resolving-merge-conflicts` when merge or rebase conflicts block packaging. Use `handoff` when release output must transfer to another agent or session without duplicating artifacts.
 
 ## Output
 
@@ -91,7 +92,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/50-Verify`
 - Next state: `/70-Report` when release packaging or handoff is complete
-- Common companion commands: `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
+- Common companion commands: `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`; support skills: `resolving-merge-conflicts`, `handoff`, and `setup-pre-commit` when release packaging needs conflict resolution, transfer notes, or local quality gates
 
 ## Sources
 
@@ -107,4 +108,5 @@ Report:
 - **Alternatives**:
   - `/50-Verify` - choose this when release readiness becomes uncertain.
   - `/40-Implement` - choose this when additional fixes are needed before release can proceed.
+  - `handoff` - choose this when release-ready context must move to another session, agent, or stakeholder packet.
 

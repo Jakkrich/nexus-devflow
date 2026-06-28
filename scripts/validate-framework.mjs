@@ -416,6 +416,126 @@ function validateStageLocalLoopContracts(failures) {
   ok(`Stage-local loop contract validation passed for ${loopEnabledWorkflows.length} workflow file(s)`);
 }
 
+function validateSkillSelectionPolicySurface(failures) {
+  const requiredDocs = [
+    'docs/skill-selection-policy.md',
+    'docs/mattpocock-skills-devflow-mapping.md',
+    'docs/mattpocock-skills-import-plan.md'
+  ];
+
+  for (const relativePath of requiredDocs) {
+    if (!fs.existsSync(path.join(projectRoot, relativePath))) {
+      fail(`Missing skill selection policy surface: ${relativePath}`, failures);
+    }
+  }
+
+  const routingSkill = readText('.agent/skills/intelligent-routing/SKILL.md', failures);
+  if (routingSkill && !routingSkill.includes('docs/skill-selection-policy.md')) {
+    fail('.agent/skills/intelligent-routing/SKILL.md must reference docs/skill-selection-policy.md', failures);
+  }
+
+  const agents = readText('AGENTS.md', failures);
+  if (agents && !agents.includes('docs/skill-selection-policy.md')) {
+    fail('AGENTS.md must reference docs/skill-selection-policy.md near reusable skill guidance', failures);
+  }
+
+  validateImportedSupportSkills(failures);
+  validateWorkflowSupportSkillHints(failures);
+  ok('Skill selection policy surface is aligned');
+}
+
+function validateImportedSupportSkills(failures) {
+  const importedSkills = [
+    'grill-with-docs',
+    'domain-modeling',
+    'codebase-design',
+    'diagnosing-bugs',
+    'tdd',
+    'review',
+    'handoff',
+    'writing-great-skills',
+    'to-prd',
+    'to-issues',
+    'prototype',
+    'triage'
+  ];
+  const forbiddenSlashCommands = [
+    'grilling',
+    'grill-with-docs',
+    'domain-modeling',
+    'codebase-design',
+    'setup-matt-pocock-skills',
+    'to-prd',
+    'to-issues',
+    'triage',
+    'implement',
+    'review'
+  ];
+  const allowedNumberedStages = new Set([
+    '/00-Discover',
+    '/10-Define',
+    '/20-Spec',
+    '/30-Plan',
+    '/40-Implement',
+    '/50-Verify',
+    '/60-Release',
+    '/70-Report'
+  ]);
+
+  for (const skillName of importedSkills) {
+    const skillPath = `.agent/skills/${skillName}/SKILL.md`;
+    const absoluteSkillPath = path.join(projectRoot, skillPath);
+    if (!fs.existsSync(absoluteSkillPath)) {
+      fail(`Imported support skill is missing: ${skillPath}`, failures);
+      continue;
+    }
+
+    const content = fs.readFileSync(absoluteSkillPath, 'utf8');
+    const numberedStageRefs = [...content.matchAll(/\/\d{2}-[A-Z][A-Za-z0-9-]+/g)].map((match) => match[0]);
+    for (const stageRef of numberedStageRefs) {
+      if (!allowedNumberedStages.has(stageRef)) {
+        fail(`${skillPath} references unsupported numbered workflow route: ${stageRef}`, failures);
+      }
+    }
+
+    for (const commandName of forbiddenSlashCommands) {
+      const slashCommandPattern = new RegExp(`(^|[^A-Za-z0-9._-])/${escapeRegExp(commandName)}([^A-Za-z0-9._-]|$)`);
+      if (slashCommandPattern.test(content)) {
+        fail(`${skillPath} references upstream slash command /${commandName}; use DevFlow stage, companion, or bare skill names instead`, failures);
+      }
+    }
+  }
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function validateWorkflowSupportSkillHints(failures) {
+  const workflowDir = path.join(projectRoot, '.agent', 'workflows');
+  if (!fs.existsSync(workflowDir)) return;
+
+  const files = fs.readdirSync(workflowDir)
+    .filter((name) => name.endsWith('.md') && name !== 'README.md');
+  const maxSupportSkillsPerHint = 5;
+
+  for (const name of files) {
+    const relativePath = `.agent/workflows/${name}`;
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+
+    for (const line of content.split(/\r?\n/)) {
+      if (!/support skills?:/i.test(line)) continue;
+      const supportPart = line.split(/support skills?:/i).pop() || '';
+      const matches = [...supportPart.matchAll(/`([^`]+)`/g)].map((match) => match[1]);
+      const supportSkillCount = matches.filter((item) => !item.startsWith('/')).length;
+      if (supportSkillCount > maxSupportSkillsPerHint) {
+        fail(`${relativePath} lists ${supportSkillCount} support skills in one hint; keep hints bounded to ${maxSupportSkillsPerHint} or fewer`, failures);
+      }
+    }
+  }
+}
+
 function validateVerifyImpactContracts(failures) {
   const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
   if (!fs.existsSync(specsRoot)) {
@@ -642,6 +762,7 @@ function main() {
   validateArtifactLanguageContracts(failures);
   validateArtifactLanguageWorkflowSurface(failures);
   validateStageLocalLoopContracts(failures);
+  validateSkillSelectionPolicySurface(failures);
   validateChecklistContracts(failures);
   validateVerifyImpactContracts(failures);
   validateVerifyImpactSurface(failures);

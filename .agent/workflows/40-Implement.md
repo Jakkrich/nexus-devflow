@@ -78,6 +78,8 @@ Use the old recovery discipline when blocked:
 - recommend `Debug` when root cause analysis is needed
 - return to Plan when the work no longer matches the plan
 
+Use `tdd` for behavior-change implementation loops, `diagnosing-bugs` when a tight repro is needed before a fix, and `codebase-design` when implementation exposes an awkward seam or shallow module.
+
 ### 4. Finalize Implementation
 
 When the scoped work is complete:
@@ -108,7 +110,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/30-Plan`
 - Next state: `/50-Verify` when scoped implementation is complete
-- Common companion commands: `Debug` for blockers, `Preview` for local checks
+- Common companion commands: `Debug` for blockers, `Preview` for local checks; support skills: `tdd`, `diagnosing-bugs`, and `codebase-design` for behavior changes, root-cause loops, and implementation-time design pressure
 
 ## Sources
 
@@ -125,6 +127,7 @@ Report:
   - `Debug "{blocker}"` - choose this when implementation is blocked by an unexplained failure.
   - `/30-Plan {ID}` - choose this when the plan is incomplete or no longer matches the work.
   - `Preview` - choose this when a local runtime or visual check is useful before formal verification.
+  - `codebase-design` - choose this when the implementation cannot be tested cleanly because the module shape is wrong.
 
 ## Wiki Update Recommendation
 
