@@ -28,6 +28,17 @@ During the session:
 - update `CONTEXT.md` when glossary terms are resolved
 - offer ADRs sparingly when a decision is hard to reverse, surprising without context, and based on a real trade-off
 
+## Loop Safety Contract
+
+Use loop safety to prevent unbounded or repetitive questioning, not to reduce useful interrogation.
+
+- **Question Budget**: do not cap the total number of useful questions when material ambiguity remains.
+- **Repeat Budget**: cap repeated attempts on the same unresolved topic at two rounds before marking the topic blocked or converting it into an explicit assumption.
+- **Topic Budget**: group questions by topic, such as scope, terminology, constraints, acceptance criteria, risks, and irreversible decisions.
+- **Exit Reason**: stop when each material ambiguity is resolved, explicitly accepted as an assumption, routed to the owning stage, or marked blocked with the exact missing input.
+- **Anti-Perfection Rule**: do not keep asking polish-only questions once the owning stage stop condition is met.
+- **Blocked Rule**: if the same necessary question remains unanswered after the repeat budget, stop the grill loop and report the missing input instead of rephrasing indefinitely.
+
 ## DevFlow Output
 
 Record outcomes in the owning stage artifact:
