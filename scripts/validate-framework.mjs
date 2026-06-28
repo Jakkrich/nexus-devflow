@@ -387,9 +387,14 @@ function validateArtifactLanguageWorkflowSurface(failures) {
 
 function validateStageLocalLoopContracts(failures) {
   const loopEnabledWorkflows = [
+    '.agent/workflows/00-Discover.md',
+    '.agent/workflows/10-Define.md',
+    '.agent/workflows/20-Spec.md',
     '.agent/workflows/30-Plan.md',
     '.agent/workflows/40-Implement.md',
-    '.agent/workflows/50-Verify.md'
+    '.agent/workflows/50-Verify.md',
+    '.agent/workflows/60-Release.md',
+    '.agent/workflows/70-Report.md'
   ];
   const requiredMarkers = [
     '### Loop Contract',
@@ -401,19 +406,36 @@ function validateStageLocalLoopContracts(failures) {
     'Stop Condition',
     'Handoff'
   ];
+  const stageEvidenceMarkers = {
+    '.agent/workflows/00-Discover.md': ['open questions', 'recommended next step'],
+    '.agent/workflows/10-Define.md': ['non-goals', 'scope boundaries'],
+    '.agent/workflows/20-Spec.md': ['acceptance criteria', 'out-of-scope'],
+    '.agent/workflows/30-Plan.md': ['checklist', 'test decision'],
+    '.agent/workflows/40-Implement.md': ['checklist', 'verification evidence'],
+    '.agent/workflows/50-Verify.md': ['checklist', 'verdict'],
+    '.agent/workflows/60-Release.md': ['follow-up', 'readiness'],
+    '.agent/workflows/70-Report.md': ['checklist', '70-report.html']
+  };
 
   for (const relativePath of loopEnabledWorkflows) {
     const content = readText(relativePath, failures);
     if (!content) continue;
+    const lowerContent = content.toLowerCase();
 
     for (const marker of requiredMarkers) {
       if (!content.includes(marker)) {
-        fail(`${relativePath} is missing stage-local loop contract marker: ${marker}`, failures);
+        fail(`${relativePath} is missing mainline stage-local loop contract marker: ${marker}`, failures);
+      }
+    }
+
+    for (const marker of stageEvidenceMarkers[relativePath] || []) {
+      if (!lowerContent.includes(marker.toLowerCase())) {
+        fail(`${relativePath} is missing stage-local loop evidence marker: ${marker}`, failures);
       }
     }
   }
 
-  ok(`Stage-local loop contract validation passed for ${loopEnabledWorkflows.length} workflow file(s)`);
+  ok(`Mainline stage-local loop contract validation passed for ${loopEnabledWorkflows.length} workflow file(s)`);
 }
 
 function validateSkillSelectionPolicySurface(failures) {

@@ -39,6 +39,18 @@ Before writing `10-define.md`, read `artifact_language` from `define.template.md
 
 ## Process
 
+### Loop Contract
+
+Run definition as a scope-stabilization loop, not as an implementation brainstorm.
+
+- **Intent**: lock the goal, non-goals, assumptions, boundaries, and decision points so the spec cannot drift between interpretations.
+- **Context**: read `00-discover.md`, attached notes, research, stakeholder constraints, and unresolved questions that affect scope.
+- **Action**: define the core goal, success framing, non-goals, constraints, assumptions, and downstream decision rules.
+- **Observation**: use concrete evidence such as conflicting interpretations, missing facts, unstable terminology, visible dependencies, and unresolved tradeoffs.
+- **Adjustment**: if options remain open, route to `Brainstorm`; if terms or boundaries are weak, use `grill-with-docs`; if facts are missing, use `Research`; if language or architecture decisions must persist, use `domain-modeling`.
+- **Stop Condition**: stop when scope, non-goals, assumptions, constraints, and decision points are stable enough that `/20-Spec` can write requirements without guessing.
+- **Handoff**: `10-define.md` must tell `/20-Spec` exactly what is in scope, what is out of scope, what assumptions are accepted, and what decisions are fixed.
+
 ### 1. Load Discovery Context
 
 Read:
