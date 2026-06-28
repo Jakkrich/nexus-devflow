@@ -52,8 +52,8 @@ try {
   const okRun = runValidate();
   assert(okRun.status === 0, `valid checklist workspace should pass:\n${okRun.stdout}\n${okRun.stderr}`);
   assert(
-    okRun.stdout.includes('Stage-local loop contract validation passed for 3 workflow file(s)'),
-    'valid framework should report scoped loop contract validation'
+    okRun.stdout.includes('Mainline stage-local loop contract validation passed for 8 workflow file(s)'),
+    'valid framework should report mainline loop contract validation'
   );
 
   fs.writeFileSync(
@@ -64,7 +64,7 @@ try {
   const missingLoopRun = runValidate();
   assert(missingLoopRun.status !== 0, 'missing loop contract marker should fail validation');
   assert(
-    missingLoopRun.stderr.includes('.agent/workflows/30-Plan.md is missing stage-local loop contract marker: ### Loop Contract'),
+    missingLoopRun.stderr.includes('.agent/workflows/30-Plan.md is missing mainline stage-local loop contract marker: ### Loop Contract'),
     'missing loop contract error should name the scoped workflow and marker'
   );
   fs.writeFileSync(planWorkflowPath, originalPlanWorkflow, 'utf8');

@@ -39,6 +39,18 @@ Before writing `20-spec.md`, read `artifact_language` from `spec.template.md` an
 
 ## Process
 
+### Loop Contract
+
+Run specification as a contract-hardening loop, not as a prose expansion of the definition.
+
+- **Intent**: produce requirements and acceptance criteria that are concrete enough for planning and review.
+- **Context**: read `10-define.md`, `00-discover.md`, relevant research, hard constraints, and any domain or codebase decisions that shape the delivery contract.
+- **Action**: write requirements, acceptance criteria, constraints, and out-of-scope items, then inspect whether each requirement is testable and unambiguous.
+- **Observation**: use concrete evidence such as ambiguous wording, unchecked assumptions, edge cases, missing acceptance criteria, conflicting constraints, and implementation details that are not true constraints.
+- **Adjustment**: if facts are missing, route to `Research`; if requirements need stress-testing, use `grill-with-docs`; if module or interface boundaries affect the contract, use `codebase-design`; if scope is unstable, return to `/10-Define`.
+- **Stop Condition**: stop when every requirement has checkable acceptance criteria, hard constraints are explicit, out-of-scope items are visible, and `/30-Plan` can break the work down without inventing intent.
+- **Handoff**: `20-spec.md` must tell `/30-Plan` what must be delivered, how success will be checked, what constraints cannot move, and what is intentionally excluded.
+
 ### 1. Read Definition Artifacts
 
 Read:

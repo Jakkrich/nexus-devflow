@@ -39,6 +39,18 @@ Before writing `60-release.md`, read `artifact_language` from `release.template.
 
 ## Process
 
+### Loop Contract
+
+Run release as a readiness-packaging loop, not as a celebratory summary.
+
+- **Intent**: convert verified work into a clear release, PR, merge, deploy, or handoff packet without hiding unresolved risk.
+- **Context**: read `50-verify.md`, `50-verify-impact.md` when present, `40-implement.md`, `20-spec.md`, checklist state, and any PR, deploy, merge, or handoff notes.
+- **Action**: summarize delivered scope, user/system impact, readiness state, validation evidence, rollback or mitigation notes, and follow-up items.
+- **Observation**: use concrete evidence such as verify verdict, failed or skipped checks, impact notes, residual risks, merge/deploy constraints, and checklist status.
+- **Adjustment**: if release readiness becomes uncertain, return to `/50-Verify`; if fixes are required, return to `/40-Implement`; if context must transfer, use `handoff`.
+- **Stop Condition**: stop when the release state is explicit, evidence supports readiness, residual risks and follow-ups are named, and the next delivery or reporting route is clear.
+- **Handoff**: `60-release.md` must tell `/70-Report` what shipped, what did not ship, what evidence supports readiness, and what follow-ups remain.
+
 ### 1. Load Verified Context
 
 Read:
