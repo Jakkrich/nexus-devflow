@@ -212,9 +212,13 @@ Use mainly in `/60-Release`, `/70-Report`
 
 These are not numbered workflows and should be invoked through the active stage, the responsible agent, or by the user directly when needed.
 
+Use `docs/skill-selection-policy.md` when multiple skills appear to fit. Stage ownership wins, choose one primary skill per pass, add secondary skills only for distinct bounded purposes, and prefer the most specific skill when descriptions overlap.
+
 | Skill | Typical use |
 | :--- | :--- |
 | `brainstorming` | Before locking direction in Discover or Define |
+| `grill-with-docs` | During Define or Spec to stress-test fuzzy domain language, boundaries, decisions, and acceptance targets; optionally before Plan to challenge a nearly locked design |
+| `domain-modeling` | During Define, Spec, or Plan when glossary terms or durable architectural decisions must be captured |
 | `preview-local-check` | During Implement or Verify for local preview and smoke checks |
 | `code-simplification` | During Implement or Verify |
 | `spec-research` | During Spec or Verify when integrations need source-backed confirmation |

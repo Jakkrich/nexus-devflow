@@ -25,6 +25,7 @@ metadata_version: 1
 ## 1. Purpose
 
 - Track implementation units in execution order.
+- For loop-enabled stages, capture stage-local loop evidence for the implementation unit only.
 
 ## 2. Status Legend
 
@@ -36,8 +37,8 @@ metadata_version: 1
 
 ## 3. Implementation Checklist Items
 
-- [ ] I1: [Scoped implementation unit] | phase: Phase 1 | owner: {Owner} | files: `file/a.ts`, `file/b.ts` | updated: {Date} | verification: [test or manual check] | evidence: pending
-- [/] I2: [Implementation currently in progress] | phase: Phase 2 | owner: [person/agent] | files: `file/c.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [command] | evidence: [latest result]
+- [ ] I1: [Scoped implementation unit] | phase: Phase 1 | owner: {Owner} | files: `file/a.ts`, `file/b.ts` | updated: {Date} | verification: [test or manual check] | loop: intent/observation/adjustment/stop pending | evidence: pending
+- [/] I2: [Implementation currently in progress] | phase: Phase 2 | owner: [person/agent] | files: `file/c.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [command] | loop: [latest observation] | evidence: [latest result]
 - [!] I3: [Blocked implementation unit] | phase: Phase 2 | owner: [person/agent] | files: `file/d.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [pending check] | evidence: [blocker note]
 - [-] I4: [Skipped implementation unit] | phase: Phase 3 | owner: [person/agent] | files: `file/e.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [not run] | evidence: [reason for skip]
 
@@ -51,6 +52,11 @@ metadata_version: 1
 - **Test Decision**: `[Required / Manual / Not Required]`
 - **Verification**:
   - `command or manual check`
+- **Loop Intent**: [what this implementation unit is trying to change]
+- **Loop Context**: [local files, constraints, and evidence used]
+- **Loop Observation**: [what changed or what was learned after the action]
+- **Loop Adjustment**: [follow-up patch, route change, or none]
+- **Loop Stop Condition**: [what makes this unit complete enough to hand off]
 - **Result**:
   - pending
 - **Notes**:

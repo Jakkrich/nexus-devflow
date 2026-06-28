@@ -21,6 +21,8 @@ Always route in this order:
 
 Do not route new work into retired JSON-first commands, dashboard-first flows, or removed aliases.
 
+When routing to support skills, follow `docs/skill-selection-policy.md`.
+
 ## Mainline Stages
 
 `/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report`
@@ -91,6 +93,32 @@ Use these agent mappings when expert judgment is the best next step:
 - the user explicitly asks for one
 - a narrow expert lens is more useful than a workflow shell
 - the active stage already exists and only specialist judgment is missing
+
+### Use a support skill when:
+
+- a mainline stage or public companion already owns the work
+- the skill resolves a bounded uncertainty inside that owner
+- the skill is more specific than the general companion surface
+- the skill output can be captured in the owning stage artifact, `CONTEXT.md`, an ADR, or a focused doc
+
+Support skill limits:
+
+- choose one primary skill per pass
+- add at most two secondary skills when each has a distinct purpose
+- prefer the most specific skill when descriptions overlap
+- route back to the owning stage when a skill finds a lifecycle-level contradiction
+
+Key conflict defaults:
+
+| Conflict | Route |
+|---|---|
+| `Brainstorm` vs `grilling` | `Brainstorm` for option generation; `grilling` for stress-testing a candidate idea |
+| `grilling` vs `grill-with-docs` | `grill-with-docs` when a codebase or durable docs matter |
+| `grill-with-docs` vs `domain-modeling` | `grill-with-docs` interviews; `domain-modeling` records confirmed glossary terms or ADRs |
+| `to-prd` vs `PRD` | `PRD` owns the public surface; `to-prd` is an internal synthesis method |
+| `to-issues` vs `/30-Plan` | `/30-Plan` owns work breakdown; `to-issues` packages slices when issue tracker output is needed |
+| `implement` vs `/40-Implement` | `/40-Implement` owns implementation |
+| `review` vs `/50-Verify` | `/50-Verify` owns verification; `review` is one lane |
 
 ## Examples
 

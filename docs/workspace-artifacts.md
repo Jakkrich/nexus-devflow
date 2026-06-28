@@ -126,6 +126,7 @@ Principles:
 3. Checklist items should include `status`, `owner`, `updated`, and `evidence`.
 4. Checklist files support the stage files. They do not replace `30-plan.md`, `40-implement.md`, or `50-verify.md`.
 5. Markdown tables with a `Status` column remain supported for backward compatibility, but checklist UI lines are the preferred human-facing format.
+6. For loop-enabled stages, checklist evidence may include intent, context, action, observation, adjustment, stop condition, and handoff. This evidence is stage-local and does not imply every mainline stage is loop-enabled.
 
 Recommended use:
 
