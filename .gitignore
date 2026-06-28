@@ -3,8 +3,10 @@
 # ------------------------------
 # 1. WORKSPACES (Logs, Specs, & Plans)
 # ------------------------------
-# Ignore all workspaces files and directories completely
-.workspaces/
+# Ignore workspace run artifacts by default, but keep benchmark history trackable.
+.workspaces/*
+!.workspaces/benchmarks/
+!.workspaces/benchmarks/**
 .workspaces-status
 *.log
 

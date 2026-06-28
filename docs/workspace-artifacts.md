@@ -14,6 +14,7 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 |-- project_index.json
 |-- lessons.md
 |-- debug/
+|-- benchmarks/
 |-- issues/
 |-- prds/
 |-- reports/
@@ -38,6 +39,7 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 | `.workspaces/prds/` | Product Requirements Documents created before mainline execution | `PRD` and product-definition work | Yes. It bridges product thinking to executable work. |
 | `.workspaces/debug/` | Root cause analysis reports and debugging notes | `Debug`, verify follow-up work | Yes. It keeps RCA separate from implementation artifacts. |
 | `.workspaces/reports/` | Cross-cutting reports that are not tied to one stage file | verification, review, specialist summaries | Yes. It captures reusable reports outside a single run. |
+| `.workspaces/benchmarks/` | Feature benchmark markdown and JSON artifacts that compare DevFlow framework changes across runs | framework feature development and release readiness | Yes. It records measurable improvement, regression, and baseline evidence. |
 | `.workspaces/wiki/` | Compiled framework and project knowledge pages with source-backed links | `Wiki`, `Report`, `Help` | Optional. Create it only when wiki capture is actually needed. |
 
 ## Top-Level Files
@@ -238,3 +240,9 @@ npm.cmd run validate:all
 ```
 
 Framework validation checks the main workspace structure, workflow naming, report naming, and roadmap markdown contracts.
+
+Run a feature benchmark after framework behavior changes:
+
+```powershell
+npm.cmd run benchmark:feature -- --feature <slug>
+```
