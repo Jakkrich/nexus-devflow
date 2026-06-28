@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benchmark: feature-benchmark-standard</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f7f9;
+  --ink: #20242c;
+  --muted: #667085;
+  --line: #d8dee8;
+  --panel: #ffffff;
+  --green: #16794c;
+  --red: #b42318;
+  --amber: #b54708;
+  --blue: #175cd3;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+main {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+.hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+.eyebrow {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+h1, h2, h3 { line-height: 1.2; }
+h1 { font-size: 34px; margin: 0 0 8px; }
+h2 { font-size: 22px; margin: 0 0 16px; }
+p { color: var(--muted); }
+a { color: var(--blue); }
+code {
+  background: #eef2f7;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.card, .panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.card { padding: 14px; }
+.card span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.card strong { font-size: 20px; }
+.panel {
+  padding: 18px;
+  margin: 16px 0;
+}
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th, td {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.badge {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.badge.pass { background: #dcfae6; color: var(--green); }
+.badge.fail { background: #fee4e2; color: var(--red); }
+.badge.neutral { background: #eef2f7; color: var(--muted); }
+.good { color: var(--green); font-weight: 700; }
+.warn { color: var(--amber); font-weight: 700; }
+.muted { color: var(--muted); }
+pre {
+  overflow-x: auto;
+  background: #101828;
+  color: #f9fafb;
+  padding: 14px;
+  border-radius: 8px;
+}
+@media (max-width: 760px) {
+  main { width: min(100% - 20px, 1180px); padding-top: 18px; }
+  .hero { align-items: flex-start; flex-direction: column; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  h1 { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+<main>
+
+      <section class="hero">
+        <div>
+          <p class="eyebrow">DevFlow Benchmark</p>
+          <h1>feature-benchmark-standard</h1>
+          <p>Status: <span class="badge pass">pass</span> Commit: <code>e5f3a6a</code></p>
+        </div>
+        <a class="button" href="benchmark-history.html">View History</a>
+      </section>
+      
+    <section class="cards">
+      <div class="card"><span>Status</span><strong>pass</strong></div>
+      <div class="card"><span>Validate</span><strong>737 ms</strong></div>
+      <div class="card"><span>Skill Test</span><strong>1027 ms</strong></div>
+      <div class="card"><span>Human Avg</span><strong>3.0</strong></div>
+    </section>
+  
+      <section class="panel">
+        <h1>Feature Benchmark: feature-benchmark-standard</h1>
+<h2>1. Summary</h2>
+<ul><li>Feature: <code>feature-benchmark-standard</code></li><li>Status: <code>pass</code></li><li>Commit: <code>e5f3a6a</code></li><li>Created: 2026-06-28T13:07:33.828Z</li><li>Baseline: .workspaces\benchmarks\2026-06-28-feature-benchmark-standard.benchmark.json</li></ul>
+<h2>2. Command Evidence</h2>
+<p>| Command | Status | Duration Ms | Exit Code |<br>| :--- | :--- | ---: | ---: |<br>| <code>npm.cmd run validate</code> | pass | 737 | 0 |<br>| <code>npm.cmd run validate:skills:test</code> | pass | 1027 | 0 |</p>
+<h2>3. Repository Metrics</h2>
+<p>| Metric | Current |<br>| :--- | ---: |<br>| workflow_count | 39 |<br>| skill_count | 87 |<br>| schema_template_count | 34 |<br>| public_companion_count | 9 |<br>| validation_script_count | 26 |</p>
+<h2>4. Human Scorecard</h2>
+<p>| Dimension | Score 1-5 | Evidence |<br>| :--- | ---: | :--- |<br>| routing_quality | 3 | Update after scenario review |<br>| stage_ownership | 3 | Update after scenario review |<br>| artifact_completeness | 3 | Update after scenario review |<br>| validation_coverage | 3 | Update after scenario review |<br>| operator_clarity | 3 | Update after scenario review |<br>| regression_risk | 3 | Update after scenario review |</p>
+<h2>5. Notes</h2>
+<ul><li>Automated benchmark captures command evidence and repository metrics.</li><li>Update human_scores after running a real scenario with docs/feature-benchmark-scorecard.md.</li></ul>
+<h2>6. Baseline Comparison</h2>
+<pre><code>{
+  &quot;command_duration_delta_ms&quot;: {
+    &quot;validate&quot;: 29,
+    &quot;validate:skills:test&quot;: 82
+  },
+  &quot;repository_metric_delta&quot;: {
+    &quot;workflow_count&quot;: 0,
+    &quot;skill_count&quot;: 0,
+    &quot;schema_template_count&quot;: 0,
+    &quot;public_companion_count&quot;: 0,
+    &quot;validation_script_count&quot;: 1
+  }
+}</code></pre>
+<h2>7. Verdict</h2>
+<ul><li>Benchmark command layer passed.</li></ul>
+<h2>8. Additional Notes</h2>
+<ul><li>Use docs/feature-benchmark-scorecard.md to complete the human scenario review.</li></ul>
+      </section>
+    
+</main>
+</body>
+</html>
