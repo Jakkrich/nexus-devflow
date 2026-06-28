@@ -25,6 +25,7 @@ For framework behavior changes, also run a feature benchmark:
 
 ```powershell
 npm.cmd run benchmark:feature -- --feature <release-or-feature-slug>
+npm.cmd run benchmark:html
 ```
 
 Use the latest comparable `.workspaces/benchmarks/*.benchmark.json` as `--baseline` when one exists. Document any negative delta or accepted trade-off in the release notes.

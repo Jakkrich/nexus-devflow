@@ -4,16 +4,16 @@
 
 - Feature: `feature-benchmark-standard`
 - Status: `pass`
-- Commit: `5282e3d`
-- Created: 2026-06-28T13:01:06.834Z
+- Commit: `e5f3a6a`
+- Created: 2026-06-28T13:07:33.828Z
 - Baseline: .workspaces\benchmarks\2026-06-28-feature-benchmark-standard.benchmark.json
 
 ## 2. Command Evidence
 
 | Command | Status | Duration Ms | Exit Code |
 | :--- | :--- | ---: | ---: |
-| `npm.cmd run validate` | pass | 708 | 0 |
-| `npm.cmd run validate:skills:test` | pass | 945 | 0 |
+| `npm.cmd run validate` | pass | 737 | 0 |
+| `npm.cmd run validate:skills:test` | pass | 1027 | 0 |
 
 ## 3. Repository Metrics
 
@@ -23,7 +23,7 @@
 | skill_count | 87 |
 | schema_template_count | 34 |
 | public_companion_count | 9 |
-| validation_script_count | 25 |
+| validation_script_count | 26 |
 
 ## 4. Human Scorecard
 
@@ -46,15 +46,15 @@
 ```json
 {
   "command_duration_delta_ms": {
-    "validate": 44,
-    "validate:skills:test": -5
+    "validate": 29,
+    "validate:skills:test": 82
   },
   "repository_metric_delta": {
     "workflow_count": 0,
     "skill_count": 0,
     "schema_template_count": 0,
     "public_companion_count": 0,
-    "validation_script_count": 0
+    "validation_script_count": 1
   }
 }
 ```

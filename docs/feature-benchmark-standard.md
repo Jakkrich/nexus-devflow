@@ -76,6 +76,21 @@ The command writes:
 .workspaces/benchmarks/{date}-{slug}.benchmark.json
 ```
 
+Render developer-friendly HTML after recording benchmark data:
+
+```powershell
+npm.cmd run benchmark:html
+```
+
+The renderer writes:
+
+```text
+.workspaces/benchmarks/{date}-{slug}.benchmark.html
+.workspaces/benchmarks/benchmark-history.html
+```
+
+Use the history page to compare benchmark runs over time.
+
 ## Baseline Rules
 
 - Use the most recent successful benchmark for the same feature family as baseline.
@@ -102,5 +117,6 @@ A DevFlow feature is ready to merge or release when:
 - core validation passes
 - focused regression checks pass
 - benchmark markdown and JSON artifacts exist
+- benchmark HTML and history HTML are rendered for developer review
 - no required score is below 3 unless the trade-off is explicitly accepted
 - any negative baseline delta is explained
