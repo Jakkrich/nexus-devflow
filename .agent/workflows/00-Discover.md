@@ -64,6 +64,7 @@ Decide whether the request is:
 - **missing evidence and should use Research**
 
 Do not pretend the request is well-defined if it is still ambiguous.
+Use `grilling` or `prototype` only when the request needs stress-testing or runnable evidence before it can move to Define.
 
 ### 4. Write `00-discover.md`
 
@@ -89,7 +90,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: Start of a new run
 - Next state: `/10-Define` when scope is ready
-- Common companion commands: `Brainstorm` when the request is fuzzy, `Research` when evidence is missing
+- Common companion commands: `Brainstorm` when the request is fuzzy, `Research` when evidence is missing; support skills: `grilling` for stress-testing and `prototype` when runnable evidence is needed
 
 ## Sources
 
@@ -105,4 +106,5 @@ Report:
 - **Alternatives**:
   - `Brainstorm` - choose this when direction is still unstable.
   - `Research` - choose this when missing facts block a confident definition.
+  - `prototype` - choose this when a runnable experiment is the fastest way to answer a discovery question.
 

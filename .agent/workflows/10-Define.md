@@ -68,6 +68,7 @@ If the direction is still unstable:
 
 - use `Brainstorm` for option comparison
 - use `grill-with-docs` when fuzzy terms, scope boundaries, or decision points need a rigorous interview before they can be locked
+- use `domain-modeling` when resolved language or architectural decisions should become durable glossary or ADR entries
 
 If evidence is missing:
 
@@ -98,7 +99,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/00-Discover`
 - Next state: `/20-Spec` when scope, decisions, and constraints are stable
-- Common companion commands: `Brainstorm` for unresolved options, `Research` for missing evidence; support skills: `grill-with-docs` and `domain-modeling` when terminology, boundaries, or decisions need sharpening
+- Common companion commands: `Brainstorm` for unresolved options, `Research` for missing evidence; support skills: `grill-with-docs`, `domain-modeling`, and `to-prd` when terminology, boundaries, decisions, or product framing need sharpening
 
 ## Sources
 

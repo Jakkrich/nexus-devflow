@@ -17,6 +17,7 @@
     "artifact-language:switch": "node ./scripts/switch-artifact-language.mjs",
     "artifact-language:test": "node ./scripts/test-switch-artifact-language.mjs",
     "validate:checklists:test": "node ./scripts/test-validate-checklists.mjs",
+    "validate:skills:test": "node ./scripts/test-skill-selection-policy.mjs",
     "validate:verify-impact:test": "node ./scripts/test-verify-impact-contract.mjs",
     "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
     "security:scan": "node ./scripts/scan-security-hygiene.mjs",

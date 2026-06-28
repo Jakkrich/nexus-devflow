@@ -70,6 +70,7 @@ Use the old QA reviewer discipline, adapted to 2.0:
 Run project validation commands when available: lint, tests, typecheck, build, or targeted commands from the plan.
 
 For test-decision alignment, verify that planned verification was actually executed and that the evidence matches the claimed result.
+Use `review` for a two-axis standards/spec review, `diagnosing-bugs` when a failure needs root cause analysis, and `silent-failure-audit` when the risk is false-positive success.
 
 ### 4. Verification Report
 
@@ -128,7 +129,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/40-Implement`
 - Next state: `/60-Release` when evidence is sufficient
-- Common companion commands: `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `Wiki`
+- Common companion commands: `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `Wiki`; support skills: `review`, `diagnosing-bugs`, `tdd`, and `silent-failure-audit` for focused verification lanes
 
 ## Sources
 
@@ -144,6 +145,7 @@ Report:
 - **Why**: Verification decides whether work moves forward to packaging or loops back for fixes.
 - **Alternatives**:
   - `Debug` - choose this when the failure needs root cause analysis before more implementation.
+  - `review` - choose this when changed work needs standards and spec review as separate axes.
   - `Wiki project ingest .workspaces/specs/{ID}-*/50-verify.md` - choose this when verification reveals reusable project knowledge.
 
 ## Wiki Update Recommendation

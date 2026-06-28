@@ -64,6 +64,7 @@ If the spec cannot be written confidently:
 
 - call `Research` when facts are missing
 - use `grill-with-docs` when requirements, acceptance criteria, constraints, or out-of-scope items need to be stress-tested against scenarios and domain language
+- use `codebase-design` when requirements imply module boundaries, interface contracts, seams, or testability constraints
 - record assumptions explicitly when they are unavoidable
 
 Do not hide uncertainty inside vague requirement text.
@@ -91,7 +92,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/10-Define`
 - Next state: `/30-Plan` when the contract is implementation-ready
-- Common companion commands: `PRD`, `Spec-Research`, `Competitor`, `Spec-Orchestrate` when product or integration context is still incomplete; support skills: `grill-with-docs` and `domain-modeling` when the spec depends on precise domain language or durable decisions
+- Common companion commands: `PRD`, `Spec-Research`, `Competitor`, `Spec-Orchestrate` when product or integration context is still incomplete; support skills: `grill-with-docs`, `domain-modeling`, and `codebase-design` when the spec depends on precise domain language, durable decisions, or module/interface constraints
 
 ## Sources
 
@@ -107,5 +108,6 @@ Report:
 - **Alternatives**:
   - `Research` - choose this when the spec still depends on missing facts.
   - `grill-with-docs` - choose this when the spec is readable but not yet tough enough to plan from.
+  - `codebase-design` - choose this when interface shape or testability constraints must be settled before planning.
   - `/10-Define` - choose this when the scope itself is still unstable.
 

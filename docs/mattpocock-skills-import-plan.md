@@ -37,7 +37,7 @@ Exit criteria:
 
 ## Phase 1: Low-Risk Support Skill Imports
 
-Status: partially started.
+Status: in progress. `grill-with-docs` and `domain-modeling` are imported. `codebase-design`, `diagnosing-bugs`, `tdd`, `review`, `handoff`, and `writing-great-skills` are imported as support skills.
 
 Import:
 
@@ -69,7 +69,7 @@ Exit criteria:
 
 ## Phase 2: Stage Workflow Hints
 
-Status: pending.
+Status: in progress. `triage`, `to-prd`, `to-issues`, and `prototype` are imported as support skills behind existing DevFlow surfaces.
 
 Tasks:
 
@@ -96,7 +96,7 @@ Exit criteria:
 
 ## Phase 3: Companion Surface Adaptation
 
-Status: pending.
+Status: in progress. `validate-framework.mjs` now checks policy docs, imported support skill presence, upstream slash-command drift, unsupported numbered workflow routes, and overloaded workflow support-skill hints.
 
 Adapt behind existing public companion commands:
 
@@ -119,7 +119,7 @@ Exit criteria:
 
 ## Phase 4: Validation And Drift Checks
 
-Status: pending.
+Status: ready for pilot execution. See `docs/mattpocock-skills-pilot-runs.md`.
 
 Add validation only after the policy stabilizes.
 
@@ -141,7 +141,7 @@ Exit criteria:
 
 ## Phase 5: Pilot Runs
 
-Status: pending.
+Status: initial decisions documented. See `docs/mattpocock-skills-promotion-decisions.md`.
 
 Run controlled examples:
 

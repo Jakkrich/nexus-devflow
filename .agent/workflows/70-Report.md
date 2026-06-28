@@ -102,6 +102,7 @@ Prefer clarity over internal detail.
 Do not bury the outcome inside implementation trivia. The report should help a reader understand the run without replaying the whole workflow.
 
 When checklists exist, use them as the most human-readable operational record of what actually happened.
+Use `handoff` when the report must support continued work, and `insight-capture` when the run produced lessons that should become reusable knowledge.
 
 ## Output
 
@@ -122,7 +123,7 @@ npm run report:html -- <workspace-path-or-running-id>
 - Classification: Mainline workflow
 - Previous state: `/60-Release`
 - Next state: End of the mainline run
-- Common companion commands: `Wiki` for durable knowledge capture, `Help` for routing or explanation
+- Common companion commands: `Wiki` for durable knowledge capture, `Help` for routing or explanation; support skills: `handoff`, `insight-capture`, and writing skills when final reporting must support continuation or reusable learning
 
 ## Sources
 
@@ -136,3 +137,4 @@ npm run report:html -- <workspace-path-or-running-id>
 - **Primary**: End of mainline flow
 - **Render HTML**: `npm run report:html -- {ID}` after `70-report.md` is finalized so the standardized stakeholder HTML stays in sync
 - **Alternative**: `Wiki` when the completed run should be promoted into durable reusable knowledge
+  - `handoff` when another session or agent must continue from the completed run.
