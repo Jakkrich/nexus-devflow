@@ -1,14 +1,19 @@
 # Install And Update Troubleshooting
 
-Use this guide when Nexus-DevFlow install, check, or update behavior is not what you expected.
+Use this guide when Nexus-DevFlow install, link, copy, check, or update behavior is not what you expected.
 
-## Commands Covered
+## Start By Identifying The Route
 
-- `npm.cmd run codex:check-global`
-- `npm.cmd run codex:update-global`
-- `npm.cmd run codex:update-global:pull`
-- `npm.cmd run validate`
-- `npm.cmd run validate:all`
+Nexus-DevFlow now has three project-facing setup routes plus one optional Codex-global route:
+
+- `Central clone + link` for the recommended project-local setup
+- `Manual copy / overwrite` when links are not suitable
+- `Let AI install or update it` when you want the AI to execute one of the supported routes
+- optional `Codex global install` when you want Codex to know Nexus-DevFlow from any project
+
+Always confirm which route you are trying to repair before changing files.
+
+## Framework-Root Commands
 
 Run these commands from the framework root:
 
@@ -16,17 +21,82 @@ Run these commands from the framework root:
 cd D:\Projects\nexus-devflow
 ```
 
-## Start With The Smallest Useful Check
+Useful checks:
 
-If you are not sure where the problem is, use this order:
+- `npm.cmd run codex:check-global`
+- `npm.cmd run codex:update-global`
+- `npm.cmd run codex:update-global:pull`
+- `npm.cmd run validate`
+- `npm.cmd run validate:all`
 
-1. Run `npm.cmd run codex:check-global`
-2. Run `npm.cmd run validate`
-3. Run `npm.cmd run validate:all` when you need the broadest repo check
+## Link Mode Problems
 
-This keeps the first pass aligned with the real lifecycle commands before you try a broader update.
+Recommended install command:
 
-## Global Check Fails
+```powershell
+npm.cmd run link-project -- D:\Path\To\TargetProject
+```
+
+If the command fails because targets already exist:
+
+1. inspect the target project and confirm those paths belong to the managed Nexus-DevFlow bundle
+2. rerun with `--overwrite` only when you intend to replace those managed targets
+
+If the command finishes but the target project still is not ready:
+
+1. confirm the linked paths exist in the target project:
+   - `.agent/`
+   - `docs/`
+   - `scripts/`
+   - `AGENTS.md`
+   - `README.md`
+   - `SETUP.md`
+   - `SETUP-BY-AI.md`
+   - `USAGE.md`
+2. confirm `.workspaces/` was not shared from the framework repo
+3. from the target project, run:
+
+```powershell
+node .\scripts\activate-agent.mjs
+node .\scripts\validate-framework.mjs
+```
+
+If you merged npm scripts into the target project's `package.json`, `npm.cmd run activate` and `npm.cmd run validate` are also acceptable.
+
+## Manual Copy / Overwrite Problems
+
+If you are using manual copy mode:
+
+1. confirm you copied only the managed bundle
+2. confirm `.workspaces/` in the target project was preserved
+3. confirm `package.json` was not overwritten blindly
+4. rerun:
+
+```powershell
+node .\scripts\activate-agent.mjs
+node .\scripts\validate-framework.mjs
+```
+
+If updates are not showing up:
+
+1. update the central framework checkout first
+2. rerun framework validation there
+3. copy the managed bundle into the target project again
+
+## AI Install Or Update Problems
+
+If the AI chose the wrong route:
+
+1. tell it explicitly whether links are acceptable
+2. ask it to read `SETUP-BY-AI.md` again
+3. ask it to report which route it is using:
+   - optional Codex global install
+   - `Central clone + link`
+   - `Manual copy / overwrite`
+
+If the AI updated the wrong files, compare the target project against the managed bundle list in `SETUP.md`.
+
+## Optional Codex Global Problems
 
 Run:
 
@@ -44,78 +114,38 @@ What this command checks:
 
 If the check fails:
 
-1. Confirm you are in `D:\Projects\nexus-devflow`
-2. Read the error closely to see whether it is a missing install, a root mismatch, a version mismatch, or a validation failure
-3. Run `npm.cmd run codex:update-global` if the global install needs to be refreshed from your current local checkout
-4. Run `npm.cmd run codex:check-global` again
-5. Run `npm.cmd run validate` if the failure points at framework validation rather than the global install itself
+1. confirm you are in `D:\Projects\nexus-devflow`
+2. read the error closely to see whether it is a missing install, a root mismatch, a version mismatch, or a validation failure
+3. run `npm.cmd run codex:update-global`
+4. run `npm.cmd run codex:check-global` again
 
-## Update After Local Changes Or A Dirty Worktree
-
-If you want to pull latest framework changes before updating, the supported command is:
+If you want to pull latest framework changes before refreshing the global install:
 
 ```powershell
 npm.cmd run codex:update-global:pull
 ```
 
-This path refuses to pull when the working tree is dirty.
-
-Check the worktree first:
+Use the pull path only when the framework worktree is clean:
 
 ```powershell
 git status --short
 ```
 
-If local changes are present:
-
-1. Do not pull blindly
-2. Decide whether to commit the local work, stash it, or skip the pull path for now
-3. Only use `npm.cmd run codex:update-global:pull` after the worktree is clean
-
-If you already have the version you want in your local checkout, use:
-
-```powershell
-npm.cmd run codex:update-global
-```
-
-That updates the global install from the current local framework without pulling.
-
-## Update Succeeds But You Want Post-Update Confidence
-
-Run:
-
-```powershell
-npm.cmd run codex:check-global
-npm.cmd run validate
-```
-
-Use:
-
-```powershell
-npm.cmd run validate:all
-```
-
-when you want the full maintainer-level validation sweep after a broader documentation or framework change.
-
 ## Validation Fails After Install Or Update
 
-Run:
+Run from the framework root:
 
 ```powershell
 npm.cmd run validate
-```
-
-Use this first when you need the core framework signal. If that passes but you still need broader confidence, run:
-
-```powershell
 npm.cmd run validate:all
 ```
 
-Because `validate:all` includes the documentation contract scan and the supporting script checks, use it when the change touches more than the narrow global install surface.
+If the problem is in a target project, also run the linked or copied validation commands from that target project.
 
 ## Practical Recovery Paths
 
-- Global install missing or stale: run `npm.cmd run codex:update-global`, then `npm.cmd run codex:check-global`
-- Pull-based update blocked by local edits: inspect `git status --short`, clean or intentionally preserve the worktree, then retry `npm.cmd run codex:update-global:pull`
-- Core framework validation issue: run `npm.cmd run validate` and fix that result before trusting the install
-- Broader maintainer confidence needed: run `npm.cmd run validate:all`
+- project-local setup is unclear: open [SETUP.md](../SETUP.md)
+- AI setup drifted: rerun with [SETUP-BY-AI.md](../SETUP-BY-AI.md) as the explicit source of truth
+- link mode stale after framework update: relink only if managed targets were removed or damaged; otherwise linked projects already point at the updated central checkout
+- manual copy mode stale after framework update: recopy the managed bundle into the target project
+- global install missing or stale: run `npm.cmd run codex:update-global`, then `npm.cmd run codex:check-global`

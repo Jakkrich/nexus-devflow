@@ -1,25 +1,25 @@
 # Nexus-DevFlow 2.0 Setup
 
-This guide is for humans installing Nexus-DevFlow 2.0.
+This guide is for humans installing or updating Nexus-DevFlow 2.0.
 
-If you want an AI assistant to do it for you, use [SETUP-BY-AI.md](./SETUP-BY-AI.md).
+If you want an AI assistant to do the work for you, use [SETUP-BY-AI.md](./SETUP-BY-AI.md).
 
 ## Requirements
 
 - Node.js 18.17 or newer
 - npm
 - git
-- a local checkout of this repository
+- one central local checkout of this repository
 
-## 1. Open The Framework
-
-Example path:
+Framework example:
 
 ```powershell
 cd D:\Projects\nexus-devflow
 ```
 
-## 2. Validate The Framework
+## 1. Validate The Central Framework Checkout
+
+Run these commands from the framework root before installing or updating anything:
 
 ```powershell
 npm.cmd run roadmap:validate
@@ -27,7 +27,10 @@ npm.cmd run validate
 npm.cmd run validate:all
 ```
 
-## 3. Install Globally For Codex
+## 2. Optional: Install Globally For Codex
+
+This is separate from installing Nexus-DevFlow into a target project.
+Use it when you want Codex itself to know the Nexus-DevFlow workflow from any project.
 
 ```powershell
 cd D:\Projects\nexus-devflow
@@ -40,79 +43,119 @@ This installs:
 
 - `%USERPROFILE%\.codex\skills\nexus-devflow\SKILL.md`
 - `%USERPROFILE%\.codex\nexus-devflow.json`
-- managed Nexus-DevFlow block in `%USERPROFILE%\.codex\AGENTS.md`
+- the managed Nexus-DevFlow block in `%USERPROFILE%\.codex\AGENTS.md`
 
-## 4. Upgrade Global Codex Install
+## 3. Install Into A Project
 
-If your local checkout is already at the version you want:
+Choose one of these three methods:
 
-```powershell
-npm.cmd run codex:update-global
-npm.cmd run codex:check-global
-npm.cmd run validate
-```
+| If you want... | Use this method |
+| --- | --- |
+| one central framework shared across many projects | `Central clone + link` |
+| no links or junctions in the target project | `Manual copy / overwrite` |
+| AI to perform the setup for you | `Let AI install or update it` |
 
-If you want to pull latest first:
+### Method 1. Central Clone + Link (Recommended)
 
-```powershell
-npm.cmd run codex:update-global:pull
-npm.cmd run codex:check-global
-npm.cmd run validate
-```
+Use this when Nexus-DevFlow should stay in one central checkout and be reused by multiple projects.
 
-If any install, check, or update step fails, use [docs/install-update-troubleshooting.md](./docs/install-update-troubleshooting.md).
-
-## 5. Use In A Project
-
-After global install, call DevFlow 2.0 from any project:
-
-```text
-/00-Discover "Add password reset"
-/10-Define
-/20-Spec
-/30-Plan
-/40-Implement
-/50-Verify
-/70-Release
-/60-Report
-```
-
-Companion commands such as `Goal`, `Brainstorm`, `Research`, `Debug`, `PRD`, `Issue-Triage`, `Wiki`, `Check-For-Updates`, and `Help` can be used around the mainline.
-
-## 6. Optional Project-Local Link
+From the framework root:
 
 ```powershell
 cd D:\Projects\nexus-devflow
-npm.cmd run link-project -- D:\Path\To\YourProject
+npm.cmd run link-project -- D:\Path\To\TargetProject
 ```
 
-Then merge the needed `scripts` block into the target project's `package.json`.
+This links the managed Nexus-DevFlow bundle into the target project:
 
-Project-specific data must stay in the target project's own `.workspaces/`.
+- `.agent/`
+- `docs/`
+- `scripts/`
+- `AGENTS.md`
+- `README.md`
+- `SETUP.md`
+- `SETUP-BY-AI.md`
+- `USAGE.md`
 
-## 7. Project-Local Copy
+This command intentionally does not link:
 
-Use this only when links are not suitable:
+- `.workspaces/`
+- `package.json`
+- maintainer files such as `ROADMAP.md` and `CHANGELOG.md`
 
-1. Copy `.agent/`
-2. Copy `scripts/`
-3. Merge needed npm scripts
-4. Run `npm.cmd run activate`
-5. Run `npm.cmd run validate`
+After linking:
 
-## 8. Install With AI
+1. merge the Nexus-DevFlow scripts you want from the framework `package.json` into the target project's `package.json`
+2. from the target project, run `node .\scripts\activate-agent.mjs`
+3. from the target project, run `node .\scripts\validate-framework.mjs`
+4. if you merged npm scripts, you can then use `npm.cmd run activate` and `npm.cmd run validate`
 
-Send this prompt to your AI assistant:
+Important rule:
+
+- keep `.workspaces` local to the target project
+
+### Method 2. Manual Copy / Overwrite
+
+Use this only when links or junctions are not suitable.
+
+The managed bundle for manual copy is the same set used by `link-project`:
+
+- `.agent/`
+- `docs/`
+- `scripts/`
+- `AGENTS.md`
+- `README.md`
+- `SETUP.md`
+- `SETUP-BY-AI.md`
+- `USAGE.md`
+
+Do not copy:
+
+- `.workspaces/`
+- `package.json`
+- unrelated user-owned project files
+
+Suggested procedure:
+
+1. update and validate the central framework checkout
+2. remove or replace the previously managed Nexus-DevFlow bundle in the target project
+3. copy the managed bundle into the target project
+4. merge the required npm scripts into the target project's `package.json`
+5. run `node .\scripts\activate-agent.mjs` from the target project
+6. run `node .\scripts\validate-framework.mjs` from the target project
+
+### Method 3. Let AI Install Or Update It
+
+Use this when you want an AI assistant to choose the correct path and perform it for you.
+
+Give the AI this prompt:
 
 ```text
-Install or upgrade Nexus-DevFlow 2.0 for this machine or project. First read SETUP-BY-AI.md from the Nexus-DevFlow repository and use it as the source of truth. Detect the framework root, package version, provider/tool, and target project. Keep .workspaces project-local. Do not overwrite user instruction files blindly. After install or upgrade, run roadmap:validate, validate, and validate:all where relevant, then report files changed, installed version, framework root, and any manual approval steps.
+Install or update Nexus-DevFlow for this project. First read SETUP-BY-AI.md from the Nexus-DevFlow repository and use it as the source of truth. Prefer the recommended Central clone + link method. If linking is not suitable, use Manual copy / overwrite instead. Keep .workspaces local to the target project. Do not overwrite user-authored instruction files blindly. Run validation after setup and report the framework root, version, target project, method used, files changed, and any manual follow-up.
 
 git-repo: https://github.com/Jakkrich/nexus-devflow
 ```
 
-## Troubleshooting
+## 4. How To Update Each Method
 
-- After install or upgrade, always run `npm.cmd run codex:check-global` and `npm.cmd run validate`
-- If install, check, or update behavior is unexpected, use [docs/install-update-troubleshooting.md](./docs/install-update-troubleshooting.md)
-- If old notes mention task JSON or dashboard runtime, treat them as legacy 1.x history
-- If `.agent` files are missing after a project-local install, relink or recopy the framework bundle
+| Current method | How to update |
+| --- | --- |
+| `Central clone + link` | update the central framework checkout, run validation once there, and linked projects will use the latest bundle immediately |
+| `Manual copy / overwrite` | update the central framework checkout, validate it, then copy the managed bundle into each target project again |
+| `Let AI install or update it` | ask the AI to detect the current method and reapply the matching update path |
+| `Codex global install` | run `npm.cmd run codex:update-global`, then `npm.cmd run codex:check-global` |
+
+If you want the latest repository state before a global Codex refresh:
+
+```powershell
+npm.cmd run codex:update-global:pull
+```
+
+Use the pull path only when the framework worktree is clean.
+
+## 5. Troubleshooting
+
+- if `link-project` reports existing managed files, rerun with `--overwrite` only when you intend to replace those managed targets
+- if global install, check, or update behavior is unexpected, use [docs/install-update-troubleshooting.md](./docs/install-update-troubleshooting.md)
+- if `.agent` files are missing after a project-local install, relink or recopy the managed bundle
+- if old notes mention JSON task contracts or dashboard runtime, treat them as legacy 1.x history
