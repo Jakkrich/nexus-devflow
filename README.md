@@ -161,6 +161,31 @@ If you are new to DevFlow:
 
 ---
 
+## Install And Update In 3 Ways
+
+Project-local Nexus-DevFlow setup now has three supported paths:
+
+| If you want... | Use this method |
+| --- | --- |
+| one central framework shared across many projects | `Central clone + link` |
+| no links or junctions in the target project | `Manual copy / overwrite` |
+| AI to perform the setup for you | `Let AI install or update it` |
+
+Recommended project-local path:
+
+```powershell
+cd D:\Projects\nexus-devflow
+npm.cmd run link-project -- D:\Path\To\TargetProject
+```
+
+`link-project` installs the managed Nexus-DevFlow bundle into the target project while keeping `.workspaces` local to that project.
+
+Optional Codex global install is supported too, but it is separate from installing Nexus-DevFlow into a project.
+
+See [SETUP.md](./SETUP.md) for the full install and update guide.
+
+---
+
 ## Repository Layout
 
 ```text

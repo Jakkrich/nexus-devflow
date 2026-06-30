@@ -10,6 +10,23 @@ function usage() {
   return 'Usage: npm run link-project -- <path-to-your-project> [--dry-run] [--overwrite]';
 }
 
+const managedLinks = [
+  { source: '.agent', target: '.agent', type: 'dir' },
+  { source: 'docs', target: 'docs', type: 'dir' },
+  { source: 'scripts', target: 'scripts', type: 'dir' },
+  { source: 'AGENTS.md', target: 'AGENTS.md', type: 'file' },
+  { source: 'README.md', target: 'README.md', type: 'file' },
+  { source: 'SETUP.md', target: 'SETUP.md', type: 'file' },
+  { source: 'SETUP-BY-AI.md', target: 'SETUP-BY-AI.md', type: 'file' },
+  { source: 'USAGE.md', target: 'USAGE.md', type: 'file' },
+];
+
+const intentionallyNotLinked = [
+  '.workspaces/ (must stay local to the target project)',
+  'package.json (user-owned project manifest)',
+  'ROADMAP.md and CHANGELOG.md (framework-maintainer artifacts)'
+];
+
 function assertChildPath(child, parent, label) {
   const relative = path.relative(parent, child);
   if (relative === '' || relative.startsWith('..') || path.isAbsolute(relative)) {
@@ -76,20 +93,14 @@ async function main() {
     process.exit(1);
   }
 
-  const links = [
-    {
-      source: path.join(rootDir, '.agent'),
-      target: path.resolve(absoluteTarget, '.agent'),
-      type: 'dir',
-    },
-    {
-      source: path.join(rootDir, 'scripts'),
-      target: path.resolve(absoluteTarget, 'scripts'),
-      type: 'dir',
-    },
-  ];
+  const links = managedLinks.map((item) => ({
+    source: path.join(rootDir, item.source),
+    target: path.resolve(absoluteTarget, item.target),
+    type: item.type,
+    label: item.target
+  }));
 
-  async function createSymlink({ source, target, type }) {
+  async function createLink({ source, target, type, label }) {
     assertChildPath(target, absoluteTarget, 'Link target');
 
     if (!(await pathExists(source))) {
@@ -103,7 +114,7 @@ async function main() {
 
     if (dryRun) {
       const action = existing ? 'Would replace' : 'Would link';
-      console.log(`[DRY RUN] ${action}: ${target} -> ${source}`);
+      console.log(`[DRY RUN] ${action}: ${label} (${target} -> ${source})`);
       return;
     }
 
@@ -111,23 +122,49 @@ async function main() {
 
     try {
       await fs.symlink(source, target, type);
-      console.log(`Linked: ${target} -> ${source}`);
+      console.log(`Linked: ${label} (${target} -> ${source})`);
     } catch (error) {
-      if (error.code !== 'EPERM' || process.platform !== 'win32') {
+      if (process.platform !== 'win32') {
         throw new Error(`Failed to link ${target}: ${error.message}`);
       }
-      await fs.symlink(source, target, 'junction');
-      console.log(`Linked (Junction): ${target} -> ${source}`);
+
+      if (type === 'dir' && error.code === 'EPERM') {
+        await fs.symlink(source, target, 'junction');
+        console.log(`Linked (Junction): ${label} (${target} -> ${source})`);
+        return;
+      }
+
+      if (type === 'file' && error.code === 'EPERM') {
+        await fs.link(source, target);
+        console.log(`Linked (Hard Link): ${label} (${target} -> ${source})`);
+        return;
+      }
+
+      throw new Error(`Failed to link ${target}: ${error.message}`);
     }
   }
 
   console.log(`\n${dryRun ? 'DRY RUN: ' : ''}Linking Nexus-DevFlow to: ${absoluteTarget}`);
   for (const link of links) {
-    await createSymlink(link);
+    await createLink(link);
   }
 
+  console.log('\nManaged bundle:');
+  for (const link of links) {
+    console.log(`- ${link.label}`);
+  }
+
+  console.log('\nIntentionally not linked:');
+  for (const item of intentionallyNotLinked) {
+    console.log(`- ${item}`);
+  }
+
+  console.log('\nNext steps:');
+  console.log('- Merge the Nexus-DevFlow scripts you need from the framework package.json into the target project package.json.');
+  console.log('- From the target project, run `node .\\scripts\\activate-agent.mjs`.');
+  console.log('- From the target project, run `node .\\scripts\\validate-framework.mjs` or `npm.cmd run validate` after merging scripts.');
+
   console.log(`\n${dryRun ? 'Dry run complete.' : 'Linking complete!'}`);
-  console.log('Note: To use the framework fully, merge the "scripts" block from Nexus-DevFlow\'s package.json into your project package.json.\n');
 }
 
 main().catch((error) => {

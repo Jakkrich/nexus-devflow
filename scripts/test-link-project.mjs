@@ -9,6 +9,16 @@ import { fileURLToPath } from 'node:url';
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const cli = path.join(rootDir, 'scripts', 'link-project.mjs');
 const scratchRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'nexus-link-project-'));
+const managedItems = [
+  { path: '.agent', type: 'dir' },
+  { path: 'docs', type: 'dir' },
+  { path: 'scripts', type: 'dir' },
+  { path: 'AGENTS.md', type: 'file' },
+  { path: 'README.md', type: 'file' },
+  { path: 'SETUP.md', type: 'file' },
+  { path: 'SETUP-BY-AI.md', type: 'file' },
+  { path: 'USAGE.md', type: 'file' }
+];
 
 function run(args) {
   return spawnSync(process.execPath, [cli, ...args], {
@@ -31,8 +41,10 @@ try {
   const dryRun = run([dryRunTarget, '--dry-run']);
   assert(dryRun.status === 0, `dry-run should pass:\n${outputOf(dryRun)}`);
   assert(outputOf(dryRun).includes('DRY RUN'), 'dry-run output should label planned actions');
-  assert(!fs.existsSync(path.join(dryRunTarget, '.agent')), 'dry-run should not create .agent link');
-  assert(!fs.existsSync(path.join(dryRunTarget, 'scripts')), 'dry-run should not create scripts link');
+  for (const item of managedItems) {
+    assert(outputOf(dryRun).includes(item.path), `dry-run should mention managed item ${item.path}`);
+    assert(!fs.existsSync(path.join(dryRunTarget, item.path)), `dry-run should not create ${item.path}`);
+  }
   console.log('[OK] link-project dry-run does not modify target.');
 
   const existingTarget = path.join(scratchRoot, 'existing-target');
@@ -47,6 +59,30 @@ try {
   assert(outputOf(overwriteDryRun).includes('Would replace'), 'overwrite dry-run should describe replacement');
   assert(fs.statSync(path.join(existingTarget, '.agent')).isDirectory(), 'overwrite dry-run should leave existing directory intact');
   console.log('[OK] link-project overwrite dry-run is non-destructive.');
+
+  const liveTarget = path.join(scratchRoot, 'live-target');
+  fs.mkdirSync(liveTarget, { recursive: true });
+  const live = run([liveTarget]);
+  assert(live.status === 0, `live link should pass:\n${outputOf(live)}`);
+  for (const item of managedItems) {
+    const targetPath = path.join(liveTarget, item.path);
+    const sourcePath = path.join(rootDir, item.path);
+    assert(fs.existsSync(targetPath), `live link should create ${item.path}`);
+
+    if (item.type === 'dir') {
+      assert(fs.realpathSync(targetPath) === sourcePath, `${item.path} should resolve back to framework source`);
+      continue;
+    }
+
+    const targetStats = fs.statSync(targetPath);
+    const sourceStats = fs.statSync(sourcePath);
+    const isSymlinkBackToSource = fs.realpathSync(targetPath) === sourcePath;
+    const isHardLinkToSource = targetStats.nlink > 1 && targetStats.size === sourceStats.size;
+    assert(isSymlinkBackToSource || isHardLinkToSource, `${item.path} should be linked back to the framework source`);
+  }
+  assert(!fs.existsSync(path.join(liveTarget, '.workspaces')), 'live link must not create .workspaces');
+  assert(outputOf(live).includes('Intentionally not linked'), 'live link output should explain skipped items');
+  console.log('[OK] link-project links the full managed bundle without sharing workspaces.');
 
   const unsafeTarget = run([rootDir, '--dry-run']);
   assert(unsafeTarget.status !== 0, 'framework root should be rejected as a link target');

@@ -7,23 +7,11 @@ import { generateProjectIndex } from './generate-project-index.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
 const args = new Set(process.argv.slice(2));
-const manifest = readJson('agent-bundle.manifest.json', []);
 const roadmapOnly = args.has('--roadmap-only');
 const roadmapMarkdownArtifacts = [
   '.workspaces/roadmap/roadmap-discovery.md',
   'ROADMAP.md'
 ];
-
-const requiredPaths = [
-  '.agent',
-  'agent-bundle.manifest.json',
-  'package.json',
-  'docs/quickstart.md',
-  'docs/workspace-artifacts.md',
-  ...(manifest?.required_paths || [])
-];
-
-const forbiddenPaths = manifest?.forbidden_legacy_paths || [];
 
 function fail(message, failures) {
   failures.push(message);
@@ -707,6 +695,16 @@ function validateChecklistLines(lines, allowedStatuses) {
 
 function main() {
   const failures = [];
+  const manifest = readJson('agent-bundle.manifest.json', failures);
+  const requiredPaths = [
+    '.agent',
+    'agent-bundle.manifest.json',
+    'package.json',
+    'docs/quickstart.md',
+    'docs/workspace-artifacts.md',
+    ...(manifest?.required_paths || [])
+  ];
+  const forbiddenPaths = manifest?.forbidden_legacy_paths || [];
   generateProjectIndex(projectRoot);
   const seenRequired = new Set();
 
