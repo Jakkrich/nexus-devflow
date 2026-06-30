@@ -1,4 +1,4 @@
-﻿---
+---
 description: Insight Extraction - Extract reusable lessons, file insights, patterns, gotchas, recommendations, and 9arm-skills/post-mortem learning from completed work.
 ---
 
@@ -33,8 +33,8 @@ Inspect the available evidence:
 - git diff or recent commits
 - `40-implement.md`
 - `50-verify.md`
-- `60-release.md`
-- `70-report.md`
+- `70-release.md`
+- `60-report.md`
 - modified files
 - human feedback or PR comments
 
@@ -69,8 +69,8 @@ Use the smallest durable destination:
 
 - stage artifacts when the lesson is specific to the current run
 - `.workspaces/lessons.md` for project-wide lessons
-- `/60-Release` for release-facing notes
-- `/70-Report` for final narrative communication
+- `/60-Report` for final narrative communication before release
+- `/70-Release` for release-facing notes and execution details
 
 For token/context learning, prefer the smallest concrete note:
 
@@ -83,7 +83,7 @@ When updating `.workspaces/lessons.md`, inspect `.agent/resources/schemas/lesson
 
 If task logs are appropriate:
 
-If this insight must be tied back to the running work item, record it in `50-verify.md`, `60-release.md`, `70-report.md`, or `.workspaces/lessons.md` rather than a legacy task log command.
+If this insight must be tied back to the running work item, record it in `50-verify.md`, `60-report.md`, `70-release.md`, or `.workspaces/lessons.md` rather than a legacy task log command.
 
 ## Output
 
@@ -104,21 +104,21 @@ If `post-mortem` was applied, include a short `Source Discipline` note crediting
 - Classification: Companion command
 - Mainline status: Knowledge capture command, not a numbered stage
 - Typical entry points: after `Debug`, `/50-Verify`, incident work, or review findings
-- Typical handoff targets: `Wiki`, `/70-Report`, `Help`
+- Typical handoff targets: `Wiki`, `/60-Report`, `Help`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/lessons.template.md`
-- Related commands: `Debug`, `/50-Verify`, `Wiki`, `/70-Report`, `Help`
+- Related commands: `Debug`, `/50-Verify`, `Wiki`, `/60-Report`, `Help`
 
 ## Next Workflow Recommendation
 
 - **Primary**: `Wiki project ingest {source}` when the insight is reusable project knowledge.
 - **Why**: `Insight` extracts lessons; `Wiki` compiles selected lessons into navigable knowledge pages.
 - **Alternatives**:
-  - `/60-Release {ID}` - choose this when the insight should shape release packaging.
-  - `/70-Report {ID}` - choose this when the insight should become the final communication summary.
+  - `/60-Report {ID}` - choose this when the insight should become the final communication summary before release.
+  - `/70-Release {ID}` - choose this when the insight should shape release packaging or execution details.
   - `Help {ID}` - choose this when the next route is unclear.
 
 ## Wiki Update Recommendation

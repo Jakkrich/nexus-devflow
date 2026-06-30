@@ -54,7 +54,7 @@
 ## Example Flow
 
 Feature work:
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 ## 3. Execution Strategy
@@ -255,8 +255,8 @@ git commit -m "docs: improve devflow onboarding flow"
 /30-Plan
 /40-Implement
 /50-Verify
-/60-Release
-/70-Report
+/70-Release
+/60-Report
 ```
 
 ## 2. Bug Fix
@@ -272,7 +272,7 @@ Debug "Login redirects forever after session expiry"
 
 ## 3. Verification-Heavy Work
 
-Use a tracked run such as `.workspaces/specs/001-integrate-md2html/` to show how `30-plan.md`, `checklists/`, `50-verify.md`, and `70-report.md` relate.
+Use a tracked run such as `.workspaces/specs/001-integrate-md2html/` to show how `30-plan.md`, `checklists/`, `50-verify.md`, and `60-report.md` relate.
 ```
 
 - [ ] **Step 2: Link the new example document from `README.md` and `docs/quickstart.md`**

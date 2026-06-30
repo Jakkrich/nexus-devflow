@@ -1,4 +1,4 @@
-﻿---
+---
 name: prp-core-coder
 description: |
   Original architecture from prp-core: Implements code (Coder) systematically.
@@ -480,7 +480,7 @@ To continue: create or select the next task ID, then run `/30-Plan {ID}`.
 ### Next Steps
 
 1. Review the report (especially if deviations noted)
-2. Continue through `/60-Release` or use the repository's PR surface if release packaging is already ready.
+2. Continue through `/70-Release` or use the repository's PR surface if release packaging is already ready.
 3. Merge when approved
 {If more phases: "4. Continue with the next task or run `/30-Plan {ID}` for the next phase."}
 ```

@@ -6,7 +6,7 @@ stage: "10-define"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
+status: "draft"
 artifact_language: "en"
 related_run: "{running_id}"
 related_files: []
@@ -21,8 +21,8 @@ related_files: []
 ## 2. Source Inputs
 
 - `00-discover.md`
-- Supporting brainstorm or research notes if they exist
 - Project context documents
+- Research or brainstorm notes when they are relevant
 
 ## 3. Project Context To Preserve
 
@@ -32,7 +32,7 @@ related_files: []
 
 ## 4. Problem Definition
 
-- [Define the problem clearly]
+- [State the exact problem this phase addresses]
 
 ## 5. Phase Scope
 
@@ -60,11 +60,11 @@ related_files: []
 
 ## 11. Assumptions
 
-- [List assumptions being made at this stage]
+- [List assumptions still being made at this stage]
 
 ## 12. Open Decisions
 
-- [List unresolved questions that still matter]
+- [List decisions that need human confirmation before or during Spec]
 
 ## 13. AI Actions Performed
 
@@ -84,17 +84,10 @@ related_files: []
 
 - `/20-Spec {running_id}`
 
-## 17. Nexus Event
-
-- `Brainstorm` when scope or non-goals are still unstable
-- `Research` when missing evidence still affects scope decisions
-- `grill-with-docs` when available and clarification could materially change scope, success criteria, or terminology
-
-## 18. Change Log
+## 17. Change Log
 
 - {Date}: Initial define draft created
 
-## 19. Additional Notes
+## 18. Additional Notes
 
-- Add any extra headings below this section when useful.
-
+- Add extra headings below this section when useful.

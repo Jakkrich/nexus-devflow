@@ -295,7 +295,7 @@ git commit -m "docs: harden phase 6 install and update guidance"
 
 - Recommended entry: `/00-Discover`
 - Core flow: full mainline
-- Essential artifacts: `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `50-verify.md`, `70-report.md`
+- Essential artifacts: `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `50-verify.md`, `60-report.md`
 
 ## Bugfix Or Operations Team
 

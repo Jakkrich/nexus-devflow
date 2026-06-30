@@ -1,4 +1,4 @@
-﻿---
+---
 description: Spec stage in DevFlow 2.0 - write the formal markdown-first specification from a stable definition.
 argument-hint: "{running-id or workspace path}"
 ---
@@ -75,6 +75,15 @@ Do not hide uncertainty inside vague requirement text.
 - keep implementation details out unless they are true constraints
 - make sure the acceptance criteria can actually be checked
 
+### 5. Manual Review Soft Gate
+
+Before recommending `/30-Plan`, check whether the delivery contract has been human-reviewed.
+If `Approval Status` is not approved yet:
+
+- warn that planning may drift if the spec is still under review
+- recommend review of requirements, exclusions, and acceptance criteria first
+- keep `/30-Plan` as a soft recommendation only
+
 ## Output
 
 Report:
@@ -83,6 +92,7 @@ Report:
 - acceptance criteria
 - hard constraints
 - out-of-scope items
+- manual review warnings when the contract is still pending
 - recommended next step
 
 ## Relationship To DevFlow 2.0
@@ -106,4 +116,10 @@ Report:
 - **Alternatives**:
   - `Research` - choose this when the spec still depends on missing facts.
   - `/10-Define` - choose this when the scope itself is still unstable.
+
+## Nexus Event
+
+- Use `Research` when a requirement, rule, or integration constraint still lacks evidence.
+- Use `Spec-Research`, `Competitor`, or `PRD` when the contract needs stronger external, product, or market framing before planning.
+- Use `grill-with-docs` when available if clarification could materially change acceptance criteria, edge cases, exclusions, or rules.
 

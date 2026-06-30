@@ -25,6 +25,7 @@ metadata_version: 1
 ## 1. Purpose
 
 - Track implementation units in execution order.
+- Keep soft-gate review signals visible while implementation is in progress.
 
 ## 2. Status Legend
 
@@ -36,10 +37,10 @@ metadata_version: 1
 
 ## 3. Implementation Checklist Items
 
-- [ ] I1: [Scoped implementation unit] | phase: Phase 1 | owner: {Owner} | files: `file/a.ts`, `file/b.ts` | updated: {Date} | verification: [test or manual check] | evidence: pending
-- [/] I2: [Implementation currently in progress] | phase: Phase 2 | owner: [person/agent] | files: `file/c.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [command] | evidence: [latest result]
-- [!] I3: [Blocked implementation unit] | phase: Phase 2 | owner: [person/agent] | files: `file/d.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [pending check] | evidence: [blocker note]
-- [-] I4: [Skipped implementation unit] | phase: Phase 3 | owner: [person/agent] | files: `file/e.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [not run] | evidence: [reason for skip]
+- [ ] I1: [Scoped implementation unit] | phase: Phase 1 | owner: {Owner} | files: `file/a.ts`, `file/b.ts` | updated: {Date} | verification: [test or manual check] | evidence: pending | review: pending | next: verify implementation evidence
+- [/] I2: [Implementation currently in progress] | phase: Phase 2 | owner: [person/agent] | files: `file/c.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [command] | evidence: [latest result] | review: in progress | next: continue scoped work
+- [!] I3: [Blocked implementation unit] | phase: Phase 2 | owner: [person/agent] | files: `file/d.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [pending check] | evidence: [blocker note] | review: blocked | next: human review needed
+- [-] I4: [Skipped implementation unit] | phase: Phase 3 | owner: [person/agent] | files: `file/e.ts` | updated: [YYYY-MM-DD HH:mm] | verification: [not run] | evidence: [reason for skip] | review: skipped | next: record reason in implement stage
 
 ## 4. Detailed Unit Notes
 
@@ -53,14 +54,25 @@ metadata_version: 1
   - `command or manual check`
 - **Result**:
   - pending
+- **Manual Review Signal**:
+  - Approval status: `Pending`
+  - Review blocker: [none / describe blocker]
+  - Next allowed command: [usually `/50-Verify {ID}` after evidence is complete]
 - **Notes**:
   - [context]
 
-## 5. Blockers And Deviations
+## 5. Manual Review Snapshot
+
+- **Current Approval Status**: `Pending`
+- **Human Review Required**: [what the reviewer still needs to confirm]
+- **Next Allowed Command**: [command to suggest after review]
+- **Soft-Gate Warning**: [state whether implementation is still waiting on approval, blocked by evidence, or ready for verify]
+
+## 6. Blockers And Deviations
 
 - [!] [Deviation from plan or blocker with reason]
 
-## 6. Additional Notes
+## 7. Additional Notes
 
 - Add more sections when the implementation stream needs richer tracking.
 

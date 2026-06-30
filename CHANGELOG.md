@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- Established the DevFlow 2.0 mainline: `/00-Discover` -> `/70-Report`
+- Established the DevFlow 2.0 mainline: `/00-Discover` -> `/60-Report`
 - Added markdown-first stage templates for Discover, Define, Spec, Plan, Implement, Verify, Release, and Report
 - Added skill-backed companion layers including `preview-local-check`, `spec-research`, `competitor-analysis`, `roadmap-strategy`, `spec-orchestration`, `human-review-decisions`, `release-git-operations`, `pr-review-analysis`, `review-followup-routing`, `insight-capture`, and `specialist-agent-routing`
 - Added standardized roadmap discovery markdown contract at `.workspaces/roadmap/roadmap-discovery.md`

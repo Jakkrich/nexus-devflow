@@ -57,6 +57,8 @@ This document decides which workflow surfaces should remain public commands, whi
 | `Changelog.md` | `internal companion` | Core behavior now lives in `release-git-operations`; keep this as a wrapper for now. |
 | `Insight.md` | `internal companion` | Core behavior now lives in `insight-capture`; keep this as a wrapper for now. |
 | `Agent.md` | `internal companion` | Core behavior now lives in `specialist-agent-routing`; keep this as an advanced wrapper for now. |
+| `grill-with-docs` (when present) | `internal skill` | Use as optional stage-support questioning for Define, Spec, or complex Plan work. Do not promote it to a required public pre-step. |
+| `grill-with-docs` (when present) | `internal skill` | Use as optional stage-support questioning for Define, Spec, or complex Plan work. Do not promote it to a required public pre-step. |
 
 ## Agent Targets
 
@@ -89,11 +91,15 @@ This document decides which workflow surfaces should remain public commands, whi
 | `Changelog.md` | `release-git-operations` |
 | `Insight.md` | `insight-capture` |
 | `Agent.md` | `specialist-agent-routing` |
+| `grill-with-docs` (when present) | `grill-with-docs` |
+| `grill-with-docs` (when present) | `grill-with-docs` |
 
 ## Current Policy
 
 - Do not delete files just because they still contain useful prompt bodies.
 - Reduce public exposure first, then move the primary behavior into a skill or agent.
 - When a companion workflow has already offloaded its main behavior, keep it as a wrapper to preserve UX and continuity.
-- Keep the numbered mainline as the only canonical stage path: `00-Discover -> 10-Define -> 20-Spec -> 30-Plan -> 40-Implement -> 50-Verify -> 60-Release -> 70-Report`.
+- Keep the numbered mainline as the only canonical stage path: `00-Discover -> 10-Define -> 20-Spec -> 30-Plan -> 40-Implement -> 50-Verify -> 60-Report -> 70-Release`.
 - The main companion group in this phase has already moved its primary behavior into the skill layer as intended.
+- Optional questioning skills should stay thin and stage-supportive. They should collect only the information that can change the current stage decision.
+- `Next Allowed Command` stays Timeline-first. `Nexus Event` may expose side routes, support skills, or specialist lanes that branch temporarily and later return to the Timeline.

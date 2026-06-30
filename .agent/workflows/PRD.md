@@ -75,7 +75,7 @@ Review `{prd_path}` against `prd.template.md`, keep the required headings, and r
 
 ### Phase 5: Map Into DevFlow 2.0
 
-Convert the PRD into explicit next steps for the mainline flow:
+Convert the PRD into explicit next steps for the Timeline flow:
 
 - `/10-Define` when product framing still needs decisions
 - `/20-Spec` when the delivery contract is ready to be locked
@@ -113,6 +113,6 @@ Return:
 ## Next Workflow Recommendation
 
 - **Primary**: `/10-Define` or `/20-Spec`
-- **Why**: PRD shapes product intent; the mainline flow should lock decisions and delivery contract before planning.
+- **Why**: PRD shapes product intent; the Timeline flow should lock decisions and delivery contract before planning.
 - **Alternative**: `Research` when technical feasibility or external dependencies are still unresolved.
 

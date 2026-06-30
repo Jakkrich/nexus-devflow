@@ -8,23 +8,23 @@ Owner: Codex
 
 DevFlow 2.0 should adopt `haidang1810/md2html` as an internal rendering engine, but expose it through a DevFlow-native API and CLI rather than as a user-facing alternate workflow.
 
-The first production consumer will be `70-report`, which will keep its current markdown-first contract:
+The first production consumer will be `60-report`, which will keep its current markdown-first contract:
 
-- `70-report.md` remains the source of truth
-- `70-report.html` remains a derived artifact
+- `60-report.md` remains the source of truth
+- `60-report.html` remains a derived artifact
 
 The new renderer must be reusable by future stages without forcing HTML generation across the entire mainline.
 
 ## 2. Problem
 
-Current `70-report.html` generation is implemented as a report-specific script with embedded markdown-to-html behavior. That works for one stage, but it does not give DevFlow a reusable rendering layer for future stage outputs such as `20-spec.html` or `30-plan.html`.
+Current `60-report.html` generation is implemented as a report-specific script with embedded markdown-to-html behavior. That works for one stage, but it does not give DevFlow a reusable rendering layer for future stage outputs such as `20-spec.html` or `30-plan.html`.
 
 We want:
 
 - one internal markdown-to-html engine for DevFlow
 - one DevFlow-native API and CLI surface
 - stage-specific HTML policies rather than an all-stage HTML requirement
-- a migration path that does not break `70-report`
+- a migration path that does not break `60-report`
 
 ## 3. Goals
 
@@ -33,7 +33,7 @@ We want:
 - Preserve DevFlow 2.0 as the only public workflow surface
 - Keep markdown as the source of truth for all stages
 - Keep HTML as a derived artifact controlled by per-stage policy
-- Migrate `70-report` to the shared renderer without changing user-facing workflow behavior
+- Migrate `60-report` to the shared renderer without changing user-facing workflow behavior
 
 ## 4. Non-Goals
 
@@ -65,7 +65,7 @@ We want:
 
 ### First-round policy
 
-- `70-report` requires `70-report.html`
+- `60-report` requires `60-report.html`
 - Other stages remain markdown-only by default
 - The shared renderer is still designed so future stages can opt in
 
@@ -98,14 +98,14 @@ Presets define structural and presentation defaults, not workflow behavior.
 
 Stage-specific adapters convert DevFlow artifacts into renderer input.
 
-For `70-report`, the adapter will:
+For `60-report`, the adapter will:
 
-- read `70-report.md`
+- read `60-report.md`
 - parse frontmatter
 - gather checklist data
 - map report sections into the renderer model
 - select the `report` preset
-- choose the default output path `70-report.html`
+- choose the default output path `60-report.html`
 
 Stage adapters own stage mapping logic. They do not own the shared rendering engine.
 
@@ -118,7 +118,7 @@ Examples:
 - `npm run render:html -- <file-or-workspace>`
 - `npm run report:html -- <workspace-path-or-running-id>`
 
-`report:html` remains as a compatibility wrapper for the `70-report` path.
+`report:html` remains as a compatibility wrapper for the `60-report` path.
 
 ## 8. API Contract
 
@@ -192,7 +192,7 @@ npm run report:html -- <workspace-path-or-running-id>
 Implementation detail:
 
 - this command becomes a thin compatibility wrapper
-- internally it resolves the `70-report` adapter and calls the shared renderer
+- internally it resolves the `60-report` adapter and calls the shared renderer
 
 ## 10. Preset Strategy
 
@@ -210,7 +210,7 @@ This preset supports stakeholder-oriented report presentation, summary sections,
 
 These may initially be minimal presets, but the registry shape should support them from the start so the architecture does not need to change later.
 
-## 11. 70-Report Migration Path
+## 11. 60-Report Migration Path
 
 ### Current state
 
@@ -224,7 +224,7 @@ These may initially be minimal presets, but the registry shape should support th
 Move to:
 
 - shared renderer modules for generic markdown-to-html behavior
-- a `70-report` stage adapter for report-specific mapping
+- a `60-report` stage adapter for report-specific mapping
 - a shared CLI command for generic rendering
 - the existing `report:html` command as a wrapper
 
@@ -232,9 +232,9 @@ Move to:
 
 1. Extract reusable rendering logic from the current report script into shared renderer modules
 2. Introduce preset registration with `report` as the first real preset
-3. Create a `70-report` adapter that prepares view-model data from report markdown and checklist artifacts
+3. Create a `60-report` adapter that prepares view-model data from report markdown and checklist artifacts
 4. Update `scripts/generate-report-html.mjs` to delegate to the shared renderer path
-5. Preserve output compatibility for `70-report.html`
+5. Preserve output compatibility for `60-report.html`
 6. Update validation and documentation only where needed to reflect the new internal architecture
 
 ## 12. Testing Strategy
@@ -253,7 +253,7 @@ Focus on renderer core:
 
 ### 12.2 Adapter Tests
 
-Focus on `70-report` mapping:
+Focus on `60-report` mapping:
 
 - frontmatter extraction
 - section extraction
@@ -266,7 +266,7 @@ Focus on `70-report` mapping:
 Focus on command-level behavior:
 
 - `npm run report:html -- <workspace>` still succeeds
-- the generated file is written to `70-report.html`
+- the generated file is written to `60-report.html`
 - expected title and section content appear in output
 - compatibility wrapper and shared renderer produce the same expected structure
 
@@ -276,7 +276,7 @@ Update docs to clarify:
 
 - markdown remains the source of truth
 - HTML is a derived artifact controlled by stage policy
-- `70-report` remains the only required HTML stage in round one
+- `60-report` remains the only required HTML stage in round one
 - the renderer is an internal DevFlow capability, not a new workflow surface
 
 Likely touch points:
@@ -295,7 +295,7 @@ Likely touch points:
 - preset registry
 - working `report` preset
 - preset skeletons for `spec`, `plan`, and `default-doc`
-- `70-report` stage adapter
+- `60-report` stage adapter
 - compatibility-preserving migration of `report:html`
 - tests across unit, adapter, and CLI layers
 - documentation updates for policy and usage
@@ -310,7 +310,7 @@ Likely touch points:
 
 ## 15. Risks And Mitigations
 
-### Risk: compatibility drift in `70-report.html`
+### Risk: compatibility drift in `60-report.html`
 
 Mitigation:
 
@@ -335,7 +335,7 @@ Mitigation:
 Proceed to an implementation plan that breaks the work into:
 
 - renderer core and preset registry
-- `70-report` adapter migration
+- `60-report` adapter migration
 - CLI compatibility layer
 - test migration and expansion
 - docs update and validation pass

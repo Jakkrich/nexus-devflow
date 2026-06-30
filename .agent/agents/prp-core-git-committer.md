@@ -1,4 +1,4 @@
-﻿---
+---
 name: prp-core-git-committer
 description: |
   Original architecture from prp-core: Commit assistant (Git Committer).
@@ -73,7 +73,7 @@ git commit -m "{type}: {description}"
 **Committed**: {hash} - {message}
 **Files**: {count} files (+{add}/-{del})
 
-Next: `git push`, `PR`, or `/60-Release`
+Next: `git push`, `PR`, or `/70-Release`
 ```
 
 ---

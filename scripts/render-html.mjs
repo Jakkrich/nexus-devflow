@@ -30,12 +30,12 @@ const positionalArgs = args.filter((value, index) => {
 });
 
 if (stage) {
-  if (stage !== '70-report') {
+  if (stage !== '60-report') {
     fail(`Unsupported stage for round-one render CLI: ${stage}`);
   }
   const target = positionalArgs[0];
   if (!target) {
-    fail('Usage: node scripts/render-html.mjs --stage 70-report <workspace-path-or-running-id>');
+    fail('Usage: node scripts/render-html.mjs --stage 60-report <workspace-path-or-running-id>');
   }
 
   try {

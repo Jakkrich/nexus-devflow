@@ -1,4 +1,4 @@
-﻿---
+---
 id: "{running_id}-implement"
 title: "Implement: {Work Title}"
 doc_type: "stage"
@@ -14,49 +14,78 @@ related_files: []
 
 # Implement: {Work Title}
 
-## 1. Purpose
+## 1. Objective
 
-- Record the implementation work performed for this running id.
+- Record the implementation work performed for this running id with a clear audit trail for human reviewers.
 
-## 2. Inputs
+## 2. Source Inputs
 
 - `30-plan.md`
 - Supporting spec, research, or design notes as needed
 
-## 3. Required Content
+## 3. Project Context To Preserve
 
-### Change Summary
+- Approved phase boundary
+- Global rules and role constraints
+- Explicit exclusions and unresolved questions that must stay visible
+
+## 4. Implementation Summary
 
 - [Summarize what was implemented]
 
-### Files Touched
+## 5. Executed Subtasks
+
+- [List the plan items executed in this stage]
+
+## 6. Files Touched
 
 - `path/to/file.ext`: [What changed]
 
-### Implementation Notes
+## 7. Behavior Changes
+
+- [Describe observable behavior changes]
+
+## 8. Implementation Notes
 
 - [Important implementation details]
 
-### Open Follow-Ups
+## 9. Open Follow-Ups
 
 - [Anything intentionally left for later]
 
-## 4. Decisions
+## 10. Deviations From Plan
 
-- [Decision 1]
+- [Document approved or unapproved deviations explicitly]
 
-## 5. Outputs
+## 11. AI Actions Performed
 
-- Implemented work ready for verification
-- List of files and follow-ups for reviewers
+- [List concrete actions taken, such as implementing subtasks, updating files, or recording blockers]
 
-## 6. Next Step Guidance
+## 12. Human Review Required
 
-- Mainline recommendation: `/50-Verify`
-- If root-cause investigation is needed: use `Debug`
-- If a temporary visual check is helpful: use `Preview`
+- Confirm the implementation stayed inside the approved scope
+- Confirm deviations are acceptable and visible
+- Confirm follow-up items are correctly classified
 
-## 7. Additional Notes
+## 13. Approval Status
+
+- Pending
+
+## 14. Next Allowed Command
+
+- `/50-Verify {running_id}`
+
+## 15. Nexus Event
+
+- `Debug` when a blocker or unexpected failure still needs root cause analysis
+- `Preview` when a local runtime or visual check would reduce verification risk
+- `/30-Plan` when implementation drift reveals that the plan is no longer trustworthy
+
+## 16. Change Log
+
+- {Date}: Initial implement draft created
+
+## 17. Additional Notes
 
 - Add any extra headings below this section when useful.
 

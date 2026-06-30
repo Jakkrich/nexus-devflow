@@ -1,4 +1,4 @@
-﻿---
+---
 description: Production Deployment (Auto-Deploy) - Perform pre-flight checks, deployment execution, and verification for production releases.
 ---
 # ๐€ Phase 52: Production Deployment (Auto-Deploy)
@@ -75,8 +75,8 @@ Generate an Error summary detailing:
 
 - Classification: Companion command
 - Mainline status: Release support command, not a numbered stage
-- Typical entry points: `/60-Release` after verification and packaging are complete
-- Typical handoff targets: `/70-Report`, `Changelog`, `Wiki`
+- Typical entry points: `/70-Release` after the report is aligned and packaging is ready to execute
+- Typical handoff targets: `/60-Report`, `Changelog`, `Wiki`
 
 ## Sources
 
@@ -85,6 +85,6 @@ Generate an Error summary detailing:
 - `.agent/skills/shipping-and-launch/SKILL.md`
 - `.agent/skills/deployment-procedures/SKILL.md`
 - `.agent/resources/schemas/deploy_report.template.md`
-- Related commands: `/60-Release`, `Commit`, `PR`, `Changelog`, `/70-Report`
+- Related commands: `/70-Release`, `Commit`, `PR`, `Changelog`, `/60-Report`
 
 

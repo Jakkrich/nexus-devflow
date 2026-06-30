@@ -1,4 +1,4 @@
-﻿---
+---
 description: DevFlow 2.0 Help and routing guide. Transitional file while Help moves from numbered workflow to companion command.
 argument-hint: [optional: question, running id, stage, or issue]
 ---
@@ -18,6 +18,7 @@ Help should:
 - explain the current DevFlow 2.0 model
 - route the user to the correct mainline stage
 - recommend companion commands when the task is still unclear
+- warn when a prior stage still needs manual review
 - summarize current project or framework state
 - stay read-only
 
@@ -59,6 +60,14 @@ If core pieces are missing, stop and recommend the underlying fix first.
 1. scan `.workspaces/specs/` for active running IDs
 2. prefer reading stage markdown files over legacy JSON
 3. summarize current state, blockers, and likely next action
+4. treat `Approval Status` and `Next Allowed Command` as soft routing signals when they are present
+
+When available, Help may use the internal helper below to build a faster first-pass summary before reading individual stage files:
+
+```text
+node scripts/summarize-run-status.mjs
+node scripts/summarize-run-status.mjs --json
+```
 
 Typical summary shape:
 
@@ -67,9 +76,9 @@ Help Summary:
 Environment: All OK
 
 Active Runs:
-- 010: in implementation, verify pending
-- 011: define complete, spec needed
-- 012: verification failed, implementation retry needed
+- 010-auth-refactor: stage=40-implement | approval=Pending | next=/50-Verify 010 | warnings: manual review open
+- 011-billing-phase-1: stage=20-spec | approval=Approved | next=/30-Plan 011
+- 012-admin-console: stage=50-verify | approval=Approved | next=/60-Report 012 | warnings: not ready for release
 
 Recommended Next Action:
 - 010 -> /50-Verify 010
@@ -77,10 +86,34 @@ Recommended Next Action:
 - 012 -> /40-Implement 012
 ```
 
+### Phase C: Manual Review Soft Gate
+
+Help should not hard-block stage progression.
+Help should warn when a stage artifact still shows:
+
+- `Approval Status: Pending`
+- `Approval Status: Needs Revision`
+- missing `Next Allowed Command`
+
+When one of those conditions exists, Help should:
+
+1. say that manual review still appears open
+2. recommend the reviewer inspect the current stage artifact first
+3. suggest the next command only as a soft recommendation, not as an automatic jump
+4. prefer checklist approval gates and stage `Next Allowed Command` when both exist, and call out disagreements explicitly
+
+Typical warning shape:
+
+```text
+Manual Review Warning:
+- 014 -> 20-spec.md still shows Approval Status: Pending
+- Recommended action: review 20-spec.md and confirm the next allowed command before moving to /30-Plan 014
+```
+
 ## DevFlow 2.0 Mainline
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 ## Public Companion Commands
@@ -131,6 +164,7 @@ These files still exist because their prompt bodies contain useful behavior, but
 Recommend `/00-Discover`.
 
 Use `Brainstorm` if the request is still vague or has multiple possible directions.
+If the request is large, high-risk, multi-phase, or requirement-heavy, explain that the run should use the manual review flow with explicit human approval at each stage.
 
 ### 2. If the user knows what they want but the scope is still fuzzy
 
@@ -154,13 +188,13 @@ Recommend `/40-Implement`.
 
 Recommend `/50-Verify`.
 
-### 7. If work is done and needs packaging or release handling
+### 7. If work is done and needs a final human-friendly summary before release
 
-Recommend `/60-Release`.
+Recommend `/60-Report`.
 
-### 8. If the work needs a final human-friendly summary
+### 8. If the work needs packaging or release handling after the report is aligned
 
-Recommend `/70-Report`.
+Recommend `/70-Release`.
 
 ## General Q And A Role
 
@@ -169,6 +203,7 @@ Help should:
 - answer questions about the project, framework, commands, agents, and prompts
 - recommend which public workflow, public companion command, or agent should be used next
 - clarify the current 2.0 stage model and companion-command model
+- explain when the manual review flow is the safer choice
 - provide example prompts for other workflows or agents
 
 When the user lacks context or the problem is unclear, Help may recommend `Research`, `Brainstorm`, or `Debug` instead of pretending the route is obvious.

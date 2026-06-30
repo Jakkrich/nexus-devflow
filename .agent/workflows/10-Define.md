@@ -1,4 +1,4 @@
-﻿---
+---
 description: Define stage in DevFlow 2.0 - convert discovery output into a stable, decision-ready work definition.
 argument-hint: "{running-id or workspace path}"
 ---
@@ -81,6 +81,15 @@ Do not move to Spec if the work can still be interpreted in materially different
 - make the scope and success framing explicit
 - keep implementation details out unless they are hard constraints
 
+### 5. Manual Review Soft Gate
+
+Before recommending `/20-Spec`, check whether `10-define.md` still needs human approval.
+If `Approval Status` is still pending or the scope remains disputed:
+
+- warn that the phase boundary is not fully locked
+- recommend review before moving forward
+- do not pretend the route is stable
+
 ## Output
 
 Report:
@@ -90,6 +99,7 @@ Report:
 - assumptions
 - scope boundaries
 - missing evidence or open risks
+- manual review warnings when scope is not yet approved
 - recommended next step
 
 ## Relationship To DevFlow 2.0
@@ -113,4 +123,10 @@ Report:
 - **Alternatives**:
   - `Brainstorm` - choose this when multiple strategic directions are still open.
   - `Research` - choose this when missing evidence still blocks a confident spec.
+
+## Nexus Event
+
+- Use `Brainstorm` when tradeoffs, non-goals, or option boundaries are still shifting in the conversation.
+- Use `Research` when scope decisions still depend on missing evidence.
+- Use `grill-with-docs` when available if targeted questioning could change scope, success criteria, terminology, or ownership boundaries before spec writing.
 

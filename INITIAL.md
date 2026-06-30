@@ -12,7 +12,7 @@ Use this file as a human-readable starting point for Nexus-DevFlow 2.0.
 ### Mainline Workflow
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 ### Public Companion Commands

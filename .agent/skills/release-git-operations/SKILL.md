@@ -28,7 +28,7 @@ This skill should reuse and align with:
 ## When to Use
 
 - After `/50-Verify` when verified work is ready for packaging
-- During `/60-Release` when the team needs commit, PR, merge, deployment, or changelog support
+- During `/70-Release` when the team needs commit, PR, merge, deployment, or changelog support after the report is already aligned
 - When release communication must be built from markdown-first stage artifacts
 
 ## Supported Modes
@@ -83,8 +83,8 @@ Read the minimum required artifacts:
 
 ### 3. Route Back
 
-- return to `/60-Release` when packaging is still in progress
-- return to `/70-Report` when communication is the remaining task
+- return to `/70-Release` when packaging is still in progress
+- return to `/60-Report` when communication is the remaining task
 - return to `/40-Implement`, `/50-Verify`, or `PR-Followup` if release blockers are discovered
 
 ## Output

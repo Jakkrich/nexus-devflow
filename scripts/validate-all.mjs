@@ -11,6 +11,8 @@ const checks = [
   ['Report stage adapter test', [process.execPath, ['scripts/test-render-report-stage.mjs']]],
   ['Report HTML generator test', [process.execPath, ['scripts/test-generate-report-html.mjs']]],
   ['Artifact language switch test', [process.execPath, ['scripts/test-switch-artifact-language.mjs']]],
+  ['Manual review contract test', [process.execPath, ['scripts/test-manual-review-contract.mjs']]],
+  ['Run status summary test', [process.execPath, ['scripts/test-summarize-run-status.mjs']]],
   ['Checklist validation test', [process.execPath, ['scripts/test-validate-checklists.mjs']]],
   ['Verify impact contract test', [process.execPath, ['scripts/test-verify-impact-contract.mjs']]],
   ['Goal runner contract test', [process.execPath, ['.agent/scripts/test-goal-runner.mjs']]],

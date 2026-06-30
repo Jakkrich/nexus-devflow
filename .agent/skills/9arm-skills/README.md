@@ -1,4 +1,4 @@
-﻿---
+---
 name: 9arm-skills
 description: Credited engineering discipline pack adapted from thananon/9arm-skills for Antigravity IDE and Nexus-DevFlow workflows.
 source_pack: 9arm-skills
@@ -28,7 +28,7 @@ This pack adapts the engineering discipline ideas from `9arm-skills` into the Ne
 | `Insight` | `post-mortem` | Turn validated bug fixes and incidents into durable team knowledge. |
 | `PR-Review` | `scrutinize` | Review intent, smaller alternatives, actual paths, and findings before approving changes. |
 | `Agent code-reviewer` | `scrutinize` | Apply outsider review discipline to specialist code reviews. |
-| `PR`, `/60-Release`, `/70-Report`, `Help` | `management-talk` | Translate engineering details into stakeholder-readable status, impact, owner, and next step. |
+| `PR`, `/60-Report`, `/70-Release`, `Help` | `management-talk` | Translate engineering details into stakeholder-readable status, impact, owner, and next step. |
 
 ## Output Rule
 

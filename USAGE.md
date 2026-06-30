@@ -18,10 +18,10 @@ This guide describes the active DevFlow 2.0 surface used in the current reposito
 - Treat skills and agents as support layers, not as replacements for the mainline.
 - Do not start new work from retired workflows or legacy dashboard/JSON-driven patterns.
 
-## Mainline Workflow
+## Timeline Workflow
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 Short meaning:
@@ -32,8 +32,32 @@ Short meaning:
 - `/30-Plan`: create the execution plan
 - `/40-Implement`: do the implementation work
 - `/50-Verify`: validate behavior, quality, and evidence, with optional `50-verify-impact.md` when impact and rollback analysis are needed
-- `/60-Release`: prepare release-facing outputs
-- `/70-Report`: produce the final summary
+- `/60-Report`: produce the final summary before release packaging
+- `/70-Release`: prepare release-facing outputs after the report is approved
+
+## Why `00`, `10`, `20`, and `30` are separate
+
+If your team used to go straight from "spec" to "plan", this is the easiest way to think about the split:
+
+- `/00-Discover`: understand the request, context, unknowns, and likely route
+- `/10-Define`: agree on the real problem, scope, constraints, and success criteria
+- `/20-Spec`: define what the finished work must do
+- `/30-Plan`: decide how the team will build and verify it
+
+They are separate because they answer different questions:
+
+- `00`: "What are we dealing with?"
+- `10`: "What are we agreeing to do?"
+- `20`: "What outcome is required?"
+- `30`: "How will we execute it?"
+
+Without that split, teams often mix problem framing, acceptance criteria, and implementation tasks into one document, which makes review harder and causes plans to inherit untested assumptions.
+
+Practical shortcut:
+
+- Keep `/00-Discover` and `/10-Define` short when the ticket is already clear
+- Start at `/20-Spec` when the problem and scope are already stable
+- Avoid skipping directly to `/30-Plan` unless the spec already exists and the expected behavior is genuinely settled
 
 ## Public Companion Commands
 
@@ -91,7 +115,8 @@ Examples of internal companions include:
 | spec is ready and work must be broken down | `/30-Plan` |
 | implementation can begin | `/40-Implement` |
 | completed work must be checked | `/50-Verify` |
-| release-facing packaging is needed | `/60-Release` or `/70-Report` |
+| final summary before release is needed | `/60-Report` |
+| release-facing packaging is needed | `/70-Release` |
 | the work starts from an issue | `Issue-Triage` |
 | a bug must be understood first | `Debug` |
 | the route is still unclear | `Help` |
@@ -102,7 +127,7 @@ Examples of internal companions include:
 
 ```mermaid
 flowchart LR
-    D00["/00-Discover"] --> D10["/10-Define"] --> D20["/20-Spec"] --> D30["/30-Plan"] --> D40["/40-Implement"] --> D50["/50-Verify"] --> D60["/60-Release"] --> D70["/70-Report"]
+    D00["/00-Discover"] --> D10["/10-Define"] --> D20["/20-Spec"] --> D30["/30-Plan"] --> D40["/40-Implement"] --> D50["/50-Verify"] --> D60["/60-Report"] --> D70["/70-Release"]
 ```
 
 ```text
@@ -112,8 +137,8 @@ flowchart LR
 /30-Plan
 /40-Implement
 /50-Verify
-/60-Release
-/70-Report
+/60-Report
+/70-Release
 ```
 
 ### 2. Idea still needs shaping
@@ -289,7 +314,7 @@ Use this layer to:
 - track units of work across `/30-Plan`, `/40-Implement`, and `/50-Verify`
 - attach evidence directly to checklist items
 - record blockers without hiding them inside long notes
-- feed final completion and blocker summaries into `/70-Report`
+- feed final completion and blocker summaries into `/60-Report`
 
 Treat checklist files as the live operational view. Treat stage files as the formal handoff and decision record.
 
@@ -328,5 +353,5 @@ If older documents mention those concepts, treat them as historical reference on
 | break work into execution steps | `/30-Plan` |
 | implement the changes | `/40-Implement` |
 | verify the work | `/50-Verify` |
-| package release-facing work | `/60-Release` |
-| produce the final wrap-up | `/70-Report` |
+| produce the final wrap-up before release | `/60-Report` |
+| package release-facing work | `/70-Release` |

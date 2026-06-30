@@ -1,4 +1,4 @@
-﻿---
+---
 description: Human recheck - Ask a read-only review question about completed or verified work without changing task status.
 ---
 # Phase 34: Human ReCheck
@@ -35,7 +35,7 @@ Read the available stage artifacts:
 - `30-plan.md`
 - `40-implement.md`
 - `50-verify.md`
-- `60-release.md` when present
+- `70-release.md` when present
 
 ### Step 2: Perform Read-Only Review
 

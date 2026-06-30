@@ -46,7 +46,7 @@ Act as custodian of the "Home Page of Project" warranting it persists as the qui
 Advocate relevant commands following the DevFlow 2.0 hierarchy:
 1. **Planning**: Once a spec matures sufficiently, advise executing `/30-Plan {ID}`.
 2. **Implementation**: After the plan is ready, endorse launching `/40-Implement {ID}`.
-3. **Review**: After implementation evidence exists, point the user to `/50-Verify {ID}`, then `/60-Release` or `/70-Report` as appropriate.
+3. **Review**: After implementation evidence exists, point the user to `/50-Verify {ID}`, then `/60-Report {ID}`, and finally `/70-Release {ID}` when release execution is still needed.
 
 ---
 *Note: This skill synergizes most efficiently running alongside the Agent Persona `requirements-engineer`.*

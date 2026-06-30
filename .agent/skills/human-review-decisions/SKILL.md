@@ -42,7 +42,7 @@ Read only what is necessary to understand the review question and evidence.
 
 - confirm the task is genuinely review-ready
 - record approval in the current review-facing artifact
-- route to `/60-Release` or `/70-Report`
+- route to `/60-Report` first, then `/70-Release` when release execution is the remaining step
 
 #### Feedback
 

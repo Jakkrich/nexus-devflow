@@ -13,8 +13,8 @@ Use the full numbered mainline when the work is a new deliverable and the team n
 /30-Plan
 /40-Implement
 /50-Verify
-/60-Release
-/70-Report
+/60-Report
+/70-Release
 ```
 
 Typical outcome:
@@ -24,9 +24,9 @@ Typical outcome:
 - `/20-Spec` turns the defined work into an acceptance-ready delivery contract.
 - `/30-Plan` breaks the spec into implementation phases and verification gates.
 - `/40-Implement` executes the planned changes.
-- `/50-Verify` records the evidence and verdict before release.
-- `/60-Release` prepares the release-facing packaging.
-- `/70-Report` produces the final summary for the run.
+- `/50-Verify` records the evidence and verdict before the final report.
+- `/60-Report` produces the final summary for the run.
+- `/70-Release` prepares the release-facing packaging after report sign-off.
 
 ## 2. Bug Fix
 
@@ -58,8 +58,8 @@ For work where proof matters as much as implementation, use a tracked run and le
 /30-Plan
 /40-Implement
 /50-Verify
-/60-Release
-/70-Report
+/60-Report
+/70-Release
 ```
 
 How the tracked run artifacts relate:
@@ -68,11 +68,12 @@ How the tracked run artifacts relate:
 - [checklists/implementation-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/implementation-checklist.md) is the live execution source of truth and tracks implementation completion against the planned tasks.
 - [checklists/verification-checklist.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists/verification-checklist.md) tracks the required evidence and validation work for `/50-Verify`.
 - [50-verify.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/50-verify.md) records the checks run, the results, the verdict, and the route to the next stage.
-- [70-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.md) is the source report, and [70-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.html) is the primary human-friendly output for reading the final result.
+- [60-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/60-report.md) is the source report, and [60-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/60-report.html) is the primary human-friendly output for reading the final result.
+- `70-release.md` is created after the report is aligned and the work moves into release packaging.
 
 Reading order for this kind of run:
 
 1. Start with [30-plan.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/30-plan.md) to understand the intended phases and validation gates.
 2. Check the files under [checklists/](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/checklists) to see live execution and verification status.
-3. Read [50-verify.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/50-verify.md) for evidence and the release verdict.
-4. Finish with [70-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.html) for the readable final output, and use [70-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/70-report.md) when you need the source markdown behind it.
+3. Read [50-verify.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/50-verify.md) for evidence and the route into the report stage.
+4. Finish with [60-report.html](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/60-report.html) for the readable final output, and use [60-report.md](D:/Projects/nexus-devflow/.workspaces/specs/001-integrate-md2html/60-report.md) when you need the source markdown behind it before release packaging begins.

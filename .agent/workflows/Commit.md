@@ -1,4 +1,4 @@
-﻿---
+---
 description: Smart Commit (Git Orchestration) - Stage files intelligently and write a concise, imperative commit message according to project standards.
 ---
 # ๐’พ Smart Commit (Git Orchestration)
@@ -49,14 +49,14 @@ You are an orchestrator. Your goal is to call the specialized Git Committer agen
 
 - Classification: Companion command
 - Mainline status: Release support command, not a numbered stage
-- Typical entry points: `/60-Release` after verification is complete
-- Typical handoff targets: `PR`, `Deploy`, `/60-Release`
+- Typical entry points: `/70-Release` after the report is aligned and release execution is ready
+- Typical handoff targets: `PR`, `Deploy`, `/70-Release`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/skills/release-git-operations/SKILL.md`
 - `.agent/skills/git-workflow-and-versioning/SKILL.md`
-- Related commands: `/60-Release`, `PR`, `Deploy`, `Merge`
+- Related commands: `/70-Release`, `PR`, `Deploy`, `Merge`
 
 

@@ -6,7 +6,7 @@ stage: "20-spec"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
+status: "draft"
 artifact_language: "en"
 related_run: "{running_id}"
 related_files: []
@@ -21,8 +21,7 @@ related_files: []
 ## 2. Source Inputs
 
 - `10-define.md`
-- Supporting research notes if they exist
-- Approved project context artifacts
+- Approved research and project context artifacts
 - Earlier phase outputs when this run depends on them
 
 ## 3. Project Context To Preserve
@@ -59,15 +58,15 @@ related_files: []
 
 ## 10. Non-Functional Constraints
 
-- [Constraints that implementation must respect]
+- [List stack, security, performance, operational, or compliance constraints]
 
 ## 11. Explicit Exclusions
 
-- [Explicitly excluded items]
+- [List what this phase deliberately does not deliver]
 
 ## 12. Traceability To Source Inputs
 
-- [Map major requirements back to approved input documents]
+- [Map major requirements back to the approved input documents]
 
 ## 13. AI Actions Performed
 
@@ -87,17 +86,10 @@ related_files: []
 
 - `/30-Plan {running_id}`
 
-## 17. Nexus Event
-
-- `Research` when a requirement still depends on missing facts
-- `Spec-Research` or `Competitor` when external context materially changes the contract
-- `grill-with-docs` when available and clarification could change acceptance criteria, edge cases, or rules
-
-## 18. Change Log
+## 17. Change Log
 
 - {Date}: Initial spec draft created
 
-## 19. Additional Notes
+## 18. Additional Notes
 
-- Add any extra headings below this section when useful.
-
+- Add extra headings below this section when useful.

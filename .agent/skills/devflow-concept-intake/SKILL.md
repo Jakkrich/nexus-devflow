@@ -56,7 +56,7 @@ Map the concept to the smallest fitting DevFlow surface:
 | Option guide | The idea is useful only as an optional bundle of practices. |
 | Wiki/docs | The idea is knowledge, not behavior. |
 
-Prefer skill-backed or option-guide adoption before adding new slash workflows. Keep the canonical `/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report` path stable unless the concept improves a core invariant.
+Prefer skill-backed or option-guide adoption before adding new slash workflows. Keep the canonical `/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release` path stable unless the concept improves a core invariant.
 
 ### 4. Coupled Concepts And Option Packs
 

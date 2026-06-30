@@ -21,6 +21,7 @@ Use these commands only to keep workflow status aligned with the task engine:
 
 Record verification start, results, open issues, and approval direction directly in `50-verify.md`. Use the stage markdown itself to indicate whether the work is ready for human review or needs to return to implementation.
 If an impact report is needed, create it in the same task directory and summarize its conclusions from `50-verify.md`.
+Keep the verification checklist aligned with the same soft-gate state so downstream report and release stages can see the current approval direction without re-reading the full verify narrative.
 
 ## Process
 
@@ -79,6 +80,7 @@ Include:
 - evidence: commands and results
 - test-decision alignment
 - checklist alignment and any stale status corrections
+- approval gate summary copied into the verification checklist when relevant
 - findings grouped by severity
 - manual checks required
 - recommended next action
@@ -90,13 +92,22 @@ Include:
 
 If pass:
 
-- route to `/60-Release`
+- route to `/60-Report`
 
 If fail:
 
 - route back to `/40-Implement`
 
 Use `Debug` when investigation is needed before implementation can resume.
+
+### 6. Manual Review Soft Gate
+
+Verification is the main human review checkpoint for implemented work.
+If the evidence is incomplete or `Approval Status` remains pending:
+
+- warn that release is not yet ready for confident handoff
+- recommend additional review or a return to `/40-Implement`
+- keep `/60-Report` as a soft recommendation only
 
 ## Output
 
@@ -107,13 +118,13 @@ Report:
 - commands run
 - validation status
 - impact and rollback analysis when `50-verify-impact.md` is present
-- next command: `/60-Release {ID}` if pass, or `/40-Implement {ID}` if fail
+- next command: `/60-Report {ID}` if pass, or `/40-Implement {ID}` if fail
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
 - Previous state: `/40-Implement`
-- Next state: `/60-Release` when evidence is sufficient
+- Next state: `/60-Report` when evidence is sufficient
 - Common companion commands: `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `Wiki`
 
 ## Sources
@@ -122,15 +133,21 @@ Report:
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/verify.template.md`
 - `.agent/resources/schemas/verify-impact.template.md`
-- Related commands: `/40-Implement`, `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `/60-Release`
+- Related commands: `/40-Implement`, `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `/60-Report`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/60-Release {ID}` when verification passes, or `/40-Implement {ID}` when verification fails.
-- **Why**: Verification decides whether work moves forward to packaging or loops back for fixes.
+- **Primary**: `/60-Report {ID}` when verification passes, or `/40-Implement {ID}` when verification fails.
+- **Why**: Verification decides whether work moves forward to the final report stage or loops back for fixes.
 - **Alternatives**:
   - `Debug` - choose this when the failure needs root cause analysis before more implementation.
   - `Wiki project ingest .workspaces/specs/{ID}-*/50-verify.md` - choose this when verification reveals reusable project knowledge.
+
+## Nexus Event
+
+- Use `Debug` when failures need deeper investigation before rework.
+- Use `PR-Review`, `QA-Orchestrate`, or `Agent code-reviewer` when a narrower review lane would change the verification decision quality.
+- Use `Wiki` when verified findings should become reusable project knowledge before the run continues.
 
 ## Wiki Update Recommendation
 

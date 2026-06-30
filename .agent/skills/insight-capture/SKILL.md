@@ -68,7 +68,7 @@ Prefer:
 - stage artifacts when the lesson is run-specific
 - `.workspaces/lessons.md` for project-wide knowledge
 - `Wiki` when the knowledge should become navigable team documentation
-- `/70-Report` when the lesson belongs in the final communication package
+- `/60-Report` when the lesson belongs in the final communication package before release
 
 When updating `.workspaces/lessons.md`, use `.agent/resources/schemas/lessons.template.md` and replace placeholder text completely.
 
@@ -81,4 +81,4 @@ Return:
 - approach outcome
 - recommendations
 - where the insight was recorded
-- whether `Wiki` or `/70-Report` should be the next handoff
+- whether `Wiki` or `/60-Report` should be the next handoff

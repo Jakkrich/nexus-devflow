@@ -1,4 +1,4 @@
-﻿---
+---
 id: "{running_id}-verification-checklist"
 title: "Verification Checklist: {Work Title}"
 doc_type: "checklist"
@@ -26,13 +26,14 @@ metadata_version: 1
 ## 1. Purpose
 
 - Track required validation, review, and release-gate checks in a human-readable way.
+- Keep soft-gate release readiness and manual review state visible for downstream stages.
 
 ## 2. Verification Checklist Items
 
-- [ ] V1: [Check item] | source: [plan/spec/verify] | owner: {Owner} | updated: {Date} | evidence: pending | severity: none
-- [/] V2: [Validation in progress] | source: [verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [command or manual check] | severity: low
-- [!] V3: [Blocked or failed gate] | source: [plan/spec/verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [failure note] | severity: high
-- [-] V4: [Skipped validation step] | source: [verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [reason for skip] | severity: none
+- [ ] V1: [Check item] | source: [plan/spec/verify] | owner: {Owner} | updated: {Date} | evidence: pending | severity: none | review: pending | next: gather evidence
+- [/] V2: [Validation in progress] | source: [verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [command or manual check] | severity: low | review: in progress | next: finish check
+- [!] V3: [Blocked or failed gate] | source: [plan/spec/verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [failure note] | severity: high | review: blocked | next: return to implement
+- [-] V4: [Skipped validation step] | source: [verify] | owner: [person/agent] | updated: [YYYY-MM-DD HH:mm] | evidence: [reason for skip] | severity: none | review: skipped | next: explain skip in verify stage
 
 ## 3. Required Commands And Manual Checks
 
@@ -45,9 +46,13 @@ metadata_version: 1
 
 ## 5. Approval Gate
 
-- **Ready For `/60-Release`**: `no`
+- **Approval Status**: `Pending`
+- **Ready For `/60-Report`**: `no`
 - **Why**: [brief reason]
 - **Return To `/40-Implement` Needed**: `yes/no`
+- **Human Review Required**: [what still needs to be checked]
+- **Next Allowed Command**: [usually `/60-Report {ID}` or `/40-Implement {ID}`]
+- **Soft-Gate Warning**: [state whether release should wait for more evidence or review]
 
 ## 6. Additional Notes
 

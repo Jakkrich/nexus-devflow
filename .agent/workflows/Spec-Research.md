@@ -80,7 +80,7 @@ If the research belongs to a running ID, mirror only the minimum necessary conte
 
 ### 4. Map Research To The Right Stage
 
-Route the result back into the mainline flow:
+Route the result back into the Timeline flow:
 
 - `/00-Discover` when the research changes problem framing
 - `/10-Define` when the research changes scope or decisions

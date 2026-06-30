@@ -31,7 +31,7 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 
 | Path | Stores | Related workflows or commands | Keep? |
 | :--- | :--- | :--- | :--- |
-| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-release.md`, `70-report.md`, `70-report.html`, and optional `checklists/` tracking files | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Release`, `/70-Report`, `Brainstorm`, `Research`, `Debug`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
+| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, and optional `checklists/` tracking files | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Brainstorm`, `Research`, `Debug`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
 | `.workspaces/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
 | `.workspaces/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
 | `.workspaces/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
@@ -56,7 +56,7 @@ Each mainline run lives under `.workspaces/specs/{ID}-{slug}/` and uses flat sta
 
 - Markdown stage files are the source of truth across the mainline.
 - HTML files are derived artifacts created only when a stage policy requires or enables them.
-- In the current framework round, `70-report.html` is the only required HTML stage artifact.
+- In the current framework round, `60-report.html` is the only required HTML stage artifact.
 - Future stage HTML outputs should be rendered through the shared renderer path instead of re-implementing markdown-to-html logic per stage.
 
 ### Mainline Stage Files
@@ -69,9 +69,9 @@ Each mainline run lives under `.workspaces/specs/{ID}-{slug}/` and uses flat sta
 | `30-plan.md` | Breaks the work down into execution order, risks, and verification approach. |
 | `40-implement.md` | Records the implementation work, key changes, and any meaningful deviation. |
 | `50-verify.md` | Stores verification evidence, findings, and the quality conclusion. |
-| `60-release.md` | Records release readiness, impact, and release-facing cautions. |
-| `70-report.md` | Produces the readable final run summary. |
-| `70-report.html` | Produces the human-facing rendered version of the final report. |
+| `60-report.md` | Produces the readable final run summary before release packaging. |
+| `60-report.html` | Produces the human-facing rendered version of the final report. |
+| `70-release.md` | Records release readiness, impact, and release-facing cautions. |
 
 `50-verify-impact.md` is an optional companion artifact. Create it during `/50-Verify` when the run needs explicit impact, regression-risk, or rollback analysis.
 
@@ -86,7 +86,7 @@ npm.cmd run report:html -- <workspace-path-or-running-id>
 Use the shared renderer CLI when you want the stage-aware renderer surface directly:
 
 ```powershell
-npm.cmd run render:html -- --stage 70-report <workspace-path-or-running-id>
+npm.cmd run render:html -- --stage 60-report <workspace-path-or-running-id>
 ```
 
 ### Checklist Layer
@@ -124,16 +124,34 @@ Principles:
 1. Checklist files are tied to one running ID.
 2. Checklist files make work visible during the run, not only after it finishes.
 3. Checklist items should include `status`, `owner`, `updated`, and `evidence`.
-4. Checklist files support the stage files. They do not replace `30-plan.md`, `40-implement.md`, or `50-verify.md`.
-5. Markdown tables with a `Status` column remain supported for backward compatibility, but checklist UI lines are the preferred human-facing format.
+4. When manual review flow is in use, checklist artifacts should also expose `review`, approval-gate notes, and the next suggested command when that signal matters.
+5. Checklist files support the stage files. They do not replace `30-plan.md`, `40-implement.md`, or `50-verify.md`.
+6. Markdown tables with a `Status` column remain supported for backward compatibility, but checklist UI lines are the preferred human-facing format.
+
+### Manual Review Visibility
+
+Mainline stage artifacts should make human review explicit.
+
+People reading a stage artifact should be able to find:
+
+- source inputs
+- preserved project context
+- AI actions performed
+- required human review
+- approval status
+- next allowed command
+
+When checklist artifacts exist, people should also be able to find the same soft-gate state there without opening every stage file.
+
+This keeps the workflow manual-first even when AI prepares the artifact draft.
 
 Recommended use:
 
 - Create initial checklist files during `/30-Plan`.
 - Update implementation status during `/40-Implement`.
 - Update validation status and release gates during `/50-Verify`.
-- Carry any final gate items into `/60-Release`.
-- Summarize completion, blockers, and evidence snapshots during `/70-Report`.
+- Summarize completion, blockers, and evidence snapshots during `/60-Report`.
+- Carry release execution, operator approvals, and delivery notes into `/70-Release`.
 
 ### Retired Legacy Files
 
@@ -156,8 +174,8 @@ Mainline:
   /40-Implement      -> .workspaces/specs/{ID}-*/40-implement.md
   /50-Verify         -> .workspaces/specs/{ID}-*/50-verify.md
   Verify companion   -> .workspaces/specs/{ID}-*/50-verify-impact.md (optional)
-  /60-Release        -> .workspaces/specs/{ID}-*/60-release.md
-  /70-Report         -> .workspaces/specs/{ID}-*/70-report.md and 70-report.html
+  /60-Report         -> .workspaces/specs/{ID}-*/60-report.md and 60-report.html
+  /70-Release        -> .workspaces/specs/{ID}-*/70-release.md
   Checklist layer    -> .workspaces/specs/{ID}-*/checklists/*.md
 
 Companion commands:
