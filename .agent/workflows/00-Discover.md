@@ -41,6 +41,18 @@ Do not route new DevFlow 2.0 work through JSON-first task initialization.
 
 ## Process
 
+### Loop Contract
+
+Run discovery as a request-grounding loop, not as a one-shot summary.
+
+- **Intent**: turn a raw request into a grounded running ID, stable problem statement, visible unknowns, and a recommended next route.
+- **Context**: read the user request, available workspace state, related artifacts, obvious constraints, and any provided references before deciding the route.
+- **Action**: restate the request, anchor or create the run, identify knowns and unknowns, and decide whether the work is ready for `/10-Define`, `Brainstorm`, `Research`, `grilling`, or `prototype`.
+- **Observation**: use concrete evidence such as existing artifacts, repo state, user constraints, missing facts, ambiguity, and visible risk.
+- **Adjustment**: if the request is fuzzy, route to `Brainstorm` or `grilling`; if facts are missing, route to `Research`; if runnable evidence is needed, route to `prototype`; otherwise proceed to `/10-Define`.
+- **Stop Condition**: stop when the request is anchored to a workspace path, the known constraints and open questions are explicit, and the next route is justified by evidence.
+- **Handoff**: `00-discover.md` must tell `/10-Define` what the request means, why it matters, what remains unknown, and what route was chosen.
+
 ### 1. Intake The Request
 
 - restate the request in plain language
@@ -64,6 +76,7 @@ Decide whether the request is:
 - **missing evidence and should use Research**
 
 Do not pretend the request is well-defined if it is still ambiguous.
+Use `grilling` or `prototype` only when the request needs stress-testing or runnable evidence before it can move to Define.
 
 ### 4. Write `00-discover.md`
 
@@ -99,7 +112,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: Start of a new run
 - Next state: `/10-Define` when scope is ready
-- Common companion commands: `Brainstorm` when the request is fuzzy, `Research` when evidence is missing
+- Common companion commands: `Brainstorm` when the request is fuzzy, `Research` when evidence is missing; support skills: `grilling` for stress-testing and `prototype` when runnable evidence is needed
 
 ## Sources
 
@@ -115,6 +128,7 @@ Report:
 - **Alternatives**:
   - `Brainstorm` - choose this when direction is still unstable.
   - `Research` - choose this when missing facts block a confident definition.
+  - `prototype` - choose this when a runnable experiment is the fastest way to answer a discovery question.
 
 ## Nexus Event
 

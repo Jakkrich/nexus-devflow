@@ -22,6 +22,18 @@ Before implementation, confirm the plan is approved in the stage artifacts. Trac
 
 ## Process
 
+### Loop Contract
+
+Run implementation as scoped execution loops, one unit at a time.
+
+- **Intent**: complete the selected planned unit while preserving the spec, plan, and repository conventions.
+- **Context**: read `30-plan.md`, `20-spec.md`, relevant checklist items, target files, pattern files, and test decisions before editing.
+- **Action**: make the smallest useful change for the current unit, update or create tests when required, run the planned verification, and record the result.
+- **Observation**: inspect concrete evidence from diffs, command output, tests, manual checks, and checklist status before claiming progress.
+- **Adjustment**: if evidence does not match intent, fix within the current unit, capture the blocker, use `Debug`, or return to `/30-Plan` or `/20-Spec` when the work no longer matches the contract.
+- **Stop Condition**: stop the unit when the planned change is complete, verification evidence is recorded, deviations are explained, and the next unit or handoff is clear.
+- **Handoff**: `40-implement.md` must tell `/50-Verify` what changed, why it changed, which checks ran, what failed or was skipped, and what residual risk remains.
+
 ### 1. Get Bearings
 
 Read:
@@ -41,13 +53,14 @@ Select one scoped unit of work at a time. Do not implement the whole plan as one
 Use the original coder discipline, adapted to 2.0:
 
 - **STRICT MANDATE (กฎเหล็ก Unit Test)**: ต้องสร้าง/แก้ไข Unit Test ควบคู่กับการแก้ไขโค้ดเสมอ โดยห้ามแก้ไขเฉพาะไฟล์โค้ดหลัก (Production Code) โดยไม่แก้ไขหรือสร้างไฟล์เทสต์ควบคู่กัน
+- start each scoped unit by naming its intent, context, expected observation, adjustment route, and stop condition
 - read referenced pattern files before editing
 - read the test decision from `30-plan.md`
 - confirm assumptions, target files, and success criteria before editing
 - make the smallest useful code change
 - preserve project style
 - run the planned verification
-- record the result in `40-implement.md`
+- record observation, adjustment, stop condition status, and the result in `40-implement.md`
 - update checklist item status, timestamps, and evidence links as work progresses
 
 If tests are `Required`:
@@ -65,6 +78,8 @@ Use the old recovery discipline when blocked:
 - recommend `Debug` when root cause analysis is needed
 - return to Plan when the work no longer matches the plan
 
+Use `tdd` for behavior-change implementation loops, `diagnosing-bugs` when a tight repro is needed before a fix, and `codebase-design` when implementation exposes an awkward seam or shallow module.
+
 ### 4. Finalize Implementation
 
 When the scoped work is complete:
@@ -72,6 +87,7 @@ When the scoped work is complete:
 - summarize the completed units
 - list changed files
 - record verification performed
+- record loop evidence for each completed unit: intent, observation, adjustment, and stop condition
 - record deviations, blockers, and manual checks
 - follow the `artifact_language` configured in `implement.template.md`
 - make sure checklist statuses match the actual state of the code and tests
@@ -94,6 +110,7 @@ Report:
 - files changed
 - verification commands run
 - test decisions followed or changed, with reasons
+- loop evidence and handoff notes for Verify
 - blocked items or manual checks
 - next command: `/50-Verify {ID}`
 
@@ -102,7 +119,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/30-Plan`
 - Next state: `/50-Verify` when scoped implementation is complete
-- Common companion commands: `Debug` for blockers, `Preview` for local checks
+- Common companion commands: `Debug` for blockers, `Preview` for local checks; support skills: `tdd`, `diagnosing-bugs`, and `codebase-design` for behavior changes, root-cause loops, and implementation-time design pressure
 
 ## Sources
 
@@ -119,6 +136,7 @@ Report:
   - `Debug "{blocker}"` - choose this when implementation is blocked by an unexplained failure.
   - `/30-Plan {ID}` - choose this when the plan is incomplete or no longer matches the work.
   - `Preview` - choose this when a local runtime or visual check is useful before formal verification.
+  - `codebase-design` - choose this when the implementation cannot be tested cleanly because the module shape is wrong.
 
 ## Nexus Event
 

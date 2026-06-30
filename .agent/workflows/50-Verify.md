@@ -25,6 +25,18 @@ Keep the verification checklist aligned with the same soft-gate state so downstr
 
 ## Process
 
+### Loop Contract
+
+Run verification as an evidence review loop, not as a single pass/fail guess.
+
+- **Intent**: decide whether the implementation satisfies the spec and plan without introducing unacceptable regression risk.
+- **Context**: read `20-spec.md`, `30-plan.md`, `40-implement.md`, checklist state, changed files, test decisions, and available command/manual evidence.
+- **Action**: run or inspect validation, compare implementation evidence against the contract, review risk areas, and record findings by severity.
+- **Observation**: use concrete evidence from test output, validation output, diff review, manual checks, skipped checks, and impact notes.
+- **Adjustment**: if evidence is missing or failing, request targeted implementation follow-up, route to `Debug`, or return to `/40-Implement` with the exact evidence gap.
+- **Stop Condition**: stop only with a clear verdict: pass, fail, or blocked; include the evidence, residual risks, and next route.
+- **Handoff**: `50-verify.md` must tell `/60-Report` why the work is ready, or tell `/40-Implement` exactly what must change before verification resumes.
+
 ### 1. Context Gathering
 
 Read:
@@ -45,6 +57,7 @@ Run the necessary validation for the current state before doing the full review.
 Use the old QA reviewer discipline, adapted to 2.0:
 
 - **STRICT MANDATE (กฎเหล็ก Unit Test)**: ตรวจสอบว่าโค้ดใหม่หรือการแก้ไข Bug (ที่มี behavior change) มีการสร้างหรืออัปเดต Unit Test คู่กันมาด้วยหรือไม่ หากไม่มีให้ทำเครื่องหมายว่า FAIL ทันที
+- compare claimed implementation evidence against the spec, plan, diff, and test decisions before forming a verdict
 - correctness
 - readability
 - architecture (DIP, SRP, Loose Coupling)
@@ -58,6 +71,7 @@ Use the old QA reviewer discipline, adapted to 2.0:
 Run project validation commands when available: lint, tests, typecheck, build, or targeted commands from the plan.
 
 For test-decision alignment, verify that planned verification was actually executed and that the evidence matches the claimed result.
+Use `review` for a two-axis standards/spec review, `diagnosing-bugs` when a failure needs root cause analysis, and `silent-failure-audit` when the risk is false-positive success.
 
 ### 4. Verification Report
 
@@ -78,6 +92,7 @@ Include:
 
 - verdict: pass or fail
 - evidence: commands and results
+- loop observation, adjustment, stop condition, and handoff notes
 - test-decision alignment
 - checklist alignment and any stale status corrections
 - approval gate summary copied into the verification checklist when relevant
@@ -96,7 +111,7 @@ If pass:
 
 If fail:
 
-- route back to `/40-Implement`
+- route back to `/40-Implement` with exact failed evidence, missing checks, or required changes
 
 Use `Debug` when investigation is needed before implementation can resume.
 
@@ -126,6 +141,7 @@ Report:
 - Previous state: `/40-Implement`
 - Next state: `/60-Report` when evidence is sufficient
 - Common companion commands: `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `Wiki`
+- Support skills: `review`, `diagnosing-bugs`, `tdd`, and `silent-failure-audit` for focused verification lanes
 
 ## Sources
 
@@ -141,6 +157,7 @@ Report:
 - **Why**: Verification decides whether work moves forward to the final report stage or loops back for fixes.
 - **Alternatives**:
   - `Debug` - choose this when the failure needs root cause analysis before more implementation.
+  - `review` - choose this when changed work needs standards and spec review as separate axes.
   - `Wiki project ingest .workspaces/specs/{ID}-*/50-verify.md` - choose this when verification reveals reusable project knowledge.
 
 ## Nexus Event

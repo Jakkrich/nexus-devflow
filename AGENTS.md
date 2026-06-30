@@ -256,9 +256,23 @@ Use mainly in `/60-Report`, `/70-Release`
 
 These are not numbered workflows and should be invoked through the active stage, the responsible agent, or by the user directly when needed.
 
+Use `docs/skill-selection-policy.md` when multiple skills appear to fit. Stage ownership wins, choose one primary skill per pass, add secondary skills only for distinct bounded purposes, and prefer the most specific skill when descriptions overlap.
+
 | Skill | Typical use |
 | :--- | :--- |
 | `brainstorming` | Before locking direction in Discover or Define |
+| `grill-with-docs` | During Define or Spec to stress-test fuzzy domain language, boundaries, decisions, and acceptance targets; optionally before Plan to challenge a nearly locked design |
+| `domain-modeling` | During Define, Spec, or Plan when glossary terms or durable architectural decisions must be captured |
+| `codebase-design` | During Spec, Plan, Implement, or Verify when module boundaries, seams, interfaces, or testability need design pressure |
+| `diagnosing-bugs` | During Debug, Implement, or Verify when a tight repro loop is needed before fixing broken, flaky, or slow behavior |
+| `tdd` | During Plan, Implement, or Verify when behavior changes need red-green-refactor evidence |
+| `review` | During Verify or Release when changed work needs standards and spec review as separate axes |
+| `handoff` | Any stage when context must transfer without duplicating existing artifacts |
+| `writing-great-skills` | When creating, importing, pruning, or refactoring DevFlow skills |
+| `to-prd` | Behind PRD when existing context should be synthesized into a product document without another interview |
+| `to-issues` | Behind Plan or Issue-Triage when a PRD, spec, or plan should become vertical issue slices |
+| `prototype` | During Discover, Define, Spec, Research, or Plan when a runnable experiment is needed to answer an uncertainty |
+| `triage` | Behind Issue-Triage when incoming reports need classification, verification, and agent-ready briefs |
 | `preview-local-check` | During Implement or Verify for local preview and smoke checks |
 | `code-simplification` | During Implement or Verify |
 | `spec-research` | During Spec or Verify when integrations need source-backed confirmation |

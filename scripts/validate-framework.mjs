@@ -454,7 +454,7 @@ function validateManualReviewContracts(failures) {
       'Next Allowed Command'
     ]],
     ['.agent/resources/schemas/verification_checklist.template.md', [
-      '## 5. Approval Gate',
+      '## 6. Approval Gate',
       '**Approval Status**:',
       '**Next Allowed Command**:',
       '**Soft-Gate Warning**:'
@@ -489,6 +489,203 @@ function validateManualReviewContracts(failures) {
   }
 
   ok('Manual review workflow contracts are aligned');
+}
+
+function validateStageLocalLoopContracts(failures) {
+  const loopEnabledWorkflows = [
+    '.agent/workflows/00-Discover.md',
+    '.agent/workflows/10-Define.md',
+    '.agent/workflows/20-Spec.md',
+    '.agent/workflows/30-Plan.md',
+    '.agent/workflows/40-Implement.md',
+    '.agent/workflows/50-Verify.md',
+    '.agent/workflows/60-Report.md',
+    '.agent/workflows/70-Release.md'
+  ];
+  const requiredMarkers = [
+    '### Loop Contract',
+    'Intent',
+    'Context',
+    'Action',
+    'Observation',
+    'Adjustment',
+    'Stop Condition',
+    'Handoff'
+  ];
+  const stageEvidenceMarkers = {
+    '.agent/workflows/00-Discover.md': ['open questions', 'recommended next step'],
+    '.agent/workflows/10-Define.md': ['non-goals', 'scope boundaries'],
+    '.agent/workflows/20-Spec.md': ['acceptance criteria', 'out-of-scope'],
+    '.agent/workflows/30-Plan.md': ['checklist', 'test decision'],
+    '.agent/workflows/40-Implement.md': ['checklist', 'verification evidence'],
+    '.agent/workflows/50-Verify.md': ['checklist', 'verdict'],
+    '.agent/workflows/60-Report.md': ['checklist', '60-report.html'],
+    '.agent/workflows/70-Release.md': ['follow-up', 'readiness']
+  };
+
+  for (const relativePath of loopEnabledWorkflows) {
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+    const lowerContent = content.toLowerCase();
+
+    for (const marker of requiredMarkers) {
+      if (!content.includes(marker)) {
+        fail(`${relativePath} is missing mainline stage-local loop contract marker: ${marker}`, failures);
+      }
+    }
+
+    for (const marker of stageEvidenceMarkers[relativePath] || []) {
+      if (!lowerContent.includes(marker.toLowerCase())) {
+        fail(`${relativePath} is missing stage-local loop evidence marker: ${marker}`, failures);
+      }
+    }
+  }
+
+  ok(`Mainline stage-local loop contract validation passed for ${loopEnabledWorkflows.length} workflow file(s)`);
+}
+
+function validateSkillSelectionPolicySurface(failures) {
+  const requiredDocs = [
+    'docs/skill-selection-policy.md',
+    'docs/mattpocock-skills-devflow-mapping.md',
+    'docs/mattpocock-skills-import-plan.md'
+  ];
+
+  for (const relativePath of requiredDocs) {
+    if (!fs.existsSync(path.join(projectRoot, relativePath))) {
+      fail(`Missing skill selection policy surface: ${relativePath}`, failures);
+    }
+  }
+
+  const routingSkill = readText('.agent/skills/intelligent-routing/SKILL.md', failures);
+  if (routingSkill && !routingSkill.includes('docs/skill-selection-policy.md')) {
+    fail('.agent/skills/intelligent-routing/SKILL.md must reference docs/skill-selection-policy.md', failures);
+  }
+
+  const agents = readText('AGENTS.md', failures);
+  if (agents && !agents.includes('docs/skill-selection-policy.md')) {
+    fail('AGENTS.md must reference docs/skill-selection-policy.md near reusable skill guidance', failures);
+  }
+
+  validateImportedSupportSkills(failures);
+  validateWorkflowSupportSkillHints(failures);
+  validateGrillWithDocsLoopSafety(failures);
+  ok('Skill selection policy surface is aligned');
+}
+
+function validateGrillWithDocsLoopSafety(failures) {
+  const requiredMarkers = [
+    'Loop Safety Contract',
+    'Question Budget',
+    'Repeat Budget',
+    'Topic Budget',
+    'Exit Reason',
+    'Anti-Perfection Rule',
+    'Blocked Rule'
+  ];
+  const skill = readText('.agent/skills/grill-with-docs/SKILL.md', failures);
+  const policy = readText('docs/skill-selection-policy.md', failures);
+
+  for (const marker of requiredMarkers) {
+    if (skill && !skill.includes(marker)) {
+      fail(`.agent/skills/grill-with-docs/SKILL.md is missing loop safety marker: ${marker}`, failures);
+    }
+    if (policy && !policy.includes(marker)) {
+      fail(`docs/skill-selection-policy.md is missing grill-with-docs loop safety marker: ${marker}`, failures);
+    }
+  }
+}
+
+function validateImportedSupportSkills(failures) {
+  const importedSkills = [
+    'grill-with-docs',
+    'domain-modeling',
+    'codebase-design',
+    'diagnosing-bugs',
+    'tdd',
+    'review',
+    'handoff',
+    'writing-great-skills',
+    'to-prd',
+    'to-issues',
+    'prototype',
+    'triage'
+  ];
+  const forbiddenSlashCommands = [
+    'grilling',
+    'grill-with-docs',
+    'domain-modeling',
+    'codebase-design',
+    'setup-matt-pocock-skills',
+    'to-prd',
+    'to-issues',
+    'triage',
+    'implement',
+    'review'
+  ];
+  const allowedNumberedStages = new Set([
+    '/00-Discover',
+    '/10-Define',
+    '/20-Spec',
+    '/30-Plan',
+    '/40-Implement',
+    '/50-Verify',
+    '/60-Report',
+    '/70-Release'
+  ]);
+
+  for (const skillName of importedSkills) {
+    const skillPath = `.agent/skills/${skillName}/SKILL.md`;
+    const absoluteSkillPath = path.join(projectRoot, skillPath);
+    if (!fs.existsSync(absoluteSkillPath)) {
+      fail(`Imported support skill is missing: ${skillPath}`, failures);
+      continue;
+    }
+
+    const content = fs.readFileSync(absoluteSkillPath, 'utf8');
+    const numberedStageRefs = [...content.matchAll(/\/\d{2}-[A-Z][A-Za-z0-9-]+/g)].map((match) => match[0]);
+    for (const stageRef of numberedStageRefs) {
+      if (!allowedNumberedStages.has(stageRef)) {
+        fail(`${skillPath} references unsupported numbered workflow route: ${stageRef}`, failures);
+      }
+    }
+
+    for (const commandName of forbiddenSlashCommands) {
+      const slashCommandPattern = new RegExp(`(^|[^A-Za-z0-9._-])/${escapeRegExp(commandName)}([^A-Za-z0-9._-]|$)`);
+      if (slashCommandPattern.test(content)) {
+        fail(`${skillPath} references upstream slash command /${commandName}; use DevFlow stage, companion, or bare skill names instead`, failures);
+      }
+    }
+  }
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function validateWorkflowSupportSkillHints(failures) {
+  const workflowDir = path.join(projectRoot, '.agent', 'workflows');
+  if (!fs.existsSync(workflowDir)) return;
+
+  const files = fs.readdirSync(workflowDir)
+    .filter((name) => name.endsWith('.md') && name !== 'README.md');
+  const maxSupportSkillsPerHint = 5;
+
+  for (const name of files) {
+    const relativePath = `.agent/workflows/${name}`;
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+
+    for (const line of content.split(/\r?\n/)) {
+      if (!/support skills?:/i.test(line)) continue;
+      const supportPart = line.split(/support skills?:/i).pop() || '';
+      const matches = [...supportPart.matchAll(/`([^`]+)`/g)].map((match) => match[1]);
+      const supportSkillCount = matches.filter((item) => !item.startsWith('/')).length;
+      if (supportSkillCount > maxSupportSkillsPerHint) {
+        fail(`${relativePath} lists ${supportSkillCount} support skills in one hint; keep hints bounded to ${maxSupportSkillsPerHint} or fewer`, failures);
+      }
+    }
+  }
 }
 
 function validateVerifyImpactContracts(failures) {
@@ -727,6 +924,8 @@ function main() {
   validateArtifactLanguageContracts(failures);
   validateArtifactLanguageWorkflowSurface(failures);
   validateManualReviewContracts(failures);
+  validateStageLocalLoopContracts(failures);
+  validateSkillSelectionPolicySurface(failures);
   validateChecklistContracts(failures);
   validateVerifyImpactContracts(failures);
   validateVerifyImpactSurface(failures);

@@ -40,6 +40,18 @@ Before writing `60-report.md`, read `artifact_language` from `report.template.md
 
 ## Process
 
+### Loop Contract
+
+Run reporting as an outcome-evidence loop, not as a dump of prior artifacts.
+
+- **Intent**: produce a final markdown and HTML summary that lets a reader understand the outcome, evidence, decisions, risks, and next actions without replaying the whole run.
+- **Context**: read all relevant stage artifacts, checklist files, verify impact notes, release notes, validation output, and supporting artifacts that materially explain the result.
+- **Action**: summarize the problem, direction, completed work, validation outcome, checklist progress, final decision, open risks, and next actions, then render the HTML report.
+- **Observation**: use concrete evidence such as checklist completion, blocked or skipped items, validation results, release state, impact notes, and unresolved follow-ups.
+- **Adjustment**: if evidence is missing, return to the owning stage; if the report must support continuation, use `handoff`; if the run produced reusable lessons, use `insight-capture` or `Wiki`.
+- **Stop Condition**: stop when `70-report.md` and `70-report.html` both exist, summarize the outcome accurately, include checklist and evidence snapshots, and name any remaining follow-up work.
+- **Handoff**: `70-report.md` must close the mainline run or tell the next reader exactly where follow-up work should continue.
+
 ### 1. Gather Full Run Context
 
 Read all relevant stage artifacts:
@@ -103,6 +115,7 @@ Prefer clarity over internal detail.
 Do not bury the outcome inside implementation trivia. The report should help a reader understand the run without replaying the whole workflow.
 
 When checklists exist, use them as the most human-readable operational record of what actually happened.
+Use `handoff` when the report must support continued work, and `insight-capture` when the run produced lessons that should become reusable knowledge.
 
 ### 5. Manual Review Soft Gate
 
@@ -134,6 +147,7 @@ npm run report:html -- <workspace-path-or-running-id>
 - Previous state: `/50-Verify`
 - Next state: `/70-Release` when the summary is aligned and release can proceed
 - Common companion commands: `Wiki` for durable knowledge capture, `Help` for routing or explanation
+- Support skills: `handoff`, `insight-capture`, and writing skills when final reporting must support continuation or reusable learning
 
 ## Sources
 
@@ -147,6 +161,7 @@ npm run report:html -- <workspace-path-or-running-id>
 - **Primary**: `/70-Release {ID}` after `60-report.md` and `60-report.html` reflect the verified state clearly.
 - **Render HTML**: `npm run report:html -- {ID}` after `60-report.md` is finalized so the standardized stakeholder HTML stays in sync
 - **Alternative**: `Wiki` when the completed run should be promoted into durable reusable knowledge before release packaging continues
+- **Additional Alternative**: `handoff` when another session or agent must continue from the completed run.
 
 ## Nexus Event
 

@@ -7,6 +7,7 @@ description: Issue Triage Addon - Analyze GitHub issues, detect duplicates or sp
 ## Target: $ARGUMENTS
 
 Use this workflow to evaluate GitHub issues, bug reports, feature requests, support requests, duplicates, or noisy reports before creating or resuming work.
+Use `triage` as the support skill for classification, verification, and agent-ready briefs. Use `to-issues` only when a stable spec or PRD must be packaged into vertical slices.
 
 ## Prompt Sources
 
@@ -104,5 +105,6 @@ Return:
 - `AGENTS.md`
 - `.agent/resources/schemas/triage.template.md`
 - Related commands: `Debug`, `PRD`, `/10-Define`, `Research`, `Help`
+- Support skills: `triage`, `to-issues`, `domain-modeling`
 
 
