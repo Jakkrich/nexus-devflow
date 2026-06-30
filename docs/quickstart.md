@@ -28,6 +28,9 @@ If you are starting new feature work:
 /00-Discover -> /10-Define -> /20-Spec -> /30-Plan
 ```
 
+If the work is large, multi-phase, requirement-heavy, or high-risk, use the same command path but treat it as a manual review flow.
+Review each stage artifact before moving to the next command and pay attention to `Approval Status` and `Next Allowed Command`.
+
 If you are fixing a bug:
 
 ```text
@@ -39,7 +42,7 @@ See [docs/example-runs.md](example-runs.md) for a fuller walkthrough.
 ## 5. Understand The Mainline
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 Public companion commands:
@@ -57,11 +60,14 @@ Help
 ```
 
 For the full current command policy, see [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1).
+Use `Help` when you are unsure whether a run should stay lightweight or switch into the manual review flow.
+For a quick read-only status scan across existing runs, agents or maintainers can also use `node scripts/summarize-run-status.mjs`.
 
 ## 6. Workspace Model
 
 DevFlow 2.0 uses markdown-first stage artifacts under `.workspaces/specs/`.
 In phase 1, markdown artifact language is controlled by `artifact_language` in the matching schema template under `.agent/resources/schemas/`.
+The mainline stage templates also include manual review sections so humans can inspect `Source Inputs`, `AI Actions Performed`, `Human Review Required`, `Approval Status`, and `Next Allowed Command` before moving forward.
 
 Typical running-id layout:
 
@@ -74,14 +80,15 @@ Typical running-id layout:
   40-implement.md
   50-verify.md
   50-verify-impact.md
-  60-release.md
-  70-report.md
-  70-report.html
+  60-report.md
+  60-report.html
+  70-release.md
 ```
 
 `50-verify-impact.md` is optional and is typically created during `/50-Verify` when the run needs explicit impact, regression-risk, or rollback analysis.
 
 See [workspace-artifacts.md](workspace-artifacts.md) for the canonical artifact contract.
+See [manual-review-workflow-spec.md](manual-review-workflow-spec.md) for the manual review operating model and naming guidance.
 Use `npm.cmd run artifact-language:switch -- en` or `npm.cmd run artifact-language:switch -- th` to change the template default for all markdown artifacts.
 
 ## Internal Surfaces

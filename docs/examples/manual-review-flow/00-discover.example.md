@@ -6,7 +6,7 @@ stage: "00-discover"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
+status: "draft"
 artifact_language: "en"
 related_run: "{running_id}"
 related_files: []
@@ -20,9 +20,8 @@ related_files: []
 
 ## 2. Source Inputs
 
-- Request summary
-- Existing project context
-- Related links, notes, or files if provided
+- Project request or issue summary
+- Existing context files or linked documents
 - Prior related running ids when applicable
 
 ## 3. Project Context To Preserve
@@ -45,11 +44,11 @@ related_files: []
 
 ## 7. Known Constraints
 
-- [Technical, business, time, or process constraints]
+- [List technical, business, timeline, policy, or workflow constraints]
 
 ## 8. Known Unknowns
 
-- [What is still unclear]
+- [List unclear areas that still need definition, research, or human confirmation]
 
 ## 9. Recommended Phase Boundary
 
@@ -73,17 +72,10 @@ related_files: []
 
 - `/10-Define {running_id}`
 
-## 14. Nexus Event
-
-- `Brainstorm` when the request still has multiple viable directions
-- `Research` when facts or evidence are missing
-- `grill-with-docs` when available and the current ambiguity could change the phase boundary
-
-## 15. Change Log
+## 14. Change Log
 
 - {Date}: Initial discover draft created
 
-## 16. Additional Notes
+## 15. Additional Notes
 
-- Add any extra headings below this section when useful.
-
+- Add extra headings below this section when useful.

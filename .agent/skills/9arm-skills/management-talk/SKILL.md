@@ -1,4 +1,4 @@
-﻿---
+---
 name: 9arm-skills/management-talk
 description: Use to translate engineering detail into stakeholder-readable updates, PR summaries, changelog notes, standups, Slack/JIRA comments, or leadership talking points.
 source_pack: 9arm-skills
@@ -75,5 +75,5 @@ Remove or compress unless needed:
 
 ## Nexus-DevFlow Output
 
-Use this skill inside `PR`, `/60-Release`, `/70-Report`, and `Help` when the user needs a human-readable summary. Keep existing Nexus output formats and destinations intact.
+Use this skill inside `PR`, `/60-Report`, `/70-Release`, and `Help` when the user needs a human-readable summary. Keep existing Nexus output formats and destinations intact.
 

@@ -13,7 +13,7 @@ export function resolveReportWorkspaceDir(argument, projectRoot) {
   if (fs.existsSync(directPath)) {
     const stats = fs.statSync(directPath);
     if (stats.isDirectory()) return directPath;
-    if (stats.isFile() && path.basename(directPath) === '70-report.md') return path.dirname(directPath);
+    if (stats.isFile() && path.basename(directPath) === '60-report.md') return path.dirname(directPath);
   }
 
   const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
@@ -34,14 +34,14 @@ export function resolveReportWorkspaceDir(argument, projectRoot) {
 }
 
 export function renderReportStageWorkspace({ workspaceDir }) {
-  const reportPath = path.join(workspaceDir, '70-report.md');
+  const reportPath = path.join(workspaceDir, '60-report.md');
   const reportMarkdown = readFileSafe(reportPath);
   if (!reportMarkdown) {
     throw new Error(`Missing report markdown: ${reportPath}`);
   }
 
   const { data: frontmatter } = parseFrontmatter(reportMarkdown);
-  const outputPath = path.join(workspaceDir, '70-report.html');
+  const outputPath = path.join(workspaceDir, '60-report.html');
 
   return renderReportWithMd2HtmlTemplate({
     sourcePath: reportPath,

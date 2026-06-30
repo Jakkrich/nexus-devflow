@@ -1,4 +1,4 @@
-﻿---
+---
 description: Update CHANGELOG.md - Automatically gather changes from specs, git history, or current state to update the project changelog.
 ---
 # Phase 53: Update Changelog
@@ -95,14 +95,14 @@ When changelog input is too implementation-heavy, apply `.agent/skills/9arm-skil
 
 - Classification: Companion command
 - Mainline status: Release communication support, not a numbered stage
-- Typical entry points: `/60-Release`, `Deploy`, `PR`
-- Typical handoff targets: `/70-Report`, `Wiki`
+- Typical entry points: `/70-Release`, `Deploy`, `PR`
+- Typical handoff targets: `/60-Report`, `Wiki`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/skills/release-git-operations/SKILL.md`
 - `.agent/resources/schemas/changelog_entry.template.md`
-- Related commands: `/60-Release`, `Deploy`, `PR`, `/70-Report`, `Wiki`
+- Related commands: `/70-Release`, `Deploy`, `PR`, `/60-Report`, `Wiki`
 
 

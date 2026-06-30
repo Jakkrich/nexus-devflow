@@ -6,13 +6,13 @@ updated: 2026-06-24
 
 # Report HTML Rendering Notes
 
-`70-report.html` is rendered directly from `70-report.md`. The markdown report is the source of truth.
+`60-report.html` is rendered directly from `60-report.md`. The markdown report is the source of truth.
 
 Renderer entry points:
 
 ```text
 scripts/generate-report-html.mjs
-scripts/render-html.mjs --stage 70-report <workspace-path-or-running-id>
+scripts/render-html.mjs --stage 60-report <workspace-path-or-running-id>
 npm run report:html -- <workspace-path-or-running-id>
 ```
 
@@ -27,14 +27,14 @@ scripts/lib/render-html/markdown.mjs
 
 ## Current Behavior
 
-- `report-stage.mjs` resolves the workspace and reads `70-report.md`
+- `report-stage.mjs` resolves the workspace and reads `60-report.md`
 - `md2html-report.mjs` maps the stage report into the md2html template shell while preserving DevFlow workspace resolution and output paths
 - `markdown.mjs` provides the markdown parsing helpers used by the stage bridge
 
 ## Source Priority
 
-1. `70-report.md` frontmatter
-2. `70-report.md` body content
+1. `60-report.md` frontmatter
+2. `60-report.md` body content
 3. renderer defaults
 
 ## Frontmatter Used By The Renderer
@@ -48,9 +48,9 @@ Other frontmatter can still exist for workflow contract purposes, but it is not 
 
 ## Checklist Guidance
 
-Checklist artifacts are not injected into `70-report.html` by template placeholder mapping.
+Checklist artifacts are not injected into `60-report.html` by template placeholder mapping.
 
-If checklist completion, blockers, skipped items, or evidence snapshots matter to the final report, include that summary explicitly in `70-report.md`, typically under:
+If checklist completion, blockers, skipped items, or evidence snapshots matter to the final report, include that summary explicitly in `60-report.md`, typically under:
 
 - `### Checklist Summary`
 - `### Validation Outcome`
@@ -60,19 +60,19 @@ If checklist completion, blockers, skipped items, or evidence snapshots matter t
 
 ```text
 .workspaces/specs/{ID}-{slug}/
-  70-report.md
-  70-report.html
+  60-report.md
+  60-report.html
 ```
 
 Optional checklist files may still exist beside the report, but the renderer does not pull them into HTML automatically.
 
 ## Presentation Layer
 
-`70-report.html` now uses the md2html presentation shell, including:
+`60-report.html` now uses the md2html presentation shell, including:
 
 - TOC sidebar and mobile drawer
 - theme toggle
 - print action
 - md2html typography and layout
 
-The stage adapter still keeps `70-report.md` as the source of truth and does not turn `/70-Report` into a separate public workflow surface.
+The stage adapter still keeps `60-report.md` as the source of truth and does not turn `/60-Report` into a separate public workflow surface.

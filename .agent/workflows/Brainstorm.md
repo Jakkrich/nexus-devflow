@@ -1,4 +1,4 @@
-﻿---
+---
 description: Structured brainstorming for projects and features. Transitional compatibility path for the Brainstorm companion command in DevFlow 2.0.
 ---
 
@@ -142,7 +142,7 @@ Brainstorm caching strategy
 - Honest tradeoffs over fake confidence
 - Multiple viable paths before recommending one
 - Persistent output saved to disk
-- Mainline remains: `/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report`
+- Mainline remains: `/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release`
 
 ## Relationship To DevFlow 2.0
 

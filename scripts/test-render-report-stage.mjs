@@ -55,7 +55,7 @@ related_run: "999"
 
   const workspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '999-render-stage');
   const checklistDir = path.join(workspaceDir, 'checklists');
-  writeFile(path.join(workspaceDir, '70-report.md'), markdown);
+  writeFile(path.join(workspaceDir, '60-report.md'), markdown);
 
   writeFile(path.join(checklistDir, 'implementation-checklist.md'), `- [x] Build report adapter
 - [/] Review adapter wiring
@@ -65,7 +65,7 @@ related_run: "999"
 `);
 
   const adapterResult = renderReportStageWorkspace({ workspaceDir, projectRoot: process.cwd() });
-  assert(adapterResult.outputPath.endsWith('70-report.html'), 'adapter should target 70-report.html');
+  assert(adapterResult.outputPath.endsWith('60-report.html'), 'adapter should target 60-report.html');
   assert(adapterResult.html.includes('Adapter Smoke Test'), 'adapter should include report title');
   assert(adapterResult.html.includes('>3. Required Content</h2>'), 'adapter should render report markdown headings');
   assert(adapterResult.html.includes('<li>Adapter path renders this report.</li>'), 'adapter should render markdown list items');
@@ -76,7 +76,7 @@ related_run: "999"
 
   const thaiWorkspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '998-render-stage-th');
   const thaiChecklistDir = path.join(thaiWorkspaceDir, 'checklists');
-  writeFile(path.join(thaiWorkspaceDir, '70-report.md'), `---
+  writeFile(path.join(thaiWorkspaceDir, '60-report.md'), `---
 id: "998-report"
 title: "Thai Adapter Report"
 artifact_language: "th"
@@ -101,7 +101,7 @@ related_run: "998"
   assert(thaiAdapterResult.html.includes('เปลี่ยนธีม'), 'thai adapter should localize the md2html theme tooltip');
 
   const flatWorkspaceDir = path.join(scratchRoot, '.workspaces', '999-shadow-stage');
-  writeFile(path.join(flatWorkspaceDir, '70-report.md'), '# Shadow\n');
+  writeFile(path.join(flatWorkspaceDir, '60-report.md'), '# Shadow\n');
 
   assert(
     resolveReportWorkspaceDir('999', scratchRoot) === workspaceDir,
@@ -114,15 +114,15 @@ related_run: "998"
 
   const cliRun = spawnSync(
     process.execPath,
-    [path.join(path.resolve('scripts'), 'render-html.mjs'), '--stage', '70-report', workspaceDir],
+    [path.join(path.resolve('scripts'), 'render-html.mjs'), '--stage', '60-report', workspaceDir],
     { cwd: path.resolve('.'), encoding: 'utf8' }
   );
   assert(cliRun.status === 0, `stage-aware render-html CLI should pass:\n${cliRun.stdout}\n${cliRun.stderr}`);
-  assert(fs.existsSync(path.join(workspaceDir, '70-report.html')), 'stage-aware render-html CLI should write 70-report.html');
+  assert(fs.existsSync(path.join(workspaceDir, '60-report.html')), 'stage-aware render-html CLI should write 60-report.html');
 
   const ambiguousRoot = path.join(scratchRoot, 'ambiguous-project');
-  writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-first', '70-report.md'), '# First\n');
-  writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-second', '70-report.md'), '# Second\n');
+  writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-first', '60-report.md'), '# First\n');
+  writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-second', '60-report.md'), '# Second\n');
   const ambiguousRun = spawnSync(
     process.execPath,
     [path.join(path.resolve('scripts'), 'generate-report-html.mjs'), '123'],

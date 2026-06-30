@@ -131,6 +131,15 @@ Run `npm run validate` after changing the framework, templates, or shared refere
 
 If validation fails, repair only what is necessary and keep `30-plan.md` aligned with the corrected state.
 
+### 7. Manual Review Soft Gate
+
+Before recommending `/40-Implement`, check whether the plan still shows pending review.
+If `Approval Status` is still pending or major dependencies remain unresolved:
+
+- warn that implementation should wait for review
+- recommend human confirmation of sequencing, scope, and verification strategy
+- keep `/40-Implement` as a soft recommendation only
+
 ## Output Checklist
 
 - complexity is clear
@@ -139,6 +148,7 @@ If validation fails, repair only what is necessary and keep `30-plan.md` aligned
 - every subtask has a test decision
 - `30-plan.md` is written and reviewable
 - validation passes
+- manual review warning is explicit when approval is still pending
 - next command is ready
 
 ## Relationship To DevFlow 2.0
@@ -163,6 +173,12 @@ If validation fails, repair only what is necessary and keep `30-plan.md` aligned
   - `Research` - choose this when the plan still depends on missing evidence.
   - `Agent codebase-explorer .workspaces/specs/{ID}-*/` - choose this when architecture or data flow is unclear.
   - `/20-Spec {ID}` - choose this when the spec itself is not strong enough for planning.
+
+## Nexus Event
+
+- Use `Research` when architecture, sequencing, or rollout decisions still depend on missing evidence.
+- Use `Agent codebase-explorer` or another specialist lane when the codebase shape or integration boundary is still unclear.
+- Use `grill-with-docs` when available if a short clarification pass could materially change sequencing, dependency order, rollout risk, or verification strategy.
 
 ## Wiki Update Recommendation
 

@@ -9,8 +9,8 @@ Use Nexus-DevFlow when the user asks for DevFlow, stage-based workflow, running-
 - `/30-Plan`
 - `/40-Implement`
 - `/50-Verify`
-- `/60-Release`
-- `/70-Report`
+- `/60-Report`
+- `/70-Release`
 
 Public companion commands are not part of the numbered mainline and should not use workflow numbers:
 
@@ -52,13 +52,13 @@ Update/check:
 
 # DevFlow 2.0 Operating Model
 
-## Mainline Workflow
+## Timeline Workflow
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
-Each mainline stage owns one primary markdown contract file inside the task workspace.
+Each Timeline stage owns one primary markdown contract file inside the task workspace.
 
 Example workspace layout:
 
@@ -77,11 +77,11 @@ Example workspace layout:
       implement.md
     50-verify/
       verify.md
-    60-release/
-      release.md
-    70-report/
+    60-report/
       report.md
       report.html
+    70-release/
+      release.md
 ```
 
 ## Running ID Rule
@@ -145,11 +145,55 @@ These files still exist because their prompt bodies contain useful behavior, but
 
 | Type | Meaning | Rule |
 | :--- | :--- | :--- |
-| Workflow | A public stage on the mainline | Owns stage state, required input/output, and next-step guidance |
+| Workflow | A public stage on the Timeline | Owns stage state, required input/output, and next-step guidance |
 | Agent | An accountable specialist role | Can be called directly or from a workflow |
 | Skill | A reusable method or discipline | Can be loaded by workflows, agents, or users |
-| Public companion command | A reusable user-facing command outside the numbered mainline | Supports the active stage but does not replace it |
+| Public companion command | A reusable user-facing command outside the numbered Timeline | Supports the active stage but does not replace it |
 | Internal companion surface | A retained prompt surface that may later move into a skill or agent | Keep behavior, but do not treat it as the preferred public entry point |
+
+## Stage Clarification Policy
+
+Before advancing a run, the AI may ask targeted clarification questions when that interaction will materially improve the decision quality of the current stage.
+
+Rules:
+
+1. Clarification is optional, not mandatory.
+2. Do not force the same questioning routine on every stage or every task.
+3. Only gather information that can change the decision of the current stage.
+4. Prefer the smallest useful interaction over a long interview.
+5. If the environment has a `grill-with-docs` skill available, treat it as an internal support skill for deeper clarification, not as a public command or required pre-step.
+
+Recommended use by stage:
+
+- `/00-Discover`: optional only when the request, stakeholder, or constraints are still too unclear to choose the next route confidently
+- `/10-Define`: preferred when scope, terminology, non-goals, decision boundaries, or success criteria are still unstable
+- `/20-Spec`: useful when acceptance criteria, edge cases, rules, or integration constraints are still ambiguous
+- `/30-Plan`: use sparingly when architecture, dependency order, rollout risk, or verification strategy still depends on unresolved decisions
+- `/40-Implement` and later: avoid by default; only re-open deep questioning when a contradiction or missing decision forces a return to an earlier stage
+
+Stage-specific information bias:
+
+- `/00-Discover`: goal, pain point, urgency, affected users, known constraints
+- `/10-Define`: scope, non-goals, success criteria, terminology, ownership boundaries
+- `/20-Spec`: required behavior, edge cases, acceptance criteria, policy or rule constraints
+- `/30-Plan`: dependency order, irreversible decisions, rollout risk, verification expectations
+
+Do not collect extra background that does not affect the current stage decision.
+
+## Nexus Event Policy
+
+DevFlow distinguishes between `Next Allowed Command` and `Nexus Event`.
+
+- `Next Allowed Command` is the Timeline continuation for the current stage.
+- `Nexus Event` is an optional branch, support skill, companion command, or specialist route that may help when the current conversation reveals a specific need.
+
+Rules:
+
+1. `Nexus Event` must not replace the Timeline stage model.
+2. `Nexus Event` is situational and should be chosen by the AI and user based on the conversation, not forced by default.
+3. `Nexus Event` should describe why a branch is useful and imply that the run returns to the Timeline afterward.
+4. Prefer a small set of high-signal hints over an exhaustive list.
+5. Include skills, companion commands, or specialist routes only when they are plausible from the current stage context.
 
 Maintainer note:
 
@@ -198,7 +242,7 @@ Use mainly in `/50-Verify`
 
 ### 4. Release and Documentation
 
-Use mainly in `/60-Release`, `/70-Report`
+Use mainly in `/60-Report`, `/70-Release`
 
 | Agent | Role | Primary responsibility |
 | :--- | :--- | :--- |
@@ -235,6 +279,7 @@ These are not numbered workflows and should be invoked through the active stage,
 | `specialist-agent-routing` | When the user wants direct specialist judgment on a bounded target |
 | `planning-and-task-breakdown` | During Plan |
 | `shipping-and-launch` | During Release |
+| `grill-with-docs` | Optional during Define, Spec, or complex Plan work when deeper clarification is needed before advancing stage decisions |
 
 ## Deprecation Notes
 

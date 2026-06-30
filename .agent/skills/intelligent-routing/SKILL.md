@@ -21,9 +21,9 @@ Always route in this order:
 
 Do not route new work into retired JSON-first commands, dashboard-first flows, or removed aliases.
 
-## Mainline Stages
+## Timeline Stages
 
-`/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report`
+`/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release`
 
 ## Public Companion Commands
 
@@ -69,12 +69,12 @@ Use these agent mappings when expert judgment is the best next step:
 | has a stable spec and needs execution plan | `/30-Plan` |
 | needs implementation work | `/40-Implement` |
 | needs testing, review, or validation evidence | `/50-Verify` |
-| needs packaging, commit, PR, or release handling | `/60-Release` |
-| needs the final summary or handoff narrative | `/70-Report` |
+| needs packaging, commit, PR, or release handling | `/70-Release` |
+| needs the final summary or handoff narrative | `/60-Report` |
 
 ## Routing Heuristics
 
-### Use a mainline stage when:
+### Use a Timeline stage when:
 
 - the request advances a task through its lifecycle
 - the user needs an artifact in `.workspaces`
@@ -85,6 +85,34 @@ Use these agent mappings when expert judgment is the best next step:
 - the request supports a stage rather than replacing it
 - the user needs exploration, research, debugging, or help
 - the output is advisory or investigative
+
+### Use an internal clarification skill when:
+
+- the current stage is blocked by ambiguity, not by missing execution effort
+- a small amount of user interaction could change scope, acceptance criteria, or planning decisions
+- the public surface should stay the same and the questioning method is only supporting the active stage
+
+If `grill-with-docs` is available in the current environment, prefer it as an optional internal support skill for:
+
+- `/10-Define` when scope or terminology is unstable
+- `/20-Spec` when acceptance criteria or rules are ambiguous
+- `/30-Plan` when architecture or verification choices are still reversible but unclear
+
+Do not use deep questioning by default in every stage. Collect only the information that affects the current Timeline-stage decision.
+
+### Use an internal clarification skill when:
+
+- the current stage is blocked by ambiguity, not by missing execution effort
+- a small amount of user interaction could change scope, acceptance criteria, or planning decisions
+- the public surface should stay the same and the questioning method is only supporting the active stage
+
+If `grill-with-docs` is available in the current environment, prefer it as an optional internal support skill for:
+
+- `/10-Define` when scope or terminology is unstable
+- `/20-Spec` when acceptance criteria or rules are ambiguous
+- `/30-Plan` when architecture or verification choices are still reversible but unclear
+
+Do not use deep questioning by default in every stage. Collect only the information that affects the current stage decision.
 
 ### Use a specialist agent when:
 
@@ -109,6 +137,8 @@ Use these agent mappings when expert judgment is the best next step:
 - Do not mention legacy external control files as part of the routing model.
 - Do not invent agent names that are not present in the current repo.
 - If the request spans multiple domains and the owner is unclear, route to `orchestrator`.
+- If clarification is needed, ask only for information that can change the active stage decision.
+- If clarification is needed, ask only for information that can change the active stage decision.
 
 ## Output Pattern
 

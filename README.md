@@ -33,13 +33,13 @@ The framework keeps that lifecycle explicit:
 
 ---
 
-## The Mainline
+## The Timeline
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Release -> /70-Report
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
-This is the canonical DevFlow 2.0 path.
+This is the canonical DevFlow 2.0 Timeline.
 
 - `00-Discover`: ground the request, context, and running ID
 - `10-Define`: lock the problem, scope, constraints, and success criteria
@@ -47,8 +47,28 @@ This is the canonical DevFlow 2.0 path.
 - `30-Plan`: create an executable implementation plan
 - `40-Implement`: perform the code changes and implementation work
 - `50-Verify`: validate behavior, quality, and evidence, optionally producing `50-verify-impact.md` for impact and rollback analysis
-- `60-Release`: package release-facing outputs such as commit, PR, merge, or deploy coordination
-- `70-Report`: produce the final standardized summary in Markdown and HTML
+- `60-Report`: produce the final standardized summary in Markdown and HTML before release packaging
+- `70-Release`: package release-facing outputs such as commit, PR, merge, or deploy coordination after report sign-off
+
+### Why `00`, `10`, `20`, and `30` are separate
+
+Teams often ask why DevFlow does not jump straight from "spec" to "plan". The short answer is that each stage locks a different level of clarity:
+
+- `00-Discover`: "What are we actually talking about?" Gather the request, missing context, unknowns, and the likely route forward.
+- `10-Define`: "What exactly are we agreeing to do?" Lock the problem, scope, constraints, and success criteria.
+- `20-Spec`: "What must the finished thing do?" Write the delivery contract, behavior, flows, and acceptance criteria.
+- `30-Plan`: "How will we build it?" Break the work into execution steps, files, risks, and verification strategy.
+
+This split prevents a common failure mode where a team starts designing or tasking too early, while the real problem, scope, or acceptance criteria are still fuzzy.
+
+Rule of thumb:
+
+- `00` is for understanding the request
+- `10` is for agreeing on scope
+- `20` is for defining the required outcome
+- `30` is for deciding the implementation path
+
+When a team already has a strong ticket or stable context, it is fine to keep `00` and `10` very short, or enter at `/20-Spec` directly. What DevFlow tries to avoid is skipping all of those thinking layers at once.
 
 ---
 
@@ -99,9 +119,9 @@ graph TD
     H --> I["/30-Plan"]
     I --> J["/40-Implement"]
     J --> K["/50-Verify"]
-    K -->|pass| L["/60-Release"]
+    K -->|pass| L["/60-Report"]
     K -->|needs work| J
-    L --> M["/70-Report"]
+    L --> M["/70-Release"]
 ```
 
 Every stage writes its own artifact under `.workspaces/specs/{RUNNING_ID}/`, so the work remains resumable, reviewable, and easy to hand off.
@@ -178,14 +198,14 @@ DevFlow keeps markdown as the source of truth for stage artifacts.
 
 HTML is a derived artifact controlled by stage policy. In the current framework round:
 
-- `70-report` requires `70-report.html`
+- `60-report` requires `60-report.html`
 - other stages remain markdown-first unless they explicitly opt into HTML rendering later
 
 Current commands:
 
 ```powershell
 npm.cmd run report:html -- <workspace-path-or-running-id>
-npm.cmd run render:html -- --stage 70-report <workspace-path-or-running-id>
+npm.cmd run render:html -- --stage 60-report <workspace-path-or-running-id>
 npm.cmd run artifact-language:switch -- en
 npm.cmd run artifact-language:switch -- th
 ```

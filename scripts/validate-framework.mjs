@@ -168,8 +168,8 @@ function validateWorkflowNumbering(failures) {
     '30-Plan.md',
     '40-Implement.md',
     '50-Verify.md',
-    '60-Release.md',
-    '70-Report.md'
+    '70-Release.md',
+    '60-Report.md'
   ]);
   const files = fs.readdirSync(workflowDir)
     .filter((name) => name.endsWith('.md') && name !== 'README.md');
@@ -270,8 +270,8 @@ function validateStageArtifactConventions(failures) {
     '.agent/workflows/30-Plan.md',
     '.agent/workflows/40-Implement.md',
     '.agent/workflows/50-Verify.md',
-    '.agent/workflows/60-Release.md',
-    '.agent/workflows/70-Report.md',
+    '.agent/workflows/70-Release.md',
+    '.agent/workflows/60-Report.md',
     '.agent/resources/schemas/discover.template.md',
     '.agent/resources/schemas/define.template.md',
     '.agent/resources/schemas/spec.template.md',
@@ -291,8 +291,8 @@ function validateStageArtifactConventions(failures) {
     '/30-plan/plan.md',
     '/40-implement/implement.md',
     '/50-verify/verify.md',
-    '/60-release/release.md',
-    '/70-report/report.md'
+    '/70-release/release.md',
+    '/60-report/report.md'
   ];
   const requiredStageNames = [
     '00-discover.md',
@@ -301,8 +301,8 @@ function validateStageArtifactConventions(failures) {
     '30-plan.md',
     '40-implement.md',
     '50-verify.md',
-    '60-release.md',
-    '70-report.md'
+    '70-release.md',
+    '60-report.md'
   ];
 
   for (const relativePath of filesToCheck) {
@@ -366,8 +366,8 @@ function validateArtifactLanguageWorkflowSurface(failures) {
     '.agent/workflows/30-Plan.md',
     '.agent/workflows/40-Implement.md',
     '.agent/workflows/50-Verify.md',
-    '.agent/workflows/60-Release.md',
-    '.agent/workflows/70-Report.md',
+    '.agent/workflows/70-Release.md',
+    '.agent/workflows/60-Report.md',
     '.agent/resources/schemas/SCHEMA.md',
     '.agent/resources/schemas/README.md',
     'docs/quickstart.md',
@@ -383,6 +383,124 @@ function validateArtifactLanguageWorkflowSurface(failures) {
   }
 
   ok('Artifact language workflow/docs surface is aligned');
+}
+
+function validateManualReviewContracts(failures) {
+  const requiredTemplateHeadings = new Map([
+    ['.agent/resources/schemas/discover.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 10. AI Actions Performed',
+      '## 11. Human Review Required',
+      '## 12. Approval Status',
+      '## 13. Next Allowed Command',
+      '## 14. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/define.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 13. AI Actions Performed',
+      '## 14. Human Review Required',
+      '## 15. Approval Status',
+      '## 16. Next Allowed Command',
+      '## 17. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/spec.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 13. AI Actions Performed',
+      '## 14. Human Review Required',
+      '## 15. Approval Status',
+      '## 16. Next Allowed Command',
+      '## 17. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/plan.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 13. AI Actions Performed',
+      '## 14. Human Review Required',
+      '## 15. Approval Status',
+      '## 16. Next Allowed Command',
+      '## 17. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/implement.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 11. AI Actions Performed',
+      '## 12. Human Review Required',
+      '## 13. Approval Status',
+      '## 14. Next Allowed Command',
+      '## 15. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/verify.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 12. AI Actions Performed',
+      '## 13. Human Review Required',
+      '## 14. Approval Status',
+      '## 15. Next Allowed Command',
+      '## 16. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/release.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 10. AI Actions Performed',
+      '## 11. Human Review Required',
+      '## 12. Approval Status',
+      '## 13. Next Allowed Command',
+      '## 14. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/report.template.md', [
+      '## 2. Source Inputs',
+      '## 3. Project Context To Preserve',
+      '## 8. Manual Review And Gate Summary',
+      '## 11. AI Actions Performed',
+      '## 12. Human Review Required',
+      '## 13. Approval Status',
+      '## 15. Next Allowed Command',
+      '## 16. Nexus Event'
+    ]],
+    ['.agent/resources/schemas/implementation_checklist.template.md', [
+      '## 5. Manual Review Snapshot',
+      'Approval status:',
+      'Next Allowed Command'
+    ]],
+    ['.agent/resources/schemas/verification_checklist.template.md', [
+      '## 5. Approval Gate',
+      '**Approval Status**:',
+      '**Next Allowed Command**:',
+      '**Soft-Gate Warning**:'
+    ]]
+  ]);
+
+  for (const [relativePath, headings] of requiredTemplateHeadings.entries()) {
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+    for (const heading of headings) {
+      if (!content.includes(heading)) {
+        fail(`${path.basename(relativePath)} is missing required heading: ${heading}`, failures);
+      }
+    }
+  }
+
+  const docsThatMustMentionManualReview = [
+    'docs/quickstart.md',
+    'docs/workspace-artifacts.md',
+    '.agent/resources/schemas/README.md',
+    '.agent/resources/schemas/SCHEMA.md',
+    'docs/manual-review-workflow-spec.md',
+    '.agent/workflows/Help.md'
+  ];
+
+  for (const relativePath of docsThatMustMentionManualReview) {
+    const content = readText(relativePath, failures);
+    if (!content) continue;
+    if (!/manual review/i.test(content)) {
+      fail(`${relativePath} must mention manual review`, failures);
+    }
+  }
+
+  ok('Manual review workflow contracts are aligned');
 }
 
 function validateVerifyImpactContracts(failures) {
@@ -465,12 +583,12 @@ function validateChecklistContracts(failures) {
     const planPath = path.join(runDir, '30-plan.md');
     const implementPath = path.join(runDir, '40-implement.md');
     const verifyPath = path.join(runDir, '50-verify.md');
-    const reportMdPath = path.join(runDir, '70-report.md');
-    const reportHtmlPath = path.join(runDir, '70-report.html');
+    const reportMdPath = path.join(runDir, '60-report.md');
+    const reportHtmlPath = path.join(runDir, '60-report.html');
     const checklistDir = path.join(runDir, 'checklists');
 
     if (fs.existsSync(reportMdPath) && !fs.existsSync(reportHtmlPath)) {
-      fail(`${relRun}: 70-report.md exists but 70-report.html is missing. Run \`npm.cmd run report:html -- ${entry.name}\``, failures);
+      fail(`${relRun}: 60-report.md exists but 60-report.html is missing. Run \`npm.cmd run report:html -- ${entry.name}\``, failures);
     }
 
     if (!fs.existsSync(checklistDir)) continue;
@@ -610,6 +728,7 @@ function main() {
   validateStageArtifactConventions(failures);
   validateArtifactLanguageContracts(failures);
   validateArtifactLanguageWorkflowSurface(failures);
+  validateManualReviewContracts(failures);
   validateChecklistContracts(failures);
   validateVerifyImpactContracts(failures);
   validateVerifyImpactSurface(failures);

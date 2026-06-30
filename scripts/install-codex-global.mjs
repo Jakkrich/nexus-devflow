@@ -22,7 +22,7 @@ function skillContent(root) {
   return [
     '---',
     'name: nexus-devflow',
-    'description: Use when the user asks for Nexus-DevFlow, DevFlow 2.0, reusable/global Codex workflows, checking or updating the Codex global install, or stage commands such as /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Release, /70-Report, or companion commands such as Help.',
+    'description: Use when the user asks for Nexus-DevFlow, DevFlow 2.0, reusable/global Codex workflows, checking or updating the Codex global install, or stage commands such as /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Report, /70-Release, or companion commands such as Help.',
     '---',
     '',
     '# Nexus-DevFlow for Codex',
@@ -79,7 +79,7 @@ function updateGlobalAgents(root) {
     markerStart,
     '# Nexus-DevFlow Global Workflow',
     '',
-    'When the user asks for Nexus-DevFlow, DevFlow 2.0, checking/updating the Codex global install, or stage commands like /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Release, /70-Report, or companion commands like Help, use the global Codex skill `nexus-devflow`.',
+    'When the user asks for Nexus-DevFlow, DevFlow 2.0, checking/updating the Codex global install, or stage commands like /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Report, /70-Release, or companion commands like Help, use the global Codex skill `nexus-devflow`.',
     '',
     'Framework root: `' + root + '`',
     'Update commands: `npm run codex:check-global`, `npm run codex:update-global`, `npm run codex:update-global:pull`',

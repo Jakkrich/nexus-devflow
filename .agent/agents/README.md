@@ -76,7 +76,7 @@ Agent code-reviewer .workspaces/specs/007-auth-refactor/
 
 ## 5. Release and Documentation
 
-ใช้บ่อยกับ `/60-Release`, `/70-Report`
+ใช้บ่อยกับ `/60-Report`, `/70-Release`
 
 | Agent | Role | Responsibility |
 | :--- | :--- | :--- |

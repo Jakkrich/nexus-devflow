@@ -16,6 +16,8 @@
     "report:html:test": "node ./scripts/test-generate-report-html.mjs",
     "artifact-language:switch": "node ./scripts/switch-artifact-language.mjs",
     "artifact-language:test": "node ./scripts/test-switch-artifact-language.mjs",
+    "validate:manual-review:test": "node ./scripts/test-manual-review-contract.mjs",
+    "validate:run-status:test": "node ./scripts/test-summarize-run-status.mjs",
     "validate:checklists:test": "node ./scripts/test-validate-checklists.mjs",
     "validate:verify-impact:test": "node ./scripts/test-verify-impact-contract.mjs",
     "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",

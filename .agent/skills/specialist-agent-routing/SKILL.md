@@ -81,8 +81,8 @@ Return to the owning step:
 - `/30-Plan`
 - `/40-Implement`
 - `/50-Verify`
-- `/60-Release`
-- `/70-Report`
+- `/70-Release`
+- `/60-Report`
 - `PR-Review`
 - `Research`
 

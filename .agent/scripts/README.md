@@ -6,7 +6,7 @@ This folder should describe only the scripts that still matter to the active Dev
 
 - DevFlow 2.0 is `markdown-first`.
 - Numbered workflows should depend on stage markdown contracts, not legacy task JSON runtime.
-- `/70-Report` HTML generation and checklist validation are current must-have capabilities.
+- `/60-Report` HTML generation and checklist validation are current must-have capabilities.
 - Migration tooling can remain temporarily, but should not define the core architecture.
 
 ## Script Classification
@@ -20,7 +20,7 @@ This folder should describe only the scripts that still matter to the active Dev
 | Docs contract scan | `validate:docs` -> `scripts/scan-doc-contract.mjs` | Keep | Guards workflow and docs consistency and catches drift in public guidance. |
 | Security hygiene scan | `security:scan` -> `scripts/scan-security-hygiene.mjs` | Keep | Repo-wide safety gate even though it is not itself a workflow feature. |
 | Agent sync check | `sync:check` -> `scripts/sync-agent-bundle.mjs` | Keep | Confirms the checked-in `.agent` bundle stays in sync with framework sources. |
-| Report HTML generator | `report:html` -> `scripts/generate-report-html.mjs` | Keep | Must-have for `/70-Report` so every workspace can emit the same HTML format from markdown plus checklists. |
+| Report HTML generator | `report:html` -> `scripts/generate-report-html.mjs` | Keep | Must-have for `/60-Report` so every workspace can emit the same HTML format from markdown plus checklists. |
 | Report generator test | `report:html:test` -> `scripts/test-generate-report-html.mjs` | Keep | Regression protection for future template changes. |
 | Checklist validation test | `validate:checklists:test` -> `scripts/test-validate-checklists.mjs` | Keep | Regression protection for checklist parsing and consistency rules. |
 | Project index generator | `index` -> `scripts/generate-project-index.mjs` | Keep for now | Useful support tooling, but not part of the strict numbered mainline contract. |
@@ -34,7 +34,7 @@ This folder should describe only the scripts that still matter to the active Dev
 | Decision rule | Action |
 | :--- | :--- |
 | Required to create, validate, or publish a numbered stage artifact | Keep |
-| Required to support the two must-haves: `/70-Report` HTML output and checklist validation and consistency checks | Keep |
+| Required to support the two must-haves: `/60-Report` HTML output and checklist validation and consistency checks | Keep |
 | Useful for onboarding or global install, but not part of the stage contract itself | Keep for now and revisit after the distribution model is stable |
 | Exists mainly to migrate old structures | Treat as transitional and plan removal in a later cleanup pass |
 

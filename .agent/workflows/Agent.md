@@ -1,4 +1,4 @@
-﻿---
+---
 description: Invoke Agent - Run a specialist persona on a file, folder, stage artifact, or codebase concern.
 ---
 # Phase 90: Invoke Agent
@@ -84,7 +84,7 @@ The following former narrow agents are now skills. Invoke them through the respo
 
 Specialist agents must use the DevFlow 2.0 stage-first contract:
 
-- Prefer `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-release.md`, and `70-report.md` as the primary artifacts.
+- Prefer `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `70-release.md`, and `60-report.md` as the primary artifacts.
 - Do not silently rewrite legacy JSON artifacts.
 - If migration work still requires JSON, prefer CLI-backed minimal updates instead of full-file rewrites.
 - If the specialist is only reviewing, recommend exact commands instead of mutating artifacts.
@@ -137,7 +137,7 @@ Short reports can be returned directly in chat.
 - Classification: Companion command
 - Mainline status: Specialist invocation command, not a numbered stage
 - Typical entry points: any stage that needs focused specialist judgment
-- Typical handoff targets: return to the owning workflow such as `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Release`, `/70-Report`
+- Typical handoff targets: return to the owning workflow such as `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`
 
 ## Sources
 
@@ -148,7 +148,7 @@ Short reports can be returned directly in chat.
 
 ## Next Workflow Recommendation
 
-- **Primary**: the workflow that owns the target's lifecycle, such as `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Release`, `/70-Report`, or `PR-Review`.
+- **Primary**: the workflow that owns the target's lifecycle, such as `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, or `PR-Review`.
 - **Why**: `Agent` supplies specialist judgment; the owning workflow should execute the next lifecycle step.
 - **Alternatives**:
   - `Research` when the specialist work uncovered unresolved external uncertainty

@@ -73,8 +73,8 @@ After global install, call DevFlow 2.0 from any project:
 /30-Plan
 /40-Implement
 /50-Verify
-/60-Release
-/70-Report
+/70-Release
+/60-Report
 ```
 
 Companion commands such as `Goal`, `Brainstorm`, `Research`, `Debug`, `PRD`, `Issue-Triage`, `Wiki`, `Check-For-Updates`, and `Help` can be used around the mainline.

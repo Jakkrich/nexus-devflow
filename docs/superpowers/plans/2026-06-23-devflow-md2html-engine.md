@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a DevFlow-native markdown-to-html rendering layer backed by `md2html` concepts, migrate `70-report` onto it without breaking existing commands, and leave reusable presets in place for future stage adoption.
+**Goal:** Build a DevFlow-native markdown-to-html rendering layer backed by `md2html` concepts, migrate `60-report` onto it without breaking existing commands, and leave reusable presets in place for future stage adoption.
 
-**Architecture:** Extract generic rendering behavior into shared renderer modules, keep stage-specific mapping inside adapters, and preserve `70-report` compatibility through a wrapper command. The first real preset is `report`; `spec`, `plan`, and `default-doc` are scaffolded so future stages can opt in without architecture changes.
+**Architecture:** Extract generic rendering behavior into shared renderer modules, keep stage-specific mapping inside adapters, and preserve `60-report` compatibility through a wrapper command. The first real preset is `report`; `spec`, `plan`, and `default-doc` are scaffolded so future stages can opt in without architecture changes.
 
 **Tech Stack:** Node.js ESM, filesystem-based HTML templates, existing DevFlow validation scripts, markdown parsing helpers inside `scripts/`, and the current report HTML contract under `.agent/resources/schemas/`.
 
@@ -21,11 +21,11 @@
 - `scripts/lib/render-html/presets/spec.mjs`: Minimal `spec` preset scaffold.
 - `scripts/lib/render-html/presets/plan.mjs`: Minimal `plan` preset scaffold.
 - `scripts/lib/render-html/presets/default-doc.mjs`: Minimal fallback preset scaffold.
-- `scripts/lib/render-html/stage-adapters/report-stage.mjs`: `70-report` adapter that maps workspace artifacts to renderer input.
+- `scripts/lib/render-html/stage-adapters/report-stage.mjs`: `60-report` adapter that maps workspace artifacts to renderer input.
 - `scripts/lib/render-html/markdown.mjs`: Shared markdown-to-HTML helpers extracted from the report script.
 - `scripts/lib/render-html/workspace-resolver.mjs`: Shared workspace and running-ID resolution helpers.
 - `scripts/test-render-html-core.mjs`: Unit-style contract tests for the shared renderer.
-- `scripts/test-render-report-stage.mjs`: Adapter-level tests for `70-report` mapping and preset usage.
+- `scripts/test-render-report-stage.mjs`: Adapter-level tests for `60-report` mapping and preset usage.
 
 ### Files To Modify
 
@@ -45,9 +45,9 @@
 
 ## 1. Technical Design And Strategy
 
-- **Overview**: Replace report-specific rendering internals with a reusable rendering pipeline. Keep `70-report.md` and `.agent/resources/schemas/report.template.html` as the active report contract while moving markdown rendering and file resolution into shared modules.
+- **Overview**: Replace report-specific rendering internals with a reusable rendering pipeline. Keep `60-report.md` and `.agent/resources/schemas/report.template.html` as the active report contract while moving markdown rendering and file resolution into shared modules.
 - **Reasoning**: This keeps the public DevFlow surface stable, reduces duplication, and allows future stages to adopt HTML output without copying report logic.
-- **Impact Assessment**: The highest-risk area is `70-report.html` compatibility, because current tests and validation expect exact files and key output fragments. The plan keeps the wrapper command and existing template to minimize visible change while improving internal structure.
+- **Impact Assessment**: The highest-risk area is `60-report.html` compatibility, because current tests and validation expect exact files and key output fragments. The plan keeps the wrapper command and existing template to minimize visible change while improving internal structure.
 
 ## 2. Implementation Blueprint
 
@@ -96,8 +96,8 @@ export function renderMarkdownDocument({
 
 ### Phase 2
 
-- **Phase Name**: Migrate `70-report` onto the shared path
-- **Technical Details**: Introduce a `70-report` adapter that prepares metadata, checklist stats, and section HTML, then route `scripts/generate-report-html.mjs` through it.
+- **Phase Name**: Migrate `60-report` onto the shared path
+- **Technical Details**: Introduce a `60-report` adapter that prepares metadata, checklist stats, and section HTML, then route `scripts/generate-report-html.mjs` through it.
 - **Edge Cases And Risks**: Checklist parsing and fallback behavior must remain compatible with validation and existing report test fixtures.
 
 ### Phase 3
@@ -110,7 +110,7 @@ export function renderMarkdownDocument({
 
 | Risk | Mitigation |
 | :--- | :--- |
-| `70-report.html` output drifts enough to break downstream expectations | Keep `.agent/resources/schemas/report.template.html` intact in round one and preserve all existing compatibility assertions in `scripts/test-generate-report-html.mjs` |
+| `60-report.html` output drifts enough to break downstream expectations | Keep `.agent/resources/schemas/report.template.html` intact in round one and preserve all existing compatibility assertions in `scripts/test-generate-report-html.mjs` |
 | Shared modules become a thin rename of the old report script without true reuse | Separate generic markdown rendering, preset lookup, and workspace resolution into independent modules with dedicated tests |
 | Future stage presets require a second refactor | Create the registry and scaffold preset files in round one, even if only `report` is fully exercised |
 | Upstream `md2html` ideas leak into the public DevFlow interface | Keep all user-facing commands and docs DevFlow-native; treat upstream as implementation inspiration and internal reference only |
@@ -122,23 +122,23 @@ export function renderMarkdownDocument({
 | Subtask | Decision | Reason | Schema/Contract | Planned Test Cases | Test File & Command | Expected Result |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Extract shared render core | Required | Behavior changes from single-purpose script to reusable renderer must be protected | `renderMarkdownDocument()` return shape and preset contract | Arrange: sample markdown and report preset. Act: render through core API. Assert: HTML string, preset name, and output file path are returned correctly | `scripts/test-render-html-core.mjs` via `node scripts/test-render-html-core.mjs` | Script exits `0` and prints `[OK]` |
-| Add `70-report` adapter migration | Required | Existing report rendering behavior is business-critical to DevFlow report artifacts | Report adapter input/output contract, checklist aggregation shape | Arrange: sample `70-report.md` plus checklist files. Act: render via adapter. Assert: title, checklist stats, blocked/skipped rows, and file links match expectations | `scripts/test-render-report-stage.mjs` via `node scripts/test-render-report-stage.mjs` | Script exits `0` and prints `[OK]` |
-| Preserve wrapper compatibility | Required | Existing command `npm run report:html -- <workspace>` must continue working | Existing report HTML output contract | Arrange: current fixture workspace. Act: run wrapper command. Assert: generated `70-report.html` still includes current key strings | `scripts/test-generate-report-html.mjs` via `node scripts/test-generate-report-html.mjs` | Script exits `0` and prints `[OK]` |
-| Add generic CLI wiring and validation suite coverage | Required | New CLI changes executable surface and validation path | CLI argument contract for `render:html` | Arrange: sample report workspace. Act: invoke `node scripts/render-html.mjs --stage 70-report <workspace>`. Assert: output file exists and validation suite can run the new test files | `npm.cmd run validate:all` | Full validation completes without renderer-related failures |
+| Add `60-report` adapter migration | Required | Existing report rendering behavior is business-critical to DevFlow report artifacts | Report adapter input/output contract, checklist aggregation shape | Arrange: sample `60-report.md` plus checklist files. Act: render via adapter. Assert: title, checklist stats, blocked/skipped rows, and file links match expectations | `scripts/test-render-report-stage.mjs` via `node scripts/test-render-report-stage.mjs` | Script exits `0` and prints `[OK]` |
+| Preserve wrapper compatibility | Required | Existing command `npm run report:html -- <workspace>` must continue working | Existing report HTML output contract | Arrange: current fixture workspace. Act: run wrapper command. Assert: generated `60-report.html` still includes current key strings | `scripts/test-generate-report-html.mjs` via `node scripts/test-generate-report-html.mjs` | Script exits `0` and prints `[OK]` |
+| Add generic CLI wiring and validation suite coverage | Required | New CLI changes executable surface and validation path | CLI argument contract for `render:html` | Arrange: sample report workspace. Act: invoke `node scripts/render-html.mjs --stage 60-report <workspace>`. Assert: output file exists and validation suite can run the new test files | `npm.cmd run validate:all` | Full validation completes without renderer-related failures |
 | Update docs for stage-specific HTML policy | Not Required | Documentation-only change with no behavior surface | N/A | Review changed docs for consistency with approved design and current commands | Manual review in diff plus `node scripts/scan-doc-contract.mjs` | Docs scan passes and wording matches design |
 
 - **Success Criteria**:
-  - [ ] Shared renderer modules exist and are used by `70-report`
+  - [ ] Shared renderer modules exist and are used by `60-report`
   - [ ] `npm run report:html -- <workspace>` still works without changing user workflow
   - [ ] Generic `render:html` entry point exists for future stage adoption
-  - [ ] `70-report` output compatibility remains covered by tests
+  - [ ] `60-report` output compatibility remains covered by tests
   - [ ] Docs state that markdown is the source of truth and HTML is stage-specific
 - **Required Evidence**:
   - [ ] Output from `node scripts/test-render-html-core.mjs`
   - [ ] Output from `node scripts/test-render-report-stage.mjs`
   - [ ] Output from `node scripts/test-generate-report-html.mjs`
   - [ ] Output from `npm.cmd run validate:all`
-- **Manual Verification**: Open a generated `70-report.html` from the fixture workspace and confirm the title, summary sections, checklist stats, blocked/skipped table, and inputs/outputs sections match the current report style.
+- **Manual Verification**: Open a generated `60-report.html` from the fixture workspace and confirm the title, summary sections, checklist stats, blocked/skipped table, and inputs/outputs sections match the current report style.
 
 ## 6. Task Breakdown
 
@@ -181,7 +181,7 @@ const result = renderMarkdownDocument({
     report_title: 'Report: Shared Renderer Smoke Test',
     report_id: 'smoke-report',
     doc_type: 'stage',
-    stage: '70-report',
+    stage: '60-report',
     created: '2026-06-23',
     updated: '2026-06-23',
     owner: 'codex',
@@ -198,8 +198,8 @@ const result = renderMarkdownDocument({
     open_risks_html: '<p>None</p>',
     next_actions_html: '<p>None</p>',
     decisions_html: '<div class="decision-item">Adopt shared renderer</div>',
-    inputs_list_html: '<li>70-report.md</li>',
-    outputs_list_html: '<li>70-report.html</li>',
+    inputs_list_html: '<li>60-report.md</li>',
+    outputs_list_html: '<li>60-report.html</li>',
     additional_notes_html: '<p>n/a</p>',
     footer_text: 'Generated from smoke test'
   }
@@ -360,11 +360,11 @@ function writeFile(filePath, content) {
 const scratchRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'nexus-report-stage-'));
 const workspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '999-render-stage');
 
-writeFile(path.join(workspaceDir, '70-report.md'), `---
+writeFile(path.join(workspaceDir, '60-report.md'), `---
 id: "999-report"
 title: "Report: Adapter Smoke Test"
 doc_type: "stage"
-stage: "70-report"
+stage: "60-report"
 created: "2026-06-23"
 updated: "2026-06-23"
 owner: "codex"
@@ -403,7 +403,7 @@ related_run: "999"
 
 const result = renderReportStageWorkspace({ workspaceDir });
 
-assert(result.outputPath.endsWith('70-report.html'), 'adapter should target 70-report.html');
+assert(result.outputPath.endsWith('60-report.html'), 'adapter should target 60-report.html');
 assert(result.html.includes('Adapter Smoke Test'), 'html should include report title');
 assert(result.html.includes('shared stage adapter'), 'html should include work-completed content');
 console.log('[OK] report stage adapter renders a workspace through the shared renderer.');
@@ -480,7 +480,7 @@ git add scripts/generate-report-html.mjs scripts/lib/render-html/markdown.mjs sc
 git commit -m "refactor: extract shared html renderer helpers"
 ```
 
-### Task 3: Implement the `70-report` adapter and preserve compatibility
+### Task 3: Implement the `60-report` adapter and preserve compatibility
 
 **Files:**
 - Create: `scripts/lib/render-html/stage-adapters/report-stage.mjs`
@@ -503,7 +503,7 @@ assert(html.includes('Publish release note'), 'html should include skipped check
 Run: `node scripts/test-generate-report-html.mjs`
 Expected: PASS before migration; re-run after each adapter change to catch drift immediately.
 
-- [ ] **Step 3: Implement the `70-report` adapter and wrapper command**
+- [ ] **Step 3: Implement the `60-report` adapter and wrapper command**
 
 ```js
 // scripts/lib/render-html/stage-adapters/report-stage.mjs
@@ -525,7 +525,7 @@ import {
 } from '../markdown.mjs';
 
 export function renderReportStageWorkspace({ workspaceDir }) {
-  const reportPath = path.join(workspaceDir, '70-report.md');
+  const reportPath = path.join(workspaceDir, '60-report.md');
   const reportMarkdown = fs.readFileSync(reportPath, 'utf8');
   const { data: frontmatter, body } = parseFrontmatter(reportMarkdown);
   const checklist = summarizeChecklists(workspaceDir);
@@ -534,7 +534,7 @@ export function renderReportStageWorkspace({ workspaceDir }) {
     report_title: frontmatter.title || `Report: ${deriveWorkTitle(frontmatter, workspaceDir)}`,
     report_id: frontmatter.id || `${deriveRunningId(workspaceDir, frontmatter)}-report`,
     doc_type: frontmatter.doc_type || 'stage',
-    stage: frontmatter.stage || '70-report',
+    stage: frontmatter.stage || '60-report',
     created: frontmatter.created || frontmatter.updated || new Date().toISOString().slice(0, 10),
     updated: frontmatter.updated || frontmatter.created || new Date().toISOString().slice(0, 10),
     owner: frontmatter.owner || 'unknown',
@@ -554,10 +554,10 @@ export function renderReportStageWorkspace({ workspaceDir }) {
     inputs_list_html: buildInputsListHtml(workspaceDir, checklist.files),
     outputs_list_html: buildOutputsListHtml(),
     additional_notes_html: renderMarkdownToHtml(extractH2Section(body, '7. Additional Notes')),
-    footer_text: `Generated from 70-report.md | Mainline next step: end of flow | Checklist items: ${checklist.totals.total}`
+    footer_text: `Generated from 60-report.md | Mainline next step: end of flow | Checklist items: ${checklist.totals.total}`
   };
 
-  const outputPath = path.join(workspaceDir, '70-report.html');
+  const outputPath = path.join(workspaceDir, '60-report.html');
   return renderMarkdownDocument({
     sourcePath: reportPath,
     markdown: reportMarkdown,
@@ -612,8 +612,8 @@ const stageIndex = args.indexOf('--stage');
 const stage = stageIndex >= 0 ? args[stageIndex + 1] : null;
 const target = args.filter((value, index) => index !== stageIndex && index !== stageIndex + 1)[0];
 
-if (stage !== '70-report') {
-  throw new Error('Round-one CLI support is currently limited to --stage 70-report.');
+if (stage !== '60-report') {
+  throw new Error('Round-one CLI support is currently limited to --stage 60-report.');
 }
 
 const workspaceDir = resolveWorkspaceDir({ argument: target, projectRoot: process.cwd() });
@@ -643,8 +643,8 @@ console.log(`Generated ${result.outputPath}`);
 
 - [ ] **Step 3: Run the command-level checks**
 
-Run: `node scripts/render-html.mjs --stage 70-report .workspaces/specs/999-sample-report`
-Expected: PASS when a fixture workspace exists and prints `Generated ...70-report.html`
+Run: `node scripts/render-html.mjs --stage 60-report .workspaces/specs/999-sample-report`
+Expected: PASS when a fixture workspace exists and prints `Generated ...60-report.html`
 
 Run: `node scripts/test-render-html-core.mjs`
 Expected: PASS
@@ -681,14 +681,14 @@ DevFlow keeps markdown as the source of truth for stage artifacts.
 
 HTML is a derived artifact controlled by stage policy. In the current framework round:
 
-- `70-report` requires `70-report.html`
+- `60-report` requires `60-report.html`
 - other stages remain markdown-first unless they explicitly opt into HTML rendering later
 
 Use:
 
 ```powershell
 npm.cmd run report:html -- <workspace-path-or-running-id>
-npm.cmd run render:html -- --stage 70-report <workspace-path-or-running-id>
+npm.cmd run render:html -- --stage 60-report <workspace-path-or-running-id>
 ```
 ```
 
@@ -698,7 +698,7 @@ npm.cmd run render:html -- --stage 70-report <workspace-path-or-running-id>
 Generator boundary:
 
 - `scripts/render-html.mjs` provides the shared DevFlow-native HTML CLI
-- `scripts/generate-report-html.mjs` remains the compatibility wrapper for `70-report`
+- `scripts/generate-report-html.mjs` remains the compatibility wrapper for `60-report`
 - `scripts/lib/render-html/stage-adapters/report-stage.mjs` owns report-specific placeholder mapping
 ```
 

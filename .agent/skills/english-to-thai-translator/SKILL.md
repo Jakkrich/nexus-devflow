@@ -94,7 +94,7 @@ This skill works within the DevFlow 2.0 workflow:
 1. During `/10-Define` or `/20-Spec`, it can help create multilingual specifications
 2. In `/30-Plan`, it helps explain technical requirements in Thai
 3. During `/40-Implement`, it translates comments and documentation when needed
-4. In `/50-Verify` or `/70-Report`, it helps ensure translated content remains clear and correct
+4. In `/50-Verify` or `/60-Report`, it helps ensure translated content remains clear and correct
 
 ## 📁 File Structure
 

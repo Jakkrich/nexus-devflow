@@ -77,6 +77,15 @@ When the scoped work is complete:
 - make sure checklist statuses match the actual state of the code and tests
 - make sure `40-implement.md` is ready for Verify
 
+### 5. Manual Review Soft Gate
+
+If the plan was not clearly approved, warn that implementation proceeded under review risk.
+When finishing `40-implement.md`:
+
+- record any deviation from the approved plan explicitly
+- set reviewer expectations before `/50-Verify`
+- keep `/50-Verify` as the next soft recommendation rather than an unconditional jump
+
 ## Output
 
 Report:
@@ -110,6 +119,12 @@ Report:
   - `Debug "{blocker}"` - choose this when implementation is blocked by an unexplained failure.
   - `/30-Plan {ID}` - choose this when the plan is incomplete or no longer matches the work.
   - `Preview` - choose this when a local runtime or visual check is useful before formal verification.
+
+## Nexus Event
+
+- Use `Debug` when the conversation reveals an unexplained blocker, flaky behavior, or root-cause gap.
+- Use `Preview` when a runtime, UI, or local interaction check would reduce verification risk.
+- Return to `/30-Plan` when implementation drift shows the plan no longer matches reality.
 
 ## Wiki Update Recommendation
 

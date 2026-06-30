@@ -28,8 +28,8 @@ DevFlow 2.0 uses a stage-based, markdown-first model:
 | Break into execution plan | `/30-Plan` |
 | Build the change | `/40-Implement` |
 | Validate quality and evidence | `/50-Verify` |
-| Package release-ready outcome | `/60-Release` |
-| Summarize the full run | `/70-Report` |
+| Package release-ready outcome | `/70-Release` |
+| Summarize the full run | `/60-Report` |
 
 ## Companion Command Routing
 
@@ -61,11 +61,11 @@ DevFlow 2.0 uses a stage-based, markdown-first model:
 | Roadmap | Discover/Define adjacent | skill or optional workflow outside core line |
 | Ideation | `Brainstorm`, `Research` | companion command |
 | Competitor | `Research` during Discover/Define | companion command or research skill |
-| Insight | `Wiki`, `/70-Report` | companion command + report content |
+| Insight | `Wiki`, `/60-Report` | companion command + report content |
 | Coder | `/40-Implement` | workflow + specialist agents |
 | QA | `/50-Verify` | workflow + QA/test skills |
 | Follow-up | `/10-Define` or `/30-Plan` ของรอบใหม่ | stage reuse, not separate numbered mainline |
-| GitHub review | `/50-Verify`, `/60-Release` | workflow/agent support |
+| GitHub review | `/50-Verify`, `/70-Release` | workflow/agent support |
 | MCP tool validation | `/50-Verify` | tool-specific verification skill |
 
 ## Borderline Rules
@@ -73,7 +73,7 @@ DevFlow 2.0 uses a stage-based, markdown-first model:
 | Idea | Route | Keep as | Rule |
 | :--- | :--- | :--- | :--- |
 | Validation fixer | `/50-Verify` แล้วค่อยย้อน `/40-Implement` ถ้าต้องแก้โค้ด | thin skill/process note | ให้ verification ชี้ failure ก่อนเสมอ |
-| Documentation ideation | `Brainstorm`, `Wiki`, `/70-Report` | skill-backed support | ไม่ต้องเปิด mainline ใหม่ |
+| Documentation ideation | `Brainstorm`, `Wiki`, `/60-Report` | skill-backed support | ไม่ต้องเปิด mainline ใหม่ |
 | Performance ideation | `/50-Verify` หรือ `/40-Implement` เมื่อมีหลักฐาน | specialist skill/agent | ต้องมี measurement |
 | Security ideation | `/50-Verify` หรือ `Debug` เมื่อมี incident symptom | specialist skill/agent | treat as finding-first |
 | Follow-up planning | `/10-Define` -> `/20-Spec` -> `/30-Plan` ของรอบใหม่ | mainline reuse | ไม่แยก workflow หมายเลขใหม่ |

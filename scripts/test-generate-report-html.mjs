@@ -29,12 +29,12 @@ try {
   const workspaceDir = path.join(scratchRoot, 'project', '.workspaces', 'specs', '999-sample-report');
   const checklistDir = path.join(workspaceDir, 'checklists');
 
-  writeFile(path.join(workspaceDir, '70-report.md'), `---
+  writeFile(path.join(workspaceDir, '60-report.md'), `---
 id: "999-report"
 title: "Report: Sample Password Reset"
 artifact_language: "en"
 doc_type: "stage"
-stage: "70-report"
+stage: "60-report"
 created: "2026-06-22"
 updated: "2026-06-22"
 owner: "codex"
@@ -116,8 +116,8 @@ related_run: "999"
   const result = run([workspaceDir]);
   assert(result.status === 0, `report html generation should pass:\n${result.stdout}\n${result.stderr}`);
 
-  const htmlPath = path.join(workspaceDir, '70-report.html');
-  assert(fs.existsSync(htmlPath), '70-report.html should be generated');
+  const htmlPath = path.join(workspaceDir, '60-report.html');
+  assert(fs.existsSync(htmlPath), '60-report.html should be generated');
 
   const html = fs.readFileSync(htmlPath, 'utf8');
   assert(html.includes('<title>Report: Sample Password Reset</title>'), 'html should include rendered title');
@@ -129,12 +129,12 @@ related_run: "999"
   assert(!html.includes('checklists/implementation-checklist.md'), 'html should not inject checklist template sections');
 
   const thaiWorkspaceDir = path.join(scratchRoot, 'project', '.workspaces', 'specs', '998-sample-report-th');
-  writeFile(path.join(thaiWorkspaceDir, '70-report.md'), `---
+  writeFile(path.join(thaiWorkspaceDir, '60-report.md'), `---
 id: "998-report"
 title: "Thai Report Title"
 artifact_language: "th"
 doc_type: "stage"
-stage: "70-report"
+stage: "60-report"
 created: "2026-06-22"
 updated: "2026-06-22"
 owner: "codex"
@@ -155,7 +155,7 @@ related_run: "998"
 
   const thaiResult = run([thaiWorkspaceDir]);
   assert(thaiResult.status === 0, `thai report html generation should pass:\n${thaiResult.stdout}\n${thaiResult.stderr}`);
-  const thaiHtml = fs.readFileSync(path.join(thaiWorkspaceDir, '70-report.html'), 'utf8');
+  const thaiHtml = fs.readFileSync(path.join(thaiWorkspaceDir, '60-report.html'), 'utf8');
   assert(thaiHtml.includes('<html lang="th"'), 'thai html should set the html lang from frontmatter');
   assert(thaiHtml.includes('>Thai Report Title</h1>'), 'thai html should render the markdown title');
   assert(thaiHtml.includes('เปลี่ยนธีม'), 'thai html should localize the md2html theme tooltip');

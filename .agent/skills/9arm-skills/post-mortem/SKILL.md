@@ -1,4 +1,4 @@
-﻿---
+---
 name: 9arm-skills/post-mortem
 description: Use after a bug, outage, or regression has been fixed and validated. Converts the fix into durable engineering knowledge.
 source_pack: 9arm-skills
@@ -64,7 +64,7 @@ Prefer existing destinations:
 
 - task-specific insight: record the final lesson in the active markdown artifacts for that running ID, or in `.workspaces/lessons.md`
 - project-wide lesson: `.workspaces/lessons.md` using `.agent/resources/schemas/lessons.template.md`
-- release-facing summary: `/60-Release`
+- release-facing summary: `/70-Release`
 - stakeholder summary: `management-talk`
 
 Keep the output concise and actionable. Avoid blame.

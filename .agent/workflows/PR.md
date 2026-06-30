@@ -1,4 +1,4 @@
-﻿---
+---
 description: Create Pull Request (Git Orchestration) - Create a well-formatted pull request from the current branch with a clear summary of changes and linked artifacts.
 ---
 # Create Pull Request (Git Orchestration)
@@ -15,7 +15,7 @@ Primary behavior now lives in:
 
 Treat this workflow file as a compatibility wrapper around that skill in `pr` mode.
 
-In DevFlow 2.0, this is a release-adjacent workflow. It usually follows `/50-Verify` and pairs naturally with `/60-Release` and `/70-Report`.
+In DevFlow 2.0, this is a release-adjacent workflow. It usually follows `/60-Report` and pairs naturally with `/70-Release` once the final summary is aligned.
 
 ---
 
@@ -41,7 +41,8 @@ You are an orchestrator. Your goal is to call the specialized Git PR Maker agent
   - `30-plan.md`
   - `40-implement.md`
   - `50-verify.md`
-  - `60-release.md`
+  - `60-report.md` when the final summary already exists
+  - `70-release.md` when release execution notes already exist
 - Automatically identify and link referenced issues when supported by repository conventions.
 - When the PR body needs stakeholder-readable language, apply `.agent/skills/9arm-skills/management-talk/SKILL.md` as a credited communication lens while preserving the repository PR template.
 - Apply GitHub prompt addons when useful:
@@ -73,19 +74,19 @@ Verify that the workflow returns:
 
 - Classification: Companion command
 - Mainline status: Release support command, not a numbered stage
-- Typical entry points: `/60-Release`, `Commit`
-- Typical handoff targets: `PR-Review`, `PR-Followup`, `Merge`, `/70-Report`
+- Typical entry points: `/70-Release`, `Commit`
+- Typical handoff targets: `PR-Review`, `PR-Followup`, `Merge`, `/70-Release`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/skills/release-git-operations/SKILL.md`
 - `.agent/skills/git-workflow-and-versioning/SKILL.md`
-- Related commands: `Commit`, `PR-Review`, `PR-Followup`, `Merge`, `/60-Release`, `/70-Report`
+- Related commands: `Commit`, `PR-Review`, `PR-Followup`, `Merge`, `/60-Report`, `/70-Release`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/60-Release`
-- **Why**: after PR creation, the release-facing summary and handoff should stay consistent.
-- **Alternative**: `PR-Review` for structured review before broader sharing, or `/70-Report` when the run needs a final communication package.
+- **Primary**: `/70-Release`
+- **Why**: after PR creation, release execution and handoff details should stay consistent with the approved report.
+- **Alternative**: `PR-Review` for structured review before broader sharing, or `/60-Report` when the final communication summary still needs to be refreshed first.
 

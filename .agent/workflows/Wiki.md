@@ -1,4 +1,4 @@
-﻿---
+---
 description: DevFlow Wiki - Ingest, query, lint, and promote compiled project or framework knowledge.
 ---
 # Wiki
@@ -31,8 +31,8 @@ Use `Wiki` when:
 Preferred DevFlow 2.0 pairing:
 
 - after `/50-Verify`
-- after `/60-Release`
-- after `/70-Report`
+- after `/70-Release`
+- after `/60-Report`
 - after meaningful `Debug` or review output
 
 ## Process
@@ -130,7 +130,7 @@ Return:
 
 - Classification: Companion command
 - Mainline status: Knowledge system command, not a numbered stage
-- Typical entry points: after `/50-Verify`, `/60-Release`, `/70-Report`, `Debug`, `Insight`, `PR-Review`
+- Typical entry points: after `/50-Verify`, `/60-Report`, `/70-Release`, `Debug`, `Insight`, `PR-Review`
 - Typical handoff targets: return to the originating stage or finish as documentation-only work
 
 ## Sources
@@ -138,11 +138,11 @@ Return:
 - `AGENTS.md`
 - `.agent/resources/schemas/wiki_page.template.md`
 - `.agent/resources/schemas/wiki_project_index.template.md`
-- Related commands: `/50-Verify`, `/60-Release`, `/70-Report`, `Debug`, `Insight`, `PR-Review`, `Help`
+- Related commands: `/50-Verify`, `/60-Report`, `/70-Release`, `Debug`, `Insight`, `PR-Review`, `Help`
 
 ## Next Workflow Recommendation
 
 - **Primary**: return to the stage or artifact flow that produced the reusable knowledge
 - **Why**: `Wiki` compiles lessons after the source work is already validated
-- **Common routes**: `/70-Report`, `/60-Release`, or `/50-Verify`
+- **Common routes**: `/60-Report`, `/70-Release`, or `/50-Verify`
 

@@ -27,7 +27,7 @@ Whenever a workflow is added or modified, compile the list of documents that mus
 
 ### Step 2: Extract Workflow Metadata
 Identify the exact interface changes:
-- What is the **Command trigger**? (e.g., `/60-Release` or `Brainstorm`)
+- What is the **Command trigger**? (e.g., `/70-Release` or `Brainstorm`)
 - What are the **Arguments**? (e.g., Target Branch, default main)
 - What is the **Process flow**? (Pre-flight -> Execution -> Cleanup)
 - What are the **Mandatory Rules**? (e.g., Enforced branch checks)

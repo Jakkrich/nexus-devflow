@@ -24,8 +24,8 @@ DevFlow 2.0 ใช้หลักดังนี้:
 | Build execution plan | `/30-Plan` |
 | Implement the work | `/40-Implement` |
 | Verify the result | `/50-Verify` |
-| Prepare release-ready handoff | `/60-Release` |
-| Summarize full run | `/70-Report` |
+| Prepare release-ready handoff | `/70-Release` |
+| Summarize full run | `/60-Report` |
 
 ## Companion Command Map
 
@@ -85,4 +85,4 @@ DevFlow 2.0 ใช้หลักดังนี้:
 | พร้อมแตกงาน | `/30-Plan` |
 | พร้อมลงมือทำ | `/40-Implement` |
 | ต้องการตรวจคุณภาพ | `/50-Verify` |
-| ต้องการสรุปจบงาน | `/70-Report` |
+| ต้องการสรุปจบงาน | `/60-Report` |

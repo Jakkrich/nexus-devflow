@@ -1,4 +1,4 @@
-﻿---
+---
 description: Discover stage in DevFlow 2.0 - turn a raw request into a grounded running-id workspace and decide the correct next step.
 argument-hint: "{title or request}"
 ---
@@ -72,6 +72,15 @@ Do not pretend the request is well-defined if it is still ambiguous.
 - replace placeholders with concrete context
 - capture open questions explicitly
 - capture assumptions only when they are necessary and visible
+- set `Approval Status` and `Next Allowed Command` so the reviewer can decide whether the run should proceed
+
+### 5. Manual Review Soft Gate
+
+If the request is large, multi-phase, requirement-heavy, or high-risk:
+
+- treat Discover as the first manual review checkpoint
+- recommend human review before `/10-Define`
+- use the `Project Context To Preserve` section to keep broad requirements visible
 
 ## Output
 
@@ -82,6 +91,7 @@ Report:
 - target problem or opportunity
 - known constraints
 - open questions
+- manual review expectations when the run is large or high-risk
 - recommended next step
 
 ## Relationship To DevFlow 2.0
@@ -105,4 +115,10 @@ Report:
 - **Alternatives**:
   - `Brainstorm` - choose this when direction is still unstable.
   - `Research` - choose this when missing facts block a confident definition.
+
+## Nexus Event
+
+- Use `Brainstorm` when the conversation reveals multiple viable directions that should be compared before scope is locked.
+- Use `Research` when the next decision depends on facts, source material, or codebase evidence that is still missing.
+- Use `grill-with-docs` when available if a short clarification pass could materially change the phase boundary, constraints, or next route.
 

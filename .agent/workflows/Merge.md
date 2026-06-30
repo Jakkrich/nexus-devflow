@@ -1,4 +1,4 @@
-﻿---
+---
 description: PR Merge (Git Orchestration) - Safely merge the current feature branch into the base branch and clean up.
 ---
 # Smart Merge (Git Orchestration)
@@ -58,18 +58,18 @@ You are an orchestrator. Your goal is to safely integrate code and clean up loca
 - Classification: Companion command
 - Mainline status: Release support command, not a numbered stage
 - Typical entry points: after `PR` and review gates are complete
-- Typical handoff targets: `/60-Release`, `/70-Report`, `Wiki`
+- Typical handoff targets: `/70-Release`, `Wiki`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/skills/release-git-operations/SKILL.md`
 - `.agent/skills/git-workflow-and-versioning/SKILL.md`
-- Related commands: `PR`, `PR-Review`, `PR-Followup`, `/60-Release`, `/70-Report`
+- Related commands: `PR`, `PR-Review`, `PR-Followup`, `/60-Report`, `/70-Release`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/70-Report`
-- **Why**: after merge, the most useful remaining step is a stable communication artifact summarizing the completed run.
-- **Alternative**: `/60-Release` if release packaging or changelog preparation still needs to be finalized first.
+- **Primary**: `/70-Release`
+- **Why**: after merge, the remaining work is usually release execution, deployment coordination, or final packaging against the already aligned report.
+- **Alternative**: `/60-Report` if merge outcomes changed the story enough that the final summary must be refreshed first.
 

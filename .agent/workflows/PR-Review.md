@@ -1,4 +1,4 @@
-﻿---
+---
 description: PR Review Addon - Review a pull request using GitHub review prompt patterns and the credited 9arm-skills/scrutinize discipline.
 ---
 
@@ -8,7 +8,7 @@ description: PR Review Addon - Review a pull request using GitHub review prompt 
 
 Use this workflow when you need a structured PR review without creating or changing the PR. It can review a local diff, a PR URL or number, or a task-linked branch.
 
-In DevFlow 2.0, this remains a supporting review workflow. It should feed corrective work back into `/40-Implement` or clear the path toward `/60-Release`.
+In DevFlow 2.0, this remains a supporting review workflow. It should feed corrective work back into `/40-Implement` or clear the path toward `/60-Report` and then `/70-Release`.
 
 Primary behavior now lives in the `pr-review-analysis` skill. Keep this workflow as the compatibility wrapper and user-facing review prompt surface.
 
@@ -45,7 +45,7 @@ Read the available context:
 - PR diff or local `git diff`
 - changed filenames
 - linked stage artifacts under `.workspaces/specs/{ID}-*/`
-- `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, and `60-release.md` when relevant
+- `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-report.md`, and `70-release.md` when relevant
 - project patterns and existing code around the changed files
 - legacy JSON only when migration context is still genuinely relevant
 
@@ -123,20 +123,20 @@ Replace any placeholder or template text with concrete findings, file references
 - Classification: Companion command
 - Mainline status: Verification and release support command, not a numbered stage
 - Typical entry points: `/50-Verify`, `PR`, `Agent code-reviewer`
-- Typical handoff targets: `PR-Followup`, `/60-Release`, `/70-Report`, `Wiki`
+- Typical handoff targets: `PR-Followup`, `/60-Report`, `/70-Release`, `Wiki`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/pr_review.template.md`
-- Related commands: `/50-Verify`, `PR`, `PR-Followup`, `Agent`, `/60-Release`, `Wiki`
+- Related commands: `/50-Verify`, `PR`, `PR-Followup`, `Agent`, `/60-Report`, `/70-Release`, `Wiki`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/40-Implement {ID}` when review finds required fixes, or `/60-Release` when the review is clean and the work is ready to move forward.
-- **Why**: PR review either creates corrective implementation work or clears the path toward release-facing packaging.
+- **Primary**: `/40-Implement {ID}` when review finds required fixes, or `/60-Report {ID}` when the review is clean and the run needs the final summary refreshed before release execution.
+- **Why**: PR review either creates corrective implementation work or clears the path toward final summary alignment and release-facing packaging.
 - **Alternatives**:
-  - `/70-Report` when the review outcome needs a communication summary
+  - `/70-Release` when the report is already aligned and only release execution remains
   - `Wiki` when the review establishes a durable convention or risk pattern
   - `PR-Followup {target}` when the PR already has comments that need classification and response
 
