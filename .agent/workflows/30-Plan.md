@@ -25,6 +25,18 @@ Record complexity, context, phases, subtasks, and validation notes directly in t
 
 ## Process
 
+### Loop Contract
+
+Run planning as an evidence loop, not as a one-shot outline.
+
+- **Intent**: produce a plan that lets implementation proceed without guessing scope, files, risks, or verification.
+- **Context**: read the spec, prior stage artifacts, relevant code/docs, existing commands, and any research that constrains execution.
+- **Action**: draft the smallest useful plan, then inspect whether every phase has files, dependencies, risks, verification, and a test decision.
+- **Observation**: use concrete evidence such as file paths, existing patterns, package scripts, validation commands, and unresolved assumptions.
+- **Adjustment**: if evidence is missing, search/read more, recommend `Research` or `Agent codebase-explorer`, split the work, or route back to `/20-Spec` when the contract is not plan-ready.
+- **Stop Condition**: stop only when phases are ordered, subtasks are scoped, verification is explicit, test decisions are recorded, and any blockers are visible.
+- **Handoff**: `30-plan.md` must give `/40-Implement` enough context to select one scoped unit and execute it without inventing intent.
+
 ### 1. Read Task Artifacts
 
 Read:
@@ -41,6 +53,8 @@ Use the old planning discipline:
 - `complex`: deeper codebase exploration, possibly specialist help
 
 If architecture or data flow is still unclear, recommend `Research` or `Agent codebase-explorer` before pretending the plan is stable.
+If domain terms, boundaries, or hard-to-reverse design choices are still questionable, use `grill-with-docs` before locking the plan.
+Use `codebase-design` when phases depend on seam placement or module interfaces. Use `tdd` when behavior-change subtasks need red-green-refactor test cases.
 
 ### 3. Explore Codebase Patterns
 
@@ -58,6 +72,7 @@ Record important findings in `30-plan.md`. Use legacy context updates only when 
 
 Use the old planner discipline, but keep `30-plan.md` as the main contract:
 
+- record the planning loop evidence: context read, observations, adjustments made, stop condition, and handoff notes
 - add phases in dependency order
 - add subtasks that are small, verifiable units
 - include explicit files to modify or create
@@ -143,6 +158,7 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 ## Output Checklist
 
 - complexity is clear
+- loop evidence is recorded: intent, context, observation, adjustment, stop condition, and handoff
 - phases are ordered by dependency
 - every subtask is scoped and verifiable
 - every subtask has a test decision
@@ -156,7 +172,7 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 - Classification: Mainline workflow
 - Previous state: `/20-Spec`
 - Next state: `/40-Implement` when execution steps and verification are clear
-- Common companion commands: `Research` or `Agent` when architecture, data flow, or external constraints still need investigation
+- Common companion commands: `Research` or `Agent` when architecture, data flow, or external constraints still need investigation; support skills: `grill-with-docs`, `domain-modeling`, `codebase-design`, `tdd`, and `to-issues` for final design stress-testing, durable terminology capture, test planning, and issue packaging
 
 ## Sources
 
@@ -172,6 +188,8 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 - **Alternatives**:
   - `Research` - choose this when the plan still depends on missing evidence.
   - `Agent codebase-explorer .workspaces/specs/{ID}-*/` - choose this when architecture or data flow is unclear.
+  - `grill-with-docs` - choose this when plan assumptions or design boundaries need one last adversarial pass.
+  - `codebase-design` - choose this when a plan needs clearer seams, interfaces, or test surfaces.
   - `/20-Spec {ID}` - choose this when the spec itself is not strong enough for planning.
 
 ## Nexus Event

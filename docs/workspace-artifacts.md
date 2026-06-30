@@ -127,6 +127,7 @@ Principles:
 4. When manual review flow is in use, checklist artifacts should also expose `review`, approval-gate notes, and the next suggested command when that signal matters.
 5. Checklist files support the stage files. They do not replace `30-plan.md`, `40-implement.md`, or `50-verify.md`.
 6. Markdown tables with a `Status` column remain supported for backward compatibility, but checklist UI lines are the preferred human-facing format.
+7. Mainline stages use stage-local loop evidence: intent, context, action, observation, adjustment, stop condition, and handoff. Each stage owns only the loop needed for its responsibility; this does not create one global loop across the whole flow.
 
 ### Manual Review Visibility
 

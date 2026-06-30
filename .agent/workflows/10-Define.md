@@ -39,6 +39,18 @@ Before writing `10-define.md`, read `artifact_language` from `define.template.md
 
 ## Process
 
+### Loop Contract
+
+Run definition as a scope-stabilization loop, not as an implementation brainstorm.
+
+- **Intent**: lock the goal, non-goals, assumptions, boundaries, and decision points so the spec cannot drift between interpretations.
+- **Context**: read `00-discover.md`, attached notes, research, stakeholder constraints, and unresolved questions that affect scope.
+- **Action**: define the core goal, success framing, non-goals, constraints, assumptions, and downstream decision rules.
+- **Observation**: use concrete evidence such as conflicting interpretations, missing facts, unstable terminology, visible dependencies, and unresolved tradeoffs.
+- **Adjustment**: if options remain open, route to `Brainstorm`; if terms or boundaries are weak, use `grill-with-docs`; if facts are missing, use `Research`; if language or architecture decisions must persist, use `domain-modeling`.
+- **Stop Condition**: stop when scope, non-goals, assumptions, constraints, and decision points are stable enough that `/20-Spec` can write requirements without guessing.
+- **Handoff**: `10-define.md` must tell `/20-Spec` exactly what is in scope, what is out of scope, what assumptions are accepted, and what decisions are fixed.
+
 ### 1. Load Discovery Context
 
 Read:
@@ -67,6 +79,8 @@ Define:
 If the direction is still unstable:
 
 - use `Brainstorm` for option comparison
+- use `grill-with-docs` when fuzzy terms, scope boundaries, or decision points need a rigorous interview before they can be locked
+- use `domain-modeling` when resolved language or architectural decisions should become durable glossary or ADR entries
 
 If evidence is missing:
 
@@ -107,7 +121,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `/00-Discover`
 - Next state: `/20-Spec` when scope, decisions, and constraints are stable
-- Common companion commands: `Brainstorm` for unresolved options, `Research` for missing evidence
+- Common companion commands: `Brainstorm` for unresolved options, `Research` for missing evidence; support skills: `grill-with-docs`, `domain-modeling`, and `to-prd` when terminology, boundaries, decisions, or product framing need sharpening
 
 ## Sources
 
@@ -123,6 +137,7 @@ Report:
 - **Alternatives**:
   - `Brainstorm` - choose this when multiple strategic directions are still open.
   - `Research` - choose this when missing evidence still blocks a confident spec.
+  - `grill-with-docs` - choose this when the definition is almost stable but still has overloaded terms, weak boundaries, or untested decision points.
 
 ## Nexus Event
 
