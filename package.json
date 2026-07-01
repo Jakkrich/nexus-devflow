@@ -7,6 +7,10 @@
   "scripts": {
     "activate": "node ./scripts/activate-agent.mjs",
     "goal": "node ./.agent/scripts/goal-runner.mjs",
+    "graphify": "node ./scripts/graphify.mjs",
+    "graphify:install": "node ./scripts/graphify.mjs install --platform antigravity",
+    "graphify:update": "node ./scripts/graphify.mjs update .",
+    "graphify:hook:install": "node ./scripts/install-git-hook.mjs",
     "index": "node ./scripts/generate-project-index.mjs",
     "link-project": "node ./scripts/link-project.mjs",
     "migrate:artifacts": "node ./scripts/migrate-stage-artifacts.mjs",
