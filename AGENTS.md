@@ -242,7 +242,15 @@ Use mainly in `/50-Verify`
 | `performance-engineer` | Performance engineer | Performance bottlenecks and validation |
 | `penetration-tester` | Penetration tester | Offensive security validation when explicitly needed |
 
-### 4. Release and Documentation
+### 5. Infrastructure and Maintenance
+
+Use mainly for overnight maintenance loops, security/lint automation, and repository cleanup.
+
+| Agent | Role | Primary responsibility |
+| :--- | :--- | :--- |
+| `ob-loop-engineer` | Maintenance specialist | Run overnight asynchronous maintenance and cleanup loops |
+
+### 6. Release and Documentation
 
 Use mainly in `/60-Report`, `/70-Release`
 

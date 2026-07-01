@@ -107,6 +107,7 @@ Agents: code-reviewer + security-auditor + performance-engineer
 | `documentation-maintainer` | docs | "write docs", "update docs", "README" |
 | `prp-core-git-committer` | commit/release packaging | "commit", "release packaging" |
 | `prp-core-git-pr-maker` | PR preparation | "pull request", "PR summary" |
+| `ob-loop-engineer` | maintenance | "overnight maintenance", "maintenance loop", "cleanup loop" |
 
 ## Synthesis Protocol
 

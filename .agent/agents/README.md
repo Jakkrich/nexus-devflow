@@ -74,7 +74,15 @@ Agent code-reviewer .workspaces/specs/007-auth-refactor/
 | `performance-engineer` | Performance | performance bottleneck และ optimization evidence |
 | `penetration-tester` | Pen tester | offensive security validation เมื่อจำเป็นจริง |
 
-## 5. Release and Documentation
+## 5. Infrastructure and Maintenance
+
+ใช้บ่อยกับการรันรอบบำรุงรักษา (maintenance loops), ตรวจสอบความปลอดภัย หรือทำความสะอาด repo ในช่วงข้ามคืน
+
+| Agent | Role | Responsibility |
+| :--- | :--- | :--- |
+| `ob-loop-engineer` | Maintenance | รัน overnight asynchronous maintenance และ cleanup loops |
+
+## 6. Release and Documentation
 
 ใช้บ่อยกับ `/60-Report`, `/70-Release`
 
@@ -86,7 +94,7 @@ Agent code-reviewer .workspaces/specs/007-auth-refactor/
 | `devops-engineer` | DevOps | deploy readiness และ release environment |
 | `coach-guideline` | Guide | ช่วยสื่อสารหรืออธิบาย next step ให้คนใช้งาน |
 
-## 6. Skill Boundary
+## 7. Skill Boundary
 
 ทักษะต่อไปนี้ไม่ควรถูกเรียกผ่าน `Agent` โดยตรงแล้ว:
 
@@ -108,5 +116,6 @@ Agent code-reviewer .workspaces/specs/007-auth-refactor/
 - ถ้าต้อง review ความเสี่ยง -> `Agent code-reviewer ...`
 - ถ้าต้อง debug root cause -> `Agent prp-core-debugger ...`
 - ถ้าต้องช่วยจัด PR/commit -> `Agent prp-core-git-committer ...` หรือ `Agent prp-core-git-pr-maker ...`
+- ถ้าต้องการรันงานบำรุงรักษาข้ามคืน -> `Agent ob-loop-engineer ...`
 
 ถ้าไม่แน่ใจว่าจะใช้ agent ไหน ให้เริ่มที่ `Help` หรือดู [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1) ก่อน

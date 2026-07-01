@@ -60,6 +60,7 @@ Use these agent mappings when expert judgment is the best next step:
 | root-cause debugging | `prp-core-debugger` |
 | release packaging and commit scope | `prp-core-git-committer`, `prp-core-git-pr-maker` |
 | broad orchestration across domains | `orchestrator` |
+| overnight maintenance loops and repo cleanup | `ob-loop-engineer` |
 
 ## Lifecycle Routing Rules
 
