@@ -106,3 +106,8 @@ docs/vault/
 # Ignore Project Roadmap & Discovery Artifacts (Design Phase)
 roadmap_discovery.json
 roadmap_discovery.th.md
+
+# ------------------------------
+# 11. AGENT RUNTIME STATE
+# ------------------------------
+.agent/state/

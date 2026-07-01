@@ -24,6 +24,7 @@
     "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
     "security:scan": "node ./scripts/scan-security-hygiene.mjs",
     "sync:check": "node ./scripts/sync-agent-bundle.mjs",
+    "ob-loop": "node ./scripts/ob-runner.mjs",
     "validate": "node ./scripts/validate-framework.mjs",
     "validate:all": "node ./scripts/validate-all.mjs",
     "validate:docs": "node ./scripts/scan-doc-contract.mjs",

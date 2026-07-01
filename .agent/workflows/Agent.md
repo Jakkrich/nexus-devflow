@@ -70,6 +70,13 @@ Git and docs:
 | `prp-core-git-pr-maker` | Pull request summary and preparation. |
 | `documentation-maintainer` | Documentation impact analysis. |
 
+Maintenance and infrastructure:
+
+| Agent | Purpose |
+| :--- | :--- |
+| `ob-loop-engineer` | Overnight infrastructure maintenance, code debt pruning, and variant branch testing loops. |
+
+
 ## Reusable Skills
 
 The following former narrow agents are now skills. Invoke them through the responsible agent or workflow instead of `Agent`:
