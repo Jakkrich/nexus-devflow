@@ -45,6 +45,9 @@ This installs:
 - `%USERPROFILE%\.codex\nexus-devflow.json`
 - the managed Nexus-DevFlow block in `%USERPROFILE%\.codex\AGENTS.md`
 
+In this Codex integration mode, DevFlow commands such as `/00-Discover`, `/10-Define`, `/50-Verify`, `Check-For-Updates`, and `Help` are prompt forms routed through that single global skill.
+They are not installed as separate generated command files.
+
 ## 3. Install Into A Project
 
 Choose one of these three methods:

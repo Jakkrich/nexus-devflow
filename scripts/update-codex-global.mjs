@@ -10,9 +10,12 @@ const projectRoot = path.resolve(__dirname, '..');
 const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), '.codex');
 const skillFile = path.join(codexHome, 'skills', 'nexus-devflow', 'SKILL.md');
 const manifestFile = path.join(codexHome, 'nexus-devflow.json');
+const agentsFile = path.join(codexHome, 'AGENTS.md');
 const args = new Set(process.argv.slice(2));
 const isWindows = process.platform === 'win32';
 const packageJson = JSON.parse(fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8'));
+const expectedSlashMode = 'single-global-skill';
+const requiredCommands = ['/00-Discover', '/10-Define', '/50-Verify', 'Check-For-Updates', 'Help'];
 
 function commandName(command) {
   if (isWindows && command === 'npm') return 'npm.cmd';
@@ -49,6 +52,15 @@ function checkGlobal() {
   const problems = [];
   if (!fs.existsSync(skillFile)) problems.push(`Missing global skill: ${skillFile}`);
   if (!fs.existsSync(manifestFile)) problems.push(`Missing manifest: ${manifestFile}`);
+  if (!fs.existsSync(agentsFile)) problems.push(`Missing global instructions file: ${agentsFile}`);
+  if (fs.existsSync(skillFile)) {
+    const skillContent = fs.readFileSync(skillFile, 'utf8');
+    for (const command of requiredCommands) {
+      if (!skillContent.includes(command)) {
+        problems.push(`Global skill is missing command routing text for ${command}`);
+      }
+    }
+  }
   if (fs.existsSync(manifestFile)) {
     const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
     if (manifest.framework_root !== projectRoot) {
@@ -56,6 +68,15 @@ function checkGlobal() {
     }
     if (manifest.version !== packageJson.version) {
       problems.push(`Installed version ${manifest.version || '<missing>'} does not match current framework version ${packageJson.version}`);
+    }
+    if (manifest.slash_command_mode !== expectedSlashMode) {
+      problems.push(`Manifest slash_command_mode is ${manifest.slash_command_mode || '<missing>'}, expected ${expectedSlashMode}`);
+    }
+  }
+  if (fs.existsSync(agentsFile)) {
+    const agentsContent = fs.readFileSync(agentsFile, 'utf8');
+    if (!agentsContent.includes('Slash command routing: treat those command names as prompt forms handled by the single global skill')) {
+      problems.push('Global AGENTS.md is missing the Nexus-DevFlow slash command routing block');
     }
   }
   assertOk(run('node', ['--check', path.join(projectRoot, 'scripts', 'install-codex-global.mjs')]), 'Installer syntax check');
@@ -67,6 +88,7 @@ function checkGlobal() {
   console.log(`Version: ${packageJson.version}`);
   console.log(`Skill: ${skillFile}`);
   console.log(`Manifest: ${manifestFile}`);
+  console.log(`Slash command mode: ${expectedSlashMode}`);
   const status = gitStatusShort();
   console.log(status ? `Git status:\n${status}` : 'Git status: clean');
 }

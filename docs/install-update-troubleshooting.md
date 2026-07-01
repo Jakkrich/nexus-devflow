@@ -108,8 +108,11 @@ What this command checks:
 
 - the global Nexus-DevFlow skill exists
 - the global manifest exists
+- the global `AGENTS.md` managed block exists
 - the manifest points at this framework root
 - the installed version matches the current local framework version
+- the install is still in `single-global-skill` slash-command mode
+- the skill and managed block still mention the DevFlow command surface
 - framework validation still passes
 
 If the check fails:

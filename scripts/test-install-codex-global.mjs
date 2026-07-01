@@ -36,8 +36,20 @@ try {
   const skillContent = fs.readFileSync(skillPath, 'utf8');
   assert(skillContent.includes(path.join(rootDir, '.agent', 'workflows', 'Help.md')), 'generated skill should point to Help.md');
   assert(!skillContent.includes('99-Help.md'), 'generated skill must not point to legacy 99-Help.md');
+  assert(skillContent.includes('`/00-Discover`'), 'generated skill should document the slash command surface');
+  assert(skillContent.includes('`Check-For-Updates`'), 'generated skill should document companion commands');
 
-  console.log('[OK] install-codex-global writes Help.md into the generated skill.');
+  const manifestPath = path.join(codexHome, 'nexus-devflow.json');
+  assert(fs.existsSync(manifestPath), 'global manifest should be created');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  assert(manifest.slash_command_mode === 'single-global-skill', 'manifest should record single-global-skill mode');
+
+  const agentsPath = path.join(codexHome, 'AGENTS.md');
+  assert(fs.existsSync(agentsPath), 'global AGENTS.md should be created');
+  const agentsContent = fs.readFileSync(agentsPath, 'utf8');
+  assert(agentsContent.includes('Slash command routing: treat those command names as prompt forms handled by the single global skill'), 'global AGENTS.md should explain slash command routing');
+
+  console.log('[OK] install-codex-global writes the single-skill slash command surface for Codex.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });
 }
