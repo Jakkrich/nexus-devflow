@@ -68,6 +68,13 @@ Confirm:
 - `%USERPROFILE%\.codex\skills\nexus-devflow\SKILL.md`
 - `%USERPROFILE%\.codex\nexus-devflow.json`
 - managed block in `%USERPROFILE%\.codex\AGENTS.md`
+- slash-command routing text for `/00-Discover`, `/10-Define`, `/50-Verify`, `Check-For-Updates`, and `Help`
+
+Codex integration mode:
+
+- use one global skill plus one managed global `AGENTS.md` block
+- treat DevFlow command names as prompt forms routed by that single skill
+- do not generate separate prompt files per command unless the user explicitly asks for that architecture
 
 ### Route B. Central Clone + Link (Recommended)
 

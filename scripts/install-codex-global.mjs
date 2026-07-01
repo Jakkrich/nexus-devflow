@@ -12,6 +12,27 @@ const skillFile = path.join(skillDir, 'SKILL.md');
 const agentsFile = path.join(codexHome, 'AGENTS.md');
 const manifestFile = path.join(codexHome, 'nexus-devflow.json');
 const packageJson = JSON.parse(fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8'));
+const timelineCommands = [
+  '/00-Discover',
+  '/10-Define',
+  '/20-Spec',
+  '/30-Plan',
+  '/40-Implement',
+  '/50-Verify',
+  '/60-Report',
+  '/70-Release'
+];
+const companionCommands = [
+  'Goal',
+  'Brainstorm',
+  'Research',
+  'Debug',
+  'PRD',
+  'Issue-Triage',
+  'Wiki',
+  'Check-For-Updates',
+  'Help'
+];
 
 function writeFile(targetFile, fileContent) {
   fs.mkdirSync(path.dirname(targetFile), { recursive: true });
@@ -29,6 +50,18 @@ function skillContent(root) {
     '',
     'Use this skill to run Nexus-DevFlow as a global Codex workflow layer from any project.',
     '',
+    '## Slash command surface',
+    '',
+    'In Codex, treat these user prompts as the public DevFlow command surface. They are prompt forms routed through this single global skill, not separate generated command files.',
+    '',
+    'Timeline commands:',
+    '',
+    ...timelineCommands.map((command) => `- \`${command}\``),
+    '',
+    'Companion commands:',
+    '',
+    ...companionCommands.map((command) => `- \`${command}\``),
+    '',
     'Canonical framework root:',
     '',
     '```text',
@@ -37,7 +70,8 @@ function skillContent(root) {
     '',
     '## Workflow routing',
     '',
-    '- If the user mentions a numbered workflow command, read the matching file under `' + path.join(root, '.agent', 'workflows') + '`.',
+    '- If the user types a timeline slash command such as `/00-Discover` or `/50-Verify`, read the matching file under `' + path.join(root, '.agent', 'workflows') + '`.',
+    '- If the user types a public companion command such as `Help`, `Check-For-Updates`, or `Debug`, read the matching companion workflow file from the same folder.',
     '- If the user asks which workflow to use, read `' + path.join(root, '.agent', 'workflows', 'Help.md') + '` first.',
     '- If the user asks for a goal-first flow, route them through Discover or Help first unless a local extension defines another entry point.',
     "- Keep target project artifacts in the target project's `.workspaces` folder. Do not write task artifacts into the Nexus-DevFlow framework repo unless the framework itself is the target.",
@@ -79,9 +113,10 @@ function updateGlobalAgents(root) {
     markerStart,
     '# Nexus-DevFlow Global Workflow',
     '',
-    'When the user asks for Nexus-DevFlow, DevFlow 2.0, checking/updating the Codex global install, or stage commands like /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Report, /70-Release, or companion commands like Help, use the global Codex skill `nexus-devflow`.',
+    'When the user asks for Nexus-DevFlow, DevFlow 2.0, checking/updating the Codex global install, or types DevFlow commands such as /00-Discover, /10-Define, /20-Spec, /30-Plan, /40-Implement, /50-Verify, /60-Report, /70-Release, Goal, Brainstorm, Research, Debug, PRD, Issue-Triage, Wiki, Check-For-Updates, or Help, use the global Codex skill `nexus-devflow`.',
     '',
     'Framework root: `' + root + '`',
+    'Slash command routing: treat those command names as prompt forms handled by the single global skill, not as separate generated command files.',
     'Update commands: `npm run codex:check-global`, `npm run codex:update-global`, `npm run codex:update-global:pull`',
     markerEnd
   ].join('\n');
@@ -101,6 +136,11 @@ writeFile(manifestFile, JSON.stringify({
   installed_for: 'codex-global',
   framework_root: projectRoot,
   skill: path.relative(codexHome, skillFile),
+  slash_command_mode: 'single-global-skill',
+  commands: {
+    timeline: timelineCommands,
+    companions: companionCommands
+  },
   update_commands: {
     check: 'npm run codex:check-global',
     update: 'npm run codex:update-global',

@@ -24,6 +24,8 @@ Public companion commands are not part of the numbered mainline and should not u
 - `Check-For-Updates`
 - `Help`
 
+For Codex global installation, treat these command names as prompt forms routed through the single global skill `nexus-devflow`, not as separate generated command files.
+
 Framework root: `d:\Projects\nexus-devflow`
 Framework target mode: `workspace-stage-first`
 Artifact contract: `markdown-first`
