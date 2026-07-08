@@ -126,6 +126,7 @@ These are not numbered stages and may be called directly by users:
 - `Debug`
 - `PRD`
 - `Issue-Triage`
+- `Security-Review`
 - `Wiki`
 - `Check-For-Updates`
 - `Help`

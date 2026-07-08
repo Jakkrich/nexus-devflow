@@ -82,6 +82,7 @@ DevFlow 2.0 keeps a smaller public companion surface around the mainline:
 - `Debug`
 - `PRD`
 - `Issue-Triage`
+- `Security-Review`
 - `Wiki`
 - `Check-For-Updates`
 - `Help`

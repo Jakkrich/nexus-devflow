@@ -12,7 +12,7 @@ This guide describes the active DevFlow 2.0 surface used in the current reposito
 ## Core Rules
 
 - Use the numbered mainline as the primary delivery path.
-- Use public companion commands only when the task needs routing, ideation, research, debugging, PRD framing, issue intake, wiki access, or help.
+- Use public companion commands only when the task needs routing, ideation, research, debugging, PRD framing, issue intake, security checking, wiki access, or help.
 - Treat stage markdown files as the source of truth.
 - Use `checklists/` under the running ID when people need live execution visibility across stages.
 - Treat skills and agents as support layers, not as replacements for the mainline.
@@ -349,6 +349,7 @@ If older documents mention those concepts, treat them as historical reference on
 | gather evidence or source knowledge | `Research` |
 | find root cause | `Debug` |
 | do product framing | `PRD` |
+| run high-severity security check | `Security-Review` |
 | write the delivery contract | `/20-Spec` |
 | break work into execution steps | `/30-Plan` |
 | implement the changes | `/40-Implement` |

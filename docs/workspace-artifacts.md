@@ -31,7 +31,7 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 
 | Path | Stores | Related workflows or commands | Keep? |
 | :--- | :--- | :--- | :--- |
-| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, and optional `checklists/` tracking files | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Brainstorm`, `Research`, `Debug`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
+| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Brainstorm`, `Research`, `Debug`, `Security-Review`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
 | `.workspaces/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
 | `.workspaces/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
 | `.workspaces/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
@@ -186,6 +186,7 @@ Companion commands:
   Debug              -> .workspaces/debug/
   PRD                -> .workspaces/prds/
   Issue-Triage       -> .workspaces/issues/
+  Security-Review    -> .workspaces/specs/{ID}-*/security-review.md
   Wiki               -> .workspaces/wiki/framework/ or .workspaces/wiki/project/ when the wiki surface is explicitly used
   Help               -> workflow recommendation or routing note
 ```
