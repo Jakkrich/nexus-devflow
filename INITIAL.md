@@ -23,6 +23,7 @@ Use this file as a human-readable starting point for Nexus-DevFlow 2.0.
 - `Debug`
 - `PRD`
 - `Issue-Triage`
+- `Security-Review`
 - `Wiki`
 - `Check-For-Updates`
 - `Help`

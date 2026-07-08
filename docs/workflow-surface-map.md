@@ -27,6 +27,7 @@ This document decides which workflow surfaces should remain public commands, whi
 | `Debug.md` | `public command` | Root-cause analysis is a distinct public need. |
 | `PRD.md` | `public command` | Product framing still matters before a stable spec exists. |
 | `Issue-Triage.md` | `public command` | Issue-driven intake is a clear standalone use case. |
+| `Security-Review.md` | `public command` | Focused security review of target directory or project. |
 | `Wiki.md` | `public command` | It supports direct knowledge query and capture. |
 | `Check-For-Updates.md` | `public command` | Install and upgrade verification is a distinct maintainer and onboarding need. |
 | `Help.md` | `public command` | It remains the primary routing and onboarding command. |

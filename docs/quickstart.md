@@ -54,6 +54,7 @@ Research
 Debug
 PRD
 Issue-Triage
+Security-Review
 Wiki
 Check-For-Updates
 Help

@@ -20,6 +20,7 @@ Public companion commands are not part of the numbered mainline and should not u
 - `Debug`
 - `PRD`
 - `Issue-Triage`
+- `Security-Review`
 - `Wiki`
 - `Check-For-Updates`
 - `Help`
@@ -112,6 +113,7 @@ These are the public non-mainline commands that users may call directly:
 | `Debug` | Root-cause investigation is needed | `40-Implement`, `50-Verify` |
 | `PRD` | Product framing is needed before a stable spec exists | `10-Define`, `20-Spec` |
 | `Issue-Triage` | Work starts from an issue intake rather than a stage artifact | Before `10-Define` or `Debug` |
+| `Security-Review` | Focused security review of target directory or project | Any stage, especially before `/50-Verify` or `/70-Release` |
 | `Wiki` | Knowledge should be captured or queried | Any stage |
 | `Check-For-Updates` | Install, upgrade, or verify Nexus-DevFlow setup for a machine or project | Before using DevFlow or when updating framework integration |
 | `Help` | The user needs routing or explanation | Any stage |
