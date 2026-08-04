@@ -33,13 +33,13 @@ try {
 
   fs.writeFileSync(
     discoverTemplate,
-    originalDiscover.replace('## 10. AI Actions Performed', '## 10. Work Summary'),
+    originalDiscover.replace('## 12. AI Actions Performed', '## 12. Work Summary'),
     'utf8'
   );
   const missingHeadingRun = runValidate();
   assert(missingHeadingRun.status !== 0, 'validation should fail when a required manual review heading is missing');
   assert(
-    combinedOutput(missingHeadingRun).includes('discover.template.md is missing required heading: ## 10. AI Actions Performed'),
+    combinedOutput(missingHeadingRun).includes('discover.template.md is missing required heading: ## 12. AI Actions Performed'),
     'missing heading failure should name the missing manual review heading'
   );
 

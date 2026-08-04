@@ -1,10 +1,10 @@
-﻿---
+---
 id: "rca-{Issue Slug}"
 title: "Root Cause Analysis: {Issue}"
 doc_type: "report"
 category: "debug"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

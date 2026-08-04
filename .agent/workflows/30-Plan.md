@@ -23,6 +23,18 @@ Record complexity, context, phases, subtasks, and validation notes directly in t
 
 **MANDATORY RULE:** If you create temporary script files (e.g. `.ps1`, `.sh`) to execute multiple compatibility commands in batch, save them inside the task workspace, never in the central `scripts/` directory.
 
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
+
 ## Process
 
 ### Loop Contract
@@ -42,7 +54,7 @@ Run planning as an evidence loop, not as a one-shot outline.
 Read:
 
 - `.workspaces/specs/{ID}-*/20-spec.md`
-- `10-define.md` and `00-discover.md` when they exist and help clarify intent
+- `10-define.md` and the shared `00-discover.md` referenced by `source_discovery` when they help clarify intent
 
 ### 2. Assess Complexity
 

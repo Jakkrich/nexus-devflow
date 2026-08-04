@@ -1,10 +1,10 @@
-﻿---
+---
 id: "{running_id}-implementation-checklist"
 title: "Implementation Checklist: {Work Title}"
 doc_type: "checklist"
 category: "implementation-tracking"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

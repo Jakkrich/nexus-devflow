@@ -1,10 +1,10 @@
-﻿---
+---
 id: "research-{Topic Slug}"
 title: "Research Report: {Topic}"
 doc_type: "research"
 category: "research"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

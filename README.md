@@ -20,13 +20,14 @@
 
 Nexus-DevFlow 2.0 gives humans and AI agents one shared operating model for real software work.
 
-A request starts as a rough goal, becomes a grounded definition, turns into a formal specification, moves through planning and implementation, gets verified with evidence, and ends as release-ready output plus a readable final report.
+A request starts as a discovery conversation, may branch through focused companion inquiry, and reaches a visible go/no-go decision before delivery runs exist. Approved work is then divided into bounded Running IDs, specified, planned, implemented, verified, reported, and released independently.
 
 The framework keeps that lifecycle explicit:
 
 - `.agent` contains workflows, agents, skills, rules, templates, and framework helpers
 - `.workspaces` contains project-local artifacts produced by the running flow
-- optional `checklists/` folders inside each running ID keep human-visible live task tracking, now with checklist-style markers such as `[ ]`, `[x]`, `[/]`, `[!]`, and `[-]`
+- `.workspaces/discoveries` holds pre-delivery decisions under Discovery IDs without consuming Running IDs
+- optional `checklists/` folders inside each Running ID keep human-visible live task tracking, now with checklist-style markers such as `[ ]`, `[x]`, `[/]`, `[!]`, and `[-]`
 - numbered workflows represent only true mainline stage states
 - companion commands stay available for discovery, research, debugging, roadmap work, review, and specialist routing
 - stage handoff lives in Markdown, not task JSON
@@ -41,8 +42,8 @@ The framework keeps that lifecycle explicit:
 
 This is the canonical DevFlow 2.0 Timeline.
 
-- `00-Discover`: ground the request, context, and running ID
-- `10-Define`: lock the problem, scope, constraints, and success criteria
+- `00-Discover`: discuss the request, route any needed Brainstorm/PRD/Research/Debug work, and decide `Proceed`, `Defer`, or `Reject` under a Discovery ID
+- `10-Define`: lock scope, divide approved work into delivery slices, and create one or more Running IDs
 - `20-Spec`: write the delivery contract and acceptance criteria
 - `30-Plan`: create an executable implementation plan
 - `40-Implement`: perform the code changes and implementation work
@@ -54,8 +55,8 @@ This is the canonical DevFlow 2.0 Timeline.
 
 Teams often ask why DevFlow does not jump straight from "spec" to "plan". The short answer is that each stage locks a different level of clarity:
 
-- `00-Discover`: "What are we actually talking about?" Gather the request, missing context, unknowns, and the likely route forward.
-- `10-Define`: "What exactly are we agreeing to do?" Lock the problem, scope, constraints, and success criteria.
+- `00-Discover`: "Should this enter delivery, and what must we learn first?" Route focused inquiry and make the go/no-go decision without creating a Running ID.
+- `10-Define`: "What independently deliverable work are we agreeing to do?" Lock boundaries and allocate one or more Running IDs.
 - `20-Spec`: "What must the finished thing do?" Write the delivery contract, behavior, flows, and acceptance criteria.
 - `30-Plan`: "How will we build it?" Break the work into execution steps, files, risks, and verification strategy.
 
@@ -63,12 +64,12 @@ This split prevents a common failure mode where a team starts designing or taski
 
 Rule of thumb:
 
-- `00` is for understanding the request
-- `10` is for agreeing on scope
+- `00` is for understanding, routing, and deciding without a Running ID
+- `10` is for agreeing on delivery boundaries and creating Running IDs
 - `20` is for defining the required outcome
 - `30` is for deciding the implementation path
 
-When a team already has a strong ticket or stable context, it is fine to keep `00` and `10` very short, or enter at `/20-Spec` directly. What DevFlow tries to avoid is skipping all of those thinking layers at once.
+When a team already has a strong approved ticket or stable context, it is fine to keep `00` very short and proceed directly to Define. Existing delivery work may enter at `/20-Spec` when its Running ID and approved definition already exist. New work still crosses the Discover decision and Define allocation boundaries.
 
 ---
 
@@ -94,10 +95,10 @@ See [docs/workflow-surface-map.md](./docs/workflow-surface-map.md) for the curre
 Examples:
 
 ```text
-Unclear request: Goal -> /00-Discover -> /10-Define
-New idea:       /00-Discover -> Brainstorm -> /10-Define -> /20-Spec
-Bug fix:        Debug -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify
-Issue intake:   Issue-Triage -> /10-Define -> /20-Spec
+Unclear request: Goal -> /00-Discover -> Brainstorm -> /00-Discover -> /10-Define
+New product idea: /00-Discover -> PRD or Research -> /00-Discover -> /10-Define
+New bug request: /00-Discover -> Debug -> /00-Discover -> /10-Define -> /20-Spec
+Existing run:    /20-Spec {ID} -> /30-Plan {ID} -> /40-Implement {ID} -> /50-Verify {ID}
 ```
 
 ---
@@ -105,27 +106,32 @@ Issue intake:   Issue-Triage -> /10-Define -> /20-Spec
 ## How It Works
 
 ```mermaid
-graph TD
-    A["Goal or Request"] --> B{"Route"}
-    B -->|unclear| C["Goal or /00-Discover"]
-    B -->|needs ideation| D["Brainstorm or PRD"]
-    B -->|needs evidence| E["Research"]
-    B -->|bug| F["Debug"]
-    B -->|ready| G["/10-Define"]
-    C --> G
-    D --> G
-    E --> G
-    F --> G
-    G --> H["/20-Spec"]
-    H --> I["/30-Plan"]
-    I --> J["/40-Implement"]
-    J --> K["/50-Verify"]
-    K -->|pass| L["/60-Report"]
-    K -->|needs work| J
-    L --> M["/70-Release"]
+flowchart TD
+    A["Goal or Request"] --> D0["/00-Discover<br/>Create Discovery ID"]
+    D0 --> R{"What must be resolved?"}
+    R -->|options| B["Brainstorm"]
+    R -->|product framing| P["PRD"]
+    R -->|evidence| E["Research"]
+    R -->|root cause| X["Debug"]
+    R -->|already clear| S["/00-Discover synthesis"]
+    B --> S
+    P --> S
+    E --> S
+    X --> S
+    S --> Q{"Decision"}
+    Q -->|Defer or Reject| Z["Stop without Running ID"]
+    Q -->|Proceed and Approved| D10["/10-Define<br/>Split scope and create Running IDs"]
+    D10 --> F{"One or many delivery runs"}
+    F --> D20["/20-Spec {ID}"]
+    D20 --> D30["/30-Plan {ID}"]
+    D30 --> D40["/40-Implement {ID}"]
+    D40 --> D50["/50-Verify {ID}"]
+    D50 -->|pass| D60["/60-Report {ID}"]
+    D50 -->|needs work| D40
+    D60 --> D70["/70-Release {ID}"]
 ```
 
-Every stage writes its own artifact under `.workspaces/specs/{RUNNING_ID}/`, so the work remains resumable, reviewable, and easy to hand off.
+Discover writes to `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/`. Only approved work reaches Define, which creates one or more `.workspaces/specs/{RUNNING_ID}-{slug}/` delivery workspaces. Every run then advances independently from Spec through Release.
 
 ---
 
@@ -135,7 +141,7 @@ Every stage writes its own artifact under `.workspaces/specs/{RUNNING_ID}/`, so 
 | --- | --- |
 | **Numbered mainline only** | Workflow numbers now belong only to real lifecycle stages. Companion commands do not compete with the mainline. |
 | **Markdown-first contracts** | `discover.md`, `define.md`, `spec.md`, `plan.md`, `implement.md`, `verify.md`, `release.md`, and `report.md` are the source of truth. |
-| **Running-ID discipline** | Artifacts stay grouped by running ID, making long tasks easier to track and resume. |
+| **Decision-before-ID discipline** | Discovery IDs preserve explored, deferred, and rejected ideas without consuming delivery numbers. `/10-Define` creates Running IDs only for approved bounded work. |
 | **Checklist visibility** | Optional `checklists/` artifacts make execution status visible throughout the run, not only in final notes. |
 | **Companion, skill, and agent separation** | Mainline state, reusable behavior, and specialist roles are modeled separately instead of mixing everything into workflows. |
 | **Report-ready output** | The flow ends in a consistent summary format, including HTML output for human communication. |
@@ -157,7 +163,7 @@ npm.cmd run validate
 If you are new to DevFlow:
 
 1. Read `docs/quickstart.md`
-2. Use `/00-Discover` for new work or `Help` if the route is unclear
+2. Use `/00-Discover` for new work; it will select Brainstorm, PRD, Research, Debug, or a direct decision without creating a Running ID
 3. Use `docs/example-runs.md` for concrete flow examples
 
 ---
@@ -232,11 +238,10 @@ Current commands:
 ```powershell
 npm.cmd run report:html -- <workspace-path-or-running-id>
 npm.cmd run render:html -- --stage 60-report <workspace-path-or-running-id>
-npm.cmd run artifact-language:switch -- en
 npm.cmd run artifact-language:switch -- th
 ```
 
-In phase 1, `artifact_language` controls markdown template defaults. Switch it when you want newly written markdown artifacts to default to Thai or English.
+The tracked framework default is Thai: every template contains `artifact_language: "th"` exactly once. The switch utility still accepts `en` for an intentional local override, but framework validation expects tracked templates to be restored to `th`.
 
 ---
 

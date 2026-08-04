@@ -6,8 +6,8 @@ stage: "20-spec"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 related_run: "{running_id}"
 related_files: []
 ---
@@ -21,6 +21,7 @@ related_files: []
 ## 2. Source Inputs
 
 - `10-define.md`
+- Shared `00-discover.md` referenced by `source_discovery` when original decision context is needed
 - Supporting research notes if they exist
 - Approved project context artifacts
 - Earlier phase outputs when this run depends on them
@@ -100,4 +101,3 @@ related_files: []
 ## 19. Additional Notes
 
 - Add any extra headings below this section when useful.
-

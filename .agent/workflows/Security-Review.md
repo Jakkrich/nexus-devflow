@@ -31,7 +31,7 @@ When `Security-Review` is triggered:
    - Ignore theoretical, style, low-impact, or medium/low severity findings for status blocking, but report them under Suggestions if present.
 4. **Load Template**:
    - Inspect `.agent/resources/schemas/security_review.template.md`.
-   - Read the `artifact_language` configuration (default: `"en"`).
+   - Read the `artifact_language` configuration (framework default: `"th"`).
    - Generate the report in English.
 5. **Write the Artifact**:
    - Write the finalized security report to `.workspaces/specs/{ID}-{slug}/security-review.md`.
@@ -53,7 +53,7 @@ created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
 status: "draft"
-artifact_language: "en"
+artifact_language: "th"
 related_run: "{running_id}"
 related_files: []
 ---

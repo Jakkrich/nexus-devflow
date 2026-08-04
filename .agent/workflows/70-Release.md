@@ -37,6 +37,18 @@ using:
 
 Before writing `70-release.md`, read `artifact_language` from `release.template.md` and produce the artifact in that language.
 
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
+
 ## Process
 
 ### Loop Contract

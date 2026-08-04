@@ -1,32 +1,33 @@
 ---
-description: Discover stage in DevFlow 2.0 - turn a raw request into a grounded running-id workspace and decide the correct next step.
-argument-hint: "{title or request}"
+description: Discover stage in DevFlow 2.0 - explore a request, route supporting inquiry, and decide whether delivery work should begin without allocating a running ID.
+argument-hint: "{title, request, or discovery-id}"
 ---
 
 # Phase 00: Discover
 
 $ARGUMENTS
 
-Start a new DevFlow 2.0 run by grounding the request, creating or selecting the running ID, and deciding whether the work should go to Define, Brainstorm, or Research.
+Explore a request before delivery commitment. Create or resume a Discovery ID, choose only the supporting route that the uncertainty requires, and finish with a visible `Proceed`, `Defer`, or `Reject` decision. Do not create a Running ID in this stage.
 
 ## Usage
 
 ```text
 /00-Discover {title or request}
+/00-Discover {discovery-id}
 ```
 
 Use this when:
 
-- a new request arrives
-- the work has not been anchored to a running ID yet
-- the team needs to understand whether the request is stable enough to define
+- a new request needs discussion before the team commits to delivery
+- the best route may be `Brainstorm`, `PRD`, `Research`, or `Debug`
+- supporting findings need to be synthesized into a go/no-go decision
 
 ## Markdown-First Contract
 
-Write the primary stage artifact to:
+Write the primary discovery artifact to:
 
 ```text
-.workspaces/specs/{ID}-{slug}/00-discover.md
+.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md
 ```
 
 using:
@@ -37,102 +38,132 @@ using:
 
 Before writing `00-discover.md`, read `artifact_language` from `discover.template.md` and produce the artifact in that language.
 
-Do not route new DevFlow 2.0 work through JSON-first task initialization.
+A Discovery ID uses a separate namespace such as `DISC-YYYYMMDD-NNN`. It is not a Running ID and must not reserve a numeric delivery run.
+
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
 
 ## Process
 
 ### Loop Contract
 
-Run discovery as a request-grounding loop, not as a one-shot summary.
+Run discovery as a decision-and-routing loop, not as task initialization.
 
-- **Intent**: turn a raw request into a grounded running ID, stable problem statement, visible unknowns, and a recommended next route.
-- **Context**: read the user request, available workspace state, related artifacts, obvious constraints, and any provided references before deciding the route.
-- **Action**: restate the request, anchor or create the run, identify knowns and unknowns, and decide whether the work is ready for `/10-Define`, `Brainstorm`, `Research`, `grilling`, or `prototype`.
-- **Observation**: use concrete evidence such as existing artifacts, repo state, user constraints, missing facts, ambiguity, and visible risk.
-- **Adjustment**: if the request is fuzzy, route to `Brainstorm` or `grilling`; if facts are missing, route to `Research`; if runnable evidence is needed, route to `prototype`; otherwise proceed to `/10-Define`.
-- **Stop Condition**: stop when the request is anchored to a workspace path, the known constraints and open questions are explicit, and the next route is justified by evidence.
-- **Handoff**: `00-discover.md` must tell `/10-Define` what the request means, why it matters, what remains unknown, and what route was chosen.
+- **Intent**: understand the request, select proportionate supporting inquiry, and decide whether the idea should enter delivery definition.
+- **Context**: read the request, the discovery artifact when resuming, companion outputs, project context, constraints, and available evidence.
+- **Action**: restate the problem, identify the decision-blocking uncertainty, select `Brainstorm`, `PRD`, `Research`, `Debug`, or direct decision, then synthesize returned findings.
+- **Observation**: use concrete evidence such as option tradeoffs, product framing, research results, root cause, stakeholder constraints, open questions, and visible risk.
+- **Adjustment**: invoke only the companion route needed to resolve the current uncertainty; every companion invoked by Discover must return to this Discovery ID for synthesis.
+- **Stop Condition**: stop when the selected route and evidence are recorded, open questions are visible, and the decision is `Proceed`, `Defer`, or `Reject`.
+- **Handoff**: only an approved `Proceed` discovery may hand off to `/10-Define {discovery_id}`. `Defer` and `Reject` end without allocating a Running ID.
 
-### 1. Intake The Request
+### 1. Create Or Resume The Discovery
+
+- inspect `.workspaces/discoveries/`
+- create a collision-free Discovery ID or resume the one supplied
+- generate a stable slug
+- do not inspect or increment numeric Running IDs during this stage
+
+### 2. Ground The Request
 
 - restate the request in plain language
-- identify the obvious problem or opportunity
-- identify the user, stakeholder, or system affected
-- note constraints that are already visible
+- identify the affected users, stakeholders, or systems
+- capture known constraints and decision-blocking unknowns
+- distinguish an idea worth exploring from delivery work already approved elsewhere
 
-### 2. Anchor The Run
+### 3. Select The Supporting Route
 
-- inspect the current workspace layout
-- choose or create the running ID
-- generate a stable slug
-- establish the canonical workspace path
+Choose proportionally:
 
-### 3. Assess Stability
+- `Brainstorm` when several viable directions need comparison
+- `PRD` when user value, product outcomes, MVP boundaries, or success measures need framing
+- `Research` when facts, codebase evidence, feasibility, or external constraints are missing
+- `Debug` when the request begins with a failure and root cause is unknown
+- direct decision when the request and evidence are already clear
 
-Decide whether the request is:
+Routes are not mutually exclusive, but do not stack them by default. Record why each selected route is necessary. Pass the Discovery ID to the companion and require its output to link back to the discovery.
 
-- **stable enough for Define**
-- **still fuzzy and should use Brainstorm**
-- **missing evidence and should use Research**
+### 4. Synthesize Returned Findings
 
-Do not pretend the request is well-defined if it is still ambiguous.
-Use `grilling` or `prototype` only when the request needs stress-testing or runnable evidence before it can move to Define.
+After each companion route:
 
-### 4. Write `00-discover.md`
+- update `00-discover.md` with the durable findings and source path
+- reassess whether another route is materially necessary
+- return to the Discover decision rather than jumping directly to `/10-Define`
+
+### 5. Decide
+
+Set one decision:
+
+- `Proceed`: enough value and evidence exist to define delivery work
+- `Defer`: the idea remains relevant but timing, evidence, or ownership is not ready
+- `Reject`: the idea should not proceed under the current framing
+
+Candidate delivery slices may be suggested, but they remain provisional and unnumbered until `/10-Define`.
+
+### 6. Write `00-discover.md`
 
 - preserve the template headings
-- follow the `artifact_language` configured in `discover.template.md`
+- follow the configured `artifact_language`
 - replace placeholders with concrete context
-- capture open questions explicitly
-- capture assumptions only when they are necessary and visible
-- set `Approval Status` and `Next Allowed Command` so the reviewer can decide whether the run should proceed
+- record selected routes, returned findings, open questions, decision, and rationale
+- keep `related_runs` empty until `/10-Define` materializes approved slices
 
-### 5. Manual Review Soft Gate
+### 7. Manual Review Gate
 
-If the request is large, multi-phase, requirement-heavy, or high-risk:
+Before `/10-Define`:
 
-- treat Discover as the first manual review checkpoint
-- recommend human review before `/10-Define`
-- use the `Project Context To Preserve` section to keep broad requirements visible
+- confirm the selected route and evidence are sufficient
+- confirm the decision is `Proceed`
+- set `Approval Status` to `Approved`
+
+Do not allocate Running IDs when the decision or approval is pending.
 
 ## Output
 
 Report:
 
-- running ID and workspace path
-- restated request
-- target problem or opportunity
-- known constraints
-- open questions
-- manual review expectations when the run is large or high-risk
-- recommended next step
+- Discovery ID and artifact path
+- request and problem summary
+- selected support route and why
+- important findings and open questions
+- `Proceed`, `Defer`, or `Reject` decision
+- recommended next step, including `/10-Define {discovery_id}` only when Proceed is approved
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Mainline workflow
-- Previous state: Start of a new run
-- Next state: `/10-Define` when scope is ready
-- Common companion commands: `Brainstorm` when the request is fuzzy, `Research` when evidence is missing; support skills: `grilling` for stress-testing and `prototype` when runnable evidence is needed
+- Classification: Mainline discovery stage
+- Previous state: request intake
+- Next state: `/10-Define {discovery_id}` only after approved Proceed
+- Common companion routes: `Brainstorm`, `PRD`, `Research`, `Debug`
+- Running ID lifecycle: begins in `/10-Define`, not in Discover
 
 ## Sources
 
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/discover.template.md`
-- Related commands: `Brainstorm`, `Research`, `/10-Define`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/10-Define`
-- **Why**: The request is grounded and ready for scope and decision locking.
+- **Primary**: the selected companion route, or `/10-Define {discovery_id}` after approved Proceed
 - **Alternatives**:
-  - `Brainstorm` - choose this when direction is still unstable.
-  - `Research` - choose this when missing facts block a confident definition.
-  - `prototype` - choose this when a runnable experiment is the fastest way to answer a discovery question.
+  - `Brainstorm {discovery_id}` for unresolved options
+  - `PRD {discovery_id}` for product framing
+  - `Research {discovery_id}` for missing evidence
+  - `Debug {discovery_id}` for unknown root cause
+  - no next command when the decision is Defer or Reject
 
 ## Nexus Event
 
-- Use `Brainstorm` when the conversation reveals multiple viable directions that should be compared before scope is locked.
-- Use `Research` when the next decision depends on facts, source material, or codebase evidence that is still missing.
-- Use `grill-with-docs` when available if a short clarification pass could materially change the phase boundary, constraints, or next route.
-
+- Use `grill-with-docs` when focused clarification could change the decision or selected route.
+- Use `prototype` when runnable evidence is the fastest way to settle feasibility.

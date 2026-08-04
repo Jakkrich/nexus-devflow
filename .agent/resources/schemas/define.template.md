@@ -6,9 +6,13 @@ stage: "10-define"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 related_run: "{running_id}"
+source_discovery: "{discovery_id}"
+sibling_runs: []
+dependencies: []
+supersedes: []
 related_files: []
 ---
 
@@ -16,65 +20,69 @@ related_files: []
 
 ## 1. Objective
 
-- Lock the phase boundary so that specification can proceed without guessing intent.
+- Lock one coherent delivery boundary created from an approved discovery so specification can proceed without loading the whole initiative.
 
 ## 2. Source Inputs
 
-- `00-discover.md`
-- Supporting brainstorm or research notes if they exist
+- `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
+- Linked Brainstorm, PRD, Research, or Debug artifacts
 - Project context documents
 
 ## 3. Project Context To Preserve
 
-- Global rules that must carry into every later stage
-- Domain language that should not be rewritten casually
-- Program-level constraints that this phase must obey
+- Global rules shared by sibling runs
+- Domain language that must remain consistent
+- Program-level constraints and cross-run decisions
 
-## 4. Problem Definition
+## 4. Source Discovery And Run Allocation
 
-- [Define the problem clearly]
+- Discovery ID: `{discovery_id}`
+- Running ID: `{running_id}`
+- Sibling runs: [List IDs or None]
+- Allocation rationale: [Why this outcome deserves one Running ID]
 
-## 5. Phase Scope
+## 5. Problem Definition
 
-- [Describe the delivery boundary for this running id]
+- [Define the part of the approved problem owned by this run]
 
-## 6. In Scope
+## 6. Delivery Scope
 
-- [List items explicitly included in this phase]
+- [Describe the independently specifiable and reviewable outcome]
 
-## 7. Out Of Scope
+## 7. In Scope
 
-- [List items explicitly excluded from this phase]
+- [List items explicitly included]
 
-## 8. Success Criteria
+## 8. Out Of Scope
 
-- [List the outcomes that make this phase ready for Spec]
+- [List items explicitly excluded, including sibling-run responsibilities]
 
-## 9. Hard Constraints
+## 9. Success Criteria
 
-- [List constraints that later stages must not violate]
+- [List outcomes that make this run ready for Spec]
 
-## 10. Dependencies
+## 10. Hard Constraints
 
-- [List dependencies on teams, systems, earlier phases, or research]
+- [List constraints later stages must not violate]
 
-## 11. Assumptions
+## 11. Dependencies
 
-- [List assumptions being made at this stage]
+- [List sibling runs, teams, systems, or research dependencies]
 
-## 12. Open Decisions
+## 12. Assumptions And Open Decisions
 
-- [List unresolved questions that still matter]
+- Assumptions: [List]
+- Open decisions: [List]
 
 ## 13. AI Actions Performed
 
-- [List concrete actions taken, such as consolidating scope, identifying non-goals, or carrying forward rules]
+- [List decomposition, allocation, scope consolidation, and traceability actions]
 
 ## 14. Human Review Required
 
-- Confirm the phase boundary is correct
-- Confirm in-scope and out-of-scope lists are acceptable
-- Confirm assumptions are visible and not hidden as facts
+- Confirm this Running ID has one coherent delivery boundary
+- Confirm sibling responsibilities are not duplicated
+- Confirm dependencies and exclusions are explicit
 
 ## 15. Approval Status
 
@@ -86,15 +94,14 @@ related_files: []
 
 ## 17. Nexus Event
 
-- `Brainstorm` when scope or non-goals are still unstable
-- `Research` when missing evidence still affects scope decisions
-- `grill-with-docs` when available and clarification could materially change scope, success criteria, or terminology
+- `/00-Discover {discovery_id}` when the delivery decision is no longer stable
+- `Research {discovery_id}` when evidence still blocks the boundary
+- `grill-with-docs` when scope or terminology remains ambiguous
 
 ## 18. Change Log
 
-- {Date}: Initial define draft created
+- {Date}: Running ID allocated and initial definition created
 
 ## 19. Additional Notes
 
 - Add any extra headings below this section when useful.
-

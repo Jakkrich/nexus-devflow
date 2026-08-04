@@ -46,6 +46,7 @@ try {
   assert(result.status === 0, `activate should pass:\n${outputOf(result)}`);
 
   assert(fs.existsSync(path.join(target, '.workspaces')), 'activate should create .workspaces');
+  assert(fs.existsSync(path.join(target, '.workspaces', 'discoveries')), 'activate should create .workspaces/discoveries');
   assert(fs.existsSync(path.join(target, '.workspaces', 'specs')), 'activate should create .workspaces/specs');
   for (const dir of ['roadmap', 'issues', 'research', 'prds', 'debug', 'reports']) {
     assert(!fs.existsSync(path.join(target, '.workspaces', dir)), `activate should not precreate .workspaces/${dir}`);

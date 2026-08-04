@@ -8,8 +8,8 @@ Use the full numbered mainline when the work is a new deliverable and the team n
 
 ```text
 /00-Discover "Add password reset"
-/10-Define
-/20-Spec
+/10-Define DISC-YYYYMMDD-NNN
+/20-Spec {ID}
 /30-Plan
 /40-Implement
 /50-Verify
@@ -19,8 +19,8 @@ Use the full numbered mainline when the work is a new deliverable and the team n
 
 Typical outcome:
 
-- `/00-Discover` creates the running ID and captures the request.
-- `/10-Define` locks scope, constraints, and success criteria.
+- `/00-Discover` creates a Discovery ID, selects any needed support route, and records the approved Proceed decision without a Running ID.
+- `/10-Define` locks delivery slices and creates one or more Running IDs.
 - `/20-Spec` turns the defined work into an acceptance-ready delivery contract.
 - `/30-Plan` breaks the spec into implementation phases and verification gates.
 - `/40-Implement` executes the planned changes.
@@ -30,12 +30,14 @@ Typical outcome:
 
 ## 2. Bug Fix
 
-Use `Debug` when the first job is root-cause investigation, then move into the numbered mainline once the issue is understood well enough to define and deliver the fix.
+Use `/00-Discover` to route a new failure through `Debug`, then return to Discover for the delivery decision before Define creates a Running ID for the approved fix.
 
 ```text
+/00-Discover "Login redirects forever after session expiry"
 Debug "Login redirects forever after session expiry"
-/10-Define
-/20-Spec
+/00-Discover DISC-YYYYMMDD-NNN
+/10-Define DISC-YYYYMMDD-NNN
+/20-Spec {ID}
 /30-Plan
 /40-Implement
 /50-Verify

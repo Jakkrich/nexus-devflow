@@ -9,6 +9,7 @@ Transform a product or feature idea into a problem-first, hypothesis-driven Prod
 
 In DevFlow 2.0, this is a supporting workflow, not part of the numbered mainline state path. Use it when the idea is still too product-shaped for `/10-Define` or `/20-Spec` to proceed cleanly.
 Use `to-prd` when existing conversation, discovery, or codebase context is already sufficient and the job is synthesis rather than another interview.
+When invoked from `/00-Discover`, link the PRD to the Discovery ID and return to `/00-Discover {discovery_id}` for the final `Proceed`, `Defer`, or `Reject` decision. PRD does not create Running IDs.
 
 ---
 
@@ -78,7 +79,8 @@ Review `{prd_path}` against `prd.template.md`, keep the required headings, and r
 
 Convert the PRD into explicit next steps for the Timeline flow:
 
-- `/10-Define` when product framing still needs decisions
+- `/00-Discover {discovery_id}` when the PRD belongs to an active discovery
+- `/10-Define` when product framing was created outside Discover and delivery has already been approved
 - `/20-Spec` when the delivery contract is ready to be locked
 - `/30-Plan {ID}` only after the spec is execution-ready
 
@@ -103,7 +105,7 @@ Return:
 - Classification: Companion command
 - Mainline status: Not a numbered stage
 - Typical entry points: product framing before implementation-ready scope exists
-- Typical handoff targets: `/10-Define`, `/20-Spec`, `Roadmap`, `Spec-Orchestrate`
+- Typical handoff targets: `/00-Discover {discovery_id}`, `/10-Define`, `/20-Spec`, `Roadmap`, `Spec-Orchestrate`
 
 ## Sources
 
@@ -114,7 +116,7 @@ Return:
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/10-Define` or `/20-Spec`
-- **Why**: PRD shapes product intent; the Timeline flow should lock decisions and delivery contract before planning.
+- **Primary**: `/00-Discover {discovery_id}` when invoked from discovery; otherwise `/10-Define`
+- **Why**: PRD shapes product intent, while Discover owns the delivery decision and Define owns Running ID creation.
 - **Alternative**: `Research` when technical feasibility or external dependencies are still unresolved.
 

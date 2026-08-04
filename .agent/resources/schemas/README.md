@@ -11,7 +11,7 @@
 3. แต่ละ stage ต้องมี input, output, และ template ของตัวเอง
 4. คงหัวข้อหลักจาก template ไว้เสมอ แต่อนุญาตให้เพิ่มหัวข้อเสริมท้ายเอกสารได้ตามบริบท
 5. JSON schema/template ถูกถอดออกจากเส้นหลัก 2.0 แล้ว
-6. ทุก `.template.md` ต้องมี `artifact_language: "th"` หรือ `"en"` ใน frontmatter
+6. ทุก `.template.md` ต้องมี `artifact_language: "th"` เพียงหนึ่งครั้งใน frontmatter เป็นค่าเริ่มต้นของ framework
 7. ก่อนสร้าง artifact markdown ให้ workflow อ่านค่า `artifact_language` จาก template ก่อนเสมอ
 8. Timeline stage templates now include manual review fields such as `AI Actions Performed`, `Human Review Required`, `Approval Status`, `Next Allowed Command`, and `Nexus Event`
 
@@ -19,8 +19,8 @@
 
 | Stage | Command | Primary artifact |
 | :--- | :--- | :--- |
-| Discover | `/00-Discover` | `00-discover.md` |
-| Define | `/10-Define` | `10-define.md` |
+| Discover | `/00-Discover` | `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md` |
+| Define | `/10-Define` | one or more `.workspaces/specs/{ID}-{slug}/10-define.md` files |
 | Spec | `/20-Spec` | `20-spec.md` |
 | Plan | `/30-Plan` | `30-plan.md` |
 | Implement | `/40-Implement` | `40-implement.md` |

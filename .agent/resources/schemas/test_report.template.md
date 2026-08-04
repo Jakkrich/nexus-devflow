@@ -1,10 +1,10 @@
-﻿---
+---
 id: "test-report-{Target Slug}"
 title: "Test Specification And Coverage Report: {Target}"
 doc_type: "report"
 category: "testing"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

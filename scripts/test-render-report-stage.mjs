@@ -26,7 +26,7 @@ try {
   const markdown = `---
 id: "999-report"
 title: "Report: Adapter Smoke Test"
-artifact_language: "en"
+artifact_language: "th"
 related_run: "999"
 ---
 
@@ -71,7 +71,7 @@ related_run: "999"
   assert(adapterResult.html.includes('<li>Adapter path renders this report.</li>'), 'adapter should render markdown list items');
   assert(adapterResult.html.includes('{{TOC_TITLE}}') === false, 'adapter should resolve md2html placeholders');
   assert(adapterResult.html.includes('id="toc-nav"'), 'adapter should include the md2html toc shell');
-  assert(adapterResult.html.includes('Toggle theme'), 'adapter should include md2html theme chrome');
+  assert(adapterResult.html.includes('เปลี่ยนธีม'), 'adapter should localize md2html theme chrome from artifact_language');
   assert(!adapterResult.html.includes('Verify html output'), 'adapter should not inject checklist summaries from the legacy template path');
 
   const thaiWorkspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '998-render-stage-th');

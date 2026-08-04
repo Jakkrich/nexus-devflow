@@ -1,29 +1,26 @@
 ---
-description: Define stage in DevFlow 2.0 - convert discovery output into a stable, decision-ready work definition.
-argument-hint: "{running-id or workspace path}"
+description: Define stage in DevFlow 2.0 - turn an approved discovery into one or more bounded delivery runs with stable scope.
+argument-hint: "{approved discovery-id, discovery path, running-id, or run path}"
 ---
 
 # Phase 10: Define
 
 $ARGUMENTS
 
-Convert discovery output into a stable work definition by locking goals, scope boundaries, assumptions, and decision points before writing the formal spec.
+Convert an approved `Proceed` discovery into bounded delivery slices. Allocate one Running ID per independently specifiable and reviewable slice, then write one `10-define.md` contract per generated run. This is the first stage that creates Running IDs.
 
 ## Usage
 
 ```text
-/10-Define {running-id or workspace path}
+/10-Define {discovery-id or discovery path}
+/10-Define {running-id or run path}
 ```
 
-Use this when:
-
-- the problem is known but still needs sharper scope
-- multiple interpretations still exist
-- the team needs a stable definition before writing the spec
+Use a Discovery ID to materialize new delivery runs. Use an existing Running ID only to revise or split a definition that already exists.
 
 ## Markdown-First Contract
 
-Write the primary stage artifact to:
+For every approved delivery slice, write:
 
 ```text
 .workspaces/specs/{ID}-{slug}/10-define.md
@@ -35,113 +32,138 @@ using:
 .agent/resources/schemas/define.template.md
 ```
 
-Before writing `10-define.md`, read `artifact_language` from `define.template.md` and produce the artifact in that language.
+Before writing any `10-define.md`, read `artifact_language` from `define.template.md` and produce every generated artifact in that language.
+
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
 
 ## Process
 
 ### Loop Contract
 
-Run definition as a scope-stabilization loop, not as an implementation brainstorm.
+Run definition as a scope-stabilization and run-allocation loop.
 
-- **Intent**: lock the goal, non-goals, assumptions, boundaries, and decision points so the spec cannot drift between interpretations.
-- **Context**: read `00-discover.md`, attached notes, research, stakeholder constraints, and unresolved questions that affect scope.
-- **Action**: define the core goal, success framing, non-goals, constraints, assumptions, and downstream decision rules.
-- **Observation**: use concrete evidence such as conflicting interpretations, missing facts, unstable terminology, visible dependencies, and unresolved tradeoffs.
-- **Adjustment**: if options remain open, route to `Brainstorm`; if terms or boundaries are weak, use `grill-with-docs`; if facts are missing, use `Research`; if language or architecture decisions must persist, use `domain-modeling`.
-- **Stop Condition**: stop when scope, non-goals, assumptions, constraints, and decision points are stable enough that `/20-Spec` can write requirements without guessing.
-- **Handoff**: `10-define.md` must tell `/20-Spec` exactly what is in scope, what is out of scope, what assumptions are accepted, and what decisions are fixed.
+- **Intent**: turn an approved discovery into the smallest coherent set of delivery runs that can each be specified, planned, implemented, and verified without carrying the entire initiative context.
+- **Context**: read the approved `00-discover.md`, linked Brainstorm/PRD/Research/Debug outputs, project-wide rules, existing run IDs, and dependencies between candidate slices.
+- **Action**: lock initiative and scope boundaries, decompose delivery slices, review the run map, allocate collision-free Running IDs, and write one `10-define.md` per slice.
+- **Observation**: use independent acceptance boundaries, release boundaries, ownership, dependencies, context size, cross-domain coupling, and reviewability as evidence for splitting or combining slices.
+- **Adjustment**: merge slices that are only implementation tasks; split slices that require separate specs, releases, ownership, or large independent context; return to `/00-Discover` if the decision or product direction is still unstable.
+- **Stop Condition**: stop when the run map is approved, IDs are materialized without collision, each run has stable in/out scope, and every generated run can proceed independently to `/20-Spec {running_id}`.
+- **Handoff**: each `10-define.md` must identify its source Discovery ID, sibling runs, dependencies, scope, non-goals, and exact next command.
 
-### 1. Load Discovery Context
+### 1. Validate The Discovery Gate
 
-Read:
+For new delivery work, require:
 
-- `00-discover.md`
-- any attached notes or research that materially affect scope
+- `Decision: Proceed`
+- `Approval Status: Approved`
+- a resolvable Discovery ID and `00-discover.md`
 
-Understand:
+If either gate is missing, do not create a Running ID. Return to `/00-Discover {discovery_id}`.
 
-- what the request is
-- why it matters
-- what is still unclear
+### 2. Build The Delivery Run Map
 
-### 2. Stabilize The Work Definition
+Define candidate slices around coherent delivery outcomes, not small tasks.
 
-Define:
+Create separate runs when work has materially independent:
 
-- the core goal
-- the intended outcome
-- the important non-goals
-- scope boundaries
-- decision points that downstream stages must respect
+- acceptance or verification boundaries
+- release or rollback boundaries
+- domain context or ownership
+- dependency sequencing
+- implementation context large enough to threaten reliable planning or review
 
-### 3. Resolve Instability
+Keep ordinary subtasks inside `/30-Plan` and checklists.
 
-If the direction is still unstable:
+For every slice record:
 
-- use `Brainstorm` for option comparison
-- use `grill-with-docs` when fuzzy terms, scope boundaries, or decision points need a rigorous interview before they can be locked
-- use `domain-modeling` when resolved language or architectural decisions should become durable glossary or ADR entries
+- title and slug
+- outcome and scope boundary
+- exclusions
+- dependencies
+- shared project constraints
+- reason it deserves one Running ID
 
-If evidence is missing:
+### 3. Review Before Allocation
 
-- use `Research`
+Present the proposed run map for human review before consuming numeric IDs when the split is large, disputed, or high risk. A single clear slice may proceed directly when approval is already explicit.
 
-Do not move to Spec if the work can still be interpreted in materially different ways.
+### 4. Allocate Running IDs
 
-### 4. Write `10-define.md`
+- inspect `.workspaces/specs/` immediately before allocation
+- choose sequential IDs after the highest existing numeric Running ID
+- never reuse a gap merely because it is available
+- create each target directory immediately to reserve it
+- recheck for collisions before writing artifacts
+- if any collision occurs, stop, rescan, and allocate a fresh contiguous range
 
-- preserve the template headings
-- follow the `artifact_language` configured in `define.template.md`
-- make the scope and success framing explicit
-- keep implementation details out unless they are hard constraints
+One invocation may create one or many Running IDs. Record the complete allocation back into the source discovery's `related_runs` and allocated-run section.
 
-### 5. Manual Review Soft Gate
+### 5. Write One `10-define.md` Per Run
 
-Before recommending `/20-Spec`, check whether `10-define.md` still needs human approval.
-If `Approval Status` is still pending or the scope remains disputed:
+- preserve template headings
+- set `source_discovery`
+- identify sibling runs and dependencies
+- carry forward only the project context needed by this slice
+- make scope, non-goals, assumptions, and success criteria explicit
+- keep implementation tasks out of Define
 
-- warn that the phase boundary is not fully locked
-- recommend review before moving forward
-- do not pretend the route is stable
+### 6. Split An Existing Run When Necessary
+
+If an existing definition is too broad:
+
+- propose a replacement run map
+- preserve traceability to the original run and discovery
+- allocate new IDs only after approval
+- mark the old definition as `Superseded` and list its replacement runs
+- do not silently fork scope during `/20-Spec`
+
+### 7. Manual Review Gate
+
+Before recommending `/20-Spec`, confirm each generated definition independently. Approval of one run must not imply approval of every sibling run.
 
 ## Output
 
 Report:
 
-- core goal
-- non-goals
-- assumptions
-- scope boundaries
-- missing evidence or open risks
-- manual review warnings when scope is not yet approved
-- recommended next step
+- source Discovery ID
+- proposed and allocated run map
+- workspace path for every generated run
+- scope and dependency summary per run
+- any superseded run
+- exact `/20-Spec {running_id}` commands for approved runs
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Mainline workflow
-- Previous state: `/00-Discover`
-- Next state: `/20-Spec` when scope, decisions, and constraints are stable
-- Common companion commands: `Brainstorm` for unresolved options, `Research` for missing evidence; support skills: `grill-with-docs`, `domain-modeling`, and `to-prd` when terminology, boundaries, decisions, or product framing need sharpening
+- Classification: Mainline workflow and Running ID creation boundary
+- Previous state: approved `/00-Discover`
+- Next state: `/20-Spec {running_id}` per generated run
+- Running ID lifecycle: starts here
 
 ## Sources
 
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/define.template.md`
-- Related commands: `/00-Discover`, `Brainstorm`, `Research`, `/20-Spec`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/20-Spec`
-- **Why**: The work definition is stable enough to formalize into a delivery contract.
+- **Primary**: `/20-Spec {running_id}` for each approved run
 - **Alternatives**:
-  - `Brainstorm` - choose this when multiple strategic directions are still open.
-  - `Research` - choose this when missing evidence still blocks a confident spec.
-  - `grill-with-docs` - choose this when the definition is almost stable but still has overloaded terms, weak boundaries, or untested decision points.
+  - `/00-Discover {discovery_id}` when the go/no-go decision or direction is unstable
+  - `Research {discovery_id}` when evidence still blocks a reliable split
+  - `grill-with-docs` when boundaries or terminology remain ambiguous
 
 ## Nexus Event
 
-- Use `Brainstorm` when tradeoffs, non-goals, or option boundaries are still shifting in the conversation.
-- Use `Research` when scope decisions still depend on missing evidence.
-- Use `grill-with-docs` when available if targeted questioning could change scope, success criteria, terminology, or ownership boundaries before spec writing.
-
+- Use `domain-modeling` when sibling runs need shared language or durable architectural decisions.
+- Use `planning-and-task-breakdown` only after the delivery boundary is stable; small tasks belong in `/30-Plan`, not separate Running IDs.

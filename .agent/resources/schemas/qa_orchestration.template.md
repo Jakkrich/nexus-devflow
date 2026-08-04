@@ -1,10 +1,10 @@
-﻿---
+---
 id: "qa-orchestration-{ID}"
 title: "QA Orchestration Plan: Task {ID} - {Task Title}"
 doc_type: "plan"
 category: "qa"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

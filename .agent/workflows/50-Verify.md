@@ -23,6 +23,18 @@ Record verification start, results, open issues, and approval direction directly
 If an impact report is needed, create it in the same task directory and summarize its conclusions from `50-verify.md`.
 Keep the verification checklist aligned with the same soft-gate state so downstream report and release stages can see the current approval direction without re-reading the full verify narrative.
 
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
+
 ## Process
 
 ### Loop Contract

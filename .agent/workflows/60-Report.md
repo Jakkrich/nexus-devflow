@@ -38,6 +38,18 @@ using:
 
 Before writing `60-report.md`, read `artifact_language` from `report.template.md` and produce the markdown artifact in that language.
 
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
+
 ## Process
 
 ### Loop Contract
@@ -56,7 +68,7 @@ Run reporting as an outcome-evidence loop, not as a dump of prior artifacts.
 
 Read all relevant stage artifacts:
 
-- `00-discover.md`
+- the shared `00-discover.md` referenced by `source_discovery` when it materially explains the delivery decision
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`

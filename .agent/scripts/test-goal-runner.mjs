@@ -46,6 +46,6 @@ assert(latest.context_usage.token_usage.tracking_mode === 'manual_optional', 'to
 assert(Array.isArray(latest.context_usage.files_read), 'context usage should record files read as a list');
 assert(Array.isArray(latest.context_usage.optimization_notes), 'context usage should record optimization notes as a list');
 assert(Array.isArray(latest.tasks_decomposed) && latest.tasks_decomposed.length === 3, 'debug flow should create three tasks');
-assert(Array.isArray(latest.recommended_commands) && latest.recommended_commands[0].startsWith('Debug'), 'debug flow should recommend Debug');
+assert(Array.isArray(latest.recommended_commands) && latest.recommended_commands[0].startsWith('/00-Discover'), 'debug flow should enter Discover so it can route the RCA and own the delivery decision');
 
 console.log('goal-runner tests passed');

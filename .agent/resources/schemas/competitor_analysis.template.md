@@ -1,10 +1,10 @@
-﻿---
+---
 id: "competitor-analysis-{Topic Slug}"
 title: "Competitor Analysis Report: {Topic}"
 doc_type: "research"
 category: "competitor-analysis"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

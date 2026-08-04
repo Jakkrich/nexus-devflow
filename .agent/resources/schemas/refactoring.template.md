@@ -1,10 +1,10 @@
-﻿---
+---
 id: "refactoring-{Target Slug}"
 title: "Code Simplification And Refactoring Report: {Target}"
 doc_type: "report"
 category: "refactoring"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

@@ -6,7 +6,8 @@ DevFlow 2.0 is:
 
 - `workspace-stage-first`
 - `markdown-first`
-- `running-id based`
+- `discovery-id before commitment`
+- `running-id based from 10-Define onward`
 - `Timeline workflow only for numbered commands`
 
 DevFlow 2.0 is not:
@@ -21,12 +22,12 @@ DevFlow 2.0 is not:
 /00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
-Each stage must produce one primary markdown file.
+`/00-Discover` produces one primary markdown file under a Discovery ID. `/10-Define` may materialize one or more Running IDs, and each generated run receives exactly one primary `10-define.md`. Every later stage produces one primary markdown file per Running ID.
 Runs may also produce supporting checklist markdown files under `checklists/` when detailed operational tracking is needed.
 
 ## 2. Shared Markdown Contract Shape
 
-Every stage template should follow this structure:
+Delivery-run stage templates from Define onward should follow this structure:
 
 ```markdown
 ---
@@ -38,7 +39,7 @@ created: "{date}"
 updated: "{date}"
 owner: "{owner}"
 status: "draft"
-artifact_language: "en"
+artifact_language: "th"
 related_run: "{running_id}"
 related_files: []
 ---
@@ -68,6 +69,8 @@ related_files: []
 ## 11. Additional Notes
 ```
 
+The Discover template uses `discovery_id`, `decision`, `selected_route`, and `related_runs` instead of `related_run`. It must not allocate or reserve a numeric Running ID.
+
 Rules:
 
 1. Required headings must stay in this order.
@@ -76,10 +79,12 @@ Rules:
 4. AI must not remove required headings.
 5. Stage files are contracts for handoff.
 6. Context that used to be stored in JSON must now be stored in markdown sections.
-7. Every `.template.md` file must declare `artifact_language: "th"` or `"en"` in frontmatter.
+7. Every `.template.md` file must declare `artifact_language: "th"` exactly once as the tracked framework default.
 8. Before creating a markdown artifact, the workflow must read `artifact_language` from the template and write the artifact in that language.
 9. `Next Allowed Command` should preserve the Timeline continuation.
 10. `Nexus Event` may list optional skills, companion commands, or specialist lanes that fit the current situation and later return to the Timeline.
+11. Every heading in a generated stage or companion artifact must have body content before the next heading. If no information exists or the section does not apply, write exactly `-`.
+12. Generated artifacts must not retain template placeholders. AI must use `-` instead of inventing facts.
 
 ## 3. Manual Review Contract
 

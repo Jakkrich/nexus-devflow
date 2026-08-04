@@ -1,10 +1,10 @@
-﻿---
+---
 id: "project-wiki-index"
 title: "Project Wiki"
 doc_type: "wiki"
 category: "knowledge"
-status: "active"
-artifact_language: "en"
+status: "active"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

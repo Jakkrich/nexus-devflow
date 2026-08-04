@@ -61,36 +61,34 @@ Update/check:
 /00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
-Each Timeline stage owns one primary markdown contract file inside the task workspace.
+Discover owns one primary markdown contract under a Discovery ID. Define may create one or more delivery workspaces, and each Running ID owns one primary markdown contract per stage from `10-Define` onward.
 
 Example workspace layout:
 
 ```text
 .workspaces/
-  012-auth-refactor/
-    00-discover/
-      discover.md
-    10-define/
-      define.md
-    20-spec/
-      spec.md
-    30-plan/
-      plan.md
-    40-implement/
-      implement.md
-    50-verify/
-      verify.md
-    60-report/
-      report.md
-      report.html
-    70-release/
-      release.md
+  discoveries/
+    DISC-20260804-001-auth-refactor/
+      00-discover.md
+  specs/
+    012-auth-refactor/
+      10-define.md
+      20-spec.md
+      30-plan.md
+      40-implement.md
+      50-verify.md
+      60-report.md
+      60-report.html
+      70-release.md
 ```
 
 ## Running ID Rule
 
-- Keep a running ID for each work item.
-- Use the running ID as the stable reference across all stage folders and files.
+- `/00-Discover` creates a Discovery ID and must not consume a Running ID.
+- `Brainstorm`, `PRD`, `Research`, and `Debug` invoked by Discover return their findings to the same Discovery ID.
+- Only an approved `Proceed` discovery may enter `/10-Define`.
+- `/10-Define` creates one or more Running IDs for bounded delivery slices.
+- Use each Running ID as the stable reference from Define through Release.
 - The workflow number is the stage state.
 - The running ID is the work reference.
 
@@ -100,6 +98,9 @@ Example workspace layout:
 - Context that used to live in JSON must move into stage `.md` files.
 - Every stage uses a required template contract with fixed headings.
 - Every template must also end with an open section so AI or the user can add custom headings when needed.
+- Every generated stage or companion artifact must contain body content under every heading. When no information exists or a section does not apply, write exactly `-`; never leave the heading empty.
+- Remove all template placeholders before saving a generated artifact. Do not invent facts to avoid using `-`.
+- The tracked framework default for every markdown template is `artifact_language: "th"` exactly once.
 
 ## Public Companion Commands
 
@@ -107,11 +108,11 @@ These are the public non-mainline commands that users may call directly:
 
 | Command | Use when | Typical attachment point |
 | :--- | :--- | :--- |
-| `Goal` | The user starts with a broad goal and still needs routing | Before `00-Discover` or before a running ID exists |
-| `Brainstorm` | The task is still fuzzy or has multiple directions | `00-Discover`, `10-Define` |
-| `Research` | More source, codebase, or external knowledge is needed | `00-Discover`, `10-Define`, `20-Spec` |
-| `Debug` | Root-cause investigation is needed | `40-Implement`, `50-Verify` |
-| `PRD` | Product framing is needed before a stable spec exists | `10-Define`, `20-Spec` |
+| `Goal` | The user starts with a broad goal and still needs routing | Before `00-Discover` or before a Discovery ID exists |
+| `Brainstorm` | The task is still fuzzy or has multiple directions | From `00-Discover`, return to the same discovery; otherwise return to the requesting stage |
+| `Research` | More source, codebase, or external knowledge is needed | From `00-Discover`, return to the same discovery; also supports later stages |
+| `Debug` | Root-cause investigation is needed | From `00-Discover` for new failures, or `40-Implement` and `50-Verify` for active runs |
+| `PRD` | Product framing is needed before delivery commitment | From `00-Discover`, return to the same discovery |
 | `Issue-Triage` | Work starts from an issue intake rather than a stage artifact | Before `10-Define` or `Debug` |
 | `Security-Review` | Focused security review of target directory or project | Any stage, especially before `/50-Verify` or `/70-Release` |
 | `Wiki` | Knowledge should be captured or queried | Any stage |
@@ -169,16 +170,16 @@ Rules:
 
 Recommended use by stage:
 
-- `/00-Discover`: optional only when the request, stakeholder, or constraints are still too unclear to choose the next route confidently
-- `/10-Define`: preferred when scope, terminology, non-goals, decision boundaries, or success criteria are still unstable
+- `/00-Discover`: ask only what can change the support route or `Proceed`, `Defer`, `Reject` decision
+- `/10-Define`: preferred when delivery slicing, scope, terminology, non-goals, ownership boundaries, or success criteria are unstable
 - `/20-Spec`: useful when acceptance criteria, edge cases, rules, or integration constraints are still ambiguous
 - `/30-Plan`: use sparingly when architecture, dependency order, rollout risk, or verification strategy still depends on unresolved decisions
 - `/40-Implement` and later: avoid by default; only re-open deep questioning when a contradiction or missing decision forces a return to an earlier stage
 
 Stage-specific information bias:
 
-- `/00-Discover`: goal, pain point, urgency, affected users, known constraints
-- `/10-Define`: scope, non-goals, success criteria, terminology, ownership boundaries
+- `/00-Discover`: goal, pain point, urgency, affected users, known constraints, support route, and go/no-go evidence
+- `/10-Define`: delivery slices, scope, non-goals, success criteria, terminology, ownership boundaries, and dependencies
 - `/20-Spec`: required behavior, edge cases, acceptance criteria, policy or rule constraints
 - `/30-Plan`: dependency order, irreversible decisions, rollout risk, verification expectations
 

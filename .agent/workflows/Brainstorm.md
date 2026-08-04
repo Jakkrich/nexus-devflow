@@ -26,6 +26,8 @@ Preferred DevFlow 2.0 pairing:
 - from `/00-Discover` when the request is still fuzzy
 - from `/10-Define` when the direction is still unstable
 
+When invoked with a Discovery ID, link the brainstorming report to that discovery and return to `/00-Discover {discovery_id}` for synthesis. Do not allocate a Running ID or jump directly from a discovery-owned brainstorm into Define.
+
 ## Behavior
 
 When `Brainstorm` is triggered:
@@ -149,7 +151,7 @@ Brainstorm caching strategy
 - Classification: Companion command
 - Mainline status: Not a numbered stage
 - Typical entry points: `/00-Discover`, `/10-Define`
-- Typical handoff targets: `/00-Discover`, `/10-Define`, `/20-Spec`, `Research`, `PRD`
+- Typical handoff targets: `/00-Discover {discovery_id}` for discovery-owned work, or the active numbered stage for run-owned work
 
 ## Sources
 
@@ -159,7 +161,7 @@ Brainstorm caching strategy
 
 ## Next Workflow Recommendation
 
-- Default: return to `/00-Discover` or `/10-Define` with the chosen direction
+- Default: return to `/00-Discover {discovery_id}` when Discover requested the work; otherwise return to the stage that requested it
 - Alternate: `Research` when facts are still missing
-- Alternate: `/20-Spec` when the direction is now stable enough to formalize
+- Alternate: `/10-Define` or `/20-Spec` only when the work was not opened from a pending discovery
 

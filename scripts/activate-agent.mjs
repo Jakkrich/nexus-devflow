@@ -29,6 +29,7 @@ function main() {
   if (exists('active-ide.py')) problems.push('Legacy active-ide.py is still present');
 
   ensureDir('.workspaces');
+  ensureDir('.workspaces/discoveries');
   ensureDir('.workspaces/specs');
 
   const now = new Date().toISOString();

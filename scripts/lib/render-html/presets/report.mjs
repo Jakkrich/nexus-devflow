@@ -4,7 +4,7 @@ export const reportPreset = {
   name: 'report',
   render({ markdown, metadata, sourcePath }) {
     const { data: frontmatter, body } = parseFrontmatter(markdown);
-    const locale = metadata.artifact_language === 'th' || frontmatter.artifact_language === 'th' ? 'th' : 'en';
+    const locale = metadata.artifact_language === 'en' || frontmatter.artifact_language === 'en' ? 'en' : 'th';
     const title = metadata.title || metadata.report_title || frontmatter.title || sourcePath || 'Report';
     const html = `<!DOCTYPE html>
 <html lang="${escapeHtml(locale)}">

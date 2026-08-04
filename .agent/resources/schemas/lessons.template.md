@@ -1,10 +1,10 @@
-﻿---
+---
 id: "project-lessons"
 title: "Project Lessons Learned"
 doc_type: "lesson"
 category: "knowledge"
-status: "active"
-artifact_language: "en"
+status: "active"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

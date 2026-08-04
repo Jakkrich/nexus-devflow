@@ -1,10 +1,10 @@
-﻿---
+---
 id: "changelog-{Version}"
 title: "Changelog Entry: {Version}"
 doc_type: "changelog"
 category: "release"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

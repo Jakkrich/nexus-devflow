@@ -7,8 +7,12 @@ created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
 status: "draft"
-artifact_language: "en"
+artifact_language: "th"
 related_run: "{running_id}"
+source_discovery: "{discovery_id}"
+sibling_runs: []
+dependencies: []
+supersedes: []
 related_files: []
 ---
 
@@ -16,65 +20,65 @@ related_files: []
 
 ## 1. Objective
 
-- Lock the phase boundary so that specification can proceed without guessing intent.
+- Lock one bounded delivery outcome created from an approved discovery.
 
 ## 2. Source Inputs
 
-- `00-discover.md`
-- Project context documents
-- Research or brainstorm notes when they are relevant
+- `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
+- Linked companion findings and project context
 
 ## 3. Project Context To Preserve
 
-- Global rules that must carry into every later stage
-- Domain language that should not be rewritten casually
-- Program-level constraints that this phase must obey
+- Global rules, shared language, and cross-run constraints
 
-## 4. Problem Definition
+## 4. Source Discovery And Run Allocation
 
-- [State the exact problem this phase addresses]
+- Discovery ID: `{discovery_id}`
+- Running ID: `{running_id}`
+- Sibling runs: [IDs or None]
+- Allocation rationale: [Why this is one run]
 
-## 5. Phase Scope
+## 5. Problem Definition
 
-- [Describe the delivery boundary for this running id]
+- [Define this run's part of the approved problem]
 
-## 6. In Scope
+## 6. Delivery Scope
 
-- [List items explicitly included in this phase]
+- [Describe the independently specifiable outcome]
 
-## 7. Out Of Scope
+## 7. In Scope
 
-- [List items explicitly excluded from this phase]
+- [Included items]
 
-## 8. Success Criteria
+## 8. Out Of Scope
 
-- [List the outcomes that make this phase ready for Spec]
+- [Excluded and sibling-owned items]
 
-## 9. Hard Constraints
+## 9. Success Criteria
 
-- [List constraints that later stages must not violate]
+- [Outcomes that make the run ready for Spec]
 
-## 10. Dependencies
+## 10. Hard Constraints
 
-- [List dependencies on teams, systems, earlier phases, or research]
+- [Constraints]
 
-## 11. Assumptions
+## 11. Dependencies
 
-- [List assumptions still being made at this stage]
+- [Sibling runs, systems, teams, or research]
 
-## 12. Open Decisions
+## 12. Assumptions And Open Decisions
 
-- [List decisions that need human confirmation before or during Spec]
+- Assumptions: [List]
+- Open decisions: [List]
 
 ## 13. AI Actions Performed
 
-- [List concrete actions taken, such as consolidating scope, identifying non-goals, or carrying forward rules]
+- [Decomposition, allocation, and traceability actions]
 
 ## 14. Human Review Required
 
-- Confirm the phase boundary is correct
-- Confirm in-scope and out-of-scope lists are acceptable
-- Confirm assumptions are visible and not hidden as facts
+- Confirm one coherent delivery boundary
+- Confirm sibling responsibilities and dependencies
 
 ## 15. Approval Status
 
@@ -84,10 +88,14 @@ related_files: []
 
 - `/20-Spec {running_id}`
 
-## 17. Change Log
+## 17. Nexus Event
 
-- {Date}: Initial define draft created
+- `/00-Discover {discovery_id}`, `Research`, or `grill-with-docs` when needed
 
-## 18. Additional Notes
+## 18. Change Log
+
+- {Date}: Running ID allocated and definition created
+
+## 19. Additional Notes
 
 - Add extra headings below this section when useful.

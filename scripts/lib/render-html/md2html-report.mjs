@@ -190,7 +190,7 @@ function replaceAll(template, values) {
 export function renderReportWithMd2HtmlTemplate({ sourcePath, markdown, outputPath }) {
   const template = fs.readFileSync(templatePath, 'utf8');
   const { frontmatter, title, body } = splitTitleAndBody(markdown, path.basename(sourcePath));
-  const locale = frontmatter.artifact_language === 'th' ? 'th' : 'en';
+  const locale = frontmatter.artifact_language === 'en' ? 'en' : 'th';
   const labels = LABELS[locale] || LABELS.en;
   const subtitle = deriveSubtitle(body) || title;
   const minutes = Math.max(1, Math.round(wordCount(body || title) / 250));

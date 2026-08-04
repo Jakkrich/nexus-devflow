@@ -42,7 +42,7 @@ scripts/lib/render-html/markdown.mjs
 | Field | Purpose |
 | :--- | :--- |
 | `title` | HTML `<title>` and visible report heading fallback |
-| `artifact_language` | sets `<html lang="...">`; `th` and `en` are supported, default is `en` |
+| `artifact_language` | sets `<html lang="...">`; `th` and `en` are supported, framework and missing-value default is `th` |
 
 Other frontmatter can still exist for workflow contract purposes, but it is not required for HTML layout generation.
 
