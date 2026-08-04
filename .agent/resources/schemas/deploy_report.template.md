@@ -1,10 +1,10 @@
-﻿---
+---
 id: "deploy-report-{Timestamp}"
 title: "Production Deployment And Pre-Flight Report"
 doc_type: "report"
 category: "release"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

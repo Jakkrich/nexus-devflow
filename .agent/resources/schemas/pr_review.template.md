@@ -1,10 +1,10 @@
-﻿---
+---
 id: "pr-review-{PR Reference}"
 title: "PR Review: {PR Reference}"
 doc_type: "report"
 category: "review"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

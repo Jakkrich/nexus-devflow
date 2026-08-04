@@ -4,7 +4,7 @@ Nexus-DevFlow 2.0 uses `.workspaces/` as the primary store for task artifacts an
 
 Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projects/nexus-devflow/AGENTS.md:1) and [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
 
-Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent/resources/schemas/*.template.md`. Workflows should read that value before generating markdown artifact output.
+The tracked framework default is `artifact_language: "th"` exactly once in every `.agent/resources/schemas/*.template.md`. Workflows must read that value before generating markdown output.
 
 ## Canonical Layout
 
@@ -13,6 +13,7 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 |-- active-agent.json
 |-- project_index.json
 |-- lessons.md
+|-- discoveries/
 |-- debug/
 |-- issues/
 |-- prds/
@@ -31,7 +32,8 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 
 | Path | Stores | Related workflows or commands | Keep? |
 | :--- | :--- | :--- | :--- |
-| `.workspaces/specs/` | Per-running-ID stage artifacts such as `00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Brainstorm`, `Research`, `Debug`, `Security-Review`, `Preview` | Yes. This is the core DevFlow 2.0 task store. |
+| `.workspaces/discoveries/` | Pre-delivery `00-discover.md` artifacts grouped by Discovery ID, including route selection, companion findings, decision, and later related-run links | `/00-Discover`, plus discovery-owned `Brainstorm`, `PRD`, `Research`, and `Debug` | Yes. This is the decision store before Running IDs exist. |
+| `.workspaces/specs/` | Per-running-ID delivery artifacts such as `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Security-Review`, `Preview` | Yes. This is the approved delivery-run store. |
 | `.workspaces/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
 | `.workspaces/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
 | `.workspaces/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
@@ -50,7 +52,7 @@ Phase 1 artifact language control uses `artifact_language: "th"|"en"` in `.agent
 
 ## Task Workspace Files
 
-Each mainline run lives under `.workspaces/specs/{ID}-{slug}/` and uses flat stage filenames in one directory so the work stays easy to inspect, resume, and validate.
+Discoveries live under `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/` before delivery commitment. An approved `/10-Define` creates one or more runs under `.workspaces/specs/{ID}-{slug}/`; each run then uses flat stage filenames so the work stays easy to inspect, resume, and validate.
 
 ### Markdown And HTML Policy
 
@@ -63,8 +65,8 @@ Each mainline run lives under `.workspaces/specs/{ID}-{slug}/` and uses flat sta
 
 | File | Purpose |
 | :--- | :--- |
-| `00-discover.md` | Captures the request, context, and opening questions. |
-| `10-define.md` | Locks scope, decisions, constraints, and success criteria. |
+| `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md` | Routes focused inquiry and records `Proceed`, `Defer`, or `Reject` without a Running ID. |
+| `.workspaces/specs/{ID}-{slug}/10-define.md` | Locks one delivery boundary, creates the Running ID, and links to its source discovery. |
 | `20-spec.md` | Defines the delivery contract and acceptance criteria. |
 | `30-plan.md` | Breaks the work down into execution order, risks, and verification approach. |
 | `40-implement.md` | Records the implementation work, key changes, and any meaningful deviation. |
@@ -142,6 +144,8 @@ People reading a stage artifact should be able to find:
 - approval status
 - next allowed command
 
+Every heading must contain concrete body content. When information is genuinely unavailable or a section does not apply, write exactly `-`. An empty heading or unresolved template placeholder is a contract failure; AI must not invent information merely to fill the section.
+
 When checklist artifacts exist, people should also be able to find the same soft-gate state there without opening every stage file.
 
 This keeps the workflow manual-first even when AI prepares the artifact draft.
@@ -168,8 +172,8 @@ If you find those files in an older workspace:
 
 ```text
 Mainline:
-  /00-Discover       -> .workspaces/specs/{ID}-*/00-discover.md
-  /10-Define         -> .workspaces/specs/{ID}-*/10-define.md
+  /00-Discover       -> .workspaces/discoveries/{DISCOVERY_ID}-*/00-discover.md
+  /10-Define         -> one or many .workspaces/specs/{ID}-*/10-define.md
   /20-Spec           -> .workspaces/specs/{ID}-*/20-spec.md
   /30-Plan           -> .workspaces/specs/{ID}-*/30-plan.md
   /40-Implement      -> .workspaces/specs/{ID}-*/40-implement.md
@@ -180,11 +184,11 @@ Mainline:
   Checklist layer    -> .workspaces/specs/{ID}-*/checklists/*.md
 
 Companion commands:
-  Goal               -> routing before a running ID exists or before mainline entry
-  Brainstorm         -> usually .workspaces/research/ or appended notes in discover/define
-  Research           -> .workspaces/research/
-  Debug              -> .workspaces/debug/
-  PRD                -> .workspaces/prds/
+  Goal               -> routing before a Discovery ID exists or before mainline entry
+  Brainstorm         -> .workspaces/research/, then back to the requesting discovery or stage
+  Research           -> .workspaces/research/, then back to the requesting discovery or stage
+  Debug              -> .workspaces/debug/, then back to the requesting discovery or stage
+  PRD                -> .workspaces/prds/, then back to the requesting discovery or stage
   Issue-Triage       -> .workspaces/issues/
   Security-Review    -> .workspaces/specs/{ID}-*/security-review.md
   Wiki               -> .workspaces/wiki/framework/ or .workspaces/wiki/project/ when the wiki surface is explicitly used

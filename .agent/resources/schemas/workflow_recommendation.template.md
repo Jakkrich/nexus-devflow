@@ -1,10 +1,10 @@
-﻿---
+---
 id: "workflow-recommendation-{Date}"
 title: "Workflow Recommendations"
 doc_type: "guide"
 category: "workflow"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

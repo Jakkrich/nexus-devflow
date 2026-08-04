@@ -1,10 +1,10 @@
-﻿---
+---
 id: "spec-orchestration-{Topic Slug}"
 title: "Spec Orchestration Report: {Topic}"
 doc_type: "report"
 category: "planning"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "Spec Orchestrator Agent"
@@ -40,7 +40,7 @@ To assemble the final requirements, the following workflows are recommended in s
 1. **`Spec-Research`**: Research integrations first [Links / Context]
 2. **`Competitor`**: Research competitor gaps and pain points [Context]
 3. **`PRD`**: Synthesize findings into a formal product spec
-4. **`/00-Discover`**: Anchor the run and create the workspace before definition/spec work
+4. **`/00-Discover`**: Open or resume a Discovery ID, select support routes, and decide whether delivery should proceed before `/10-Define` creates Running IDs
 
 ## 3. Spec Critic Analysis #section/findings
 

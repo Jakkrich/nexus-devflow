@@ -37,6 +37,18 @@ using:
 
 Before writing `20-spec.md`, read `artifact_language` from `spec.template.md` and produce the artifact in that language.
 
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
+
 ## Process
 
 ### Loop Contract
@@ -44,10 +56,10 @@ Before writing `20-spec.md`, read `artifact_language` from `spec.template.md` an
 Run specification as a contract-hardening loop, not as a prose expansion of the definition.
 
 - **Intent**: produce requirements and acceptance criteria that are concrete enough for planning and review.
-- **Context**: read `10-define.md`, `00-discover.md`, relevant research, hard constraints, and any domain or codebase decisions that shape the delivery contract.
+- **Context**: read the run's `10-define.md`, follow its `source_discovery` link when original framing matters, and read relevant research, hard constraints, and domain or codebase decisions that shape this run's delivery contract.
 - **Action**: write requirements, acceptance criteria, constraints, and out-of-scope items, then inspect whether each requirement is testable and unambiguous.
 - **Observation**: use concrete evidence such as ambiguous wording, unchecked assumptions, edge cases, missing acceptance criteria, conflicting constraints, and implementation details that are not true constraints.
-- **Adjustment**: if facts are missing, route to `Research`; if requirements need stress-testing, use `grill-with-docs`; if module or interface boundaries affect the contract, use `codebase-design`; if scope is unstable, return to `/10-Define`.
+- **Adjustment**: if facts are missing, route to `Research`; if requirements need stress-testing, use `grill-with-docs`; if module or interface boundaries affect the contract, use `codebase-design`; if scope is unstable or still contains multiple independently deliverable contracts, return to `/10-Define` and split the run before continuing.
 - **Stop Condition**: stop when every requirement has checkable acceptance criteria, hard constraints are explicit, out-of-scope items are visible, and `/30-Plan` can break the work down without inventing intent.
 - **Handoff**: `20-spec.md` must tell `/30-Plan` what must be delivered, how success will be checked, what constraints cannot move, and what is intentionally excluded.
 
@@ -56,7 +68,7 @@ Run specification as a contract-hardening loop, not as a prose expansion of the 
 Read:
 
 - `10-define.md`
-- `00-discover.md` when the original framing still matters
+- the shared `00-discover.md` referenced by `source_discovery` when the original framing still matters
 - research notes if they impose real constraints
 
 ### 2. Write The Specification
@@ -80,6 +92,8 @@ If the spec cannot be written confidently:
 - record assumptions explicitly when they are unavoidable
 
 Do not hide uncertainty inside vague requirement text.
+
+Do not combine sibling Running IDs into one spec. If this run still contains multiple independent acceptance, release, ownership, or context boundaries, stop and return to `/10-Define {running_id}` for an explicit split.
 
 ### 4. Finalize `20-spec.md`
 

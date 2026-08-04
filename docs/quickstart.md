@@ -18,23 +18,23 @@ npm.cmd run validate
 
 - Start with `/00-Discover` when the work is new
 - Start with `Help` when the route is unclear
-- Start with `Debug` when you need root-cause investigation before scoping the fix
+- Let `/00-Discover` route to `Debug` when a new request begins with an unknown root cause
 
 ## 4. First Example Path
 
 If you are starting new feature work:
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan
+/00-Discover -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan
 ```
 
 If the work is large, multi-phase, requirement-heavy, or high-risk, use the same command path but treat it as a manual review flow.
 Review each stage artifact before moving to the next command and pay attention to `Approval Status` and `Next Allowed Command`.
 
-If you are fixing a bug:
+If a new request begins with a bug:
 
 ```text
-Debug -> /10-Define -> /20-Spec -> /30-Plan
+/00-Discover -> Debug -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan
 ```
 
 See [docs/example-runs.md](example-runs.md) for a fuller walkthrough.
@@ -66,15 +66,14 @@ For a quick read-only status scan across existing runs, agents or maintainers ca
 
 ## 6. Workspace Model
 
-DevFlow 2.0 uses markdown-first stage artifacts under `.workspaces/specs/`.
-In phase 1, markdown artifact language is controlled by `artifact_language` in the matching schema template under `.agent/resources/schemas/`.
+DevFlow 2.0 uses markdown-first discovery artifacts under `.workspaces/discoveries/` and delivery stage artifacts under `.workspaces/specs/`.
+Markdown artifacts default to Thai through one `artifact_language: "th"` field in every matching schema template under `.agent/resources/schemas/`.
 The mainline stage templates also include manual review sections so humans can inspect `Source Inputs`, `AI Actions Performed`, `Human Review Required`, `Approval Status`, and `Next Allowed Command` before moving forward.
 
 Typical running-id layout:
 
 ```text
 .workspaces/specs/{ID}-{slug}/
-  00-discover.md
   10-define.md
   20-spec.md
   30-plan.md
@@ -86,11 +85,18 @@ Typical running-id layout:
   70-release.md
 ```
 
+Pre-delivery discovery uses a separate namespace and does not consume a Running ID:
+
+```text
+.workspaces/discoveries/{DISCOVERY_ID}-{slug}/
+  00-discover.md
+```
+
 `50-verify-impact.md` is optional and is typically created during `/50-Verify` when the run needs explicit impact, regression-risk, or rollback analysis.
 
 See [workspace-artifacts.md](workspace-artifacts.md) for the canonical artifact contract.
 See [manual-review-workflow-spec.md](manual-review-workflow-spec.md) for the manual review operating model and naming guidance.
-Use `npm.cmd run artifact-language:switch -- en` or `npm.cmd run artifact-language:switch -- th` to change the template default for all markdown artifacts.
+Use `npm.cmd run artifact-language:switch -- th` to normalize all templates back to the tracked Thai default. An explicit `en` override remains available for local use, but tracked framework validation expects `th`.
 
 ## Internal Surfaces
 

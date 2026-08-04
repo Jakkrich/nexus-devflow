@@ -48,7 +48,7 @@ export function renderReportStageWorkspace({ workspaceDir }) {
     markdown: reportMarkdown,
     outputPath,
     metadata: {
-      artifact_language: frontmatter.artifact_language || 'en',
+      artifact_language: frontmatter.artifact_language || 'th',
       title: frontmatter.title || 'Report'
     }
   });

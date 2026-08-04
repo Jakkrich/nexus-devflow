@@ -1,10 +1,10 @@
-﻿---
+---
 id: "wiki-{Title Slug}"
 title: "{Title}"
 doc_type: "wiki"
 category: "knowledge"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

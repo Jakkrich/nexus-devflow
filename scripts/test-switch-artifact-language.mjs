@@ -29,13 +29,14 @@ function run(args) {
 try {
   writeFile(path.join(schemasDir, 'discover.template.md'), `---
 id: "sample"
+artifact_language: "th"
 artifact_language: "en"
 status: "draft"
 ---
 `);
   writeFile(path.join(schemasDir, 'verify.template.md'), `---
 id: "sample"
-artifact_language: "en"
+artifact_language: "th"
 status: "draft"
 ---
 `);
@@ -43,6 +44,7 @@ status: "draft"
   const toThai = run(['th', '--schemas-dir', schemasDir]);
   assert(toThai.status === 0, `switch to th should pass:\n${toThai.stdout}\n${toThai.stderr}`);
   assert(fs.readFileSync(path.join(schemasDir, 'discover.template.md'), 'utf8').includes('artifact_language: "th"'), 'discover template should switch to th');
+  assert((fs.readFileSync(path.join(schemasDir, 'discover.template.md'), 'utf8').match(/^artifact_language:/gm) || []).length === 1, 'duplicate artifact_language fields should be normalized to one');
   assert(fs.readFileSync(path.join(schemasDir, 'verify.template.md'), 'utf8').includes('artifact_language: "th"'), 'verify template should switch to th');
 
   const toEnglish = run(['en', '--schemas-dir', schemasDir]);

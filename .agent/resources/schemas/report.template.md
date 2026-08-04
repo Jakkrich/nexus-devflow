@@ -6,8 +6,8 @@ stage: "60-report"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 related_run: "{running_id}"
 related_files: []
 ---
@@ -20,7 +20,7 @@ related_files: []
 
 ## 2. Source Inputs
 
-- `00-discover.md`
+- Shared `00-discover.md` referenced by `source_discovery` when it materially explains the delivery decision
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`
@@ -125,4 +125,3 @@ The `60-report.html` output should include:
 ## 18. Additional Notes
 
 - Add any extra headings below this section when useful.
-

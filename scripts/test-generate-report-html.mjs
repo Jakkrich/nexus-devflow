@@ -32,7 +32,7 @@ try {
   writeFile(path.join(workspaceDir, '60-report.md'), `---
 id: "999-report"
 title: "Report: Sample Password Reset"
-artifact_language: "en"
+artifact_language: "th"
 doc_type: "stage"
 stage: "60-report"
 created: "2026-06-22"
@@ -124,7 +124,7 @@ related_run: "999"
   assert(html.includes('>Report: Sample Password Reset</h1>'), 'html should render the markdown document title');
   assert(html.includes('>1. Purpose</h2>'), 'html should render markdown headings from the report body');
   assert(html.includes('<li>Stakeholder demo is ready.</li>'), 'html should include additional notes from markdown');
-  assert(html.includes('Toggle theme'), 'html should render through the md2html template chrome');
+  assert(html.includes('เปลี่ยนธีม'), 'html should localize the md2html template chrome from artifact_language');
   assert(html.includes('id="toc-nav"'), 'html should include the md2html toc shell');
   assert(!html.includes('checklists/implementation-checklist.md'), 'html should not inject checklist template sections');
 

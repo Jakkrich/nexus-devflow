@@ -1,10 +1,10 @@
-﻿---
+---
 id: "triage-{Issue_Number}"
 title: "GitHub Issue Triage Report: #{Issue_Number}"
 doc_type: "report"
 category: "triage"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

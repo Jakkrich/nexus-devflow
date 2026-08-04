@@ -325,7 +325,6 @@ function validateStageArtifactConventions(failures) {
 
 function validateArtifactLanguageContracts(failures) {
   const schemasDir = path.join(projectRoot, '.agent', 'resources', 'schemas');
-  const validLanguages = new Set(['th', 'en']);
   const templateFiles = fs.readdirSync(schemasDir, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith('.template.md'))
     .map((entry) => path.join(schemasDir, entry.name));
@@ -333,17 +332,99 @@ function validateArtifactLanguageContracts(failures) {
   for (const filePath of templateFiles) {
     const relativePath = path.relative(projectRoot, filePath);
     const content = fs.readFileSync(filePath, 'utf8');
-    const match = content.match(/^artifact_language:\s*"(.*)"\s*$/m);
-    if (!match) {
+    const matches = [...content.matchAll(/^artifact_language:\s*"(.*)"\s*$/gm)];
+    if (matches.length === 0) {
       fail(`${relativePath} is missing required frontmatter field: artifact_language`, failures);
       continue;
     }
-    if (!validLanguages.has(match[1])) {
-      fail(`${relativePath} has unsupported artifact_language "${match[1]}"`, failures);
+    if (matches.length !== 1) {
+      fail(`${relativePath} must declare artifact_language exactly once; found ${matches.length}`, failures);
+      continue;
+    }
+    if (matches[0][1] !== 'th') {
+      fail(`${relativePath} must use the framework default artifact_language "th"; found "${matches[0][1]}"`, failures);
     }
   }
 
   ok(`Artifact language contract passed for ${templateFiles.length} template file(s)`);
+}
+
+function validateGeneratedArtifactSectionContent(failures) {
+  const workspaceRoot = path.join(projectRoot, '.workspaces');
+  if (!fs.existsSync(workspaceRoot)) {
+    ok('No generated workspace artifacts to validate for section content');
+    return;
+  }
+
+  const markdownFiles = [];
+  function walk(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+      } else if (entry.isFile() && entry.name.endsWith('.md')) {
+        markdownFiles.push(full);
+      }
+    }
+  }
+  walk(workspaceRoot);
+
+  const unresolvedPlaceholderPatterns = [
+    /\{(?:Date|Owner|Work Title|running_id|discovery_id)\}/i,
+    /\[(?:Describe|List|Summarize|State|Add|Requirement|Criterion|Question|Reason|Action|What|Selected|Updated|Insert|Provide)\b[^\]]*\]/i
+  ];
+  let checkedFiles = 0;
+
+  for (const filePath of markdownFiles) {
+    const content = fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '');
+    if (!content.startsWith('---')) continue;
+    const frontmatterEnd = content.indexOf('\n---', 3);
+    if (frontmatterEnd === -1) continue;
+    const frontmatter = content.slice(0, frontmatterEnd);
+    if (!/^artifact_language:\s*"(?:th|en)"\s*$/m.test(frontmatter) && !/^doc_type:/m.test(frontmatter)) continue;
+
+    checkedFiles++;
+    const body = content.slice(frontmatterEnd + 4);
+    const headings = [...body.matchAll(/^(#{2,6})\s+(.+?)\s*$/gm)].map((match) => ({
+      index: match.index,
+      end: match.index + match[0].length,
+      level: match[1].length,
+      title: match[0]
+    }));
+
+    for (let index = 0; index < headings.length; index++) {
+      const heading = headings[index];
+      let sectionEnd = body.length;
+      for (let next = index + 1; next < headings.length; next++) {
+        if (headings[next].level <= heading.level) {
+          sectionEnd = headings[next].index;
+          break;
+        }
+      }
+
+      const sectionBody = body
+        .slice(heading.end, sectionEnd)
+        .split(/\r?\n/)
+        .filter((line) => !/^#{2,6}\s+/.test(line.trim()))
+        .filter((line) => !/^<!--.*-->$/.test(line.trim()))
+        .join('\n')
+        .trim();
+      const relativePath = path.relative(projectRoot, filePath);
+
+      if (!sectionBody) {
+        fail(`${relativePath} has an empty section: ${heading.title}; write concrete content or "-"`, failures);
+        continue;
+      }
+      for (const pattern of unresolvedPlaceholderPatterns) {
+        if (pattern.test(sectionBody)) {
+          fail(`${relativePath} has an unresolved placeholder under ${heading.title}; replace it with concrete content or "-"`, failures);
+          break;
+        }
+      }
+    }
+  }
+
+  ok(`Generated artifact section content passed for ${checkedFiles} frontmatter-backed markdown file(s)`);
 }
 
 function validateArtifactLanguageWorkflowSurface(failures) {
@@ -378,11 +459,11 @@ function validateManualReviewContracts(failures) {
     ['.agent/resources/schemas/discover.template.md', [
       '## 2. Source Inputs',
       '## 3. Project Context To Preserve',
-      '## 10. AI Actions Performed',
-      '## 11. Human Review Required',
-      '## 12. Approval Status',
-      '## 13. Next Allowed Command',
-      '## 14. Nexus Event'
+      '## 12. AI Actions Performed',
+      '## 13. Human Review Required',
+      '## 14. Approval Status',
+      '## 15. Next Allowed Command',
+      '## 16. Nexus Event'
     ]],
     ['.agent/resources/schemas/define.template.md', [
       '## 2. Source Inputs',
@@ -491,6 +572,52 @@ function validateManualReviewContracts(failures) {
   ok('Manual review workflow contracts are aligned');
 }
 
+function validateDiscoveryRunBoundary(failures) {
+  const discoverWorkflow = readText('.agent/workflows/00-Discover.md', failures);
+  const defineWorkflow = readText('.agent/workflows/10-Define.md', failures);
+  const discoverTemplate = readText('.agent/resources/schemas/discover.template.md', failures);
+  const defineTemplate = readText('.agent/resources/schemas/define.template.md', failures);
+  const readme = readText('README.md', failures);
+
+  const requiredDiscoverMarkers = [
+    '.workspaces/discoveries/',
+    'Discovery ID',
+    'Proceed',
+    'Defer',
+    'Reject',
+    'Do not create a Running ID'
+  ];
+  for (const marker of requiredDiscoverMarkers) {
+    if (discoverWorkflow && !discoverWorkflow.includes(marker)) {
+      fail(`.agent/workflows/00-Discover.md is missing discovery boundary marker: ${marker}`, failures);
+    }
+  }
+
+  for (const marker of ['{discovery_id}', 'decision:', 'selected_route:', 'related_runs:']) {
+    if (discoverTemplate && !discoverTemplate.includes(marker)) {
+      fail(`.agent/resources/schemas/discover.template.md is missing Discovery ID contract marker: ${marker}`, failures);
+    }
+  }
+  if (discoverTemplate && /(^|\n)related_run:\s/m.test(discoverTemplate)) {
+    fail('.agent/resources/schemas/discover.template.md must not bind Discover to one Running ID', failures);
+  }
+
+  for (const marker of ['source_discovery:', 'sibling_runs:', 'Running ID', 'one or many']) {
+    const target = marker.endsWith(':') ? defineTemplate : defineWorkflow;
+    if (target && !target.includes(marker)) {
+      fail(`Define contract is missing fan-out marker: ${marker}`, failures);
+    }
+  }
+
+  for (const marker of ['What must be resolved?', 'Stop without Running ID', 'One or many delivery runs']) {
+    if (readme && !readme.includes(marker)) {
+      fail(`README How It Works diagram is missing lifecycle marker: ${marker}`, failures);
+    }
+  }
+
+  ok('Discovery decision and Define Running ID boundary are aligned');
+}
+
 function validateStageLocalLoopContracts(failures) {
   const loopEnabledWorkflows = [
     '.agent/workflows/00-Discover.md',
@@ -504,6 +631,7 @@ function validateStageLocalLoopContracts(failures) {
   ];
   const requiredMarkers = [
     '### Loop Contract',
+    '## Required Section Content',
     'Intent',
     'Context',
     'Action',
@@ -529,7 +657,10 @@ function validateStageLocalLoopContracts(failures) {
     const lowerContent = content.toLowerCase();
 
     for (const marker of requiredMarkers) {
-      if (!content.includes(marker)) {
+      const markerExists = marker.startsWith('## ')
+        ? content.split(/\r?\n/).some((line) => line === marker)
+        : content.includes(marker);
+      if (!markerExists) {
         fail(`${relativePath} is missing mainline stage-local loop contract marker: ${marker}`, failures);
       }
     }
@@ -923,7 +1054,9 @@ function main() {
   validateStageArtifactConventions(failures);
   validateArtifactLanguageContracts(failures);
   validateArtifactLanguageWorkflowSurface(failures);
+  validateGeneratedArtifactSectionContent(failures);
   validateManualReviewContracts(failures);
+  validateDiscoveryRunBoundary(failures);
   validateStageLocalLoopContracts(failures);
   validateSkillSelectionPolicySurface(failures);
   validateChecklistContracts(failures);

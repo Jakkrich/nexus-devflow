@@ -18,8 +18,7 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 
 ### Minimum Artifact Set
 
-- `00-discover/discover.md`
-- `00-discover.md`
+- `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`
@@ -32,7 +31,7 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 - Add `70-release.md` when release-facing packaging or coordination matters
 - Add `checklists/` when the team wants live execution visibility across planning, implementation, and verification
 - Add `PRD` artifacts when product framing needs to mature before or during spec work
-- Skip early companion layers when the request is already clear and `/10-Define` can start immediately
+- Skip unnecessary companion routes when the request is already clear, approve Proceed in Discover, and continue to `/10-Define {discovery_id}`
 
 ## Bugfix Or Operations Team
 
@@ -42,9 +41,9 @@ Teams handling defects, regressions, incidents, operational fixes, or smaller re
 
 ### Recommended Starting Commands
 
-- `Debug` when root cause is still unknown
+- `/00-Discover` for a new failure, routing to `Debug` when root cause is still unknown
 - `Issue-Triage` when the work begins from ticket intake or an ops queue
-- `/10-Define` when the bug and required fix are already well understood
+- `/10-Define {discovery_id}` when the discovery decision is approved and the required fix is understood
 
 ### Minimum Artifact Set
 
@@ -56,7 +55,7 @@ Teams handling defects, regressions, incidents, operational fixes, or smaller re
 
 ### Optional Layers
 
-- Add `00-discover.md` when the issue is still ambiguous or multiple failure modes are competing
+- Keep the shared `00-discover.md` concise when the issue is already well understood
 - Add `60-report.md` when the fix needs a durable wrap-up for handoff, incident learning, or stakeholder visibility
 - Add `50-verify-impact.md` when rollback, blast radius, or impact analysis should be captured explicitly
 - Skip heavier discovery or PRD-style framing when the issue is narrow and urgency is high

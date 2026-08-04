@@ -43,11 +43,11 @@ The Boss first classifies the request into one of these paths:
 
 | Flow | Use When | Typical Next Step |
 | :--- | :--- | :--- |
-| DevFlow Mainline | Feature work, bug fixes, tests, docs, migrations, or refactors that should produce stage artifacts or code. | `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify` |
-| PRD / Spec Orchestration | Product ideas, requirements, or high-level planning before a running ID exists. | `PRD` or `Spec-Orchestrate` |
-| Brainstorm Flow | Early ambiguous ideas that need options and tradeoff analysis. | `Brainstorm` |
-| Research Flow | The user needs external facts, docs, or feasibility proof before defining scope. | `Research` or `Spec-Research` |
-| RCA / Debug Flow | Failures, errors, regressions, or investigation-heavy bug reports. | `Debug` |
+| DevFlow Mainline | New feature, bug, test, docs, migration, or refactor requests. | `/00-Discover`, which owns the delivery decision |
+| PRD / Spec Orchestration | Product ideas or requirement-heavy planning before a Discovery ID exists. | `/00-Discover`, likely routing to `PRD` |
+| Brainstorm Flow | Early ambiguous ideas that need options and tradeoff analysis. | `/00-Discover`, likely routing to `Brainstorm` |
+| Research Flow | External facts, docs, codebase evidence, or feasibility proof are needed. | `/00-Discover`, likely routing to `Research` |
+| RCA / Debug Flow | Failures, errors, regressions, or investigation-heavy bug reports. | `/00-Discover`, likely routing to `Debug` |
 
 ## Process
 
@@ -118,8 +118,8 @@ Report:
 
 - Classification: Companion command
 - Mainline status: Not a numbered stage
-- Typical entry points: broad goals before a running ID exists
-- Typical handoff targets: `/00-Discover`, `Brainstorm`, `Research`, `PRD`, `Spec-Orchestrate`, `Debug`
+- Typical entry points: broad goals before a Discovery ID exists
+- Typical handoff target: `/00-Discover`, with a likely companion route recorded as guidance rather than executed outside Discover
 
 ## Sources
 
@@ -132,10 +132,9 @@ Report:
 - **Primary**: the first command listed in `recommended_commands`
 - **Why**: `Goal` exists to route broad intent into the correct DevFlow 2.0 entry point
 - **Alternatives**:
-  - `Brainstorm "{goal}"` when the goal is still exploratory
-  - `Debug "{goal}"` when the goal is primarily a failure investigation
-  - `/10-Define` when the goal is stable but still needs scope locking
-  - `/20-Spec` when the work is ready to become a delivery contract
+  - `/00-Discover "{goal}"` for all new work; Discover chooses Brainstorm, PRD, Research, Debug, or direct decision
+  - `/10-Define {discovery_id}` only after an approved Proceed decision
+  - `/20-Spec {running_id}` only for an existing approved delivery run
 
 ## Wiki Update Recommendation
 

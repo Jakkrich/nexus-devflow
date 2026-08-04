@@ -1,10 +1,10 @@
-﻿---
+---
 id: "agent-report-{Agent Name}-{Timestamp}"
 title: "Agent Report: {Agent Name}"
 doc_type: "report"
 category: "agent"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Agent Name}"

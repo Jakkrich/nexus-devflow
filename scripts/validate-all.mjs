@@ -3,8 +3,8 @@ import { spawnSync } from 'node:child_process';
 import process from 'node:process';
 
 const checks = [
-  ['Framework validation', ['npm.cmd', ['run', 'validate']]],
-  ['Bundle sync check', ['npm.cmd', ['run', 'sync:check']]],
+  ['Framework validation', [process.execPath, ['scripts/validate-framework.mjs']]],
+  ['Bundle sync check', [process.execPath, ['scripts/sync-agent-bundle.mjs']]],
   ['Activate contract test', [process.execPath, ['scripts/test-activate-agent.mjs']]],
   ['Validate framework regression test', [process.execPath, ['scripts/test-validate-framework.mjs']]],
   ['Link project contract test', [process.execPath, ['scripts/test-link-project.mjs']]],
@@ -14,6 +14,7 @@ const checks = [
   ['Report HTML generator test', [process.execPath, ['scripts/test-generate-report-html.mjs']]],
   ['Artifact language switch test', [process.execPath, ['scripts/test-switch-artifact-language.mjs']]],
   ['Manual review contract test', [process.execPath, ['scripts/test-manual-review-contract.mjs']]],
+  ['Generated stage content contract test', [process.execPath, ['scripts/test-stage-content-contract.mjs']]],
   ['Run status summary test', [process.execPath, ['scripts/test-summarize-run-status.mjs']]],
   ['Checklist validation test', [process.execPath, ['scripts/test-validate-checklists.mjs']]],
   ['Verify impact contract test', [process.execPath, ['scripts/test-verify-impact-contract.mjs']]],
@@ -27,9 +28,10 @@ let failed = false;
 
 for (const [label, [command, args]] of checks) {
   console.log(`\n=== ${label} ===`);
-  const result = spawnSync(command, args, { stdio: 'inherit', shell: process.platform === 'win32' });
+  const result = spawnSync(command, args, { stdio: 'inherit', shell: false });
   if (result.status !== 0) {
     failed = true;
+    if (result.error) console.error(result.error.message);
     console.error(`Check failed: ${label}`);
   }
 }

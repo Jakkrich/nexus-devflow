@@ -1,14 +1,16 @@
 ---
-id: "{running_id}-discover"
+id: "{discovery_id}-discover"
 title: "Discover: {Work Title}"
-doc_type: "stage"
+doc_type: "discovery"
 stage: "00-discover"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
-status: "draft"
-artifact_language: "en"
-related_run: "{running_id}"
+status: "draft"
+artifact_language: "th"
+decision: "Pending"
+selected_route: "Undecided"
+related_runs: []
 related_files: []
 ---
 
@@ -16,20 +18,20 @@ related_files: []
 
 ## 1. Objective
 
-- Anchor this running id and restate the incoming request as one reviewable phase candidate.
+- Explore the request and reach a reviewable go/no-go decision before creating any Running ID.
 
 ## 2. Source Inputs
 
-- Request summary
+- Incoming request
 - Existing project context
-- Related links, notes, or files if provided
-- Prior related running ids when applicable
+- Related links, notes, or files
+- Companion outputs linked to this Discovery ID
 
 ## 3. Project Context To Preserve
 
-- Global business rules that must not be redefined
-- Cross-module constraints that affect this phase
-- Open questions that still require human confirmation
+- Global business rules that must carry into future delivery runs
+- Cross-module constraints
+- Domain language and unresolved questions
 
 ## 4. Request Summary
 
@@ -37,53 +39,73 @@ related_files: []
 
 ## 5. Problem Or Opportunity
 
-- [Describe the problem to solve or opportunity to pursue]
+- [Describe the problem, opportunity, affected users, and why it matters]
 
-## 6. Initial Scope Hypothesis
+## 6. Decision-Blocking Unknowns
 
-- [Describe what this phase likely covers]
+- [List only unknowns that could change the route or decision]
 
-## 7. Known Constraints
+## 7. Candidate Routes
 
-- [Technical, business, time, or process constraints]
+| Route | Why It May Be Needed | Decision Question |
+| :--- | :--- | :--- |
+| `Brainstorm` | [Reason or Not Needed] | [Question] |
+| `PRD` | [Reason or Not Needed] | [Question] |
+| `Research` | [Reason or Not Needed] | [Question] |
+| `Debug` | [Reason or Not Needed] | [Question] |
+| Direct decision | [Reason or Not Ready] | [Question] |
 
-## 8. Known Unknowns
+## 8. Selected Route
 
-- [What is still unclear]
+- Route: [Brainstorm / PRD / Research / Debug / Direct decision]
+- Rationale: [Why this is the smallest useful route]
+- Return target: `/00-Discover {discovery_id}`
 
-## 9. Recommended Phase Boundary
+## 9. Returned Findings
 
-- [State the proposed phase boundary and why this should be one running id]
+- [Summarize durable findings and link their artifact paths]
 
-## 10. AI Actions Performed
+## 10. Candidate Delivery Slices
 
-- [List concrete actions taken, such as summarizing sources, grouping constraints, or proposing a phase title]
+- [List provisional, unnumbered outcomes only; `/10-Define` owns final splitting and Running ID allocation]
 
-## 11. Human Review Required
+## 11. Decision
 
-- Confirm the phase title and boundary
-- Confirm the source inputs are the correct source of truth
-- Confirm no important context is missing before Define
+- Status: [Proceed / Defer / Reject / Pending]
+- Rationale: [Evidence supporting the decision]
 
-## 12. Approval Status
+## 12. AI Actions Performed
+
+- [List concrete actions such as routing, synthesizing evidence, or updating the decision]
+
+## 13. Human Review Required
+
+- Confirm the selected route and returned evidence
+- Confirm `Proceed`, `Defer`, or `Reject`
+- Confirm no Running ID has been allocated during Discover
+
+## 14. Approval Status
 
 - Pending
 
-## 13. Next Allowed Command
+## 15. Next Allowed Command
 
-- `/10-Define {running_id}`
+- [Selected companion command, `/10-Define {discovery_id}` after approved Proceed, or `None` for Defer/Reject]
 
-## 14. Nexus Event
+## 16. Nexus Event
 
-- `Brainstorm` when the request still has multiple viable directions
-- `Research` when facts or evidence are missing
-- `grill-with-docs` when available and the current ambiguity could change the phase boundary
+- `grill-with-docs` when clarification could change the decision
+- `prototype` when runnable evidence is needed
 
-## 15. Change Log
+## 17. Allocated Runs
 
-- {Date}: Initial discover draft created
+- [Updated by `/10-Define`; keep empty during Discover]
 
-## 16. Additional Notes
+## 18. Change Log
+
+- {Date}: Initial discovery draft created
+
+## 19. Additional Notes
 
 - Add any extra headings below this section when useful.
 

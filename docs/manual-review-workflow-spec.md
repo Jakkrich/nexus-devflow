@@ -80,8 +80,9 @@ Store project-wide context outside individual running ids, then carry it forward
 Recommended levels:
 
 1. Project context
-2. Phase delivery run
-3. Task and subtask execution
+2. Pre-delivery discovery decision
+3. Phase delivery run
+4. Task and subtask execution
 
 ### Project Context Layer
 
@@ -97,13 +98,21 @@ This layer stores broad requirements, domain language, global constraints, unres
 
 ### Phase Delivery Layer
 
+Before the phase delivery layer, `/00-Discover` stores the request, selected support routes, evidence, and decision under:
+
+```text
+.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md
+```
+
+This layer consumes no Running ID. Only an approved `Proceed` discovery may enter `/10-Define`.
+
 Each phase should use one running id under:
 
 ```text
 .workspaces/specs/{ID}-{phase-slug}/
 ```
 
-Each running id owns the full mainline artifact set for one phase or capability slice.
+Each running id begins with `10-define.md` and owns the delivery artifact set for one phase or capability slice. Multiple runs may link to one shared Discovery ID.
 
 ### Task Execution Layer
 
@@ -121,6 +130,9 @@ Do not create a new running id for every small implementation task unless that t
 
 ```text
 .workspaces/
+  discoveries/
+    {DISCOVERY_ID}-{slug}/
+      00-discover.md
   prds/
     {project-slug}.md
   research/
@@ -135,7 +147,6 @@ Do not create a new running id for every small implementation task unless that t
       {project-slug}-phase-map.md
   specs/
     {ID}-{phase-slug}/
-      00-discover.md
       10-define.md
       20-spec.md
       30-plan.md
@@ -153,6 +164,7 @@ Do not create a new running id for every small implementation task unless that t
 Humans should know where to look:
 
 - project framing: `prds/`
+- pre-delivery route and decision: `discoveries/{DISCOVERY_ID}-{slug}/`
 - evidence and research: `research/`
 - durable rules and domain language: `wiki/project/`
 - current phase state: `specs/{ID}-{phase-slug}/`
@@ -249,28 +261,32 @@ The next mainline command should not be considered the default path until the cu
 
 Purpose:
 
-- anchor a new run
-- restate the request
-- identify constraints and unknowns
-- propose a phase boundary
+- create or resume a Discovery ID, not a Running ID
+- restate the request and identify decision-blocking unknowns
+- select `Brainstorm`, `PRD`, `Research`, `Debug`, or direct decision
+- synthesize companion findings into `Proceed`, `Defer`, or `Reject`
 
 Human checks:
 
-- the phase title is correct
-- the source documents are the right ones
-- the proposed boundary does not merge unrelated work
+- the selected route is proportionate
+- returned evidence supports the decision
+- approved Proceed is explicit before Define
+- no Running ID was consumed
 
 ### `10-Define`
 
 Purpose:
 
-- lock the phase boundary
+- turn an approved discovery into one or more delivery slices
+- allocate one Running ID per coherent slice
 - record in-scope and out-of-scope items
 - preserve global constraints
 
 Human checks:
 
 - scope is not drifting
+- sibling runs do not duplicate responsibility
+- small tasks were not incorrectly promoted into separate runs
 - confirmed requirements are carried forward
 - open questions are not hidden as assumptions
 
@@ -307,17 +323,17 @@ Human checks:
 Recommended manual progression:
 
 ```text
-Goal -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+Goal -> /00-Discover -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 Recommended prompt style for large work:
 
 ```text
-/00-Discover {phase title}
+/00-Discover {initiative or request}
 Use existing project documents as source of truth.
-Treat this as one phase of a larger initiative.
-Do not redefine confirmed requirements.
-Carry forward cross-module constraints and open questions.
+Choose only the supporting route needed to make the delivery decision.
+Do not create a Running ID.
+Return companion findings to this Discovery ID.
 ```
 
 ## Template Extension Rules

@@ -66,8 +66,8 @@ Use these agent mappings when expert judgment is the best next step:
 
 | User State | Recommended Route |
 |---|---|
-| vague request, still exploring | `/00-Discover` or `Brainstorm` |
-| knows the problem, scope still fuzzy | `/10-Define` |
+| new request, vague or clear | `/00-Discover`; it selects support inquiry and owns the delivery decision |
+| approved discovery needs one or more delivery boundaries | `/10-Define {discovery_id}` |
 | needs requirements and acceptance criteria | `/20-Spec` |
 | has a stable spec and needs execution plan | `/30-Plan` |
 | needs implementation work | `/40-Implement` |
@@ -153,9 +153,9 @@ Key conflict defaults:
 
 | User Request | Route |
 |---|---|
-| "I have an idea but not the shape yet" | `Brainstorm` then `/10-Define` |
-| "Turn this stable goal into requirements" | `/20-Spec` |
-| "Fix this broken auth flow" | `Debug` or `Agent prp-core-debugger ...`, then `/40-Implement` or `/50-Verify` |
+| "I have an idea but not the shape yet" | `/00-Discover`, likely `Brainstorm`, then return to Discover |
+| "Turn this stable new goal into requirements" | `/00-Discover`, then `/10-Define {discovery_id}` before `/20-Spec {running_id}` |
+| "Fix this newly reported broken auth flow" | `/00-Discover`, likely `Debug`, then return to Discover before Define |
 | "Review this implementation for risks" | `/50-Verify` or `Agent code-reviewer ...` |
 | "Install or upgrade Nexus-DevFlow on this machine" | `Check-For-Updates` |
 | "Help me figure out which command to use" | `Help` |

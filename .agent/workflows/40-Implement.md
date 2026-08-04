@@ -20,6 +20,18 @@ Use controlled task-engine commands when progress state must be synchronized:
 
 Before implementation, confirm the plan is approved in the stage artifacts. Track subtask progress, implementation notes, and completion evidence directly in `40-implement.md` and related stage markdown files.
 
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
+
 ## Process
 
 ### Loop Contract

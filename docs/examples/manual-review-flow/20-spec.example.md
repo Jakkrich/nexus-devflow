@@ -7,7 +7,7 @@ created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
 status: "draft"
-artifact_language: "en"
+artifact_language: "th"
 related_run: "{running_id}"
 related_files: []
 ---

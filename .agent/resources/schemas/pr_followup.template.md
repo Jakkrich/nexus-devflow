@@ -1,10 +1,10 @@
-﻿---
+---
 id: "pr-followup-{ID}"
 title: "PR Follow-Up And Review Comment Triage: Task {ID}"
 doc_type: "report"
 category: "review"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

@@ -37,14 +37,33 @@ function updateTemplateLanguage(filePath, language) {
   if (!normalizedContent.startsWith('---')) {
     throw new Error(`Template is missing frontmatter: ${filePath}`);
   }
-  if (!/^artifact_language:\s*"(th|en)"\s*$/m.test(normalizedContent)) {
+  const frontmatterEnd = normalizedContent.indexOf('\n---', 3);
+  if (frontmatterEnd === -1) {
+    throw new Error(`Template frontmatter is not closed: ${filePath}`);
+  }
+
+  const frontmatter = normalizedContent.slice(0, frontmatterEnd);
+  const body = normalizedContent.slice(frontmatterEnd);
+  const languagePattern = /^artifact_language:\s*"(th|en)"\s*$/gm;
+  const matches = [...frontmatter.matchAll(languagePattern)];
+  if (matches.length === 0) {
     throw new Error(`Template is missing artifact_language frontmatter: ${filePath}`);
   }
 
-  const updated = normalizedContent.replace(
-    /^artifact_language:\s*"(th|en)"\s*$/m,
-    `artifact_language: "${language}"`
-  );
+  let keptLanguage = false;
+  const normalizedFrontmatter = frontmatter
+    .split(/\r?\n/)
+    .filter((line) => {
+      if (!/^artifact_language:\s*"(th|en)"\s*$/.test(line)) return true;
+      if (keptLanguage) return false;
+      keptLanguage = true;
+      return true;
+    })
+    .map((line) => /^artifact_language:\s*"(th|en)"\s*$/.test(line)
+      ? `artifact_language: "${language}"`
+      : line)
+    .join('\n');
+  const updated = `${normalizedFrontmatter}${body}`;
 
   if (updated !== normalizedContent) {
     fs.writeFileSync(filePath, updated, 'utf8');
@@ -72,7 +91,7 @@ function main() {
       updateTemplateLanguage(filePath, language);
     }
 
-    console.log(`Updated artifact_language to "${language}" in ${templateFiles.length} template file(s).`);
+    console.log(`Normalized artifact_language to one "${language}" field in ${templateFiles.length} template file(s).`);
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

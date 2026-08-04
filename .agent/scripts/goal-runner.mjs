@@ -128,40 +128,40 @@ function routeGoal(goal, override = '') {
   if (includesAny(text, ['brainstorm', 'ideate', 'options', 'explore ideas'])) {
     return {
       flow: 'Brainstorm Flow',
-      reason: 'Goal asks for idea exploration before committing to a task.',
-      nextCommands: ['Brainstorm "{goal}"'],
+      reason: 'Goal asks for idea exploration; Discover should open the decision record and route to Brainstorm.',
+      nextCommands: ['/00-Discover "{goal}"'],
     };
   }
 
   if (includesAny(text, ['prd', 'requirements', 'product requirement', 'spec', 'user story'])) {
     return {
       flow: 'PRD / Spec Flow',
-      reason: 'Goal is requirements-heavy and should produce a spec before implementation.',
-      nextCommands: ['PRD "{goal}"', 'Spec-Orchestrate {ID}'],
+      reason: 'Goal is requirements-heavy; Discover should open the decision record and route to PRD or Research before Define.',
+      nextCommands: ['/00-Discover "{goal}"'],
     };
   }
 
   if (includesAny(text, ['debug', 'root cause', 'rca', 'regression', 'error', 'failing', 'crash'])) {
     return {
       flow: 'RCA / Debug Flow',
-      reason: 'Goal describes a failure or investigation path.',
-      nextCommands: ['Debug "{goal}"'],
+      reason: 'Goal describes a failure; Discover should open the decision record and route to Debug before an approved fix receives a Running ID.',
+      nextCommands: ['/00-Discover "{goal}"'],
     };
   }
 
   return {
     flow: 'DevFlow Task Execution',
-    reason: 'Goal appears actionable as a standard DevFlow 2.0 run that can move through Discover -> Define -> Spec -> Plan -> Implement -> Verify.',
-    nextCommands: ['/00-Discover "{goal}"', '/10-Define {ID}', '/20-Spec {ID}', '/30-Plan {ID}', '/40-Implement {ID}', '/50-Verify {ID}'],
+    reason: 'Goal appears actionable; Discover should make the delivery decision before Define creates one or more Running IDs.',
+    nextCommands: ['/00-Discover "{goal}"', '/10-Define {DISCOVERY_ID}', '/20-Spec {ID}', '/30-Plan {ID}', '/40-Implement {ID}', '/50-Verify {ID}'],
   };
 }
 
 function flowCommands(flow) {
   const normalized = flow.toLowerCase();
-  if (normalized.includes('brainstorm')) return ['Brainstorm "{goal}"'];
-  if (normalized.includes('prd') || normalized.includes('spec')) return ['PRD "{goal}"'];
-  if (normalized.includes('debug') || normalized.includes('rca')) return ['Debug "{goal}"'];
-  return ['/00-Discover "{goal}"', '/10-Define {ID}', '/20-Spec {ID}', '/30-Plan {ID}', '/40-Implement {ID}', '/50-Verify {ID}'];
+  if (normalized.includes('brainstorm')) return ['/00-Discover "{goal}"'];
+  if (normalized.includes('prd') || normalized.includes('spec')) return ['/00-Discover "{goal}"'];
+  if (normalized.includes('debug') || normalized.includes('rca')) return ['/00-Discover "{goal}"'];
+  return ['/00-Discover "{goal}"', '/10-Define {DISCOVERY_ID}', '/20-Spec {ID}', '/30-Plan {ID}', '/40-Implement {ID}', '/50-Verify {ID}'];
 }
 
 function estimateComplexity(goal) {

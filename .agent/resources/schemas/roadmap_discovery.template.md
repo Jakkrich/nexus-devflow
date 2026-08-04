@@ -1,10 +1,10 @@
-﻿---
+---
 id: "roadmap-discovery-{Project Slug}"
 title: "Roadmap Discovery: {Project Name}"
 doc_type: "roadmap-discovery"
 category: "planning"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"

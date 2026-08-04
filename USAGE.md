@@ -14,7 +14,8 @@ This guide describes the active DevFlow 2.0 surface used in the current reposito
 - Use the numbered mainline as the primary delivery path.
 - Use public companion commands only when the task needs routing, ideation, research, debugging, PRD framing, issue intake, security checking, wiki access, or help.
 - Treat stage markdown files as the source of truth.
-- Use `checklists/` under the running ID when people need live execution visibility across stages.
+- Use Discovery IDs for pre-delivery discussion and Running IDs only from `/10-Define` onward.
+- Use `checklists/` under the Running ID when people need live execution visibility across stages.
 - Treat skills and agents as support layers, not as replacements for the mainline.
 - Do not start new work from retired workflows or legacy dashboard/JSON-driven patterns.
 
@@ -26,8 +27,8 @@ This guide describes the active DevFlow 2.0 surface used in the current reposito
 
 Short meaning:
 
-- `/00-Discover`: capture the request, context, and running ID
-- `/10-Define`: lock scope, decisions, constraints, and success criteria
+- `/00-Discover`: discuss, route support inquiry, and decide `Proceed`, `Defer`, or `Reject` under a Discovery ID
+- `/10-Define`: lock delivery boundaries and create one or more Running IDs
 - `/20-Spec`: write the delivery contract and acceptance criteria
 - `/30-Plan`: create the execution plan
 - `/40-Implement`: do the implementation work
@@ -39,15 +40,15 @@ Short meaning:
 
 If your team used to go straight from "spec" to "plan", this is the easiest way to think about the split:
 
-- `/00-Discover`: understand the request, context, unknowns, and likely route
-- `/10-Define`: agree on the real problem, scope, constraints, and success criteria
+- `/00-Discover`: understand the request, choose Brainstorm/PRD/Research/Debug when needed, and make the delivery decision
+- `/10-Define`: agree on delivery slices and allocate Running IDs
 - `/20-Spec`: define what the finished work must do
 - `/30-Plan`: decide how the team will build and verify it
 
 They are separate because they answer different questions:
 
-- `00`: "What are we dealing with?"
-- `10`: "What are we agreeing to do?"
+- `00`: "Should this proceed, and what must we resolve first?"
+- `10`: "What bounded delivery runs are we agreeing to create?"
 - `20`: "What outcome is required?"
 - `30`: "How will we execute it?"
 
@@ -55,8 +56,8 @@ Without that split, teams often mix problem framing, acceptance criteria, and im
 
 Practical shortcut:
 
-- Keep `/00-Discover` and `/10-Define` short when the ticket is already clear
-- Start at `/20-Spec` when the problem and scope are already stable
+- Keep `/00-Discover` short when an approved ticket already contains enough evidence
+- Start at `/20-Spec` only when a Running ID and approved `10-define.md` already exist
 - Avoid skipping directly to `/30-Plan` unless the spec already exists and the expected behavior is genuinely settled
 
 ## Public Companion Commands
@@ -110,7 +111,7 @@ Examples of internal companions include:
 | Situation | Start with |
 | :--- | :--- |
 | the request is still unclear | `/00-Discover` or `Brainstorm` |
-| scope must be locked | `/10-Define` |
+| approved discovery must become delivery runs | `/10-Define {discovery_id}` |
 | a delivery contract must be written | `/20-Spec` |
 | spec is ready and work must be broken down | `/30-Plan` |
 | implementation can begin | `/40-Implement` |
@@ -127,13 +128,16 @@ Examples of internal companions include:
 
 ```mermaid
 flowchart LR
-    D00["/00-Discover"] --> D10["/10-Define"] --> D20["/20-Spec"] --> D30["/30-Plan"] --> D40["/40-Implement"] --> D50["/50-Verify"] --> D60["/60-Report"] --> D70["/70-Release"]
+    D00["/00-Discover<br/>Discovery ID"] --> G{"Proceed?"}
+    G -->|No| E["Defer or Reject<br/>No Running ID"]
+    G -->|Approved| D10["/10-Define<br/>Create Running IDs"]
+    D10 --> D20["/20-Spec {ID}"] --> D30["/30-Plan {ID}"] --> D40["/40-Implement {ID}"] --> D50["/50-Verify {ID}"] --> D60["/60-Report {ID}"] --> D70["/70-Release {ID}"]
 ```
 
 ```text
 /00-Discover "Add password reset"
-/10-Define
-/20-Spec
+/10-Define DISC-YYYYMMDD-NNN
+/20-Spec {ID}
 /30-Plan
 /40-Implement
 /50-Verify
@@ -146,58 +150,64 @@ flowchart LR
 ```mermaid
 flowchart LR
     D00["/00-Discover"] --> B["Brainstorm"]
-    B --> D10["/10-Define"] --> D20["/20-Spec"]
+    B --> S["/00-Discover synthesis"] --> D10["/10-Define"] --> D20["/20-Spec {ID}"]
 ```
 
 ```text
 /00-Discover "Improve onboarding"
 Brainstorm
-/10-Define
-/20-Spec
+/00-Discover DISC-YYYYMMDD-NNN
+/10-Define DISC-YYYYMMDD-NNN
+/20-Spec {ID}
 ```
 
 ### 3. Needs extra integration knowledge
 
 ```mermaid
 flowchart LR
-    D10["/10-Define"] --> R["Research"]
-    R --> D20["/20-Spec"] --> D30["/30-Plan"]
+    D00["/00-Discover"] --> R["Research"]
+    R --> S["/00-Discover synthesis"] --> D10["/10-Define"] --> D20["/20-Spec {ID}"]
 ```
 
 ```text
-/10-Define "Subscription billing"
+/00-Discover "Subscription billing"
 Research "Stripe subscription webhook and customer portal"
-/20-Spec
-/30-Plan
+/00-Discover DISC-YYYYMMDD-NNN
+/10-Define DISC-YYYYMMDD-NNN
+/20-Spec {ID}
 ```
 
 ### 4. Needs product and market framing
 
 ```mermaid
 flowchart LR
-    D10["/10-Define"] --> R["Research"]
+    D00["/00-Discover"] --> R["Research"]
     R --> P["PRD"]
-    P --> D20["/20-Spec"]
+    P --> S["/00-Discover synthesis"] --> D10["/10-Define"] --> D20["/20-Spec {ID}"]
 ```
 
 ```text
-/10-Define "AI workflow product direction"
+/00-Discover "AI workflow product direction"
 Research "AI coding workflow tools and market context"
 PRD "Top priority initiative"
-/20-Spec
+/00-Discover DISC-YYYYMMDD-NNN
+/10-Define DISC-YYYYMMDD-NNN
+/20-Spec {ID}
 ```
 
 ### 5. Starts from a bug
 
 ```mermaid
 flowchart LR
-    X["Debug"] --> D10["/10-Define"] --> D20["/20-Spec"] --> D30["/30-Plan"] --> D40["/40-Implement"] --> D50["/50-Verify"]
+    D00["/00-Discover"] --> X["Debug"] --> S["/00-Discover synthesis"] --> D10["/10-Define"] --> D20["/20-Spec {ID}"] --> D30["/30-Plan {ID}"] --> D40["/40-Implement {ID}"] --> D50["/50-Verify {ID}"]
 ```
 
 ```text
+/00-Discover "Login redirects forever after session expiry"
 Debug "Login redirects forever after session expiry"
-/10-Define "Fix login redirect loop"
-/20-Spec
+/00-Discover DISC-YYYYMMDD-NNN
+/10-Define DISC-YYYYMMDD-NNN
+/20-Spec {ID}
 /30-Plan
 /40-Implement
 /50-Verify
@@ -223,6 +233,7 @@ Common paths:
 
 | Path | Purpose |
 | :--- | :--- |
+| `.workspaces/discoveries/` | pre-delivery Discover artifacts grouped by Discovery ID |
 | `.workspaces/specs/` | stage artifacts grouped by running ID |
 | `.workspaces/specs/{ID}-{slug}/checklists/` | live operational tracking for plan, implementation, verification, and release gates |
 | `.workspaces/research/` | research and brainstorm outputs when used |
@@ -252,11 +263,10 @@ Meaning:
 Artifact language default:
 
 ```powershell
-npm.cmd run artifact-language:switch -- en
 npm.cmd run artifact-language:switch -- th
 ```
 
-In phase 1, this updates `artifact_language` across markdown schema templates so new markdown artifacts should be written in the selected language.
+All tracked schema templates default to `artifact_language: "th"` exactly once. The switch utility accepts `en` only as an intentional local override; restore `th` before framework validation.
 
 ## Goal Runner
 

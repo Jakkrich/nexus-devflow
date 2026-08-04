@@ -30,6 +30,8 @@ Preferred DevFlow 2.0 pairing:
 - from `/20-Spec`
 - from `/50-Verify` when validating a claim or implementation choice
 
+When invoked with a Discovery ID, link the research report to that discovery and return to `/00-Discover {discovery_id}` so Discover can synthesize the evidence and make the decision. Research must not allocate a Running ID.
+
 ---
 
 ## Internal Process
@@ -130,7 +132,7 @@ Research whether this API version is compatible
 
 ## Next Workflow Recommendation
 
-- Default: return to the stage that asked for evidence
+- Default: return to the stage that asked for evidence; for discovery-owned research this is `/00-Discover {discovery_id}`
 - Common routes: `/10-Define`, `/20-Spec`, `/30-Plan`, or `/50-Verify`
 - Alternate: `Brainstorm` if the research opens multiple strategic options
 

@@ -47,7 +47,7 @@ When invoked, Help should verify system health first before summarizing task sta
 Check system readiness step by step:
 
 1. verify `.agent/workflows/` exists
-2. verify `.workspaces/` and `.workspaces/specs/` exist
+2. verify `.workspaces/discoveries/` and `.workspaces/specs/` exist
 3. verify the mainline workflow files exist
 4. verify schema resources exist under `.agent/resources/schemas/`
 
@@ -57,9 +57,9 @@ If core pieces are missing, stop and recommend the underlying fix first.
 
 ### Phase B: Running Status Scan
 
-1. scan `.workspaces/specs/` for active running IDs
-2. prefer reading stage markdown files over legacy JSON
-3. summarize current state, blockers, and likely next action
+1. scan `.workspaces/discoveries/` for pending discovery decisions and `.workspaces/specs/` for active Running IDs
+2. prefer reading discovery and stage markdown files over legacy JSON
+3. summarize discovery decisions, run state, blockers, and likely next action
 4. treat `Approval Status` and `Next Allowed Command` as soft routing signals when they are present
 
 When available, Help may use the internal helper below to build a faster first-pass summary before reading individual stage files:
@@ -162,16 +162,14 @@ These files still exist because their prompt bodies contain useful behavior, but
 
 ### 1. If the user is just starting
 
-Recommend `/00-Discover`.
-
-Use `Brainstorm` if the request is still vague or has multiple possible directions.
+Recommend `/00-Discover`. Discover selects `Brainstorm`, `PRD`, `Research`, `Debug`, or direct decision and owns the return synthesis.
 If the request is large, high-risk, multi-phase, or requirement-heavy, explain that the run should use the manual review flow with explicit human approval at each stage.
 
-### 2. If the user knows what they want but the scope is still fuzzy
+### 2. If an approved discovery needs delivery boundaries
 
-Recommend `/10-Define`.
+Recommend `/10-Define {discovery_id}` so Define can create one or more Running IDs.
 
-Suggest `Brainstorm` or `Research` if definition still has uncertainty.
+If the go/no-go decision is not approved, return to `/00-Discover {discovery_id}` instead.
 
 ### 3. If the task is already defined and needs requirements
 

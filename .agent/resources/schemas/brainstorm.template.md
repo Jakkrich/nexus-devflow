@@ -1,10 +1,10 @@
-﻿---
+---
 id: "brainstorm-{Topic Slug}"
 title: "Brainstorming Report: {Topic}"
 doc_type: "report"
 category: "brainstorm"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -82,7 +82,7 @@ recommended_option: null
 
 - [ ] Run `Research` to investigate specific technical details of the chosen option.
 - [ ] Run `PRD` to formulate a product requirement document.
-- [ ] Run `/00-Discover` to anchor the request and create the running workspace.
+- [ ] Return to `/00-Discover {discovery_id}` so the selected direction can inform the delivery decision without creating a Running ID.
 - [ ] Run `/10-Define` if the direction is already stable enough to lock scope.
 
 ## 5. Sources #section/sources

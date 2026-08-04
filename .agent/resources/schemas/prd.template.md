@@ -1,10 +1,10 @@
-﻿---
+---
 id: "prd-{Feature Slug}"
 title: "Product Requirements Document: {Feature Name}"
 doc_type: "prd"
 category: "planning"
-status: "draft"
-artifact_language: "en"
+status: "draft"
+artifact_language: "th"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
