@@ -1,6 +1,6 @@
 {
   "name": "nexus-devflow",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Agent-ready DevFlow 2.0 workflow layer framework with .agents and .claude adapter tooling.",
   "type": "module",
   "private": true,
@@ -16,7 +16,6 @@
     "graphify": "node ./scripts/graphify.mjs",
     "graphify:install": "node ./scripts/graphify.mjs install --platform antigravity",
     "graphify:update": "node ./scripts/graphify.mjs update .",
-    "graphify:hook:install": "node ./scripts/install-git-hook.mjs",
     "index": "node ./scripts/generate-project-index.mjs",
     "link-project": "node ./scripts/link-project.mjs",
     "migrate:artifacts": "node ./scripts/migrate-stage-artifacts.mjs",
