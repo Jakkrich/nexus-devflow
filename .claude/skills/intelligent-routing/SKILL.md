@@ -80,7 +80,7 @@ Use these agent mappings when expert judgment is the best next step:
 ### Use a Timeline stage when:
 
 - the request advances a task through its lifecycle
-- the user needs an artifact in `.workspaces`
+- the user needs an artifact in `devflow`
 - the next step should change stage ownership
 
 ### Use a public companion command when:

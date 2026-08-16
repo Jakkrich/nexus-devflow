@@ -197,7 +197,7 @@ Companion commands:
 
 ## Markdown Metadata Contract
 
-Markdown artifacts in `.workspaces`, `docs`, and the template set should follow the shared rules in [markdown-metadata-contract.md](/D:/Projects/nexus-devflow/docs/markdown-metadata-contract.md).
+Markdown artifacts in `devflow`, `docs`, and the template set should follow the shared rules in [markdown-metadata-contract.md](/D:/Projects/nexus-devflow/docs/markdown-metadata-contract.md).
 
 Core rules:
 

@@ -122,11 +122,11 @@ try {
     'resolver should support direct 60-report.md file paths'
   );
 
-  const flatWorkspace = path.join(scratchRoot, '.workspaces', '888-sample-report');
+  const flatWorkspace = path.join(scratchRoot, 'devflow', '888-sample-report');
   fs.mkdirSync(flatWorkspace, { recursive: true });
   assert(
     resolveWorkspaceDir({ argument: '888', projectRoot: scratchRoot }) === flatWorkspace,
-    'resolver should support flat .workspaces running-id layout'
+    'resolver should support flat devflow running-id layout'
   );
 
   const ambiguousOne = path.join(specsRoot, '777-first');

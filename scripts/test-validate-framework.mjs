@@ -20,7 +20,7 @@ function outputOf(result) {
 
 try {
   fs.mkdirSync(fixtureRoot, { recursive: true });
-  for (const item of ['.agent', '.workspaces', 'docs', 'scripts', 'package.json', 'ROADMAP.md', 'agent-bundle.manifest.json']) {
+  for (const item of ['.agent', 'devflow', 'docs', 'scripts', 'package.json', 'ROADMAP.md', 'agent-bundle.manifest.json']) {
     fs.cpSync(path.join(rootDir, item), path.join(fixtureRoot, item), { recursive: true });
   }
 

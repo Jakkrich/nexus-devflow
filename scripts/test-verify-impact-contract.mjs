@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const runDir = path.join(rootDir, '.workspaces', 'specs', '997-verify-impact-contract-test');
+const runDir = path.join(rootDir, 'devflow', 'specs', '997-verify-impact-contract-test');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);

@@ -26,7 +26,7 @@ function writeFile(filePath, content) {
 }
 
 try {
-  const workspaceDir = path.join(scratchRoot, 'project', '.workspaces', 'specs', '999-sample-report');
+  const workspaceDir = path.join(scratchRoot, 'project', 'devflow', 'specs', '999-sample-report');
   const checklistDir = path.join(workspaceDir, 'checklists');
 
   writeFile(path.join(workspaceDir, '60-report.md'), `---
@@ -128,7 +128,7 @@ related_run: "999"
   assert(html.includes('id="toc-nav"'), 'html should include the md2html toc shell');
   assert(!html.includes('checklists/implementation-checklist.md'), 'html should not inject checklist template sections');
 
-  const thaiWorkspaceDir = path.join(scratchRoot, 'project', '.workspaces', 'specs', '998-sample-report-th');
+  const thaiWorkspaceDir = path.join(scratchRoot, 'project', 'devflow', 'specs', '998-sample-report-th');
   writeFile(path.join(thaiWorkspaceDir, '60-report.md'), `---
 id: "998-report"
 title: "Thai Report Title"

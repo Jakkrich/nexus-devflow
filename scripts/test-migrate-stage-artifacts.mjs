@@ -27,7 +27,7 @@ function writeFile(filePath, content = 'sample\n') {
 
 try {
   const projectRoot = path.join(scratchRoot, 'project');
-  const legacyRoot = path.join(projectRoot, '.workspaces', '001-sample-task');
+  const legacyRoot = path.join(projectRoot, 'devflow', '001-sample-task');
   writeFile(path.join(legacyRoot, '00-discover', 'discover.md'));
   writeFile(path.join(legacyRoot, '10-define', 'define.md'));
   writeFile(path.join(legacyRoot, '20-spec', 'spec.md'));
@@ -41,7 +41,7 @@ try {
   const writeRun = run([projectRoot, '--write']);
   assert(writeRun.status === 0, `write migration should pass:\n${writeRun.stdout}\n${writeRun.stderr}`);
 
-  const targetRoot = path.join(projectRoot, '.workspaces', 'specs', '001-sample-task');
+  const targetRoot = path.join(projectRoot, 'devflow', 'specs', '001-sample-task');
   assert(fs.existsSync(path.join(targetRoot, '00-discover.md')), 'discover artifact should move to flat stage filename');
   assert(fs.existsSync(path.join(targetRoot, '10-define.md')), 'define artifact should move to flat stage filename');
   assert(fs.existsSync(path.join(targetRoot, '20-spec.md')), 'spec artifact should move to flat stage filename');

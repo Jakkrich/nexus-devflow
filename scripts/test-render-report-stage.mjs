@@ -53,7 +53,7 @@ related_run: "999"
   const html = renderMarkdownToHtml(summary);
   assert(html.includes('<li>Adapter path renders this report.</li>'), 'markdown list should render to html list');
 
-  const workspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '999-render-stage');
+  const workspaceDir = path.join(scratchRoot, 'devflow', 'specs', '999-render-stage');
   const checklistDir = path.join(workspaceDir, 'checklists');
   writeFile(path.join(workspaceDir, '60-report.md'), markdown);
 
@@ -74,7 +74,7 @@ related_run: "999"
   assert(adapterResult.html.includes('เปลี่ยนธีม'), 'adapter should localize md2html theme chrome from artifact_language');
   assert(!adapterResult.html.includes('Verify html output'), 'adapter should not inject checklist summaries from the legacy template path');
 
-  const thaiWorkspaceDir = path.join(scratchRoot, '.workspaces', 'specs', '998-render-stage-th');
+  const thaiWorkspaceDir = path.join(scratchRoot, 'devflow', 'specs', '998-render-stage-th');
   const thaiChecklistDir = path.join(thaiWorkspaceDir, 'checklists');
   writeFile(path.join(thaiWorkspaceDir, '60-report.md'), `---
 id: "998-report"
@@ -100,7 +100,7 @@ related_run: "998"
   assert(thaiAdapterResult.html.includes('id="toc-nav"'), 'thai adapter should include the md2html toc shell');
   assert(thaiAdapterResult.html.includes('เปลี่ยนธีม'), 'thai adapter should localize the md2html theme tooltip');
 
-  const flatWorkspaceDir = path.join(scratchRoot, '.workspaces', '999-shadow-stage');
+  const flatWorkspaceDir = path.join(scratchRoot, 'devflow', '999-shadow-stage');
   writeFile(path.join(flatWorkspaceDir, '60-report.md'), '# Shadow\n');
 
   assert(
@@ -121,8 +121,8 @@ related_run: "998"
   assert(fs.existsSync(path.join(workspaceDir, '60-report.html')), 'stage-aware render-html CLI should write 60-report.html');
 
   const ambiguousRoot = path.join(scratchRoot, 'ambiguous-project');
-  writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-first', '60-report.md'), '# First\n');
-  writeFile(path.join(ambiguousRoot, '.workspaces', 'specs', '123-second', '60-report.md'), '# Second\n');
+  writeFile(path.join(ambiguousRoot, 'devflow', 'specs', '123-first', '60-report.md'), '# First\n');
+  writeFile(path.join(ambiguousRoot, 'devflow', 'specs', '123-second', '60-report.md'), '# Second\n');
   const ambiguousRun = spawnSync(
     process.execPath,
     [path.join(path.resolve('scripts'), 'generate-report-html.mjs'), '123'],
