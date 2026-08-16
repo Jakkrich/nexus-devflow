@@ -86,15 +86,21 @@ npx @jakkrichm/create-nexus-devflow ./my-app
 npx @jakkrichm/create-nexus-devflow --adapter both
 ```
 
-### 2. เริ่มต้นวงจร DevFlow
+### 2. สั่งเปิดใช้งาน DevFlow ใน AI Assistant
 
-เปิดโปรเจกต์ใน AI Assistant ของคุณ (Google Antigravity, Codex, Claude Code ฯลฯ) แล้วสั่ง:
+เปิดโปรเจกต์ของคุณใน AI Assistant ของคุณ (Google Antigravity, OpenAI Codex, Claude Code ฯลฯ) แล้วรันคำสั่งเปิดตัวหลัก:
+
+```text
+/devflow
+```
+
+> **คำแนะนำ:** `/devflow` คือคำสั่งเปิดตัวหลักของระบบ ทำหน้าที่สำรวจสถานะของพื้นที่ทำงาน ตรวจสอบความสมบูรณ์ของเฟรมเวิร์ก และนำทางคุณไปยังคำสั่งถัดไปที่เหมาะสมที่สุดทันที (`/00-Discover`, `/10-Define`, `/40-Implement`, `/50-Verify` ฯลฯ)
+
+หรือเริ่มต้นขั้นตอนค้นหาความต้องการโดยตรงด้วยคำสั่ง:
 
 ```text
 /00-Discover
 ```
-
-AI จะนำทางคุณในการค้นหาความต้องการ, กำหนด Running ID Bounded Run ใต้ `devflow/runs/`, และพาคุณผ่านการเขียนสเปก, วางแผน, ลงมือทำ, ตรวจสอบคุณภาพ, และรายงานการส่งมอบ!
 
 ## วงจรสายหลัก (Mainline Timeline Workflow)
 
