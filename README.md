@@ -86,15 +86,21 @@ npx @jakkrichm/create-nexus-devflow ./my-app
 npx @jakkrichm/create-nexus-devflow --adapter both
 ```
 
-### 2. Start the DevFlow Lifecycle
+### 2. Launch DevFlow in your AI Assistant
 
-Open your project in your AI assistant (Google Antigravity, Codex, Claude Code, etc.) and run:
+Open your project in your AI Assistant (Google Antigravity, OpenAI Codex, Claude Code, etc.) and run the flagship guide command:
+
+```text
+/devflow
+```
+
+> **Tip:** `/devflow` is your entry command. It inspects your workspace state, checks framework health, and routes you to the exact next command (`/00-Discover`, `/10-Define`, `/40-Implement`, `/50-Verify`, etc.).
+
+Alternatively, start directly with request discovery:
 
 ```text
 /00-Discover
 ```
-
-The AI will guide you through request discovery, define bounded delivery runs under `devflow/runs/`, and take you through formal specs, planning, implementation, verification, and release reporting!
 
 ## Mainline Timeline Workflow
 
