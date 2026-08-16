@@ -34,7 +34,7 @@ jobs:
         run: node -e "const v = require('./packages/create-nexus-devflow/package.json').version; const t = process.env.GITHUB_REF_NAME; if (t !== 'v' + v) { console.error('Tag ' + t + ' does not match package version ' + v); process.exit(1); }"
       - name: Publish to npm
         run: |
-          package_version=$(node -p "require('./packages/create-nexus-devflow/package.json').version")
+          package_version=$(node -p "require('./package.json').version")
           if npm view "@jakkrichm/create-nexus-devflow@$package_version" version >/dev/null 2>&1; then
             echo "@jakkrichm/create-nexus-devflow@$package_version is already published."
           else
