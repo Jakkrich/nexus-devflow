@@ -1,0 +1,14 @@
+{
+  "skill": "prp-dev-fastapi",
+  "description": "Comprehensive skill for FastAPI development following the PRP Pure Agentic workflow. Includes project templates, async/await patterns, Pydantic validation, repository/service architecture, and automated validation loops. Use when designing, implementation, or refactoring FastAPI applications.",
+  "positive": [
+    "run prp-dev-fastapi skill",
+    "invoke /prp-dev-fastapi command",
+    "use prp-dev-fastapi for comprehensive skill fastapi development following pure agentic workflow",
+    "apply prp-dev-fastapi guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

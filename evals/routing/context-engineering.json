@@ -1,0 +1,14 @@
+{
+  "skill": "context-engineering",
+  "description": "context-engineering skill instruction",
+  "positive": [
+    "run context-engineering skill",
+    "invoke /context-engineering command",
+    "use context-engineering for context engineering skill instruction",
+    "apply context-engineering guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

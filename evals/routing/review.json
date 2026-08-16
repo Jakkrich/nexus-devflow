@@ -1,0 +1,14 @@
+{
+  "skill": "review",
+  "description": "Two-axis review for changed work. Use inside /50-Verify or /70-Release when a branch, PR, or work-in-progress diff needs standards and spec review.",
+  "positive": [
+    "run review skill",
+    "invoke /review command",
+    "use review for axis review changed work inside verify release when",
+    "apply review guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

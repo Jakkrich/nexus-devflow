@@ -1,0 +1,14 @@
+{
+  "skill": "server-management",
+  "description": "Server management principles and decision-making. Process management, monitoring strategy, and scaling decisions. Teaches thinking, not commands.",
+  "positive": [
+    "run server-management skill",
+    "invoke /server-management command",
+    "use server-management for server management principles decision making process management monitoring",
+    "apply server-management guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "codebase-design",
+  "description": "Shared vocabulary for designing deep modules. Use when a DevFlow stage needs module/interface design, seam placement, testability review, or architecture simplification.",
+  "positive": [
+    "run codebase-design skill",
+    "invoke /codebase-design command",
+    "use codebase-design for shared vocabulary designing deep modules when devflow stage",
+    "apply codebase-design guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

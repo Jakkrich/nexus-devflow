@@ -1,0 +1,14 @@
+{
+  "skill": "devflow",
+  "description": "Flagship interactive guide, intent router, workspace state inspector, and sitemap for Nexus-DevFlow workflows. Inspects current workspace state, maps natural language requests to matching stages/commands, and provides a cheat sheet of all available DevFlow skills. Use when the user runs /devflow, asks how to use devflow, asks what command to run next, or needs guidance on DevFlow lifecycle paths.",
+  "positive": [
+    "run devflow skill",
+    "invoke /devflow command",
+    "use devflow for flagship interactive guide intent router workspace state inspector",
+    "apply devflow guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

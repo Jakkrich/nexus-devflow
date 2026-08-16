@@ -1,0 +1,14 @@
+{
+  "skill": "parallel-agents",
+  "description": "Multi-agent orchestration patterns for the current DevFlow 2.0 specialist set. Use when multiple independent analyses or implementation perspectives can run in parallel.",
+  "positive": [
+    "run parallel-agents skill",
+    "invoke /parallel-agents command",
+    "use parallel-agents for multi agent orchestration patterns current devflow specialist when",
+    "apply parallel-agents guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

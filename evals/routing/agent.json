@@ -1,0 +1,14 @@
+{
+  "skill": "agent",
+  "description": "Invoke Agent - Run a specialist persona on a file, folder, stage artifact, or codebase concern.",
+  "positive": [
+    "run agent skill",
+    "invoke /agent command",
+    "use agent for invoke agent specialist persona file folder stage artifact",
+    "apply agent guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

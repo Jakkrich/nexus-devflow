@@ -1,22 +1,24 @@
 {
-  "source_bundle": ".agent",
-  "description": "Single-source manifest for the active PRPs agent bundle.",
+  "source_bundle": ".agents",
+  "description": "Single-source manifest for the active Nexus-DevFlow agent adapters.",
   "required_paths": [
-    ".agent/package.json",
-    ".agent/agents",
-    ".agent/docs",
-    ".agent/resources/schemas",
-    ".agent/rules",
-    ".agent/skills",
-    ".agent/workflows"
+    ".agents/skills",
+    ".claude/skills",
+    ".nexus/nexus-devflow.json",
+    "devflow/context/project-overview.md",
+    "devflow/context/coding-standards.md",
+    "devflow/context/ai-interaction.md",
+    "devflow/context/findings.md",
+    "devflow/reference/running-id-contract.md"
   ],
   "forbidden_legacy_paths": [
+    ".agent",
     ".cursor",
     ".windsurf"
   ],
   "commands": {
-    "activate": "npm run activate",
-    "validate": "npm run validate",
-    "check_bundle": "npm run sync:check"
+    "check": "npm run check",
+    "validate": "npm run check:static",
+    "test": "npm test"
   }
 }

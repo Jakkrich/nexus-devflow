@@ -1,0 +1,14 @@
+{
+  "skill": "prototype",
+  "description": "Build a throwaway prototype to answer a design question during Discover, Define, Spec, Research, or Plan.",
+  "positive": [
+    "run prototype skill",
+    "invoke /prototype command",
+    "use prototype for build throwaway prototype answer design question during discover",
+    "apply prototype guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

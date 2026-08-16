@@ -1,0 +1,14 @@
+{
+  "skill": "roadmap-strategy",
+  "description": "Create or refresh product roadmap direction using markdown-first discovery and roadmap artifacts. Use when strategic planning should stay outside the mainline but still follow DevFlow 2.0 contracts.",
+  "positive": [
+    "run roadmap-strategy skill",
+    "invoke /roadmap-strategy command",
+    "use roadmap-strategy for create refresh product roadmap direction using markdown first",
+    "apply roadmap-strategy guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

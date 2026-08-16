@@ -1,0 +1,14 @@
+{
+  "skill": "using-agent-skills",
+  "description": "Discovers and invokes agent skills. Use when starting a session or when you need to discover which skill applies to the current task. This is the meta-skill that governs how all other skills are discovered and invoked.",
+  "positive": [
+    "run using-agent-skills skill",
+    "invoke /using-agent-skills command",
+    "use using-agent-skills for discovers invokes agent skills when starting session when",
+    "apply using-agent-skills guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

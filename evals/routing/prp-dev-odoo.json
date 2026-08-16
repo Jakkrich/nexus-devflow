@@ -1,0 +1,14 @@
+{
+  "skill": "prp-dev-odoo",
+  "description": "Comprehensive skill for Odoo development following the PRP Pure Agentic workflow. Supports Odoo 8 and Odoo 13+ patterns, model/view/controller architecture, and automated validation in a Zero-Script environment.",
+  "positive": [
+    "run prp-dev-odoo skill",
+    "invoke /prp-dev-odoo command",
+    "use prp-dev-odoo for comprehensive skill odoo development following pure agentic workflow",
+    "apply prp-dev-odoo guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

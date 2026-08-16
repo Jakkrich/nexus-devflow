@@ -1,0 +1,14 @@
+{
+  "skill": "debugging-and-error-recovery",
+  "description": "Guides systematic root-cause debugging. Use when tests fail, builds break, behavior doesn't match expectations, or you encounter any unexpected error. Use when you need a systematic approach to finding and fixing the root cause rather than guessing.",
+  "positive": [
+    "run debugging-and-error-recovery skill",
+    "invoke /debugging-and-error-recovery command",
+    "use debugging-and-error-recovery for guides systematic root cause debugging when tests fail",
+    "apply debugging-and-error-recovery guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

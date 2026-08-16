@@ -1,0 +1,14 @@
+{
+  "skill": "simplify",
+  "description": "Simplify workflow",
+  "positive": [
+    "run simplify skill",
+    "invoke /simplify command",
+    "use simplify for simplify workflow",
+    "apply simplify guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

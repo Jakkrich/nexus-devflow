@@ -1,0 +1,14 @@
+{
+  "skill": "obsidian-clipper-template-creator",
+  "description": "Guide for creating templates for the Obsidian Web Clipper. Use when you want to create a new clipping template, understand available variables, or format clipped content.",
+  "positive": [
+    "run obsidian-clipper-template-creator skill",
+    "invoke /obsidian-clipper-template-creator command",
+    "use obsidian-clipper-template-creator for guide creating templates obsidian clipper when want create",
+    "apply obsidian-clipper-template-creator guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

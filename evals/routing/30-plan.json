@@ -1,0 +1,14 @@
+{
+  "skill": "30-plan",
+  "description": "Plan implementation in DevFlow 2.0 - transform `20-spec.md` into a markdown-first executable plan.",
+  "positive": [
+    "run 30-plan skill",
+    "invoke /30-plan command",
+    "use 30-plan for plan implementation devflow transform spec into markdown first",
+    "apply 30-plan guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

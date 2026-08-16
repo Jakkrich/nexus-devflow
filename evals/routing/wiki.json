@@ -1,0 +1,14 @@
+{
+  "skill": "wiki",
+  "description": "DevFlow Wiki - Ingest, query, lint, and promote compiled project or framework knowledge.",
+  "positive": [
+    "run wiki skill",
+    "invoke /wiki command",
+    "use wiki for devflow wiki ingest query lint promote compiled project",
+    "apply wiki guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

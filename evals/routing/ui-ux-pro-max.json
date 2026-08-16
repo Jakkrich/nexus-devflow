@@ -1,0 +1,14 @@
+{
+  "skill": "ui-ux-pro-max",
+  "description": "AI-powered design intelligence with 50+ styles, 95+ color palettes, and automated design system generation. Use when designing, building, or reviewing UI/UX.",
+  "positive": [
+    "run ui-ux-pro-max skill",
+    "invoke /ui-ux-pro-max command",
+    "use ui-ux-pro-max for powered design intelligence with styles color palettes automated",
+    "apply ui-ux-pro-max guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

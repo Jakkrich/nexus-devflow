@@ -1,0 +1,14 @@
+{
+  "skill": "test",
+  "description": "Test workflow",
+  "positive": [
+    "run test skill",
+    "invoke /test command",
+    "use test for test workflow",
+    "apply test guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

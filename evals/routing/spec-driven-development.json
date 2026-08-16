@@ -1,0 +1,14 @@
+{
+  "skill": "spec-driven-development",
+  "description": "Creates specs before coding. Use when starting a new project, feature, or significant change and no specification exists yet. Use when requirements are unclear, ambiguous, or only exist as a vague idea.",
+  "positive": [
+    "run spec-driven-development skill",
+    "invoke /spec-driven-development command",
+    "use spec-driven-development for creates specs before coding when starting project feature",
+    "apply spec-driven-development guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

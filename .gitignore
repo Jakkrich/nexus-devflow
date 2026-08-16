@@ -1,113 +1,50 @@
-# PRP Framework - gitignore
+# Nexus-DevFlow - Git Ignore
 
-# ------------------------------
-# 1. WORKSPACES (Logs, Specs, & Plans)
-# ------------------------------
-# Ignore all workspaces files and directories completely
-.workspaces/
-.workspaces-status
+# Node.js dependencies & logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 *.log
 
+# Build & tarball outputs
+dist/
+build/
+*.tgz
 
-# Security & Secrets - CRITICAL IGNORE!
-.security-key
-.workspaces-security.json
-
-# ------------------------------
-# 2. ARTIFACTS (IGNORED BUT KEEP STRUCTURE)
-# ------------------------------
-# .workspaces/issues/*
-# !.workspaces/issues/.gitkeep
-# .workspaces/specs/*
-# !.workspaces/specs/.gitkeep
-
-# ------------------------------
-# 3. BACKEND & TOOLS
-# ------------------------------
-# Local-only third-party tool checkouts
-.local-tools/
-.specify/
-
-# Python Virtual Environments
-venv/
-.venv/
-env/
-
-# Python Cache & Bytecode
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Node.js Dependencies (Future Proofing)
-node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-.agent/.test-codex-home/
-.agent/.test-workspace/
-.agent/.test-workspace-node/
-
-# Graphify generated knowledge graph
-graphify-out/
-
-# ------------------------------
-# 4. IDE / EDITOR SETTINGS
-# ------------------------------
-# VS Code (Optional: Adjust based on team policy)
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# ------------------------------
-# 5. OS Generated Files
-# ------------------------------
+# OS & Editor generated files
 .DS_Store
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
 
-# ------------------------------
-# 6. Documentation & Notes
-# ------------------------------
-# Keep folder structure but ignore content inside sensitive/messy notes
-Nexus-DevFlow/_notes/*
-!Nexus-DevFlow/_notes/.gitkeep
+# Environment & Security
+.env
+.env.local
+.env.*.local
+*.pem
+.security-key
 
-# ------------------------------
-# 7. Environment Variables
-# ------------------------------
-**.env
+# DevFlow transient run data & scratch files
+devflow/runs/*
+!devflow/runs/.gitkeep
+devflow/discoveries/*
+!devflow/discoveries/.gitkeep
+devflow/reports/*
+!devflow/reports/.gitkeep
 
-# ------------------------------
-# 8. Template HTML
-# ------------------------------
-template-html/*
-
-# .workspaces/roadmaps_.json
-
-# ------------------------------
-# 9. OBSIDIAN VAULT NOTES & SETTINGS
-# ------------------------------
-# Ignore Obsidian Vault entirely
-docs/vault/
-
-# ------------------------------
-# 10. DESIGN ASSETS & ROADMAPS
-# ------------------------------
-# Keep Design Assets & Graphic Assets in docs
-!docs/*.png
-!docs/*.jpg
-!docs/*.jpeg
-!docs/*.svg
-
-# Ignore Project Roadmap & Discovery Artifacts (Design Phase)
-roadmap_discovery.json
-roadmap_discovery.th.md
-
-# ------------------------------
-# 11. AGENT RUNTIME STATE
-# ------------------------------
-.agent/state/
+# Python cache & virtualenvs (if applicable)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/

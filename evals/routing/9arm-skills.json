@@ -1,0 +1,14 @@
+{
+  "skill": "9arm-skills",
+  "description": "9arm-skills skill instruction",
+  "positive": [
+    "run 9arm-skills skill",
+    "invoke /9arm-skills command",
+    "use 9arm-skills for 9arm skills skill instruction",
+    "apply 9arm-skills guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "40-implement",
+  "description": "Implement code in DevFlow 2.0 - execute one planned unit at a time with markdown-first implementation evidence.",
+  "positive": [
+    "run 40-implement skill",
+    "invoke /40-implement command",
+    "use 40-implement for implement code devflow execute planned unit time with",
+    "apply 40-implement guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

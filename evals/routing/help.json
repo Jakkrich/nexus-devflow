@@ -1,0 +1,14 @@
+{
+  "skill": "help",
+  "description": "DevFlow 2.0 Help and routing guide. Transitional file while Help moves from numbered workflow to companion command.",
+  "positive": [
+    "run help skill",
+    "invoke /help command",
+    "use help for devflow help routing guide transitional file while help",
+    "apply help guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

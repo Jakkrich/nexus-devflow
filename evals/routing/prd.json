@@ -1,0 +1,14 @@
+{
+  "skill": "prd",
+  "description": "PRD workflow",
+  "positive": [
+    "run prd skill",
+    "invoke /prd command",
+    "use prd for workflow",
+    "apply prd guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "test-driven-development",
+  "description": "Drives development with tests. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality.",
+  "positive": [
+    "run test-driven-development skill",
+    "invoke /test-driven-development command",
+    "use test-driven-development for drives development with tests when implementing logic fixing",
+    "apply test-driven-development guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

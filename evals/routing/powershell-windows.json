@@ -1,0 +1,14 @@
+{
+  "skill": "powershell-windows",
+  "description": "PowerShell Windows patterns. Critical pitfalls, operator syntax, error handling.",
+  "positive": [
+    "run powershell-windows skill",
+    "invoke /powershell-windows command",
+    "use powershell-windows for powershell windows patterns critical pitfalls operator syntax error",
+    "apply powershell-windows guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

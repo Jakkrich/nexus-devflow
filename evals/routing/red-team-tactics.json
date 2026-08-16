@@ -1,0 +1,14 @@
+{
+  "skill": "red-team-tactics",
+  "description": "Red team tactics principles based on MITRE ATT&CK. Attack phases, detection evasion, reporting.",
+  "positive": [
+    "run red-team-tactics skill",
+    "invoke /red-team-tactics command",
+    "use red-team-tactics for team tactics principles based mitre attack phases detection",
+    "apply red-team-tactics guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "tailwind-patterns",
+  "description": "Tailwind CSS v4 principles. CSS-first configuration, container queries, modern patterns, design token architecture.",
+  "positive": [
+    "run tailwind-patterns skill",
+    "invoke /tailwind-patterns command",
+    "use tailwind-patterns for tailwind principles first configuration container queries modern patterns",
+    "apply tailwind-patterns guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

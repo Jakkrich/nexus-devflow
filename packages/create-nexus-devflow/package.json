@@ -1,0 +1,53 @@
+{
+  "name": "@jakkrichm/create-nexus-devflow",
+  "version": "2.0.0",
+  "description": "Install or update the agent-ready DevFlow 2.0 workflow layer into a scaffolded or existing project.",
+  "license": "MIT",
+  "author": "Jakkrich",
+  "homepage": "https://github.com/Jakkrich/nexus-devflow#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jakkrich/nexus-devflow.git",
+    "directory": "packages/create-nexus-devflow"
+  },
+  "bugs": {
+    "url": "https://github.com/Jakkrich/nexus-devflow/issues"
+  },
+  "keywords": [
+    "devflow",
+    "nexus-devflow",
+    "ai",
+    "ai-coding",
+    "antigravity",
+    "codex",
+    "claude-code",
+    "agent",
+    "workflow",
+    "scaffold"
+  ],
+  "bin": {
+    "create-nexus-devflow": "bin/create-nexus-devflow.js",
+    "nexus-devflow": "bin/create-nexus-devflow.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check:pack": "npm pack --dry-run",
+    "prepare-template": "node scripts/prepare-template.js",
+    "prepack": "node scripts/prepare-template.js",
+    "postpack": "node scripts/clean-template.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "template/",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

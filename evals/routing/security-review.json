@@ -1,0 +1,14 @@
+{
+  "skill": "security-review",
+  "description": "High-severity security code review for folders, projects, files, or diffs with English Markdown output contract.",
+  "positive": [
+    "run security-review skill",
+    "invoke /security-review command",
+    "use security-review for high severity security code review folders projects files",
+    "apply security-review guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

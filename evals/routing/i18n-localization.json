@@ -1,0 +1,14 @@
+{
+  "skill": "i18n-localization",
+  "description": "Internationalization and localization patterns. Detecting hardcoded strings, managing translations, locale files, RTL support.",
+  "positive": [
+    "run i18n-localization skill",
+    "invoke /i18n-localization command",
+    "use i18n-localization for internationalization localization patterns detecting hardcoded strings managing translations",
+    "apply i18n-localization guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

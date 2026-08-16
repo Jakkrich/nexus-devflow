@@ -1,0 +1,14 @@
+{
+  "skill": "70-release",
+  "description": "Release stage in DevFlow 2.0 - package verified work for delivery, merge, PR, deployment, or handoff.",
+  "positive": [
+    "run 70-release skill",
+    "invoke /70-release command",
+    "use 70-release for release stage devflow package verified work delivery merge",
+    "apply 70-release guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

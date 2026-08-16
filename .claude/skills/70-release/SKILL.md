@@ -1,0 +1,155 @@
+---name: 70-release
+
+description: Release stage in DevFlow 2.0 - package verified work for delivery, merge, PR, deployment, or handoff.
+argument-hint: "{running-id or workspace path}"
+---
+
+# Phase 70: Release
+
+$ARGUMENTS
+
+Package approved work for delivery after the report stage has captured the final verified story. This stage turns report sign-off into release-ready execution and handoff.
+
+## Usage
+
+```text
+/70-Release {running-id or workspace path}
+```
+
+Use this when:
+
+- `/60-Report` is complete
+- the work needs release execution or a release-facing handoff packet
+- downstream stakeholders need delivery notes instead of raw implementation detail
+
+## Markdown-First Contract
+
+Write the primary stage artifact to:
+
+```text
+devflow/runs/{ID}-{slug}/70-release.md
+```
+
+using:
+
+```text
+.agent/resources/schemas/release.template.md
+```
+
+Before writing `70-release.md`, read `artifact_language` from `release.template.md` and produce the artifact in that language.
+
+## Required Section Content
+
+Before completing any generated artifact:
+
+- preserve every heading required by the selected template
+- write concrete information under every heading
+- when no information exists or the section does not apply, write exactly `-`
+- never leave a heading immediately followed by another heading with no body content
+- remove template placeholders from the final artifact
+- do not invent facts merely to avoid using `-`
+- re-read the saved artifact and verify every heading satisfies this rule
+
+## Process
+
+### Loop Contract
+
+Run release as a readiness-packaging loop, not as a celebratory summary.
+
+- **Intent**: convert verified work into a clear release, PR, merge, deploy, or handoff packet without hiding unresolved risk.
+- **Context**: read `50-verify.md`, `50-verify-impact.md` when present, `40-implement.md`, `20-spec.md`, checklist state, and any PR, deploy, merge, or handoff notes.
+- **Action**: summarize delivered scope, user/system impact, readiness state, validation evidence, rollback or mitigation notes, and follow-up items.
+- **Observation**: use concrete evidence such as verify verdict, failed or skipped checks, impact notes, residual risks, merge/deploy constraints, and checklist status.
+- **Adjustment**: if release readiness becomes uncertain, return to `/50-Verify`; if fixes are required, return to `/40-Implement`; if context must transfer, use `handoff`.
+- **Stop Condition**: stop when the release state is explicit, evidence supports readiness, residual risks and follow-ups are named, and the next delivery or reporting route is clear.
+- **Handoff**: `70-release.md` must close the mainline run or tell the next reader what shipped, what did not ship, what evidence supports readiness, and what follow-ups remain.
+
+### 1. Load Verified Context
+
+Read:
+
+- `60-report.md`
+- `50-verify.md`
+- `40-implement.md`
+- `20-spec.md`
+- any PR, deploy, merge, or handoff notes already captured
+
+### 2. Package The Release Outcome
+
+Summarize:
+
+- what is being delivered
+- what changed in user or system terms
+- what state the work is in for PR, deploy, merge, or handoff
+- what follow-up items remain
+
+### 3. Write `70-release.md`
+
+Keep the language understandable for someone who did not do the work.
+Follow the `artifact_language` configured in `release.template.md`.
+
+Prefer clear release-note style wording:
+
+- what was added
+- what changed
+- what was fixed
+- what is intentionally deferred
+
+### 4. Confirm Readiness
+
+If release readiness changes because unresolved issues are found:
+
+- route back to `/50-Verify` or `/40-Implement`
+
+Do not package unfinished work as release-ready through wording tricks.
+Use `resolving-merge-conflicts` when merge or rebase conflicts block packaging. Use `handoff` when release output must transfer to another agent or session without duplicating artifacts.
+
+### 5. Manual Review Soft Gate
+
+Before closing the mainline run, warn when release approval is still pending.
+If release blockers, operator questions, or handoff approvals remain open:
+
+- mark them visibly in `70-release.md`
+- recommend human confirmation before closing the phase
+- keep the mainline closeout as a soft recommendation only
+
+## Output
+
+Report:
+
+- delivered scope
+- release, PR, merge, deploy, or handoff state
+- follow-up items
+- recommended next step
+
+## Relationship To DevFlow 2.0
+
+- Classification: Mainline workflow
+- Previous state: `/60-Report`
+- Next state: End of the mainline run when release packaging or handoff is complete
+- Common companion commands: `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
+- Support skills: `resolving-merge-conflicts`, `handoff`, and `setup-pre-commit` when release packaging needs conflict resolution, transfer notes, or local quality gates
+
+## Sources
+
+- `AGENTS.md`
+- `docs/workspace-artifacts.md`
+- `.agent/resources/schemas/release.template.md`
+- Related commands: `/60-Report`, `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
+
+## Next Workflow Recommendation
+
+- **Primary**: End of Timeline flow
+- **Why**: The report is already complete, and this phase is the final release-facing execution step.
+- **Alternatives**:
+  - `/60-Report` - choose this when the release package diverges from the approved report and the summary must be refreshed first.
+  - `/50-Verify` - choose this when release readiness becomes uncertain.
+  - `/40-Implement` - choose this when additional fixes are needed before release can proceed.
+  - `handoff` - choose this when release-ready context must move to another session, agent, or stakeholder packet.
+
+## Nexus Event
+
+- Use `Commit`, `PR`, `Deploy`, `Merge`, or `Changelog` when release execution still needs a concrete lane.
+- Return to `/60-Report` when release notes, scope, or handoff wording diverge from the approved summary.
+- Return to `/50-Verify` or `/40-Implement` when release readiness changes because unresolved issues are discovered.
+

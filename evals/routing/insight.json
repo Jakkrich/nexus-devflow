@@ -1,0 +1,14 @@
+{
+  "skill": "insight",
+  "description": "Insight Extraction - Extract reusable lessons, file insights, patterns, gotchas, recommendations, and 9arm-skills/post-mortem learning from completed work.",
+  "positive": [
+    "run insight skill",
+    "invoke /insight command",
+    "use insight for insight extraction extract reusable lessons file insights patterns",
+    "apply insight guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

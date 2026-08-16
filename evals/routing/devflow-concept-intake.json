@@ -1,0 +1,14 @@
+{
+  "skill": "devflow-concept-intake",
+  "description": "Studies external Git repositories, READMEs, prompt frameworks, agent workflows, and engineering-methodology repos before adapting ideas into Nexus-DevFlow. Use when the user asks to research a repo for DevFlow, compare concepts, decide what to adopt or reject, create an adoption proposal, write an option guide for coupled practices, or track upstream sources for adopted concepts.",
+  "positive": [
+    "run devflow-concept-intake skill",
+    "invoke /devflow-concept-intake command",
+    "use devflow-concept-intake for studies external repositories readmes prompt frameworks agent workflows",
+    "apply devflow-concept-intake guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

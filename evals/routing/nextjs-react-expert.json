@@ -1,0 +1,14 @@
+{
+  "skill": "nextjs-react-expert",
+  "description": "React and Next.js performance optimization from Vercel Engineering. Use when building React components, optimizing performance, eliminating waterfalls, reducing bundle size, reviewing code for performance issues, or implementing server/client-side optimizations.",
+  "positive": [
+    "run nextjs-react-expert skill",
+    "invoke /nextjs-react-expert command",
+    "use nextjs-react-expert for react next performance optimization from vercel engineering when",
+    "apply nextjs-react-expert guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}
