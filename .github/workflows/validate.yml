@@ -1,0 +1,42 @@
+name: Validate DevFlow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: ${{ matrix.os }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        node:
+          - "22"
+          - "24"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Validate DevFlow workspace integrity
+        run: npm run check
+      - name: Validate DevFlow static contract
+        run: npm run check:static
+      - name: Run installer unit tests
+        run: npm test
+      - name: Evaluate skill routing
+        run: npm run test:routing
+      - name: Verify package smoke test
+        run: npm run test:package
