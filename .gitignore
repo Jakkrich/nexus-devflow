@@ -9,10 +9,11 @@ pnpm-debug.log*
 lerna-debug.log*
 *.log
 
-# Build & tarball outputs
+# Build & generated outputs
 dist/
 build/
 *.tgz
+graphify-out/
 
 # OS & Editor generated files
 .DS_Store
