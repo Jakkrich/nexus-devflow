@@ -18,4 +18,4 @@ Nexus-DevFlow aims to provide the premier stage-based agentic workflow layer for
 
 - Elevating installer overlay stability across cross-platform environments.
 - Expanding skill routing evaluation benchmarks to 100% accuracy.
-- Maintaining clean markdown-first stage contracts under `.workspaces/`.
+- Maintaining clean markdown-first stage contracts under `devflow/`.

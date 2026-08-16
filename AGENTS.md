@@ -22,8 +22,8 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 ```
 
 ### Mainline Stages:
-1. `/00-Discover` - Explore a request before delivery commitment. Creates a Discovery ID (`.workspaces/discoveries/...`).
-2. `/10-Define` - Turn an approved discovery into one or more bounded delivery runs (`.workspaces/specs/{running-id}/10-define.md`).
+1. `/00-Discover` - Explore a request before delivery commitment. Creates a Discovery ID (`devflow/discoveries/...`).
+2. `/10-Define` - Turn an approved discovery into one or more bounded delivery runs (`devflow/runs/{running-id}/10-define.md`).
 3. `/20-Spec` - Formalize markdown-first specifications (`20-spec.md`).
 4. `/30-Plan` - Transform spec into executable steps (`30-plan.md`).
 5. `/40-Implement` - Execute planned tasks incrementally (`40-implement.md`).
@@ -39,7 +39,7 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 - `PRD`: Product framing before delivery commitment
 - `Issue-Triage`: Intaking and triaging incoming reports
 - `Security-Review`: High-severity security review
-- `Wiki`: Knowledge base management under `.workspaces/wiki/`
+- `Wiki`: Knowledge base management under `devflow/wiki/`
 - `Check-For-Updates`: Verify or upgrade DevFlow setup
 - `Help`: Routing and process assistance
 

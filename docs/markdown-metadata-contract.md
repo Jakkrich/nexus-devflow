@@ -88,17 +88,17 @@ requirement_count: 0
 acceptance_criteria_count: 0
 ```
 
-Use `doc_type: "spec"` and `category: "planning"` for `.workspaces/specs/{ID}-*/20-spec.md`.
+Use `doc_type: "spec"` and `category: "planning"` for `devflow/runs/{ID}-*/20-spec.md`.
 
 ### Implementation Plan
 
 ```yaml
-source_spec: ".workspaces/specs/{task-id}/20-spec.md"
+source_spec: "devflow/runs/{task-id}/20-spec.md"
 phase_count: 0
 risk_level: "medium"
 ```
 
-Use `doc_type: "plan"` and `category: "planning"` for `.workspaces/specs/{ID}-*/30-plan.md`.
+Use `doc_type: "plan"` and `category: "planning"` for `devflow/runs/{ID}-*/30-plan.md`.
 
 ### Research Report
 

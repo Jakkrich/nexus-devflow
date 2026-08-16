@@ -16,7 +16,7 @@ export function resolveReportWorkspaceDir(argument, projectRoot) {
     if (stats.isFile() && path.basename(directPath) === '60-report.md') return path.dirname(directPath);
   }
 
-  const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
+  const specsRoot = path.join(projectRoot, 'devflow', 'runs');
   if (fs.existsSync(specsRoot) && fs.statSync(specsRoot).isDirectory()) {
     const specCandidates = fs.readdirSync(specsRoot, { withFileTypes: true })
       .filter((entry) => entry.isDirectory() && entry.name.startsWith(argument))

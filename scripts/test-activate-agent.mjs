@@ -27,7 +27,7 @@ function outputOf(result) {
 try {
   const target = path.join(scratchRoot, 'target-project');
   fs.mkdirSync(target, { recursive: true });
-  fs.cpSync(path.join(rootDir, '.agent'), path.join(target, '.agent'), { recursive: true });
+  fs.cpSync(path.join(rootDir, '.agents'), path.join(target, '.agents'), { recursive: true });
   fs.writeFileSync(
     path.join(target, 'package.json'),
     JSON.stringify({
@@ -35,7 +35,7 @@ try {
       private: true,
       scripts: {
         activate: 'node ./scripts/activate-agent.mjs',
-        validate: 'node ./scripts/validate-framework.mjs',
+        check: 'node ./scripts/validate-framework.mjs',
       },
     }, null, 2),
     'utf8',
@@ -45,16 +45,16 @@ try {
   const result = run(target);
   assert(result.status === 0, `activate should pass:\n${outputOf(result)}`);
 
-  assert(fs.existsSync(path.join(target, '.workspaces')), 'activate should create .workspaces');
-  assert(fs.existsSync(path.join(target, '.workspaces', 'discoveries')), 'activate should create .workspaces/discoveries');
-  assert(fs.existsSync(path.join(target, '.workspaces', 'specs')), 'activate should create .workspaces/specs');
+  assert(fs.existsSync(path.join(target, 'devflow')), 'activate should create devflow');
+  assert(fs.existsSync(path.join(target, 'devflow', 'discoveries')), 'activate should create devflow/discoveries');
+  assert(fs.existsSync(path.join(target, 'devflow', 'runs')), 'activate should create devflow/runs');
   for (const dir of ['roadmap', 'issues', 'research', 'prds', 'debug', 'reports']) {
-    assert(!fs.existsSync(path.join(target, '.workspaces', dir)), `activate should not precreate .workspaces/${dir}`);
+    assert(!fs.existsSync(path.join(target, 'devflow', dir)), `activate should not precreate devflow/${dir}`);
   }
 
-  assert(!fs.existsSync(path.join(target, '.workspaces', 'wiki')), 'activate should not create .workspaces/wiki in lean mode');
-  assert(fs.existsSync(path.join(target, '.workspaces', 'active-agent.json')), 'activate should create active-agent.json');
-  assert(fs.existsSync(path.join(target, '.workspaces', 'project_index.json')), 'activate should create project_index.json');
+  assert(!fs.existsSync(path.join(target, 'devflow', 'wiki')), 'activate should not create devflow/wiki in lean mode');
+  assert(fs.existsSync(path.join(target, 'devflow', 'context', 'active-agent.json')), 'activate should create active-agent.json');
+  assert(fs.existsSync(path.join(target, 'devflow', 'context', 'project_index.json')), 'activate should create project_index.json');
   console.log('[OK] activate-agent creates only the minimal workspace skeleton.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });

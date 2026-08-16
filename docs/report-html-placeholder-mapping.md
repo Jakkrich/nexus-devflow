@@ -59,7 +59,7 @@ If checklist completion, blockers, skipped items, or evidence snapshots matter t
 ## Expected Workspace Inputs
 
 ```text
-.workspaces/specs/{ID}-{slug}/
+devflow/runs/{ID}-{slug}/
   60-report.md
   60-report.html
 ```

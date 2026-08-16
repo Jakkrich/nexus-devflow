@@ -27,7 +27,7 @@ function runSummary(args = []) {
 try {
   fs.rmSync(tempRoot, { recursive: true, force: true });
 
-  const specsRoot = path.join(tempRoot, '.workspaces', 'specs');
+  const specsRoot = path.join(tempRoot, 'devflow', 'runs');
 
   writeFile(path.join(specsRoot, '101-alpha', '20-spec.md'), `# Spec\n\n## 15. Approval Status\n\n- Pending\n\n## 16. Next Allowed Command\n\n- \`/30-Plan 101\`\n`);
   writeFile(path.join(specsRoot, '101-alpha', 'checklists', 'verification-checklist.md'), `# Verification Checklist\n\n## 5. Approval Gate\n\n- **Approval Status**: \`Pending\`\n- **Ready For \`/60-Report\`**: \`no\`\n- **Why**: waiting for review\n- **Return To \`/40-Implement\` Needed**: \`no\`\n- **Human Review Required**: confirm acceptance criteria evidence\n- **Next Allowed Command**: \`/30-Plan 101\`\n- **Soft-Gate Warning**: spec still pending approval\n`);

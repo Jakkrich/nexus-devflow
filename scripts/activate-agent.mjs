@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,24 +23,21 @@ function writeJson(relativePath, data) {
 
 function main() {
   const problems = [];
-  if (!exists('.agent')) problems.push('Missing .agent bundle');
-  if (!exists('.agent/package.json')) problems.push('Missing .agent/package.json');
-  if (exists('.cursor')) problems.push('Legacy .cursor directory is still present');
-  if (exists('active-ide.py')) problems.push('Legacy active-ide.py is still present');
+  if (!exists('.agents')) problems.push('Missing .agents adapter');
 
-  ensureDir('.workspaces');
-  ensureDir('.workspaces/discoveries');
-  ensureDir('.workspaces/specs');
+  ensureDir('devflow');
+  ensureDir('devflow/discoveries');
+  ensureDir('devflow/runs');
 
   const now = new Date().toISOString();
-  writeJson('.workspaces/active-agent.json', {
-    active_bundle: '.agent',
+  writeJson('devflow/context/active-agent.json', {
+    active_bundle: '.agents',
     primary_ide: 'Codex',
     package_manager: 'npm',
     activated_at: now,
     scripts: {
-      validate: 'npm run validate',
-      generate_project_index: 'npm run index'
+      validate: 'npm run check',
+      generate_project_index: 'npm run check:static'
     }
   });
 
@@ -53,9 +50,8 @@ function main() {
     return;
   }
 
-  console.log('Nexus-DevFlow activated for Codex .agent workflow bundle.');
-  console.log('Next: npm run validate');
+  console.log('Nexus-DevFlow activated successfully.');
+  console.log('Next: npm run check');
 }
 
 main();
-

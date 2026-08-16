@@ -30,7 +30,7 @@ For large or requirement-sensitive work, teams often need stronger answers to th
 This spec covers:
 
 - a manual-first operating model for the existing mainline
-- artifact placement rules in `.workspaces/`
+- artifact placement rules in `devflow/`
 - a recommended naming scheme for project, phase, and running-id work
 - stage-level review gates for `00-Discover`, `10-Define`, `20-Spec`, and `30-Plan`
 - example template structure for those four stages
@@ -88,11 +88,11 @@ Recommended levels:
 
 Project context should live in durable shared artifacts such as:
 
-- `.workspaces/prds/{project-slug}.md`
-- `.workspaces/research/{project-slug}/source-summary.md`
-- `.workspaces/research/{project-slug}/open-questions.md`
-- `.workspaces/wiki/project/{project-slug}-global-rules.md`
-- `.workspaces/wiki/project/{project-slug}-phase-map.md`
+- `devflow/prds/{project-slug}.md`
+- `devflow/research/{project-slug}/source-summary.md`
+- `devflow/research/{project-slug}/open-questions.md`
+- `devflow/wiki/project/{project-slug}-global-rules.md`
+- `devflow/wiki/project/{project-slug}-phase-map.md`
 
 This layer stores broad requirements, domain language, global constraints, unresolved questions, and phase boundaries.
 
@@ -101,7 +101,7 @@ This layer stores broad requirements, domain language, global constraints, unres
 Before the phase delivery layer, `/00-Discover` stores the request, selected support routes, evidence, and decision under:
 
 ```text
-.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md
+devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md
 ```
 
 This layer consumes no Running ID. Only an approved `Proceed` discovery may enter `/10-Define`.
@@ -109,7 +109,7 @@ This layer consumes no Running ID. Only an approved `Proceed` discovery may ente
 Each phase should use one running id under:
 
 ```text
-.workspaces/specs/{ID}-{phase-slug}/
+devflow/runs/{ID}-{phase-slug}/
 ```
 
 Each running id begins with `10-define.md` and owns the delivery artifact set for one phase or capability slice. Multiple runs may link to one shared Discovery ID.
@@ -129,7 +129,7 @@ Do not create a new running id for every small implementation task unless that t
 ### Recommended Layout
 
 ```text
-.workspaces/
+devflow/
   discoveries/
     {DISCOVERY_ID}-{slug}/
       00-discover.md

@@ -43,7 +43,7 @@ owner: "codex"
 status: "draft"
 related_run: "997"
 related_files:
-  - ".workspaces/specs/997-verify-impact-contract-test/50-verify.md"
+  - "devflow/runs/997-verify-impact-contract-test/50-verify.md"
 ---
 
 # Impact & Safety Report: Verify Impact Contract

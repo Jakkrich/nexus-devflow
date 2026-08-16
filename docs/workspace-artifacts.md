@@ -1,6 +1,6 @@
 # Workspace Artifacts
 
-Nexus-DevFlow 2.0 uses `.workspaces/` as the primary store for task artifacts and supporting run history, following the framework's `markdown-first` contract.
+Nexus-DevFlow 2.0 uses `devflow/` as the primary store for task artifacts and supporting run history, following the framework's `markdown-first` contract.
 
 Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projects/nexus-devflow/AGENTS.md:1) and [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
 
@@ -9,7 +9,7 @@ The tracked framework default is `artifact_language: "th"` exactly once in every
 ## Canonical Layout
 
 ```text
-.workspaces/
+devflow/
 |-- active-agent.json
 |-- project_index.json
 |-- lessons.md
@@ -32,27 +32,27 @@ The tracked framework default is `artifact_language: "th"` exactly once in every
 
 | Path | Stores | Related workflows or commands | Keep? |
 | :--- | :--- | :--- | :--- |
-| `.workspaces/discoveries/` | Pre-delivery `00-discover.md` artifacts grouped by Discovery ID, including route selection, companion findings, decision, and later related-run links | `/00-Discover`, plus discovery-owned `Brainstorm`, `PRD`, `Research`, and `Debug` | Yes. This is the decision store before Running IDs exist. |
-| `.workspaces/specs/` | Per-running-ID delivery artifacts such as `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Security-Review`, `Preview` | Yes. This is the approved delivery-run store. |
-| `.workspaces/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
-| `.workspaces/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
-| `.workspaces/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
-| `.workspaces/prds/` | Product Requirements Documents created before mainline execution | `PRD` and product-definition work | Yes. It bridges product thinking to executable work. |
-| `.workspaces/debug/` | Root cause analysis reports and debugging notes | `Debug`, verify follow-up work | Yes. It keeps RCA separate from implementation artifacts. |
-| `.workspaces/reports/` | Cross-cutting reports that are not tied to one stage file | verification, review, specialist summaries | Yes. It captures reusable reports outside a single run. |
-| `.workspaces/wiki/` | Compiled framework and project knowledge pages with source-backed links | `Wiki`, `Report`, `Help` | Optional. Create it only when wiki capture is actually needed. |
+| `devflow/discoveries/` | Pre-delivery `00-discover.md` artifacts grouped by Discovery ID, including route selection, companion findings, decision, and later related-run links | `/00-Discover`, plus discovery-owned `Brainstorm`, `PRD`, `Research`, and `Debug` | Yes. This is the decision store before Running IDs exist. |
+| `devflow/runs/` | Per-running-ID delivery artifacts such as `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Security-Review`, `Preview` | Yes. This is the approved delivery-run store. |
+| `devflow/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
+| `devflow/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
+| `devflow/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
+| `devflow/prds/` | Product Requirements Documents created before mainline execution | `PRD` and product-definition work | Yes. It bridges product thinking to executable work. |
+| `devflow/debug/` | Root cause analysis reports and debugging notes | `Debug`, verify follow-up work | Yes. It keeps RCA separate from implementation artifacts. |
+| `devflow/reports/` | Cross-cutting reports that are not tied to one stage file | verification, review, specialist summaries | Yes. It captures reusable reports outside a single run. |
+| `devflow/wiki/` | Compiled framework and project knowledge pages with source-backed links | `Wiki`, `Report`, `Help` | Optional. Create it only when wiki capture is actually needed. |
 
 ## Top-Level Files
 
 | File | Purpose | Related workflows or commands |
 | :--- | :--- | :--- |
-| `.workspaces/active-agent.json` | Records the active `.agent` bundle and npm command surface | activation/bootstrap tasks |
-| `.workspaces/project_index.json` | Project-wide structure, services, conventions, and commands | indexing, research, planning support during migration |
-| `.workspaces/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `Debug`, `Wiki`, `Report`, release/review follow-up |
+| `devflow/active-agent.json` | Records the active `.agent` bundle and npm command surface | activation/bootstrap tasks |
+| `devflow/project_index.json` | Project-wide structure, services, conventions, and commands | indexing, research, planning support during migration |
+| `devflow/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `Debug`, `Wiki`, `Report`, release/review follow-up |
 
 ## Task Workspace Files
 
-Discoveries live under `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/` before delivery commitment. An approved `/10-Define` creates one or more runs under `.workspaces/specs/{ID}-{slug}/`; each run then uses flat stage filenames so the work stays easy to inspect, resume, and validate.
+Discoveries live under `devflow/discoveries/{DISCOVERY_ID}-{slug}/` before delivery commitment. An approved `/10-Define` creates one or more runs under `devflow/runs/{ID}-{slug}/`; each run then uses flat stage filenames so the work stays easy to inspect, resume, and validate.
 
 ### Markdown And HTML Policy
 
@@ -65,8 +65,8 @@ Discoveries live under `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/` before d
 
 | File | Purpose |
 | :--- | :--- |
-| `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md` | Routes focused inquiry and records `Proceed`, `Defer`, or `Reject` without a Running ID. |
-| `.workspaces/specs/{ID}-{slug}/10-define.md` | Locks one delivery boundary, creates the Running ID, and links to its source discovery. |
+| `devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md` | Routes focused inquiry and records `Proceed`, `Defer`, or `Reject` without a Running ID. |
+| `devflow/runs/{ID}-{slug}/10-define.md` | Locks one delivery boundary, creates the Running ID, and links to its source discovery. |
 | `20-spec.md` | Defines the delivery contract and acceptance criteria. |
 | `30-plan.md` | Breaks the work down into execution order, risks, and verification approach. |
 | `40-implement.md` | Records the implementation work, key changes, and any meaningful deviation. |
@@ -96,7 +96,7 @@ npm.cmd run render:html -- --stage 60-report <workspace-path-or-running-id>
 Use a dedicated checklist folder when people need a live view of task execution:
 
 ```text
-.workspaces/specs/{ID}-{slug}/checklists/
+devflow/runs/{ID}-{slug}/checklists/
   implementation-checklist.md
   verification-checklist.md
 ```
@@ -172,26 +172,26 @@ If you find those files in an older workspace:
 
 ```text
 Mainline:
-  /00-Discover       -> .workspaces/discoveries/{DISCOVERY_ID}-*/00-discover.md
-  /10-Define         -> one or many .workspaces/specs/{ID}-*/10-define.md
-  /20-Spec           -> .workspaces/specs/{ID}-*/20-spec.md
-  /30-Plan           -> .workspaces/specs/{ID}-*/30-plan.md
-  /40-Implement      -> .workspaces/specs/{ID}-*/40-implement.md
-  /50-Verify         -> .workspaces/specs/{ID}-*/50-verify.md
-  Verify companion   -> .workspaces/specs/{ID}-*/50-verify-impact.md (optional)
-  /60-Report         -> .workspaces/specs/{ID}-*/60-report.md and 60-report.html
-  /70-Release        -> .workspaces/specs/{ID}-*/70-release.md
-  Checklist layer    -> .workspaces/specs/{ID}-*/checklists/*.md
+  /00-Discover       -> devflow/discoveries/{DISCOVERY_ID}-*/00-discover.md
+  /10-Define         -> one or many devflow/runs/{ID}-*/10-define.md
+  /20-Spec           -> devflow/runs/{ID}-*/20-spec.md
+  /30-Plan           -> devflow/runs/{ID}-*/30-plan.md
+  /40-Implement      -> devflow/runs/{ID}-*/40-implement.md
+  /50-Verify         -> devflow/runs/{ID}-*/50-verify.md
+  Verify companion   -> devflow/runs/{ID}-*/50-verify-impact.md (optional)
+  /60-Report         -> devflow/runs/{ID}-*/60-report.md and 60-report.html
+  /70-Release        -> devflow/runs/{ID}-*/70-release.md
+  Checklist layer    -> devflow/runs/{ID}-*/checklists/*.md
 
 Companion commands:
   Goal               -> routing before a Discovery ID exists or before mainline entry
-  Brainstorm         -> .workspaces/research/, then back to the requesting discovery or stage
-  Research           -> .workspaces/research/, then back to the requesting discovery or stage
-  Debug              -> .workspaces/debug/, then back to the requesting discovery or stage
-  PRD                -> .workspaces/prds/, then back to the requesting discovery or stage
-  Issue-Triage       -> .workspaces/issues/
-  Security-Review    -> .workspaces/specs/{ID}-*/security-review.md
-  Wiki               -> .workspaces/wiki/framework/ or .workspaces/wiki/project/ when the wiki surface is explicitly used
+  Brainstorm         -> devflow/research/, then back to the requesting discovery or stage
+  Research           -> devflow/research/, then back to the requesting discovery or stage
+  Debug              -> devflow/debug/, then back to the requesting discovery or stage
+  PRD                -> devflow/prds/, then back to the requesting discovery or stage
+  Issue-Triage       -> devflow/issues/
+  Security-Review    -> devflow/runs/{ID}-*/security-review.md
+  Wiki               -> devflow/wiki/framework/ or devflow/wiki/project/ when the wiki surface is explicitly used
   Help               -> workflow recommendation or routing note
 ```
 
@@ -230,9 +230,9 @@ Safe cleanup targets:
 
 Not safe to delete by default:
 
-- `.workspaces/specs`
-- `.workspaces/wiki` once wiki capture has started
-- `.workspaces/lessons.md`
+- `devflow/specs`
+- `devflow/wiki` once wiki capture has started
+- `devflow/lessons.md`
 
 ## Regeneration
 
@@ -243,14 +243,14 @@ npm.cmd run index
 
 ## Legacy Migration
 
-Use the migration helper when a project still has legacy run folders such as `.workspaces/001-some-task/00-discover/discover.md`:
+Use the migration helper when a project still has legacy run folders such as `devflow/001-some-task/00-discover/discover.md`:
 
 ```powershell
 npm.cmd run migrate:artifacts -- D:\Projects\some-project
 npm.cmd run migrate:artifacts -- D:\Projects\some-project --write
 ```
 
-The command runs as a dry-run by default and moves legacy task artifacts into `.workspaces/specs/{ID}-{slug}/` with flat stage filenames only when `--write` is provided.
+The command runs as a dry-run by default and moves legacy task artifacts into `devflow/runs/{ID}-{slug}/` with flat stage filenames only when `--write` is provided.
 
 ## Validation
 

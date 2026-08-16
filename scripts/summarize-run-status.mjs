@@ -132,7 +132,7 @@ function summarizeRun(runDir) {
 }
 
 function listRunStatuses(projectRoot) {
-  const specsRoot = path.join(projectRoot, '.workspaces', 'specs');
+  const specsRoot = path.join(projectRoot, 'devflow', 'runs');
   if (!fs.existsSync(specsRoot)) {
     return [];
   }

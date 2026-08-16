@@ -48,7 +48,7 @@ async function processDir(dir) {
 }
 
 async function main() {
-  console.log("Updating skill file paths from .workspaces/ to devflow/...");
+  console.log("Updating skill file paths from devflow/ to devflow/...");
   const updatedCount = await processDir(agentsSkillsDir);
   console.log(`Updated paths in ${updatedCount} skill file(s).`);
 

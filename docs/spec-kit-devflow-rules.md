@@ -23,7 +23,7 @@ The source of truth remains:
 - `DevFlow 2.0` mainline workflows
 - DevFlow companion commands
 - DevFlow skills and agents
-- DevFlow markdown-first stage contracts under `.workspaces/`
+- DevFlow markdown-first stage contracts under `devflow/`
 
 Spec Kit outputs are drafts, prompts, checklists, or analysis aids until their useful ideas are translated into DevFlow-native artifacts.
 

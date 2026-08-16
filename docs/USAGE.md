@@ -233,16 +233,16 @@ Common paths:
 
 | Path | Purpose |
 | :--- | :--- |
-| `.workspaces/discoveries/` | pre-delivery Discover artifacts grouped by Discovery ID |
-| `.workspaces/specs/` | stage artifacts grouped by running ID |
-| `.workspaces/specs/{ID}-{slug}/checklists/` | live operational tracking for plan, implementation, verification, and release gates |
-| `.workspaces/research/` | research and brainstorm outputs when used |
-| `.workspaces/prds/` | PRD artifacts when used |
-| `.workspaces/roadmap/` | roadmap discovery notes |
-| `.workspaces/issues/` | issue-triage outputs when used |
-| `.workspaces/debug/` | debug and RCA notes when used |
-| `.workspaces/reports/` | cross-cutting reports when used |
-| `.workspaces/wiki/` | knowledge artifacts when used |
+| `devflow/discoveries/` | pre-delivery Discover artifacts grouped by Discovery ID |
+| `devflow/runs/` | stage artifacts grouped by running ID |
+| `devflow/runs/{ID}-{slug}/checklists/` | live operational tracking for plan, implementation, verification, and release gates |
+| `devflow/research/` | research and brainstorm outputs when used |
+| `devflow/prds/` | PRD artifacts when used |
+| `devflow/roadmap/` | roadmap discovery notes |
+| `devflow/issues/` | issue-triage outputs when used |
+| `devflow/debug/` | debug and RCA notes when used |
+| `devflow/reports/` | cross-cutting reports when used |
+| `devflow/wiki/` | knowledge artifacts when used |
 
 ## Validation
 
@@ -294,7 +294,7 @@ Notes:
 When a team wants detailed follow-through, create checklist artifacts inside the run:
 
 ```text
-.workspaces/specs/{ID}-{slug}/checklists/
+devflow/runs/{ID}-{slug}/checklists/
   master-checklist.md
   implementation-checklist.md
   verification-checklist.md

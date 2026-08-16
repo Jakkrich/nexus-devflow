@@ -14,8 +14,8 @@ export function resolveWorkspaceDir({ argument, projectRoot }) {
   }
 
   const searchRoots = [
-    path.join(projectRoot, '.workspaces', 'specs'),
-    path.join(projectRoot, '.workspaces')
+    path.join(projectRoot, 'devflow', 'runs'),
+    path.join(projectRoot, 'devflow')
   ].filter((root) => fs.existsSync(root) && fs.statSync(root).isDirectory());
 
   const candidates = searchRoots.flatMap((root) =>
