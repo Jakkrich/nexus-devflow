@@ -1,6 +1,6 @@
 {
   "name": "nexus-devflow",
-  "version": "1.5.0",
+  "version": "2.0.1",
   "description": "Agent-ready PRP workflow framework with .agent tooling, roadmap artifacts, and validation scripts.",
   "type": "module",
   "private": true,
