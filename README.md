@@ -1,125 +1,193 @@
-# Nexus-DevFlow 2.0
+<p align="center">
+  <img src="docs/logo-nexus-devflow.png" alt="Nexus-DevFlow 2.0" width="120">
+</p>
 
-> **Agent-ready stage-based workflow layer for building production software with AI.**
+<h1 align="center">Nexus-DevFlow 2.0</h1>
 
-[![npm version](https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef)](https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow)
-[![license](https://img.shields.io/github/license/Jakkrich/nexus-devflow?style=flat-square&color=155eef)](LICENSE)
+<p align="center"><strong>An agent-ready stage-based workflow layer for building production software with AI.</strong></p>
 
-**English** | [ไทย](README.th.md)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow"><img src="https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
+  <a href="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml"><img src="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg" alt="Validate DevFlow"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/Jakkrich/nexus-devflow?style=flat-square&color=155eef" alt="MIT license"></a>
+</p>
 
-[Repository](https://github.com/Jakkrich/nexus-devflow) | [npm](https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow) | [Releases](https://github.com/Jakkrich/nexus-devflow/releases) | [Changelog](CHANGELOG.md)
+<p align="center"><strong>English</strong> | <a href="README.th.md">ไทย</a></p>
 
----
+<p align="center">
+  <a href="https://github.com/Jakkrich/nexus-devflow">Repository</a> |
+  <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow">npm</a> |
+  <a href="https://github.com/Jakkrich/nexus-devflow/releases">Releases</a> |
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
 
-## Quick Start
+**Nexus-DevFlow 2.0** provides an 8-stage agentic workflow layer (`/00-Discover` through `/70-Release`) for building production software with AI assistants. Instead of unstructured "vibe coding", DevFlow guides AI through an explicit, markdown-first, auditable delivery lifecycle.
 
-Install or overlay **Nexus-DevFlow** into any newly scaffolded or existing Git repository:
+Install it inside any scaffolded or existing Git repository:
 
 ```bash
-# Overlay into current project
 npx @jakkrichm/create-nexus-devflow
+```
 
-# Specify target directory
+> [!NOTE]
+> Nexus-DevFlow 2.0 is designed as a workflow layer overlay that sits on top of your application codebase, bringing multi-agent skills (`.agents/skills` & `.claude/skills`), structured stage artifacts (`devflow/`), and senior QA gates to your favorite AI IDE (Google Antigravity, OpenAI Codex, Claude Code, Cursor, Gemini CLI, and others).
+
+## What this is
+
+"Vibe coding" without structure leads to unmaintainable code, hidden regressions, and context loss. 
+
+DevFlow establishes a rigorous, stage-based control system for AI-assisted development:
+
+1. **Explicit 8-Stage Mainline.** Clear progression from Discovery (`/00-Discover`), Definition (`/10-Define`), Specification (`/20-Spec`), Planning (`/30-Plan`), Implementation (`/40-Implement`), Verification (`/50-Verify`), Reporting (`/60-Report`), to Release (`/70-Release`).
+2. **Markdown-First State.** Every stage produces durable markdown artifacts under `devflow/discoveries/` and `devflow/runs/{RUNNING_ID}/`. Your work survives chat clears and context limits.
+3. **Dual Tool Adapters.** Native skills for OpenAI Codex & Google Antigravity (`.agents/skills/`) and Claude Code (`.claude/skills/`).
+4. **Senior QA & Verification Gates.** Stage `/50-Verify` performs automated and specialist verification before generating human-friendly HTML/markdown reports (`/60-Report`).
+
+## At a glance
+
+| Principle | What it means |
+| --- | --- |
+| **Stage-based Mainline** | Linear progression (`/00-Discover` ➔ `/70-Release`) guarantees structured software engineering. |
+| **Markdown-First State** | All specs, plans, implementation logs, and QA verdicts live in human-readable markdown files under `devflow/`. |
+| **Dual Adapter Layer** | Shared `.agents/skills` for Codex & Antigravity, `.claude/skills` for Claude Code. |
+| **Companion Commands** | On-demand specialists (`Brainstorm`, `PRD`, `Debug`, `Research`, `Security-Review`, `Issue-Triage`) support the mainline without breaking stage linearity. |
+| **Automatic Verification** | Built-in test execution, framework validation, and static contracts prevent regressions. |
+
+## Contents
+
+- [What this is](#what-this-is)
+- [At a glance](#at-a-glance)
+- [Quick start](#quick-start)
+- [Mainline Timeline Workflow](#mainline-timeline-workflow)
+- [Public Companion Commands](#public-companion-commands)
+- [Tool Adapter Support](#tool-adapter-support)
+- [Workspace Artifact Layout](#workspace-artifact-layout)
+- [Updating DevFlow](#updating-devflow)
+- [Documentation & References](#documentation--references)
+- [License](#license)
+
+## Quick start
+
+### 1. Overlay into your project
+
+Scaffold your application first (using Next.js, Vite, FastAPI, etc.), navigate into your Git repository, and run the overlay installer:
+
+```bash
+npx @jakkrichm/create-nexus-devflow
+```
+
+You can also specify a target path or select specific tool adapters:
+
+```bash
+# Target directory
 npx @jakkrichm/create-nexus-devflow ./my-app
 
-# Choose specific AI tool adapter (codex, antigravity, claude, or both)
+# Specific tool adapter (codex, antigravity, claude, or both)
 npx @jakkrichm/create-nexus-devflow --adapter both
 ```
 
----
+### 2. Start the DevFlow Lifecycle
 
-## What is Nexus-DevFlow?
-
-**Nexus-DevFlow** is a stage-based workflow layer designed for agentic AI coding assistants (Google Antigravity, OpenAI Codex, Claude Code, Cursor, Gemini CLI, Aider, and Zed).
-
-Instead of "vibe coding" without structure, DevFlow guides AI through an explicit, auditable 8-stage lifecycle:
+Open your project in your AI assistant (Google Antigravity, Codex, Claude Code, etc.) and run:
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+/00-Discover
 ```
 
-### Mainline Lifecycle Stages:
-1. **`/00-Discover`**: Explore request, route supporting inquiries, and make go/no-go delivery decisions under a Discovery ID (`devflow/discoveries/...`).
-2. **`/10-Define`**: Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`).
-3. **`/20-Spec`**: Formalize markdown-first specification contracts and acceptance criteria (`20-spec.md`).
-4. **`/30-Plan`**: Transform specs into executable task breakdowns (`30-plan.md`).
-5. **`/40-Implement`**: Execute planned tasks incrementally with implementation evidence (`40-implement.md`).
-6. **`/50-Verify`**: Senior QA review and runtime validation checks (`50-verify.md`).
-7. **`/60-Report`**: Generate standardized markdown and HTML summary reports (`60-report.md`, `60-report.html`).
-8. **`/70-Release`**: Package verified work for PR merge or production deployment (`70-release.md`).
+The AI will guide you through request discovery, define bounded delivery runs under `devflow/runs/`, and take you through formal specs, planning, implementation, verification, and release reporting!
 
----
+## Mainline Timeline Workflow
+
+```text
+/00-Discover ➔ /10-Define ➔ /20-Spec ➔ /30-Plan ➔ /40-Implement ➔ /50-Verify ➔ /60-Report ➔ /70-Release
+```
+
+| Stage | Command | Purpose & Artifact |
+| --- | --- | --- |
+| **00** | `/00-Discover` | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
+| **10** | `/10-Define` | Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`). |
+| **20** | `/20-Spec` | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
+| **30** | `/30-Plan` | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
+| **40** | `/40-Implement` | Execute planned tasks incrementally with step evidence (`40-implement.md`). |
+| **50** | `/50-Verify` | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
+| **60** | `/60-Report` | Produce standardized markdown and self-contained HTML summary report (`60-report.md`, `60-report.html`). |
+| **70** | `/70-Release` | Package verified work for merge, PR, or deployment handoff (`70-release.md`). |
 
 ## Public Companion Commands
 
-Companion commands provide supporting context without disrupting mainline numbering:
+Companion commands provide specialized support without interrupting the linear mainline stage progression:
 
-- `Goal`: Route broad, long-running goals before Discovery.
-- `Brainstorm`: Ideate without allocating running IDs.
-- `Research`: Conduct codebase or web research.
-- `Debug`: Root cause investigation before or during implementation.
-- `PRD`: Product framing before delivery commitment.
-- `Issue-Triage`: Intaking and triaging incoming bug reports.
-- `Security-Review`: High-severity security review.
-- `Wiki`: Knowledge base management under `devflow/wiki/`.
-- `Check-For-Updates`: Verify or upgrade DevFlow setup.
-- `Help`: Process assistance and stage routing.
+| Companion | Purpose |
+| --- | --- |
+| `Brainstorm` | Brainstorm ideas and explore concepts without allocating running IDs. |
+| `PRD` | Product framing and requirement documentation before delivery commitment. |
+| `Research` | Codebase or web research to support discovery and spec stages. |
+| `Debug` | Root cause investigation for bugs before or during implementation. |
+| `Security-Review` | High-severity security review for code, diffs, or architecture. |
+| `Issue-Triage` | Intake, triage, and duplicate checking for reported issues. |
+| `Wiki` | Knowledge base management under `devflow/wiki/`. |
+| `Help` | Process assistance, intent routing, and sitemap guidance. |
 
----
+## Tool Adapter Support
 
-## Tool-Specific Adapters
+| Tool | Adapter Path | Invocation |
+| --- | --- | --- |
+| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Slash commands (e.g. `/00-Discover`, `/20-Spec`, `/40-Implement`) |
+| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | `$00-discover`, `$20-spec`, or natural language |
+| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Slash commands (e.g. `/00-Discover`, `/10-Define`, `/50-Verify`) |
+| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Natural language instructions referencing `AGENTS.md` |
 
-DevFlow provides native adapter support across popular AI tools:
+## Workspace Artifact Layout
 
-- **`AGENTS.md`**: Universal entry point for Codex, Google Antigravity, Cursor, Gemini CLI, Aider, and Zed.
-- **`CLAUDE.md`**: Imports `@AGENTS.md` for Claude Code.
-- **`.agents/skills/`**: Stores stage workflows and discipline skills for Codex & Google Antigravity.
-- **`.claude/skills/`**: Stores synced stage workflows and skills for Claude Code.
-
----
-
-## Repository Structure
+DevFlow 2.0 maintains a clean, human-readable workspace under `devflow/`:
 
 ```text
-nexus-devflow/
-├── .agents/                        # Codex & Google Antigravity adapter skills
-├── .claude/                        # Claude Code adapter skills (synced)
-├── .github/                        # GitHub Templates (Issue Forms, PR Template, CODEOWNERS)
-├── .nexus/                         # DevFlow metadata manifest (.nexus/nexus-devflow.json)
-├── devflow/                        # Framework context (project-overview.md, coding-standards.md)
-├── evals/                          # Routing accuracy evaluation datasets (127 skills)
-├── packages/
-│   └── create-nexus-devflow/       # NPX Overlay Installer package
-├── scripts/                        # Maintenance, check, and evaluation scripts
-├── AGENTS.md                       # Universal AI entry point
-├── CLAUDE.md                       # Claude Code entry point (@AGENTS.md)
-├── LICENSE                         # Independent MIT License
-└── package.json                    # Maintainer package.json
+devflow/
+├── context/
+│   ├── project-overview.md     # Source of truth project context
+│   ├── coding-standards.md     # Project conventions & guidelines
+│   ├── ai-interaction.md       # AI operational preferences
+│   └── findings.md             # Quality & audit findings ledger
+├── discoveries/                # Pre-delivery discovery artifacts (00-discover.md)
+├── runs/                       # Per-running-ID delivery artifacts
+│   └── {RUNNING_ID}-{slug}/
+│       ├── 10-define.md
+│       ├── 20-spec.md
+│       ├── 30-plan.md
+│       ├── 40-implement.md
+│       ├── 50-verify.md
+│       ├── 60-report.md
+│       ├── 60-report.html
+│       └── 70-release.md
+├── research/                   # Durable research library
+├── prds/                       # Product Requirements Documents
+├── debug/                      # Root cause analysis reports
+└── reports/                    # Standardized cross-cutting reports
 ```
 
----
+## Updating DevFlow
 
-## Maintenance & Validation Commands
+Keep your project's DevFlow setup up to date:
 
 ```bash
-# Framework workspace integrity check
-npm run check
+# Preview changes before updating
+npx @jakkrichm/create-nexus-devflow update --dry-run
 
-# Static contract validation
-npm run check:static
-
-# Run installer package unit tests
-npm test
-
-# Run skill routing evaluation suite (100% accuracy check)
-npm run test:routing
-
-# Package smoke test (tarball & temporary overlay test)
-npm run test:package
+# Apply update
+npx @jakkrichm/create-nexus-devflow update
 ```
 
----
+The updater manages only DevFlow framework files under `.agents/skills/`, `.claude/skills/`, and `devflow/reference/`, preserving your project's custom code, context, and run history.
+
+## Documentation & References
+
+- [Quick Start Guide](docs/quickstart.md)
+- [Usage & Lifecycle Guide](docs/USAGE.md)
+- [Workspace Artifacts Specification](docs/workspace-artifacts.md)
+- [Workflow Surface Map](docs/workflow-surface-map.md)
+- [Manual Review Workflow Spec](docs/manual-review-workflow-spec.md)
+- [Governance Rules](docs/governance-rules.md)
 
 ## License
 
-MIT License — Copyright (c) 2026 Nexus-DevFlow Contributors / Jakkrich
+This project is licensed under the [MIT License](LICENSE).
