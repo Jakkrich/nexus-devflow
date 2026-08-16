@@ -80,7 +80,7 @@ try {
     const isHardLinkToSource = targetStats.nlink > 1 && targetStats.size === sourceStats.size;
     assert(isSymlinkBackToSource || isHardLinkToSource, `${item.path} should be linked back to the framework source`);
   }
-  assert(!fs.existsSync(path.join(liveTarget, 'devflow')), 'live link must not create .workspaces');
+  assert(!fs.existsSync(path.join(liveTarget, 'devflow')), 'live link must not create devflow');
   assert(outputOf(live).includes('Intentionally not linked'), 'live link output should explain skipped items');
   console.log('[OK] link-project links the full managed bundle without sharing workspaces.');
 

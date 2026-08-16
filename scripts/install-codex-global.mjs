@@ -74,7 +74,7 @@ function skillContent(root) {
     '- If the user types a public companion command such as `Help`, `Check-For-Updates`, or `Debug`, read the matching companion workflow file from the same folder.',
     '- If the user asks which workflow to use, read `' + path.join(root, '.agent', 'workflows', 'Help.md') + '` first.',
     '- If the user asks for a goal-first flow, route them through Discover or Help first unless a local extension defines another entry point.',
-    "- Keep target project artifacts in the target project's `.workspaces` folder. Do not write task artifacts into the Nexus-DevFlow framework repo unless the framework itself is the target.",
+    "- Keep target project artifacts in the target project's `devflow` folder. Do not write task artifacts into the Nexus-DevFlow framework repo unless the framework itself is the target.",
     '- Prefer the target project commands for verification, then use Nexus-DevFlow validation commands only when the framework is installed or linked into that project.',
     '',
     '## Codex global update workflow',

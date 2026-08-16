@@ -24,7 +24,7 @@ Detect:
 - target project
 - whether the current setup is using `Codex global`, `Central clone + link`, or `Manual copy / overwrite`
 
-Keep `.workspaces` project-local.
+Keep `devflow` project-local.
 
 Do not overwrite user instruction files blindly.
 
@@ -54,7 +54,7 @@ Use this command when:
 - use `Manual copy / overwrite` only when linking is unsuitable or explicitly rejected
 - treat `AI install` as guided execution of one of the supported routes, not as a separate bundle layout
 - preserve user-authored instructions outside managed Nexus-DevFlow content
-- do not link, copy, or share `.workspaces` from the framework repo into another project
+- do not link, copy, or share `devflow` from the framework repo into another project
 - if the framework repo is dirty, do not pull automatically; report the dirty files and ask before proceeding with a pull-based update
 - do not claim success until the relevant validation commands pass
 
@@ -64,7 +64,7 @@ Use this command when:
 2. Detect the framework root and confirm the framework files listed there exist.
 3. Detect the installed or target version from `package.json`.
 4. Detect the provider or tool context.
-5. Detect the target project and keep its `.workspaces` local to that project.
+5. Detect the target project and keep its `devflow` local to that project.
 6. Detect the current route already in use, if any:
    - optional `Codex global`
    - `Central clone + link`

@@ -116,7 +116,7 @@ function applyMigration(plan) {
 
     const sourceStageDirs = [...new Set(stageMappings.map((mapping) => path.join(item.sourceRoot, mapping.legacyDir)))];
     for (const stageDir of sourceStageDirs) removeIfEmpty(stageDir, item.sourceRoot);
-    removeIfEmpty(item.sourceRoot, plan.workspacesRoot);
+    removeIfEmpty(item.sourceRoot, plandevflowRoot);
   }
 }
 
@@ -124,7 +124,7 @@ function printPlan(plan, writeMode) {
   const modeLabel = writeMode ? 'WRITE' : 'DRY-RUN';
   console.log(`Artifact migration mode: ${modeLabel}`);
   console.log(`Project root: ${plan.projectRoot}`);
-  console.log(`Workspace root: ${plan.workspacesRoot}`);
+  console.log(`Workspace root: ${plandevflowRoot}`);
 
   if (plan.plans.length === 0) {
     console.log('No legacy run directories found.');

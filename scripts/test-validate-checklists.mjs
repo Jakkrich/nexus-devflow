@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const runDir = path.join(rootDir, '.workspaces', 'specs', '998-checklist-validation-test');
+const runDir = path.join(rootDir, 'devflow', 'specs', '998-checklist-validation-test');
 const planWorkflowPath = path.join(rootDir, '.agent', 'workflows', '30-Plan.md');
 let originalPlanWorkflow = null;
 

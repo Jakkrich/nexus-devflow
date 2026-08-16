@@ -13,15 +13,15 @@ async function updatePathsInSkill(skillFile) {
   let updated = content;
 
   // Replace workspace paths to devflow equivalents
-  updated = updated.replace(/\.workspaces\/specs\//g, "devflow/runs/");
-  updated = updated.replace(/\.workspaces\/discoveries\//g, "devflow/discoveries/");
-  updated = updated.replace(/\.workspaces\/reports\//g, "devflow/reports/");
-  updated = updated.replace(/\.workspaces\/research\//g, "devflow/research/");
-  updated = updated.replace(/\.workspaces\/issues\//g, "devflow/issues/");
-  updated = updated.replace(/\.workspaces\/prds\//g, "devflow/prds/");
-  updated = updated.replace(/\.workspaces\/wiki\//g, "devflow/wiki/");
-  updated = updated.replace(/\.workspaces\/roadmap\//g, "devflow/roadmap/");
-  updated = updated.replace(/\.workspaces\//g, "devflow/");
+  updated = updated.replace(/\devflow\/specs\//g, "devflow/runs/");
+  updated = updated.replace(/\devflow\/discoveries\//g, "devflow/discoveries/");
+  updated = updated.replace(/\devflow\/reports\//g, "devflow/reports/");
+  updated = updated.replace(/\devflow\/research\//g, "devflow/research/");
+  updated = updated.replace(/\devflow\/issues\//g, "devflow/issues/");
+  updated = updated.replace(/\devflow\/prds\//g, "devflow/prds/");
+  updated = updated.replace(/\devflow\/wiki\//g, "devflow/wiki/");
+  updated = updated.replace(/\devflow\/roadmap\//g, "devflow/roadmap/");
+  updated = updated.replace(/\devflow\//g, "devflow/");
   updated = updated.replace(/\.agent\/workflows\//g, ".agents/skills/");
   updated = updated.replace(/\.agent\/skills\//g, ".agents/skills/");
 
