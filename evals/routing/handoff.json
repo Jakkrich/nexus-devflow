@@ -1,0 +1,14 @@
+{
+  "skill": "handoff",
+  "description": "Compact active context into a handoff note. Use when a DevFlow run must continue in another session, agent, or report without duplicating existing artifacts.",
+  "positive": [
+    "run handoff skill",
+    "invoke /handoff command",
+    "use handoff for compact active context into handoff note when devflow",
+    "apply handoff guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

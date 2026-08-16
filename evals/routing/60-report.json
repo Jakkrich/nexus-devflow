@@ -1,0 +1,14 @@
+{
+  "skill": "60-report",
+  "description": "Report stage in DevFlow 2.0 - produce the final standardized markdown and HTML summary for the full running flow.",
+  "positive": [
+    "run 60-report skill",
+    "invoke /60-report command",
+    "use 60-report for report stage devflow produce final standardized markdown html",
+    "apply 60-report guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

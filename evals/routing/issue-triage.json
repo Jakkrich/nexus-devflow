@@ -1,0 +1,14 @@
+{
+  "skill": "issue-triage",
+  "description": "Issue-Triage workflow",
+  "positive": [
+    "run issue-triage skill",
+    "invoke /issue-triage command",
+    "use issue-triage for issue triage workflow",
+    "apply issue-triage guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

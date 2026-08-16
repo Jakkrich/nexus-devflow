@@ -1,0 +1,14 @@
+{
+  "skill": "goal",
+  "description": "Goal workflow",
+  "positive": [
+    "run goal skill",
+    "invoke /goal command",
+    "use goal for goal workflow",
+    "apply goal guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

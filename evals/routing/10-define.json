@@ -1,0 +1,14 @@
+{
+  "skill": "10-define",
+  "description": "Define stage in DevFlow 2.0 - turn an approved discovery into one or more bounded delivery runs with stable scope.",
+  "positive": [
+    "run 10-define skill",
+    "invoke /10-define command",
+    "use 10-define for define stage devflow turn approved discovery into more",
+    "apply 10-define guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "human-review-decisions",
+  "description": "Handle human approval, feedback, rejection, and recheck decisions around verified work. Use when a task needs a human gate after verification and the result must route cleanly back into the DevFlow 2.0 lifecycle.",
+  "positive": [
+    "run human-review-decisions skill",
+    "invoke /human-review-decisions command",
+    "use human-review-decisions for handle human approval feedback rejection recheck decisions around",
+    "apply human-review-decisions guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

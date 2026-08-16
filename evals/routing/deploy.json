@@ -1,0 +1,14 @@
+{
+  "skill": "deploy",
+  "description": "Production Deployment (Auto-Deploy) - Perform pre-flight checks, deployment execution, and verification for production releases.",
+  "positive": [
+    "run deploy skill",
+    "invoke /deploy command",
+    "use deploy for production deployment auto deploy perform flight checks deployment",
+    "apply deploy guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

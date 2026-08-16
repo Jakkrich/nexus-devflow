@@ -1,0 +1,14 @@
+{
+  "skill": "pr",
+  "description": "Create Pull Request (Git Orchestration) - Create a well-formatted pull request from the current branch with a clear summary of changes and linked artifacts.",
+  "positive": [
+    "run pr skill",
+    "invoke /pr command",
+    "use pr for create pull request orchestration create well formatted pull",
+    "apply pr guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "changelog",
+  "description": "Update CHANGELOG.md - Automatically gather changes from specs, git history, or current state to update the project changelog.",
+  "positive": [
+    "run changelog skill",
+    "invoke /changelog command",
+    "use changelog for update changelog automatically gather changes from specs history",
+    "apply changelog guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

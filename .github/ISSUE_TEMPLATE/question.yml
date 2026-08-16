@@ -1,0 +1,42 @@
+name: Usage question
+description: Ask for help using Nexus-DevFlow after checking the documentation.
+title: "[Question]: "
+labels:
+  - question
+body:
+  - type: checkboxes
+    id: before-submitting
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the documentation and existing issues first.
+          required: true
+        - label: I removed credentials and private repository content from this question.
+          required: true
+  - type: input
+    id: documentation
+    attributes:
+      label: Documentation checked
+      description: Link the guide or command page you already reviewed.
+      placeholder: https://github.com/Jakkrich/nexus-devflow
+    validations:
+      required: true
+  - type: dropdown
+    id: adapter
+    attributes:
+      label: AI tool and adapter family
+      options:
+        - Codex (.agents adapter)
+        - Google Antigravity (shared .agents adapter)
+        - Claude Code
+        - Both adapter families
+        - Other or manual SKILL.md usage
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: Explain what you are trying to accomplish, what you tried, and where you became blocked.
+    validations:
+      required: true

@@ -1,0 +1,14 @@
+{
+  "skill": "preview",
+  "description": "Preview workflow",
+  "positive": [
+    "run preview skill",
+    "invoke /preview command",
+    "use preview for preview workflow",
+    "apply preview guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

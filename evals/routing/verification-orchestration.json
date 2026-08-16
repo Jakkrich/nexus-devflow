@@ -1,0 +1,14 @@
+{
+  "skill": "verification-orchestration",
+  "description": "Coordinate multi-lane QA, specialist review, test planning, and verification follow-up. Use when /50-Verify needs more structure than a single pass and the team needs a QA matrix or specialist routing.",
+  "positive": [
+    "run verification-orchestration skill",
+    "invoke /verification-orchestration command",
+    "use verification-orchestration for coordinate multi lane specialist review test planning verification",
+    "apply verification-orchestration guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

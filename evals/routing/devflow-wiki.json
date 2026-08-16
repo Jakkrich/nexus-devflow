@@ -1,0 +1,14 @@
+{
+  "skill": "devflow-wiki",
+  "description": "devflow-wiki skill instruction",
+  "positive": [
+    "run devflow-wiki skill",
+    "invoke /devflow-wiki command",
+    "use devflow-wiki for devflow wiki skill instruction",
+    "apply devflow-wiki guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

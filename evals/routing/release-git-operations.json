@@ -1,0 +1,14 @@
+{
+  "skill": "release-git-operations",
+  "description": "Handle commit, pull request, merge, deployment, and changelog work around Release. Use when packaging verified work for sharing, integration, deployment, or release communication.",
+  "positive": [
+    "run release-git-operations skill",
+    "invoke /release-git-operations command",
+    "use release-git-operations for handle commit pull request merge deployment changelog work",
+    "apply release-git-operations guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "skill": "database-design",
+  "description": "Database design principles and decision-making. Schema design, indexing strategy, ORM selection, serverless databases.",
+  "positive": [
+    "run database-design skill",
+    "invoke /database-design command",
+    "use database-design for database design principles decision making schema design indexing",
+    "apply database-design guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

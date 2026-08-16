@@ -1,0 +1,14 @@
+{
+  "skill": "app-builder",
+  "description": "Main application building orchestrator. Creates full-stack applications from natural language requests. Determines project type, selects tech stack, coordinates agents.",
+  "positive": [
+    "run app-builder skill",
+    "invoke /app-builder command",
+    "use app-builder for main application building orchestrator creates full stack applications",
+    "apply app-builder guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

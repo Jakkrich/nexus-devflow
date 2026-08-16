@@ -1,0 +1,14 @@
+{
+  "skill": "commit",
+  "description": "Smart Commit (Git Orchestration) - Stage files intelligently and write a concise, imperative commit message according to project standards.",
+  "positive": [
+    "run commit skill",
+    "invoke /commit command",
+    "use commit for smart commit orchestration stage files intelligently write concise",
+    "apply commit guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

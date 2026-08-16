@@ -1,0 +1,14 @@
+{
+  "skill": "research",
+  "description": "Research workflow",
+  "positive": [
+    "run research skill",
+    "invoke /research command",
+    "use research for research workflow",
+    "apply research guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

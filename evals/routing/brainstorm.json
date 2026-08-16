@@ -1,0 +1,14 @@
+{
+  "skill": "brainstorm",
+  "description": "Structured brainstorming for projects and features. Transitional compatibility path for the Brainstorm companion command in DevFlow 2.0.",
+  "positive": [
+    "run brainstorm skill",
+    "invoke /brainstorm command",
+    "use brainstorm for structured brainstorming projects features transitional compatibility path brainstorm",
+    "apply brainstorm guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

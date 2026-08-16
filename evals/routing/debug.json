@@ -1,0 +1,14 @@
+{
+  "skill": "debug",
+  "description": "Debug workflow",
+  "positive": [
+    "run debug skill",
+    "invoke /debug command",
+    "use debug for debug workflow",
+    "apply debug guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

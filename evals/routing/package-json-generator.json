@@ -1,0 +1,14 @@
+{
+  "skill": "package-json-generator",
+  "description": "Generates or updates a package.json file with standardized npm scripts for the project. Automatically migrates tasks from .vscode/tasks.json if present. Use when initializing npm scripts, migrating from VS Code tasks, or setting up a centralized task runner.",
+  "positive": [
+    "run package-json-generator skill",
+    "invoke /package-json-generator command",
+    "use package-json-generator for generates updates package json file with standardized scripts",
+    "apply package-json-generator guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

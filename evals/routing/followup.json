@@ -1,0 +1,14 @@
+{
+  "skill": "followup",
+  "description": "Followup workflow",
+  "positive": [
+    "run followup skill",
+    "invoke /followup command",
+    "use followup for followup workflow",
+    "apply followup guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

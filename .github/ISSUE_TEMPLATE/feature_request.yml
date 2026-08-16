@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest an improvement, new command, or adapter capability for Nexus-DevFlow.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for new features, command improvements, or workflow capability requests.
+  - type: checkboxes
+    id: before-submitting
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues for similar proposals.
+          required: true
+        - label: I removed credentials and private repository content.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Explain the limitation or missing capability you encounter today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the command, workflow skill, or adapter behavior you would like to see.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative approaches considered
+      description: Describe alternative solutions or workarounds you considered.
