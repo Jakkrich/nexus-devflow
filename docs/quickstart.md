@@ -60,7 +60,7 @@ Check-For-Updates
 Help
 ```
 
-For the full current command policy, see [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1).
+For the full current command policy, see [workflow-surface-map.md](docs/workflow-surface-map.md:1).
 Use `Help` when you are unsure whether a run should stay lightweight or switch into the manual review flow.
 For a quick read-only status scan across existing runs, agents or maintainers can also use `node scripts/summarize-run-status.mjs`.
 

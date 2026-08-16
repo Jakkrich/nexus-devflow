@@ -2,7 +2,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generateProjectIndex } from './generate-project-index.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
@@ -177,12 +176,6 @@ function main() {
     ...(manifest?.required_paths || [])
   ];
   const forbiddenPaths = manifest?.forbidden_legacy_paths || [];
-
-  try {
-    generateProjectIndex(projectRoot);
-  } catch {
-    // index generation fallback
-  }
 
   const seenRequired = new Set();
   for (const item of requiredPaths) {

@@ -76,7 +76,7 @@ These are the public non-mainline commands:
 | `Check-For-Updates` | Nexus-DevFlow setup or upgrade needs to be installed, checked, or repaired |
 | `Help` | the next route is unclear |
 
-See [workflow-surface-map.md](D:/Projects/nexus-devflow/docs/workflow-surface-map.md) for the current distinction between public commands, internal companions, and archive/history surfaces.
+See [workflow-surface-map.md](docs/workflow-surface-map.md) for the current distinction between public commands, internal companions, and archive/history surfaces.
 
 ## Internal Companion Surfaces
 
@@ -215,19 +215,19 @@ Debug "Login redirects forever after session expiry"
 
 ## Maintainer Preset Guidance
 
-Maintainers who need to recommend a lighter or heavier adoption shape should use [docs/team-presets.md](D:/Projects/nexus-devflow/docs/team-presets.md) as recommendation guidance only.
+Maintainers who need to recommend a lighter or heavier adoption shape should use [docs/team-presets.md](docs/team-presets.md) as recommendation guidance only.
 
 Presets sit on top of the same mainline and public companion commands described in this guide. They do not replace the workflow, create new command families, or introduce alternate DevFlow systems.
 
 ## Maintainer Governance Guidance
 
-Maintainers who are deciding where a future framework change belongs should use [docs/governance-rules.md](D:/Projects/nexus-devflow/docs/governance-rules.md).
+Maintainers who are deciding where a future framework change belongs should use [docs/governance-rules.md](docs/governance-rules.md).
 
 The governance guide keeps workflow, skill, script, validation, and high-surface doc placement aligned without changing the public onboarding story or command model.
 
 ## Workspace Layout
 
-See the full contract in [workspace-artifacts.md](D:/Projects/nexus-devflow/docs/workspace-artifacts.md).
+See the full contract in [workspace-artifacts.md](docs/workspace-artifacts.md).
 
 Common paths:
 

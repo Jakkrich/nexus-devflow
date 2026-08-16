@@ -32,9 +32,6 @@ Use markdown-first artifacts:
 - `devflow/roadmap/roadmap-discovery.md`
 - `ROADMAP.md`
 
-Optional supporting context may include:
-
-- `devflow/project_index.json` until project-index migration is fully complete
 - research notes
 - PRD outputs
 - release or insight notes
