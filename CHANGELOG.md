@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.6] - 2026-08-17
+
+### Removed
+- **Obsolete Documentation Cleanup**: Removed 3 outdated documentation files (`docs/prompt-addons.md`, `docs/install-update-troubleshooting.md`, `docs/upgrade-path.md`) from `docs/`.
+
+### Improved
+- **Release Guidance**: Updated `docs/release-process.md` with DevFlow 2.0 standard validation commands and NPX installer update checks.
+
 ## [2.0.5] - 2026-08-17
 
 ### Removed
