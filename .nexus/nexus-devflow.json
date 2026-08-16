@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "nexus-devflow",
   "package": "@jakkrichm/create-nexus-devflow",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "repository": "https://github.com/Jakkrich/nexus-devflow",
   "artifactLanguage": "th",
   "adapters": [

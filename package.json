@@ -1,7 +1,7 @@
 {
   "name": "nexus-devflow",
-  "version": "2.0.2",
-  "description": "Agent-ready PRP workflow framework with .agent tooling, roadmap artifacts, and validation scripts.",
+  "version": "2.0.3",
+  "description": "Agent-ready DevFlow 2.0 workflow layer framework with .agents and .claude adapter tooling.",
   "type": "module",
   "private": true,
   "scripts": {
@@ -35,17 +35,11 @@
     "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
     "security:scan": "node ./scripts/scan-security-hygiene.mjs",
     "sync:check": "node ./scripts/sync-agent-bundle.mjs",
-    "ob-loop": "node ./scripts/ob-runner.mjs",
     "validate": "node ./scripts/validate-framework.mjs",
-    "validate:all": "node ./scripts/validate-all.mjs",
-    "validate:docs": "node ./scripts/scan-doc-contract.mjs",
-    "codex:install-global": "node ./scripts/install-codex-global.mjs",
-    "codex:check-global": "node ./scripts/update-codex-global.mjs --check",
-    "codex:update-global": "node ./scripts/update-codex-global.mjs",
-    "codex:update-global:pull": "node ./scripts/update-codex-global.mjs --pull"
+    "validate:docs": "node ./scripts/scan-doc-contract.mjs"
   },
   "bin": {
-    "prps": "./scripts/activate-agent.mjs"
+    "nexus-devflow": "./scripts/activate-agent.mjs"
   },
   "engines": {
     "node": ">=18.17"
