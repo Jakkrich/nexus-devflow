@@ -2,7 +2,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generateProjectIndex } from './generate-project-index.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
@@ -15,33 +14,14 @@ function ensureDir(relativePath) {
   fs.mkdirSync(path.join(projectRoot, relativePath), { recursive: true });
 }
 
-function writeJson(relativePath, data) {
-  const target = path.join(projectRoot, relativePath);
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
-}
-
 function main() {
   const problems = [];
   if (!exists('.agents')) problems.push('Missing .agents adapter');
+  if (!exists('devflow/context')) problems.push('Missing devflow/context directory');
 
   ensureDir('devflow');
   ensureDir('devflow/discoveries');
   ensureDir('devflow/runs');
-
-  const now = new Date().toISOString();
-  writeJson('devflow/context/active-agent.json', {
-    active_bundle: '.agents',
-    primary_ide: 'Codex',
-    package_manager: 'npm',
-    activated_at: now,
-    scripts: {
-      validate: 'npm run check',
-      generate_project_index: 'npm run check:static'
-    }
-  });
-
-  generateProjectIndex(projectRoot);
 
   if (problems.length) {
     console.error('Activation completed with issues:');

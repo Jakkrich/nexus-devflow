@@ -2,7 +2,12 @@
 
 Nexus-DevFlow 2.0 uses `devflow/` as the primary store for task artifacts and supporting run history, following the framework's `markdown-first` contract.
 
-Operational source of truth for command surfaces lives in [AGENTS.md](/D:/Projects/nexus-devflow/AGENTS.md:1) and [workflow-surface-map.md](/D:/Projects/nexus-devflow/docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
+Operational source of truth for command surfaces lives in [AGENTS.md](AGENTS.md:1) and [workflow-surface-map.md](docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
+# Workspace Artifacts
+
+Nexus-DevFlow 2.0 uses `devflow/` as the primary store for task artifacts and supporting run history, following the framework's `markdown-first` contract.
+
+Operational source of truth for command surfaces lives in [AGENTS.md](AGENTS.md:1) and [workflow-surface-map.md](docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
 
 The tracked framework default is `artifact_language: "th"` exactly once in every `.agent/resources/schemas/*.template.md`. Workflows must read that value before generating markdown output.
 
@@ -10,9 +15,11 @@ The tracked framework default is `artifact_language: "th"` exactly once in every
 
 ```text
 devflow/
-|-- active-agent.json
-|-- project_index.json
-|-- lessons.md
+|-- context/
+|   |-- project-overview.md
+|   |-- coding-standards.md
+|   |-- ai-interaction.md
+|   `-- findings.md
 |-- discoveries/
 |-- debug/
 |-- issues/
@@ -20,18 +27,15 @@ devflow/
 |-- reports/
 |-- research/
 |-- roadmap/
-|   |-- roadmap-discovery.md
-|   `-- {other roadmap notes}.md
 |-- wiki/
-|   |-- framework/
-|   `-- project/
-`-- specs/
+`-- runs/
 ```
 
 ## Folder Responsibilities
 
 | Path | Stores | Related workflows or commands | Keep? |
 | :--- | :--- | :--- | :--- |
+| `devflow/context/` | Source of truth project context (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `findings.md`) | All AI sessions & stages | Yes. This is the core context store. |
 | `devflow/discoveries/` | Pre-delivery `00-discover.md` artifacts grouped by Discovery ID, including route selection, companion findings, decision, and later related-run links | `/00-Discover`, plus discovery-owned `Brainstorm`, `PRD`, `Research`, and `Debug` | Yes. This is the decision store before Running IDs exist. |
 | `devflow/runs/` | Per-running-ID delivery artifacts such as `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Security-Review`, `Preview` | Yes. This is the approved delivery-run store. |
 | `devflow/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
@@ -46,15 +50,11 @@ devflow/
 
 | File | Purpose | Related workflows or commands |
 | :--- | :--- | :--- |
-| `devflow/active-agent.json` | Records the active `.agent` bundle and npm command surface | activation/bootstrap tasks |
-| `devflow/project_index.json` | Project-wide structure, services, conventions, and commands | indexing, research, planning support during migration |
 | `devflow/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `Debug`, `Wiki`, `Report`, release/review follow-up |
 
 ## Task Workspace Files
 
 Discoveries live under `devflow/discoveries/{DISCOVERY_ID}-{slug}/` before delivery commitment. An approved `/10-Define` creates one or more runs under `devflow/runs/{ID}-{slug}/`; each run then uses flat stage filenames so the work stays easy to inspect, resume, and validate.
-
-### Markdown And HTML Policy
 
 - Markdown stage files are the source of truth across the mainline.
 - HTML files are derived artifacts created only when a stage policy requires or enables them.
@@ -197,7 +197,7 @@ Companion commands:
 
 ## Markdown Metadata Contract
 
-Markdown artifacts in `devflow`, `docs`, and the template set should follow the shared rules in [markdown-metadata-contract.md](/D:/Projects/nexus-devflow/docs/markdown-metadata-contract.md).
+Markdown artifacts in `devflow`, `docs`, and the template set should follow the shared rules in [markdown-metadata-contract.md](docs/markdown-metadata-contract.md).
 
 Core rules:
 

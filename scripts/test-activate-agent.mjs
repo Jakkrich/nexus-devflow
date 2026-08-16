@@ -26,7 +26,7 @@ function outputOf(result) {
 
 try {
   const target = path.join(scratchRoot, 'target-project');
-  fs.mkdirSync(target, { recursive: true });
+  fs.mkdirSync(path.join(target, 'devflow', 'context'), { recursive: true });
   fs.cpSync(path.join(rootDir, '.agents'), path.join(target, '.agents'), { recursive: true });
   fs.writeFileSync(
     path.join(target, 'package.json'),
@@ -53,8 +53,6 @@ try {
   }
 
   assert(!fs.existsSync(path.join(target, 'devflow', 'wiki')), 'activate should not create devflow/wiki in lean mode');
-  assert(fs.existsSync(path.join(target, 'devflow', 'context', 'active-agent.json')), 'activate should create active-agent.json');
-  assert(fs.existsSync(path.join(target, 'devflow', 'context', 'project_index.json')), 'activate should create project_index.json');
   console.log('[OK] activate-agent creates only the minimal workspace skeleton.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });
