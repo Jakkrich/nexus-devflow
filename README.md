@@ -39,8 +39,8 @@ Instead of "vibe coding" without structure, DevFlow guides AI through an explici
 ```
 
 ### Mainline Lifecycle Stages:
-1. **`/00-Discover`**: Explore request, route supporting inquiries, and make go/no-go delivery decisions under a Discovery ID (`.workspaces/discoveries/...`).
-2. **`/10-Define`**: Lock delivery boundaries and allocate Running IDs (`.workspaces/specs/{RUNNING_ID}/10-define.md`).
+1. **`/00-Discover`**: Explore request, route supporting inquiries, and make go/no-go delivery decisions under a Discovery ID (`devflow/discoveries/...`).
+2. **`/10-Define`**: Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`).
 3. **`/20-Spec`**: Formalize markdown-first specification contracts and acceptance criteria (`20-spec.md`).
 4. **`/30-Plan`**: Transform specs into executable task breakdowns (`30-plan.md`).
 5. **`/40-Implement`**: Execute planned tasks incrementally with implementation evidence (`40-implement.md`).
@@ -61,7 +61,7 @@ Companion commands provide supporting context without disrupting mainline number
 - `PRD`: Product framing before delivery commitment.
 - `Issue-Triage`: Intaking and triaging incoming bug reports.
 - `Security-Review`: High-severity security review.
-- `Wiki`: Knowledge base management under `.workspaces/wiki/`.
+- `Wiki`: Knowledge base management under `devflow/wiki/`.
 - `Check-For-Updates`: Verify or upgrade DevFlow setup.
 - `Help`: Process assistance and stage routing.
 

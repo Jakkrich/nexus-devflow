@@ -108,14 +108,14 @@ try {
   assert(planResult.html.includes('Plan Document'), 'plan preset should render generic html');
   assert(planResult.html.includes('<li>Execution step</li>'), 'plan preset should render markdown structure');
 
-  const specsRoot = path.join(scratchRoot, '.workspaces', 'specs');
+  const specsRoot = path.join(scratchRoot, 'devflow', 'runs');
   const specsWorkspace = path.join(specsRoot, '999-sample-report');
   fs.mkdirSync(specsWorkspace, { recursive: true });
   const reportFilePath = path.join(specsWorkspace, '60-report.md');
   fs.writeFileSync(reportFilePath, '# Report\n', 'utf8');
   assert(
     resolveWorkspaceDir({ argument: '999', projectRoot: scratchRoot }) === specsWorkspace,
-    'resolver should support .workspaces/specs running-id layout'
+    'resolver should support devflow/specs running-id layout'
   );
   assert(
     resolveWorkspaceDir({ argument: reportFilePath, projectRoot: scratchRoot }) === specsWorkspace,

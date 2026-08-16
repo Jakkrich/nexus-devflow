@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-const uvCacheDir = path.join(projectRoot, '.workspaces', '.uv-cache');
+const uvCacheDir = path.join(projectRoot, 'devflow', '.uv-cache');
 const isWindows = process.platform === 'win32';
 
 function run(command, args, options = {}) {

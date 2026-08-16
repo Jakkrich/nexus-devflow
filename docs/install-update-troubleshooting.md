@@ -53,7 +53,7 @@ If the command finishes but the target project still is not ready:
    - `SETUP.md`
    - `SETUP-BY-AI.md`
    - `USAGE.md`
-2. confirm `.workspaces/` was not shared from the framework repo
+2. confirm `devflow/` was not shared from the framework repo
 3. from the target project, run:
 
 ```powershell
@@ -68,7 +68,7 @@ If you merged npm scripts into the target project's `package.json`, `npm.cmd run
 If you are using manual copy mode:
 
 1. confirm you copied only the managed bundle
-2. confirm `.workspaces/` in the target project was preserved
+2. confirm `devflow/` in the target project was preserved
 3. confirm `package.json` was not overwritten blindly
 4. rerun:
 

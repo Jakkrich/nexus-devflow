@@ -36,8 +36,8 @@ npx @jakkrichm/create-nexus-devflow --adapter both
 ```
 
 ### สเตจหลักในกระบวนการทำงาน (Mainline Lifecycle):
-1. **`/00-Discover`**: สำรวจคำขอ รวบรวมข้อมูลสนับสนุน และตัดสินใจเริ่มต้นงานภายใต้ Discovery ID (`.workspaces/discoveries/...`)
-2. **`/10-Define`**: กำหนดขอบเขตการส่งมอบและออก Running ID (`.workspaces/specs/{RUNNING_ID}/10-define.md`)
+1. **`/00-Discover`**: สำรวจคำขอ รวบรวมข้อมูลสนับสนุน และตัดสินใจเริ่มต้นงานภายใต้ Discovery ID (`devflow/discoveries/...`)
+2. **`/10-Define`**: กำหนดขอบเขตการส่งมอบและออก Running ID (`devflow/runs/{RUNNING_ID}/10-define.md`)
 3. **`/20-Spec`**: จัดทำสเปกข้อตกลงและเกณฑ์ยอมรับในรูปแบบ Markdown-first (`20-spec.md`)
 4. **`/30-Plan`**: แปลงสเปกเป็นรายการงานย่อยที่ลงมือทำได้ (`30-plan.md`)
 5. **`/40-Implement`**: ลงมือเขียนโค้ดตามแผนงานพร้อมบันทึกหลักฐาน (`40-implement.md`)
@@ -58,7 +58,7 @@ npx @jakkrichm/create-nexus-devflow --adapter both
 - `PRD`: จัดทำกรอบผลิตภัณฑ์ก่อนการส่งมอบ
 - `Issue-Triage`: คัดกรองรายการบั๊กหรือข้อผิดพลาดเข้าสู่ระบบ
 - `Security-Review`: ตรวจสอบความปลอดภัยระดับความเสี่ยงสูง
-- `Wiki`: จัดการคลังความรู้ภายใต้ `.workspaces/wiki/`
+- `Wiki`: จัดการคลังความรู้ภายใต้ `devflow/wiki/`
 - `Check-For-Updates`: ตรวจสอบและอัปเดตเวอร์ชัน DevFlow
 - `Help`: คู่มือช่วยเหลือและนำทางไปสเตจที่ถูกต้อง
 

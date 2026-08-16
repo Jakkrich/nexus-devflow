@@ -10,7 +10,7 @@ status: "draft"
 artifact_language: "th"
 related_run: "{running_id}"
 related_files:
-  - ".workspaces/specs/{running_id}-{phase-slug}/20-spec.md"
+  - "devflow/runs/{running_id}-{phase-slug}/20-spec.md"
 ---
 
 # Implementation Plan: {Work Title}
@@ -81,7 +81,7 @@ related_files:
 
 ## 13. Checklist Initialization
 
-- Checklist directory: `.workspaces/specs/{running_id}-{phase-slug}/checklists/`
+- Checklist directory: `devflow/runs/{running_id}-{phase-slug}/checklists/`
 - Required files:
   - `implementation-checklist.md`
   - `verification-checklist.md`

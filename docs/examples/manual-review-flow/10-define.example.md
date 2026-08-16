@@ -24,7 +24,7 @@ related_files: []
 
 ## 2. Source Inputs
 
-- `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
+- `devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
 - Linked companion findings and project context
 
 ## 3. Project Context To Preserve

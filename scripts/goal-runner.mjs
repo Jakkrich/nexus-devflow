@@ -5,9 +5,9 @@ import process from 'node:process';
 
 const DEFAULT_MAX_TURNS = 20;
 const MIN_MAX_TURNS = 1;
-const GOAL_SESSION_DIR = path.join('.workspaces', 'specs', 'goal-sessions');
-const LATEST_SESSION_FILE = path.join('.workspaces', 'specs', 'goal_latest_session.json');
-const EXECUTION_LOG_FILE = path.join('.workspaces', 'specs', 'goal_execution_log.json');
+const GOAL_SESSION_DIR = path.join('devflow', 'runs', 'goal-sessions');
+const LATEST_SESSION_FILE = path.join('devflow', 'runs', 'goal_latest_session.json');
+const EXECUTION_LOG_FILE = path.join('devflow', 'runs', 'goal_execution_log.json');
 
 function findProjectRoot() {
   if (process.env.PRP_PROJECT_ROOT) return path.resolve(process.env.PRP_PROJECT_ROOT);
@@ -154,7 +154,7 @@ async function main() {
       files_read: ['AGENTS.md'],
       optimization_notes: [
         'Used lightweight goal classifier without mutating code.',
-        'Preserved markdown-first contract under .workspaces/specs/.'
+        'Preserved markdown-first contract under devflow/runs/.'
       ]
     },
     metrics: {

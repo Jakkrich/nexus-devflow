@@ -22,7 +22,7 @@ const managedLinks = [
 ];
 
 const intentionallyNotLinked = [
-  '.workspaces/ (must stay local to the target project)',
+  'devflow/ (must stay local to the target project)',
   'package.json (user-owned project manifest)',
   'ROADMAP.md and CHANGELOG.md (framework-maintainer artifacts)'
 ];

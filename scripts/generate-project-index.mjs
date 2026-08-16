@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -68,9 +68,9 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
           path: '.agent',
           purpose: 'Primary Antigravity IDE agent framework bundle'
         },
-        '.workspaces': {
-          path: '.workspaces',
-          purpose: 'Canonical generated workspace root for stage artifacts, shared reports, and optional support areas created on demand'
+        'devflow': {
+          path: 'devflow',
+          purpose: 'Canonical workspace root for stage context, active runs, shared reports, and reference contracts'
         },
         'scripts': {
           path: 'scripts',
@@ -85,10 +85,10 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
         'Node.js >=18.17',
         'Python 3',
         'Git',
-        'Codex-compatible .agent workflows'
+        'DevFlow-compatible agent adapters'
       ],
       dev_dependencies: [],
-      testing: 'npm run validate',
+      testing: 'npm run check',
       test_directory: 'scripts',
       scripts: rootPkg.scripts || {}
     },
@@ -103,9 +103,9 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
     conventions: {
       documentation: 'Markdown',
       artifact_format: 'Markdown-first',
-      agent_bundle: '.agent',
+      agent_bundle: '.agents',
       primary_ide: 'Codex',
-      workspace_directory: '.workspaces',
+      workspace_directory: 'devflow',
       package_manager: 'npm',
       legacy_cursor_removed: true
     },
@@ -117,7 +117,7 @@ export function buildProjectIndex(projectRoot = defaultRoot) {
 export function generateProjectIndex(projectRoot = defaultRoot) {
   const index = buildProjectIndex(projectRoot);
   const targets = [
-    path.join(projectRoot, '.workspaces', 'project_index.json')
+    path.join(projectRoot, 'devflow', 'context', 'project_index.json')
   ];
   for (const target of targets) {
     fs.mkdirSync(path.dirname(target), { recursive: true });

@@ -34,10 +34,10 @@ This pack adapts the engineering discipline ideas from `9arm-skills` into the Ne
 
 Keep Nexus-DevFlow output formats intact:
 
-- Debug output still goes to `.workspaces/debug/rca-{slug}.md`.
+- Debug output still goes to `devflow/debug/rca-{slug}.md`.
 - PR review output still uses the PR review report contract.
-- Specialist reports still go to `.workspaces/reports/`.
-- Lessons still go to `.workspaces/lessons.md` or task logs.
+- Specialist reports still go to `devflow/reports/`.
+- Lessons still go to `devflow/lessons.md` or task logs.
 
 When a report uses this pack, include a short source discipline note:
 

@@ -66,14 +66,14 @@ For a quick read-only status scan across existing runs, agents or maintainers ca
 
 ## 6. Workspace Model
 
-DevFlow 2.0 uses markdown-first discovery artifacts under `.workspaces/discoveries/` and delivery stage artifacts under `.workspaces/specs/`.
+DevFlow 2.0 uses markdown-first discovery artifacts under `devflow/discoveries/` and delivery stage artifacts under `devflow/runs/`.
 Markdown artifacts default to Thai through one `artifact_language: "th"` field in every matching schema template under `.agent/resources/schemas/`.
 The mainline stage templates also include manual review sections so humans can inspect `Source Inputs`, `AI Actions Performed`, `Human Review Required`, `Approval Status`, and `Next Allowed Command` before moving forward.
 
 Typical running-id layout:
 
 ```text
-.workspaces/specs/{ID}-{slug}/
+devflow/runs/{ID}-{slug}/
   10-define.md
   20-spec.md
   30-plan.md
@@ -88,7 +88,7 @@ Typical running-id layout:
 Pre-delivery discovery uses a separate namespace and does not consume a Running ID:
 
 ```text
-.workspaces/discoveries/{DISCOVERY_ID}-{slug}/
+devflow/discoveries/{DISCOVERY_ID}-{slug}/
   00-discover.md
 ```
 
@@ -105,7 +105,7 @@ Some additional workflow files still exist under `.agent/workflows/`, but they a
 ## Troubleshooting
 
 - If `.agent` files are missing, restore the framework bundle before running validation.
-- If `.workspaces/specs/` is missing, run `npm.cmd run activate`.
+- If `devflow/runs/` is missing, run `npm.cmd run activate`.
 - If validation fails after structural edits, fix the missing files or docs, then re-run `npm.cmd run validate`.
 
 Do not route new work through retired JSON artifacts. Use the stage markdown templates under `.agent/resources/schemas/` instead.

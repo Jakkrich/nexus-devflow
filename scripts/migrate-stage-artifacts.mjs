@@ -44,7 +44,7 @@ function isLegacyRunDirectory(workspacesRoot, entryName) {
 }
 
 function planMigration(projectRoot) {
-  const workspacesRoot = path.join(projectRoot, '.workspaces');
+  const workspacesRoot = path.join(projectRoot, 'devflow');
   const specsRoot = path.join(workspacesRoot, 'specs');
   if (!fs.existsSync(workspacesRoot)) {
     throw new Error(`Missing workspace root: ${workspacesRoot}`);

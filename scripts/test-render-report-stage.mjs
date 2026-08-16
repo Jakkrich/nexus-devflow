@@ -105,7 +105,7 @@ related_run: "998"
 
   assert(
     resolveReportWorkspaceDir('999', scratchRoot) === workspaceDir,
-    'report generator should prefer .workspaces/specs when both layouts share a running id'
+    'report generator should prefer devflow/specs when both layouts share a running id'
   );
   assert(
     resolveWrapperWorkspaceDir('999', scratchRoot) === workspaceDir,

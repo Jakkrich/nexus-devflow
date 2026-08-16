@@ -18,7 +18,7 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 
 ### Minimum Artifact Set
 
-- `.workspaces/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
+- `devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`
