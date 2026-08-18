@@ -11,7 +11,7 @@ Create a codebase-informed implementation plan using `30-plan.md` as the primary
 ## Usage
 
 ```text
-/30-Plan {ID}
+30-plan {ID}
 ```
 
 ## Markdown-First Contract
@@ -46,15 +46,15 @@ Run planning as an evidence loop, not as a one-shot outline.
 - **Context**: read the spec, prior stage artifacts, relevant code/docs, existing commands, and any research that constrains execution.
 - **Action**: draft the smallest useful plan, then inspect whether every phase has files, dependencies, risks, verification, and a test decision.
 - **Observation**: use concrete evidence such as file paths, existing patterns, package scripts, validation commands, and unresolved assumptions.
-- **Adjustment**: if evidence is missing, search/read more, recommend `Research` or `Agent codebase-explorer`, split the work, or route back to `/20-Spec` when the contract is not plan-ready.
+- **Adjustment**: if evidence is missing, search/read more, recommend `Research` or `Agent codebase-explorer`, split the work, or route back to `20-spec` when the contract is not plan-ready.
 - **Stop Condition**: stop only when phases are ordered, subtasks are scoped, verification is explicit, test decisions are recorded, and any blockers are visible.
-- **Handoff**: `30-plan.md` must give `/40-Implement` enough context to select one scoped unit and execute it without inventing intent.
+- **Handoff**: `30-plan.md` must give `40-implement` enough context to select one scoped unit and execute it without inventing intent.
 
 ### 1. Read Task Artifacts
 
 Read:
 
-- `devflow/runs/{ID}-*/20-spec.md`
+- `devflow/runs/{ID}-*20-spec.md`
 - `10-define.md` and the shared `00-discover.md` referenced by `source_discovery` when they help clarify intent
 
 ### 2. Assess Complexity
@@ -161,12 +161,12 @@ If validation fails, repair only what is necessary and keep `30-plan.md` aligned
 
 ### 7. Manual Review Soft Gate
 
-Before recommending `/40-Implement`, check whether the plan still shows pending review.
+Before recommending `40-implement`, check whether the plan still shows pending review.
 If `Approval Status` is still pending or major dependencies remain unresolved:
 
 - warn that implementation should wait for review
 - recommend human confirmation of sequencing, scope, and verification strategy
-- keep `/40-Implement` as a soft recommendation only
+- keep `40-implement` as a soft recommendation only
 
 ## Output Checklist
 
@@ -183,8 +183,8 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
-- Previous state: `/20-Spec`
-- Next state: `/40-Implement` when execution steps and verification are clear
+- Previous state: `20-spec`
+- Next state: `40-implement` when execution steps and verification are clear
 - Common companion commands: `Research` or `Agent` when architecture, data flow, or external constraints still need investigation; support skills: `grill-with-docs`, `domain-modeling`, `codebase-design`, `tdd`, and `to-issues` for final design stress-testing, durable terminology capture, test planning, and issue packaging
 
 ## Sources
@@ -192,18 +192,18 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/plan.template.md`
-- Related commands: `/20-Spec`, `Research`, `Agent`, `/40-Implement`
+- Related commands: `20-spec`, `Research`, `Agent`, `40-implement`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/40-Implement {ID}`
+- **Primary**: `40-implement {ID}`
 - **Why**: Approved planning is the gate before implementation in DevFlow 2.0.
 - **Alternatives**:
   - `Research` - choose this when the plan still depends on missing evidence.
   - `Agent codebase-explorer devflow/runs/{ID}-*/` - choose this when architecture or data flow is unclear.
   - `grill-with-docs` - choose this when plan assumptions or design boundaries need one last adversarial pass.
   - `codebase-design` - choose this when a plan needs clearer seams, interfaces, or test surfaces.
-  - `/20-Spec {ID}` - choose this when the spec itself is not strong enough for planning.
+  - `20-spec {ID}` - choose this when the spec itself is not strong enough for planning.
 
 ## Nexus Event
 
@@ -216,6 +216,6 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 - **Needed**: `yes` when planning records a reusable architecture decision, project pattern, or context-loading lesson.
 - **Scope**: `project` unless the planning lesson changes DevFlow framework behavior.
 - **Reason**: Plans often discover stable patterns that future sessions should reuse.
-- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*/30-plan.md`
+- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*30-plan.md`
 
 

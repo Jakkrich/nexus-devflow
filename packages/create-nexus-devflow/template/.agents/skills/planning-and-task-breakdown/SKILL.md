@@ -24,7 +24,7 @@ Decompose work into small, verifiable tasks with explicit acceptance criteria. G
 - You need to communicate scope to a human
 - The implementation order isn't obvious
 
-In DevFlow 2.0, this skill primarily supports `/30-Plan`.
+In DevFlow 2.0, this skill primarily supports `30-plan`.
 
 **When NOT to use:** Single-file changes with obvious scope, or when the spec already contains well-defined tasks.
 

@@ -17,7 +17,7 @@ Ship with confidence. The goal is not just to deploy — it's to deploy safely, 
 - Opening a beta or early access program
 - Any deployment that carries risk (all of them)
 
-In DevFlow 2.0, this skill most often supports `/70-Release` and assumes `/60-Report` is already aligned as the communication baseline.
+In DevFlow 2.0, this skill most often supports `70-release` and assumes `60-report` is already aligned as the communication baseline.
 
 ## The Pre-Launch Checklist
 

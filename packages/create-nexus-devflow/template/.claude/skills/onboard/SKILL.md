@@ -8,15 +8,15 @@ description: "[Devflow] Set up Nexus-DevFlow after overlaying it onto a freshly 
 Where this sits in the workflow:
 
 ```text
-scaffold app  ->  overlay DevFlow  ->  [onboard]  ->  /00-discover or /10-define  ->  Mainline Loop
+scaffold app  ->  overlay DevFlow  ->  [onboard]  ->  00-discover or 10-define  ->  Mainline Loop
 (user/tool)       (create-nexus)       (tune setup)   (discovery / run scoping)      (20-spec -> 70-release)
 ```
 
-`/onboard` is the fresh-project on-ramp for Nexus-DevFlow. It assumes the application was scaffolded first (e.g. via `create-next-app`, `create-vite`, `cargo new`, etc.) and DevFlow was overlaid after.
+`onboard` is the fresh-project on-ramp for Nexus-DevFlow. It assumes the application was scaffolded first (e.g. via `create-next-app`, `create-vite`, `cargo new`, etc.) and DevFlow was overlaid after.
 
-Run `/onboard` before starting discovery or delivery runs. Its job is to make DevFlow fit the real project from day one: detecting commands, project name, coding conventions, ignore rules, and tool adapters.
+Run `onboard` before starting discovery or delivery runs. Its job is to make DevFlow fit the real project from day one: detecting commands, project name, coding conventions, ignore rules, and tool adapters.
 
-Use `/adopt` instead when the app already has substantial shipped code, working routes, and existing business logic.
+Use `adopt` instead when the app already has substantial shipped code, working routes, and existing business logic.
 
 ---
 
@@ -32,7 +32,7 @@ Inspect the repository and context files:
 
 - If the project is freshly scaffolded with minimal boilerplate, proceed.
 - If `devflow/context/project-overview.md` and `devflow/context/coding-standards.md` already contain rich, user-customized content, do not overwrite them without explicit confirmation.
-- If the repository already has substantial existing routes, controllers, or database models, stop and recommend `/adopt` instead.
+- If the repository already has substantial existing routes, controllers, or database models, stop and recommend `adopt` instead.
 
 Never run a framework scaffolder. DevFlow is already overlaid.
 
@@ -125,5 +125,5 @@ Present a concise onboarding summary report:
 - Files tuned during onboarding
 - Adapter status (`.agents/`, `.claude/`)
 - Recommended next step:
-  - Run `00-discover` (or `/00-discover`, `$00-discover`) to explore the first feature or product direction
-  - Run `10-define` (or `/10-define`, `$10-define`) if the initial delivery slice is already clear and ready for execution
+  - Run `00-discover` (or `00-discover`, `$00-discover`) to explore the first feature or product direction
+  - Run `10-define` (or `10-define`, `$10-define`) if the initial delivery slice is already clear and ready for execution

@@ -8,7 +8,7 @@ description: "[Devflow] Plan safe feature or run reversal with dependency and co
 Where this sits in the workflow:
 
 ```text
-completed run + git history  ->  [rollback]  ->  /40-implement (or fix run)  ->  /50-verify  ->  /70-release
+completed run + git history  ->  [rollback]  ->  40-implement (or fix run)  ->  50-verify  ->  70-release
 (run archive + commits)          (risk review    (reverse product diff)          (prove)      (log & finalize)
                                   + plan)
 ```
@@ -20,9 +20,9 @@ This skill **plans a rollback**. It does not silently alter product code, reset 
 A completed run by Running ID, name, or run path, plus an optional reason. Examples:
 
 ```text
-/rollback RUN-002-add-onboard-adopt-doctor-skills
-/rollback "auth login" because OAuth provider changed
-/rollback devflow/runs/RUN-001-align-devflow-blueprint
+rollback RUN-002-add-onboard-adopt-doctor-skills
+rollback "auth login" because OAuth provider changed
+rollback devflow/runs/RUN-001-align-devflow-blueprint
 ```
 
 With no target, list recent completed runs from `devflow/runs/` and `devflow/context/current-stage.md` and ask the user to choose. Never silently guess the target. If the reason is missing, ask for one before finalizing the rollback plan.
@@ -98,7 +98,7 @@ Draft the rollback plan containing:
 Present the rollback plan to the user:
 
 - Summarize affected files and dependency risks.
-- If approved, route to `/40-implement` (or allocate a dedicated Fix/Rollback Run) to safely execute the reversal steps behind review gates.
+- If approved, route to `40-implement` (or allocate a dedicated Fixrollback Run) to safely execute the reversal steps behind review gates.
 
 ## Rules
 

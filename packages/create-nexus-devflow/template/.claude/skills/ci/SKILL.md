@@ -8,7 +8,7 @@ description: "[Devflow] Set up automated GitHub Actions CI workflow (.github/wor
 Where this sits in the workflow:
 
 ```text
-/onboard or /adopt  ->  [ci]  ->  Verify locally  ->  GitHub Actions runs Verify on PR & Push
+onboard or adopt  ->  [ci]  ->  Verify locally  ->  GitHub Actions runs Verify on PR & Push
 (project setup)         (setup)    (same command)     (automated checks)
 ```
 

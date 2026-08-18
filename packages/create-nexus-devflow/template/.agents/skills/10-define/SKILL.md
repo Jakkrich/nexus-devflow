@@ -13,8 +13,8 @@ Convert an approved `Proceed` discovery into bounded delivery slices. Allocate o
 ## Usage
 
 ```text
-/10-Define {discovery-id or discovery path}
-/10-Define {running-id or run path}
+10-define {discovery-id or discovery path}
+10-define {running-id or run path}
 ```
 
 Use a Discovery ID to materialize new delivery runs. Use an existing Running ID only to revise or split a definition that already exists.
@@ -24,7 +24,7 @@ Use a Discovery ID to materialize new delivery runs. Use an existing Running ID 
 For every approved delivery slice, write:
 
 ```text
-devflow/runs/{ID}-{slug}/10-define.md
+devflow/runs/{ID}-{slug}10-define.md
 ```
 
 using:
@@ -57,8 +57,8 @@ Run definition as a scope-stabilization and run-allocation loop.
 - **Context**: read the approved `00-discover.md`, linked Brainstorm/PRD/Research/Debug outputs, project-wide rules, existing run IDs, and dependencies between candidate slices.
 - **Action**: lock initiative and scope boundaries, decompose delivery slices, review the run map, allocate collision-free Running IDs, and write one `10-define.md` per slice.
 - **Observation**: use independent acceptance boundaries, release boundaries, ownership, dependencies, context size, cross-domain coupling, and reviewability as evidence for splitting or combining slices.
-- **Adjustment**: merge slices that are only implementation tasks; split slices that require separate specs, releases, ownership, or large independent context; return to `/00-Discover` if the decision or product direction is still unstable.
-- **Stop Condition**: stop when the run map is approved, IDs are materialized without collision, each run has stable in/out scope, and every generated run can proceed independently to `/20-Spec {running_id}`.
+- **Adjustment**: merge slices that are only implementation tasks; split slices that require separate specs, releases, ownership, or large independent context; return to `00-discover` if the decision or product direction is still unstable.
+- **Stop Condition**: stop when the run map is approved, IDs are materialized without collision, each run has stable in/out scope, and every generated run can proceed independently to `20-spec {running_id}`.
 - **Handoff**: each `10-define.md` must identify its source Discovery ID, sibling runs, dependencies, scope, non-goals, and exact next command.
 
 ### 1. Validate The Discovery Gate
@@ -69,7 +69,7 @@ For new delivery work, require:
 - `Approval Status: Approved`
 - a resolvable Discovery ID and `00-discover.md`
 
-If either gate is missing, do not create a Running ID. Return to `/00-Discover {discovery_id}`.
+If either gate is missing, do not create a Running ID. Return to `00-discover {discovery_id}`.
 
 ### 2. Build The Delivery Run Map
 
@@ -83,7 +83,7 @@ Create separate runs when work has materially independent:
 - dependency sequencing
 - implementation context large enough to threaten reliable planning or review
 
-Keep ordinary subtasks inside `/30-Plan` and checklists.
+Keep ordinary subtasks inside `30-plan` and checklists.
 
 For every slice record:
 
@@ -126,11 +126,11 @@ If an existing definition is too broad:
 - preserve traceability to the original run and discovery
 - allocate new IDs only after approval
 - mark the old definition as `Superseded` and list its replacement runs
-- do not silently fork scope during `/20-Spec`
+- do not silently fork scope during `20-spec`
 
 ### 7. Manual Review Gate
 
-Before recommending `/20-Spec`, confirm each generated definition independently. Approval of one run must not imply approval of every sibling run.
+Before recommending `20-spec`, confirm each generated definition independently. Approval of one run must not imply approval of every sibling run.
 
 ## Output
 
@@ -141,13 +141,13 @@ Report:
 - workspace path for every generated run
 - scope and dependency summary per run
 - any superseded run
-- exact `/20-Spec {running_id}` commands for approved runs
+- exact `20-spec {running_id}` commands for approved runs
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow and Running ID creation boundary
-- Previous state: approved `/00-Discover`
-- Next state: `/20-Spec {running_id}` per generated run
+- Previous state: approved `00-discover`
+- Next state: `20-spec {running_id}` per generated run
 - Running ID lifecycle: starts here
 
 ## Sources
@@ -158,13 +158,13 @@ Report:
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/20-Spec {running_id}` for each approved run
+- **Primary**: `20-spec {running_id}` for each approved run
 - **Alternatives**:
-  - `/00-Discover {discovery_id}` when the go/no-go decision or direction is unstable
+  - `00-discover {discovery_id}` when the go/no-go decision or direction is unstable
   - `Research {discovery_id}` when evidence still blocks a reliable split
   - `grill-with-docs` when boundaries or terminology remain ambiguous
 
 ## Nexus Event
 
 - Use `domain-modeling` when sibling runs need shared language or durable architectural decisions.
-- Use `planning-and-task-breakdown` only after the delivery boundary is stable; small tasks belong in `/30-Plan`, not separate Running IDs.
+- Use `planning-and-task-breakdown` only after the delivery boundary is stable; small tasks belong in `30-plan`, not separate Running IDs.

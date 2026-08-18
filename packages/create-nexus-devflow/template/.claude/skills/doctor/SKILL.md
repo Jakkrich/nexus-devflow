@@ -12,7 +12,7 @@ Any time during development -> [doctor] -> Health Report & Actionable Fixes
 (read-only inspection)          (diagnostics)    (remediation recommendations)
 ```
 
-`/doctor` is a safe, read-only diagnostic skill that verifies whether your repository's Nexus-DevFlow configuration, context files, tool adapters, commands, and active runs are healthy and aligned.
+`doctor` is a safe, read-only diagnostic skill that verifies whether your repository's Nexus-DevFlow configuration, context files, tool adapters, commands, and active runs are healthy and aligned.
 
 ---
 
@@ -29,7 +29,7 @@ Run through these 5 health checks:
 ### Check 1: Core Framework & Context Files Integrity
 - Check if [AGENTS.md](AGENTS.md) and [CLAUDE.md](CLAUDE.md) exist and are populated.
 - Check required context files under `devflow/context/`:
-  - `project-overview.md` (Check if still empty/placeholder -> recommend `/onboard` or `/adopt`)
+  - `project-overview.md` (Check if still empty/placeholder -> recommend `onboard` or `adopt`)
   - `coding-standards.md` (Check if customized for stack)
   - `ai-interaction.md` (Check if rules are configured)
   - `current-stage.md` (Check if active run matches filesystem)
@@ -80,5 +80,5 @@ Present a clean, scannable diagnostic report:
 
 ### Recommended Remediation Actions:
 1. [Action item if any warning or failure detected]
-2. [Suggested next command, e.g. /devflow, /onboard, /adopt, etc.]
+2. [Suggested next command, e.g. devflow, onboard, adopt, etc.]
 ```

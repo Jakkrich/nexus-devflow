@@ -69,14 +69,14 @@ Display an organized output listing Passed/Failed files, and explicitly show the
 
 - Classification: Companion command
 - Mainline status: Verification support command, not a numbered stage
-- Typical entry points: `/40-Implement`, `/50-Verify`, `Debug`
-- Typical handoff targets: `/50-Verify`, `Debug`, `QA-Orchestrate`
+- Typical entry points: `40-implement`, `50-verify`, `Debug`
+- Typical handoff targets: `50-verify`, `Debug`, `QA-Orchestrate`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agents/skills/test-execution-and-coverage/SKILL.md`
 - `.agent/resources/schemas/test_report.template.md`
-- Related commands: `/40-Implement`, `/50-Verify`, `Debug`, `QA-Orchestrate`
+- Related commands: `40-implement`, `50-verify`, `Debug`, `QA-Orchestrate`
 
 
