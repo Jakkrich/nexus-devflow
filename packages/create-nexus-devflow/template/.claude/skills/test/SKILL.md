@@ -1,6 +1,6 @@
 ---
 name: test
-description: Test workflow
+description: "[Devflow] Test execution, missing test generation, and coverage analysis across unit, integration, and smoke test suites."
 ---
 
 ﻿---

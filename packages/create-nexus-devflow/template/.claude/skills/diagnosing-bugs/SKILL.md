@@ -1,6 +1,6 @@
 ---
 name: diagnosing-bugs
-description: Diagnosis loop for hard bugs and performance regressions. Use inside Debug, /40-Implement, or /50-Verify when behavior is broken, throwing, failing, flaky, or slow.
+description: "[Devflow] Diagnosis loop for hard bugs and performance regressions. Use inside Debug, /40-Implement, or /50-Verify when behavior is broken, throwing, failing, flaky, or slow."
 ---
 
 # Diagnosing Bugs

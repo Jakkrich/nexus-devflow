@@ -1,6 +1,6 @@
 ---
 name: simplify
-description: Simplify workflow
+description: "[Devflow] Code simplification and refactoring for clarity and maintainability without altering runtime behavior."
 ---
 
 ﻿---

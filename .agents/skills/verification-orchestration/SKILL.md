@@ -1,6 +1,6 @@
 ---
 name: verification-orchestration
-description: Coordinate multi-lane QA, specialist review, test planning, and verification follow-up. Use when /50-Verify needs more structure than a single pass and the team needs a QA matrix or specialist routing.
+description: "[Devflow] Coordinate multi-lane QA, specialist review, test planning, and verification follow-up. Use when /50-Verify needs more structure than a single pass and the team needs a QA matrix or specialist routing."
 ---
 
 # Verification Orchestration

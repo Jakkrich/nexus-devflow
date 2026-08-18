@@ -1,6 +1,6 @@
 ---name: 70-release
 
-description: Release stage in DevFlow 2.0 - package verified work for delivery, merge, PR, deployment, or handoff.
+description: "[Devflow] Release stage in DevFlow 2.0 - package verified work for delivery, git merge, PR, or deployment."
 argument-hint: "{running-id or workspace path}"
 ---
 

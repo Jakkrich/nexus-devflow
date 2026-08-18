@@ -1,6 +1,6 @@
 ---
 name: spec-orchestration
-description: Coordinate Brainstorm, Research, PRD, competitor context, and spec critique before the work re-enters the numbered mainline. Use when a broad idea needs orchestration rather than a straight pass.
+description: "[Devflow] Coordinate Brainstorm, Research, PRD, competitor context, and spec critique before the work re-enters the numbered mainline. Use when a broad idea needs orchestration rather than a straight pass."
 ---
 
 # Spec Orchestration

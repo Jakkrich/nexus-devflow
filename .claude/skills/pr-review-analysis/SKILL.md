@@ -1,6 +1,6 @@
 ---
 name: pr-review-analysis
-description: Review pull requests or local diffs with structured finding discipline, selective review lanes, and Nexus-DevFlow report templates. Use when the team needs a substantial review without turning review into a numbered workflow stage.
+description: "[Devflow] Review pull requests or local diffs with structured finding discipline, selective review lanes, and Nexus-DevFlow report templates. Use when the team needs a substantial review without turning review into a numbered workflow stage."
 ---
 
 # PR Review Analysis

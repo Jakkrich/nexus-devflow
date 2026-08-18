@@ -1,6 +1,6 @@
 ---name: commit
 
-description: Smart Commit (Git Orchestration) - Stage files intelligently and write a concise, imperative commit message according to project standards.
+description: "[Devflow] Smart Commit (Git Orchestration) - Stage files intelligently and write a concise, imperative commit message according to project standards."
 ---
 # ๐’พ Smart Commit (Git Orchestration)
 

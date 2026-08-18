@@ -1,6 +1,6 @@
 ---name: changelog
 
-description: Update CHANGELOG.md - Automatically gather changes from specs, git history, or current state to update the project changelog.
+description: "[Devflow] Update CHANGELOG.md automatically from specs, git commits, and stage report history."
 ---
 # Phase 53: Update Changelog
 

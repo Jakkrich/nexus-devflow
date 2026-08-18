@@ -1,6 +1,6 @@
 ---
 name: intelligent-routing
-description: Automatic agent and stage routing for DevFlow 2.0. Use when deciding which active workflow, skill, or specialist should own the next step.
+description: "[Devflow] Automatic agent and stage routing for DevFlow 2.0. Use when deciding which active workflow, skill, or specialist should own the next step."
 version: 2.0.0
 ---
 

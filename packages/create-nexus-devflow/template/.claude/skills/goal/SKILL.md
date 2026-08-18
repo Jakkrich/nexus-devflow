@@ -1,6 +1,6 @@
 ---
 name: goal
-description: Goal workflow
+description: "[Devflow] High-level goal routing and open-ended request intake before entering the 00-discover stage."
 ---
 
 ﻿---

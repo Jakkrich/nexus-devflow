@@ -1,6 +1,6 @@
 ---
 name: package-json-generator
-description: Generates or updates a package.json file with standardized npm scripts for the project. Automatically migrates tasks from .vscode/tasks.json if present. Use when initializing npm scripts, migrating from VS Code tasks, or setting up a centralized task runner.
+description: "[Devflow] Generates or updates a package.json file with standardized npm scripts for the project. Automatically migrates tasks from .vscode/tasks.json if present. Use when initializing npm scripts, migrating from VS Code tasks, or setting up a centralized task runner."
 ---
 
 # Package JSON Generator

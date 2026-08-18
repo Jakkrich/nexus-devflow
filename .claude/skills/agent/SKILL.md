@@ -1,6 +1,6 @@
 ---name: agent
 
-description: Invoke Agent - Run a specialist persona on a file, folder, stage artifact, or codebase concern.
+description: "[Devflow] Invoke specialist persona or role-based agent on a target file, folder, stage artifact, or concern."
 ---
 # Phase 90: Invoke Agent
 

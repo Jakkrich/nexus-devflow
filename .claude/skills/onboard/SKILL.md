@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: Set up Nexus-DevFlow after overlaying it onto a freshly scaffolded or early project. Detects the stack, tunes AGENTS.md commands and conventions, customizes coding-standards.md, checks .gitignore and tool adapters, initializes project-overview.md, and guides the user to /00-discover or /10-define. Use when the user runs onboard, /onboard, $onboard, just installed DevFlow into a new project, or asks what to do after installation. For an existing app with meaningful shipped features, use adopt instead.
+description: "[Devflow] Set up Nexus-DevFlow after overlaying it onto a freshly scaffolded or early-stage project."
 ---
 
 # onboard - Finish the Nexus-DevFlow Setup for Fresh Projects

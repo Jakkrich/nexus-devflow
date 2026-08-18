@@ -1,6 +1,6 @@
 ---name: pr-review
 
-description: PR Review Addon - Review a pull request using GitHub review prompt patterns and the credited 9arm-skills/scrutinize discipline.
+description: "[Devflow] PR Review Addon - Review a pull request using GitHub review prompt patterns and the credited 9arm-skills/scrutinize discipline."
 ---
 
 # Phase 55: PR Review Addon

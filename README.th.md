@@ -131,6 +131,11 @@ devflow
 | `onboard` | `setup` | ตรวจจับ Stack และตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่ที่เพิ่งติดตั้ง |
 | `adopt` | `bootstrap` | สำรวจ Codebase เดิมและดึงบริบทเข้าสู่ DevFlow สำหรับโปรเจกต์เดิม |
 | `doctor` | `health` | ตรวจสุขภาพการตั้งค่า, Context files, Scripts และตรวจจับ Workflow Drift |
+| `try` | `try` | สร้างคู่มือการทดสอบด้วยมือทีละขั้นตอนสำหรับผู้ใช้และ Tester (Where to go / What to click / What to expect) |
+| `rollback` | `rollback` | วางแผนถอนฟีเจอร์หรือย้อนกลับ Run อย่างปลอดภัย พร้อมวิเคราะห์ Dependency Risks |
+| `ci` | `ci` | ติดตั้ง GitHub Actions Pipeline (`.github/workflows/verify.yml`) อัตโนมัติจาก Verify Command จริง |
+| `brief` | `brief` | สรุปขอบเขต ความเสี่ยง และขนาดงาน (S/M/L) แบบ Read-only ก่อนลงมือเขียนสเปก |
+| `autopilot` | `autopilot` | โหมดทำงานอัตโนมัติต่อเนื่อง (Spec -> Plan -> Implement -> Verify -> Report) พร้อม Checkpoint commits และสรุปรายงาน |
 | `brainstorm` | `brainstorm` | ระดมความคิดและสำรวจแนวคิดโดยยังไม่เปิด Running ID |
 | `prd` | `prd` | จัดทำเอกสารข้อกำหนดผลิตภัณฑ์ (PRD) ก่อนลงมือกำหนดการส่งมอบ |
 | `research` | `research` | วิจัยค้นคว้า codebase หรือค้นหาข้อมูลเว็บเพื่อสนับสนุนขั้น Discover และ Spec |

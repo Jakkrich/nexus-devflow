@@ -1,6 +1,6 @@
 ---
 name: adopt
-description: Bootstrap Nexus-DevFlow into an existing (brownfield) codebase. Surveys the real repository (read-only), interviews the user for intent, generates project-overview.md and coding-standards.md from existing code, tunes AGENTS.md commands, and seeds the initial Discovery or Run map. Use when the user runs adopt, /adopt, $adopt, is overlaying DevFlow onto an app that already has meaningful code, or asks to adopt DevFlow into an existing project. For freshly scaffolded or early projects, use onboard instead.
+description: "[Devflow] Survey existing brownfield codebase and bootstrap DevFlow context files."
 ---
 
 # adopt - Bootstrap Nexus-DevFlow from an Existing Codebase

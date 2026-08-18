@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Build a throwaway prototype to answer a design question during Discover, Define, Spec, Research, or Plan.
+description: "[Devflow] Build a throwaway prototype to answer a design question during Discover, Define, Spec, Research, or Plan."
 disable-model-invocation: true
 ---
 

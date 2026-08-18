@@ -1,6 +1,6 @@
 ---
 name: release-git-operations
-description: Handle commit, pull request, merge, deployment, and changelog work around Release. Use when packaging verified work for sharing, integration, deployment, or release communication.
+description: "[Devflow] Handle commit, pull request, merge, deployment, and changelog work around Release. Use when packaging verified work for sharing, integration, deployment, or release communication."
 ---
 
 # Release Git Operations

@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.9] - 2026-08-18
+
+### Added
+- **Companion Skills (`try`, `rollback`, `ci`, `brief`)**: Integrated 4 high-value companion skills from Blueprint (`/try` for human manual QA walkthroughs, `/rollback` for safe run reversal planning with dependency risk analysis, `/ci` for automated GitHub Actions pipeline setup, and `/brief` for read-only scope/risk pre-checks before spec).
+- **Autonomous Bounded Loop (`autopilot`)**: Added `/autopilot` for continuous execution across Spec -> Plan -> Implement -> QA Verify -> Report Digest with checkpoint commits and strict hard stops (no auto-merge, push, or deploy).
+- **Standardized `[Devflow]` Prefix**: Added `[Devflow]` prefix across all 104 skill descriptions in `.agents/skills/` and `.claude/skills/` for cleaner categorization and better AI agent discovery.
+- **Reviewed & Enhanced Descriptions**: Significantly improved descriptions for all companion wrappers and specialist skills to provide concrete action, purpose, and trigger intents.
+
 ## [2.0.8] - 2026-08-18
 
 ### Added

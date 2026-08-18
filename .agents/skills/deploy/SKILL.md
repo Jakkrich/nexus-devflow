@@ -1,6 +1,6 @@
 ---name: deploy
 
-description: Production Deployment (Auto-Deploy) - Perform pre-flight checks, deployment execution, and verification for production releases.
+description: "[Devflow] Production deployment pre-flight checks, smoke validation, and deployment execution."
 ---
 # ๐€ Phase 52: Production Deployment (Auto-Deploy)
 

@@ -1,6 +1,6 @@
 ---
 name: competitor-analysis
-description: Research competitors, market alternatives, user pain points, and differentiation opportunities. Use when product framing, roadmap decisions, or strategic positioning need source-backed external context.
+description: "[Devflow] Research competitors, market alternatives, user pain points, and differentiation opportunities. Use when product framing, roadmap decisions, or strategic positioning need source-backed external context."
 ---
 
 # Competitor Analysis

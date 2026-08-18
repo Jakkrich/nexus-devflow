@@ -1,6 +1,6 @@
 ---
 name: preview
-description: Preview workflow
+description: "[Devflow] Local preview server management, smoke-check, and temporary runtime inspection before formal verification."
 ---
 
 ﻿---

@@ -1,6 +1,6 @@
 ---
 name: test-execution-and-coverage
-description: Generate missing tests, run existing tests, and summarize coverage and failures. Use when implementation or verification needs explicit testing evidence beyond a general TDD reminder.
+description: "[Devflow] Generate missing tests, run existing tests, and summarize coverage and failures. Use when implementation or verification needs explicit testing evidence beyond a general TDD reminder."
 ---
 
 # Test Execution And Coverage

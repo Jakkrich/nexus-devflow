@@ -1,6 +1,6 @@
 ---name: 50-verify
 
-description: Verify quality in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement.
+description: "[Devflow] Verify stage in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement."
 ---
 # Phase 50: Verify Quality
 

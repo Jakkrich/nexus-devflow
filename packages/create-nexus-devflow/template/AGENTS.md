@@ -85,6 +85,11 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 - `onboard` (alias: `/onboard`, `$onboard`): Initial stack detection and baseline setup for fresh/scaffolded projects.
 - `adopt` (alias: `/adopt`, `$adopt`): Survey existing brownfield codebases and bootstrap DevFlow context.
 - `doctor` (alias: `/doctor`, `$doctor`): Read-only health check for context files, adapters, commands, and workflow drift.
+- `try` (alias: `/try`, `$try`): Step-by-step human manual QA review guide (where to go, what to click, what to expect).
+- `rollback` (alias: `/rollback`, `$rollback`): Safe feature/run reversal planner with dependency and commit risk analysis.
+- `ci` (alias: `/ci`, `$ci`): Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup and alignment.
+- `brief` (alias: `/brief`, `$brief`): Read-only scope, dependency, and size pre-briefing before speccing a run.
+- `autopilot` (alias: `/autopilot`, `$autopilot`): Optional explicit mode for one bounded spec/plan/implement/verify/report pass with checkpoint commits and review packet.
 - `goal`: Route broad, open-ended goals before Discovery.
 - `brainstorm`: Structured divergent & convergent ideation without creating running IDs.
 - `research`: Conduct deep codebase or web research with source-backed citations.
@@ -103,6 +108,11 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 | **Setup (Fresh)**| `onboard` | `setup` | `$onboard`, `$setup` | `/onboard` | "onboard project", "setup devflow" |
 | **Adopt (Exist)**| `adopt` | `bootstrap` | `$adopt`, `$bootstrap` | `/adopt` | "adopt codebase", "bootstrap devflow" |
 | **Diagnostics** | `doctor` | `health` | `$doctor`, `$health` | `/doctor` | "doctor check", "diagnose devflow" |
+| **Manual QA** | `try` | `manual-test` | `$try` | `/try` | "how to try", "where to click", "manual test guide" |
+| **Reversal** | `rollback` | `revert` | `$rollback` | `/rollback` | "rollback run", "undo feature", "plan reversal" |
+| **CI Setup** | `ci` | `github-actions`| `$ci` | `/ci` | "setup ci", "create github actions", "add verify workflow" |
+| **Pre-Check** | `brief` | `preview-scope`| `$brief` | `/brief` | "brief feature", "check next scope", "preview run" |
+| **Autopilot** | `autopilot` | `auto-loop` | `$autopilot` | `/autopilot` | "run autopilot", "autopilot feature", "start auto loop" |
 | **Stage 00** | `00-discover` | `discover` | `$00-discover`, `$discover` | `/00-discover` | "start discovery", "explore request" |
 | **Stage 10** | `10-define` | `define` | `$10-define`, `$define` | `/10-define` | "define run scope", "allocate run" |
 | **Stage 20** | `20-spec` | `spec` | `$20-spec`, `$spec` | `/20-spec` | "write spec", "create delivery contract" |

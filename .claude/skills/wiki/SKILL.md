@@ -1,6 +1,6 @@
 ---name: wiki
 
-description: DevFlow Wiki - Ingest, query, lint, and promote compiled project or framework knowledge.
+description: "[Devflow] Knowledge base management, ingestion, linting, and querying under devflow/wiki/."
 ---
 # Wiki
 

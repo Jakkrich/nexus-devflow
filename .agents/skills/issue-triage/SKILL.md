@@ -1,6 +1,6 @@
 ---
 name: issue-triage
-description: Issue-Triage workflow
+description: "[Devflow] Intake, categorize, and prioritize incoming issues and bug reports before delivery commitment."
 ---
 
 ﻿---

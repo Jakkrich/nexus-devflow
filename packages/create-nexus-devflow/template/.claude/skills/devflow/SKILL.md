@@ -1,6 +1,6 @@
 ---
 name: devflow
-description: Flagship interactive guide, intent router, workspace state inspector, and sitemap for Nexus-DevFlow workflows. Inspects current workspace state, maps natural language requests to matching stages/commands, and provides a cheat sheet of all available DevFlow skills. Use when the user runs devflow, /devflow, $devflow, status, asks how to use devflow, asks what command to run next, or needs guidance on DevFlow lifecycle paths.
+description: "[Devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows."
 ---
 
 # devflow - Interactive Workflow Guide & Intent Router for Nexus-DevFlow
@@ -51,6 +51,11 @@ When the user specifies a request, map it to the matching DevFlow 2.0 stage or c
 | "Verify code quality & QA review" | `50-verify` | `verify` | `50-verify` -> `60-report` -> `70-release` |
 | "Generate summary HTML/MD report" | `60-report` | `report` | `60-report` -> `70-release` |
 | "Package for PR merge or deployment" | `70-release` | `release` | `70-release` |
+| "Human manual QA walkthrough guide" | `try` | `try` | `try` (after implement or verify) |
+| "Safely plan feature or run reversal" | `rollback` | `rollback` | `rollback` -> `40-implement` |
+| "Set up automatic GitHub Actions CI" | `ci` | `ci` | `ci` (after onboard or adopt) |
+| "Pre-check scope & risks before spec" | `brief` | `brief` | `brief` -> `20-spec` |
+| "Run autonomous bounded delivery loop"| `autopilot` | `autopilot` | `autopilot` -> `70-release` |
 | "High-level goal or long-running task" | `goal` | `goal` | `goal` -> `00-discover` |
 | "Brainstorm ideas without allocating ID" | `brainstorm` | `brainstorm` | `brainstorm` -> `00-discover` |
 | "Deep codebase or web research" | `research` | `research` | `research` |
@@ -80,6 +85,11 @@ Always provide a clean summary of available Nexus-DevFlow skills grouped by life
 - `onboard` (`/onboard`, `$onboard`) - Baseline stack setup for freshly scaffolded projects
 - `adopt` (`/adopt`, `$adopt`) - Survey and bootstrap DevFlow into existing brownfield projects
 - `doctor` (`/doctor`, `$doctor`) - Read-only health check for setup, scripts, and workflow drift
+- `try` (`/try`, `$try`) - Step-by-step human manual QA review guide (where to go, what to click, what to expect)
+- `rollback` (`/rollback`, `$rollback`) - Safe feature/run reversal planner with dependency risk analysis
+- `ci` (`/ci`, `$ci`) - Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup
+- `brief` (`/brief`, `$brief`) - Read-only scope, dependency, and size pre-briefing before speccing
+- `autopilot` (`/autopilot`, `$autopilot`) - Optional bounded autonomous loop (spec -> plan -> implement -> verify -> report)
 - `goal` - Route broad goals before Discovery
 - `brainstorm` - Ideate without allocating running IDs
 - `research` - Conduct codebase or web research

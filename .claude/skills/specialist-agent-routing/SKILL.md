@@ -1,6 +1,6 @@
 ---
 name: specialist-agent-routing
-description: Route a request to the right specialist agent and preserve the DevFlow 2.0 stage-first contract. Use when the user wants direct specialist judgment on a file, folder, workspace, or concern.
+description: "[Devflow] Route a request to the right specialist agent and preserve the DevFlow 2.0 stage-first contract. Use when the user wants direct specialist judgment on a file, folder, workspace, or concern."
 ---
 
 # Specialist Agent Routing

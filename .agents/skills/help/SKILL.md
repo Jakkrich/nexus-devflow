@@ -1,6 +1,6 @@
 ---name: help
 
-description: DevFlow 2.0 Help and routing guide. Transitional file while Help moves from numbered workflow to companion command.
+description: "[Devflow] DevFlow 2.0 help, routing guide, workflow sitemap, and process navigation."
 argument-hint: [optional: question, running id, stage, or issue]
 ---
 

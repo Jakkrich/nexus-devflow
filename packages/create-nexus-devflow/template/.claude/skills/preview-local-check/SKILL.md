@@ -1,6 +1,6 @@
 ---
 name: preview-local-check
-description: Manage local preview, smoke-check, and temporary runtime verification before formal verification. Use when implementation needs a quick visual or runtime check, when a reviewer needs a local URL, or when a change should be inspected before /50-Verify.
+description: "[Devflow] Manage local preview, smoke-check, and temporary runtime verification before formal verification. Use when implementation needs a quick visual or runtime check, when a reviewer needs a local URL, or when a change should be inspected before /50-Verify."
 ---
 
 # Preview Local Check
