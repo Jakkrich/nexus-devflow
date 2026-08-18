@@ -1,6 +1,6 @@
 ---
 name: insight-capture
-description: Extract durable lessons, patterns, gotchas, and post-mortem knowledge from completed work. Use when implementation or verification work should become reusable team knowledge.
+description: "[Devflow] Extract durable lessons, patterns, gotchas, and post-mortem knowledge from completed work. Use when implementation or verification work should become reusable team knowledge."
 ---
 
 # Insight Capture

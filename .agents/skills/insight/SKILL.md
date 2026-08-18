@@ -1,6 +1,6 @@
 ---name: insight
 
-description: Insight Extraction - Extract reusable lessons, file insights, patterns, gotchas, recommendations, and 9arm-skills/post-mortem learning from completed work.
+description: "[Devflow] Extract reusable lessons, patterns, file insights, and post-mortem learning from completed work."
 ---
 
 # Phase 54: Insight Extraction

@@ -1,6 +1,6 @@
 ---
 name: review-followup-routing
-description: Classify review comments, extend existing work safely, and route corrective or future work back into the right DevFlow 2.0 stage. Use for PR follow-up and post-review follow-up planning.
+description: "[Devflow] Classify review comments, extend existing work safely, and route corrective or future work back into the right DevFlow 2.0 stage. Use for PR follow-up and post-review follow-up planning."
 ---
 
 # Review Follow-up Routing

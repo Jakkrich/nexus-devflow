@@ -1,6 +1,6 @@
 ---
 name: md2html
-description: Convert long-form Markdown (plan, spec, system design, RFC, runbook, postmortem, brainstorm, notes) into a single self-contained HTML page with Mermaid diagrams, step timelines, callouts, sidebar TOC. Claude-orange light+dark theme. Multi-language. Portable across Claude Code / Codex / Antigravity / any AI agent.
+description: "[Devflow] Convert long-form Markdown (plan, spec, system design, RFC, runbook, postmortem, brainstorm, notes) into a single self-contained HTML page with Mermaid diagrams, step timelines, callouts, sidebar TOC. Claude-orange light+dark theme. Multi-language. Portable across Claude Code / Codex / Antigravity / any AI agent."
 trigger: /md2html
 ---
 

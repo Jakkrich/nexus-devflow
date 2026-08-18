@@ -1,6 +1,6 @@
 ---
 name: silent-failure-audit
-description: Audits error handling, logging, fallbacks, and observability for silent failures. Use after adding catch blocks, fallback logic, retry handling, optional chaining, or user-facing failure paths.
+description: "[Devflow] Audits error handling, logging, fallbacks, and observability for silent failures. Use after adding catch blocks, fallback logic, retry handling, optional chaining, or user-facing failure paths."
 ---
 
 # Silent Failure Audit

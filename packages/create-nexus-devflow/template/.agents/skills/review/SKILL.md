@@ -1,6 +1,6 @@
 ---
 name: review
-description: Two-axis review for changed work. Use inside /50-Verify or /70-Release when a branch, PR, or work-in-progress diff needs standards and spec review.
+description: "[Devflow] Two-axis review for changed work. Use inside /50-Verify or /70-Release when a branch, PR, or work-in-progress diff needs standards and spec review."
 ---
 
 # Review

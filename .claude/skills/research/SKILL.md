@@ -1,6 +1,6 @@
 ---
 name: research
-description: Research workflow
+description: "[Devflow] Deep codebase or web research with source-backed citations to support discovery and spec stages."
 ---
 
 ﻿---

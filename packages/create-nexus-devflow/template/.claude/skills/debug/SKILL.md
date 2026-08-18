@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Debug workflow
+description: "[Devflow] Root cause investigation and diagnostic loop before or during implementation without editing code. Use when encountering broken behavior, test failures, or bugs."
 ---
 
 ﻿---

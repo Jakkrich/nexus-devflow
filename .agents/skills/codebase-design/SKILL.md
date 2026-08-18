@@ -1,6 +1,6 @@
 ---
 name: codebase-design
-description: Shared vocabulary for designing deep modules. Use when a DevFlow stage needs module/interface design, seam placement, testability review, or architecture simplification.
+description: "[Devflow] Shared vocabulary for designing deep modules. Use when a DevFlow stage needs module/interface design, seam placement, testability review, or architecture simplification."
 ---
 
 # Codebase Design

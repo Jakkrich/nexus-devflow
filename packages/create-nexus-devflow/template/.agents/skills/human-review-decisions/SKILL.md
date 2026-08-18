@@ -1,6 +1,6 @@
 ---
 name: human-review-decisions
-description: Handle human approval, feedback, rejection, and recheck decisions around verified work. Use when a task needs a human gate after verification and the result must route cleanly back into the DevFlow 2.0 lifecycle.
+description: "[Devflow] Handle human approval, feedback, rejection, and recheck decisions around verified work. Use when a task needs a human gate after verification and the result must route cleanly back into the DevFlow 2.0 lifecycle."
 ---
 
 # Human Review Decisions

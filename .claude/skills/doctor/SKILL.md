@@ -1,6 +1,6 @@
 ---
 name: doctor
-description: Read-only DevFlow health check and diagnostics. Inspects DevFlow setup, tool adapters, context files integrity, AGENTS.md commands validity, active runs in devflow/runs/, checklist completeness, and detects workflow drift. Use when the user runs doctor, /doctor, $doctor, asks to diagnose DevFlow, or wants to check project workflow health.
+description: "[Devflow] Read-only DevFlow health check and diagnostics for context files, adapters, commands, and workflow drift."
 ---
 
 # doctor - Read-Only DevFlow Health Check & Diagnostics

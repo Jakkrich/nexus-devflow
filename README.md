@@ -131,6 +131,11 @@ Companion commands provide specialized support without interrupting the linear m
 | `onboard` | `setup` | Baseline stack detection and setup for fresh/scaffolded projects. |
 | `adopt` | `bootstrap` | Survey existing codebase and bootstrap DevFlow into brownfield apps. |
 | `doctor` | `health` | Read-only health check for setup, scripts, adapters, and workflow drift. |
+| `try` | `try` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
+| `rollback` | `rollback` | Safe feature/run reversal planner with dependency risk analysis. |
+| `ci` | `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup and alignment. |
+| `brief` | `brief` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
+| `autopilot` | `autopilot` | Optional explicit bounded loop (spec -> plan -> implement -> verify -> report). |
 | `brainstorm` | `brainstorm` | Brainstorm ideas and explore concepts without allocating running IDs. |
 | `prd` | `prd` | Product framing and requirement documentation before delivery commitment. |
 | `research` | `research` | Codebase or web research to support discovery and spec stages. |

@@ -1,6 +1,6 @@
 ---
 name: prd
-description: PRD workflow
+description: "[Devflow] Product Requirements Document drafting, user story mapping, and feature scoping before delivery commitment."
 ---
 
 ﻿---

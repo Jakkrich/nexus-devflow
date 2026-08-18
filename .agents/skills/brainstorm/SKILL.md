@@ -1,6 +1,6 @@
 ---name: brainstorm
 
-description: Structured brainstorming for projects and features. Transitional compatibility path for the Brainstorm companion command in DevFlow 2.0.
+description: "[Devflow] Structured divergent and convergent ideation for features and ideas without allocating running IDs."
 ---
 
 # Brainstorm - Structured Idea Exploration

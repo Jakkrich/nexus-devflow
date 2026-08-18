@@ -1,6 +1,6 @@
 ---
 name: workflow-documentation-sync
-description: Enforces the synchronization and comprehensive update of documentation, manuals, usage guides, and examples whenever a new workflow is introduced or modified in the project. Use when introducing new workflows or changing existing ones.
+description: "[Devflow] Enforces the synchronization and comprehensive update of documentation, manuals, usage guides, and examples whenever a new workflow is introduced or modified in the project. Use when introducing new workflows or changing existing ones."
 ---
 
 # Workflow Documentation Sync

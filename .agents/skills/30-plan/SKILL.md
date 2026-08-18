@@ -1,6 +1,6 @@
 ---name: 30-plan
 
-description: Plan implementation in DevFlow 2.0 - transform `20-spec.md` into a markdown-first executable plan.
+description: "[Devflow] Plan stage in DevFlow 2.0 - transform 20-spec.md into an executable task breakdown with test decisions."
 ---
 # Phase 30: Plan Implementation
 

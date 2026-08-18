@@ -1,6 +1,6 @@
 ---name: pr
 
-description: Create Pull Request (Git Orchestration) - Create a well-formatted pull request from the current branch with a clear summary of changes and linked artifacts.
+description: "[Devflow] Pull Request creation with automated change summaries, verification evidence, and linked stage artifacts."
 ---
 # Create Pull Request (Git Orchestration)
 

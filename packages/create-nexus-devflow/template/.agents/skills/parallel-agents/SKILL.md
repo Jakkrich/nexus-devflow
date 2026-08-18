@@ -1,6 +1,6 @@
 ---
 name: parallel-agents
-description: Multi-agent orchestration patterns for the current DevFlow 2.0 specialist set. Use when multiple independent analyses or implementation perspectives can run in parallel.
+description: "[Devflow] Multi-agent orchestration patterns for the current DevFlow 2.0 specialist set. Use when multiple independent analyses or implementation perspectives can run in parallel."
 allowed-tools: Read, Glob, Grep
 ---
 

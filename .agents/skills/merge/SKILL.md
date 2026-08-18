@@ -1,6 +1,6 @@
 ---name: merge
 
-description: PR Merge (Git Orchestration) - Safely merge the current feature branch into the base branch and clean up.
+description: "[Devflow] Safe PR branch merge into base branch, cleanup, and release readiness check."
 ---
 # Smart Merge (Git Orchestration)
 

@@ -1,6 +1,6 @@
 ---name: 60-report
 
-description: Report stage in DevFlow 2.0 - produce the final standardized markdown and HTML summary for the full running flow.
+description: "[Devflow] Report stage in DevFlow 2.0 - produce standardized markdown and HTML summary report for the completed run."
 argument-hint: "{running-id or workspace path}"
 ---
 

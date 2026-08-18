@@ -1,6 +1,6 @@
 ---name: security-review
 
-description: High-severity security code review for folders, projects, files, or diffs with English Markdown output contract.
+description: "[Devflow] High-severity security code review and vulnerability audit for folders, projects, files, or diffs."
 argument-hint: "[target folder, project path, file list, or git diff] [--lang=en]"
 ---
 

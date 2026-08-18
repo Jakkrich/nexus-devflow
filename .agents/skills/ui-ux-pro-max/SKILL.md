@@ -1,6 +1,6 @@
 ---
 name: ui-ux-pro-max
-description: AI-powered design intelligence with 50+ styles, 95+ color palettes, and automated design system generation. Use when designing, building, or reviewing UI/UX.
+description: "[Devflow] AI-powered design intelligence with 50+ styles, 95+ color palettes, and automated design system generation. Use when designing, building, or reviewing UI/UX."
 ---
 
 # UI/UX Pro Max (Design Intelligence)

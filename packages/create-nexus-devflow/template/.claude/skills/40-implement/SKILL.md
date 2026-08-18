@@ -1,6 +1,6 @@
 ---name: 40-implement
 
-description: Implement code in DevFlow 2.0 - execute one planned unit at a time with markdown-first implementation evidence.
+description: "[Devflow] Implement stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests."
 ---
 # Phase 40: Implement Code
 

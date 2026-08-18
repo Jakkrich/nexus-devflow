@@ -25,6 +25,11 @@ This document decides which workflow surfaces should remain public commands, whi
 | `onboard` | `public command` | Detects stack and tunes baseline setup for freshly scaffolded projects. |
 | `adopt` | `public command` | Surveys existing codebases and bootstraps DevFlow into brownfield projects. |
 | `doctor` | `public command` | Read-only health check for setup, scripts, adapters, and workflow drift. |
+| `try` | `public command` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
+| `rollback` | `public command` | Safe feature/run reversal planner with dependency risk analysis. |
+| `ci` | `public command` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup and alignment. |
+| `brief` | `public command` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
+| `autopilot` | `public command` | Explicit autonomous bounded delivery loop across spec/plan/implement/verify/report. |
 | `Goal.md` | `public command` | It routes broad goals before the work enters the mainline. |
 | `Brainstorm.md` | `public command` | It is a common user-facing ideation surface before direction is locked. |
 | `Research.md` | `public command` | It is a clear command that users can invoke directly for evidence gathering. |

@@ -1,6 +1,6 @@
 ---
 name: roadmap-strategy
-description: Create or refresh product roadmap direction using markdown-first discovery and roadmap artifacts. Use when strategic planning should stay outside the mainline but still follow DevFlow 2.0 contracts.
+description: "[Devflow] Create or refresh product roadmap direction using markdown-first discovery and roadmap artifacts. Use when strategic planning should stay outside the mainline but still follow DevFlow 2.0 contracts."
 ---
 
 # Roadmap Strategy

@@ -1,6 +1,6 @@
 ---
 name: followup
-description: Followup workflow
+description: "[Devflow] Followup task tracking, post-verification iteration, and routing unresolved items to subsequent runs."
 ---
 
 ﻿---

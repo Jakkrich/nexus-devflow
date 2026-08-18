@@ -70,6 +70,11 @@ These are the public non-mainline commands:
 | `onboard` | detect stack and setup baseline context for fresh/scaffolded projects |
 | `adopt` | survey existing codebase and bootstrap DevFlow into brownfield projects |
 | `doctor` | read-only health check for setup, scripts, adapters, and workflow drift |
+| `try` | generate human step-by-step manual QA review and walkthrough guide |
+| `rollback` | plan safe feature or run reversal with dependency risk analysis |
+| `ci` | configure automated GitHub Actions pipeline (`.github/workflows/verify.yml`) |
+| `brief` | read-only scope, dependency, and size pre-briefing before speccing |
+| `autopilot` | run autonomous bounded loop (spec -> plan -> implement -> verify -> report) |
 | `Goal` | the request is still broad and needs routing |
 | `Brainstorm` | the direction is still fuzzy |
 | `Research` | more evidence or source knowledge is needed |
