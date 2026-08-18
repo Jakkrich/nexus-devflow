@@ -71,7 +71,6 @@ function createManifest(version, adapters, templateFiles) {
         "prd",
         "issue-triage",
         "security-review",
-        "wiki",
         "check-for-updates",
         "help"
       ]
@@ -305,6 +304,21 @@ async function applyPreparedUpdate(prepared, { replaceConflicts = false } = {}) 
     try {
       await fs.unlink(fileToRemove);
       removedCount++;
+
+      let parentDir = path.dirname(fileToRemove);
+      while (parentDir !== prepared.targetDir && parentDir.startsWith(prepared.targetDir)) {
+        try {
+          const entries = await fs.readdir(parentDir);
+          if (entries.length === 0) {
+            await fs.rmdir(parentDir);
+            parentDir = path.dirname(parentDir);
+          } else {
+            break;
+          }
+        } catch {
+          break;
+        }
+      }
     } catch (error) {
       if (error.code !== "ENOENT") {
         throw error;
