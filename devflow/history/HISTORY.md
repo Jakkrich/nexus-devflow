@@ -8,7 +8,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Release Date | Running ID | Title | Git Tag / Commit | Release Status | Report Link |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 2026-08-18 | `RUN-007` | ยกระดับระบบ Nexus-DevFlow ด้วยวินัยและกลไกสำคัญจาก Blueprint | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-007-integrate-blueprint-skills-enhancements/60-report.md) |
+| 2026-08-18 | `RUN-008` | ปรับปรุงโครงสร้าง Nexus-DevFlow ให้ Lean & Clean ยุบรวม Skills บริหารจัดการ History และ Safe Rollback | `be713ea` | `Released` | [`60-report.md`](../runs/RUN-008-lean-and-clean-devflow-optimization/60-report.md) |
+| 2026-08-18 | `RUN-007` | ยกระดับระบบ Nexus-DevFlow ด้วยวินัยและกลไกสำคัญจาก Blueprint | `e79528b` | `Released` | [`60-report.md`](../runs/RUN-007-integrate-blueprint-skills-enhancements/60-report.md) |
 | 2026-08-18 | `RUN-006` | Standardize Command Naming and Provider Invocation | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-006-standardize-command-naming-and-provider-invocation/60-report.md) |
 | 2026-08-18 | `RUN-005` | Add DevFlow Prefix to Skill Descriptions | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-005-add-devflow-prefix-to-skill-descriptions/60-report.md) |
 | 2026-08-18 | `RUN-004` | Add Autopilot Skill | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-004-add-autopilot-skill/60-report.md) |
