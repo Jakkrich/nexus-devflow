@@ -29,6 +29,7 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 2. **OpenAI Codex & Non-Native CLI Tools**: In environments without automatic background skill discovery (such as OpenAI Codex CLI, Aider, or generic terminals), **you MUST use your file reading tool to inspect `.agents/skills/<skill>/SKILL.md` before executing the stage** to strictly follow its schema, artifact contract, and quality gates.
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover and surface `.agents/skills/` and `.claude/skills/`.
 4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` (or `/devflow`, `$devflow`) to automatically inspect `devflow/context/current-stage.md` and active runs in `devflow/runs/`.
+5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`00-discover.md`, `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-report.md`, `70-release.md`) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 
 ## Timeline Workflow
 
