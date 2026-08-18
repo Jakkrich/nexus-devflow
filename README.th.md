@@ -112,48 +112,55 @@ devflow
 
 | ขั้นตอน | คำสั่ง / ชื่อย่อ | วัตถุประสงค์ & อาร์ติแฟกต์ |
 | --- | --- | --- |
-| **00** | `00-discover` (`discover`, `/00-discover`) | สำรวจความต้องการ คัดกรองและตัดสินใจว่าควรส่งมอบงานหรือไม่ (`devflow/discoveries/`) |
-| **10** | `10-define` (`define`, `/10-define`) | ล็อกขอบเขตการส่งมอบและกำหนด Running ID (`devflow/runs/{RUNNING_ID}/10-define.md`) |
-| **20** | `20-spec` (`spec`, `/20-spec`) | เขียนสเปกและเกณฑ์การรับมอบงานอย่างเป็นทางการ (`20-spec.md`) |
-| **30** | `30-plan` (`plan`, `/30-plan`) | แปลงสเปกเป็นขั้นตอนงานที่ลงมือทำได้พร้อมรายการเช็กลิสต์ (`30-plan.md`) |
-| **40** | `40-implement` (`implement`, `/40-implement`) | ลงมือพัฒนาตามแผนทีละขั้นตอนพร้อมบันทึกหลักฐาน (`40-implement.md`) |
-| **50** | `50-verify` (`verify`, `/50-verify`) | ตรวจสอบคุณภาพโดย Senior QA รันการทดสอบและตัดสินผลลัพธ์ (`50-verify.md`) |
-| **60** | `60-report` (`report`, `/60-report`) | สรุปรายงานมาตรฐานทั้งไฟล์ Markdown และ HTML แบบอ่านง่าย (`60-report.md`, `60-report.html`) |
-| **70** | `70-release` (`release`, `/70-release`) | แพ็กเกจงานที่ผ่านการตรวจสอบแล้วสำหรับ Merge, PR หรือส่งมอบ Deploy (`70-release.md`) |
+> 💡 **การเรียกใช้งานคำสั่งตาม AI Provider**: คำสั่งทั้งหมดใช้ **ชื่อมาตรฐาน (Canonical Name)** เดียวกัน โดยรูปแบบการพิมพ์ขึ้นอยู่กับ AI Tool ที่ใช้งาน:
+> - **พิมพ์ชื่อปกติ**: เช่น `00-discover`, `devflow` (ใช้ได้กับทุกระบบ)
+> - **เครื่องหมาย Slash (`/`)**: สำหรับ Claude Code, Google Antigravity, Gemini CLI (เช่น `/00-discover`, `/devflow`)
+> - **เครื่องหมาย Dollar (`$`)**: สำหรับ OpenAI Codex CLI (เช่น `$00-discover`, `$devflow`)
+
+| สเตจ | ชื่อคำสั่งมาตรฐาน (Canonical Name) | คำอธิบาย & อาร์ติแฟกต์หลัก |
+| :--- | :--- | :--- |
+| **00** | `00-discover` | สำรวจความต้องการ คัดกรองและตัดสินใจว่าควรส่งมอบงานหรือไม่ (`devflow/discoveries/`) |
+| **10** | `10-define` | ล็อกขอบเขตการส่งมอบและกำหนด Running ID (`devflow/runs/{RUNNING_ID}/10-define.md`) |
+| **20** | `20-spec` | เขียนสเปกและเกณฑ์การรับมอบงานอย่างเป็นทางการ (`20-spec.md`) |
+| **30** | `30-plan` | แปลงสเปกเป็นขั้นตอนงานที่ลงมือทำได้พร้อมรายการเช็กลิสต์ (`30-plan.md`) |
+| **40** | `40-implement` | ลงมือพัฒนาตามแผนทีละขั้นตอนพร้อมบันทึกหลักฐาน (`40-implement.md`) |
+| **50** | `50-verify` | ตรวจสอบคุณภาพโดย Senior QA รันการทดสอบและตัดสินผลลัพธ์ (`50-verify.md`) |
+| **60** | `60-report` | สรุปรายงานมาตรฐานทั้งไฟล์ Markdown และ HTML แบบอ่านง่าย (`60-report.md`, `60-report.html`) |
+| **70** | `70-release` | แพ็กเกจงานที่ผ่านการตรวจสอบแล้วสำหรับ Merge, PR หรือส่งมอบ Deploy (`70-release.md`) |
 
 ## คำสั่งผู้ช่วยเฉพาะทาง (Companion Commands)
 
 คำสั่งผู้ช่วยให้การสนับสนุนเฉพาะทางแก่สายหลัก โดยไม่ทำให้ลำดับขั้นตอนเสียไป:
 
-| คำสั่งผู้ช่วย | ชื่อย่อ | วัตถุประสงค์ |
-| --- | --- | --- |
-| `devflow` | `status` | สรุปสถานะพื้นที่ทำงาน ตรวจสอบความคืบหน้า และนำทางคำสั่งถัดไป |
-| `onboard` | `setup` | ตรวจจับ Stack และตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่ที่เพิ่งติดตั้ง |
-| `adopt` | `bootstrap` | สำรวจ Codebase เดิมและดึงบริบทเข้าสู่ DevFlow สำหรับโปรเจกต์เดิม |
-| `doctor` | `health` | ตรวจสุขภาพการตั้งค่า, Context files, Scripts และตรวจจับ Workflow Drift |
-| `try` | `try` | สร้างคู่มือการทดสอบด้วยมือทีละขั้นตอนสำหรับผู้ใช้และ Tester (Where to go / What to click / What to expect) |
-| `rollback` | `rollback` | วางแผนถอนฟีเจอร์หรือย้อนกลับ Run อย่างปลอดภัย พร้อมวิเคราะห์ Dependency Risks |
-| `ci` | `ci` | ติดตั้ง GitHub Actions Pipeline (`.github/workflows/verify.yml`) อัตโนมัติจาก Verify Command จริง |
-| `brief` | `brief` | สรุปขอบเขต ความเสี่ยง และขนาดงาน (S/M/L) แบบ Read-only ก่อนลงมือเขียนสเปก |
-| `autopilot` | `autopilot` | โหมดทำงานอัตโนมัติต่อเนื่อง (Spec -> Plan -> Implement -> Verify -> Report) พร้อม Checkpoint commits และสรุปรายงาน |
-| `brainstorm` | `brainstorm` | ระดมความคิดและสำรวจแนวคิดโดยยังไม่เปิด Running ID |
-| `prd` | `prd` | จัดทำเอกสารข้อกำหนดผลิตภัณฑ์ (PRD) ก่อนลงมือกำหนดการส่งมอบ |
-| `research` | `research` | วิจัยค้นคว้า codebase หรือค้นหาข้อมูลเว็บเพื่อสนับสนุนขั้น Discover และ Spec |
-| `debug` | `debug` | วินิจฉัยหาสาเหตุของบั๊กก่อนหรือระหว่างการพัฒนา |
-| `security-review` | `security-review` | ตรวจสอบความปลอดภัยระดับเข้มงวดสำหรับโค้ด, diff หรือสถาปัตยกรรม |
-| `issue-triage` | `issue-triage` | รับเรื่อง คัดกรอง และตรวจสอบปัญหาบั๊กที่ได้รับแจ้ง |
-| `wiki` | `wiki` | จัดการคลังความรู้โปรเจกต์ใต้ `devflow/wiki/` |
-| `check-for-updates` | `check-for-updates` | ตรวจสอบหรืออัปเดตชุดติดตั้ง DevFlow |
-| `help` | `help` | แนะนำขั้นตอน นำทางคำสั่ง และผังกระบวนการ |
+| คำสั่งมาตรฐาน (Canonical Name) | วัตถุประสงค์ |
+| :--- | :--- |
+| `devflow` | สรุปสถานะพื้นที่ทำงาน ตรวจสอบความคืบหน้า และนำทางคำสั่งถัดไป |
+| `onboard` | ตรวจจับ Stack และตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่ที่เพิ่งติดตั้ง |
+| `adopt` | สำรวจ Codebase เดิมและดึงบริบทเข้าสู่ DevFlow สำหรับโปรเจกต์เดิม |
+| `doctor` | ตรวจสุขภาพการตั้งค่า, Context files, Scripts และตรวจจับ Workflow Drift |
+| `try` | สร้างคู่มือการทดสอบด้วยมือทีละขั้นตอนสำหรับผู้ใช้และ Tester (Where to go / What to click / What to expect) |
+| `rollback` | วางแผนถอนฟีเจอร์หรือย้อนกลับ Run อย่างปลอดภัย พร้อมวิเคราะห์ Dependency Risks |
+| `ci` | ติดตั้ง GitHub Actions Pipeline (`.github/workflows/verify.yml`) อัตโนมัติจาก Verify Command จริง |
+| `brief` | สรุปขอบเขต ความเสี่ยง และขนาดงาน (S/M/L) แบบ Read-only ก่อนลงมือเขียนสเปก |
+| `autopilot` | โหมดทำงานอัตโนมัติต่อเนื่อง (Spec -> Plan -> Implement -> Verify -> Report) พร้อม Checkpoint commits และสรุปรายงาน |
+| `brainstorm` | ระดมความคิดและสำรวจแนวคิดโดยยังไม่เปิด Running ID |
+| `prd` | จัดทำเอกสารข้อกำหนดผลิตภัณฑ์ (PRD) ก่อนลงมือกำหนดการส่งมอบ |
+| `research` | วิจัยค้นคว้า codebase หรือค้นหาข้อมูลเว็บเพื่อสนับสนุนขั้น Discover และ Spec |
+| `debug` | วินิจฉัยหาสาเหตุของบั๊กก่อนหรือระหว่างการพัฒนา |
+| `security-review` | ตรวจสอบความปลอดภัยระดับเข้มงวดสำหรับโค้ด, diff หรือสถาปัตยกรรม |
+| `issue-triage` | รับเรื่อง คัดกรอง และตรวจสอบปัญหาบั๊กที่ได้รับแจ้ง |
+| `wiki` | จัดการคลังความรู้โปรเจกต์ใต้ `devflow/wiki/` |
+| `check-for-updates` | ตรวจสอบหรืออัปเดตชุดติดตั้ง DevFlow |
+| `help` | แนะนำขั้นตอน นำทางคำสั่ง และผังกระบวนการ |
 
 ## การรองรับตัวเชื่อมต่อ AI (Tool Adapters)
 
-| เครื่องมือ | พาธตัวเชื่อมต่อ | วิธีเรียกใช้งาน |
+| เครื่องมือ | พาธตัวเชื่อมต่อ | รูปแบบการเรียกใช้งาน |
 | --- | --- | --- |
 | **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`, `devflow`), slash commands (`/00-discover`), หรือภาษาธรรมชาติ |
-| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`), skill macro (`$00-discover`, `$spec`), หรือภาษาธรรมชาติ |
-| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | ชื่อปกติ, slash commands (`/00-discover`, `/10-define`), หรือภาษาธรรมชาติ |
-| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | คำสั่งภาษาธรรมชาติโดยอ้างอิงแนวทางใน `AGENTS.md` |
+| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`), skill command (`$00-discover`), หรือภาษาธรรมชาติ |
+| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`), slash commands (`/00-discover`), หรือภาษาธรรมชาติ |
+| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | คำสั่งภาษาธรรมชาติหรือชื่อปกติโดยอ้างอิงแนวทางใน `AGENTS.md` |
 
 ## โครงสร้างอาร์ติแฟกต์ในพื้นที่ทำงาน
 
