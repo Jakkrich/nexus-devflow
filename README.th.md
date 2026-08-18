@@ -88,59 +88,66 @@ npx @jakkrichm/create-nexus-devflow --adapter both
 
 ### 2. สั่งเปิดใช้งาน DevFlow ใน AI Assistant
 
-เปิดโปรเจกต์ของคุณใน AI Assistant ของคุณ (Google Antigravity, OpenAI Codex, Claude Code ฯลฯ) แล้วรันคำสั่งเปิดตัวหลัก:
+เปิดโปรเจกต์ของคุณใน AI Assistant ของคุณ (Google Antigravity, OpenAI Codex, Claude Code, Cursor ฯลฯ) แล้วรันคำสั่งเปิดตัวหลัก:
 
 ```text
-/devflow
+devflow
 ```
+*(หรือ `/devflow`, `$devflow`, `status`)*
 
-> **คำแนะนำ:** `/devflow` คือคำสั่งเปิดตัวหลักของระบบ ทำหน้าที่สำรวจสถานะของพื้นที่ทำงาน ตรวจสอบความสมบูรณ์ของเฟรมเวิร์ก และนำทางคุณไปยังคำสั่งถัดไปที่เหมาะสมที่สุดทันที (`/00-Discover`, `/10-Define`, `/40-Implement`, `/50-Verify` ฯลฯ)
+> **คำแนะนำ:** `devflow` คือคำสั่งเปิดตัวหลักของระบบ ทำหน้าที่สำรวจสถานะของพื้นที่ทำงาน ตรวจสอบความสมบูรณ์ของเฟรมเวิร์ก และนำทางคุณไปยังคำสั่งถัดไปที่เหมาะสมที่สุดทันที (`00-discover`, `10-define`, `40-implement`, `50-verify` ฯลฯ)
 
 หรือเริ่มต้นขั้นตอนค้นหาความต้องการโดยตรงด้วยคำสั่ง:
 
 ```text
-/00-Discover
+00-discover
 ```
+*(หรือ `discover`, `/00-discover`, `$00-discover`)*
 
 ## วงจรสายหลัก (Mainline Timeline Workflow)
 
 ```text
-/00-Discover ➔ /10-Define ➔ /20-Spec ➔ /30-Plan ➔ /40-Implement ➔ /50-Verify ➔ /60-Report ➔ /70-Release
+00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-implement ➔ 50-verify ➔ 60-report ➔ 70-release
 ```
 
-| ขั้นตอน | คำสั่ง | วัตถุประสงค์ & อาร์ติแฟกต์ |
+| ขั้นตอน | คำสั่ง / ชื่อย่อ | วัตถุประสงค์ & อาร์ติแฟกต์ |
 | --- | --- | --- |
-| **00** | `/00-Discover` | สำรวจความต้องการ คัดกรองและตัดสินใจว่าควรส่งมอบงานหรือไม่ (`devflow/discoveries/`) |
-| **10** | `/10-Define` | ล็อกขอบเขตการส่งมอบและกำหนด Running ID (`devflow/runs/{RUNNING_ID}/10-define.md`) |
-| **20** | `/20-Spec` | เขียนสเปกและเกณฑ์การรับมอบงานอย่างเป็นทางการ (`20-spec.md`) |
-| **30** | `/30-Plan` | แปลงสเปกเป็นขั้นตอนงานที่ลงมือทำได้พร้อมรายการเช็กลิสต์ (`30-plan.md`) |
-| **40** | `/40-Implement` | ลงมือพัฒนาตามแผนทีละขั้นตอนพร้อมบันทึกหลักฐาน (`40-implement.md`) |
-| **50** | `/50-Verify` | ตรวจสอบคุณภาพโดย Senior QA รันการทดสอบและตัดสินผลลัพธ์ (`50-verify.md`) |
-| **60** | `/60-Report` | สรุปรายงานมาตรฐานทั้งไฟล์ Markdown และ HTML แบบอ่านง่าย (`60-report.md`, `60-report.html`) |
-| **70** | `/70-Release` | แพ็กเกจงานที่ผ่านการตรวจสอบแล้วสำหรับ Merge, PR หรือส่งมอบ Deploy (`70-release.md`) |
+| **00** | `00-discover` (`discover`, `/00-discover`) | สำรวจความต้องการ คัดกรองและตัดสินใจว่าควรส่งมอบงานหรือไม่ (`devflow/discoveries/`) |
+| **10** | `10-define` (`define`, `/10-define`) | ล็อกขอบเขตการส่งมอบและกำหนด Running ID (`devflow/runs/{RUNNING_ID}/10-define.md`) |
+| **20** | `20-spec` (`spec`, `/20-spec`) | เขียนสเปกและเกณฑ์การรับมอบงานอย่างเป็นทางการ (`20-spec.md`) |
+| **30** | `30-plan` (`plan`, `/30-plan`) | แปลงสเปกเป็นขั้นตอนงานที่ลงมือทำได้พร้อมรายการเช็กลิสต์ (`30-plan.md`) |
+| **40** | `40-implement` (`implement`, `/40-implement`) | ลงมือพัฒนาตามแผนทีละขั้นตอนพร้อมบันทึกหลักฐาน (`40-implement.md`) |
+| **50** | `50-verify` (`verify`, `/50-verify`) | ตรวจสอบคุณภาพโดย Senior QA รันการทดสอบและตัดสินผลลัพธ์ (`50-verify.md`) |
+| **60** | `60-report` (`report`, `/60-report`) | สรุปรายงานมาตรฐานทั้งไฟล์ Markdown และ HTML แบบอ่านง่าย (`60-report.md`, `60-report.html`) |
+| **70** | `70-release` (`release`, `/70-release`) | แพ็กเกจงานที่ผ่านการตรวจสอบแล้วสำหรับ Merge, PR หรือส่งมอบ Deploy (`70-release.md`) |
 
 ## คำสั่งผู้ช่วยเฉพาะทาง (Companion Commands)
 
 คำสั่งผู้ช่วยให้การสนับสนุนเฉพาะทางแก่สายหลัก โดยไม่ทำให้ลำดับขั้นตอนเสียไป:
 
-| คำสั่งผู้ช่วย | วัตถุประสงค์ |
-| --- | --- |
-| `Brainstorm` | ระดมความคิดและสำรวจแนวคิดโดยยังไม่เปิด Running ID |
-| `PRD` | จัดทำเอกสารข้อกำหนดผลิตภัณฑ์ (PRD) ก่อนลงมือกำหนดการส่งมอบ |
-| `Research` | วิจัยค้นคว้า codebase หรือค้นหาข้อมูลเว็บเพื่อสนับสนุนขั้น Discover และ Spec |
-| `Debug` | วินิจฉัยหาสาเหตุของบั๊กก่อนหรือระหว่างการพัฒนา |
-| `Security-Review` | ตรวจสอบความปลอดภัยระดับเข้มงวดสำหรับโค้ด, diff หรือสถาปัตยกรรม |
-| `Issue-Triage` | รับเรื่อง คัดกรอง และตรวจสอบปัญหาบั๊กที่ได้รับแจ้ง |
-| `Wiki` | จัดการคลังความรู้โปรเจกต์ใต้ `devflow/wiki/` |
-| `Help` | แนะนำขั้นตอน นำทางคำสั่ง และผังกระบวนการ |
+| คำสั่งผู้ช่วย | ชื่อย่อ | วัตถุประสงค์ |
+| --- | --- | --- |
+| `devflow` | `status` | สรุปสถานะพื้นที่ทำงาน ตรวจสอบความคืบหน้า และนำทางคำสั่งถัดไป |
+| `onboard` | `setup` | ตรวจจับ Stack และตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่ที่เพิ่งติดตั้ง |
+| `adopt` | `bootstrap` | สำรวจ Codebase เดิมและดึงบริบทเข้าสู่ DevFlow สำหรับโปรเจกต์เดิม |
+| `doctor` | `health` | ตรวจสุขภาพการตั้งค่า, Context files, Scripts และตรวจจับ Workflow Drift |
+| `brainstorm` | `brainstorm` | ระดมความคิดและสำรวจแนวคิดโดยยังไม่เปิด Running ID |
+| `prd` | `prd` | จัดทำเอกสารข้อกำหนดผลิตภัณฑ์ (PRD) ก่อนลงมือกำหนดการส่งมอบ |
+| `research` | `research` | วิจัยค้นคว้า codebase หรือค้นหาข้อมูลเว็บเพื่อสนับสนุนขั้น Discover และ Spec |
+| `debug` | `debug` | วินิจฉัยหาสาเหตุของบั๊กก่อนหรือระหว่างการพัฒนา |
+| `security-review` | `security-review` | ตรวจสอบความปลอดภัยระดับเข้มงวดสำหรับโค้ด, diff หรือสถาปัตยกรรม |
+| `issue-triage` | `issue-triage` | รับเรื่อง คัดกรอง และตรวจสอบปัญหาบั๊กที่ได้รับแจ้ง |
+| `wiki` | `wiki` | จัดการคลังความรู้โปรเจกต์ใต้ `devflow/wiki/` |
+| `check-for-updates` | `check-for-updates` | ตรวจสอบหรืออัปเดตชุดติดตั้ง DevFlow |
+| `help` | `help` | แนะนำขั้นตอน นำทางคำสั่ง และผังกระบวนการ |
 
 ## การรองรับตัวเชื่อมต่อ AI (Tool Adapters)
 
 | เครื่องมือ | พาธตัวเชื่อมต่อ | วิธีเรียกใช้งาน |
 | --- | --- | --- |
-| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Slash commands (เช่น `/00-Discover`, `/20-Spec`, `/40-Implement`) |
-| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | `$00-discover`, `$20-spec` หรือภาษาธรรมชาติ |
-| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Slash commands (เช่น `/00-Discover`, `/10-Define`, `/50-Verify`) |
+| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`, `devflow`), slash commands (`/00-discover`), หรือภาษาธรรมชาติ |
+| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`), skill macro (`$00-discover`, `$spec`), หรือภาษาธรรมชาติ |
+| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | ชื่อปกติ, slash commands (`/00-discover`, `/10-define`), หรือภาษาธรรมชาติ |
 | **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | คำสั่งภาษาธรรมชาติโดยอ้างอิงแนวทางใน `AGENTS.md` |
 
 ## โครงสร้างอาร์ติแฟกต์ในพื้นที่ทำงาน

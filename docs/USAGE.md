@@ -66,12 +66,17 @@ These are the public non-mainline commands:
 
 | Command | Use when |
 | :--- | :--- |
+| `devflow` | guide, inspect active workspace state, and route intent |
+| `onboard` | detect stack and setup baseline context for fresh/scaffolded projects |
+| `adopt` | survey existing codebase and bootstrap DevFlow into brownfield projects |
+| `doctor` | read-only health check for setup, scripts, adapters, and workflow drift |
 | `Goal` | the request is still broad and needs routing |
 | `Brainstorm` | the direction is still fuzzy |
 | `Research` | more evidence or source knowledge is needed |
 | `Debug` | root-cause analysis is needed |
 | `PRD` | product framing is needed before spec work |
 | `Issue-Triage` | the work starts from issue intake |
+| `Security-Review` | high-severity security and vulnerability audit |
 | `Wiki` | knowledge needs to be queried or captured |
 | `Check-For-Updates` | Nexus-DevFlow setup or upgrade needs to be installed, checked, or repaired |
 | `Help` | the next route is unclear |
