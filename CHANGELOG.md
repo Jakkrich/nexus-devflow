@@ -5,6 +5,13 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.10] - 2026-08-18
+
+### Changed
+- **Standardized Canonical Command Naming**: Standardized all Mainline Stages (`00-discover`, `10-define`, `20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`) and Companion Commands to use a single Canonical Name, completely removing confusing shorthand and redundant semantic aliases from core documentation and tables.
+- **AI Provider Invocation Guideline**: Added clear and concise instructions across `AGENTS.md`, `README.md`, and `README.th.md` explaining that command invocation syntax (Plain Name, `/`, or `$`) depends on the AI Provider or tool being used (e.g., Slash Commands for Claude Code & Antigravity, Dollar Macro for OpenAI Codex CLI).
+- **Skill Adapters & Template Alignment**: Updated usage blocks and next-step references across all `SKILL.md` files in `.agents/skills/` and `.claude/skills/`, and synchronized template package.
+
 ## [2.0.9] - 2026-08-18
 
 ### Added
