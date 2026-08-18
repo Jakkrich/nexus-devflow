@@ -64,6 +64,20 @@ Run release as a readiness-packaging loop, not as a celebratory summary.
 - **Stop Condition**: stop when the release state is explicit, evidence supports readiness, residual risks and follow-ups are named, and the next delivery or reporting route is clear.
 - **Handoff**: `70-release.md` must close the mainline run or tell the next reader what shipped, what did not ship, what evidence supports readiness, and what follow-ups remain.
 
+### 0. Step 0 Safety Pass & Findings Ledger Gate
+
+Before packaging, merging, or releasing:
+
+1. **Findings Ledger Blockers**:
+   - ตรวจสอบ `devflow/context/findings.md`
+   - ต้องไม่มี Finding ระดับ P0 หรือ P1 ในสถานะ `open` หรือ `fixed` ค้างอยู่
+   - สถานะ `fixed` ยังคงบล็อก release เสมอจนกว่าจะผ่านการ Review ใน `50-verify` เพื่อเลื่อนเป็น `closed`
+2. **2-Stage Approval Separation**:
+   - การขออนุมัติ Merge เข้า `main` หรือ `master` เป็นการอนุมัติขั้นแรก
+   - **การ Push ไปยัง Remote หรือ Deploy จะต้องขออนุมัติแยกต่างหากอย่างชัดเจน (Merge approval DOES NOT equal Push approval)**
+3. **Archive Resolved Findings**:
+   - ย้ายรายการ Findings ที่ปิดแล้ว (`closed`, `accepted`, `invalid`) ไปบันทึกในเอกสาร Release และรีเซ็ต `findings.md` ให้สะอาด
+
 ### 1. Load Verified Context
 
 Read:
@@ -72,6 +86,7 @@ Read:
 - `50-verify.md`
 - `40-implement.md`
 - `20-spec.md`
+- `devflow/context/findings.md`
 - any PR, deploy, merge, or handoff notes already captured
 
 ### 2. Package The Release Outcome
@@ -81,6 +96,7 @@ Summarize:
 - what is being delivered
 - what changed in user or system terms
 - what state the work is in for PR, deploy, merge, or handoff
+- resolved and archived findings
 - what follow-up items remain
 
 ### 3. Write `70-release.md`
@@ -94,15 +110,18 @@ Prefer clear release-note style wording:
 - what changed
 - what was fixed
 - what is intentionally deferred
+- archived findings summary
 
-### 4. Confirm Readiness
+### 4. Confirm Readiness & 2-Stage Execution
 
 If release readiness changes because unresolved issues are found:
 
 - route back to `50-verify` or `40-implement`
 
 Do not package unfinished work as release-ready through wording tricks.
-Use `resolving-merge-conflicts` when merge or rebase conflicts block packaging. Use `handoff` when release output must transfer to another agent or session without duplicating artifacts.
+When executing git operations:
+1. Obtain explicit user confirmation before merging.
+2. Obtain separate explicit user confirmation before running `git push` or deployment.
 
 ### 5. Manual Review Soft Gate
 

@@ -65,21 +65,21 @@ Read:
 
 Run the necessary validation for the current state before doing the full review.
 
-### 3. QA Review
+### 3. QA Review & Findings Ledger Verification
 
-Use the old QA reviewer discipline, adapted to 2.0:
+Use the senior QA reviewer discipline, adapted to DevFlow 2.0 and Blueprint quality gates:
 
 - **STRICT MANDATE (กฎเหล็ก Unit Test)**: ตรวจสอบว่าโค้ดใหม่หรือการแก้ไข Bug (ที่มี behavior change) มีการสร้างหรืออัปเดต Unit Test คู่กันมาด้วยหรือไม่ หากไม่มีให้ทำเครื่องหมายว่า FAIL ทันที
+- **EMPIRICAL PROOF CONTRACT (หลักฐานเชิงประจักษ์)**: ห้ามเคลมว่า "ผ่าน" หรือ "ทำงานได้" โดยไม่มีหลักฐานรูปธรรม — ต้องระบุ Command, Test Output, Route, Screenshot, หรือ Log จริงที่พิสูจน์ผลลัพธ์
+- **FINDINGS LEDGER STATE MACHINE (`findings.md`)**:
+  - ตรวจสอบ `devflow/context/findings.md`
+  - ตรวจสอบสถานะ: `open` ➔ `fixed` ➔ `closed` (เฉพาะการตรวจซ้ำใน `50-verify` เท่านั้นที่สามารถเลื่อนสถานะ `fixed` เป็น `closed` ได้)
+  - **P0/P1 HARD GATE**: หากพบ Finding ระดับ P0 หรือ P1 ในสถานะ `open` หรือ `fixed` ที่ยังไม่ได้ถูกแก้ไข/ตรวจซ้ำ ให้ตัดสินเป็น FAIL ทันที
+- **MANUAL TRY GUIDE**: สรุปขั้นตอนการทดสอบด้วยมือสำหรับมนุษย์ (Where to go, What to click, What to expect) ไว้อย่างชัดเจน
 - compare claimed implementation evidence against the spec, plan, diff, and test decisions before forming a verdict
-- correctness
-- readability
-- architecture (DIP, SRP, Loose Coupling)
-- security
-- performance
+- correctness, readability, architecture (DIP, SRP, Loose Coupling), security, and performance
 - test coverage (และตรวจสอบว่าไม่มีการ skip หรือ disable เทสต์)
-- test decision alignment
-- manual verification gaps
-- assumptions and scope discipline
+- test decision alignment and scope discipline
 
 Run project validation commands when available: lint, tests, typecheck, build, or targeted commands from the plan.
 
