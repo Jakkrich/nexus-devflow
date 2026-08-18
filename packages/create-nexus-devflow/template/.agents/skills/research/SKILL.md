@@ -30,12 +30,12 @@ Use `prototype` when the fastest reliable evidence is a runnable throwaway exper
 
 Preferred DevFlow 2.0 pairing:
 
-- from `/00-Discover`
-- from `/10-Define`
-- from `/20-Spec`
-- from `/50-Verify` when validating a claim or implementation choice
+- from `00-discover`
+- from `10-define`
+- from `20-spec`
+- from `50-verify` when validating a claim or implementation choice
 
-When invoked with a Discovery ID, link the research report to that discovery and return to `/00-Discover {discovery_id}` so Discover can synthesize the evidence and make the decision. Research must not allocate a Running ID.
+When invoked with a Discovery ID, link the research report to that discovery and return to `00-discover {discovery_id}` so Discover can synthesize the evidence and make the decision. Research must not allocate a Running ID.
 
 ---
 
@@ -125,19 +125,19 @@ Research whether this API version is compatible
 
 - Classification: Companion command
 - Mainline status: Not a numbered stage
-- Typical entry points: `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`
+- Typical entry points: `00-discover`, `10-define`, `20-spec`, `30-plan`
 - Typical handoff targets: return to the stage that asked for the evidence
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/research.template.md`
-- Related commands: `/00-Discover`, `/10-Define`, `/20-Spec`, `/30-Plan`, `Spec-Research`, `Agent`
+- Related commands: `00-discover`, `10-define`, `20-spec`, `30-plan`, `Spec-Research`, `Agent`
 - Support skills: `prototype`, `spec-research`, `competitor-analysis`, `insight-capture`
 
 ## Next Workflow Recommendation
 
-- Default: return to the stage that asked for evidence; for discovery-owned research this is `/00-Discover {discovery_id}`
-- Common routes: `/10-Define`, `/20-Spec`, `/30-Plan`, or `/50-Verify`
+- Default: return to the stage that asked for evidence; for discovery-owned research this is `00-discover {discovery_id}`
+- Common routes: `10-define`, `20-spec`, `30-plan`, or `50-verify`
 - Alternate: `Brainstorm` if the research opens multiple strategic options
 

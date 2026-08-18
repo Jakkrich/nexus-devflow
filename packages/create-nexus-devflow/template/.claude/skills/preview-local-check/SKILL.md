@@ -1,6 +1,6 @@
 ---
 name: preview-local-check
-description: "[Devflow] Manage local preview, smoke-check, and temporary runtime verification before formal verification. Use when implementation needs a quick visual or runtime check, when a reviewer needs a local URL, or when a change should be inspected before /50-Verify."
+description: "[Devflow] Manage local preview, smoke-check, and temporary runtime verification before formal verification. Use when implementation needs a quick visual or runtime check, when a reviewer needs a local URL, or when a change should be inspected before 50-verify."
 ---
 
 # Preview Local Check
@@ -18,8 +18,8 @@ Use it to:
 
 ## When to Use
 
-- During `/40-Implement` when a quick runtime check is useful
-- During `/50-Verify` when the change needs visual or interactive confirmation
+- During `40-implement` when a quick runtime check is useful
+- During `50-verify` when the change needs visual or interactive confirmation
 - When a reviewer asks for a local preview URL
 
 Do not use this skill as a replacement for test evidence, verification evidence, or release readiness.
@@ -50,8 +50,8 @@ Always report:
 
 ### 4. Route Back
 
-- return to `/50-Verify` when preview confirms the change is ready for formal checks
-- return to `/40-Implement` when preview reveals implementation issues
+- return to `50-verify` when preview confirms the change is ready for formal checks
+- return to `40-implement` when preview reveals implementation issues
 - use `Debug` when the preview failure needs RCA
 
 ## Output

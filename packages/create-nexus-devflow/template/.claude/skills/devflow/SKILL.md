@@ -9,14 +9,14 @@ Use this skill to guide the user on what to do next, inspect current workspace s
 
 ## Input
 
-- **No argument (`devflow`, `/devflow`, `$devflow`, or `status`)**: Inspect current workspace state (active run in `devflow/runs/` or `devflow/context/current-stage.md`, active discovery in `devflow/discoveries/`, open findings in `devflow/context/findings.md`, and project overview in `devflow/context/project-overview.md`) and recommend the exact next action.
+- **No argument (`devflow`, `devflow`, `$devflow`, or `status`)**: Inspect current workspace state (active run in `devflow/runs/` or `devflow/context/current-stage.md`, active discovery in `devflow/discoveries/`, open findings in `devflow/context/findings.md`, and project overview in `devflow/context/project-overview.md`) and recommend the exact next action.
 - **With user request (`devflow "<request>"`)**: Classify the user's intent and guide them to the matching DevFlow 2.0 stage or companion command path.
 
 ## Workspace State Inspection
 
 When invoked without an argument (or when determining the next step), inspect:
 
-1. **Project Setup Baseline**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`. If they are empty or default placeholders, recommend `/onboard` (for fresh projects) or `/adopt` (for existing codebases).
+1. **Project Setup Baseline**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`. If they are empty or default placeholders, recommend `onboard` (for fresh projects) or `adopt` (for existing codebases).
 2. **Active Delivery Run**: Read `devflow/context/current-stage.md` and check `devflow/runs/{RUNNING_ID}/` for active artifacts (`10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-report.md`, `70-release.md`).
 3. **Active Discovery**: Check `devflow/discoveries/` for open discovery notes.
 4. **Audit Findings Ledger**: Check `devflow/context/findings.md` for open high-severity findings.
@@ -24,15 +24,15 @@ When invoked without an argument (or when determining the next step), inspect:
 ### State-Based Recommendation Rules
 
 - If context is empty/unconfigured -> Recommend `onboard` (for fresh project) or `adopt` (for brownfield codebase).
-- If a run is at `10-define.md` -> Recommend `20-spec {RUNNING_ID}` (or `/20-spec`, `$20-spec`, `spec`).
-- If a run is at `20-spec.md` -> Recommend `30-plan {RUNNING_ID}` (or `/30-plan`, `$30-plan`, `plan`).
-- If a run is at `30-plan.md` -> Recommend `40-implement {RUNNING_ID}` (or `/40-implement`, `$40-implement`, `implement`).
+- If a run is at `10-define.md` -> Recommend `20-spec {RUNNING_ID}` (or `20-spec`, `$20-spec`, `spec`).
+- If a run is at `20-spec.md` -> Recommend `30-plan {RUNNING_ID}` (or `30-plan`, `$30-plan`, `plan`).
+- If a run is at `30-plan.md` -> Recommend `40-implement {RUNNING_ID}` (or `40-implement`, `$40-implement`, `implement`).
 - If a run is at `40-implement.md` with incomplete tasks -> Recommend `40-implement {RUNNING_ID}`.
-- If a run is at `40-implement.md` with all tasks done -> Recommend `50-verify {RUNNING_ID}` (or `/50-verify`, `$50-verify`, `verify`).
+- If a run is at `40-implement.md` with all tasks done -> Recommend `50-verify {RUNNING_ID}` (or `50-verify`, `$50-verify`, `verify`).
 - If a run passed `50-verify.md` -> Recommend `60-report {RUNNING_ID}` then `70-release {RUNNING_ID}`.
 - If no run is active and user wants to explore an idea -> Recommend `00-discover` (or `discover`, `Brainstorm`).
 - If no run is active and open P0/P1 findings exist -> Recommend `security-review` or `debug`.
-- If user asks to check system health or configuration -> Recommend `doctor` (or `/doctor`, `$doctor`).
+- If user asks to check system health or configuration -> Recommend `doctor` (or `doctor`, `$doctor`).
 
 ## Intent Classification & Skill Routing
 
@@ -71,25 +71,25 @@ When the user specifies a request, map it to the matching DevFlow 2.0 stage or c
 Always provide a clean summary of available Nexus-DevFlow skills grouped by lifecycle stage:
 
 ### 1. Mainline Lifecycle Stages (Linear Order)
-- `00-discover` (`discover`, `/00-discover`, `$00-discover`) - Explore request, route inquiries, go/no-go under Discovery ID
-- `10-define` (`define`, `/10-define`, `$10-define`) - Lock delivery boundaries and allocate Running ID (`devflow/runs/{ID}`)
-- `20-spec` (`spec`, `/20-spec`, `$20-spec`) - Formalize markdown-first specifications and acceptance criteria
-- `30-plan` (`plan`, `/30-plan`, `$30-plan`) - Transform spec into executable task breakdown with test decisions
-- `40-implement` (`implement`, `/40-implement`, `$40-implement`) - Execute planned tasks incrementally with evidence
-- `50-verify` (`verify`, `/50-verify`, `$50-verify`) - Senior QA review, validation checks, and pass/fail gate
-- `60-report` (`report`, `/60-report`, `$60-report`) - Generate standardized markdown and HTML summary report
-- `70-release` (`release`, `/70-release`, `$70-release`) - Package verified work for PR merge or deployment
+- `00-discover` (`discover`, `00-discover`, `$00-discover`) - Explore request, route inquiries, go/no-go under Discovery ID
+- `10-define` (`define`, `10-define`, `$10-define`) - Lock delivery boundaries and allocate Running ID (`devflow/runs/{ID}`)
+- `20-spec` (`spec`, `20-spec`, `$20-spec`) - Formalize markdown-first specifications and acceptance criteria
+- `30-plan` (`plan`, `30-plan`, `$30-plan`) - Transform spec into executable task breakdown with test decisions
+- `40-implement` (`implement`, `40-implement`, `$40-implement`) - Execute planned tasks incrementally with evidence
+- `50-verify` (`verify`, `50-verify`, `$50-verify`) - Senior QA review, validation checks, and pass/fail gate
+- `60-report` (`report`, `60-report`, `$60-report`) - Generate standardized markdown and HTML summary report
+- `70-release` (`release`, `70-release`, `$70-release`) - Package verified work for PR merge or deployment
 
 ### 2. Public Companion Commands
-- `devflow` (`status`, `/devflow`, `$devflow`) - Guide, state inspector, and intent router
-- `onboard` (`/onboard`, `$onboard`) - Baseline stack setup for freshly scaffolded projects
-- `adopt` (`/adopt`, `$adopt`) - Survey and bootstrap DevFlow into existing brownfield projects
-- `doctor` (`/doctor`, `$doctor`) - Read-only health check for setup, scripts, and workflow drift
-- `try` (`/try`, `$try`) - Step-by-step human manual QA review guide (where to go, what to click, what to expect)
-- `rollback` (`/rollback`, `$rollback`) - Safe feature/run reversal planner with dependency risk analysis
-- `ci` (`/ci`, `$ci`) - Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup
-- `brief` (`/brief`, `$brief`) - Read-only scope, dependency, and size pre-briefing before speccing
-- `autopilot` (`/autopilot`, `$autopilot`) - Optional bounded autonomous loop (spec -> plan -> implement -> verify -> report)
+- `devflow` (`status`, `devflow`, `$devflow`) - Guide, state inspector, and intent router
+- `onboard` (`onboard`, `$onboard`) - Baseline stack setup for freshly scaffolded projects
+- `adopt` (`adopt`, `$adopt`) - Survey and bootstrap DevFlow into existing brownfield projects
+- `doctor` (`doctor`, `$doctor`) - Read-only health check for setup, scripts, and workflow drift
+- `try` (`try`, `$try`) - Step-by-step human manual QA review guide (where to go, what to click, what to expect)
+- `rollback` (`rollback`, `$rollback`) - Safe feature/run reversal planner with dependency risk analysis
+- `ci` (`ci`, `$ci`) - Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup
+- `brief` (`brief`, `$brief`) - Read-only scope, dependency, and size pre-briefing before speccing
+- `autopilot` (`autopilot`, `$autopilot`) - Optional bounded autonomous loop (spec -> plan -> implement -> verify -> report)
 - `goal` - Route broad goals before Discovery
 - `brainstorm` - Ideate without allocating running IDs
 - `research` - Conduct codebase or web research

@@ -25,7 +25,7 @@ When routing to support skills, follow `docs/skill-selection-policy.md`.
 
 ## Timeline Stages
 
-`/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release`
+`00-discover -> 10-define -> 20-spec -> 30-plan -> 40-implement -> 50-verify -> 60-report -> 70-release`
 
 ## Public Companion Commands
 
@@ -66,14 +66,14 @@ Use these agent mappings when expert judgment is the best next step:
 
 | User State | Recommended Route |
 |---|---|
-| new request, vague or clear | `/00-Discover`; it selects support inquiry and owns the delivery decision |
-| approved discovery needs one or more delivery boundaries | `/10-Define {discovery_id}` |
-| needs requirements and acceptance criteria | `/20-Spec` |
-| has a stable spec and needs execution plan | `/30-Plan` |
-| needs implementation work | `/40-Implement` |
-| needs testing, review, or validation evidence | `/50-Verify` |
-| needs packaging, commit, PR, or release handling | `/70-Release` |
-| needs the final summary or handoff narrative | `/60-Report` |
+| new request, vague or clear | `00-discover`; it selects support inquiry and owns the delivery decision |
+| approved discovery needs one or more delivery boundaries | `10-define {discovery_id}` |
+| needs requirements and acceptance criteria | `20-spec` |
+| has a stable spec and needs execution plan | `30-plan` |
+| needs implementation work | `40-implement` |
+| needs testing, review, or validation evidence | `50-verify` |
+| needs packaging, commit, PR, or release handling | `70-release` |
+| needs the final summary or handoff narrative | `60-report` |
 
 ## Routing Heuristics
 
@@ -97,9 +97,9 @@ Use these agent mappings when expert judgment is the best next step:
 
 If `grill-with-docs` is available in the current environment, prefer it as an optional internal support skill for:
 
-- `/10-Define` when scope or terminology is unstable
-- `/20-Spec` when acceptance criteria or rules are ambiguous
-- `/30-Plan` when architecture or verification choices are still reversible but unclear
+- `10-define` when scope or terminology is unstable
+- `20-spec` when acceptance criteria or rules are ambiguous
+- `30-plan` when architecture or verification choices are still reversible but unclear
 
 Do not use deep questioning by default in every stage. Collect only the information that affects the current Timeline-stage decision.
 
@@ -111,9 +111,9 @@ Do not use deep questioning by default in every stage. Collect only the informat
 
 If `grill-with-docs` is available in the current environment, prefer it as an optional internal support skill for:
 
-- `/10-Define` when scope or terminology is unstable
-- `/20-Spec` when acceptance criteria or rules are ambiguous
-- `/30-Plan` when architecture or verification choices are still reversible but unclear
+- `10-define` when scope or terminology is unstable
+- `20-spec` when acceptance criteria or rules are ambiguous
+- `30-plan` when architecture or verification choices are still reversible but unclear
 
 Do not use deep questioning by default in every stage. Collect only the information that affects the current stage decision.
 
@@ -145,18 +145,18 @@ Key conflict defaults:
 | `grilling` vs `grill-with-docs` | `grill-with-docs` when a codebase or durable docs matter |
 | `grill-with-docs` vs `domain-modeling` | `grill-with-docs` interviews; `domain-modeling` records confirmed glossary terms or ADRs |
 | `to-prd` vs `PRD` | `PRD` owns the public surface; `to-prd` is an internal synthesis method |
-| `to-issues` vs `/30-Plan` | `/30-Plan` owns work breakdown; `to-issues` packages slices when issue tracker output is needed |
-| `implement` vs `/40-Implement` | `/40-Implement` owns implementation |
-| `review` vs `/50-Verify` | `/50-Verify` owns verification; `review` is one lane |
+| `to-issues` vs `30-plan` | `30-plan` owns work breakdown; `to-issues` packages slices when issue tracker output is needed |
+| `implement` vs `40-implement` | `40-implement` owns implementation |
+| `review` vs `50-verify` | `50-verify` owns verification; `review` is one lane |
 
 ## Examples
 
 | User Request | Route |
 |---|---|
-| "I have an idea but not the shape yet" | `/00-Discover`, likely `Brainstorm`, then return to Discover |
-| "Turn this stable new goal into requirements" | `/00-Discover`, then `/10-Define {discovery_id}` before `/20-Spec {running_id}` |
-| "Fix this newly reported broken auth flow" | `/00-Discover`, likely `Debug`, then return to Discover before Define |
-| "Review this implementation for risks" | `/50-Verify` or `Agent code-reviewer ...` |
+| "I have an idea but not the shape yet" | `00-discover`, likely `Brainstorm`, then return to Discover |
+| "Turn this stable new goal into requirements" | `00-discover`, then `10-define {discovery_id}` before `20-spec {running_id}` |
+| "Fix this newly reported broken auth flow" | `00-discover`, likely `Debug`, then return to Discover before Define |
+| "Review this implementation for risks" | `50-verify` or `Agent code-reviewer ...` |
 | "Install or upgrade Nexus-DevFlow on this machine" | `Check-For-Updates` |
 | "Help me figure out which command to use" | `Help` |
 
