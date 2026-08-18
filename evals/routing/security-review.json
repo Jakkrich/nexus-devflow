@@ -1,10 +1,10 @@
 {
   "skill": "security-review",
-  "description": "High-severity security code review for folders, projects, files, or diffs with English Markdown output contract.",
+  "description": "\"[Devflow] Security review, vulnerability scanner, and code hardening. Audits for OWASP vulnerabilities, secrets, injections, and auth flaws.\"",
   "positive": [
     "run security-review skill",
     "invoke /security-review command",
-    "use security-review for high severity security code review folders projects files",
+    "use security-review for devflow security review vulnerability scanner code hardening audits",
     "apply security-review guidance"
   ],
   "negative": [

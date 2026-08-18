@@ -1,10 +1,10 @@
 {
   "skill": "agent",
-  "description": "Invoke Agent - Run a specialist persona on a file, folder, stage artifact, or codebase concern.",
+  "description": "\"[Devflow] Invoke specialist persona or role-based agent on a target file, folder, stage artifact, or concern.\"",
   "positive": [
     "run agent skill",
     "invoke /agent command",
-    "use agent for invoke agent specialist persona file folder stage artifact",
+    "use agent for devflow invoke specialist persona role based agent target",
     "apply agent guidance"
   ],
   "negative": [

@@ -1,10 +1,10 @@
 {
   "skill": "nextjs-react-expert",
-  "description": "React and Next.js performance optimization from Vercel Engineering. Use when building React components, optimizing performance, eliminating waterfalls, reducing bundle size, reviewing code for performance issues, or implementing server/client-side optimizations.",
+  "description": "\"[Devflow] React and Next.js performance optimization from Vercel Engineering. Use when building React components, optimizing performance, eliminating waterfalls, reducing bundle size, reviewing code for performance issues, or implementing server/client-side optimizations.\"",
   "positive": [
     "run nextjs-react-expert skill",
     "invoke /nextjs-react-expert command",
-    "use nextjs-react-expert for react next performance optimization from vercel engineering when",
+    "use nextjs-react-expert for devflow react next performance optimization from vercel engineering",
     "apply nextjs-react-expert guidance"
   ],
   "negative": [

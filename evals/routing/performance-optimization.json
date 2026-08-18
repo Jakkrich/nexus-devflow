@@ -1,10 +1,10 @@
 {
   "skill": "performance-optimization",
-  "description": "Optimizes application performance. Use when performance requirements exist, when you suspect performance regressions, or when Core Web Vitals or load times need improvement. Use when profiling reveals bottlenecks that need fixing.",
+  "description": "\"[Devflow] Optimizes application performance. Use when performance requirements exist, when you suspect performance regressions, or when Core Web Vitals or load times need improvement. Use when profiling reveals bottlenecks that need fixing.\"",
   "positive": [
     "run performance-optimization skill",
     "invoke /performance-optimization command",
-    "use performance-optimization for optimizes application performance when performance requirements exist when",
+    "use performance-optimization for devflow optimizes application performance when performance requirements exist",
     "apply performance-optimization guidance"
   ],
   "negative": [

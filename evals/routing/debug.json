@@ -1,10 +1,10 @@
 {
   "skill": "debug",
-  "description": "Debug workflow",
+  "description": "\"[Devflow] Root cause investigation and diagnostic loop before or during implementation without editing code. Use when encountering broken behavior, test failures, or bugs.\"",
   "positive": [
     "run debug skill",
     "invoke /debug command",
-    "use debug for debug workflow",
+    "use debug for devflow root cause investigation diagnostic loop before during",
     "apply debug guidance"
   ],
   "negative": [

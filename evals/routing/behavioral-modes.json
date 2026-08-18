@@ -1,10 +1,10 @@
 {
   "skill": "behavioral-modes",
-  "description": "AI operational modes (brainstorm, implement, debug, review, teach, ship, orchestrate). Use to adapt behavior based on task type.",
+  "description": "\"[Devflow] AI operational modes (brainstorm, implement, debug, review, teach, ship, orchestrate). Use to adapt behavior based on task type.\"",
   "positive": [
     "run behavioral-modes skill",
     "invoke /behavioral-modes command",
-    "use behavioral-modes for operational modes brainstorm implement debug review teach ship",
+    "use behavioral-modes for devflow operational modes brainstorm implement debug review teach",
     "apply behavioral-modes guidance"
   ],
   "negative": [
