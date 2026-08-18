@@ -87,8 +87,9 @@ Explain:
 - what problem was addressed
 - what direction was chosen
 - what was implemented
-- how it was verified
+- how it was verified (พร้อมบันทึกสถานะ Findings Ledger ใน `devflow/context/findings.md`)
 - how checklist progress moved across the run
+- **Manual Try Guide**: สรุปขั้นตอนการทดสอบสำหรับมนุษย์ ("Where to go", "What to click", "What to expect")
 - what approval or review state remained at each important gate
 - what the release recommendation is
 - what follow-up items still exist
