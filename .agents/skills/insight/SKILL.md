@@ -1,131 +1,42 @@
----name: insight
-
-description: "[Devflow] Extract reusable lessons, patterns, file insights, and post-mortem learning from completed work."
+---
+name: insight
+description: "[Devflow] Extract reusable lessons, architectural patterns, post-mortem incident learning, and token optimizations from completed work."
 ---
 
-# Phase 54: Insight Extraction
+# Insight Extraction & Post-Mortem Learning
 
-## Target: $ARGUMENTS
+## Overview
 
-Use this workflow after implementation, QA, human approval, PR review, or a debugging session to preserve useful knowledge for future work.
+This is the insight and knowledge extraction master skill for Nexus-DevFlow. It captures reusable engineering lessons, architectural patterns, gotchas, post-mortem incident analyses, and token-efficiency notes from completed implementation and verification work.
 
-Primary behavior now lives in the `insight-capture` skill. Keep this workflow as the compatibility wrapper and knowledge-capture entry point.
+**9arm Post-Mortem Pattern**:
+```text
+What Broke ➔ Business Impact ➔ Root Cause ➔ Fix Evidence ➔ Prevention & Guardrails
+```
 
-## Prompt Source
+---
 
-Adapted from:
+## 1. Types of Knowledge Extracted
 
-- `insight_extractor.md`
+1. **Architectural Patterns**: Reusable structural patterns, data transformations, or component designs.
+2. **Gotchas & Hidden Invariants**: Subtle platform bugs, async timing issues, ORM quirks, or browser edge cases.
+3. **Incident Post-Mortems**: Rigorous root cause analysis and why tests/checks failed to catch the bug initially.
+4. **Context & Token Optimization**: Notes on avoidable context reading or redundant artifact parsing.
 
-Additional credited discipline when the source work is a bug, regression, or incident:
+---
 
-- `.agents/skills/9arm-skills/post-mortem/SKILL.md`
-- Source pack: `9arm-skills`
-- Credit: `thananon/9arm-skills`
-- Upstream: https://github.com/thananon/9arm-skills
-- Adapted for: Antigravity IDE / Nexus-DevFlow
+## 2. Process & Recording Destinations
 
-## Process
+1. **Load Evidence**: Review `git diff`, `40-implement.md`, `50-verify.md`, or test logs.
+2. **Distill Insights**: Formulate clear, actionable, non-generic takeaways.
+3. **Save to Persistent Memory**:
+   - Save project-wide engineering lessons to `devflow/context/lessons.md` (or `knowledge/lessons.md`).
+   - Feed run-specific learnings into `60-report.md` and `70-release.md`.
 
-### 1. Load Evidence
-
-Inspect the available evidence:
-
-- git diff or recent commits
-- `40-implement.md`
-- `50-verify.md`
-- `70-release.md`
-- `60-report.md`
-- modified files
-- human feedback or PR comments
-
-### 2. Extract Reusable Knowledge
-
-Capture only actionable knowledge:
-
-- file purpose and important changes
-- reusable patterns
-- gotchas and triggers
-- approach outcome
-- alternatives tried
-- context or token usage notes that explain avoidable overhead
-- recommendations for future sessions
-
-Avoid generic notes that do not help future work.
-
-For bug, regression, or incident work, apply the `post-mortem` lens only after fix and validation evidence exist:
-
-- what broke
-- impact
-- reliable repro or timeline
-- root cause
-- fix
-- validation evidence
-- why it slipped through
-- prevention or follow-up
-
-### 3. Save Or Route Insights
-
-Use the smallest durable destination:
-
-- stage artifacts when the lesson is specific to the current run
-- `devflow/lessons.md` for project-wide lessons
-- `60-report` for final narrative communication before release
-- `70-release` for release-facing notes and execution details
-
-For token/context learning, prefer the smallest concrete note:
-
-- what context was loaded unnecessarily
-- which file, artifact, or agent handoff caused repeated reading
-- what should be passed as minimal context next time
-- exact token counts only when they are available from the runtime or provider
-
-When updating `devflow/lessons.md`, inspect `.agent/resources/schemas/lessons.template.md` first and replace any placeholder text with concrete incident facts, insight, prevention, and follow-up action.
-
-If task logs are appropriate:
-
-If this insight must be tied back to the running work item, record it in `50-verify.md`, `60-report.md`, `70-release.md`, or `devflow/lessons.md` rather than a legacy task log command.
-
-## Output
-
-Return:
-
-- file insights
-- patterns discovered
-- gotchas discovered
-- approach outcome
-- context usage notes
-- recommendations
-- where the insight was recorded or should be recorded
-
-If `post-mortem` was applied, include a short `Source Discipline` note crediting `9arm-skills/post-mortem`.
+---
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Companion command
-- Mainline status: Knowledge capture command, not a numbered stage
-- Typical entry points: after `Debug`, `50-verify`, incident work, or review findings
-- Typical handoff targets: `Wiki`, `60-report`, `Help`
-
-## Sources
-
-- `AGENTS.md`
-- `.agent/resources/schemas/lessons.template.md`
-- Related commands: `Debug`, `50-verify`, `Wiki`, `60-report`, `Help`
-
-## Next Workflow Recommendation
-
-- **Primary**: `Wiki project ingest {source}` when the insight is reusable project knowledge.
-- **Why**: `Insight` extracts lessons; `Wiki` compiles selected lessons into navigable knowledge pages.
-- **Alternatives**:
-  - `60-report {ID}` - choose this when the insight should become the final communication summary before release.
-  - `70-release {ID}` - choose this when the insight should shape release packaging or execution details.
-  - `Help {ID}` - choose this when the next route is unclear.
-
-## Wiki Update Recommendation
-
-- **Needed**: `yes` for reusable lessons, gotchas, decisions, validated root causes, or token/context optimizations.
-- **Scope**: `project` for target-project lessons, `framework` for DevFlow workflow lessons.
-- **Reason**: Insight extraction is the safest handoff point for wiki compilation.
-- **Suggested Command**: `Wiki project ingest {source}`
-
+- **Classification**: Companion command & Continuous learning
+- **Mainline integration**: Invoked after `50-verify` or `60-report`.
+- **Handoff**: `60-report`, `70-release`

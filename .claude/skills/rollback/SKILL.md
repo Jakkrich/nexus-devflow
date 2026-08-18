@@ -103,6 +103,7 @@ Present the rollback plan to the user:
 ## Rules
 
 - **Preserve History**: Never delete run folders under `devflow/runs/`. Historical reports must remain intact.
+- **Update History Ledger**: When the rollback is completed and verified, update the target entry's status in `devflow/history/HISTORY.md` to `Rolled Back` with reference to the reversal commit.
 - **No Destructive Git Commands**: Never execute `git reset --hard HEAD~N` or `git push --force`. All reversals must be applied as forward commits.
 - **One Target Per Rollback**: Avoid bundling multiple unrelated rollbacks into one pass.
 - **Explicit Human Gate**: Always wait for user approval before applying any reverse diffs to code.

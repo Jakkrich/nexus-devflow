@@ -3,119 +3,40 @@ name: preview
 description: "[Devflow] Local preview server management, smoke-check, and temporary runtime inspection before formal verification."
 ---
 
-﻿---
-description: Preview management and temporary runtime checks. Transitional compatibility path for the Preview companion command in DevFlow 2.0.
----
+# Preview Management & Local Runtime Inspection
 
-# Preview Management
+## Overview
 
-## Usage
+This is the preview master skill for Nexus-DevFlow. It manages local development/preview servers (`npm run dev`, `npm run preview`, `vite`, `next dev`), handles port conflicts, and executes smoke checks before formal verification.
 
-```text
-Preview
-Preview start
-Preview stop
-Preview restart
-Preview check
-```
+## Usage & Sub-Commands
 
-This file keeps its old numeric path for migration compatibility.
-
-In DevFlow 2.0, `Preview` is a companion command, not a numbered mainline workflow.
-
-Primary behavior now lives in:
-
-```text
-.agents/skills/preview-local-check/SKILL.md
-```
-
-Treat this workflow file as a compatibility wrapper around that skill.
-
-Manage the local preview development server or temporary runtime check.
-
-Use it when:
-
-- the team wants a quick visual or runtime check before formal verification
-- implementation needs a local smoke check
-- a temporary render helps clarify what changed
-- a human reviewer needs something concrete to inspect before giving feedback
-
-Preferred DevFlow 2.0 pairing:
-
-- from `40-implement`
-- from `50-verify`
+- `/preview`         - Inspect current preview status and health
+- `/preview start`   - Start the local preview/dev server
+- `/preview stop`    - Stop the running server process
+- `/preview restart` - Restart the preview server
+- `/preview check`   - Perform runtime smoke check against `http://localhost:<port>`
 
 ---
 
-## Sub-commands
+## 1. Process & Runtime Management
 
-- `Preview` - show current preview status
-- `Preview start` - start the server
-- `Preview stop` - stop the server
-- `Preview restart` - restart the server
-- `Preview check` - run a health check
+1. **Detect Framework & Command**: Identify the project runtime (`npm run dev`, `vite preview`, `pnpm start`, `python -m http.server`).
+2. **Handle Port Conflicts**: Check if the standard port (3000, 5173, 8080) is occupied; auto-select fallback port or terminate stale background processes.
+3. **Health & Smoke Check**: Query local endpoint via HTTP GET to verify HTTP 200 OK and asset loading.
+4. **Report Status**:
+   ```markdown
+   ## Preview Status
+   - **URL**: `http://localhost:3000`
+   - **App Type**: Next.js / Vite / Node.js
+   - **Health Status**: `OK` (200 OK)
+   - **Console / Network**: Zero fatal runtime errors
+   ```
 
 ---
-
-## Internal Process
-
-`Preview` manages the local preview workflow using the `preview-local-check` skill plus any available preview automation or equivalent project-local commands.
-
-When handling preview operations:
-
-1. detect the correct project or server command path
-2. report the current state clearly
-3. handle port conflicts gracefully
-4. keep the action scoped to preview management, not broader deployment
-5. distinguish between preview success and full verification success
-
-Commands should use the nearest equivalent project-local preview command for the project, such as `npm run dev`, `npm run preview`, framework-specific local servers, or other runtime helpers that already exist in the target project.
-
-### Resolving Port Conflicts
-
-If the port is in use, offer options:
-
-1. start on a different port
-2. terminate the process on the existing port
-3. specify a custom port
-
-### Status Format
-
-When displaying status, clearly state:
-
-- URL
-- project path
-- app type
-- health status
-- notes about blockers, missing dependencies, or startup warnings
-
-Example summary:
-
-```markdown
-## Preview Status
-
-- **URL**: `http://localhost:3000`
-- **Project Path**: `[absolute path]`
-- **App Type**: `Next.js | FastAPI | Odoo | PHP | Other`
-- **Health Status**: `OK | Warning | Failed`
-- **Notes**: [port conflict, startup issue, missing dependency, or none]
-```
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Companion command
-- Mainline status: Not a numbered stage
-- Typical entry points: `40-implement`, `50-verify`, UI or runtime checking
-- Typical handoff targets: `50-verify`, `Debug`, `40-implement`
-
-## Sources
-
-- `AGENTS.md`
-- `.agents/skills/preview-local-check/SKILL.md`
-- Related commands: `40-implement`, `50-verify`, `Debug`
-
-## Next Workflow Recommendation
-
-- **Primary**: `50-verify` when preview confirms the change is ready for formal checks
-- **Alternative**: `40-implement` when preview exposed implementation work
-
+- **Classification**: Companion command & Runtime support
+- **Mainline stages**: `40-implement` (interactive visual check), `50-verify` (smoke test check)
+- **Handoff**: `50-verify`

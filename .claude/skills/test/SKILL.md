@@ -1,82 +1,94 @@
 ---
 name: test
-description: "[Devflow] Test execution, missing test generation, and coverage analysis across unit, integration, and smoke test suites."
+description: "[Devflow] Test-driven development, test generation, test execution, and coverage analysis across unit, integration, and smoke test suites."
 ---
 
-﻿---
-description: Test Generation and Execution - Generates missing tests, runs existing test suites, or checks test coverage for the project.
----
-# ๐งช Test Generation and Execution
+# Test-Driven Development, Generation & Execution
 
-## Usage: `/13-Test [target]`
+## Overview
 
-Generates missing tests, runs existing test suites, or checks test coverage for the project.
-
-Primary behavior now lives in:
+This is the comprehensive testing master skill for Nexus-DevFlow. It drives development with tests (TDD), handles test generation, execution, coverage analysis, and bug reproduction. Tests are proof — "seems right" is not done.
 
 ```text
-.agents/skills/test-execution-and-coverage/SKILL.md
+    RED                GREEN              REFACTOR
+ Write a test    Write minimal code    Clean up the
+ that fails  ──→  to make it pass  ──→  implementation  ──→  (repeat)
+      │                  │                    │
+      ▼                  ▼                    ▼
+   Test FAILS        Test PASSES         Tests still PASS
 ```
 
-Treat this workflow file as a compatibility wrapper around that skill.
+## Usage & Sub-Commands
+
+- `/test`                - Run all project test suites
+- `/test [file/feature]` - Generate tests for a specific target
+- `/test coverage`       - Show test coverage report
+- `/test watch`          - Run tests in watch mode
 
 ---
 
-## ๐ ๏ธ Sub-commands
+## 1. The TDD Cycle
 
-- `/13-Test`                - Run all tests
-- `/13-Test [file/feature]` - Generate tests for a specific target
-- `/13-Test coverage`       - Show test coverage report
-- `/13-Test watch`          - Run tests in watch mode
+### Step 1: RED — Write a Failing Test
+Write the test first. It must fail. A test that passes immediately proves nothing.
 
----
+### Step 2: GREEN — Make It Pass
+Write the minimum code to make the test pass. Avoid premature over-engineering.
 
-## ๐ฆ Internal Process
-
-### Scenario A: Generate Tests
-If the user requests tests for a target:
-1. **Analyze**: Identify functions, edge cases, and external dependencies.
-2. **Template Verification**: **MANDATORY:** Before generating the test plan, inspect `.agent/resources/schemas/test_report.template.md`, preserve its required layout, and replace placeholder text with concrete coverage, command output, failures, and gaps.
-3. **Generate Cases**: Develop Happy path, Error cases, Edge cases.
-4. **Write**: Implement the tests using the project's testing framework (Pytest, Jest, Vitest, etc.). Follow the `Arrange-Act-Assert` pattern and mock external dependencies.
-5. **Save Test Report**: Save the test plan and results to `devflow/reports/{date}-test-report-{target}.md` (where `{date}` is today's date in `YYYY-MM-DD` format and `{target}` is a slugified version of the file or feature name).
-
-### Scenario B: Execute Tests
-Use the project's native command (e.g., `npm test`, `pytest`) to run the tests and format the output clearly for the user. Highlight any failed tests with expected vs received values. Save the execution summary report matching the template to `devflow/reports/{date}-test-report-run.md` (where `{date}` is today's date in `YYYY-MM-DD` format).
+### Step 3: REFACTOR — Clean Up
+Improve code readability, naming, structure, and eliminate duplication while keeping tests green.
 
 ---
 
-## ๐ก๏ธ Key Principles
-- **Test behavior, not implementation.**
-- **One assertion per test** (when practical).
-- **Descriptive test names.**
-- **Arrange-Act-Assert pattern.**
-- **Save Report**: Always save the test plan or results to disk for persistent logging.
+## 2. The Prove-It Pattern (Bug Reproduction)
 
-## ๐“ Output Formats
+When fixing any defect, **do not attempt a fix without proving the bug exists first**:
 
-### For Test Generation
-Generate a summary indicating:
-- **Test Plan**: Table of Test Case, Type, Coverage (Happy path, error case, validation)
-- **Generated Tests**: File path and the code block
-- **Report Location**: Confirm the report has been written to the specified workspace path.
-- **Run command**: e.g. `npm test`
+```text
+Bug report arrives ➔ Write reproduction test (FAILS) ➔ Implement fix ➔ Test PASSES ➔ Guard regression
+```
 
-### For Test Execution
-Display an organized output listing Passed/Failed files, and explicitly show the expectation vs received outcome for failed assertions.
+---
+
+## 3. The Test Pyramid & Resource Sizes
+
+| Level | Size | Target % | Scope & Characteristics |
+| :--- | :--- | :--- | :--- |
+| **Unit** | Small | ~80% | Pure logic, in-memory, single process, milliseconds each |
+| **Integration** | Medium | ~15% | API boundaries, database interaction, component seams |
+| **E2E** | Large | ~5% | Critical user journeys, full workflows, browser automation |
+
+---
+
+## 4. Key Testing Principles & Best Practices
+
+1. **Test behavior, not implementation details**: Assert on output and state changes, not private method call sequences.
+2. **DAMP over DRY in tests**: Descriptive and meaningful test setup beats overly abstract shared helpers.
+3. **Arrange-Act-Assert**: Distinct setup, action, and verification phases in every test case.
+4. **Prefer real implementations & fakes over heavy mocks**: Mock only at boundaries where real dependencies are slow or non-deterministic.
+5. **One assertion concept per test**: Isolate test failure reasons clearly.
+
+---
+
+## 5. Browser Testing & Runtime Verification
+
+For browser and UI features, unit tests alone are insufficient:
+- **Console**: Zero errors and unhandled exceptions in production code.
+- **Network**: Accurate status codes, payload shapes, and CORS handling.
+- **DOM & Styles**: Verified layout rendering, accessibility tree, and responsive behaviors.
+
+---
+
+## 6. Test Generation & Persistent Execution Reports
+
+When generating or logging test runs during `40-implement` or `50-verify`:
+- Save summary reports to `devflow/reports/{date}-test-report-{slug}.md`
+- Include: Target, Test Cases (Happy Path, Error, Edge Cases), Pass/Fail statistics, and gaps/risks.
+
+---
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Companion command
-- Mainline status: Verification support command, not a numbered stage
-- Typical entry points: `40-implement`, `50-verify`, `Debug`
-- Typical handoff targets: `50-verify`, `Debug`, `QA-Orchestrate`
-
-## Sources
-
-- `AGENTS.md`
-- `.agents/skills/test-execution-and-coverage/SKILL.md`
-- `.agent/resources/schemas/test_report.template.md`
-- Related commands: `40-implement`, `50-verify`, `Debug`, `QA-Orchestrate`
-
-
+- **Classification**: Companion command & Engineering standard
+- **Mainline stages**: `30-plan` (TDD decisions), `40-implement` (TDD execution), `50-verify` (QA gate)
+- **Handoff**: `50-verify`, `Debug`, `autopilot`

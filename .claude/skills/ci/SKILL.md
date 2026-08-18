@@ -1,70 +1,36 @@
 ---
 name: ci
-description: "[Devflow] Set up automated GitHub Actions CI workflow (.github/workflows/verify.yml) aligned with project verify command."
+description: "[Devflow] CI/CD pipeline automation and GitHub Actions setup (.github/workflows/verify.yml). Automates quality gates, typechecks, tests, and build checks."
 ---
 
-# ci - Automated GitHub Actions Pipeline Setup
+# CI/CD Pipeline Automation & Quality Gates
 
-Where this sits in the workflow:
+## Overview
+
+This is the CI/CD and automation master skill for Nexus-DevFlow. It automates quality gates so that no change reaches production without passing static analysis, typechecking, tests, security audits, and builds.
 
 ```text
-onboard or adopt  ->  [ci]  ->  Verify locally  ->  GitHub Actions runs Verify on PR & Push
-(project setup)         (setup)    (same command)     (automated checks)
+PR / Push ➔ Lint & Typecheck ➔ Unit & Integration Tests ➔ Build Verification ➔ Security Audit
 ```
 
-This skill connects local verification with automated GitHub checks using **one shared Verify recipe**:
+---
 
-- **Verify is the recipe**: Runs the project's real checks (typecheck, tests, build) defined in `AGENTS.md`.
-- **GitHub Actions is the worker**: Executes the same recipe automatically on pull requests and pushes.
-- **Branch Protection / Ruleset is the gate**: Optionally requires the check to pass before merging.
+## 1. Shift-Left Quality Gate Pipeline
 
-This skill configures the workflow file. It **never pushes to remote, changes remote repository rulesets, or publishes releases** without explicit permission.
+1. **Static Analysis & Typecheck**: `tsc --noEmit`, `eslint`, `biome` (Catches syntax & type flaws in seconds).
+2. **Automated Tests**: Unit & Integration tests (`npm test`, `pytest`, `go test`).
+3. **Build Integrity**: `npm run build` (Ensures bundle compiles cleanly without warnings).
+4. **Security Hygiene**: `npm audit --audit-level=high` (Flags vulnerable dependencies).
 
-## Input
+---
 
-No argument is required. A preferred package manager or branch name can be optionally provided.
+## 2. GitHub Actions Setup (`.github/workflows/verify.yml`)
 
-## Step 1 - Inspect Project Setup (Read-Only)
-
-Inspect the repository without modifying files:
-
-1. **Commands in `AGENTS.md`**: Look for existing `Verify`, `Test`, `Build`, and `Dev` commands.
-2. **Project Manifests**: `package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `Cargo.toml`, etc.
-3. **Lockfiles & Package Manager**: `pnpm-lock.yaml` (pnpm), `package-lock.json` (npm), `yarn.lock` (yarn), `bun.lockb` (bun), `poetry.lock` (poetry), `Cargo.lock` (cargo).
-4. **Runtime Versions**: `.node-version`, `.nvmrc`, `package.json` engines, `.python-version`.
-5. **Existing Workflows**: Inspect `.github/workflows/` to check if a CI workflow already exists.
-6. **Git Default Branch**: Detect `main` or `master`.
-
-If a healthy and matching workflow already exists, report that CI is already in place and stop.
-
-## Step 2 - Define The Single Verify Command
-
-Build one combined Verify command from actual checks that exist in the project, in this standard order:
-
-1. **Typecheck** (e.g. `tsc --noEmit`, `mypy`, `pyright`, `go vet`)
-2. **Tests** (e.g. `npm test`, `pytest`, `go test ./...`, `cargo test`) - only if real tests exist
-3. **Build** (e.g. `npm run build`, `cargo build`)
-
-For JavaScript/TypeScript projects, ensure a `verify` or `check` script exists in `package.json` (or combine existing scripts: e.g. `npm run check:static && npm test && npm run build`).
-
-Record the exact command in the Commands section of `AGENTS.md`:
-
-```markdown
-## Commands
-- Verify: `npm run check` (or detected verify command)
-```
-
-## Step 3 - Generate `.github/workflows/verify.yml`
-
-Create `.github/workflows/verify.yml` with security and stability best practices:
-
-- **Trigger**: Pull requests to default branch + Pushes to default branch.
-- **Permissions**: Set least privilege `permissions: contents: read`.
-- **Concurrency**: Cancel in-progress runs on the same PR branch.
-- **Lockfile-Safe Install**: Use `npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable`, or `cargo --locked`.
-- **Exact Verify Step**: Run the exact Verify command from `AGENTS.md`.
-
-### Standard GitHub Actions Template (Node.js Example):
+When setting up or updating CI:
+- **Trigger**: Pull requests and pushes to `main` / `master`.
+- **Permissions**: Enforce least privilege (`permissions: contents: read`).
+- **Concurrency**: Cancel stale in-progress runs on the same PR.
+- **Deterministic Install**: Use `npm ci` or `--frozen-lockfile`.
 
 ```yaml
 name: Verify
@@ -90,7 +56,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Runtime
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -103,29 +69,10 @@ jobs:
         run: npm run check
 ```
 
-## Step 4 - Verify Locally
+---
 
-Execute the Verify command locally to confirm that it succeeds on clean code before recommending it:
+## Relationship To DevFlow 2.0
 
-```bash
-npm run check
-```
-
-If local verification fails, report the failing check and assist in resolving it before claiming CI readiness.
-
-## Step 5 - Summary & Handoff
-
-Output a concise summary:
-
-- **Verify Command**: Documented command in `AGENTS.md`.
-- **Workflow File**: `.github/workflows/verify.yml` (created/updated).
-- **Trigger Events**: `pull_request` & `push`.
-- **Local Test**: Result of local execution.
-- **Next Steps**: Advise user to commit and push the workflow to activate GitHub Actions.
-
-## Rules
-
-- **Preserve Existing CI**: Never overwrite existing custom workflows without explicit user consent.
-- **No Dummy Tests**: Do not invent fake test commands or install unrequested test runners.
-- **Least Privilege Security**: Always specify `permissions: contents: read`.
-- **No Auto-Push**: Stop at local file creation; do not push to remote automatically.
+- **Classification**: Companion command & Automated testing infrastructure
+- **Mainline integration**: Invoked via `/ci` during `onboard` or `adopt`.
+- **Handoff**: `50-verify`, `70-release`

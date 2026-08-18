@@ -1,55 +1,71 @@
 ---
 name: review
-description: "[Devflow] Two-axis review for changed work. Use inside 50-verify or 70-release when a branch, PR, or work-in-progress diff needs standards and spec review."
+description: "[Devflow] Multi-axis code and PR review. Reviews diffs against standards, specs, correctness, security, performance, and 9arm scrutinize discipline."
 ---
 
-# Review
+# Code Review, Quality & PR Analysis
 
-Use this support skill as one verification lane. `50-verify` owns validation evidence; this skill reviews a diff from two separate angles.
+## Overview
 
-## Axes
+This is the comprehensive review master skill for Nexus-DevFlow. It evaluates code modifications, local diffs, branches, and pull requests across multiple dimensions before merging or releasing. Every change gets reviewed before merge — no exceptions.
 
-- **Standards**: does the change follow documented repo conventions?
-- **Spec**: does the change implement the originating issue, PRD, spec, or stage artifact?
+**The approval standard**: Approve a change when it definitely improves overall code health and satisfies the specification, even if it isn't perfect.
 
-Keep the axes separate so one does not hide the other.
+---
 
-## Process
+## 1. The Scrutinize Discipline (9arm Review Pattern)
 
-1. Pin the fixed point.
-   - Use the user-supplied commit, branch, tag, or merge-base.
-   - If none is supplied, default to the active branch merge-base with `main` when available.
-   - Confirm the diff is non-empty.
+Before jumping into line-by-line comments, apply the 4-step Scrutiny check:
+1. **Intent Check**: What problem is this change truly trying to solve? Is this the right problem?
+2. **Safer / Smaller Alternative**: Could this be achieved with fewer lines, zero new dependencies, or less complexity?
+3. **Runtime Path Trace**: Trace the execution path through inputs, error handling, async boundaries, and state mutations.
+4. **Precision & Evidence**: Does the code contain unproven assumptions or missing test evidence?
 
-2. Identify the spec source.
-   - Prefer `devflow/runs/{ID}-*20-spec.md`, `30-plan.md`, issue brief, PRD, or explicit user path.
-   - If no spec exists, mark the Spec axis as skipped.
+---
 
-3. Identify standards sources.
-   - Look for repo docs such as `AGENTS.md`, `CONTRIBUTING.md`, coding standards, workflow docs, or stage contracts.
+## 2. The Five-Axis Review Framework
 
-4. Review standards.
-   - Cite the violated standard.
-   - Distinguish hard violations from judgment calls.
-   - Skip issues that tooling already enforces unless tooling is missing.
+Every review evaluates code across these 5 core axes:
 
-5. Review spec.
-   - Report missing or partial requirements.
-   - Report scope creep.
-   - Report implemented behavior that appears wrong against the spec.
+```text
+┌──────────────────────────────────────────────────────────┐
+│                 FIVE-AXIS CODE REVIEW                    │
+├──────────────┬───────────────────────────────────────────┤
+│ 1. Correctness│ Logic, edge cases, error paths, races     │
+│ 2. Simplicity │ Readable, concise, no dead code, DAMP/DRY │
+│ 3. Architecture│ Boundaries, dependencies, design patterns │
+│ 4. Security   │ Input validation, auth, no secrets/XSS    │
+│ 5. Performance│ No N+1 queries, async I/O, memoization    │
+└──────────────┴───────────────────────────────────────────┘
+```
 
-6. Aggregate findings.
-   - Present `Standards` and `Spec` separately.
-   - Lead with concrete findings and file references.
-   - Record residual risk and skipped axes.
+---
 
-## Output
+## 3. Review Lenses & Finding Severities
 
-Return:
+Categorize all findings into actionable severities:
 
-- fixed point and diff scope
-- standards sources
-- spec source or skipped reason
-- findings by axis
-- worst issue per axis
-- recommended DevFlow route
+- **P0 (Critical Blocker)**: Security vulnerability, data loss, runtime crash, broken main functionality. (Blocks `70-release`)
+- **P1 (Major Blocker)**: Spec mismatch, broken error handling, severe regression risk. (Blocks `70-release`)
+- **P2 (Normal Improvement)**: Readability, missing edge-case test, minor performance optimization.
+- **P3 (Nit / Suggestion)**: Naming polish, optional refactor, comment clarity.
+
+---
+
+## 4. PR Review Process
+
+1. **Load Context**: Pin fixed point (merge-base with `main`), read spec (`20-spec.md`) and coding standards.
+2. **Review Standards vs. Spec**: Check adherence to project instructions (`AGENTS.md`) and acceptance criteria.
+3. **Validate Findings**: Ensure every finding is reproducible and points to specific files and line numbers.
+4. **Generate Report**: Save substantial review reports under:
+   ```text
+   devflow/runs/{ID}-{slug}/pr_review.md
+   ```
+
+---
+
+## Relationship To DevFlow 2.0
+
+- **Classification**: Companion command & Verification support
+- **Mainline stages**: `50-verify` (QA & Code Review lane), `70-release` (Pre-merge review)
+- **Handoff**: `40-implement` (for fixes), `50-verify`, `70-release`

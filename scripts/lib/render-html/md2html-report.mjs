@@ -5,9 +5,10 @@ import { escapeHtml, parseFrontmatter, renderInline } from './markdown.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..', '..', '..');
+const localTemplatePath = path.join(__dirname, 'template.html');
 const primaryTemplatePath = path.join(projectRoot, '.agents', 'skills', 'md2html', 'template.html');
 const fallbackTemplatePath = path.join(projectRoot, '.claude', 'skills', 'md2html', 'template.html');
-const templatePath = fs.existsSync(primaryTemplatePath) ? primaryTemplatePath : fallbackTemplatePath;
+const templatePath = fs.existsSync(localTemplatePath) ? localTemplatePath : (fs.existsSync(primaryTemplatePath) ? primaryTemplatePath : fallbackTemplatePath);
 
 const LABELS = {
   en: {
