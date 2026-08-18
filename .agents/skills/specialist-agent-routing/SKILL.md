@@ -76,13 +76,13 @@ Use `.agent/resources/schemas/agent_report.template.md` unless the invoking work
 
 Return to the owning step:
 
-- `/10-Define`
-- `/20-Spec`
-- `/30-Plan`
-- `/40-Implement`
-- `/50-Verify`
-- `/70-Release`
-- `/60-Report`
+- `10-define`
+- `20-spec`
+- `30-plan`
+- `40-implement`
+- `50-verify`
+- `70-release`
+- `60-report`
 - `PR-Review`
 - `Research`
 

@@ -48,11 +48,11 @@ The Boss first classifies the request into one of these paths:
 
 | Flow | Use When | Typical Next Step |
 | :--- | :--- | :--- |
-| DevFlow Mainline | New feature, bug, test, docs, migration, or refactor requests. | `/00-Discover`, which owns the delivery decision |
-| PRD / Spec Orchestration | Product ideas or requirement-heavy planning before a Discovery ID exists. | `/00-Discover`, likely routing to `PRD` |
-| Brainstorm Flow | Early ambiguous ideas that need options and tradeoff analysis. | `/00-Discover`, likely routing to `Brainstorm` |
-| Research Flow | External facts, docs, codebase evidence, or feasibility proof are needed. | `/00-Discover`, likely routing to `Research` |
-| RCA / Debug Flow | Failures, errors, regressions, or investigation-heavy bug reports. | `/00-Discover`, likely routing to `Debug` |
+| DevFlow Mainline | New feature, bug, test, docs, migration, or refactor requests. | `00-discover`, which owns the delivery decision |
+| PRD / Spec Orchestration | Product ideas or requirement-heavy planning before a Discovery ID exists. | `00-discover`, likely routing to `PRD` |
+| Brainstorm Flow | Early ambiguous ideas that need options and tradeoff analysis. | `00-discover`, likely routing to `Brainstorm` |
+| Research Flow | External facts, docs, codebase evidence, or feasibility proof are needed. | `00-discover`, likely routing to `Research` |
+| RCA / Debug Flow | Failures, errors, regressions, or investigation-heavy bug reports. | `00-discover`, likely routing to `Debug` |
 
 ## Process
 
@@ -124,22 +124,22 @@ Report:
 - Classification: Companion command
 - Mainline status: Not a numbered stage
 - Typical entry points: broad goals before a Discovery ID exists
-- Typical handoff target: `/00-Discover`, with a likely companion route recorded as guidance rather than executed outside Discover
+- Typical handoff target: `00-discover`, with a likely companion route recorded as guidance rather than executed outside Discover
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/scripts/goal-runner.mjs`
-- Related commands: `/00-Discover`, `Brainstorm`, `Research`, `PRD`, `Spec-Orchestrate`, `Debug`
+- Related commands: `00-discover`, `Brainstorm`, `Research`, `PRD`, `Spec-Orchestrate`, `Debug`
 
 ## Next Workflow Recommendation
 
 - **Primary**: the first command listed in `recommended_commands`
 - **Why**: `Goal` exists to route broad intent into the correct DevFlow 2.0 entry point
 - **Alternatives**:
-  - `/00-Discover "{goal}"` for all new work; Discover chooses Brainstorm, PRD, Research, Debug, or direct decision
-  - `/10-Define {discovery_id}` only after an approved Proceed decision
-  - `/20-Spec {running_id}` only for an existing approved delivery run
+  - `00-discover "{goal}"` for all new work; Discover chooses Brainstorm, PRD, Research, Debug, or direct decision
+  - `10-define {discovery_id}` only after an approved Proceed decision
+  - `20-spec {running_id}` only for an existing approved delivery run
 
 ## Wiki Update Recommendation
 

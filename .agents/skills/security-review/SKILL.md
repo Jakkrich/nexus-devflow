@@ -107,8 +107,8 @@ related_files: []
 
 ## 8. Next Allowed Command
 
-- `/40-Implement {running_id}` (if fail, for code remediation)
-- `/50-Verify {running_id}` (if pass, to verify execution correctness)
+- `40-implement {running_id}` (if fail, for code remediation)
+- `50-verify {running_id}` (if pass, to verify execution correctness)
 
 ## 9. Nexus Event
 
@@ -157,7 +157,7 @@ Evaluate high-severity risks including:
 
 - **Classification**: Companion command
 - **Mainline Status**: Not part of the linear Timeline. Can be run at any stage.
-- **Typical Entry Points**: Any stage, especially before `/50-Verify` or `/70-Release` to verify security health.
+- **Typical Entry Points**: Any stage, especially before `50-verify` or `70-release` to verify security health.
 
 ## Sources
 

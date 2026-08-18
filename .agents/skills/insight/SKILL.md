@@ -70,8 +70,8 @@ Use the smallest durable destination:
 
 - stage artifacts when the lesson is specific to the current run
 - `devflow/lessons.md` for project-wide lessons
-- `/60-Report` for final narrative communication before release
-- `/70-Release` for release-facing notes and execution details
+- `60-report` for final narrative communication before release
+- `70-release` for release-facing notes and execution details
 
 For token/context learning, prefer the smallest concrete note:
 
@@ -104,22 +104,22 @@ If `post-mortem` was applied, include a short `Source Discipline` note crediting
 
 - Classification: Companion command
 - Mainline status: Knowledge capture command, not a numbered stage
-- Typical entry points: after `Debug`, `/50-Verify`, incident work, or review findings
-- Typical handoff targets: `Wiki`, `/60-Report`, `Help`
+- Typical entry points: after `Debug`, `50-verify`, incident work, or review findings
+- Typical handoff targets: `Wiki`, `60-report`, `Help`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/lessons.template.md`
-- Related commands: `Debug`, `/50-Verify`, `Wiki`, `/60-Report`, `Help`
+- Related commands: `Debug`, `50-verify`, `Wiki`, `60-report`, `Help`
 
 ## Next Workflow Recommendation
 
 - **Primary**: `Wiki project ingest {source}` when the insight is reusable project knowledge.
 - **Why**: `Insight` extracts lessons; `Wiki` compiles selected lessons into navigable knowledge pages.
 - **Alternatives**:
-  - `/60-Report {ID}` - choose this when the insight should become the final communication summary before release.
-  - `/70-Release {ID}` - choose this when the insight should shape release packaging or execution details.
+  - `60-report {ID}` - choose this when the insight should become the final communication summary before release.
+  - `70-release {ID}` - choose this when the insight should shape release packaging or execution details.
   - `Help {ID}` - choose this when the next route is unclear.
 
 ## Wiki Update Recommendation

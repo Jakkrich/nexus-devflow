@@ -8,14 +8,14 @@ description: "[Devflow] Survey existing brownfield codebase and bootstrap DevFlo
 Where this sits in the workflow:
 
 ```text
-existing codebase  ->  [adopt]  ->  project-overview + coding-standards  ->  /00-discover or /10-define
+existing codebase  ->  [adopt]  ->  project-overview + coding-standards  ->  00-discover or 10-define
 (already has code)     (survey +    (seeded from the real code;               (first feature / refactoring
                         interview)   shipped architecture documented)          delivery lifecycle)
 ```
 
 Standard onboarding assumes a freshly scaffolded, near-empty app. That does not fit a codebase that already has thousands of lines of working code.
 
-`/adopt` is the brownfield on-ramp for Nexus-DevFlow: it reads what is already there, asks only for what the code cannot reveal (the *intent*, the *why*, and the *upcoming roadmap*), and produces the exact context files the rest of the DevFlow lifecycle expects (`project-overview.md`, `coding-standards.md`, `AGENTS.md` commands).
+`adopt` is the brownfield on-ramp for Nexus-DevFlow: it reads what is already there, asks only for what the code cannot reveal (the *intent*, the *why*, and the *upcoming roadmap*), and produces the exact context files the rest of the DevFlow lifecycle expects (`project-overview.md`, `coding-standards.md`, `AGENTS.md` commands).
 
 ---
 
@@ -91,5 +91,5 @@ Present the adoption summary for review:
 - Inferred conventions and coding standards
 - Available verified commands in `AGENTS.md`
 - Recommended next step:
-  - Run `00-discover` (or `/00-discover`, `$00-discover`) to explore the next major initiative or feature
-  - Run `10-define` (or `/10-define`, `$10-define`) to immediately scope a delivery run for known roadmap items
+  - Run `00-discover` (or `00-discover`, `$00-discover`) to explore the next major initiative or feature
+  - Run `10-define` (or `10-define`, `$10-define`) to immediately scope a delivery run for known roadmap items

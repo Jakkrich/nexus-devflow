@@ -8,7 +8,7 @@ description: "[Devflow] Optional explicit mode for one bounded spec/plan/impleme
 Where this sits in the workflow:
 
 ```text
-/devflow  ->  [autopilot]  ->  review packet  ->  /70-release
+devflow  ->  [autopilot]  ->  review packet  ->  70-release
 (where        (spec, plan,     (human review,     (package, PR,
  are we?)      build, verify,   walkthrough)       merge with approval)
                report)
@@ -16,7 +16,7 @@ Where this sits in the workflow:
 
 Autopilot is an explicit opt-in execution skill for Nexus-DevFlow 2.0. It runs a single bounded loop across the delivery lifecycle (**`20-spec` -> `30-plan` -> `40-implement` -> `50-verify` -> `60-report`**) without requiring human confirmation between every sub-step.
 
-It does **not** replace the normal step-by-step workflow. Mainline commands (`/20-spec`, `/30-plan`, `/40-implement`, `/50-verify`, `/60-report`, `/70-release`) remain the conservative default.
+It does **not** replace the normal step-by-step workflow. Mainline commands (`20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`) remain the conservative default.
 
 Do not suggest Autopilot as the default next action. Use it only when the user explicitly asks for it.
 
@@ -27,14 +27,14 @@ The explicit Autopilot request is permission to create checkpoint commits on the
 Common forms:
 
 - **No argument**: resume the active run in `devflow/context/current-stage.md`, or target the next planned run/feature in `devflow/context/project-overview.md`.
-- **Running ID or feature name**: target that run, e.g. `/autopilot RUN-004` or `/autopilot "add user authentication"`.
+- **Running ID or feature name**: target that run, e.g. `autopilot RUN-004` or `autopilot "add user authentication"`.
 - **`fix "<issue>"`**: write and execute an ad-hoc fix run.
 - **`resume`**: continue the current active run on its existing branch.
 
 If the requested target conflicts with a run already in progress, stop and ask which one should win. Do not overwrite active stage artifacts silently.
 
 > [!IMPORTANT]
-> Rollback is intentionally excluded from Autopilot. If the request is a rollback or the stage is marked Rollback, stop and direct the user to `/rollback` and reviewed `/40-implement`. Reversing completed work requires explicit dependency and human review gates.
+> Rollback is intentionally excluded from Autopilot. If the request is a rollback or the stage is marked Rollback, stop and direct the user to `rollback` and reviewed `40-implement`. Reversing completed work requires explicit dependency and human review gates.
 
 ---
 
@@ -61,7 +61,7 @@ Stop before changing files when:
 
 ## Step 2 - Choose or Write Specification (`20-spec`)
 
-1. If `devflow/runs/{running-id}-{slug}/20-spec.md` already exists, resume it.
+1. If `devflow/runs/{running-id}-{slug}20-spec.md` already exists, resume it.
 2. If no spec exists:
    - Ensure `10-define.md` exists with locked scope and allocated Running ID.
    - Write `20-spec.md` following the DevFlow specification schema.
@@ -77,7 +77,7 @@ Stop before changing files when:
    - Fix: `fix/{slug}-{running-id}`
    - Switch to or create the working branch. Never run Autopilot directly on `main` or `master`.
 2. **Planning**:
-   - Write `devflow/runs/{running-id}-{slug}/30-plan.md`.
+   - Write `devflow/runs/{running-id}-{slug}30-plan.md`.
    - Seed `checklists/implementation-checklist.md` and `checklists/verification-checklist.md`.
 
 ---
@@ -99,7 +99,7 @@ For every subtask:
    git add <modified-files> devflow/runs/{running-id}-{slug}/checklists/implementation-checklist.md
    git commit -m "feat({running-id}): checkpoint <concise step description>"
    ```
-8. Write `devflow/runs/{running-id}-{slug}/40-implement.md`.
+8. Write `devflow/runs/{running-id}-{slug}40-implement.md`.
 
 ---
 
@@ -111,7 +111,7 @@ For every subtask:
    - Project test suite (Unit tests, integration tests)
    - Build / Package smoke tests
 2. Update `checklists/verification-checklist.md` with concrete evidence.
-3. Write `devflow/runs/{running-id}-{slug}/50-verify.md` with QA verdict (`PASS` / `FAIL`).
+3. Write `devflow/runs/{running-id}-{slug}50-verify.md` with QA verdict (`PASS` / `FAIL`).
 
 ---
 
@@ -129,9 +129,9 @@ Review diffs and inspect `devflow/context/findings.md`:
 
 ## Step 7 - Delivery Digest & Review Packet (`60-report`)
 
-1. Write `devflow/runs/{running-id}-{slug}/60-report.md`.
-2. Render standalone HTML dashboard `devflow/runs/{running-id}-{slug}/60-report.html` (via `md2html` or report generator).
-3. Update `devflow/context/current-stage.md` to indicate ready for `/70-release`.
+1. Write `devflow/runs/{running-id}-{slug}60-report.md`.
+2. Render standalone HTML dashboard `devflow/runs/{running-id}-{slug}60-report.html` (via `md2html` or report generator).
+3. Update `devflow/context/current-stage.md` to indicate ready for `70-release`.
 4. Stop with a concise **Review Packet Dashboard** for human approval.
 
 ---
@@ -159,17 +159,17 @@ When Autopilot finishes successfully, output a scannable review packet:
 - **Branch**: `{branch-name}`
 - **Target Run**: `{running-id} - {title}`
 - **Artifacts Generated**:
-  - Spec: `devflow/runs/{id}/20-spec.md`
-  - Plan: `devflow/runs/{id}/30-plan.md`
-  - Implement Evidence: `devflow/runs/{id}/40-implement.md`
-  - QA Verify Report: `devflow/runs/{id}/50-verify.md`
-  - Digest Report: `devflow/runs/{id}/60-report.md`
-  - HTML Dashboard: `devflow/runs/{id}/60-report.html`
+  - Spec: `devflow/runs/{id}20-spec.md`
+  - Plan: `devflow/runs/{id}30-plan.md`
+  - Implement Evidence: `devflow/runs/{id}40-implement.md`
+  - QA Verify Report: `devflow/runs/{id}50-verify.md`
+  - Digest Report: `devflow/runs/{id}60-report.md`
+  - HTML Dashboard: `devflow/runs/{id}60-report.html`
 - **Validation & Tests**: `All Passed (Green)`
 - **Checkpoint Commits**: `{count} commits created on {branch-name}`
-- **Manual QA Walkthrough**: Run `/try {running-id}` for human review guide
+- **Manual QA Walkthrough**: Run `try {running-id}` for human review guide
 
 ---
 👉 **Next Recommended Action**:
-Inspect diffs and `/try` walkthrough, then run `/70-release {running-id}` to package, merge, or create PR.
+Inspect diffs and `try` walkthrough, then run `70-release {running-id}` to package, merge, or create PR.
 ```

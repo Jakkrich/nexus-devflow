@@ -13,12 +13,12 @@ Package approved work for delivery after the report stage has captured the final
 ## Usage
 
 ```text
-/70-Release {running-id or workspace path}
+70-release {running-id or workspace path}
 ```
 
 Use this when:
 
-- `/60-Report` is complete
+- `60-report` is complete
 - the work needs release execution or a release-facing handoff packet
 - downstream stakeholders need delivery notes instead of raw implementation detail
 
@@ -27,7 +27,7 @@ Use this when:
 Write the primary stage artifact to:
 
 ```text
-devflow/runs/{ID}-{slug}/70-release.md
+devflow/runs/{ID}-{slug}70-release.md
 ```
 
 using:
@@ -60,7 +60,7 @@ Run release as a readiness-packaging loop, not as a celebratory summary.
 - **Context**: read `50-verify.md`, `50-verify-impact.md` when present, `40-implement.md`, `20-spec.md`, checklist state, and any PR, deploy, merge, or handoff notes.
 - **Action**: summarize delivered scope, user/system impact, readiness state, validation evidence, rollback or mitigation notes, and follow-up items.
 - **Observation**: use concrete evidence such as verify verdict, failed or skipped checks, impact notes, residual risks, merge/deploy constraints, and checklist status.
-- **Adjustment**: if release readiness becomes uncertain, return to `/50-Verify`; if fixes are required, return to `/40-Implement`; if context must transfer, use `handoff`.
+- **Adjustment**: if release readiness becomes uncertain, return to `50-verify`; if fixes are required, return to `40-implement`; if context must transfer, use `handoff`.
 - **Stop Condition**: stop when the release state is explicit, evidence supports readiness, residual risks and follow-ups are named, and the next delivery or reporting route is clear.
 - **Handoff**: `70-release.md` must close the mainline run or tell the next reader what shipped, what did not ship, what evidence supports readiness, and what follow-ups remain.
 
@@ -99,7 +99,7 @@ Prefer clear release-note style wording:
 
 If release readiness changes because unresolved issues are found:
 
-- route back to `/50-Verify` or `/40-Implement`
+- route back to `50-verify` or `40-implement`
 
 Do not package unfinished work as release-ready through wording tricks.
 Use `resolving-merge-conflicts` when merge or rebase conflicts block packaging. Use `handoff` when release output must transfer to another agent or session without duplicating artifacts.
@@ -125,7 +125,7 @@ Report:
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
-- Previous state: `/60-Report`
+- Previous state: `60-report`
 - Next state: End of the mainline run when release packaging or handoff is complete
 - Common companion commands: `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
 - Support skills: `resolving-merge-conflicts`, `handoff`, and `setup-pre-commit` when release packaging needs conflict resolution, transfer notes, or local quality gates
@@ -135,21 +135,21 @@ Report:
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/release.template.md`
-- Related commands: `/60-Report`, `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
+- Related commands: `60-report`, `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
 
 ## Next Workflow Recommendation
 
 - **Primary**: End of Timeline flow
 - **Why**: The report is already complete, and this phase is the final release-facing execution step.
 - **Alternatives**:
-  - `/60-Report` - choose this when the release package diverges from the approved report and the summary must be refreshed first.
-  - `/50-Verify` - choose this when release readiness becomes uncertain.
-  - `/40-Implement` - choose this when additional fixes are needed before release can proceed.
+  - `60-report` - choose this when the release package diverges from the approved report and the summary must be refreshed first.
+  - `50-verify` - choose this when release readiness becomes uncertain.
+  - `40-implement` - choose this when additional fixes are needed before release can proceed.
   - `handoff` - choose this when release-ready context must move to another session, agent, or stakeholder packet.
 
 ## Nexus Event
 
 - Use `Commit`, `PR`, `Deploy`, `Merge`, or `Changelog` when release execution still needs a concrete lane.
-- Return to `/60-Report` when release notes, scope, or handoff wording diverge from the approved summary.
-- Return to `/50-Verify` or `/40-Implement` when release readiness changes because unresolved issues are discovered.
+- Return to `60-report` when release notes, scope, or handoff wording diverge from the approved summary.
+- Return to `50-verify` or `40-implement` when release readiness changes because unresolved issues are discovered.
 

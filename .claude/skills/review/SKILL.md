@@ -1,11 +1,11 @@
 ---
 name: review
-description: "[Devflow] Two-axis review for changed work. Use inside /50-Verify or /70-Release when a branch, PR, or work-in-progress diff needs standards and spec review."
+description: "[Devflow] Two-axis review for changed work. Use inside 50-verify or 70-release when a branch, PR, or work-in-progress diff needs standards and spec review."
 ---
 
 # Review
 
-Use this support skill as one verification lane. `/50-Verify` owns validation evidence; this skill reviews a diff from two separate angles.
+Use this support skill as one verification lane. `50-verify` owns validation evidence; this skill reviews a diff from two separate angles.
 
 ## Axes
 
@@ -22,7 +22,7 @@ Keep the axes separate so one does not hide the other.
    - Confirm the diff is non-empty.
 
 2. Identify the spec source.
-   - Prefer `devflow/runs/{ID}-*/20-spec.md`, `30-plan.md`, issue brief, PRD, or explicit user path.
+   - Prefer `devflow/runs/{ID}-*20-spec.md`, `30-plan.md`, issue brief, PRD, or explicit user path.
    - If no spec exists, mark the Spec axis as skipped.
 
 3. Identify standards sources.

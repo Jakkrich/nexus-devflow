@@ -50,14 +50,14 @@ You are an orchestrator. Your goal is to call the specialized Git Committer agen
 
 - Classification: Companion command
 - Mainline status: Release support command, not a numbered stage
-- Typical entry points: `/70-Release` after the report is aligned and release execution is ready
-- Typical handoff targets: `PR`, `Deploy`, `/70-Release`
+- Typical entry points: `70-release` after the report is aligned and release execution is ready
+- Typical handoff targets: `PR`, `Deploy`, `70-release`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agents/skills/release-git-operations/SKILL.md`
 - `.agents/skills/git-workflow-and-versioning/SKILL.md`
-- Related commands: `/70-Release`, `PR`, `Deploy`, `Merge`
+- Related commands: `70-release`, `PR`, `Deploy`, `Merge`
 
 

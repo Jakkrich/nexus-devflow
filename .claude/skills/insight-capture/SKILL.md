@@ -20,7 +20,7 @@ This skill should reuse and align with:
 
 ## When to Use
 
-- after `/50-Verify`, release preparation, or a completed implementation run
+- after `50-verify`, release preparation, or a completed implementation run
 - after debugging, regression fixes, or incidents that deserve durable learning
 - when reusable project knowledge should move into lessons, wiki material, or final reporting
 
@@ -68,7 +68,7 @@ Prefer:
 - stage artifacts when the lesson is run-specific
 - `devflow/lessons.md` for project-wide knowledge
 - `Wiki` when the knowledge should become navigable team documentation
-- `/60-Report` when the lesson belongs in the final communication package before release
+- `60-report` when the lesson belongs in the final communication package before release
 
 When updating `devflow/lessons.md`, use `.agent/resources/schemas/lessons.template.md` and replace placeholder text completely.
 
@@ -81,4 +81,4 @@ Return:
 - approach outcome
 - recommendations
 - where the insight was recorded
-- whether `Wiki` or `/60-Report` should be the next handoff
+- whether `Wiki` or `60-report` should be the next handoff

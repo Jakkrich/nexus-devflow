@@ -27,11 +27,11 @@ Use it when:
 
 Preferred DevFlow 2.0 pairing:
 
-- from `/00-Discover` when a new request begins with a failure whose root cause is unknown
-- from `/40-Implement`
-- from `/50-Verify`
+- from `00-discover` when a new request begins with a failure whose root cause is unknown
+- from `40-implement`
+- from `50-verify`
 
-When invoked with a Discovery ID, link the RCA report to that discovery and return to `/00-Discover {discovery_id}` for the delivery decision. Do not allocate a Running ID for an unapproved fix during Debug.
+When invoked with a Discovery ID, link the RCA report to that discovery and return to `00-discover {discovery_id}` for the delivery decision. Do not allocate a Running ID for an unapproved fix during Debug.
 
 ## Source Discipline
 
@@ -114,18 +114,18 @@ Debug unexpected duplicate records
 
 - Classification: Companion command
 - Mainline status: Not a numbered stage
-- Typical entry points: `/00-Discover`, `/40-Implement`, `/50-Verify`, `Issue-Triage`, production failure analysis
-- Typical handoff targets: `/00-Discover {discovery_id}` for discovery-owned RCA, `/40-Implement`, `/50-Verify`, `Insight`, `Wiki`
+- Typical entry points: `00-discover`, `40-implement`, `50-verify`, `Issue-Triage`, production failure analysis
+- Typical handoff targets: `00-discover {discovery_id}` for discovery-owned RCA, `40-implement`, `50-verify`, `Insight`, `Wiki`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/rca.template.md`
-- Related commands: `/40-Implement`, `/50-Verify`, `Test`, `Insight`, `Wiki`, `Agent`
+- Related commands: `40-implement`, `50-verify`, `Test`, `Insight`, `Wiki`, `Agent`
 
 ## Next Workflow Recommendation
 
-- Default: return to `/00-Discover {discovery_id}` when the failure entered through discovery; otherwise return to `/40-Implement` when a tracked fix already exists
-- Alternate: `/30-Plan` if the fix needs planning changes
-- Alternate: `/50-Verify` when the issue is resolved and needs re-checking
+- Default: return to `00-discover {discovery_id}` when the failure entered through discovery; otherwise return to `40-implement` when a tracked fix already exists
+- Alternate: `30-plan` if the fix needs planning changes
+- Alternate: `50-verify` when the issue is resolved and needs re-checking
 

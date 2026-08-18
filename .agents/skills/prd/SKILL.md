@@ -12,9 +12,9 @@ description: Strategic PRD Generator (Orchestration) - Transform a product or fe
 
 Transform a product or feature idea into a problem-first, hypothesis-driven Product Requirements Document (PRD).
 
-In DevFlow 2.0, this is a supporting workflow, not part of the numbered mainline state path. Use it when the idea is still too product-shaped for `/10-Define` or `/20-Spec` to proceed cleanly.
+In DevFlow 2.0, this is a supporting workflow, not part of the numbered mainline state path. Use it when the idea is still too product-shaped for `10-define` or `20-spec` to proceed cleanly.
 Use `to-prd` when existing conversation, discovery, or codebase context is already sufficient and the job is synthesis rather than another interview.
-When invoked from `/00-Discover`, link the PRD to the Discovery ID and return to `/00-Discover {discovery_id}` for the final `Proceed`, `Defer`, or `Reject` decision. PRD does not create Running IDs.
+When invoked from `00-discover`, link the PRD to the Discovery ID and return to `00-discover {discovery_id}` for the final `Proceed`, `Defer`, or `Reject` decision. PRD does not create Running IDs.
 
 ---
 
@@ -56,7 +56,7 @@ You are an orchestrator. Your goal is to call the specialized PRD Architect agen
   - explicit assumptions
   - open questions
   - risks that should remain visible before delivery planning
-- Do not let the PRD silently drift into implementation detail that belongs in `/20-Spec` or `/30-Plan`.
+- Do not let the PRD silently drift into implementation detail that belongs in `20-spec` or `30-plan`.
 
 ### Phase 4: Output Generation
 
@@ -84,10 +84,10 @@ devflow/prds/{date}-{slug}.prd.md
 
 Convert the PRD into explicit next steps for the Timeline flow:
 
-- `/00-Discover {discovery_id}` when the PRD belongs to an active discovery
-- `/10-Define` when product framing was created outside Discover and delivery has already been approved
-- `/20-Spec` when the delivery contract is ready to be locked
-- `/30-Plan {ID}` only after the spec is execution-ready
+- `00-discover {discovery_id}` when the PRD belongs to an active discovery
+- `10-define` when product framing was created outside Discover and delivery has already been approved
+- `20-spec` when the delivery contract is ready to be locked
+- `30-plan {ID}` only after the spec is execution-ready
 
 The user should still approve the transition into execution work. Do not treat PRD generation as automatic task creation.
 
@@ -110,18 +110,18 @@ Return:
 - Classification: Companion command
 - Mainline status: Not a numbered stage
 - Typical entry points: product framing before implementation-ready scope exists
-- Typical handoff targets: `/00-Discover {discovery_id}`, `/10-Define`, `/20-Spec`, `Roadmap`, `Spec-Orchestrate`
+- Typical handoff targets: `00-discover {discovery_id}`, `10-define`, `20-spec`, `Roadmap`, `Spec-Orchestrate`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/prd.template.md`
-- Related commands: `Brainstorm`, `Research`, `/10-Define`, `/20-Spec`, `Roadmap`, `Spec-Orchestrate`
+- Related commands: `Brainstorm`, `Research`, `10-define`, `20-spec`, `Roadmap`, `Spec-Orchestrate`
 - Support skills: `to-prd`, `grill-with-docs`, `domain-modeling`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/00-Discover {discovery_id}` when invoked from discovery; otherwise `/10-Define`
+- **Primary**: `00-discover {discovery_id}` when invoked from discovery; otherwise `10-define`
 - **Why**: PRD shapes product intent, while Discover owns the delivery decision and Define owns Running ID creation.
 - **Alternative**: `Research` when technical feasibility or external dependencies are still unresolved.
 

@@ -11,8 +11,8 @@ This skill complements TDD by handling test generation, execution, and persisten
 
 ## When to Use
 
-- During `/40-Implement` when tests need to be added
-- During `/50-Verify` when the test suite must be run and summarized
+- During `40-implement` when tests need to be added
+- During `50-verify` when the test suite must be run and summarized
 - During `Debug` when a bug needs a reproduction test
 
 ## Process
@@ -41,8 +41,8 @@ Use `.agent/resources/schemas/test_report.template.md` when saving a reusable re
 
 ### 4. Route Back
 
-- `/50-Verify` when tests support formal verification
-- `/40-Implement` when missing or failing tests require code changes
+- `50-verify` when tests support formal verification
+- `40-implement` when missing or failing tests require code changes
 - `Debug` when failures need RCA
 
 ## Output

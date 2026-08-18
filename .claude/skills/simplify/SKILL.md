@@ -21,7 +21,7 @@ Treat this workflow file as a wrapper around that skill.
 
 Use this workflow when the code works but has grown harder to read, harder to change, or more general than necessary.
 
-In DevFlow 2.0, `Simplify` is a supporting implementation workflow. It usually pairs with `/40-Implement` and should end in `/50-Verify`.
+In DevFlow 2.0, `Simplify` is a supporting implementation workflow. It usually pairs with `40-implement` and should end in `50-verify`.
 
 ## Process
 
@@ -61,19 +61,19 @@ Return:
 
 - Classification: Companion command
 - Mainline status: Not a numbered stage
-- Typical entry points: `/40-Implement`, `/50-Verify`, `PR-Review`, `Agent`
-- Typical handoff targets: `/40-Implement`, `/50-Verify`, `PR-Review`
+- Typical entry points: `40-implement`, `50-verify`, `PR-Review`, `Agent`
+- Typical handoff targets: `40-implement`, `50-verify`, `PR-Review`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agents/skills/code-simplification/SKILL.md`
 - `.agent/resources/schemas/refactoring.template.md`
-- Related commands: `/40-Implement`, `/50-Verify`, `PR-Review`, `Agent`
+- Related commands: `40-implement`, `50-verify`, `PR-Review`, `Agent`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/50-Verify`
+- **Primary**: `50-verify`
 - **Why**: simplification should finish with explicit proof that behavior did not regress
-- **Alternative**: `/40-Implement` when simplification exposed a deeper implementation change rather than a pure refactor
+- **Alternative**: `40-implement` when simplification exposed a deeper implementation change rather than a pure refactor
 

@@ -18,7 +18,7 @@ This skill handles the human review loop after implementation and verification. 
 
 ## When to Use
 
-- After `/50-Verify` when a human must decide whether the work is acceptable
+- After `50-verify` when a human must decide whether the work is acceptable
 - When verified work needs non-blocking feedback
 - When review fails and the task must be sent back with explicit action items
 - When a read-only re-evaluation is needed before the human chooses a decision
@@ -42,23 +42,23 @@ Read only what is necessary to understand the review question and evidence.
 
 - confirm the task is genuinely review-ready
 - record approval in the current review-facing artifact
-- route to `/60-Report` first, then `/70-Release` when release execution is the remaining step
+- route to `60-report` first, then `70-release` when release execution is the remaining step
 
 #### Feedback
 
 - record requested improvements without treating them as hard rejection
 - preserve the feedback round and source
-- route to `/40-Implement` or `/30-Plan` if the feedback changes scope
+- route to `40-implement` or `30-plan` if the feedback changes scope
 
 #### Reject
 
 - record rejection reason and concrete action items
-- route to `/40-Implement`, `/30-Plan`, or `Debug` depending on the issue
+- route to `40-implement`, `30-plan`, or `Debug` depending on the issue
 
 #### Recheck
 
 - keep the action read-only unless the user explicitly asks to record it
-- evaluate the evidence and recommend `approve`, `feedback`, `reject`, or `/50-Verify`
+- evaluate the evidence and recommend `approve`, `feedback`, `reject`, or `50-verify`
 
 ### 3. Record Reusable Lessons
 

@@ -8,7 +8,7 @@ description: "[Devflow] Read-only scope, dependency, and risk pre-briefing befor
 Where this sits in the workflow:
 
 ```text
-10-define or project-overview.md  ->  [brief]  ->  /20-spec  ->  /30-plan  ->  /40-implement
+10-define or project-overview.md  ->  [brief]  ->  20-spec  ->  30-plan  ->  40-implement
 (proposed scope & context)            (read-only   (write        (break down)  (build it)
                                       explainer)    contract)
 ```
@@ -22,10 +22,10 @@ It is **strictly read-only 100%**. It never writes specs, creates directories, b
 ## Input
 
 - **no argument**: briefs the active run in `devflow/context/current-stage.md` (or the first planned feature in `devflow/context/project-overview.md`).
-- **running ID or feature name**: e.g. `/brief RUN-003`, `/brief "OAuth Login"`.
-- **topic / concern**: e.g. `/brief "database migration"`.
+- **running ID or feature name**: e.g. `brief RUN-003`, `brief "OAuth Login"`.
+- **topic / concern**: e.g. `brief "database migration"`.
 
-If there is no active run and the overview does not list planned features, plainly report that context is needed and recommend `/00-discover` or `/10-define`.
+If there is no active run and the overview does not list planned features, plainly report that context is needed and recommend `00-discover` or `10-define`.
 
 ## Step 1 - Read Context (Read-Only)
 
@@ -44,7 +44,7 @@ Evaluate:
 - **Depends On**: Required upstream models, tables, APIs, environment variables, or sibling runs.
 - **Unblocks**: Downstream features or workflows that this run enables.
 - **Touches**: Files, modules, API routes, database tables, or UI components likely to change.
-- **Estimated Size**: Small (S), Medium (M), Large (L), or Extra-Large (XL - recommend splitting in `/10-define`).
+- **Estimated Size**: Small (S), Medium (M), Large (L), or Extra-Large (XL - recommend splitting in `10-define`).
 - **Open Questions & Risks**: Ambiguous requirements, missing external APIs, or complex migrations.
 
 ## Step 3 - Output Structured Briefing
@@ -59,16 +59,16 @@ Produce a short, scannable briefing:
 - **Unblocks**: Downstream capabilities enabled by this feature.
 - **Touches**: Anticipated files, schemas, endpoints, and UI views.
 - **Estimated Scope & Size**: `[S / M / L / XL]` (and split recommendation if XL).
-- **Key Risks & Open Questions**: Technical or product unknowns that must be settled in `/20-spec`.
+- **Key Risks & Open Questions**: Technical or product unknowns that must be settled in `20-spec`.
 
 ---
-👉 **Next Recommended Action**: `/20-spec {running-id}` (or resolve prerequisite blocker first).
+👉 **Next Recommended Action**: `20-spec {running-id}` (or resolve prerequisite blocker first).
 ```
 
 ## Rules
 
 - **Always Read-Only**: Never edit any workspace file, never allocate running IDs, never commit or execute scripts.
-- **Explain, Don't Spec**: Focus on scope, architectural dependencies, and size estimation. The formal delivery contract is the responsibility of `/20-spec`.
+- **Explain, Don't Spec**: Focus on scope, architectural dependencies, and size estimation. The formal delivery contract is the responsibility of `20-spec`.
 - **Ground In Reality**: Trace all assertions back to `project-overview.md` or actual codebase facts. Do not invent non-existent packages or fictional architecture.
 - **Highlight Blockers Early**: Flagging a missing prerequisite before speccing is the primary value of this command.
 

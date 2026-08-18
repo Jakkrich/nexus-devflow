@@ -59,18 +59,18 @@ You are an orchestrator. Your goal is to safely integrate code and clean up loca
 - Classification: Companion command
 - Mainline status: Release support command, not a numbered stage
 - Typical entry points: after `PR` and review gates are complete
-- Typical handoff targets: `/70-Release`, `Wiki`
+- Typical handoff targets: `70-release`, `Wiki`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agents/skills/release-git-operations/SKILL.md`
 - `.agents/skills/git-workflow-and-versioning/SKILL.md`
-- Related commands: `PR`, `PR-Review`, `PR-Followup`, `/60-Report`, `/70-Release`
+- Related commands: `PR`, `PR-Review`, `PR-Followup`, `60-report`, `70-release`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/70-Release`
+- **Primary**: `70-release`
 - **Why**: after merge, the remaining work is usually release execution, deployment coordination, or final packaging against the already aligned report.
-- **Alternative**: `/60-Report` if merge outcomes changed the story enough that the final summary must be refreshed first.
+- **Alternative**: `60-report` if merge outcomes changed the story enough that the final summary must be refreshed first.
 

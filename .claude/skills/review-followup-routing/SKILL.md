@@ -83,9 +83,9 @@ For task follow-up, append the approved follow-up work directly into the relevan
 
 ### 5. Route Back
 
-- `/40-Implement` for immediate corrective work
-- `/50-Verify` when only verification needs another pass
-- `/10-Define` or `/20-Spec` when the follow-up becomes genuinely new scope
+- `40-implement` for immediate corrective work
+- `50-verify` when only verification needs another pass
+- `10-define` or `20-spec` when the follow-up becomes genuinely new scope
 
 ## Output
 
