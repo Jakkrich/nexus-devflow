@@ -9,7 +9,7 @@ description: "[Devflow] PR Review Addon - Review a pull request using GitHub rev
 
 Use this workflow when you need a structured PR review without creating or changing the PR. It can review a local diff, a PR URL or number, or a task-linked branch.
 
-In DevFlow 2.0, this remains a supporting review workflow. It should feed corrective work back into `/40-Implement` or clear the path toward `/60-Report` and then `/70-Release`.
+In DevFlow 2.0, this remains a supporting review workflow. It should feed corrective work back into `40-implement` or clear the path toward `60-report` and then `70-release`.
 
 Primary behavior now lives in the `pr-review-analysis` skill. Keep this workflow as the compatibility wrapper and user-facing review prompt surface.
 
@@ -123,21 +123,21 @@ devflow/runs/{ID}-*/pr_review.md
 
 - Classification: Companion command
 - Mainline status: Verification and release support command, not a numbered stage
-- Typical entry points: `/50-Verify`, `PR`, `Agent code-reviewer`
-- Typical handoff targets: `PR-Followup`, `/60-Report`, `/70-Release`, `Wiki`
+- Typical entry points: `50-verify`, `PR`, `Agent code-reviewer`
+- Typical handoff targets: `PR-Followup`, `60-report`, `70-release`, `Wiki`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/pr_review.template.md`
-- Related commands: `/50-Verify`, `PR`, `PR-Followup`, `Agent`, `/60-Report`, `/70-Release`, `Wiki`
+- Related commands: `50-verify`, `PR`, `PR-Followup`, `Agent`, `60-report`, `70-release`, `Wiki`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/40-Implement {ID}` when review finds required fixes, or `/60-Report {ID}` when the review is clean and the run needs the final summary refreshed before release execution.
+- **Primary**: `40-implement {ID}` when review finds required fixes, or `60-report {ID}` when the review is clean and the run needs the final summary refreshed before release execution.
 - **Why**: PR review either creates corrective implementation work or clears the path toward final summary alignment and release-facing packaging.
 - **Alternatives**:
-  - `/70-Release` when the report is already aligned and only release execution remains
+  - `70-release` when the report is already aligned and only release execution remains
   - `Wiki` when the review establishes a durable convention or risk pattern
   - `PR-Followup {target}` when the PR already has comments that need classification and response
 

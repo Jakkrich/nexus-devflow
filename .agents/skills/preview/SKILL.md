@@ -42,8 +42,8 @@ Use it when:
 
 Preferred DevFlow 2.0 pairing:
 
-- from `/40-Implement`
-- from `/50-Verify`
+- from `40-implement`
+- from `50-verify`
 
 ---
 
@@ -105,17 +105,17 @@ Example summary:
 
 - Classification: Companion command
 - Mainline status: Not a numbered stage
-- Typical entry points: `/40-Implement`, `/50-Verify`, UI or runtime checking
-- Typical handoff targets: `/50-Verify`, `Debug`, `/40-Implement`
+- Typical entry points: `40-implement`, `50-verify`, UI or runtime checking
+- Typical handoff targets: `50-verify`, `Debug`, `40-implement`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agents/skills/preview-local-check/SKILL.md`
-- Related commands: `/40-Implement`, `/50-Verify`, `Debug`
+- Related commands: `40-implement`, `50-verify`, `Debug`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/50-Verify` when preview confirms the change is ready for formal checks
-- **Alternative**: `/40-Implement` when preview exposed implementation work
+- **Primary**: `50-verify` when preview confirms the change is ready for formal checks
+- **Alternative**: `40-implement` when preview exposed implementation work
 

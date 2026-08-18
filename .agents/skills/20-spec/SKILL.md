@@ -13,7 +13,7 @@ Turn the defined work into a specification that is concrete enough for planning 
 ## Usage
 
 ```text
-/20-Spec {running-id or workspace path}
+20-spec {running-id or workspace path}
 ```
 
 Use this when:
@@ -27,7 +27,7 @@ Use this when:
 Write the primary stage artifact to:
 
 ```text
-devflow/runs/{ID}-{slug}/20-spec.md
+devflow/runs/{ID}-{slug}20-spec.md
 ```
 
 using:
@@ -60,9 +60,9 @@ Run specification as a contract-hardening loop, not as a prose expansion of the 
 - **Context**: read the run's `10-define.md`, follow its `source_discovery` link when original framing matters, and read relevant research, hard constraints, and domain or codebase decisions that shape this run's delivery contract.
 - **Action**: write requirements, acceptance criteria, constraints, and out-of-scope items, then inspect whether each requirement is testable and unambiguous.
 - **Observation**: use concrete evidence such as ambiguous wording, unchecked assumptions, edge cases, missing acceptance criteria, conflicting constraints, and implementation details that are not true constraints.
-- **Adjustment**: if facts are missing, route to `Research`; if requirements need stress-testing, use `grill-with-docs`; if module or interface boundaries affect the contract, use `codebase-design`; if scope is unstable or still contains multiple independently deliverable contracts, return to `/10-Define` and split the run before continuing.
-- **Stop Condition**: stop when every requirement has checkable acceptance criteria, hard constraints are explicit, out-of-scope items are visible, and `/30-Plan` can break the work down without inventing intent.
-- **Handoff**: `20-spec.md` must tell `/30-Plan` what must be delivered, how success will be checked, what constraints cannot move, and what is intentionally excluded.
+- **Adjustment**: if facts are missing, route to `Research`; if requirements need stress-testing, use `grill-with-docs`; if module or interface boundaries affect the contract, use `codebase-design`; if scope is unstable or still contains multiple independently deliverable contracts, return to `10-define` and split the run before continuing.
+- **Stop Condition**: stop when every requirement has checkable acceptance criteria, hard constraints are explicit, out-of-scope items are visible, and `30-plan` can break the work down without inventing intent.
+- **Handoff**: `20-spec.md` must tell `30-plan` what must be delivered, how success will be checked, what constraints cannot move, and what is intentionally excluded.
 
 ### 1. Read Definition Artifacts
 
@@ -94,7 +94,7 @@ If the spec cannot be written confidently:
 
 Do not hide uncertainty inside vague requirement text.
 
-Do not combine sibling Running IDs into one spec. If this run still contains multiple independent acceptance, release, ownership, or context boundaries, stop and return to `/10-Define {running_id}` for an explicit split.
+Do not combine sibling Running IDs into one spec. If this run still contains multiple independent acceptance, release, ownership, or context boundaries, stop and return to `10-define {running_id}` for an explicit split.
 
 ### 4. Finalize `20-spec.md`
 
@@ -106,12 +106,12 @@ Do not combine sibling Running IDs into one spec. If this run still contains mul
 
 ### 5. Manual Review Soft Gate
 
-Before recommending `/30-Plan`, check whether the delivery contract has been human-reviewed.
+Before recommending `30-plan`, check whether the delivery contract has been human-reviewed.
 If `Approval Status` is not approved yet:
 
 - warn that planning may drift if the spec is still under review
 - recommend review of requirements, exclusions, and acceptance criteria first
-- keep `/30-Plan` as a soft recommendation only
+- keep `30-plan` as a soft recommendation only
 
 ## Output
 
@@ -127,8 +127,8 @@ Report:
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
-- Previous state: `/10-Define`
-- Next state: `/30-Plan` when the contract is implementation-ready
+- Previous state: `10-define`
+- Next state: `30-plan` when the contract is implementation-ready
 - Common companion commands: `PRD`, `Spec-Research`, `Competitor`, `Spec-Orchestrate` when product or integration context is still incomplete; support skills: `grill-with-docs`, `domain-modeling`, and `codebase-design` when the spec depends on precise domain language, durable decisions, or module/interface constraints
 
 ## Sources
@@ -136,17 +136,17 @@ Report:
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/spec.template.md`
-- Related commands: `/10-Define`, `PRD`, `Spec-Research`, `Competitor`, `Spec-Orchestrate`, `/30-Plan`
+- Related commands: `10-define`, `PRD`, `Spec-Research`, `Competitor`, `Spec-Orchestrate`, `30-plan`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/30-Plan`
+- **Primary**: `30-plan`
 - **Why**: The specification is now concrete enough to break into executable work.
 - **Alternatives**:
   - `Research` - choose this when the spec still depends on missing facts.
   - `grill-with-docs` - choose this when the spec is readable but not yet tough enough to plan from.
   - `codebase-design` - choose this when interface shape or testability constraints must be settled before planning.
-  - `/10-Define` - choose this when the scope itself is still unstable.
+  - `10-define` - choose this when the scope itself is still unstable.
 
 ## Nexus Event
 

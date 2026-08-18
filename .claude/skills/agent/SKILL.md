@@ -17,7 +17,7 @@ Agent {AGENT_NAME} {TARGET}
 Examples:
 
 ```text
-Agent requirements-engineer devflow/runs/007-auth-refactor/20-spec.md
+Agent requirements-engineer devflow/runs/007-auth-refactor20-spec.md
 Agent codebase-explorer src/services/
 Agent code-reviewer devflow/runs/007-auth-refactor
 ```
@@ -145,7 +145,7 @@ Short reports can be returned directly in chat.
 - Classification: Companion command
 - Mainline status: Specialist invocation command, not a numbered stage
 - Typical entry points: any stage that needs focused specialist judgment
-- Typical handoff targets: return to the owning workflow such as `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`
+- Typical handoff targets: return to the owning workflow such as `10-define`, `20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`
 
 ## Sources
 
@@ -156,7 +156,7 @@ Short reports can be returned directly in chat.
 
 ## Next Workflow Recommendation
 
-- **Primary**: the workflow that owns the target's lifecycle, such as `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, or `PR-Review`.
+- **Primary**: the workflow that owns the target's lifecycle, such as `10-define`, `20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`, or `PR-Review`.
 - **Why**: `Agent` supplies specialist judgment; the owning workflow should execute the next lifecycle step.
 - **Alternatives**:
   - `Research` when the specialist work uncovered unresolved external uncertainty

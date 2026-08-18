@@ -8,12 +8,12 @@ description: "[Devflow] Generate human manual QA review walkthrough guide (where
 Where this sits in the workflow:
 
 ```text
-/40-implement or /50-verify or /60-report  ->  [try]  ->  human review & verification
+40-implement or 50-verify or 60-report  ->  [try]  ->  human review & verification
 (work implemented / verified)                  (manual    (where to go,
                                                steps)     what to click)
 ```
 
-`/50-verify` proves behavior from automated QA and test runs. `/try` gives the user and testers an actionable, step-by-step manual walkthrough: start this command, open this route, click these controls, expect this result, and watch for these failure signs.
+`50-verify` proves behavior from automated QA and test runs. `try` gives the user and testers an actionable, step-by-step manual walkthrough: start this command, open this route, click these controls, expect this result, and watch for these failure signs.
 
 It is always **read-only 100%**. It does not edit files, install dependencies, commit, merge, push, or run destructive commands.
 
@@ -23,7 +23,7 @@ Optional scope:
 
 - **no argument**: use the active run in `devflow/context/current-stage.md` (or the latest completed run under `devflow/runs/`)
 - `latest`: use the most recent completed run in `devflow/runs/`
-- a run ID or path: e.g. `/try RUN-002-add-onboard-adopt-doctor-skills`
+- a run ID or path: e.g. `try RUN-002-add-onboard-adopt-doctor-skills`
 - a specific route, endpoint, or CLI command: focus the walkthrough on that surface
 
 If there is no active run and no run history, ask what change or feature the user wants to test manually.

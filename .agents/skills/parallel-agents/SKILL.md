@@ -24,7 +24,7 @@ Before parallelizing:
 2. identify the lifecycle owner
 3. split the work into independent questions
 
-If those conditions are missing, return first to `/00-Discover`, `/20-Spec`, or `/30-Plan`.
+If those conditions are missing, return first to `00-discover`, `20-spec`, or `30-plan`.
 
 ## Basic Invocation Patterns
 

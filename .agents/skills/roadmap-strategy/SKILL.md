@@ -23,7 +23,7 @@ This skill should reuse and align with:
 
 - when product direction, priority, or sequencing needs a dedicated roadmap pass
 - when competitor, PRD, research, or delivery insight should be consolidated into strategy
-- when roadmap work should stay outside the numbered mainline but still hand off cleanly into `PRD`, `/10-Define`, or `/20-Spec`
+- when roadmap work should stay outside the numbered mainline but still hand off cleanly into `PRD`, `10-define`, or `20-spec`
 
 ## Canonical Artifacts
 
@@ -79,8 +79,8 @@ Replace placeholder content fully and keep headings and tables intact so validat
 ### 5. Route Back
 
 - `PRD` when product framing needs to deepen
-- `/10-Define` when roadmap decisions should become bounded work
-- `/20-Spec` when one item is ready for delivery contract work
+- `10-define` when roadmap decisions should become bounded work
+- `20-spec` when one item is ready for delivery contract work
 - `Brainstorm` when strategy is still too fuzzy to lock
 
 ## Output

@@ -9,7 +9,7 @@ Implement the approved plan incrementally. Source code edits are allowed in this
 ## Usage
 
 ```text
-/40-Implement {ID}
+40-implement {ID}
 ```
 
 ## Markdown-First Contract
@@ -43,9 +43,9 @@ Run implementation as scoped execution loops, one unit at a time.
 - **Context**: read `30-plan.md`, `20-spec.md`, relevant checklist items, target files, pattern files, and test decisions before editing.
 - **Action**: make the smallest useful change for the current unit, update or create tests when required, run the planned verification, and record the result.
 - **Observation**: inspect concrete evidence from diffs, command output, tests, manual checks, and checklist status before claiming progress.
-- **Adjustment**: if evidence does not match intent, fix within the current unit, capture the blocker, use `Debug`, or return to `/30-Plan` or `/20-Spec` when the work no longer matches the contract.
+- **Adjustment**: if evidence does not match intent, fix within the current unit, capture the blocker, use `Debug`, or return to `30-plan` or `20-spec` when the work no longer matches the contract.
 - **Stop Condition**: stop the unit when the planned change is complete, verification evidence is recorded, deviations are explained, and the next unit or handoff is clear.
-- **Handoff**: `40-implement.md` must tell `/50-Verify` what changed, why it changed, which checks ran, what failed or was skipped, and what residual risk remains.
+- **Handoff**: `40-implement.md` must tell `50-verify` what changed, why it changed, which checks ran, what failed or was skipped, and what residual risk remains.
 
 ### 1. Get Bearings
 
@@ -112,8 +112,8 @@ If the plan was not clearly approved, warn that implementation proceeded under r
 When finishing `40-implement.md`:
 
 - record any deviation from the approved plan explicitly
-- set reviewer expectations before `/50-Verify`
-- keep `/50-Verify` as the next soft recommendation rather than an unconditional jump
+- set reviewer expectations before `50-verify`
+- keep `50-verify` as the next soft recommendation rather than an unconditional jump
 
 ## Output
 
@@ -125,13 +125,13 @@ Report:
 - test decisions followed or changed, with reasons
 - loop evidence and handoff notes for Verify
 - blocked items or manual checks
-- next command: `/50-Verify {ID}`
+- next command: `50-verify {ID}`
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
-- Previous state: `/30-Plan`
-- Next state: `/50-Verify` when scoped implementation is complete
+- Previous state: `30-plan`
+- Next state: `50-verify` when scoped implementation is complete
 - Common companion commands: `Debug` for blockers, `Preview` for local checks; support skills: `tdd`, `diagnosing-bugs`, and `codebase-design` for behavior changes, root-cause loops, and implementation-time design pressure
 
 ## Sources
@@ -139,15 +139,15 @@ Report:
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/implement.template.md`
-- Related commands: `/30-Plan`, `Debug`, `Preview`, `/50-Verify`
+- Related commands: `30-plan`, `Debug`, `Preview`, `50-verify`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/50-Verify {ID}` when the planned work is complete.
+- **Primary**: `50-verify {ID}` when the planned work is complete.
 - **Why**: Implementation needs independent verification before release or human acceptance.
 - **Alternatives**:
   - `Debug "{blocker}"` - choose this when implementation is blocked by an unexplained failure.
-  - `/30-Plan {ID}` - choose this when the plan is incomplete or no longer matches the work.
+  - `30-plan {ID}` - choose this when the plan is incomplete or no longer matches the work.
   - `Preview` - choose this when a local runtime or visual check is useful before formal verification.
   - `codebase-design` - choose this when the implementation cannot be tested cleanly because the module shape is wrong.
 
@@ -155,12 +155,12 @@ Report:
 
 - Use `Debug` when the conversation reveals an unexplained blocker, flaky behavior, or root-cause gap.
 - Use `Preview` when a runtime, UI, or local interaction check would reduce verification risk.
-- Return to `/30-Plan` when implementation drift shows the plan no longer matches reality.
+- Return to `30-plan` when implementation drift shows the plan no longer matches reality.
 
 ## Wiki Update Recommendation
 
 - **Needed**: `yes` when coding discovers a reusable implementation pattern, gotcha, or context optimization.
 - **Scope**: `project` unless the discovery is about DevFlow itself.
 - **Reason**: Coding findings are useful only when they are stable enough to help future tasks.
-- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*/40-implement.md`
+- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*40-implement.md`
 

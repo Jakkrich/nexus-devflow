@@ -1,6 +1,6 @@
 ---
 name: verification-orchestration
-description: "[Devflow] Coordinate multi-lane QA, specialist review, test planning, and verification follow-up. Use when /50-Verify needs more structure than a single pass and the team needs a QA matrix or specialist routing."
+description: "[Devflow] Coordinate multi-lane QA, specialist review, test planning, and verification follow-up. Use when 50-verify needs more structure than a single pass and the team needs a QA matrix or specialist routing."
 ---
 
 # Verification Orchestration
@@ -11,7 +11,7 @@ This skill structures complex verification work across multiple QA lanes without
 
 ## When to Use
 
-- `/50-Verify` is too broad for a single simple pass
+- `50-verify` is too broad for a single simple pass
 - the change needs correctness, regression, security, performance, and UX checks together
 - the team needs specialist routing for QA
 
@@ -54,8 +54,8 @@ Use `.agent/resources/schemas/qa_orchestration.template.md` when saving a reusab
 
 ### 5. Route Back
 
-- `/50-Verify` when the QA matrix strengthens verification evidence
-- `/40-Implement` when actionable fixes are required
+- `50-verify` when the QA matrix strengthens verification evidence
+- `40-implement` when actionable fixes are required
 - `Followup` when findings become new scope
 
 ## Output

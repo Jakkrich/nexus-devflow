@@ -1,13 +1,13 @@
 ---
 name: diagnosing-bugs
-description: "[Devflow] Diagnosis loop for hard bugs and performance regressions. Use inside Debug, /40-Implement, or /50-Verify when behavior is broken, throwing, failing, flaky, or slow."
+description: "[Devflow] Diagnosis loop for hard bugs and performance regressions. Use inside Debug, 40-implement, or 50-verify when behavior is broken, throwing, failing, flaky, or slow."
 ---
 
 # Diagnosing Bugs
 
 Use this support skill when the active DevFlow owner needs a disciplined root-cause loop.
 
-Do not let this skill replace `Debug`, `/40-Implement`, or `/50-Verify`. It supplies the method; the owning workflow records the artifact.
+Do not let this skill replace `Debug`, `40-implement`, or `50-verify`. It supplies the method; the owning workflow records the artifact.
 
 ## Phase 1: Build A Tight Feedback Loop
 
@@ -79,7 +79,7 @@ When a correct test seam exists:
 4. Watch it pass.
 5. Re-run the original feedback loop.
 
-If no correct seam exists, record that architecture finding and route to `codebase-design` or `/30-Plan` after the bug is fixed.
+If no correct seam exists, record that architecture finding and route to `codebase-design` or `30-plan` after the bug is fixed.
 
 ## Phase 6: Cleanup And Post-Mortem
 

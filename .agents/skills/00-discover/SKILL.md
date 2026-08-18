@@ -13,8 +13,8 @@ Explore a request before delivery commitment. Create or resume a Discovery ID, c
 ## Usage
 
 ```text
-/00-Discover {title or request}
-/00-Discover {discovery-id}
+00-discover {title or request}
+00-discover {discovery-id}
 ```
 
 Use this when:
@@ -28,7 +28,7 @@ Use this when:
 Write the primary discovery artifact to:
 
 ```text
-devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md
+devflow/discoveries/{DISCOVERY_ID}-{slug}00-discover.md
 ```
 
 using:
@@ -65,7 +65,7 @@ Run discovery as a decision-and-routing loop, not as task initialization.
 - **Observation**: use concrete evidence such as option tradeoffs, product framing, research results, root cause, stakeholder constraints, open questions, and visible risk.
 - **Adjustment**: invoke only the companion route needed to resolve the current uncertainty; every companion invoked by Discover must return to this Discovery ID for synthesis.
 - **Stop Condition**: stop when the selected route and evidence are recorded, open questions are visible, and the decision is `Proceed`, `Defer`, or `Reject`.
-- **Handoff**: only an approved `Proceed` discovery may hand off to `/10-Define {discovery_id}`. `Defer` and `Reject` end without allocating a Running ID.
+- **Handoff**: only an approved `Proceed` discovery may hand off to `10-define {discovery_id}`. `Defer` and `Reject` end without allocating a Running ID.
 
 ### 1. Create Or Resume The Discovery
 
@@ -99,7 +99,7 @@ After each companion route:
 
 - update `00-discover.md` with the durable findings and source path
 - reassess whether another route is materially necessary
-- return to the Discover decision rather than jumping directly to `/10-Define`
+- return to the Discover decision rather than jumping directly to `10-define`
 
 ### 5. Decide
 
@@ -109,7 +109,7 @@ Set one decision:
 - `Defer`: the idea remains relevant but timing, evidence, or ownership is not ready
 - `Reject`: the idea should not proceed under the current framing
 
-Candidate delivery slices may be suggested, but they remain provisional and unnumbered until `/10-Define`.
+Candidate delivery slices may be suggested, but they remain provisional and unnumbered until `10-define`.
 
 ### 6. Write `00-discover.md`
 
@@ -117,11 +117,11 @@ Candidate delivery slices may be suggested, but they remain provisional and unnu
 - follow the configured `artifact_language`
 - replace placeholders with concrete context
 - record selected routes, returned findings, open questions, decision, and rationale
-- keep `related_runs` empty until `/10-Define` materializes approved slices
+- keep `related_runs` empty until `10-define` materializes approved slices
 
 ### 7. Manual Review Gate
 
-Before `/10-Define`:
+Before `10-define`:
 
 - confirm the selected route and evidence are sufficient
 - confirm the decision is `Proceed`
@@ -138,15 +138,15 @@ Report:
 - selected support route and why
 - important findings and open questions
 - `Proceed`, `Defer`, or `Reject` decision
-- recommended next step, including `/10-Define {discovery_id}` only when Proceed is approved
+- recommended next step, including `10-define {discovery_id}` only when Proceed is approved
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline discovery stage
 - Previous state: request intake
-- Next state: `/10-Define {discovery_id}` only after approved Proceed
+- Next state: `10-define {discovery_id}` only after approved Proceed
 - Common companion routes: `Brainstorm`, `PRD`, `Research`, `Debug`
-- Running ID lifecycle: begins in `/10-Define`, not in Discover
+- Running ID lifecycle: begins in `10-define`, not in Discover
 
 ## Sources
 
@@ -156,7 +156,7 @@ Report:
 
 ## Next Workflow Recommendation
 
-- **Primary**: the selected companion route, or `/10-Define {discovery_id}` after approved Proceed
+- **Primary**: the selected companion route, or `10-define {discovery_id}` after approved Proceed
 - **Alternatives**:
   - `Brainstorm {discovery_id}` for unresolved options
   - `PRD {discovery_id}` for product framing

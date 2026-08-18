@@ -20,7 +20,7 @@ This skill should reuse and align with:
 
 ## When to Use
 
-- after `/50-Verify` when the change needs structured review before `/60-Report` and `/70-Release`
+- after `50-verify` when the change needs structured review before `60-report` and `70-release`
 - when a local diff, branch, or pull request needs findings-first analysis
 - when the user wants review without directly editing code
 
@@ -86,4 +86,4 @@ Return:
 - open questions or assumptions
 - residual risks or test gaps
 - where the review report was saved
-- the recommended next route such as `/40-Implement`, `/70-Release`, or `PR-Followup`
+- the recommended next route such as `40-implement`, `70-release`, or `PR-Followup`

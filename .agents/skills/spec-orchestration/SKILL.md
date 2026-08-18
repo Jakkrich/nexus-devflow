@@ -48,8 +48,8 @@ Route proportionally:
 - `Research` or `Spec-Research` for external or technical proof
 - `Competitor` for market context
 - `PRD` for product framing
-- `/10-Define` for scope and decision locking
-- `/20-Spec` for delivery contract writing
+- `10-define` for scope and decision locking
+- `20-spec` for delivery contract writing
 
 Do not stack every support surface by default.
 
@@ -76,9 +76,9 @@ Use `.agent/resources/schemas/spec_orchestration.template.md` and replace placeh
 
 ### 5. Route Back To Mainline
 
-- `/10-Define` when the idea still needs scope decisions
-- `/20-Spec` when enough evidence exists to write the delivery contract
-- `/30-Plan` only when the spec is already solid
+- `10-define` when the idea still needs scope decisions
+- `20-spec` when enough evidence exists to write the delivery contract
+- `30-plan` only when the spec is already solid
 
 ## Output
 
