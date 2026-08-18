@@ -88,60 +88,67 @@ npx @jakkrichm/create-nexus-devflow --adapter both
 
 ### 2. Launch DevFlow in your AI Assistant
 
-Open your project in your AI Assistant (Google Antigravity, OpenAI Codex, Claude Code, etc.) and run the flagship guide command:
+Open your project in your AI Assistant (Google Antigravity, OpenAI Codex, Claude Code, Cursor, etc.) and run the flagship guide command:
 
 ```text
-/devflow
+devflow
 ```
+*(or `/devflow`, `$devflow`, `status`)*
 
-> **Tip:** `/devflow` is your entry command. It inspects your workspace state, checks framework health, and routes you to the exact next command (`/00-Discover`, `/10-Define`, `/40-Implement`, `/50-Verify`, etc.).
+> **Tip:** `devflow` is your entry command. It inspects your workspace state, checks framework health, and routes you to the exact next command (`00-discover`, `10-define`, `40-implement`, `50-verify`, etc.).
 
 Alternatively, start directly with request discovery:
 
 ```text
-/00-Discover
+00-discover
 ```
+*(or `discover`, `/00-discover`, `$00-discover`)*
 
 ## Mainline Timeline Workflow
 
 ```text
-/00-Discover ➔ /10-Define ➔ /20-Spec ➔ /30-Plan ➔ /40-Implement ➔ /50-Verify ➔ /60-Report ➔ /70-Release
+00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-implement ➔ 50-verify ➔ 60-report ➔ 70-release
 ```
 
-| Stage | Command | Purpose & Artifact |
+| Stage | Command / Alias | Purpose & Artifact |
 | --- | --- | --- |
-| **00** | `/00-Discover` | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
-| **10** | `/10-Define` | Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`). |
-| **20** | `/20-Spec` | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
-| **30** | `/30-Plan` | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
-| **40** | `/40-Implement` | Execute planned tasks incrementally with step evidence (`40-implement.md`). |
-| **50** | `/50-Verify` | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
-| **60** | `/60-Report` | Produce standardized markdown and self-contained HTML summary report (`60-report.md`, `60-report.html`). |
-| **70** | `/70-Release` | Package verified work for merge, PR, or deployment handoff (`70-release.md`). |
+| **00** | `00-discover` (`discover`, `/00-discover`) | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
+| **10** | `10-define` (`define`, `/10-define`) | Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`). |
+| **20** | `20-spec` (`spec`, `/20-spec`) | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
+| **30** | `30-plan` (`plan`, `/30-plan`) | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
+| **40** | `40-implement` (`implement`, `/40-implement`) | Execute planned tasks incrementally with step evidence (`40-implement.md`). |
+| **50** | `50-verify` (`verify`, `/50-verify`) | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
+| **60** | `60-report` (`report`, `/60-report`) | Produce standardized markdown and self-contained HTML summary report (`60-report.md`, `60-report.html`). |
+| **70** | `70-release` (`release`, `/70-release`) | Package verified work for merge, PR, or deployment handoff (`70-release.md`). |
 
 ## Public Companion Commands
 
 Companion commands provide specialized support without interrupting the linear mainline stage progression:
 
-| Companion | Purpose |
-| --- | --- |
-| `Brainstorm` | Brainstorm ideas and explore concepts without allocating running IDs. |
-| `PRD` | Product framing and requirement documentation before delivery commitment. |
-| `Research` | Codebase or web research to support discovery and spec stages. |
-| `Debug` | Root cause investigation for bugs before or during implementation. |
-| `Security-Review` | High-severity security review for code, diffs, or architecture. |
-| `Issue-Triage` | Intake, triage, and duplicate checking for reported issues. |
-| `Wiki` | Knowledge base management under `devflow/wiki/`. |
-| `Help` | Process assistance, intent routing, and sitemap guidance. |
+| Companion | Alias | Purpose |
+| --- | --- | --- |
+| `devflow` | `status` | Flagship interactive guide, state inspector, and intent router. |
+| `onboard` | `setup` | Baseline stack detection and setup for fresh/scaffolded projects. |
+| `adopt` | `bootstrap` | Survey existing codebase and bootstrap DevFlow into brownfield apps. |
+| `doctor` | `health` | Read-only health check for setup, scripts, adapters, and workflow drift. |
+| `brainstorm` | `brainstorm` | Brainstorm ideas and explore concepts without allocating running IDs. |
+| `prd` | `prd` | Product framing and requirement documentation before delivery commitment. |
+| `research` | `research` | Codebase or web research to support discovery and spec stages. |
+| `debug` | `debug` | Root cause investigation for bugs before or during implementation. |
+| `security-review` | `security-review` | High-severity security review for code, diffs, or architecture. |
+| `issue-triage` | `issue-triage` | Intake, triage, and duplicate checking for reported issues. |
+| `wiki` | `wiki` | Knowledge base management under `devflow/wiki/`. |
+| `check-for-updates` | `check-for-updates` | Verify or upgrade DevFlow setup. |
+| `help` | `help` | Process assistance, intent routing, and sitemap guidance. |
 
 ## Tool Adapter Support
 
-| Tool | Adapter Path | Invocation |
+| Tool | Adapter Path | Invocation Support |
 | --- | --- | --- |
-| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Slash commands (e.g. `/00-Discover`, `/20-Spec`, `/40-Implement`) |
-| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | `$00-discover`, `$20-spec`, or natural language |
-| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Slash commands (e.g. `/00-Discover`, `/10-Define`, `/50-Verify`) |
-| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Natural language instructions referencing `AGENTS.md` |
+| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`, `devflow`), slash commands (`/00-discover`), or natural language |
+| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`), skill macro (`$00-discover`, `$spec`), or natural language |
+| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Plain names, slash commands (`/00-discover`, `/10-define`), or natural language |
+| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Plain names or natural language instructions referencing `AGENTS.md` |
 
 ## Workspace Artifact Layout
 

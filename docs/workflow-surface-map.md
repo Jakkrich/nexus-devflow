@@ -21,6 +21,10 @@ This document decides which workflow surfaces should remain public commands, whi
 
 | File | Decision | Why |
 | :--- | :--- | :--- |
+| `devflow` | `public command` | Flagship interactive guide, state inspector, and intent router. |
+| `onboard` | `public command` | Detects stack and tunes baseline setup for freshly scaffolded projects. |
+| `adopt` | `public command` | Surveys existing codebases and bootstraps DevFlow into brownfield projects. |
+| `doctor` | `public command` | Read-only health check for setup, scripts, adapters, and workflow drift. |
 | `Goal.md` | `public command` | It routes broad goals before the work enters the mainline. |
 | `Brainstorm.md` | `public command` | It is a common user-facing ideation surface before direction is locked. |
 | `Research.md` | `public command` | It is a clear command that users can invoke directly for evidence gathering. |
