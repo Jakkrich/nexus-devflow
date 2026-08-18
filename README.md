@@ -112,47 +112,54 @@ Alternatively, start directly with request discovery:
 
 | Stage | Command / Alias | Purpose & Artifact |
 | --- | --- | --- |
-| **00** | `00-discover` (`discover`, `/00-discover`) | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
-| **10** | `10-define` (`define`, `/10-define`) | Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`). |
-| **20** | `20-spec` (`spec`, `/20-spec`) | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
-| **30** | `30-plan` (`plan`, `/30-plan`) | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
-| **40** | `40-implement` (`implement`, `/40-implement`) | Execute planned tasks incrementally with step evidence (`40-implement.md`). |
-| **50** | `50-verify` (`verify`, `/50-verify`) | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
-| **60** | `60-report` (`report`, `/60-report`) | Produce standardized markdown and self-contained HTML summary report (`60-report.md`, `60-report.html`). |
-| **70** | `70-release` (`release`, `/70-release`) | Package verified work for merge, PR, or deployment handoff (`70-release.md`). |
+> 💡 **Invocation by AI Provider**: All stages and companion tools use a single **Canonical Name**. Invocation format depends on your AI tool:
+> - **Plain Name**: e.g., `00-discover`, `devflow` (universal plain text)
+> - **Slash Prefix (`/`)**: For Claude Code, Google Antigravity, Gemini CLI (e.g., `/00-discover`, `/devflow`)
+> - **Dollar Prefix (`$`)**: For OpenAI Codex CLI (e.g., `$00-discover`, `$devflow`)
+
+| Stage | Canonical Command Name | Description & Core Artifacts |
+| :--- | :--- | :--- |
+| **00** | `00-discover` | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
+| **10** | `10-define` | Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`). |
+| **20** | `20-spec` | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
+| **30** | `30-plan` | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
+| **40** | `40-implement` | Execute planned tasks incrementally with step evidence (`40-implement.md`). |
+| **50** | `50-verify` | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
+| **60** | `60-report` | Produce standardized markdown and self-contained HTML summary report (`60-report.md`, `60-report.html`). |
+| **70** | `70-release` | Package verified work for merge, PR, or deployment handoff (`70-release.md`). |
 
 ## Public Companion Commands
 
 Companion commands provide specialized support without interrupting the linear mainline stage progression:
 
-| Companion | Alias | Purpose |
-| --- | --- | --- |
-| `devflow` | `status` | Flagship interactive guide, state inspector, and intent router. |
-| `onboard` | `setup` | Baseline stack detection and setup for fresh/scaffolded projects. |
-| `adopt` | `bootstrap` | Survey existing codebase and bootstrap DevFlow into brownfield apps. |
-| `doctor` | `health` | Read-only health check for setup, scripts, adapters, and workflow drift. |
-| `try` | `try` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
-| `rollback` | `rollback` | Safe feature/run reversal planner with dependency risk analysis. |
-| `ci` | `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup and alignment. |
-| `brief` | `brief` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
-| `autopilot` | `autopilot` | Optional explicit bounded loop (spec -> plan -> implement -> verify -> report). |
-| `brainstorm` | `brainstorm` | Brainstorm ideas and explore concepts without allocating running IDs. |
-| `prd` | `prd` | Product framing and requirement documentation before delivery commitment. |
-| `research` | `research` | Codebase or web research to support discovery and spec stages. |
-| `debug` | `debug` | Root cause investigation for bugs before or during implementation. |
-| `security-review` | `security-review` | High-severity security review for code, diffs, or architecture. |
-| `issue-triage` | `issue-triage` | Intake, triage, and duplicate checking for reported issues. |
-| `wiki` | `wiki` | Knowledge base management under `devflow/wiki/`. |
-| `check-for-updates` | `check-for-updates` | Verify or upgrade DevFlow setup. |
-| `help` | `help` | Process assistance, intent routing, and sitemap guidance. |
+| Canonical Command Name | Purpose |
+| :--- | :--- |
+| `devflow` | Flagship interactive guide, state inspector, and intent router. |
+| `onboard` | Baseline stack detection and setup for fresh/scaffolded projects. |
+| `adopt` | Survey existing codebase and bootstrap DevFlow into brownfield apps. |
+| `doctor` | Read-only health check for setup, scripts, adapters, and workflow drift. |
+| `try` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
+| `rollback` | Safe feature/run reversal planner with dependency risk analysis. |
+| `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup and alignment. |
+| `brief` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
+| `autopilot` | Optional explicit bounded loop (spec -> plan -> implement -> verify -> report). |
+| `brainstorm` | Brainstorm ideas and explore concepts without allocating running IDs. |
+| `prd` | Product framing and requirement documentation before delivery commitment. |
+| `research` | Codebase or web research to support discovery and spec stages. |
+| `debug` | Root cause investigation for bugs before or during implementation. |
+| `security-review` | High-severity security review for code, diffs, or architecture. |
+| `issue-triage` | Intake, triage, and duplicate checking for reported issues. |
+| `wiki` | Knowledge base management under `devflow/wiki/`. |
+| `check-for-updates` | Verify or upgrade DevFlow setup. |
+| `help` | Process assistance, intent routing, and sitemap guidance. |
 
 ## Tool Adapter Support
 
 | Tool | Adapter Path | Invocation Support |
 | --- | --- | --- |
 | **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`, `devflow`), slash commands (`/00-discover`), or natural language |
-| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`), skill macro (`$00-discover`, `$spec`), or natural language |
-| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Plain names, slash commands (`/00-discover`, `/10-define`), or natural language |
+| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`), skill command (`$00-discover`), or natural language |
+| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Plain names (`00-discover`), slash commands (`/00-discover`), or natural language |
 | **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Plain names or natural language instructions referencing `AGENTS.md` |
 
 ## Workspace Artifact Layout
