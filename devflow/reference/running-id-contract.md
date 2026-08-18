@@ -35,5 +35,5 @@ All DevFlow framework context, active runs, templates, and history are consolida
 ## Mainline Lifecycle Rules
 
 1. Mainline stages move linearly: `/00-Discover` ➔ `/10-Define` ➔ `/20-Spec` ➔ `/30-Plan` ➔ `/40-Implement` ➔ `/50-Verify` ➔ `/60-Report` ➔ `/70-Release`.
-2. Companion commands (`Goal`, `Brainstorm`, `Research`, `Debug`, `PRD`, `Issue-Triage`, `Security-Review`, `Wiki`, `Check-For-Updates`, `Help`) provide supporting context without replacing mainline stage numbers.
+2. Companion commands (`Goal`, `Brainstorm`, `Research`, `Debug`, `PRD`, `Issue-Triage`, `Security-Review`, `Check-For-Updates`, `Help`) provide supporting context without replacing mainline stage numbers.
 3. Every stage produces markdown-first evidence in `devflow/runs/` before passing verification gates.

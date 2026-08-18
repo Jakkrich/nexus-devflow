@@ -3,129 +3,68 @@ name: debug
 description: "[Devflow] Root cause investigation and diagnostic loop before or during implementation without editing code. Use when encountering broken behavior, test failures, or bugs."
 ---
 
-﻿---
-description: Root cause analysis and debugging. Transitional compatibility path for the Debug companion command in DevFlow 2.0.
----
+# Debug & Root Cause Analysis (RCA)
 
-# Debug - Root Cause Analysis
+## Overview
 
-## Issue: $ARGUMENTS
+This is the comprehensive debugging master skill for Nexus-DevFlow. It guides systematic root-cause investigation without blindly editing code. The goal is to find the actual origin of an issue, not merely suppress visible symptoms.
 
-This file keeps its old numeric path for migration compatibility.
-
-In DevFlow 2.0, `Debug` is a companion command, not a numbered mainline workflow. Its investigative depth should remain comparable to the original debug workflow.
-
-## Purpose
-
-Use `Debug` to find the actual origin of an issue, not just the visible symptom.
-
-Use it when:
-
-- implementation work is blocked by a defect
-- verification reveals a failure that needs root-cause analysis
-- the team needs RCA before deciding the next implementation step
-
-Preferred DevFlow 2.0 pairing:
-
-- from `00-discover` when a new request begins with a failure whose root cause is unknown
-- from `40-implement`
-- from `50-verify`
-
-When invoked with a Discovery ID, link the RCA report to that discovery and return to `00-discover {discovery_id}` for the delivery decision. Do not allocate a Running ID for an unapproved fix during Debug.
-
-## Source Discipline
-
-Apply the local skill pack at `.agents/skills/9arm-skills/debug-mantra/SKILL.md`.
-
-- Source pack: `9arm-skills`
-- Credit: `thananon/9arm-skills`
-- Upstream: https://github.com/thananon/9arm-skills
-- Mantra: `Reproduce -> Trace fail path -> Falsify hypothesis -> Cross-reference breadcrumbs`
+**The Debug Mantra (9arm Pattern)**:
+```text
+Reproduce ➔ Trace Fail Path ➔ Falsify Hypotheses ➔ Cross-reference Breadcrumbs ➔ RCA Proof
+```
 
 ---
 
-## Internal Process
+## 1. The 4-Phase Diagnostic Loop
 
-You are doing Root Cause Analysis, not just symptom triage. Keep the richer original debugging discipline and map the next step back into DevFlow 2.0.
+### Phase 1: Reproduce & Classify
+- Restate the observed symptom vs. expected behavior with exact steps.
+- Create a minimal reproduction script, test case, or curl command.
+- Rule: **Do not propose a code fix before the reproduction story is verified.**
 
-### Phase 1: Reproduce And Classify
+### Phase 2: Isolate & Hypothesize
+- Generate 2–4 distinct hypotheses ranked by probability.
+- Formulate specific criteria and evidence that would *falsify* each hypothesis.
 
-- restate the symptom clearly
-- capture expected vs actual behavior
-- determine whether the issue is reproducible
-- do not recommend a fix before the reproduction story is credible
+### Phase 3: Non-Destructive Investigation
+- Trace code execution paths end-to-end (stack traces, logs, variable states, async boundaries).
+- Inspect recent commits or configuration changes that touch the affected boundary.
+- Test hypotheses methodically using tests and logging without altering business logic.
 
-### Phase 2: Isolate And Hypothesize
+### Phase 4: Root Cause Conclusion (RCA)
+- State precisely *why* the bug occurred (underlying invariant violation).
+- Define the minimal, robust architectural fix direction.
+- Propose regression prevention measures (unit test, type guard, linter rule).
 
-- identify likely components, recent changes, or conditions
-- generate 2-4 hypotheses ordered by likelihood
-- define what evidence would falsify each hypothesis
+---
 
-### Phase 3: Investigate With Evidence
+## 2. Output Format (RCA Report)
 
-- trace the real fail path end-to-end
-- test hypotheses methodically
-- record evidence with file:line or command output
-- maintain a breadcrumb trail of observations and conclusions
+Save substantial RCA investigations under:
+```text
+devflow/debug/rca-{slug}.md
+```
 
-### Phase 4: Conclude With RCA
-
-- name the root cause
-- explain why it is the root cause
-- describe the fix direction
-- capture prevention or follow-up measures
-
-This command supports the active stage. It does not replace the mainline stage itself.
-
-## Output Format
-
-Save the RCA report to `devflow/debug/rca-{slug}.md`.
-
-Before generating the report:
-
-1. Inspect `.agent/resources/schemas/rca.template.md`
-2. Preserve its required headings and structure
-3. Replace placeholder text with concrete evidence
-4. Re-check the output against `rca.template.md`, ensure required headings remain, and remove all placeholders before completion
-
-Present the summary in this shape:
-
+Structure:
 ```markdown
 ## Debug Summary
 
-1. **Symptom**: [What is happening]
-2. **Evidence**: [error log, file, line, failing command]
-3. **Investigation Path**: [what was tested and what happened]
-4. **Root Cause**: [why this happened]
-5. **Fix Direction**: [what should be changed]
-6. **Prevention**: [how to avoid recurrence]
+1. **Symptom**: [What is happening vs expected]
+2. **Evidence**: [Error logs, stack trace, file:line references]
+3. **Investigation Path**: [Hypotheses tested and falsification proof]
+4. **Root Cause**: [The exact mechanism causing the failure]
+5. **Fix Direction**: [Recommended scoped change]
+6. **Regression Guard**: [Reproduction test to add before fixing]
 ```
 
-## Examples
-
-```text
-Debug flaky login redirect
-Debug failing migration in CI
-Debug why webhook verification breaks in staging
-Debug unexpected duplicate records
-```
+---
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Companion command
-- Mainline status: Not a numbered stage
-- Typical entry points: `00-discover`, `40-implement`, `50-verify`, `Issue-Triage`, production failure analysis
-- Typical handoff targets: `00-discover {discovery_id}` for discovery-owned RCA, `40-implement`, `50-verify`, `Insight`, `Wiki`
-
-## Sources
-
-- `AGENTS.md`
-- `.agent/resources/schemas/rca.template.md`
-- Related commands: `40-implement`, `50-verify`, `Test`, `Insight`, `Wiki`, `Agent`
-
-## Next Workflow Recommendation
-
-- Default: return to `00-discover {discovery_id}` when the failure entered through discovery; otherwise return to `40-implement` when a tracked fix already exists
-- Alternate: `30-plan` if the fix needs planning changes
-- Alternate: `50-verify` when the issue is resolved and needs re-checking
-
+- **Classification**: Companion command & Investigation lane
+- **Mainline integration**:
+  - During `00-discover`: Unclear failure intake before allocation
+  - During `40-implement`: Hard test failure or unexpected runtime exception
+  - During `50-verify`: Defect found during QA inspection
+- **Handoff**: `test` (write repro test), `40-implement` (execute fix), `50-verify` (re-check)

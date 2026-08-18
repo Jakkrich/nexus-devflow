@@ -1,0 +1,26 @@
+# Nexus-DevFlow Master Release History Ledger
+
+This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during the `70-release` stage and links to its exact Git commit hash, release tag, and generated delivery artifacts.
+
+---
+
+## 📜 Release Log
+
+| Release Date | Running ID | Title | Git Tag / Commit | Release Status | Report Link |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-18 | `RUN-007` | ยกระดับระบบ Nexus-DevFlow ด้วยวินัยและกลไกสำคัญจาก Blueprint | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-007-integrate-blueprint-skills-enhancements/60-report.md) |
+| 2026-08-18 | `RUN-006` | Standardize Command Naming and Provider Invocation | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-006-standardize-command-naming-and-provider-invocation/60-report.md) |
+| 2026-08-18 | `RUN-005` | Add DevFlow Prefix to Skill Descriptions | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-005-add-devflow-prefix-to-skill-descriptions/60-report.md) |
+| 2026-08-18 | `RUN-004` | Add Autopilot Skill | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-004-add-autopilot-skill/60-report.md) |
+| 2026-08-18 | `RUN-003` | Add Try, Rollback, CI, Brief Skills | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-003-add-try-rollback-ci-brief-skills/60-report.md) |
+| 2026-08-18 | `RUN-002` | Add Onboard, Adopt, Doctor Skills | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-002-add-onboard-adopt-doctor-skills/60-report.md) |
+| 2026-08-18 | `RUN-001` | Align DevFlow with Blueprint Architecture | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-001-align-devflow-blueprint/60-report.md) |
+
+---
+
+## 🗄️ Run Lifecycle States
+
+- **Active**: Currently executing in `devflow/runs/{running-id}-{slug}/` (tracked in `devflow/context/current-stage.md`).
+- **Released**: Finished `70-release`, merged, and logged in this master ledger.
+- **Archived**: Older historical runs moved to `devflow/history/archived-runs/` to maintain a clean workspace.
+- **Rolled Back**: Features safely reversed via `/rollback` with documented post-reversal verification.

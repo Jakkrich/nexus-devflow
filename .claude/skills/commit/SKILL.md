@@ -1,63 +1,59 @@
----name: commit
-
-description: "[Devflow] Smart Commit (Git Orchestration) - Stage files intelligently and write a concise, imperative commit message according to project standards."
 ---
-# ๐’พ Smart Commit (Git Orchestration)
+name: commit
+description: "[Devflow] Smart Commit (Git Orchestration) - Stage files intelligently, write conventional imperative commit messages, and manage trunk-based versioning."
+---
 
-## Target: $ARGUMENTS
+# Smart Commit & Git Workflow Versioning
 
-Stage files intelligently and write a concise, imperative commit message according to project standards.
+## Overview
 
-Primary behavior now lives in:
+This is the Git orchestration and versioning master skill for Nexus-DevFlow. It enforces atomic commits, conventional commit formatting, intelligent staging, and safe trunk-based workflows. Commits are save points, branches are sandboxes, and Git history is durable documentation.
+
+---
+
+## 1. Commit Discipline & The Conventional Commits Standard
+
+Each commit should represent one atomic, self-contained change:
 
 ```text
-.agents/skills/release-git-operations/SKILL.md
+<type>(<scope>): <short imperative summary>
+
+[optional detailed body explaining WHY, not WHAT]
 ```
 
-Treat this workflow file as a compatibility wrapper around that skill in `commit` mode.
+### Commit Types:
+- `feat`: A new user-facing feature or capability
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Maintenance, build tasks, package updates
+
+### Formatting Rules:
+- Use the imperative mood: `"feat(auth): add password reset flow"` (NOT `"added"` or `"adds"`).
+- Never mix formatting/refactoring with behavioral feature changes in the same commit.
 
 ---
 
-## ๐ ๏ธ Internal Process
+## 2. Trunk-Based Branching & Safety
 
-You are an orchestrator. Your goal is to call the specialized Git Committer agent to perform a high-quality commit.
-
-### Phase 1: Assessment & Staging
-**Call Agent**: `prp-core-git-committer`
-- Provide the target description (e.g., "all", "backend only", "staged").
-- The agent will:
-  - Check the current Git status and branch.
-  - **MANDATORY BRANCH RULE:** Use the user's current branch as-is. Do not create, switch, or checkout a branch automatically. Only create or switch branches when the user explicitly asks for that exact branch action in the current request.
-  - If the current branch appears risky for the intended commit (for example `main`/`master` or a protected branch), warn the user and ask whether they want to continue on the current branch or explicitly create/switch to another branch.
-  - Interpret your description to stage the correct files.
-  - Review the staged changes to understand the context.
-
-### Phase 2: Message Generation & Commit
-- Ensure the agent generates an imperative commit message (e.g., `feat: Add user auth`).
-- The agent will execute the commit and capture the result.
-
-### Phase 3: Result Summary
-- Verify the agent reports:
-  - Commit Hash.
-  - Final Commit Message.
-  - Statistics (Files changed, additions, deletions).
+- **Keep `main` deployable**: Feature branches (`feature/{slug}-{running-id}`) must be short-lived.
+- **Never commit directly to `main` without review**: Use feature/fix branches during development.
+- **Small, verified increments**: Test and verify before committing each checkpoint.
 
 ---
 
-๐“ **Next Step**: Run `PR` to create a Pull Request.
+## 3. Execution Flow
+
+1. Check `git status` and verify current branch.
+2. Stage relevant files explicitly (`git add <files>` — avoid blindly running `git add .` if untracked temporary files exist).
+3. Generate concise conventional commit message.
+4. Execute `git commit` and capture commit hash.
+
+---
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Companion command
-- Mainline status: Release support command, not a numbered stage
-- Typical entry points: `70-release` after the report is aligned and release execution is ready
-- Typical handoff targets: `PR`, `Deploy`, `70-release`
-
-## Sources
-
-- `AGENTS.md`
-- `.agents/skills/release-git-operations/SKILL.md`
-- `.agents/skills/git-workflow-and-versioning/SKILL.md`
-- Related commands: `70-release`, `PR`, `Deploy`, `Merge`
-
-
+- **Classification**: Companion command & Version control support
+- **Mainline integration**: Used during `40-implement` (checkpoint commits), `70-release` (final release commit).
+- **Handoff**: `pr`, `merge`, `70-release`

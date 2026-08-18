@@ -27,7 +27,14 @@ General engineering standards for code, tests, and documentation in Nexus-DevFlo
 - **P0/P1 Blockers**: P0 and P1 findings in `open` or `fixed` status block `70-release` unconditionally. `fixed` status must be promoted to `closed` via `50-verify` re-examination.
 
 ## 4. Git Workflow & Release Safety
-
+ 
 - Commit messages follow conventional/imperative format (e.g., `feat(RUN-007): ...`).
 - Feature branches follow `feature/{slug}-{running-id}` or `fix/{slug}-{running-id}`.
 - **2-Stage Release Approvals**: Explicit consent to merge into `main` is strictly separate from consent to `git push` to remote repositories or deploy to production.
+
+## 5. Fast-Track & Quick-Fix Guidelines (Lean Mode)
+
+- For trivial bug fixes, typo corrections, or single-file non-architectural changes, developers and agents may use the **Quick-Fix Fast-Track**:
+  - Consolidate Discovery, Define, and Spec into an inline fix brief (`devflow/runs/{fix-id}/fix-brief.md`).
+  - Jump directly to `40-implement` (with reproduction unit test) ➔ `50-verify` ➔ `70-release`.
+  - Avoid creating heavy redundant documentation for changes under 20 lines of code while preserving Empirical Proof and Unit Test requirements.

@@ -77,6 +77,8 @@ Before packaging, merging, or releasing:
    - **การ Push ไปยัง Remote หรือ Deploy จะต้องขออนุมัติแยกต่างหากอย่างชัดเจน (Merge approval DOES NOT equal Push approval)**
 3. **Archive Resolved Findings**:
    - ย้ายรายการ Findings ที่ปิดแล้ว (`closed`, `accepted`, `invalid`) ไปบันทึกในเอกสาร Release และรีเซ็ต `findings.md` ให้สะอาด
+4. **Append to Master History Ledger**:
+   - บันทึก Entry ใหม่ลงใน `devflow/history/HISTORY.md` พร้อมระบุ Running ID, Title, วันที่, Git Commit Hash / Tag, สถานะ (`Released`), และลิงก์ไปยังรายงานสรุป `60-report.md`
 
 ### 1. Load Verified Context
 

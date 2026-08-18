@@ -32,3 +32,4 @@
 - Run `/20-Spec` and `/30-Plan` to establish formal delivery specifications and execution plans.
 - Run `/40-Implement` for step-by-step code implementation with evidence.
 - Run `/50-Verify`, `/60-Report`, and `/70-Release` for quality verification, reporting, and release packaging.
+- Use **Fast-Track / Quick-Fix mode** for minor hotfixes to skip heavy ceremony while keeping test evidence.
