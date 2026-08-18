@@ -1,10 +1,10 @@
 {
   "skill": "goal",
-  "description": "Goal workflow",
+  "description": "\"[Devflow] High-level goal routing and open-ended request intake before entering the 00-discover stage.\"",
   "positive": [
     "run goal skill",
     "invoke /goal command",
-    "use goal for goal workflow",
+    "use goal for devflow high level goal routing open ended request",
     "apply goal guidance"
   ],
   "negative": [

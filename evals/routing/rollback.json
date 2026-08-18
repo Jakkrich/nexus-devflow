@@ -1,0 +1,14 @@
+{
+  "skill": "rollback",
+  "description": "\"[Devflow] Plan safe feature or run reversal with dependency and commit risk analysis.\"",
+  "positive": [
+    "run rollback skill",
+    "invoke /rollback command",
+    "use rollback for devflow plan safe feature reversal with dependency commit",
+    "apply rollback guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

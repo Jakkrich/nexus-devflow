@@ -1,10 +1,10 @@
 {
   "skill": "00-discover",
-  "description": "Discover stage in DevFlow 2.0 - explore a request, route supporting inquiry, and decide whether delivery work should begin without allocating a running ID.",
+  "description": "\"[Devflow] Discover stage in DevFlow 2.0 - explore a request, route supporting inquiry, and decide whether delivery work should begin without allocating a running ID.\"",
   "positive": [
     "run 00-discover skill",
     "invoke /00-discover command",
-    "use 00-discover for discover stage devflow explore request route supporting inquiry",
+    "use 00-discover for devflow discover stage devflow explore request route supporting",
     "apply 00-discover guidance"
   ],
   "negative": [

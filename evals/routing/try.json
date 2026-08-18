@@ -1,0 +1,14 @@
+{
+  "skill": "try",
+  "description": "\"[Devflow] Generate human manual QA review walkthrough guide (where to go, what to click, what to expect).\"",
+  "positive": [
+    "run try skill",
+    "invoke /try command",
+    "use try for devflow generate human manual review walkthrough guide where",
+    "apply try guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

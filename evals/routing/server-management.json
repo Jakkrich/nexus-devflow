@@ -1,10 +1,10 @@
 {
   "skill": "server-management",
-  "description": "Server management principles and decision-making. Process management, monitoring strategy, and scaling decisions. Teaches thinking, not commands.",
+  "description": "\"[Devflow] Server management principles and decision-making. Process management, monitoring strategy, and scaling decisions. Teaches thinking, not commands.\"",
   "positive": [
     "run server-management skill",
     "invoke /server-management command",
-    "use server-management for server management principles decision making process management monitoring",
+    "use server-management for devflow server management principles decision making process management",
     "apply server-management guidance"
   ],
   "negative": [

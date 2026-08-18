@@ -1,10 +1,10 @@
 {
   "skill": "review",
-  "description": "Two-axis review for changed work. Use inside /50-Verify or /70-Release when a branch, PR, or work-in-progress diff needs standards and spec review.",
+  "description": "\"[Devflow] Multi-axis code and PR review. Reviews diffs against standards, specs, correctness, security, performance, and 9arm scrutinize discipline.\"",
   "positive": [
     "run review skill",
     "invoke /review command",
-    "use review for axis review changed work inside verify release when",
+    "use review for devflow multi axis code review reviews diffs against",
     "apply review guidance"
   ],
   "negative": [

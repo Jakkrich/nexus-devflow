@@ -1,10 +1,10 @@
 {
   "skill": "powershell-windows",
-  "description": "PowerShell Windows patterns. Critical pitfalls, operator syntax, error handling.",
+  "description": "\"[Devflow] PowerShell Windows patterns. Critical pitfalls, operator syntax, error handling.\"",
   "positive": [
     "run powershell-windows skill",
     "invoke /powershell-windows command",
-    "use powershell-windows for powershell windows patterns critical pitfalls operator syntax error",
+    "use powershell-windows for devflow powershell windows patterns critical pitfalls operator syntax",
     "apply powershell-windows guidance"
   ],
   "negative": [

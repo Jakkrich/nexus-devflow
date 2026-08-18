@@ -1,0 +1,14 @@
+{
+  "skill": "onboard",
+  "description": "\"[Devflow] Set up Nexus-DevFlow after overlaying it onto a freshly scaffolded or early-stage project.\"",
+  "positive": [
+    "run onboard skill",
+    "invoke /onboard command",
+    "use onboard for devflow nexus devflow after overlaying onto freshly scaffolded",
+    "apply onboard guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

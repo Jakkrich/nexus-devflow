@@ -1,10 +1,10 @@
 {
   "skill": "50-verify",
-  "description": "Verify quality in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement.",
+  "description": "\"[Devflow] Verify stage in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement.\"",
   "positive": [
     "run 50-verify skill",
     "invoke /50-verify command",
-    "use 50-verify for verify quality devflow perform senior review record evidence",
+    "use 50-verify for devflow verify stage devflow perform senior review record",
     "apply 50-verify guidance"
   ],
   "negative": [
