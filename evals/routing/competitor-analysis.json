@@ -1,10 +1,10 @@
 {
   "skill": "competitor-analysis",
-  "description": "Research competitors, market alternatives, user pain points, and differentiation opportunities. Use when product framing, roadmap decisions, or strategic positioning need source-backed external context.",
+  "description": "\"[Devflow] Research competitors, market alternatives, user pain points, and differentiation opportunities. Use when product framing, roadmap decisions, or strategic positioning need source-backed external context.\"",
   "positive": [
     "run competitor-analysis skill",
     "invoke /competitor-analysis command",
-    "use competitor-analysis for research competitors market alternatives user pain points differentiation",
+    "use competitor-analysis for devflow research competitors market alternatives user pain points",
     "apply competitor-analysis guidance"
   ],
   "negative": [

@@ -1,0 +1,14 @@
+{
+  "skill": "autopilot",
+  "description": "\"[Devflow] Optional explicit mode for one bounded spec/plan/implement/verify/report pass with checkpoint commits and review packet.\"",
+  "positive": [
+    "run autopilot skill",
+    "invoke /autopilot command",
+    "use autopilot for devflow optional explicit mode bounded spec plan implement",
+    "apply autopilot guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Compact active context into a handoff note. Use when a DevFlow run must continue in another session, agent, or report without duplicating existing artifacts.
+description: "[Devflow] Compact active context into a handoff note. Use when a DevFlow run must continue in another session, agent, or report without duplicating existing artifacts."
 disable-model-invocation: true
 ---
 

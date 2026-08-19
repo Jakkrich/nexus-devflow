@@ -5,6 +5,40 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.10] - 2026-08-18
+
+### Changed
+- **Standardized Canonical Command Naming**: Standardized all Mainline Stages (`00-discover`, `10-define`, `20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`) and Companion Commands to use a single Canonical Name, completely removing confusing shorthand and redundant semantic aliases from core documentation and tables.
+- **AI Provider Invocation Guideline**: Added clear and concise instructions across `AGENTS.md`, `README.md`, and `README.th.md` explaining that command invocation syntax (Plain Name, `/`, or `$`) depends on the AI Provider or tool being used (e.g., Slash Commands for Claude Code & Antigravity, Dollar Macro for OpenAI Codex CLI).
+- **Skill Adapters & Template Alignment**: Updated usage blocks and next-step references across all `SKILL.md` files in `.agents/skills/` and `.claude/skills/`, and synchronized template package.
+
+## [2.0.9] - 2026-08-18
+
+### Added
+- **Companion Skills (`try`, `rollback`, `ci`, `brief`)**: Integrated 4 high-value companion skills from Blueprint (`/try` for human manual QA walkthroughs, `/rollback` for safe run reversal planning with dependency risk analysis, `/ci` for automated GitHub Actions pipeline setup, and `/brief` for read-only scope/risk pre-checks before spec).
+- **Autonomous Bounded Loop (`autopilot`)**: Added `/autopilot` for continuous execution across Spec -> Plan -> Implement -> QA Verify -> Report Digest with checkpoint commits and strict hard stops (no auto-merge, push, or deploy).
+- **Standardized `[Devflow]` Prefix**: Added `[Devflow]` prefix across all 104 skill descriptions in `.agents/skills/` and `.claude/skills/` for cleaner categorization and better AI agent discovery.
+- **Reviewed & Enhanced Descriptions**: Significantly improved descriptions for all companion wrappers and specialist skills to provide concrete action, purpose, and trigger intents.
+
+## [2.0.8] - 2026-08-18
+
+### Added
+- **Onboarding & Adoption Companion Skills (`onboard`, `adopt`)**: Introduced dedicated setup and ingestion workflows. `/onboard` detects stack, tunes `AGENTS.md` commands and `coding-standards.md`, and initializes baseline context for freshly scaffolded projects. `/adopt` provides a read-only survey and intent interview to bootstrap DevFlow context into existing brownfield codebases.
+- **Health Check & Diagnostics Skill (`doctor`)**: Added a read-only diagnostic skill (`/doctor`) to verify context file completeness, adapter parity, command validity, active run progression, and detect workflow drift.
+- **Router Integration**: Upgraded the flagship `devflow` router to automatically detect unconfigured projects and route users to `/onboard` or `/adopt`, and to recommend `/doctor` for diagnostics.
+- **Ecosystem Synchronization**: Added `onboard`, `adopt`, `doctor` across [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md), package installer template, and documentation.
+
+## [2.0.7] - 2026-08-18
+
+### Added
+- **Blueprint-Style Self-Contained Model**: Upgraded [AGENTS.md](file:///d:/Projects/devtools/nexus-devflow/AGENTS.md) to a comprehensive, self-contained operating blueprint with execution rules for OpenAI Codex, Google Antigravity, Claude Code, Cursor, and generic AI coding assistants.
+- **Mandatory Tool Reading Directive**: Added explicit instructions in `AGENTS.md` for agents without background skill loaders (e.g. OpenAI Codex CLI, Aider) to inspect `.agents/skills/<skill>/SKILL.md` before executing stages.
+- **Universal Command Invocations**: Native support for normal stage names (`00-discover`, `10-define`, `20-spec`, `devflow`), semantic aliases (`discover`, `spec`, `implement`, `verify`, `report`, `release`, `status`), Codex macro syntax (`$00-discover`), and slash commands (`/00-discover`).
+- **State-Aware Inspection in `devflow` Router**: Upgraded flagship `devflow` guide to automatically scan active runs in `devflow/runs/` and `devflow/context/current-stage.md` to recommend the exact next step.
+
+### Fixed
+- **HTML Report Template Path**: Fixed template resolution in `scripts/lib/render-html/md2html-report.mjs` to dynamically look in `.agents/skills/md2html/template.html` and `.claude/`.
+
 ## [2.0.6] - 2026-08-17
 
 ### Removed

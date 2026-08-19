@@ -1,6 +1,6 @@
 ---
 name: type-design
-description: Analyzes type and interface design for encapsulation, invariant expression, usefulness, and enforcement. Use when introducing new types, reviewing PRs with type changes, or refactoring domain models.
+description: "[Devflow] Analyzes type and interface design for encapsulation, invariant expression, usefulness, and enforcement. Use when introducing new types, reviewing PRs with type changes, or refactoring domain models."
 ---
 
 # Type Design

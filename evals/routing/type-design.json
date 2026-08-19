@@ -1,10 +1,10 @@
 {
   "skill": "type-design",
-  "description": "Analyzes type and interface design for encapsulation, invariant expression, usefulness, and enforcement. Use when introducing new types, reviewing PRs with type changes, or refactoring domain models.",
+  "description": "\"[Devflow] Analyzes type and interface design for encapsulation, invariant expression, usefulness, and enforcement. Use when introducing new types, reviewing PRs with type changes, or refactoring domain models.\"",
   "positive": [
     "run type-design skill",
     "invoke /type-design command",
-    "use type-design for analyzes type interface design encapsulation invariant expression usefulness",
+    "use type-design for devflow analyzes type interface design encapsulation invariant expression",
     "apply type-design guidance"
   ],
   "negative": [

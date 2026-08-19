@@ -1,10 +1,10 @@
 {
   "skill": "insight",
-  "description": "Insight Extraction - Extract reusable lessons, file insights, patterns, gotchas, recommendations, and 9arm-skills/post-mortem learning from completed work.",
+  "description": "\"[Devflow] Extract reusable lessons, architectural patterns, post-mortem incident learning, and token optimizations from completed work.\"",
   "positive": [
     "run insight skill",
     "invoke /insight command",
-    "use insight for insight extraction extract reusable lessons file insights patterns",
+    "use insight for devflow extract reusable lessons architectural patterns post mortem",
     "apply insight guidance"
   ],
   "negative": [

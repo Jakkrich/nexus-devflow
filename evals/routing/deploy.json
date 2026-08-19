@@ -1,10 +1,10 @@
 {
   "skill": "deploy",
-  "description": "Production Deployment (Auto-Deploy) - Perform pre-flight checks, deployment execution, and verification for production releases.",
+  "description": "\"[Devflow] Production deployment pre-flight checks, launch readiness, smoke validation, and deployment execution.\"",
   "positive": [
     "run deploy skill",
     "invoke /deploy command",
-    "use deploy for production deployment auto deploy perform flight checks deployment",
+    "use deploy for devflow production deployment flight checks launch readiness smoke",
     "apply deploy guidance"
   ],
   "negative": [

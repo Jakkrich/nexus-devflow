@@ -1,10 +1,10 @@
 {
   "skill": "changelog",
-  "description": "Update CHANGELOG.md - Automatically gather changes from specs, git history, or current state to update the project changelog.",
+  "description": "\"[Devflow] Update CHANGELOG.md automatically from specs, git commits, and stage report history.\"",
   "positive": [
     "run changelog skill",
     "invoke /changelog command",
-    "use changelog for update changelog automatically gather changes from specs history",
+    "use changelog for devflow update changelog automatically from specs commits stage",
     "apply changelog guidance"
   ],
   "negative": [

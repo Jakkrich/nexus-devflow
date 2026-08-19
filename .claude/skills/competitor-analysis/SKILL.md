@@ -1,6 +1,6 @@
 ---
 name: competitor-analysis
-description: Research competitors, market alternatives, user pain points, and differentiation opportunities. Use when product framing, roadmap decisions, or strategic positioning need source-backed external context.
+description: "[Devflow] Research competitors, market alternatives, user pain points, and differentiation opportunities. Use when product framing, roadmap decisions, or strategic positioning need source-backed external context."
 ---
 
 # Competitor Analysis
@@ -51,9 +51,9 @@ Use `.agent/resources/schemas/competitor_analysis.template.md` when saving a reu
 ### 5. Route Back
 
 - `PRD` for product framing
-- `/10-Define` for scope and decision shaping
+- `10-define` for scope and decision shaping
 - `Roadmap` for prioritization
-- `/20-Spec` when a selected opportunity becomes actionable
+- `20-spec` when a selected opportunity becomes actionable
 
 ## Output
 

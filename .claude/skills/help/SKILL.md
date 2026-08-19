@@ -1,6 +1,6 @@
 ---name: help
 
-description: DevFlow 2.0 Help and routing guide. Transitional file while Help moves from numbered workflow to companion command.
+description: "[Devflow] DevFlow 2.0 help, routing guide, workflow sitemap, and process navigation."
 argument-hint: [optional: question, running id, stage, or issue]
 ---
 
@@ -77,14 +77,14 @@ Help Summary:
 Environment: All OK
 
 Active Runs:
-- 010-auth-refactor: stage=40-implement | approval=Pending | next=/50-Verify 010 | warnings: manual review open
-- 011-billing-phase-1: stage=20-spec | approval=Approved | next=/30-Plan 011
-- 012-admin-console: stage=50-verify | approval=Approved | next=/60-Report 012 | warnings: not ready for release
+- 010-auth-refactor: stage=40-implement | approval=Pending | next=50-verify 010 | warnings: manual review open
+- 011-billing-phase-1: stage=20-spec | approval=Approved | next=30-plan 011
+- 012-admin-console: stage=50-verify | approval=Approved | next=60-report 012 | warnings: not ready for release
 
 Recommended Next Action:
-- 010 -> /50-Verify 010
-- 011 -> /20-Spec 011
-- 012 -> /40-Implement 012
+- 010 -> 50-verify 010
+- 011 -> 20-spec 011
+- 012 -> 40-implement 012
 ```
 
 ### Phase C: Manual Review Soft Gate
@@ -108,13 +108,13 @@ Typical warning shape:
 ```text
 Manual Review Warning:
 - 014 -> 20-spec.md still shows Approval Status: Pending
-- Recommended action: review 20-spec.md and confirm the next allowed command before moving to /30-Plan 014
+- Recommended action: review 20-spec.md and confirm the next allowed command before moving to 30-plan 014
 ```
 
 ## DevFlow 2.0 Mainline
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+00-discover -> 10-define -> 20-spec -> 30-plan -> 40-implement -> 50-verify -> 60-report -> 70-release
 ```
 
 ## Public Companion Commands
@@ -163,38 +163,38 @@ These files still exist because their prompt bodies contain useful behavior, but
 
 ### 1. If the user is just starting
 
-Recommend `/00-Discover`. Discover selects `Brainstorm`, `PRD`, `Research`, `Debug`, or direct decision and owns the return synthesis.
+Recommend `00-discover`. Discover selects `Brainstorm`, `PRD`, `Research`, `Debug`, or direct decision and owns the return synthesis.
 If the request is large, high-risk, multi-phase, or requirement-heavy, explain that the run should use the manual review flow with explicit human approval at each stage.
 
 ### 2. If an approved discovery needs delivery boundaries
 
-Recommend `/10-Define {discovery_id}` so Define can create one or more Running IDs.
+Recommend `10-define {discovery_id}` so Define can create one or more Running IDs.
 
-If the go/no-go decision is not approved, return to `/00-Discover {discovery_id}` instead.
+If the go/no-go decision is not approved, return to `00-discover {discovery_id}` instead.
 
 ### 3. If the task is already defined and needs requirements
 
-Recommend `/20-Spec`.
+Recommend `20-spec`.
 
 ### 4. If requirements already exist and implementation planning is next
 
-Recommend `/30-Plan`.
+Recommend `30-plan`.
 
 ### 5. If planning is done and work should begin
 
-Recommend `/40-Implement`.
+Recommend `40-implement`.
 
 ### 6. If implementation exists and needs checking
 
-Recommend `/50-Verify`.
+Recommend `50-verify`.
 
 ### 7. If work is done and needs a final human-friendly summary before release
 
-Recommend `/60-Report`.
+Recommend `60-report`.
 
 ### 8. If the work needs packaging or release handling after the report is aligned
 
-Recommend `/70-Release`.
+Recommend `70-release`.
 
 ## General Q And A Role
 

@@ -1,6 +1,6 @@
 ---name: changelog
 
-description: Update CHANGELOG.md - Automatically gather changes from specs, git history, or current state to update the project changelog.
+description: "[Devflow] Update CHANGELOG.md automatically from specs, git commits, and stage report history."
 ---
 # Phase 53: Update Changelog
 
@@ -96,14 +96,14 @@ When changelog input is too implementation-heavy, apply `.agents/skills/9arm-ski
 
 - Classification: Companion command
 - Mainline status: Release communication support, not a numbered stage
-- Typical entry points: `/70-Release`, `Deploy`, `PR`
-- Typical handoff targets: `/60-Report`, `Wiki`
+- Typical entry points: `70-release`, `Deploy`, `PR`
+- Typical handoff targets: `60-report`, `Wiki`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agents/skills/release-git-operations/SKILL.md`
 - `.agent/resources/schemas/changelog_entry.template.md`
-- Related commands: `/70-Release`, `Deploy`, `PR`, `/60-Report`, `Wiki`
+- Related commands: `70-release`, `Deploy`, `PR`, `60-report`, `Wiki`
 
 

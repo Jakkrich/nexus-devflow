@@ -1,6 +1,6 @@
 ---name: 50-verify
 
-description: Verify quality in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement.
+description: "[Devflow] Verify stage in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement."
 ---
 # Phase 50: Verify Quality
 
@@ -9,7 +9,7 @@ Review implementation quality, run validation, produce a verification report, an
 ## Usage
 
 ```text
-/50-Verify {ID}
+50-verify {ID}
 ```
 
 ## Markdown-First Contract
@@ -46,9 +46,9 @@ Run verification as an evidence review loop, not as a single pass/fail guess.
 - **Context**: read `20-spec.md`, `30-plan.md`, `40-implement.md`, checklist state, changed files, test decisions, and available command/manual evidence.
 - **Action**: run or inspect validation, compare implementation evidence against the contract, review risk areas, and record findings by severity.
 - **Observation**: use concrete evidence from test output, validation output, diff review, manual checks, skipped checks, and impact notes.
-- **Adjustment**: if evidence is missing or failing, request targeted implementation follow-up, route to `Debug`, or return to `/40-Implement` with the exact evidence gap.
+- **Adjustment**: if evidence is missing or failing, request targeted implementation follow-up, route to `Debug`, or return to `40-implement` with the exact evidence gap.
 - **Stop Condition**: stop only with a clear verdict: pass, fail, or blocked; include the evidence, residual risks, and next route.
-- **Handoff**: `50-verify.md` must tell `/60-Report` why the work is ready, or tell `/40-Implement` exactly what must change before verification resumes.
+- **Handoff**: `50-verify.md` must tell `60-report` why the work is ready, or tell `40-implement` exactly what must change before verification resumes.
 
 ### 1. Context Gathering
 
@@ -65,21 +65,21 @@ Read:
 
 Run the necessary validation for the current state before doing the full review.
 
-### 3. QA Review
+### 3. QA Review & Findings Ledger Verification
 
-Use the old QA reviewer discipline, adapted to 2.0:
+Use the senior QA reviewer discipline, adapted to DevFlow 2.0 and Blueprint quality gates:
 
 - **STRICT MANDATE (กฎเหล็ก Unit Test)**: ตรวจสอบว่าโค้ดใหม่หรือการแก้ไข Bug (ที่มี behavior change) มีการสร้างหรืออัปเดต Unit Test คู่กันมาด้วยหรือไม่ หากไม่มีให้ทำเครื่องหมายว่า FAIL ทันที
+- **EMPIRICAL PROOF CONTRACT (หลักฐานเชิงประจักษ์)**: ห้ามเคลมว่า "ผ่าน" หรือ "ทำงานได้" โดยไม่มีหลักฐานรูปธรรม — ต้องระบุ Command, Test Output, Route, Screenshot, หรือ Log จริงที่พิสูจน์ผลลัพธ์
+- **FINDINGS LEDGER STATE MACHINE (`findings.md`)**:
+  - ตรวจสอบ `devflow/context/findings.md`
+  - ตรวจสอบสถานะ: `open` ➔ `fixed` ➔ `closed` (เฉพาะการตรวจซ้ำใน `50-verify` เท่านั้นที่สามารถเลื่อนสถานะ `fixed` เป็น `closed` ได้)
+  - **P0/P1 HARD GATE**: หากพบ Finding ระดับ P0 หรือ P1 ในสถานะ `open` หรือ `fixed` ที่ยังไม่ได้ถูกแก้ไข/ตรวจซ้ำ ให้ตัดสินเป็น FAIL ทันที
+- **MANUAL TRY GUIDE**: สรุปขั้นตอนการทดสอบด้วยมือสำหรับมนุษย์ (Where to go, What to click, What to expect) ไว้อย่างชัดเจน
 - compare claimed implementation evidence against the spec, plan, diff, and test decisions before forming a verdict
-- correctness
-- readability
-- architecture (DIP, SRP, Loose Coupling)
-- security
-- performance
+- correctness, readability, architecture (DIP, SRP, Loose Coupling), security, and performance
 - test coverage (และตรวจสอบว่าไม่มีการ skip หรือ disable เทสต์)
-- test decision alignment
-- manual verification gaps
-- assumptions and scope discipline
+- test decision alignment and scope discipline
 
 Run project validation commands when available: lint, tests, typecheck, build, or targeted commands from the plan.
 
@@ -120,11 +120,11 @@ Include:
 
 If pass:
 
-- route to `/60-Report`
+- route to `60-report`
 
 If fail:
 
-- route back to `/40-Implement` with exact failed evidence, missing checks, or required changes
+- route back to `40-implement` with exact failed evidence, missing checks, or required changes
 
 Use `Debug` when investigation is needed before implementation can resume.
 
@@ -134,8 +134,8 @@ Verification is the main human review checkpoint for implemented work.
 If the evidence is incomplete or `Approval Status` remains pending:
 
 - warn that release is not yet ready for confident handoff
-- recommend additional review or a return to `/40-Implement`
-- keep `/60-Report` as a soft recommendation only
+- recommend additional review or a return to `40-implement`
+- keep `60-report` as a soft recommendation only
 
 ## Output
 
@@ -146,13 +146,13 @@ Report:
 - commands run
 - validation status
 - impact and rollback analysis when `50-verify-impact.md` is present
-- next command: `/60-Report {ID}` if pass, or `/40-Implement {ID}` if fail
+- next command: `60-report {ID}` if pass, or `40-implement {ID}` if fail
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
-- Previous state: `/40-Implement`
-- Next state: `/60-Report` when evidence is sufficient
+- Previous state: `40-implement`
+- Next state: `60-report` when evidence is sufficient
 - Common companion commands: `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `Wiki`
 - Support skills: `review`, `diagnosing-bugs`, `tdd`, and `silent-failure-audit` for focused verification lanes
 
@@ -162,16 +162,16 @@ Report:
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/verify.template.md`
 - `.agent/resources/schemas/verify-impact.template.md`
-- Related commands: `/40-Implement`, `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `/60-Report`
+- Related commands: `40-implement`, `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `60-report`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/60-Report {ID}` when verification passes, or `/40-Implement {ID}` when verification fails.
+- **Primary**: `60-report {ID}` when verification passes, or `40-implement {ID}` when verification fails.
 - **Why**: Verification decides whether work moves forward to the final report stage or loops back for fixes.
 - **Alternatives**:
   - `Debug` - choose this when the failure needs root cause analysis before more implementation.
   - `review` - choose this when changed work needs standards and spec review as separate axes.
-  - `Wiki project ingest devflow/runs/{ID}-*/50-verify.md` - choose this when verification reveals reusable project knowledge.
+  - `Wiki project ingest devflow/runs/{ID}-*50-verify.md` - choose this when verification reveals reusable project knowledge.
 
 ## Nexus Event
 
@@ -184,5 +184,5 @@ Report:
 - **Needed**: `yes` when QA confirms a reusable lesson, regression pattern, manual check, or validation command.
 - **Scope**: `project` unless QA reveals a DevFlow framework rule.
 - **Reason**: Verified QA evidence is one of the safest sources for project wiki updates.
-- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*/50-verify.md`
+- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*50-verify.md`
 

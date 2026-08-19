@@ -1,10 +1,10 @@
 {
   "skill": "preview",
-  "description": "Preview workflow",
+  "description": "\"[Devflow] Local preview server management, smoke-check, and temporary runtime inspection before formal verification.\"",
   "positive": [
     "run preview skill",
     "invoke /preview command",
-    "use preview for preview workflow",
+    "use preview for devflow local preview server management smoke check temporary",
     "apply preview guidance"
   ],
   "negative": [

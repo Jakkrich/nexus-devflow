@@ -1,6 +1,6 @@
 ---name: pr
 
-description: Create Pull Request (Git Orchestration) - Create a well-formatted pull request from the current branch with a clear summary of changes and linked artifacts.
+description: "[Devflow] Pull Request creation with automated change summaries, verification evidence, and linked stage artifacts."
 ---
 # Create Pull Request (Git Orchestration)
 
@@ -16,7 +16,7 @@ Primary behavior now lives in:
 
 Treat this workflow file as a compatibility wrapper around that skill in `pr` mode.
 
-In DevFlow 2.0, this is a release-adjacent workflow. It usually follows `/60-Report` and pairs naturally with `/70-Release` once the final summary is aligned.
+In DevFlow 2.0, this is a release-adjacent workflow. It usually follows `60-report` and pairs naturally with `70-release` once the final summary is aligned.
 
 ---
 
@@ -31,7 +31,7 @@ You are an orchestrator. Your goal is to call the specialized Git PR Maker agent
 - Ensure the branch is not `main` or `master`.
 - Check for unpushed commits.
 - Verify the working directory is clean enough for PR submission.
-- Confirm the implementation has already passed the expected verification gate. If it has not, route back to `/50-Verify` first.
+- Confirm the implementation has already passed the expected verification gate. If it has not, route back to `50-verify` first.
 
 ### Phase 2: Context And Template
 
@@ -75,19 +75,19 @@ Verify that the workflow returns:
 
 - Classification: Companion command
 - Mainline status: Release support command, not a numbered stage
-- Typical entry points: `/70-Release`, `Commit`
-- Typical handoff targets: `PR-Review`, `PR-Followup`, `Merge`, `/70-Release`
+- Typical entry points: `70-release`, `Commit`
+- Typical handoff targets: `PR-Review`, `PR-Followup`, `Merge`, `70-release`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agents/skills/release-git-operations/SKILL.md`
 - `.agents/skills/git-workflow-and-versioning/SKILL.md`
-- Related commands: `Commit`, `PR-Review`, `PR-Followup`, `Merge`, `/60-Report`, `/70-Release`
+- Related commands: `Commit`, `PR-Review`, `PR-Followup`, `Merge`, `60-report`, `70-release`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/70-Release`
+- **Primary**: `70-release`
 - **Why**: after PR creation, release execution and handoff details should stay consistent with the approved report.
-- **Alternative**: `PR-Review` for structured review before broader sharing, or `/60-Report` when the final communication summary still needs to be refreshed first.
+- **Alternative**: `PR-Review` for structured review before broader sharing, or `60-report` when the final communication summary still needs to be refreshed first.
 

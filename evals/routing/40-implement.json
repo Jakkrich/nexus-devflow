@@ -1,10 +1,10 @@
 {
   "skill": "40-implement",
-  "description": "Implement code in DevFlow 2.0 - execute one planned unit at a time with markdown-first implementation evidence.",
+  "description": "\"[Devflow] Implement stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests.\"",
   "positive": [
     "run 40-implement skill",
     "invoke /40-implement command",
-    "use 40-implement for implement code devflow execute planned unit time with",
+    "use 40-implement for devflow implement stage devflow execute planned tasks incrementally",
     "apply 40-implement guidance"
   ],
   "negative": [
