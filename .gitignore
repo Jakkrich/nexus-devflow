@@ -34,13 +34,30 @@ Desktop.ini
 *.pem
 .security-key
 
-# DevFlow transient run data & scratch files
+# DevFlow transient run data, research, brainstorm & scratch files
 devflow/runs/*
 !devflow/runs/.gitkeep
 devflow/discoveries/*
 !devflow/discoveries/.gitkeep
 devflow/reports/*
 !devflow/reports/.gitkeep
+devflow/research/*
+!devflow/research/.gitkeep
+devflow/brainstorm/*
+devflow/brainstorms/*
+devflow/scratch/*
+devflow/history/*
+!devflow/history/.gitkeep
+devflow/tmp/*
+.devflow/
+
+# Local databases & state files
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
 
 # Python cache & virtualenvs (if applicable)
 __pycache__/
