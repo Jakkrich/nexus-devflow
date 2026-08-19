@@ -1,6 +1,6 @@
 ---
 name: issue-triage
-description: Issue-Triage workflow
+description: "[Devflow] Intake, categorize, and prioritize incoming issues and bug reports before delivery commitment."
 ---
 
 ﻿---
@@ -84,8 +84,8 @@ Use:
 - `Debug` for confirmed bugs needing root cause work
 - `Research` or `Spec-Research` for external dependency uncertainty
 - `PRD` for product-level feature requests that need problem framing
-- `/10-Define` for actionable work that still needs scope decisions
-- `/20-Spec` for work that is already stable enough to become a delivery contract
+- `10-define` for actionable work that still needs scope decisions
+- `20-spec` for work that is already stable enough to become a delivery contract
 - `Help` when the issue is not actionable yet
 
 ## Output Triage Recommendation
@@ -103,13 +103,13 @@ Return:
 - Classification: Companion command
 - Mainline status: Intake support command, not a numbered stage
 - Typical entry points: issue intake before scope or implementation begins
-- Typical handoff targets: `Debug`, `PRD`, `/10-Define`, `Research`, `Help`
+- Typical handoff targets: `Debug`, `PRD`, `10-define`, `Research`, `Help`
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/triage.template.md`
-- Related commands: `Debug`, `PRD`, `/10-Define`, `Research`, `Help`
+- Related commands: `Debug`, `PRD`, `10-define`, `Research`, `Help`
 - Support skills: `triage`, `to-issues`, `domain-modeling`
 
 

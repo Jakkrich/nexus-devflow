@@ -1,10 +1,10 @@
 {
   "skill": "70-release",
-  "description": "Release stage in DevFlow 2.0 - package verified work for delivery, merge, PR, deployment, or handoff.",
+  "description": "\"[Devflow] Release stage in DevFlow 2.0 - package verified work for delivery, git merge, PR, or deployment.\"",
   "positive": [
     "run 70-release skill",
     "invoke /70-release command",
-    "use 70-release for release stage devflow package verified work delivery merge",
+    "use 70-release for devflow release stage devflow package verified work delivery",
     "apply 70-release guidance"
   ],
   "negative": [

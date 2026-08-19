@@ -1,6 +1,6 @@
 ---name: brainstorm
 
-description: Structured brainstorming for projects and features. Transitional compatibility path for the Brainstorm companion command in DevFlow 2.0.
+description: "[Devflow] Structured divergent and convergent ideation for features and ideas without allocating running IDs."
 ---
 
 # Brainstorm - Structured Idea Exploration
@@ -24,10 +24,10 @@ Use it when:
 
 Preferred DevFlow 2.0 pairing:
 
-- from `/00-Discover` when the request is still fuzzy
-- from `/10-Define` when the direction is still unstable
+- from `00-discover` when the request is still fuzzy
+- from `10-define` when the direction is still unstable
 
-When invoked with a Discovery ID, link the brainstorming report to that discovery and return to `/00-Discover {discovery_id}` for synthesis. Do not allocate a Running ID or jump directly from a discovery-owned brainstorm into Define.
+When invoked with a Discovery ID, link the brainstorming report to that discovery and return to `00-discover {discovery_id}` for synthesis. Do not allocate a Running ID or jump directly from a discovery-owned brainstorm into Define.
 
 ## Behavior
 
@@ -145,24 +145,24 @@ Brainstorm caching strategy
 - Honest tradeoffs over fake confidence
 - Multiple viable paths before recommending one
 - Persistent output saved to disk
-- Mainline remains: `/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release`
+- Mainline remains: `00-discover -> 10-define -> 20-spec -> 30-plan -> 40-implement -> 50-verify -> 60-report -> 70-release`
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Companion command
 - Mainline status: Not a numbered stage
-- Typical entry points: `/00-Discover`, `/10-Define`
-- Typical handoff targets: `/00-Discover {discovery_id}` for discovery-owned work, or the active numbered stage for run-owned work
+- Typical entry points: `00-discover`, `10-define`
+- Typical handoff targets: `00-discover {discovery_id}` for discovery-owned work, or the active numbered stage for run-owned work
 
 ## Sources
 
 - `AGENTS.md`
 - `.agent/resources/schemas/brainstorm.template.md`
-- Related commands: `/00-Discover`, `/10-Define`, `Research`, `PRD`, `/20-Spec`
+- Related commands: `00-discover`, `10-define`, `Research`, `PRD`, `20-spec`
 
 ## Next Workflow Recommendation
 
-- Default: return to `/00-Discover {discovery_id}` when Discover requested the work; otherwise return to the stage that requested it
+- Default: return to `00-discover {discovery_id}` when Discover requested the work; otherwise return to the stage that requested it
 - Alternate: `Research` when facts are still missing
-- Alternate: `/10-Define` or `/20-Spec` only when the work was not opened from a pending discovery
+- Alternate: `10-define` or `20-spec` only when the work was not opened from a pending discovery
 

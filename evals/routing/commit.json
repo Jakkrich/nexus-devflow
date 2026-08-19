@@ -1,10 +1,10 @@
 {
   "skill": "commit",
-  "description": "Smart Commit (Git Orchestration) - Stage files intelligently and write a concise, imperative commit message according to project standards.",
+  "description": "\"[Devflow] Smart Commit (Git Orchestration) - Stage files intelligently, write conventional imperative commit messages, and manage trunk-based versioning.\"",
   "positive": [
     "run commit skill",
     "invoke /commit command",
-    "use commit for smart commit orchestration stage files intelligently write concise",
+    "use commit for devflow smart commit orchestration stage files intelligently write",
     "apply commit guidance"
   ],
   "negative": [

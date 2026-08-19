@@ -1,10 +1,10 @@
 {
   "skill": "seo-fundamentals",
-  "description": "SEO fundamentals, E-E-A-T, Core Web Vitals, and Google algorithm principles.",
+  "description": "\"[Devflow] SEO fundamentals, E-E-A-T, Core Web Vitals, and Google algorithm principles.\"",
   "positive": [
     "run seo-fundamentals skill",
     "invoke /seo-fundamentals command",
-    "use seo-fundamentals for fundamentals core vitals google algorithm principles",
+    "use seo-fundamentals for devflow fundamentals core vitals google algorithm principles",
     "apply seo-fundamentals guidance"
   ],
   "negative": [

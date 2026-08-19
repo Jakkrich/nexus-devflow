@@ -1,10 +1,10 @@
 {
   "skill": "prd",
-  "description": "PRD workflow",
+  "description": "\"[Devflow] Product Requirements Document drafting, user story mapping, and feature scoping before delivery commitment.\"",
   "positive": [
     "run prd skill",
     "invoke /prd command",
-    "use prd for workflow",
+    "use prd for devflow product requirements document drafting user story mapping",
     "apply prd guidance"
   ],
   "negative": [

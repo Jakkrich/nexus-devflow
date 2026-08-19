@@ -1,0 +1,14 @@
+{
+  "skill": "brief",
+  "description": "\"[Devflow] Read-only scope, dependency, and risk pre-briefing before speccing a run.\"",
+  "positive": [
+    "run brief skill",
+    "invoke /brief command",
+    "use brief for devflow read only scope dependency risk briefing before",
+    "apply brief guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

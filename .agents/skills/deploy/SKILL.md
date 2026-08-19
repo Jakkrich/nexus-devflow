@@ -1,91 +1,63 @@
----name: deploy
-
-description: Production Deployment (Auto-Deploy) - Perform pre-flight checks, deployment execution, and verification for production releases.
 ---
-# ๐€ Phase 52: Production Deployment (Auto-Deploy)
+name: deploy
+description: "[Devflow] Production deployment pre-flight checks, launch readiness, smoke validation, and deployment execution."
+---
 
-## Usage: `Deploy [subcommand]`
+# Production Deployment & Launch Readiness
 
-Perform pre-flight checks, deployment execution, and verification for production releases.
+## Overview
 
-Primary behavior now lives in:
+This is the comprehensive deployment master skill for Nexus-DevFlow. It handles pre-flight validation, multi-platform deployment execution (Vercel, Render, Railway, Fly.io, Docker), health checks, smoke verification, and safe rollback readiness.
 
 ```text
-.agents/skills/release-git-operations/SKILL.md
+Pre-Flight Checks ➔ Build & Smoke Test ➔ Deployment Execution ➔ Health Verification ➔ Release Logging
 ```
 
-Treat this workflow file as a compatibility wrapper around that skill in `deploy` mode.
+---
+
+## 1. Pre-Flight Verification Checklist
+
+Before initiating any deployment, verify:
+1. **Code & Quality**: Zero syntax/type errors, linters clean, unit & integration tests passing (`npm test`).
+2. **Security**: No secrets in source code, environment variables documented in `.env.example`, `npm audit` checked.
+3. **Database & Migrations**: Schema migrations verified backwards-compatible and applied.
+4. **Performance & Assets**: Production bundles compiled, assets compressed, Core Web Vitals considered.
+5. **Observability**: Healthcheck endpoint (`/api/health`) responsive, error tracking configured.
 
 ---
 
-## ๐ ๏ธ Sub-commands
+## 2. Platform Deployment Matrix
 
-- `Deploy`            - Interactive deployment wizard
-- `Deploy check`      - Run pre-deployment checks only
-- `Deploy preview`    - Deploy to preview/staging
-- `Deploy production` - Deploy to production
-- `Deploy rollback`   - Rollback to previous version
-
----
-
-## ๐ฆ Internal Process
-
-### Phase 1: Pre-Flight Checks
-Before any deployment, the AI MUST verify the following Checklist:
-1. **Code Quality**: No syntax errors, Linters passing, Tests passing.
-2. **Security**: No hardcoded secrets, Environment variables documented, Dependencies audited.
-3. **Performance**: Bundle size acceptable, Images optimized, No N+1 queries.
-4. **Accessibility**: Keyboard nav works, screen reader compatible, contrast adequate.
-5. **Infrastructure**: Env vars set, migrations ready, monitoring configured.
-6. **Documentation**: README / ADRs / CHANGELOG updated.
-
-*You MUST run appropriate validation commands to systematically audit the codebase before giving the green light.*
-
-### Phase 2: Deployment Execution
-Determine the project's platform (Vercel, Railway, Docker, Fly.io, etc.) and execute the appropriate build & deploy commands.
-- Vercel: `vercel --prod`
-- Railway: `railway up`
-- Docker: `docker compose up -d`
-- Fly.io: `fly deploy`
-
-### Phase 3: Health Check, Verify & Report
-- **Template Verification**: **MANDATORY:** Before final deployment, inspect `.agent/resources/schemas/deploy_report.template.md`, preserve its required layout, and replace placeholder text with concrete environment, commands, checks, rollback notes, and deployment result.
-- Save the final deployment and pre-flight check report to `devflow/reports/{date}-deploy-report-{timestamp}.md` (where `{date}` is today's date in `YYYY-MM-DD` format and `{timestamp}` is a clean date/time slug).
-- Verify that the deployed application is responding (HTTP 200 OK) and all services (Database, API) are healthy.
+| Target Platform | Deploy Method / Command | Verification Method |
+| :--- | :--- | :--- |
+| **Vercel** | `vercel --prod` or Git push | Inspect deployment URL & build logs |
+| **Render / Railway** | `railway up` or Git integration | Check service status & container logs |
+| **Fly.io** | `fly deploy` | Check `fly status` and HTTP response |
+| **Docker / VPS** | `docker compose up -d --build` | Check container health & PM2 logs |
 
 ---
 
-## ๐“ Output Formats
+## 3. Post-Deployment Smoke Verification & Health Check
 
-### Successful Deploy
-Generate a summary indicating:
-- **Summary**: Version, Environment, Duration, Platform
-- **URLs**: Production, Dashboard
-- **Report Location**: Confirm the deploy checklist and validation report has been written to the specified workspace path.
-- **What Changed**: Bullet points of new features or fixes
-- **Health Check**: Status of API and Database
+1. Send an HTTP request to the deployed domain: verify HTTP 200 OK.
+2. Test critical paths (Authentication, API endpoints, core database transactions).
+3. Confirm telemetry and error log stream are free of unhandled exceptions.
 
-### Failed Deploy
-Generate an Error summary detailing:
-- **Error**: Step where it failed (e.g., Build failed at TypeScript compilation)
-- **Details**: Exact error snippet
-- **Resolution**: Step-by-step fix recommendation
-- **Rollback Available**: Suggest running `Deploy rollback` if needed.
+---
+
+## 4. Rollback Readiness
+
+Always have an immediate rollback plan before triggering production releases:
+- Pin the previous stable build artifact, Docker image tag, or Git commit hash.
+- If post-deployment smoke tests fail, trigger rollback immediately:
+  ```text
+  deploy rollback
+  ```
+
+---
 
 ## Relationship To DevFlow 2.0
 
-- Classification: Companion command
-- Mainline status: Release support command, not a numbered stage
-- Typical entry points: `/70-Release` after the report is aligned and packaging is ready to execute
-- Typical handoff targets: `/60-Report`, `Changelog`, `Wiki`
-
-## Sources
-
-- `AGENTS.md`
-- `.agents/skills/release-git-operations/SKILL.md`
-- `.agents/skills/shipping-and-launch/SKILL.md`
-- `.agents/skills/deployment-procedures/SKILL.md`
-- `.agent/resources/schemas/deploy_report.template.md`
-- Related commands: `/70-Release`, `Commit`, `PR`, `Changelog`, `/60-Report`
-
-
+- **Classification**: Companion command & Delivery support
+- **Mainline integration**: Invoked after `70-release` when ready to deploy.
+- **Handoff**: `60-report`, `changelog`, `rollback`

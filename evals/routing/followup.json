@@ -1,10 +1,10 @@
 {
   "skill": "followup",
-  "description": "Followup workflow",
+  "description": "\"[Devflow] Followup task tracking, post-verification iteration, and routing unresolved items to subsequent runs.\"",
   "positive": [
     "run followup skill",
     "invoke /followup command",
-    "use followup for followup workflow",
+    "use followup for devflow followup task tracking post verification iteration routing",
     "apply followup guidance"
   ],
   "negative": [

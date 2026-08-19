@@ -256,17 +256,29 @@ async function confirmUpdateConflicts(prepared, options) {
   return answer.trim().toLowerCase() === "y";
 }
 
+function printNextSteps() {
+  console.log("\nNext steps in your AI IDE (Antigravity, Claude Code, Codex, etc.):");
+  console.log("  1. Project Setup & Baseline:");
+  console.log("     - Existing project : Run `/adopt` (or `$adopt`) to scan codebase and bootstrap context.");
+  console.log("     - Fresh project    : Run `/onboard` (or `$onboard`) to configure project baseline.");
+  console.log("  2. System Health & CI:");
+  console.log("     - Health check     : Run `/doctor` (or `$doctor`) to verify adapters and setup.");
+  console.log("     - CI configuration : Run `/ci` (or `$ci`) to setup GitHub Actions workflow.");
+  console.log("  3. Delivery Flow:");
+  console.log("     - Interactive guide: Run `/devflow` (or `$devflow`) for state & routing assistance.");
+  console.log("     - Start new work   : Run `/00-discover` (or `$00-discover`) to begin delivery lifecycle.");
+}
+
 function printInstallSuccess(targetDir, result, options) {
   console.log("\nNexus-DevFlow overlay successfully installed!");
   console.log(`Applied ${result.appliedCount} file(s).`);
-  console.log("\nNext steps:");
-  console.log("  1. Open your project in your AI IDE (Antigravity, Codex, Claude Code, etc.)");
-  console.log("  2. Run `/00-Discover` or `/help` to start your DevFlow workspace workflow.");
+  printNextSteps();
 }
 
 function printUpdateSuccess(prepared, result) {
   console.log("\nNexus-DevFlow update successfully applied!");
   console.log(`Applied ${result.appliedCount} file(s), removed ${result.removedCount} orphaned file(s).`);
+  printNextSteps();
 }
 
 main().catch((err) => {

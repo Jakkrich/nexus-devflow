@@ -1,10 +1,10 @@
 {
   "skill": "mcp-builder",
-  "description": "MCP (Model Context Protocol) server building principles. Tool design, resource patterns, best practices.",
+  "description": "\"[Devflow] MCP (Model Context Protocol) server building principles. Tool design, resource patterns, best practices.\"",
   "positive": [
     "run mcp-builder skill",
     "invoke /mcp-builder command",
-    "use mcp-builder for model context protocol server building principles tool design",
+    "use mcp-builder for devflow model context protocol server building principles tool",
     "apply mcp-builder guidance"
   ],
   "negative": [

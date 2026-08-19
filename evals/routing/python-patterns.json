@@ -1,10 +1,10 @@
 {
   "skill": "python-patterns",
-  "description": "Python development principles and decision-making. Framework selection, async patterns, type hints, project structure. Teaches thinking, not copying.",
+  "description": "\"[Devflow] Python development principles and decision-making. Framework selection, async patterns, type hints, project structure. Teaches thinking, not copying.\"",
   "positive": [
     "run python-patterns skill",
     "invoke /python-patterns command",
-    "use python-patterns for python development principles decision making framework selection async",
+    "use python-patterns for devflow python development principles decision making framework selection",
     "apply python-patterns guidance"
   ],
   "negative": [

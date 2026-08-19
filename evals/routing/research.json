@@ -1,10 +1,10 @@
 {
   "skill": "research",
-  "description": "Research workflow",
+  "description": "\"[Devflow] Deep codebase or web research with source-backed citations to support discovery and spec stages.\"",
   "positive": [
     "run research skill",
     "invoke /research command",
-    "use research for research workflow",
+    "use research for devflow deep codebase research with source backed citations",
     "apply research guidance"
   ],
   "negative": [

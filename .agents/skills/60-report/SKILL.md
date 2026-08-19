@@ -1,6 +1,6 @@
 ---name: 60-report
 
-description: Report stage in DevFlow 2.0 - produce the final standardized markdown and HTML summary for the full running flow.
+description: "[Devflow] Report stage in DevFlow 2.0 - produce standardized markdown and HTML summary report for the completed run."
 argument-hint: "{running-id or workspace path}"
 ---
 
@@ -13,7 +13,7 @@ Produce the final human-friendly summary of the full running flow in both Markdo
 ## Usage
 
 ```text
-/60-Report {running-id or workspace path}
+60-report {running-id or workspace path}
 ```
 
 Use this when:
@@ -27,8 +27,8 @@ Use this when:
 Write the primary stage artifacts to:
 
 ```text
-devflow/runs/{ID}-{slug}/60-report.md
-devflow/runs/{ID}-{slug}/60-report.html
+devflow/runs/{ID}-{slug}60-report.md
+devflow/runs/{ID}-{slug}60-report.html
 ```
 
 using:
@@ -87,8 +87,9 @@ Explain:
 - what problem was addressed
 - what direction was chosen
 - what was implemented
-- how it was verified
+- how it was verified (พร้อมบันทึกสถานะ Findings Ledger ใน `devflow/context/findings.md`)
 - how checklist progress moved across the run
+- **Manual Try Guide**: สรุปขั้นตอนการทดสอบสำหรับมนุษย์ ("Where to go", "What to click", "What to expect")
 - what approval or review state remained at each important gate
 - what the release recommendation is
 - what follow-up items still exist
@@ -157,8 +158,8 @@ npm run report:html -- <workspace-path-or-running-id>
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
-- Previous state: `/50-Verify`
-- Next state: `/70-Release` when the summary is aligned and release can proceed
+- Previous state: `50-verify`
+- Next state: `70-release` when the summary is aligned and release can proceed
 - Common companion commands: `Wiki` for durable knowledge capture, `Help` for routing or explanation
 - Support skills: `handoff`, `insight-capture`, and writing skills when final reporting must support continuation or reusable learning
 
@@ -167,11 +168,11 @@ npm run report:html -- <workspace-path-or-running-id>
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/report.template.md`
-- Related commands: `/50-Verify`, `/70-Release`, `Wiki`, `Help`
+- Related commands: `50-verify`, `70-release`, `Wiki`, `Help`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `/70-Release {ID}` after `60-report.md` and `60-report.html` reflect the verified state clearly.
+- **Primary**: `70-release {ID}` after `60-report.md` and `60-report.html` reflect the verified state clearly.
 - **Render HTML**: `npm run report:html -- {ID}` after `60-report.md` is finalized so the standardized stakeholder HTML stays in sync
 - **Alternative**: `Wiki` when the completed run should be promoted into durable reusable knowledge before release packaging continues
 - **Additional Alternative**: `handoff` when another session or agent must continue from the completed run.
@@ -180,4 +181,4 @@ npm run report:html -- <workspace-path-or-running-id>
 
 - Use `Wiki` when the final summary should become durable project or framework knowledge.
 - Use `Help` when approval signals, ownership, or route timing still feel ambiguous.
-- Return to `/50-Verify` when unresolved evidence, blockers, or review state mean the report should not advance yet.
+- Return to `50-verify` when unresolved evidence, blockers, or review state mean the report should not advance yet.

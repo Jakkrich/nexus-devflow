@@ -1,10 +1,10 @@
 {
   "skill": "20-spec",
-  "description": "Spec stage in DevFlow 2.0 - write the formal markdown-first specification from a stable definition.",
+  "description": "\"[Devflow] Spec stage in DevFlow 2.0 - write the formal markdown-first specification from a stable definition.\"",
   "positive": [
     "run 20-spec skill",
     "invoke /20-spec command",
-    "use 20-spec for spec stage devflow write formal markdown first specification",
+    "use 20-spec for devflow spec stage devflow write formal markdown first",
     "apply 20-spec guidance"
   ],
   "negative": [

@@ -1,10 +1,10 @@
 {
   "skill": "help",
-  "description": "DevFlow 2.0 Help and routing guide. Transitional file while Help moves from numbered workflow to companion command.",
+  "description": "\"[Devflow] DevFlow 2.0 help, routing guide, workflow sitemap, and process navigation.\"",
   "positive": [
     "run help skill",
     "invoke /help command",
-    "use help for devflow help routing guide transitional file while help",
+    "use help for devflow devflow help routing guide workflow sitemap process",
     "apply help guidance"
   ],
   "negative": [

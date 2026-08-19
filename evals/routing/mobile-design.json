@@ -1,10 +1,10 @@
 {
   "skill": "mobile-design",
-  "description": "Mobile-first design thinking and decision-making for iOS and Android apps. Touch interaction, performance patterns, platform conventions. Teaches principles, not fixed values. Use when building React Native, Flutter, or native mobile apps.",
+  "description": "\"[Devflow] Mobile-first design thinking and decision-making for iOS and Android apps. Touch interaction, performance patterns, platform conventions. Teaches principles, not fixed values. Use when building React Native, Flutter, or native mobile apps.\"",
   "positive": [
     "run mobile-design skill",
     "invoke /mobile-design command",
-    "use mobile-design for mobile first design thinking decision making android apps",
+    "use mobile-design for devflow mobile first design thinking decision making android",
     "apply mobile-design guidance"
   ],
   "negative": [

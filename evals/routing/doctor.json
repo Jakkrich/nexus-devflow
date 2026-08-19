@@ -1,0 +1,14 @@
+{
+  "skill": "doctor",
+  "description": "\"[Devflow] Read-only DevFlow health check and diagnostics for context files, adapters, commands, and workflow drift.\"",
+  "positive": [
+    "run doctor skill",
+    "invoke /doctor command",
+    "use doctor for devflow read only devflow health check diagnostics context",
+    "apply doctor guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

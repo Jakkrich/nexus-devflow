@@ -1,6 +1,6 @@
 ---
 name: skill-development
-description: Guides the creation and maintenance of agent skills. Use when building new skills or modifying existing ones to ensure they follow the PRP framework standards.
+description: "[Devflow] Guides the creation and maintenance of agent skills. Use when building new skills or modifying existing ones to ensure they follow the PRP framework standards."
 ---
 
 # Skill Development (Skill Anatomy)
