@@ -100,6 +100,7 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 - `prd`: Product Requirements Document drafting before delivery commitment.
 - `issue-triage`: Intake, categorize, and prioritize incoming issues and bug reports.
 - `security-review`: High-severity vulnerability and security review.
+- `overview`: Scan codebase architecture, data models, and shipped history to synthesize or refresh devflow/context/project-overview.md.
 - `wiki`: Knowledge base management and ingestion under `devflow/wiki/`.
 - `check-for-updates`: Verify or upgrade DevFlow setup.
 - `help`: Routing and process assistance across DevFlow workflows.
@@ -112,6 +113,7 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 | :--- | :--- | :--- | :--- | :--- |
 | **Setup (Fresh)** | `onboard` | `/onboard` | `$onboard` | Detect tech stack and establish initial project baseline |
 | **Adopt (Exist)** | `adopt` | `/adopt` | `$adopt` | Adopt existing brownfield codebase into DevFlow |
+| **Context Sync** | `overview` | `/overview` | `$overview` | Scan reality & history to refresh project-overview.md |
 | **Diagnostics** | `doctor` | `/doctor` | `$doctor` | Read-only health check for configs, tools, and drift |
 | **Manual QA** | `try` | `/try` | `$try` | Step-by-step manual testing guide for human verification |
 | **Reversal** | `rollback` | `/rollback` | `$rollback` | Reversal planner with dependency & commit risk analysis |
