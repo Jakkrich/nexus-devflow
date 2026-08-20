@@ -268,6 +268,9 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (positional[0] === "eject") {
       command = "eject";
       target = positional[1] || target || ".";
+    } else if (positional[0] === "install") {
+      command = "install";
+      target = positional[1] || target || ".";
     } else {
       target = positional[0];
     }
