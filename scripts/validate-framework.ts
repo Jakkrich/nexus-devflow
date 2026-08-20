@@ -1,0 +1,201 @@
+#!/usr/bin/env node
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { validateUpstreamMonitorContract } from "./lib/validate-upstream-monitor.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, "..");
+const args = new Set(process.argv.slice(2));
+const roadmapOnly = args.has("--roadmap-only");
+
+function fail(message: string, failures: string[]): void {
+  failures.push(message);
+  console.error(`FAIL: ${message}`);
+}
+
+function ok(message: string): void {
+  console.log(`OK: ${message}`);
+}
+
+function readJson<T = unknown>(relativePath: string, failures: string[]): T | null {
+  const target = path.join(projectRoot, relativePath);
+  try {
+    return JSON.parse(fs.readFileSync(target, "utf8")) as T;
+  } catch (error: unknown) {
+    fail(`${relativePath} is not valid JSON: ${error instanceof Error ? error.message : String(error)}`, failures);
+    return null;
+  }
+}
+
+function readText(relativePath: string, failures: string[]): string | null {
+  const target = path.join(projectRoot, relativePath);
+  try {
+    return fs.readFileSync(target, "utf8");
+  } catch (error: unknown) {
+    fail(`Could not read ${relativePath}: ${error instanceof Error ? error.message : String(error)}`, failures);
+    return null;
+  }
+}
+
+function scanForLegacyReferences(failures: string[]): void {
+  const excluded = new Set([".git", "node_modules", ".venv", "venv", "env", "dist", "template"]);
+  const allowedLegacyMentions = new Set([
+    path.normalize("scripts/activate-agent.mjs"),
+    path.normalize("agent-bundle.manifest.json"),
+    path.normalize("scripts/sync-agent-bundle.mjs"),
+    path.normalize("scripts/validate-framework.ts")
+  ]);
+  const legacyPatterns = [".cursor", ".cursorrules"];
+  const hits: string[] = [];
+
+  function walk(dir: string) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (excluded.has(entry.name)) continue;
+      const full = path.join(dir, entry.name);
+      const relative = path.relative(projectRoot, full);
+
+      if (entry.isDirectory()) {
+        if (legacyPatterns.includes(entry.name) && !allowedLegacyMentions.has(path.normalize(relative))) {
+          hits.push(`${relative} (directory)`);
+        }
+        walk(full);
+      } else if (entry.isFile()) {
+        if (legacyPatterns.includes(entry.name) && !allowedLegacyMentions.has(path.normalize(relative))) {
+          hits.push(`${relative} (file)`);
+        }
+      }
+    }
+  }
+
+  walk(projectRoot);
+  if (hits.length > 0) {
+    fail(`Found legacy rule files:\n  ${hits.join("\n  ")}`, failures);
+  } else {
+    ok("No legacy rule files found");
+  }
+}
+
+function validateRoadmap(failures: string[]): void {
+  const roadmapPath = path.join(projectRoot, "ROADMAP.md");
+  if (!fs.existsSync(roadmapPath)) {
+    fail("Missing ROADMAP.md", failures);
+    return;
+  }
+  const roadmap = readText("ROADMAP.md", failures);
+  if (!roadmap) return;
+
+  for (const heading of [
+    "## Strategic Direction",
+    "## Phases",
+    "## Current Focus"
+  ]) {
+    if (!roadmap.includes(heading)) fail(`ROADMAP.md is missing required heading: ${heading}`, failures);
+  }
+
+  ok("ROADMAP.md markdown validation passed");
+}
+
+function validateWorkflowNumbering(failures: string[]): void {
+  const skillsDir = path.join(projectRoot, ".agents", "skills");
+  if (!fs.existsSync(skillsDir)) {
+    fail("Missing .agents/skills directory", failures);
+    return;
+  }
+  const numberedMainline = new Set([
+    "00-discover",
+    "10-define",
+    "20-spec",
+    "30-plan",
+    "40-implement",
+    "50-verify",
+    "70-release",
+    "60-report"
+  ]);
+  const skillFolders = fs.readdirSync(skillsDir)
+    .filter((name) => fs.statSync(path.join(skillsDir, name)).isDirectory());
+
+  const invalid: string[] = [];
+  for (const name of skillFolders) {
+    const isNumbered = /^\d{2}-[a-z0-9-]+$/.test(name);
+    if (numberedMainline.has(name)) {
+      if (!isNumbered) invalid.push(`${name} (mainline skills must keep numbering)`);
+      continue;
+    }
+    if (isNumbered) {
+      invalid.push(`${name} (non-mainline skills must not use numbering)`);
+      continue;
+    }
+  }
+
+  if (invalid.length) {
+    fail(`Skill naming is invalid under DevFlow 2.0:\n  ${invalid.join("\n  ")}`, failures);
+  } else {
+    ok(`Skill naming passed for ${skillFolders.length} skills in .agents/skills`);
+  }
+}
+
+function validateUpstreamWorkflow(failures: string[]): void {
+  const workflowPath = path.join(projectRoot, ".github", "workflows", "check-upstream.yml");
+  if (!fs.existsSync(workflowPath)) {
+    fail("Missing .github/workflows/check-upstream.yml", failures);
+    return;
+  }
+
+  const workflow = fs.readFileSync(workflowPath, "utf8").replace(/\r\n/g, "\n");
+  try {
+    validateUpstreamMonitorContract(workflow);
+    ok(".github/workflows/check-upstream.yml contract passed");
+  } catch (error: unknown) {
+    fail(`Upstream monitor contract failed: ${error instanceof Error ? error.message : String(error)}`, failures);
+  }
+}
+
+function main() {
+  const failures: string[] = [];
+  const manifest = readJson<{ required_paths?: string[]; forbidden_legacy_paths?: string[] }>("agent-bundle.manifest.json", failures);
+  const requiredPaths = [
+    "agent-bundle.manifest.json",
+    "package.json",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".agents/skills",
+    ".claude/skills",
+    ".nexus/nexus-devflow.json",
+    ".nexus/upstream-ai-blueprint.json",
+    ".github/workflows/check-upstream.yml",
+    "devflow/context/project-overview.md",
+    "devflow/context/coding-standards.md",
+    "devflow/context/ai-interaction.md",
+    "devflow/reference/running-id-contract.md",
+    ...(manifest?.required_paths || [])
+  ];
+  const forbiddenPaths = manifest?.forbidden_legacy_paths || [];
+
+  const seenRequired = new Set<string>();
+  for (const item of requiredPaths) {
+    if (seenRequired.has(item)) continue;
+    seenRequired.add(item);
+    if (!fs.existsSync(path.join(projectRoot, item))) fail(`Missing required path: ${item}`, failures);
+    else ok(`Found ${item}`);
+  }
+
+  for (const item of forbiddenPaths) {
+    if (fs.existsSync(path.join(projectRoot, item))) fail(`Forbidden legacy path exists: ${item}`, failures);
+    else ok(`Legacy path absent: ${item}`);
+  }
+
+  scanForLegacyReferences(failures);
+  validateRoadmap(failures);
+  validateWorkflowNumbering(failures);
+  validateUpstreamWorkflow(failures);
+
+  if (failures.length > 0) {
+    console.error(`\nValidation failed with ${failures.length} issue(s).`);
+    process.exit(1);
+  }
+
+  console.log("\nNexus-DevFlow framework static validation completed successfully!");
+}
+
+main();

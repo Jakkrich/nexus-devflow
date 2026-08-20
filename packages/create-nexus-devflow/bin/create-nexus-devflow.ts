@@ -1,20 +1,32 @@
 #!/usr/bin/env node
 
-const fs = require("node:fs/promises");
-const fsSync = require("node:fs");
-const path = require("node:path");
-const readline = require("node:readline/promises");
-const {
-  MANIFEST_PATH,
+import fs from "node:fs/promises";
+import fsSync from "node:fs";
+import path from "node:path";
+import readline from "node:readline/promises";
+import { fileURLToPath } from "node:url";
+import {
   applyPreparedUpdate,
   prepareUpdate,
-  writeInstallManifest
-} = require("../lib/update");
+  type PreparedUpdate
+} from "../lib/update.js";
 
-const packageRoot = path.resolve(__dirname, "..");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const packageRoot = path.resolve(__dirname, "..", "..");
 const templateRoot = path.join(packageRoot, "template");
 
 const adapterChoices = new Set(["codex", "antigravity", "claude", "both", "all"]);
+
+interface CliOptions {
+  command: "install" | "update";
+  target: string | null;
+  adapter: string;
+  force: boolean;
+  dryRun: boolean;
+  help: boolean;
+  version: boolean;
+  yes: boolean;
+}
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
@@ -65,7 +77,7 @@ async function main() {
     adapter: options.adapter
   });
 
-  printInstallPlan(prepared, options);
+  printInstallPlan(prepared);
 
   if (options.dryRun) {
     return;
@@ -83,12 +95,12 @@ async function main() {
     replaceConflicts: options.force || prepared.conflictList.length > 0
   });
 
-  printInstallSuccess(targetDir, result, options);
+  printInstallSuccess(targetDir, result);
 }
 
-function parseArgs(args) {
-  let command = "install";
-  let target = null;
+function parseArgs(args: string[]): CliOptions {
+  let command: "install" | "update" = "install";
+  let target: string | null = null;
   let adapter = "both";
   let force = false;
   let dryRun = false;
@@ -96,7 +108,7 @@ function parseArgs(args) {
   let version = false;
   let yes = false;
 
-  const positional = [];
+  const positional: string[] = [];
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -176,13 +188,13 @@ function parseArgs(args) {
   };
 }
 
-function readPackageVersion() {
+function readPackageVersion(): string {
   const pkgPath = path.join(packageRoot, "package.json");
   const content = fsSync.readFileSync(pkgPath, "utf8");
-  return JSON.parse(content).version;
+  return (JSON.parse(content) as { version: string }).version;
 }
 
-function printHelp() {
+function printHelp(): void {
   console.log(`
 Nexus-DevFlow Installer v${readPackageVersion()}
 
@@ -200,7 +212,7 @@ Options:
 `);
 }
 
-function printInstallPlan(prepared, options) {
+function printInstallPlan(prepared: PreparedUpdate): void {
   console.log(`\nNexus-DevFlow v${readPackageVersion()}`);
   console.log(`Target Directory: ${prepared.targetDir}`);
   console.log(`Active Adapters : ${prepared.activeAdapters.join(", ")}\n`);
@@ -217,7 +229,7 @@ function printInstallPlan(prepared, options) {
   }
 }
 
-function printUpdatePlan(prepared) {
+function printUpdatePlan(prepared: PreparedUpdate): void {
   console.log(`\nNexus-DevFlow Update Plan (v${readPackageVersion()})`);
   console.log(`Target Directory: ${prepared.targetDir}`);
   console.log(`Active Adapters : ${prepared.activeAdapters.join(", ")}\n`);
@@ -228,7 +240,7 @@ function printUpdatePlan(prepared) {
   console.log(`Conflicts found : ${prepared.conflictList.length}`);
 }
 
-async function confirmInstallConflicts(prepared, options) {
+async function confirmInstallConflicts(prepared: PreparedUpdate, options: CliOptions): Promise<boolean> {
   if (options.yes) return true;
 
   const rl = readline.createInterface({
@@ -242,7 +254,7 @@ async function confirmInstallConflicts(prepared, options) {
   return answer.trim().toLowerCase() === "y";
 }
 
-async function confirmUpdateConflicts(prepared, options) {
+async function confirmUpdateConflicts(prepared: PreparedUpdate, options: CliOptions): Promise<boolean> {
   if (options.yes) return true;
 
   const rl = readline.createInterface({
@@ -256,7 +268,7 @@ async function confirmUpdateConflicts(prepared, options) {
   return answer.trim().toLowerCase() === "y";
 }
 
-function printNextSteps() {
+function printNextSteps(): void {
   console.log("\nNext steps in your AI IDE (Antigravity, Claude Code, Codex, etc.):");
   console.log("  1. Project Setup & Baseline:");
   console.log("     - Existing project : Run `/adopt` (or `$adopt`) to scan codebase and bootstrap context.");
@@ -269,19 +281,24 @@ function printNextSteps() {
   console.log("     - Start new work   : Run `/00-discover` (or `$00-discover`) to begin delivery lifecycle.");
 }
 
-function printInstallSuccess(targetDir, result, options) {
+function printInstallSuccess(targetDir: string, result: { appliedCount: number }): void {
   console.log("\nNexus-DevFlow overlay successfully installed!");
   console.log(`Applied ${result.appliedCount} file(s).`);
   printNextSteps();
 }
 
-function printUpdateSuccess(prepared, result) {
+function printUpdateSuccess(prepared: PreparedUpdate, result: { appliedCount: number; removedCount: number }): void {
   console.log("\nNexus-DevFlow update successfully applied!");
   console.log(`Applied ${result.appliedCount} file(s), removed ${result.removedCount} orphaned file(s).`);
   printNextSteps();
 }
 
-main().catch((err) => {
-  console.error(`\nError: ${err.message}`);
-  process.exit(1);
-});
+if (
+  process.argv[1] &&
+  fsSync.realpathSync(process.argv[1]) === fsSync.realpathSync(fileURLToPath(import.meta.url))
+) {
+  main().catch((err: unknown) => {
+    console.error(`\nError: ${err instanceof Error ? err.message : String(err)}`);
+    process.exit(1);
+  });
+}

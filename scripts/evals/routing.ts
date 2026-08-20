@@ -13,7 +13,13 @@ const stopWords = new Set([
   "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were", "will", "with"
 ]);
 
-function tokenize(text) {
+export interface SkillInfo {
+  name: string;
+  description: string;
+  descTokens: Set<string>;
+}
+
+export function tokenize(text: string): string[] {
   return String(text || "")
     .toLowerCase()
     .replace(/[^a-z0-9-]/g, " ")
@@ -21,7 +27,7 @@ function tokenize(text) {
     .filter((token) => token.length > 1 && !stopWords.has(token));
 }
 
-function parseSkillFrontmatter(content) {
+export function parseSkillFrontmatter(content: string): { name: string; description: string } {
   if (!content.startsWith("---")) return { name: "", description: "" };
   const parts = content.split("---");
   if (parts.length < 3) return { name: "", description: "" };
@@ -35,8 +41,8 @@ function parseSkillFrontmatter(content) {
   return { name, description };
 }
 
-export function loadSkills() {
-  const skills = new Map();
+export function loadSkills(): Map<string, SkillInfo> {
+  const skills = new Map<string, SkillInfo>();
   if (!fs.existsSync(skillsRoot)) return skills;
   const entries = fs.readdirSync(skillsRoot);
   for (const entry of entries) {
@@ -54,7 +60,7 @@ export function loadSkills() {
   return skills;
 }
 
-export function evaluateRouting() {
+export function evaluateRouting(): { totalCases: number; rank1Passes: number; accuracy: number } {
   console.log("Running DevFlow Skill Routing Evaluation...\n");
   const skills = loadSkills();
   if (skills.size === 0) {
@@ -73,7 +79,7 @@ export function evaluateRouting() {
 
   for (const caseFile of caseFiles) {
     const targetSkill = path.basename(caseFile, ".json").toLowerCase();
-    const data = JSON.parse(fs.readFileSync(path.join(casesRoot, caseFile), "utf8"));
+    const data = JSON.parse(fs.readFileSync(path.join(casesRoot, caseFile), "utf8")) as { positive?: string[] };
     const positiveCases = data.positive || [];
 
     for (const prompt of positiveCases) {
@@ -122,7 +128,10 @@ export function evaluateRouting() {
   return { totalCases, rank1Passes, accuracy };
 }
 
-if (process.argv[1] === __filename) {
+if (
+  process.argv[1] &&
+  fs.realpathSync(process.argv[1]) === fs.realpathSync(__filename)
+) {
   const result = evaluateRouting();
   if (result.accuracy < 80 && result.totalCases > 0) {
     console.error("Routing accuracy below 80% threshold!");

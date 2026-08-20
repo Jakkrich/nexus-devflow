@@ -25,20 +25,22 @@
     "workflow",
     "scaffold"
   ],
+  "type": "module",
   "bin": {
-    "create-nexus-devflow": "bin/create-nexus-devflow.js",
-    "nexus-devflow": "bin/create-nexus-devflow.js"
+    "create-nexus-devflow": "dist/bin/create-nexus-devflow.js",
+    "nexus-devflow": "dist/bin/create-nexus-devflow.js"
   },
   "scripts": {
-    "test": "node --test",
+    "build": "tsc -p tsconfig.json",
+    "test": "tsx --test test/update.test.ts",
     "check:pack": "npm pack --dry-run",
-    "prepare-template": "node scripts/prepare-template.js",
-    "prepack": "node scripts/prepare-template.js",
-    "postpack": "node scripts/clean-template.js"
+    "prepare-template": "tsx scripts/prepare-template.ts",
+    "clean-template": "tsx scripts/clean-template.ts",
+    "prepack": "npm run build && npm run prepare-template",
+    "postpack": "npm run clean-template"
   },
   "files": [
-    "bin/",
-    "lib/",
+    "dist/",
     "template/",
     "README.md",
     "LICENSE",

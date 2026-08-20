@@ -5,15 +5,16 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "check": "node ./scripts/check-devflow.mjs",
-    "check:static": "node ./scripts/validate-framework.mjs",
+    "check": "npm run typecheck && tsx scripts/check-devflow.ts",
+    "check:static": "tsx scripts/validate-framework.ts",
+    "typecheck": "tsc --noEmit",
     "sync:adapters": "node ./scripts/sync-adapters.js",
     "docs:dev": "npm --prefix website run dev",
     "docs:build": "npm --prefix website run build",
     "docs:preview": "npm --prefix website run preview",
     "test": "npm --prefix packages/create-nexus-devflow test",
-    "test:routing": "node ./scripts/evals/routing.js",
-    "test:package": "node ./scripts/smoke-package.mjs",
+    "test:routing": "tsx ./scripts/evals/routing.ts",
+    "test:package": "tsx ./scripts/smoke-package.ts",
     "activate": "node ./scripts/activate-agent.mjs",
     "goal": "node ./scripts/goal-runner.mjs",
     "index": "node ./scripts/generate-project-index.mjs",
@@ -31,11 +32,16 @@
     "validate:checklists:test": "node ./scripts/test-validate-checklists.mjs",
     "validate:skills:test": "node ./scripts/test-skill-selection-policy.mjs",
     "validate:verify-impact:test": "node ./scripts/test-verify-impact-contract.mjs",
-    "roadmap:validate": "node ./scripts/validate-framework.mjs --roadmap-only",
+    "roadmap:validate": "tsx ./scripts/validate-framework.ts --roadmap-only",
     "security:scan": "node ./scripts/scan-security-hygiene.mjs",
     "sync:check": "node ./scripts/sync-agent-bundle.mjs",
-    "validate": "node ./scripts/validate-framework.mjs",
+    "validate": "tsx ./scripts/validate-framework.ts",
     "validate:docs": "node ./scripts/scan-doc-contract.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   },
   "bin": {
     "nexus-devflow": "./scripts/activate-agent.mjs"

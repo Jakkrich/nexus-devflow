@@ -1,0 +1,69 @@
+name: Check AI Blueprint upstream
+
+on:
+  schedule:
+    - cron: "1 0 * * *"
+      timezone: "Asia/Bangkok"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-blueprint-upstream-monitor
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    permissions:
+      contents: read
+    outputs:
+      update-available: ${{ steps.report.outputs.update-available }}
+      issue-body-base64: ${{ steps.report.outputs.issue-body-base64 }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Nexus DevFlow
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Inspect AI Blueprint upstream
+        run: npx tsx .agents/skills/sync-upstream/scripts/inspect-upstream.ts > "$RUNNER_TEMP/upstream-inspection.json"
+      - name: Prepare update report
+        id: report
+        env:
+          ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: >-
+          npx tsx scripts/upstream-monitor.ts
+          --inspection "$RUNNER_TEMP/upstream-inspection.json"
+          --issue-body "$RUNNER_TEMP/upstream-issue.md"
+          --github-output "$GITHUB_OUTPUT"
+          --run-url "$ACTION_RUN_URL"
+  publish:
+    needs: detect
+    if: needs.detect.outputs.update-available == 'true'
+    permissions:
+      contents: read
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Nexus DevFlow
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Restore Issue body
+        env:
+          ISSUE_BODY_BASE64: ${{ needs.detect.outputs.issue-body-base64 }}
+        run: node -e "require('node:fs').writeFileSync(process.env.RUNNER_TEMP + '/upstream-issue.md', Buffer.from(process.env.ISSUE_BODY_BASE64, 'base64'))"
+      - name: Create or update review Issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: npx tsx scripts/update-upstream-issue.ts --issue-body "$RUNNER_TEMP/upstream-issue.md"
