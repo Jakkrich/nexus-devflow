@@ -5,6 +5,17 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.16] - 2026-08-20
+
+### Added
+- **Native Status CLI (`nexus-devflow status` / `create-nexus-devflow status`)**: Standalone terminal status inspection utility displaying project metadata, progress of living spec and active delivery runs, findings blocker detection (`P0`/`P1`), git status and remote divergence, and automated next action recommendation.
+- **Machine-Readable JSON Output (`--json`)**: Added `--json` flag to `status` command for automated CI/CD pipeline checks and external tooling integration.
+- **Core Status Inspection Libraries (`packages/create-nexus-devflow/lib/`)**: Added TypeScript modules for project root auto-detection (`project-root.ts`), metadata and adapter discovery (`project-metadata.ts`), findings ledger parser (`findings.ts`), git status reader (`git-status.ts`), and current work progress tracker (`current-work.ts`).
+- **Comprehensive Status Unit Test Suite**: Added 15 unit tests across `test/project-root.test.ts`, `test/project-metadata.test.ts`, `test/git-status.test.ts`, `test/findings.test.ts`, and `test/status.test.ts`.
+
+### Changed
+- **Synced AI Blueprint Upstream Baseline**: Updated `.nexus/upstream-ai-blueprint.json` tracking commit to `c394e3b` (v0.9.1).
+
 ## [2.0.15] - 2026-08-20
 
 ### Added

@@ -28,11 +28,12 @@
   "type": "module",
   "bin": {
     "create-nexus-devflow": "dist/bin/create-nexus-devflow.js",
-    "nexus-devflow": "dist/bin/create-nexus-devflow.js"
+    "nexus-devflow": "dist/bin/create-nexus-devflow.js",
+    "devflow": "dist/bin/create-nexus-devflow.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "tsx --test test/update.test.ts",
+    "test": "tsx --test test/*.test.ts",
     "check:pack": "npm pack --dry-run",
     "prepare-template": "tsx scripts/prepare-template.ts",
     "clean-template": "tsx scripts/clean-template.ts",
