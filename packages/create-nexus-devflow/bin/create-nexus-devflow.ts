@@ -15,6 +15,11 @@ import {
   prepareUpdate,
   type PreparedUpdate
 } from "../lib/update.js";
+import {
+  applyUninstall,
+  prepareUninstall,
+  type PreparedUninstall
+} from "../lib/uninstall.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..", "..");
@@ -23,7 +28,7 @@ const templateRoot = path.join(packageRoot, "template");
 const adapterChoices = new Set(["codex", "antigravity", "claude", "both", "all"]);
 
 interface CliOptions {
-  command: "install" | "status" | "update";
+  command: "install" | "status" | "update" | "uninstall" | "eject";
   target: string | null;
   adapter: string;
   force: boolean;
@@ -32,6 +37,7 @@ interface CliOptions {
   json: boolean;
   version: boolean;
   yes: boolean;
+  keepHistory: boolean;
 }
 
 async function main(args: readonly string[] = process.argv.slice(2)): Promise<void> {
@@ -56,6 +62,45 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
         ? JSON.stringify(status, null, 2)
         : formatHumanStatus(status, { color: shouldUseColor() })
     );
+    return;
+  }
+
+  if (options.command === "uninstall" || options.command === "eject") {
+    const prepared = await prepareUninstall({
+      targetDir,
+      keepHistory: options.keepHistory
+    });
+
+    if (options.json) {
+      if (options.dryRun) {
+        console.log(JSON.stringify({ dryRun: true, ...prepared }, null, 2));
+      } else {
+        const result = await applyUninstall(prepared);
+        console.log(JSON.stringify(result, null, 2));
+      }
+      return;
+    }
+
+    printUninstallPlan(prepared);
+
+    if (prepared.itemsToDelete.length === 0) {
+      console.log("\nNo DevFlow files or directories found in target project.");
+      return;
+    }
+
+    if (options.dryRun) {
+      console.log("\n[Dry-run] No files were removed.");
+      return;
+    }
+
+    const proceed = options.yes || options.force || (await confirmUninstall(prepared, options));
+    if (!proceed) {
+      console.log("Uninstall cancelled.");
+      return;
+    }
+
+    const result = await applyUninstall(prepared);
+    printUninstallSuccess(result);
     return;
   }
 
@@ -116,7 +161,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 }
 
 function parseArgs(args: readonly string[]): CliOptions {
-  let command: "install" | "status" | "update" = "install";
+  let command: "install" | "status" | "update" | "uninstall" | "eject" = "install";
   let target: string | null = null;
   let adapter = "both";
   let force = false;
@@ -125,6 +170,7 @@ function parseArgs(args: readonly string[]): CliOptions {
   let json = false;
   let version = false;
   let yes = false;
+  let keepHistory = false;
 
   const positional: string[] = [];
 
@@ -158,6 +204,11 @@ function parseArgs(args: readonly string[]): CliOptions {
 
     if (arg === "-y" || arg === "--yes") {
       yes = true;
+      continue;
+    }
+
+    if (arg === "--keep-history") {
+      keepHistory = true;
       continue;
     }
 
@@ -211,6 +262,12 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (positional[0] === "update") {
       command = "update";
       target = positional[1] || target || ".";
+    } else if (positional[0] === "uninstall") {
+      command = "uninstall";
+      target = positional[1] || target || ".";
+    } else if (positional[0] === "eject") {
+      command = "eject";
+      target = positional[1] || target || ".";
     } else {
       target = positional[0];
     }
@@ -225,7 +282,8 @@ function parseArgs(args: readonly string[]): CliOptions {
     help,
     json,
     version,
-    yes
+    yes,
+    keepHistory
   };
 }
 
@@ -243,16 +301,20 @@ Usage:
   npx @jakkrichm/create-nexus-devflow [target-dir] [options]
   nexus-devflow status [target-dir] [options]
   nexus-devflow update [target-dir] [options]
+  nexus-devflow uninstall [target-dir] [options]
+  nexus-devflow eject [target-dir] [options]
 
 Commands:
   status             Show project overview, progress, findings, git status, and next action
   update             Update existing DevFlow installation without overwriting user changes
+  uninstall, eject   Completely remove DevFlow workflow files and adapters from project
 
 Options:
   --adapter <name>   Tool adapters to install: codex, antigravity, claude, both (default: both)
-  --json             Print status as structured JSON object
+  --keep-history     Keep devflow/history/ directory during uninstall
+  --json             Print output as structured JSON object
   --target, -t       Target project directory
-  --force, -f        Overwrite conflicting files without prompting
+  --force, -f        Overwrite conflicting files / force uninstall without prompting
   --dry-run          Preview changes without modifying disk
   -y, --yes          Automatically confirm interactive prompts
   --version, -v      Show version number
@@ -288,6 +350,19 @@ function printUpdatePlan(prepared: PreparedUpdate): void {
   console.log(`Conflicts found : ${prepared.conflictList.length}`);
 }
 
+function printUninstallPlan(prepared: PreparedUninstall): void {
+  console.log(`\nNexus-DevFlow Clean Eject / Uninstall (v${readPackageVersion()})`);
+  console.log(`Target Directory: ${prepared.targetDir}\n`);
+
+  console.log(`Items to delete : ${prepared.itemsToDelete.length} (${prepared.totalFiles} files, ${prepared.totalDirectories} directories)`);
+  if (prepared.itemsToDelete.length > 0) {
+    console.log("DevFlow Footprint:");
+    for (const item of prepared.itemsToDelete) {
+      console.log(`  - ${item}`);
+    }
+  }
+}
+
 async function confirmInstallConflicts(prepared: PreparedUpdate, options: CliOptions): Promise<boolean> {
   if (options.yes) return true;
 
@@ -316,6 +391,20 @@ async function confirmUpdateConflicts(prepared: PreparedUpdate, options: CliOpti
   return answer.trim().toLowerCase() === "y";
 }
 
+async function confirmUninstall(prepared: PreparedUninstall, options: CliOptions): Promise<boolean> {
+  if (options.yes) return true;
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  const answer = await rl.question(
+    `\nAre you sure you want to completely remove DevFlow from this project? [y/N] `
+  );
+  rl.close();
+  return answer.trim().toLowerCase() === "y";
+}
+
 function printNextSteps(): void {
   console.log("\nNext steps in your AI IDE (Antigravity, Claude Code, Codex, etc.):");
   console.log("  1. Project Setup & Baseline:");
@@ -339,6 +428,11 @@ function printUpdateSuccess(prepared: PreparedUpdate, result: { appliedCount: nu
   console.log("\nNexus-DevFlow update successfully applied!");
   console.log(`Applied ${result.appliedCount} file(s), removed ${result.removedCount} orphaned file(s).`);
   printNextSteps();
+}
+
+function printUninstallSuccess(result: { deletedCount: number; deletedItems: string[] }): void {
+  console.log("\nNexus-DevFlow has been completely removed from the project.");
+  console.log(`Deleted ${result.deletedCount} item(s). No DevFlow traces remain.`);
 }
 
 if (

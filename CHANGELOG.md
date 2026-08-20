@@ -5,6 +5,13 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.17] - 2026-08-20
+
+### Added
+- **Clean Eject & Uninstall Subcommands (`nexus-devflow uninstall` / `nexus-devflow eject`)**: Standalone CLI utility to completely remove all DevFlow files (`devflow/`, `.agents/`, `.claude/`, `.nexus/`, `AGENTS.md`, `CLAUDE.md`) from a codebase without touching user application code.
+- **Safety Flags & Automation Controls**: Added `--dry-run` to preview deleted items, `-y`/`--yes`/`-f`/`--force` for non-interactive execution, `--keep-history` to preserve run archives, and `--json` structured output.
+- **Core Uninstall Module & Test Suite**: Added `packages/create-nexus-devflow/lib/uninstall.ts` with 5 new unit tests in `test/uninstall.test.ts` (bringing total unit tests to 20/20 passing).
+
 ## [2.0.16] - 2026-08-20
 
 ### Added

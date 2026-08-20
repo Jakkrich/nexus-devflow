@@ -29,6 +29,7 @@ Primary source of truth for the project context, architecture, tech stack, and a
 
 ## Shipped Capabilities (Recent Milestones)
 
+- **`RUN-020` (2026-08-20)**: Clean Eject & Uninstall CLI subcommands (`nexus-devflow uninstall` / `eject`), complete footprint deletion engine, safety flags (`--dry-run`, `-y`, `--keep-history`, `--json`), and 20/20 unit tests suite.
 - **`RUN-019` (2026-08-20)**: Native Terminal Status CLI (`nexus-devflow status` / `create-nexus-devflow status`), project root detection, metadata & findings parser, 15 Unit tests suite, and upstream AI Blueprint v0.9.1 baseline synchronization.
 - **`RUN-018` (2026-08-20)**: Complete website and documentation overhaul for Dual-Track Architecture (`website/src/content/docs/`).
 - **`RUN-017` (2026-08-20)**: Separate Fast-Track skills (`/feature`, `/fix`) and rename Deep-Track stage 40 to `40-execute` to eliminate command collisions.
@@ -40,4 +41,4 @@ Primary source of truth for the project context, architecture, tech stack, and a
 
 - **Active Discovery ID**: None (Idle)
 - **Active Running ID**: None (Idle)
-- **Last Completed Run**: `RUN-019-sync-upstream-status-cli-and-project-detection` (2026-08-20)
+- **Last Completed Run**: `RUN-020-uninstall-and-eject-devflow-cli` (2026-08-20)

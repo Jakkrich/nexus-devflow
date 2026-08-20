@@ -233,6 +233,23 @@ npx @jakkrichm/create-nexus-devflow update
 
 ตัวอัปเดตจะจัดการเฉพาะไฟล์เฟรมเวิร์กของ DevFlow ภายใต้ `.agents/skills/`, `.claude/skills/`, และ `devflow/reference/` โดยจะเก็บรักษาโค้ด บริบท และประวัติการทำงานของโปรเจกต์คุณไว้อย่างปลอดภัย
 
+## การถอนการติดตั้งและลบ DevFlow ออกจากโปรเจกต์ (Uninstall & Clean Eject)
+
+เมื่อคุณต้องการส่งมอบงานให้กับลูกค้า หรือเผยแพร่โค้ดเป็น Open-Source โดยไม่ต้องการให้หลงเหลือร่องรอยหรือไฟล์ของ DevFlow ในโปรเจกต์:
+
+```bash
+# ตรวจสอบรายชื่อไฟล์และโฟลเดอร์ที่จะถูกลบก่อน
+npx @jakkrichm/create-nexus-devflow uninstall --dry-run
+
+# ถอนการติดตั้งและลบไฟล์ DevFlow ทั้งหมดทันที
+npx @jakkrichm/create-nexus-devflow uninstall -y
+
+# หรือใช้คำสั่ง alias eject
+npx @jakkrichm/create-nexus-devflow eject -y
+```
+
+คำสั่งนี้จะลบไฟล์ `devflow/`, `.agents/`, `.claude/`, `.nexus/`, `AGENTS.md`, และ `CLAUDE.md` ออกอย่างหมดจด 100% โดย **ไม่แตะต้องซอร์สโค้ดของแอปพลิเคชันคุณ** (`src/`, `package.json`, `.git/`) แน่นอนครับ
+
 ## เอกสารและคู่มืออ้างอิง
 
 - [คู่มือเริ่มต้นอย่างรวดเร็ว (Quick Start)](docs/quickstart.md)
