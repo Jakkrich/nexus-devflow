@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "packages/create-nexus-devflow/bin/**/*.ts",
+    "packages/create-nexus-devflow/lib/**/*.ts",
+    "packages/create-nexus-devflow/scripts/**/*.ts",
+    "packages/create-nexus-devflow/test/**/*.ts",
+    ".agents/skills/sync-upstream/scripts/**/*.ts"
+  ],
+  "exclude": ["node_modules", "website", "packages/create-nexus-devflow/dist", "packages/create-nexus-devflow/template"]
+}

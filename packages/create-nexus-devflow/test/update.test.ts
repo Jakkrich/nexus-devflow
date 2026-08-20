@@ -1,15 +1,16 @@
-const test = require("node:test");
-const assert = require("node:assert/strict");
-const fs = require("node:fs/promises");
-const os = require("node:os");
-const path = require("node:path");
-const {
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import test from "node:test";
+import {
   adapterListFromMode,
+  applyPreparedUpdate,
   createManifest,
   prepareUpdate,
-  applyPreparedUpdate,
-  readManifest
-} = require("../lib/update");
+  readManifest,
+  type TemplateFile
+} from "../lib/update.js";
 
 test("adapterListFromMode resolves adapter aliases correctly", () => {
   assert.deepEqual(adapterListFromMode("both"), ["codex", "claude"]);
@@ -21,7 +22,7 @@ test("adapterListFromMode resolves adapter aliases correctly", () => {
 });
 
 test("createManifest constructs valid manifest metadata", () => {
-  const templateFiles = new Map([
+  const templateFiles = new Map<string, TemplateFile>([
     ["AGENTS.md", { source: "/tmp/AGENTS.md", hash: "hash123" }],
     ["CLAUDE.md", { source: "/tmp/CLAUDE.md", hash: "hash456" }]
   ]);
@@ -70,7 +71,7 @@ test("prepareUpdate and applyPreparedUpdate overlay files into clean directory",
 
     const installedManifest = await readManifest(targetDir);
     assert.notEqual(installedManifest, null);
-    assert.equal(installedManifest.version, "2.0.0");
+    assert.equal(installedManifest!.version, "2.0.0");
 
     const targetAgents = await fs.readFile(path.join(targetDir, "AGENTS.md"), "utf8");
     assert.equal(targetAgents, "# AGENTS\n");

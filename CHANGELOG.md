@@ -5,6 +5,13 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.14] - 2026-08-20
+
+### Added
+- **Centralized AI Blueprint Upstream Monitor**: Moved and installed the automated AI Blueprint Upstream Monitor workflow (`.github/workflows/check-upstream.yml`) in `nexus-devflow`. Includes `scripts/upstream-monitor.ts`, `scripts/update-upstream-issue.ts`, tracking metadata in `.nexus/upstream-ai-blueprint.json`, and maintainer skill `sync-upstream`.
+- **TypeScript Architecture & Dist Pipeline**: Upgraded installer package `@jakkrichm/create-nexus-devflow` to TypeScript with compilation pipeline (`tsconfig.json`, `dist/bin/create-nexus-devflow.js`, `lib/update.ts`, `scripts/prepare-template.ts`).
+- **Robust Multi-lane Verification Gate**: Root `npm run check` with full TypeScript typechecking (`tsc --noEmit`), TF-IDF skill routing evaluations (`scripts/evals/routing.ts`), installer unit tests, and packed tarball smoke testing.
+
 ## [2.0.10] - 2026-08-18
 
 ### Changed
