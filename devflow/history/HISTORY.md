@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Release Date | Running ID | Title | Git Tag / Commit | Release Status | Report Link |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-20 | `RUN-013` | เพิ่ม Skill `/overview` และระบบ Living Context Sync สำหรับ Nexus-DevFlow | `e30375b` | `Released` | [`60-report.md`](../runs/RUN-013-add-overview-and-context-sync-skill/60-report.md) |
 | 2026-08-18 | `RUN-008` | ปรับปรุงโครงสร้าง Nexus-DevFlow ให้ Lean & Clean ยุบรวม Skills บริหารจัดการ History และ Safe Rollback | `be713ea` | `Released` | [`60-report.md`](../runs/RUN-008-lean-and-clean-devflow-optimization/60-report.md) |
 | 2026-08-18 | `RUN-007` | ยกระดับระบบ Nexus-DevFlow ด้วยวินัยและกลไกสำคัญจาก Blueprint | `e79528b` | `Released` | [`60-report.md`](../runs/RUN-007-integrate-blueprint-skills-enhancements/60-report.md) |
 | 2026-08-18 | `RUN-006` | Standardize Command Naming and Provider Invocation | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-006-standardize-command-naming-and-provider-invocation/60-report.md) |
