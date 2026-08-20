@@ -1,6 +1,6 @@
----name: 60-report
-
-description: "[Devflow] Report stage in DevFlow 2.0 - produce standardized markdown and HTML summary report for the completed run."
+---
+name: 60-report
+description: "[Devflow] Report stage in DevFlow 2.0 - produce standardized markdown summary report for the completed run."
 argument-hint: "{running-id or workspace path}"
 ---
 
@@ -8,7 +8,7 @@ argument-hint: "{running-id or workspace path}"
 
 $ARGUMENTS
 
-Produce the final human-friendly summary of the full running flow in both Markdown and HTML so the outcome is easy to communicate every time.
+Produce the final human-friendly summary of the full running flow in Markdown (`60-report.md`) so the outcome is easy to communicate every time.
 
 ## Usage
 
@@ -16,19 +16,12 @@ Produce the final human-friendly summary of the full running flow in both Markdo
 60-report {running-id or workspace path}
 ```
 
-Use this when:
-
-- verification is complete and the run is ready for a final standardized summary before release
-- the team needs a standardized summary for communication
-- non-technical readers should be able to understand what happened
-
 ## Markdown-First Contract
 
-Write the primary stage artifacts to:
+Write the primary stage artifact to:
 
 ```text
-devflow/runs/{ID}-{slug}60-report.md
-devflow/runs/{ID}-{slug}60-report.html
+devflow/runs/{ID}-{slug}/60-report.md
 ```
 
 using:
@@ -38,6 +31,9 @@ using:
 ```
 
 Before writing `60-report.md`, read `artifact_language` from `report.template.md` and produce the markdown artifact in that language.
+
+> [!IMPORTANT]
+> **No Auto-Generated HTML**: ยกเลิกการสร้างไฟล์ `60-report.html` แบบอัตโนมัติในขั้นตอนนี้! ระบบจะสร้างเฉพาะ `60-report.md` เท่านั้น หากผู้ใช้หรือทีมต้องการสร้าง HTML Report สวยงาม ให้เรียกคำสั่งแยกต่างหาก: `/report:html` หรือ `npm run report:html`
 
 ## Required Section Content
 
@@ -57,13 +53,13 @@ Before completing any generated artifact:
 
 Run reporting as an outcome-evidence loop, not as a dump of prior artifacts.
 
-- **Intent**: produce a final markdown and HTML summary that lets a reader understand the outcome, evidence, decisions, risks, and next actions without replaying the whole run.
+- **Intent**: produce a final markdown summary that lets a reader understand the outcome, evidence, decisions, risks, and next actions without replaying the whole run.
 - **Context**: read all relevant stage artifacts, checklist files, verify impact notes, release notes, validation output, and supporting artifacts that materially explain the result.
-- **Action**: summarize the problem, direction, completed work, validation outcome, checklist progress, final decision, open risks, and next actions, then render the HTML report.
+- **Action**: summarize the problem, direction, completed work, validation outcome, checklist progress, final decision, open risks, and next actions.
 - **Observation**: use concrete evidence such as checklist completion, blocked or skipped items, validation results, release state, impact notes, and unresolved follow-ups.
 - **Adjustment**: if evidence is missing, return to the owning stage; if the report must support continuation, use `handoff`; if the run produced reusable lessons, use `insight-capture` or `Wiki`.
-- **Stop Condition**: stop when `70-report.md` and `70-report.html` both exist, summarize the outcome accurately, include checklist and evidence snapshots, and name any remaining follow-up work.
-- **Handoff**: `70-report.md` must close the mainline run or tell the next reader exactly where follow-up work should continue.
+- **Stop Condition**: stop when `60-report.md` exists, summarizes the outcome accurately, includes checklist and evidence snapshots, and names any remaining follow-up work.
+- **Handoff**: `60-report.md` must close the mainline run or tell the next reader exactly where follow-up work should continue.
 
 ### 1. Gather Full Run Context
 
@@ -98,19 +94,9 @@ Explain:
 
 Write:
 
-- a readable Markdown report for contributors
-- a consistent HTML report for stakeholder sharing
+- a readable Markdown report (`60-report.md`) for contributors
 
-In phase 1, `artifact_language` governs the markdown report text. HTML output is derived directly from `60-report.md` through the shared markdown-to-html renderer.
-
-To render the HTML consistently from the markdown report, use one of:
-
-```text
-npm run report:html -- <workspace-path-or-running-id>
-npm run render:html -- --stage 60-report <workspace-path-or-running-id>
-```
-
-Keep checklist summaries and follow-up status inside `60-report.md` so they carry through into the rendered HTML.
+Keep checklist summaries and follow-up status inside `60-report.md`.
 
 Both outputs should summarize checklist state when checklist artifacts exist, including:
 
@@ -120,27 +106,6 @@ Both outputs should summarize checklist state when checklist artifacts exist, in
 - approval status, review blockers, and next allowed command when they still matter
 - remaining follow-up work
 
-The HTML should stay visually consistent across runs while preserving the report markdown as the source of truth.
-
-### 4. Keep The Audience In Mind
-
-Prefer clarity over internal detail.
-
-Do not bury the outcome inside implementation trivia. The report should help a reader understand the run without replaying the whole workflow.
-
-When checklists exist, use them as the most human-readable operational record of what actually happened.
-Use `handoff` when the report must support continued work, and `insight-capture` when the run produced lessons that should become reusable knowledge.
-
-### 5. Manual Review Soft Gate
-
-Use the report as the final visibility checkpoint before release.
-If any stage still shows unresolved approval, blockers, or deferred work:
-
-- surface that state clearly in `60-report.md`
-- pull the relevant signal forward from checklist approval sections when they exist
-- do not imply the phase is fully closed when review is still open
-- recommend the real next action, even if that means returning to an earlier stage
-
 ## Output
 
 Report:
@@ -148,37 +113,18 @@ Report:
 - what the run accomplished
 - checklist completion status and remaining items
 - important remaining follow-ups
-- where `60-report.md` and `60-report.html` were written
-- render command used or recommended:
-
-```text
-npm run report:html -- <workspace-path-or-running-id>
-```
+- where `60-report.md` was written
+- standalone HTML command tip: `/report:html` (if HTML view is desired)
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Mainline workflow
 - Previous state: `50-verify`
 - Next state: `70-release` when the summary is aligned and release can proceed
-- Common companion commands: `Wiki` for durable knowledge capture, `Help` for routing or explanation
-- Support skills: `handoff`, `insight-capture`, and writing skills when final reporting must support continuation or reusable learning
-
-## Sources
-
-- `AGENTS.md`
-- `docs/workspace-artifacts.md`
-- `.agent/resources/schemas/report.template.md`
-- Related commands: `50-verify`, `70-release`, `Wiki`, `Help`
+- Common companion commands: `/report:html` for standalone HTML dashboard, `Wiki` for durable knowledge capture, `Help` for routing or explanation
 
 ## Next Workflow Recommendation
 
-- **Primary**: `70-release {ID}` after `60-report.md` and `60-report.html` reflect the verified state clearly.
-- **Render HTML**: `npm run report:html -- {ID}` after `60-report.md` is finalized so the standardized stakeholder HTML stays in sync
-- **Alternative**: `Wiki` when the completed run should be promoted into durable reusable knowledge before release packaging continues
-- **Additional Alternative**: `handoff` when another session or agent must continue from the completed run.
-
-## Nexus Event
-
-- Use `Wiki` when the final summary should become durable project or framework knowledge.
-- Use `Help` when approval signals, ownership, or route timing still feel ambiguous.
-- Return to `50-verify` when unresolved evidence, blockers, or review state mean the report should not advance yet.
+- **Primary**: `70-release {ID}` after `60-report.md` reflects the verified state clearly.
+- **Optional Standalone HTML**: `/report:html` (or `npm run report:html -- {ID}`) if an interactive HTML report is desired for stakeholder presentation.
+- **Alternative**: `Wiki` when the completed run should be promoted into durable reusable knowledge before release packaging continues.

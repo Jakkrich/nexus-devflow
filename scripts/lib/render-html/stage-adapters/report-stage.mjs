@@ -9,14 +9,29 @@ function readFileSafe(filePath) {
 }
 
 export function resolveReportWorkspaceDir(argument, projectRoot) {
+  const specsRoot = path.join(projectRoot, 'devflow', 'runs');
+  if (!argument) {
+    // Auto-detect latest run if no argument provided
+    if (fs.existsSync(specsRoot) && fs.statSync(specsRoot).isDirectory()) {
+      const runs = fs.readdirSync(specsRoot, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && entry.name.startsWith('RUN-'))
+        .sort((a, b) => b.name.localeCompare(a.name));
+      if (runs.length > 0) {
+        return path.join(specsRoot, runs[0].name);
+      }
+    }
+    throw new Error('Usage: node scripts/generate-report-html.mjs <workspace-path-or-running-id>');
+  }
+
   const directPath = path.resolve(projectRoot, argument);
   if (fs.existsSync(directPath)) {
     const stats = fs.statSync(directPath);
     if (stats.isDirectory()) return directPath;
-    if (stats.isFile() && path.basename(directPath) === '60-report.md') return path.dirname(directPath);
+    if (stats.isFile() && (path.basename(directPath) === '60-report.md' || path.basename(directPath) === 'spec.md' || path.basename(directPath) === 'blueprint.md')) {
+      return path.dirname(directPath);
+    }
   }
 
-  const specsRoot = path.join(projectRoot, 'devflow', 'runs');
   if (fs.existsSync(specsRoot) && fs.statSync(specsRoot).isDirectory()) {
     const specCandidates = fs.readdirSync(specsRoot, { withFileTypes: true })
       .filter((entry) => entry.isDirectory() && entry.name.startsWith(argument))
@@ -34,14 +49,29 @@ export function resolveReportWorkspaceDir(argument, projectRoot) {
 }
 
 export function renderReportStageWorkspace({ workspaceDir }) {
-  const reportPath = path.join(workspaceDir, '60-report.md');
+  let reportPath = path.join(workspaceDir, '60-report.md');
+  let outputPath = path.join(workspaceDir, '60-report.html');
+
+  if (!fs.existsSync(reportPath)) {
+    const specPath = path.join(workspaceDir, 'spec.md');
+    const blueprintPath = path.join(workspaceDir, 'blueprint.md');
+    if (fs.existsSync(specPath)) {
+      reportPath = specPath;
+      outputPath = path.join(workspaceDir, 'report.html');
+    } else if (fs.existsSync(blueprintPath)) {
+      reportPath = blueprintPath;
+      outputPath = path.join(workspaceDir, 'report.html');
+    } else {
+      throw new Error(`Missing report markdown (60-report.md or spec.md) in ${workspaceDir}`);
+    }
+  }
+
   const reportMarkdown = readFileSafe(reportPath);
   if (!reportMarkdown) {
-    throw new Error(`Missing report markdown: ${reportPath}`);
+    throw new Error(`Could not read markdown: ${reportPath}`);
   }
 
   const { data: frontmatter } = parseFrontmatter(reportMarkdown);
-  const outputPath = path.join(workspaceDir, '60-report.html');
 
   return renderReportWithMd2HtmlTemplate({
     sourcePath: reportPath,
@@ -49,17 +79,14 @@ export function renderReportStageWorkspace({ workspaceDir }) {
     outputPath,
     metadata: {
       artifact_language: frontmatter.artifact_language || 'th',
-      title: frontmatter.title || 'Report'
+      title: frontmatter.title || path.basename(workspaceDir)
     }
   });
 }
 
 export function runReportHtmlCommand({ projectRoot, argument }) {
-  if (!argument) {
-    throw new Error('Usage: node scripts/generate-report-html.mjs <workspace-path-or-running-id>');
-  }
-
   const workspaceDir = resolveReportWorkspaceDir(argument, projectRoot);
   const result = renderReportStageWorkspace({ workspaceDir });
   return result.outputPath;
 }
+

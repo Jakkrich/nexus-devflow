@@ -8,6 +8,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Release Date | Running ID | Title | Git Tag / Commit | Release Status | Report Link |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-20 | `RUN-016` | ระบบบันทึกไอเดียพร้อม AI วิเคราะห์ความเป็นไปได้ (`/idea`) และเชื่อมต่อกับ Status Backlog | `HEAD` | `Released` | [`spec.md`](../runs/RUN-016-idea-capture-inbox-and-status-integration/spec.md) |
+| 2026-08-20 | `RUN-015` | Dual-Track Architecture (Fast-Track 4 Steps & Deep-Track 8 Steps) + Living Spec (`spec.md`) + Standalone HTML Report Policy | `HEAD` | `Released` | [`spec.md`](../runs/RUN-015-fast-track-and-living-blueprint/spec.md) |
 | 2026-08-20 | `RUN-014` | ยกระดับสถาปัตยกรรม DevFlow สู่ TypeScript และย้ายระบบ Check AI Blueprint Upstream Monitor | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-014-typescript-migration-and-upstream-monitor-for-devflow/60-report.md) |
 | 2026-08-20 | `RUN-013` | เพิ่ม Skill `/overview` และระบบ Living Context Sync สำหรับ Nexus-DevFlow | `e30375b` | `Released` | [`60-report.md`](../runs/RUN-013-add-overview-and-context-sync-skill/60-report.md) |
 | 2026-08-18 | `RUN-008` | ปรับปรุงโครงสร้าง Nexus-DevFlow ให้ Lean & Clean ยุบรวม Skills บริหารจัดการ History และ Safe Rollback | `be713ea` | `Released` | [`60-report.md`](../runs/RUN-008-lean-and-clean-devflow-optimization/60-report.md) |
