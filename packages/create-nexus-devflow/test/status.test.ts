@@ -6,7 +6,7 @@ import test from "node:test";
 import { parseArgs } from "../bin/create-nexus-devflow.js";
 import { formatHumanStatus, readProjectStatus } from "../lib/status.js";
 
-test("parseArgs parses status command and options", () => {
+test("parseArgs parses status and install command options correctly", () => {
   const options1 = parseArgs(["status"]);
   assert.equal(options1.command, "status");
   assert.equal(options1.json, false);
@@ -15,6 +15,15 @@ test("parseArgs parses status command and options", () => {
   assert.equal(options2.command, "status");
   assert.equal(options2.json, true);
   assert.equal(options2.target, "./test-app");
+
+  const options3 = parseArgs(["install", "-y"]);
+  assert.equal(options3.command, "install");
+  assert.equal(options3.target, ".");
+  assert.equal(options3.yes, true);
+
+  const options4 = parseArgs(["install", "./custom-dir", "-y"]);
+  assert.equal(options4.command, "install");
+  assert.equal(options4.target, "./custom-dir");
 });
 
 test("readProjectStatus and formatHumanStatus work with 3-Pillars context/current-feature.md", async () => {
