@@ -204,6 +204,21 @@ devflow/
 └── reports/                    # Standardized cross-cutting reports
 ```
 
+## Inspecting Project Status
+
+You can inspect the full status of your project directly from the terminal without opening an AI chat session:
+
+```bash
+# Display human-friendly ANSI colored status card
+npx @jakkrichm/create-nexus-devflow status
+
+# Or output machine-readable JSON for CI/CD pipelines
+npx @jakkrichm/create-nexus-devflow status --json
+
+# Or inspect a specific directory
+npx @jakkrichm/create-nexus-devflow status ./my-app
+```
+
 ## Updating DevFlow
 
 Keep your project's DevFlow setup up to date:

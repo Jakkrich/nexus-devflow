@@ -204,6 +204,21 @@ devflow/
 └── reports/                    # รายงานสรุปภาพรวมมาตรฐาน
 ```
 
+## การตรวจสอบสถานะโปรเจกต์ (Terminal Status Inspection)
+
+คุณสามารถตรวจดูสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของงาน และคำแนะนำขั้นตอนถัดไปได้โดยตรงจาก Terminal โดยไม่ต้องเปิดแชทกับ AI:
+
+```bash
+# แสดงการ์ดสถานะแบบสี (ANSI Color) สวยงาม เข้าใจง่าย
+npx @jakkrichm/create-nexus-devflow status
+
+# หรือแสดงผลลัพธ์เป็น Machine-Readable JSON สำหรับ CI/CD
+npx @jakkrichm/create-nexus-devflow status --json
+
+# หรือระบุโฟลเดอร์โปรเจกต์ที่ต้องการตรวจสอบ
+npx @jakkrichm/create-nexus-devflow status ./my-app
+```
+
 ## การอัปเดต DevFlow
 
 อัปเดตโครงสร้าง DevFlow ในโปรเจกต์ของคุณให้เป็นปัจจุบันเสมอ:

@@ -52,6 +52,10 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 - **หน้าที่**: แผนผังช่วยเหลือและแนะนำคำสั่งทั้งหมดในระบบ DevFlow
 - **การใช้งาน**: `/help [topic]`
 
+### 9. `nexus-devflow status` (Terminal CLI)
+- **หน้าที่**: ตรวจดูภาพรวมสถานะโปรเจกต์ผ่าน Terminal โดยตรง แสดงข้อมูลโปรเจกต์, ความคืบหน้าของ Living Spec/Checklist, ตรวจจับ Blocker Findings (`P0`/`P1`), Git Status, และแนะนำ Next Action อัตโนมัติ (รองรับ `--json` สำหรับ CI/CD)
+- **การใช้งาน**: `npx @jakkrichm/create-nexus-devflow status` หรือ `nexus-devflow status [--json]`
+
 ---
 
 ## 🚀 หมวดที่ 2: งานก่อนพัฒนาและระบบอัตโนมัติ (Pre-Flight & Autonomous)
