@@ -148,7 +148,7 @@ Report:
 - Classification: Mainline workflow
 - Previous state: `60-report`
 - Next state: End of the mainline run when release packaging or handoff is complete
-- Common companion commands: `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
+- Common companion commands: `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`, `overview`
 - Support skills: `resolving-merge-conflicts`, `handoff`, and `setup-pre-commit` when release packaging needs conflict resolution, transfer notes, or local quality gates
 
 ## Sources
@@ -156,13 +156,14 @@ Report:
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/release.template.md`
-- Related commands: `60-report`, `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`
+- Related commands: `60-report`, `Commit`, `PR`, `Deploy`, `Changelog`, `Merge`, `Wiki`, `overview`
 
 ## Next Workflow Recommendation
 
-- **Primary**: End of Timeline flow
+- **Primary**: End of Timeline flow (or run `/overview` to sync living project context)
 - **Why**: The report is already complete, and this phase is the final release-facing execution step.
 - **Alternatives**:
+  - `overview` - choose this to immediately sync newly shipped capabilities into `devflow/context/project-overview.md`.
   - `60-report` - choose this when the release package diverges from the approved report and the summary must be refreshed first.
   - `50-verify` - choose this when release readiness becomes uncertain.
   - `40-implement` - choose this when additional fixes are needed before release can proceed.
@@ -170,7 +171,7 @@ Report:
 
 ## Nexus Event
 
-- Use `Commit`, `PR`, `Deploy`, `Merge`, or `Changelog` when release execution still needs a concrete lane.
+- Use `Commit`, `PR`, `Deploy`, `Merge`, `Changelog`, or `overview` when release execution still needs a concrete lane.
 - Return to `60-report` when release notes, scope, or handoff wording diverge from the approved summary.
 - Return to `50-verify` or `40-implement` when release readiness changes because unresolved issues are discovered.
 
