@@ -35,8 +35,10 @@ jobs:
         if: github.ref_type == 'tag'
         run: node -e "const fs = require('node:fs'); const v = JSON.parse(fs.readFileSync('./packages/create-nexus-devflow/package.json', 'utf8')).version; const t = process.env.GITHUB_REF_NAME; if (t !== 'v' + v) { console.error('Tag ' + t + ' does not match package version ' + v); process.exit(1); }"
       - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          package_version=$(node -e "const fs = require('node:fs'); console.log(JSON.parse(fs.readFileSync('./packages/create-nexus-devflow/package.json', 'utf8')).version);")
+          package_version=$(node -e "const fs = require('node:fs'); console.log(JSON.parse(fs.readFileSync('./package.json', 'utf8')).version);")
           if npm view "@jakkrichm/create-nexus-devflow@$package_version" version >/dev/null 2>&1; then
             echo "@jakkrichm/create-nexus-devflow@$package_version is already published."
           else
