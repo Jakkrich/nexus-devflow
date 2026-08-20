@@ -38,7 +38,7 @@ npx @jakkrichm/create-nexus-devflow
 
 DevFlow สร้างระบบควบคุมและกระบวนการวิศวกรรมซอฟต์แวร์ที่เข้มงวดสำหรับการพัฒนาด้วย AI:
 
-1. **สายหลัก 8 ขั้นตอนที่ชัดเจน.** ลำดับขั้นตั้งแต่การค้นหาความต้องการ (`/00-Discover`), กำหนดขอบเขต (`/10-Define`), เขียนสเปก (`/20-Spec`), วางแผน (`/30-Plan`), ลงมือพัฒนา (`/40-Implement`), ตรวจสอบคุณภาพ (`/50-Verify`), สรุปรายงาน (`/60-Report`), จนถึงการส่งมอบ (`/70-Release`)
+1. **สายหลัก 8 ขั้นตอนที่ชัดเจน.** ลำดับขั้นตั้งแต่การค้นหาความต้องการ (`/00-Discover`), กำหนดขอบเขต (`/10-Define`), เขียนสเปก (`/20-Spec`), วางแผน (`/30-Plan`), ลงมือพัฒนา (`/40-Execute`), ตรวจสอบคุณภาพ (`/50-Verify`), สรุปรายงาน (`/60-Report`), จนถึงการส่งมอบ (`/70-Release`)
 2. **สถานะเก็บเป็น Markdown (Markdown-First).** ทุกขั้นตอนสร้างไฟล์ Markdown ถาวรใต้ `devflow/discoveries/` และ `devflow/runs/{RUNNING_ID}/` งานของคุณจึงไม่สูญหายแม้ context ถูกล้าง
 3. **ตัวเชื่อมต่อ Dual Adapters.** รองรับทักษะ native สำหรับ OpenAI Codex & Google Antigravity (`.agents/skills/`) และ Claude Code (`.claude/skills/`)
 4. **จุดตรวจ Senior QA และรายงาน.** ขั้นตอน `/50-Verify` จะทำการตรวจสอบคุณภาพด้วย automated tests และ specialist review ก่อนสร้างรายงานสรุปทั้งแบบ HTML และ Markdown (`/60-Report`)
@@ -95,7 +95,7 @@ devflow
 ```
 *(หรือ `/devflow`, `$devflow`, `status`)*
 
-> **คำแนะนำ:** `devflow` คือคำสั่งเปิดตัวหลักของระบบ ทำหน้าที่สำรวจสถานะของพื้นที่ทำงาน ตรวจสอบความสมบูรณ์ของเฟรมเวิร์ก และนำทางคุณไปยังคำสั่งถัดไปที่เหมาะสมที่สุดทันที (`00-discover`, `10-define`, `40-implement`, `50-verify` ฯลฯ)
+> **คำแนะนำ:** `devflow` คือคำสั่งเปิดตัวหลักของระบบ ทำหน้าที่สำรวจสถานะของพื้นที่ทำงาน ตรวจสอบความสมบูรณ์ของเฟรมเวิร์ก และนำทางคุณไปยังคำสั่งถัดไปที่เหมาะสมที่สุดทันที (`00-discover`, `10-define`, `40-execute`, `50-verify` ฯลฯ)
 
 หรือเริ่มต้นขั้นตอนค้นหาความต้องการโดยตรงด้วยคำสั่ง:
 
@@ -104,18 +104,30 @@ devflow
 ```
 *(หรือ `discover`, `/00-discover`, `$00-discover`)*
 
-## วงจรสายหลัก (Mainline Timeline Workflow)
+## Dual-Track Delivery Model
+
+Nexus-DevFlow 2.0 รองรับการส่งมอบงาน 2 รูปแบบ:
+
+### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 ขั้นตอน)
+> **เหมาะสำหรับ 85% ของงานประจำวัน** ขับเคลื่อนด้วย **Single Living Spec (`spec.md`)** แผ่นเดียวจบ:
 
 ```text
-00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-implement ➔ 50-verify ➔ 60-report ➔ 70-release
+/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-| ขั้นตอน | คำสั่ง / ชื่อย่อ | วัตถุประสงค์ & อาร์ติแฟกต์ |
-| --- | --- | --- |
-> 💡 **การเรียกใช้งานคำสั่งตาม AI Provider**: คำสั่งทั้งหมดใช้ **ชื่อมาตรฐาน (Canonical Name)** เดียวกัน โดยรูปแบบการพิมพ์ขึ้นอยู่กับ AI Tool ที่ใช้งาน:
-> - **พิมพ์ชื่อปกติ**: เช่น `00-discover`, `devflow` (ใช้ได้กับทุกระบบ)
-> - **เครื่องหมาย Slash (`/`)**: สำหรับ Claude Code, Google Antigravity, Gemini CLI (เช่น `/00-discover`, `/devflow`)
-> - **เครื่องหมาย Dollar (`$`)**: สำหรับ OpenAI Codex CLI (เช่น `$00-discover`, `$devflow`)
+1. **`feature` / `fix` (`/feature`, `/fix`)**: สร้าง Living Spec (`devflow/runs/{RUN_ID}-{slug}/spec.md`) พร้อม Scope, Acceptance Criteria และ Checklist
+2. **`implement` (`/implement`)**: พัฒนาโค้ดตาม Checklist ทีละขั้นด้วย TDD และอัปเดตความคืบหน้าลงใน `spec.md`
+3. **`check` (`/check`)**: Senior QA ตรวจสอบ Multi-lane verification (Typecheck, Lint, Tests, Proof) บันทึกหลักฐานลง `spec.md`
+4. **`complete` (`/complete`)**: Final Safety Pass, สรุป Release Digest ลง `spec.md`, ทำ Git Merge และปิดรอบอย่างปลอดภัย
+
+---
+
+### 🏗️ Track 2: Deep-Track (Architect Mode — 8 ขั้นตอน)
+> **เหมาะสำหรับงานสถาปัตยกรรมใหญ่ งานเสี่ยงสูง หรืองาน Database Migration**:
+
+```text
+00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
+```
 
 | สเตจ | ชื่อคำสั่งมาตรฐาน (Canonical Name) | คำอธิบาย & อาร์ติแฟกต์หลัก |
 | :--- | :--- | :--- |
@@ -123,9 +135,9 @@ devflow
 | **10** | `10-define` | ล็อกขอบเขตการส่งมอบและกำหนด Running ID (`devflow/runs/{RUNNING_ID}/10-define.md`) |
 | **20** | `20-spec` | เขียนสเปกและเกณฑ์การรับมอบงานอย่างเป็นทางการ (`20-spec.md`) |
 | **30** | `30-plan` | แปลงสเปกเป็นขั้นตอนงานที่ลงมือทำได้พร้อมรายการเช็กลิสต์ (`30-plan.md`) |
-| **40** | `40-implement` | ลงมือพัฒนาตามแผนทีละขั้นตอนพร้อมบันทึกหลักฐาน (`40-implement.md`) |
+| **40** | `40-execute` | ลงมือพัฒนาตามแผนทีละขั้นตอนพร้อมบันทึกหลักฐาน (`40-execute.md`) |
 | **50** | `50-verify` | ตรวจสอบคุณภาพโดย Senior QA รันการทดสอบและตัดสินผลลัพธ์ (`50-verify.md`) |
-| **60** | `60-report` | สรุปรายงานมาตรฐานทั้งไฟล์ Markdown และ HTML แบบอ่านง่าย (`60-report.md`, `60-report.html`) |
+| **60** | `60-report` | สรุปรายงานมาตรฐาน Markdown Report (`60-report.md`) |
 | **70** | `70-release` | แพ็กเกจงานที่ผ่านการตรวจสอบแล้วสำหรับ Merge, PR หรือส่งมอบ Deploy (`70-release.md`) |
 
 ## คำสั่งผู้ช่วยเฉพาะทาง (Companion Commands)
@@ -135,6 +147,8 @@ devflow
 | คำสั่งมาตรฐาน (Canonical Name) | วัตถุประสงค์ |
 | :--- | :--- |
 | `devflow` | สรุปสถานะพื้นที่ทำงาน ตรวจสอบความคืบหน้า และนำทางคำสั่งถัดไป |
+| `idea` | จดไอเดียด่วนพร้อม AI วิเคราะห์ Feasibility & Value ลง `devflow/ideas.md` |
+| `report-html` | สร้าง Interactive Standalone HTML Report Dashboard เมื่อต้องการพรีเซนต์ (`/report:html`) |
 | `onboard` | ตรวจจับ Stack และตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่ที่เพิ่งติดตั้ง |
 | `adopt` | สำรวจ Codebase เดิมและดึงบริบทเข้าสู่ DevFlow สำหรับโปรเจกต์เดิม |
 | `doctor` | ตรวจสุขภาพการตั้งค่า, Context files, Scripts และตรวจจับ Workflow Drift |
@@ -179,7 +193,7 @@ devflow/
 │       ├── 10-define.md
 │       ├── 20-spec.md
 │       ├── 30-plan.md
-│       ├── 40-implement.md
+│       ├── 40-execute.md
 │       ├── 50-verify.md
 │       ├── 60-report.md
 │       ├── 60-report.html

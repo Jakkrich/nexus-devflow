@@ -29,10 +29,10 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 
 ### Universal Invocation & Agent Directives:
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `spec`, `implement`, `check`, `complete`, `00-discover`, `10-define`, `20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`, `report-html`, `devflow`, `onboard`, `adopt`, `doctor`, `try`, `rollback`, `ci`, `brief`, `autopilot`). The way you invoke commands depends on your AI Provider / Tool:
-   - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `spec`, `devflow`).
-   - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/spec`, `/feature`, `/fix`, `/devflow`.
-   - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$spec`, `$devflow`.
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `00-discover`, `10-define`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`, `report-html`, `devflow`, `onboard`, `adopt`, `doctor`, `try`, `rollback`, `ci`, `brief`, `autopilot`, `idea`, `spec`). The way you invoke commands depends on your AI Provider / Tool:
+   - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `40-execute`, `devflow`).
+   - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/40-execute`, `/devflow`.
+   - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$40-execute`, `$devflow`.
 2. **OpenAI Codex & Non-Native CLI Tools**: In environments without automatic background skill discovery (such as OpenAI Codex CLI, Aider, or generic terminals), **you MUST use your file reading tool to inspect `.agents/skills/<skill>/SKILL.md` before executing the stage** to strictly follow its schema, artifact contract, and quality gates.
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover and surface `.agents/skills/` and `.claude/skills/`.
 4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` to automatically inspect `devflow/context/current-stage.md` and active runs in `devflow/runs/`.
@@ -45,10 +45,10 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 Recommended for 85% of daily work (features, bug fixes, UI improvements, iterative tasks):
 
 ```text
-/spec (or /feature, /fix) ──▶ /implement ──▶ /check ──▶ /complete
+/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`spec` (`/spec`, `/feature`, `/fix`)**:
+1. **`feature` / `fix` (`/feature`, `/fix`, `/spec`)**:
    - **Purpose**: Combines Discover, Define, Spec, and Plan into one unified step. Allocates sequential Running ID (`RUN-xxx`) and creates the **Single Living Spec (`spec.md`)**.
    - **Artifact**: `devflow/runs/{running-id}-{slug}/spec.md`
 2. **`implement` (`/implement`)**:
@@ -65,14 +65,14 @@ Recommended for 85% of daily work (features, bug fixes, UI improvements, iterati
 Recommended for large architectural epics, database migrations, and multi-agent coordination:
 
 ```text
-00-discover ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-implement ──▶ 50-verify ──▶ 60-report ──▶ 70-release
+00-discover ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
 ```
 
 1. `00-discover`: Explore request before delivery commitment without allocating running ID (`00-discover.md`).
 2. `10-define`: Turn approved discovery into bounded delivery run(s) with sequential Running IDs (`10-define.md`).
 3. `20-spec`: Formalize markdown-first delivery contract & acceptance criteria (`20-spec.md`).
 4. `30-plan`: Breakdown spec into executable tasks with test decisions (`30-plan.md` + checklists).
-5. `40-implement`: Incremental task implementation behind review gates (`40-implement.md`).
+5. `40-execute`: Incremental task execution behind review gates (`40-execute.md`).
 6. `50-verify`: Senior QA review & multi-lane verification checks (`50-verify.md`).
 7. `60-report`: Standardized markdown delivery digest (`60-report.md`).
 8. `70-release`: Release packaging, release notes, git merge, and deployment (`70-release.md`).
@@ -116,7 +116,8 @@ Recommended for large architectural epics, database migrations, and multi-agent 
 
 | Track / Category | Canonical Name | Claude / Antigravity (`/`) | OpenAI Codex (`$`) | Purpose / Action |
 | :--- | :--- | :--- | :--- | :--- |
-| **Fast: Spec** | `spec` | `/spec` / `/feature` / `/fix` | `$spec` / `$feature` / `$fix` | 4-step Fast-Track spec & living spec creation (supports `IDEA-xxx`) |
+| **Fast: Feature** | `feature` | `/feature` | `$feature` | 4-step Fast-Track spec & living spec creation for new features (supports `IDEA-xxx`) |
+| **Fast: Fix** | `fix` | `/fix` | `$fix` | 4-step Fast-Track spec & living spec creation for bug fixes (supports `IDEA-xxx`) |
 | **Fast: Implement** | `implement` | `/implement` | `$implement` | Fast-Track incremental execution with TDD |
 | **Fast: Check** | `check` | `/check` | `$check` | Fast-Track QA review & multi-lane verification |
 | **Fast: Complete** | `complete` | `/complete` | `$complete` | Fast-Track safety pass, release digest & git merge |
@@ -126,7 +127,7 @@ Recommended for large architectural epics, database migrations, and multi-agent 
 | **Deep: 10** | `10-define` | `/10-define` | `$10-define` | Turn approved discovery into bounded delivery run(s) |
 | **Deep: 20** | `20-spec` | `/20-spec` | `$20-spec` | Formal markdown delivery contract & acceptance criteria |
 | **Deep: 30** | `30-plan` | `/30-plan` | `$30-plan` | Breakdown spec into executable tasks with test decisions |
-| **Deep: 40** | `40-implement` | `/40-implement` | `$40-implement` | Implement tasks in small reviewable increments |
+| **Deep: 40** | `40-execute` | `/40-execute` | `$40-execute` | Execute planned tasks in small reviewable increments (`40-execute.md`) |
 | **Deep: 50** | `50-verify` | `/50-verify` | `$50-verify` | Senior QA review & multi-lane verification checks |
 | **Deep: 60** | `60-report` | `/60-report` | `$60-report` | Standalone markdown summary report |
 | **Deep: 70** | `70-release` | `/70-release` | `$70-release` | Package for delivery, git merge, PR, or deployment |

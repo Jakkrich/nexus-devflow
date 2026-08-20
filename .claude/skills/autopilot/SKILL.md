@@ -14,9 +14,9 @@ devflow  ->  [autopilot]  ->  review packet  ->  70-release
                report)
 ```
 
-Autopilot is an explicit opt-in execution skill for Nexus-DevFlow 2.0. It runs a single bounded loop across the delivery lifecycle (**`20-spec` -> `30-plan` -> `40-implement` -> `50-verify` -> `60-report`**) without requiring human confirmation between every sub-step.
+Autopilot is an explicit opt-in execution skill for Nexus-DevFlow 2.0. It runs a single bounded loop across the delivery lifecycle (**`20-spec` -> `30-plan` -> `40-execute` -> `50-verify` -> `60-report`**) without requiring human confirmation between every sub-step.
 
-It does **not** replace the normal step-by-step workflow. Mainline commands (`20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`) remain the conservative default.
+It does **not** replace the normal step-by-step workflow. Mainline commands (`20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`) remain the conservative default.
 
 Do not suggest Autopilot as the default next action. Use it only when the user explicitly asks for it.
 
@@ -34,7 +34,7 @@ Common forms:
 If the requested target conflicts with a run already in progress, stop and ask which one should win. Do not overwrite active stage artifacts silently.
 
 > [!IMPORTANT]
-> Rollback is intentionally excluded from Autopilot. If the request is a rollback or the stage is marked Rollback, stop and direct the user to `rollback` and reviewed `40-implement`. Reversing completed work requires explicit dependency and human review gates.
+> Rollback is intentionally excluded from Autopilot. If the request is a rollback or the stage is marked Rollback, stop and direct the user to `rollback` and reviewed `40-execute`. Reversing completed work requires explicit dependency and human review gates.
 
 ---
 
@@ -82,7 +82,7 @@ Stop before changing files when:
 
 ---
 
-## Step 4 - Implement in Small Increments (`40-implement`)
+## Step 4 - Implement in Small Increments (`40-execute`)
 
 Work through the implementation checklist in order. Each step must remain reviewable.
 
@@ -99,7 +99,7 @@ For every subtask:
    git add <modified-files> devflow/runs/{running-id}-{slug}/checklists/implementation-checklist.md
    git commit -m "feat({running-id}): checkpoint <concise step description>"
    ```
-8. Write `devflow/runs/{running-id}-{slug}40-implement.md`.
+8. Write `devflow/runs/{running-id}-{slug}40-execute.md`.
 
 ---
 
@@ -161,7 +161,7 @@ When Autopilot finishes successfully, output a scannable review packet:
 - **Artifacts Generated**:
   - Spec: `devflow/runs/{id}20-spec.md`
   - Plan: `devflow/runs/{id}30-plan.md`
-  - Implement Evidence: `devflow/runs/{id}40-implement.md`
+  - Implement Evidence: `devflow/runs/{id}40-execute.md`
   - QA Verify Report: `devflow/runs/{id}50-verify.md`
   - Digest Report: `devflow/runs/{id}60-report.md`
   - HTML Dashboard: `devflow/runs/{id}60-report.html`

@@ -5,7 +5,7 @@ description: "[Devflow] Shared vocabulary for designing deep modules. Use when a
 
 # Codebase Design
 
-Use this support skill when `20-spec`, `30-plan`, `40-implement`, or `50-verify` needs better module shape.
+Use this support skill when `20-spec`, `30-plan`, `40-execute`, or `50-verify` needs better module shape.
 
 Design deep modules: a lot of behavior behind a small interface, placed at a clean seam, and testable through that interface. The aim is leverage for callers, locality for maintainers, and behavior-focused tests.
 
@@ -13,7 +13,7 @@ Design deep modules: a lot of behavior behind a small interface, placed at a cle
 
 - `20-spec`: use when requirements depend on a stable module or interface contract.
 - `30-plan`: use when planning needs file-level architecture, seams, or dependency strategy.
-- `40-implement`: use when implementation reveals shallow modules or awkward test seams.
+- `40-execute`: use when implementation reveals shallow modules or awkward test seams.
 - `50-verify`: use when review finds code that is hard to test, hard to change, or too spread out.
 
 ## Vocabulary

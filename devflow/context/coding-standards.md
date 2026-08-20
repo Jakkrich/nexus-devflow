@@ -36,5 +36,5 @@ General engineering standards for code, tests, and documentation in Nexus-DevFlo
 
 - For trivial bug fixes, typo corrections, or single-file non-architectural changes, developers and agents may use the **Quick-Fix Fast-Track**:
   - Consolidate Discovery, Define, and Spec into an inline fix brief (`devflow/runs/{fix-id}/fix-brief.md`).
-  - Jump directly to `40-implement` (with reproduction unit test) ➔ `50-verify` ➔ `70-release`.
+  - Jump directly to `40-execute` (with reproduction unit test) ➔ `50-verify` ➔ `70-release`.
   - Avoid creating heavy redundant documentation for changes under 20 lines of code while preserving Empirical Proof and Unit Test requirements.

@@ -8,6 +8,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Release Date | Running ID | Title | Git Tag / Commit | Release Status | Report Link |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-20 | `RUN-018` | อัปเดตคู่มือ เอกสาร และ Website Documentation ให้เป็นปัจจุบันและครอบคลุม Dual-Track Model ล่าสุด | `HEAD` | `Released` | [`spec.md`](../runs/RUN-018-update-documentation-and-guides/spec.md) |
+| 2026-08-20 | `RUN-017` | แยกคำสั่ง Fast-Track เป็น `/feature`, `/fix` และเปลี่ยน Deep-Track สเตจ 40 เป็น `40-execute` | `HEAD` | `Released` | [`spec.md`](../runs/RUN-017-split-spec-and-rename-40-execute/spec.md) |
 | 2026-08-20 | `RUN-016` | ระบบบันทึกไอเดียพร้อม AI วิเคราะห์ความเป็นไปได้ (`/idea`) และเชื่อมต่อกับ Status Backlog | `HEAD` | `Released` | [`spec.md`](../runs/RUN-016-idea-capture-inbox-and-status-integration/spec.md) |
 | 2026-08-20 | `RUN-015` | Dual-Track Architecture (Fast-Track 4 Steps & Deep-Track 8 Steps) + Living Spec (`spec.md`) + Standalone HTML Report Policy | `HEAD` | `Released` | [`spec.md`](../runs/RUN-015-fast-track-and-living-blueprint/spec.md) |
 | 2026-08-20 | `RUN-014` | ยกระดับสถาปัตยกรรม DevFlow สู่ TypeScript และย้ายระบบ Check AI Blueprint Upstream Monitor | `HEAD` | `Released` | [`60-report.md`](../runs/RUN-014-typescript-migration-and-upstream-monitor-for-devflow/60-report.md) |

@@ -11,7 +11,7 @@ Use the full numbered mainline when the work is a new deliverable and the team n
 /10-Define DISC-YYYYMMDD-NNN
 /20-Spec {ID}
 /30-Plan
-/40-Implement
+/40-Execute
 /50-Verify
 /60-Report
 /70-Release
@@ -23,7 +23,7 @@ Typical outcome:
 - `/10-Define` locks delivery slices and creates one or more Running IDs.
 - `/20-Spec` turns the defined work into an acceptance-ready delivery contract.
 - `/30-Plan` breaks the spec into implementation phases and verification gates.
-- `/40-Implement` executes the planned changes.
+- `/40-Execute` executes the planned changes.
 - `/50-Verify` records the evidence and verdict before the final report.
 - `/60-Report` produces the final summary for the run.
 - `/70-Release` prepares the release-facing packaging after report sign-off.
@@ -39,7 +39,7 @@ Debug "Login redirects forever after session expiry"
 /10-Define DISC-YYYYMMDD-NNN
 /20-Spec {ID}
 /30-Plan
-/40-Implement
+/40-Execute
 /50-Verify
 ```
 
@@ -49,7 +49,7 @@ Why this route fits:
 - `/10-Define` captures the confirmed bug scope, affected behavior, and fix boundaries.
 - `/20-Spec` records the intended fix and acceptance criteria.
 - `/30-Plan` converts the fix into concrete implementation and verification work.
-- `/40-Implement` applies the code changes.
+- `/40-Execute` applies the code changes.
 - `/50-Verify` confirms the redirect loop is resolved and the fix is safe.
 
 ## 3. Verification-Heavy Work
@@ -58,7 +58,7 @@ For work where proof matters as much as implementation, use a tracked run and le
 
 ```text
 /30-Plan
-/40-Implement
+/40-Execute
 /50-Verify
 /60-Report
 /70-Release

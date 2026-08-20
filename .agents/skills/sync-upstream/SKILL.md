@@ -30,6 +30,6 @@ The inspector clones `https://github.com/aiblueprinthq/ai-blueprint.git` into a 
 
 1. Create a discovery: `/00-discover sync-upstream <upstream-details>`
 2. Define the delivery run: `/10-define`
-3. Execute through the DevFlow delivery stages (`20-spec` -> `30-plan` -> `40-implement` -> `50-verify` -> `60-report` -> `70-release`)
+3. Execute through the DevFlow delivery stages (`20-spec` -> `30-plan` -> `40-execute` -> `50-verify` -> `60-report` -> `70-release`)
 4. Verify all gates pass (`npm run check`)
 5. Update `.nexus/upstream-ai-blueprint.json` with the new reviewed commit.

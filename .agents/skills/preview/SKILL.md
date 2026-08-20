@@ -38,5 +38,5 @@ This is the preview master skill for Nexus-DevFlow. It manages local development
 ## Relationship To DevFlow 2.0
 
 - **Classification**: Companion command & Runtime support
-- **Mainline stages**: `40-implement` (interactive visual check), `50-verify` (smoke test check)
+- **Mainline stages**: `40-execute` (interactive visual check), `50-verify` (smoke test check)
 - **Handoff**: `50-verify`

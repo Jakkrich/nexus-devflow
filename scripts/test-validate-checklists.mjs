@@ -63,7 +63,7 @@ try {
   ]);
 
   writeFile(path.join(runDir, '30-plan.md'));
-  writeFile(path.join(runDir, '40-implement.md'));
+  writeFile(path.join(runDir, '40-execute.md'));
   writeFile(path.join(runDir, '50-verify.md'));
   writeFile(path.join(runDir, '60-report.md'));
   writeFile(path.join(runDir, '60-report.html'), '<html></html>\n');

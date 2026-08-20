@@ -19,19 +19,23 @@ Primary source of truth for the project context, architecture, tech stack, and a
 
 ## Architecture & Key Modules
 
+- **Dual-Track Delivery Engine**:
+  - **Fast-Track (Blueprint Mode — 4 Steps)**: High-velocity spec loop (`/feature` or `/fix` ➔ `/implement` ➔ `/check` ➔ `/complete`) with Single Living Spec (`spec.md`).
+  - **Deep-Track (Architect Mode — 8 Steps)**: Full-lifecycle delivery pipeline (`00-discover` ➔ `10-define` ➔ `20-spec` ➔ `30-plan` ➔ `40-execute` ➔ `50-verify` ➔ `60-report` ➔ `70-release`).
 - **`packages/create-nexus-devflow/`**: Distribution CLI package with TypeScript compilation (`dist/bin/create-nexus-devflow.js`), atomic update engine (`lib/update.ts`), and prepack template bundler (`scripts/prepare-template.ts`).
-- **`.agents/skills/` & `.claude/skills/`**: 72 synchronized AI agent skills covering Mainline stages (00-70) and companion tools (`devflow`, `try`, `doctor`, `overview`, `sync-upstream`, `ci`, `rollback`).
+- **`.agents/skills/` & `.claude/skills/`**: 80 synchronized AI agent skills covering Dual-Track workflows and companion tools (`devflow`, `idea`, `report-html`, `try`, `doctor`, `overview`, `sync-upstream`, `ci`, `rollback`).
 - **`scripts/`**: Maintainer infrastructure (`check-devflow.ts`, `validate-framework.ts`, `smoke-package.ts`, `upstream-monitor.ts`, `evals/routing.ts`).
-- **`devflow/`**: Workspace state, discoveries, runs, context, reference contracts, and master release history ledger.
+- **`devflow/`**: Workspace state, discoveries, runs, ideas, context, reference contracts, and master release history ledger.
 
 ## Shipped Capabilities (Recent Milestones)
 
+- **`RUN-017` (2026-08-20)**: Separate Fast-Track skills (`/feature`, `/fix`) and rename Deep-Track stage 40 to `40-execute` to eliminate command collisions.
+- **`RUN-016` (2026-08-20)**: Quick Idea Capture and AI Feasibility Assessment (`/idea`) with centralized Idea Inbox (`devflow/ideas.md`).
+- **`RUN-015` (2026-08-20)**: Dual-Track Architecture (Fast-Track 4 Steps & Deep-Track 8 Steps) + Living Spec (`spec.md`) + Standalone HTML Reporting Policy.
 - **`RUN-014` (2026-08-20)**: Upgraded DevFlow to full TypeScript architecture (`tsconfig.json`, `tsx`, `tsc`, `dist/`), migrated AI Blueprint Upstream Monitor workflow to DevFlow, and established multi-lane verification matrix.
-- **`RUN-013` (2026-08-20)**: Added `/overview` skill for living context scanning and synchronization.
-- **`RUN-008` (2026-08-18)**: Lean & Clean DevFlow optimization, consolidated skill taxonomy, and safe rollback mechanisms.
 
 ## DevFlow Workspace Status
 
 - **Active Discovery ID**: None (Idle)
-- **Active Running ID**: None (Idle)
-- **Last Completed Run**: `RUN-014-typescript-migration-and-upstream-monitor-for-devflow`
+- **Active Running ID**: `RUN-018-update-documentation-and-guides`
+- **Last Completed Run**: `RUN-017-split-spec-and-rename-40-execute`

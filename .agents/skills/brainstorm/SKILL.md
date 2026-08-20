@@ -145,7 +145,7 @@ Brainstorm caching strategy
 - Honest tradeoffs over fake confidence
 - Multiple viable paths before recommending one
 - Persistent output saved to disk
-- Mainline remains: `00-discover -> 10-define -> 20-spec -> 30-plan -> 40-implement -> 50-verify -> 60-report -> 70-release`
+- Mainline remains: `00-discover -> 10-define -> 20-spec -> 30-plan -> 40-execute -> 50-verify -> 60-report -> 70-release`
 
 ## Relationship To DevFlow 2.0
 

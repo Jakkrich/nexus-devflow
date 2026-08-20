@@ -8,7 +8,7 @@ description: "[Devflow] Generate human manual QA review walkthrough guide (where
 Where this sits in the workflow:
 
 ```text
-40-implement or 50-verify or 60-report  ->  [try]  ->  human review & verification
+40-execute or 50-verify or 60-report  ->  [try]  ->  human review & verification
 (work implemented / verified)                  (manual    (where to go,
                                                steps)     what to click)
 ```
@@ -36,7 +36,7 @@ Read:
 - `devflow/context/current-stage.md`
 - `devflow/context/project-overview.md`
 - `devflow/context/coding-standards.md`
-- Active run artifacts: `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md` (or archived run artifacts)
+- Active run artifacts: `20-spec.md`, `30-plan.md`, `40-execute.md`, `50-verify.md` (or archived run artifacts)
 - Current git branch and status
 
 Do not dump the full spec. Extract only the concrete routes, screens, CLI commands, API endpoints, test data, and expected outcomes that a human needs to verify the feature.

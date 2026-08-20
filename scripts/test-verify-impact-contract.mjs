@@ -79,7 +79,7 @@ try {
   fs.rmSync(runDir, { recursive: true, force: true });
 
   writeFile(path.join(runDir, '30-plan.md'));
-  writeFile(path.join(runDir, '40-implement.md'));
+  writeFile(path.join(runDir, '40-execute.md'));
   writeFile(path.join(runDir, '50-verify.md'));
   writeFile(path.join(runDir, '50-verify-impact.md'), validImpactReport);
 

@@ -59,5 +59,5 @@ This is the comprehensive security master skill for Nexus-DevFlow. It combines s
 ## Relationship To DevFlow 2.0
 
 - **Classification**: Companion command & Safety gate
-- **Mainline integration**: Run during `40-implement` or `50-verify` before `70-release`.
-- **Handoff**: P0/P1 security findings block release and return to `40-implement` for immediate remediation.
+- **Mainline integration**: Run during `40-execute` or `50-verify` before `70-release`.
+- **Handoff**: P0/P1 security findings block release and return to `40-execute` for immediate remediation.

@@ -109,7 +109,7 @@ function validateWorkflowNumbering(failures) {
     '10-define',
     '20-spec',
     '30-plan',
-    '40-implement',
+    '40-execute',
     '50-verify',
     '70-release',
     '60-report'
@@ -143,7 +143,7 @@ function validateArtifactLanguageWorkflowSurface(failures) {
     '.agents/skills/10-define/SKILL.md',
     '.agents/skills/20-spec/SKILL.md',
     '.agents/skills/30-plan/SKILL.md',
-    '.agents/skills/40-implement/SKILL.md',
+    '.agents/skills/40-execute/SKILL.md',
     '.agents/skills/50-verify/SKILL.md',
     '.agents/skills/70-release/SKILL.md',
     '.agents/skills/60-report/SKILL.md'

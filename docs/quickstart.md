@@ -42,7 +42,7 @@ See [docs/example-runs.md](example-runs.md) for a fuller walkthrough.
 ## 5. Understand The Mainline
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 Public companion commands:
@@ -77,7 +77,7 @@ devflow/runs/{ID}-{slug}/
   10-define.md
   20-spec.md
   30-plan.md
-  40-implement.md
+  40-execute.md
   50-verify.md
   50-verify-impact.md
   60-report.md

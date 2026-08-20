@@ -8,7 +8,7 @@ description: "[Devflow] Read-only scope, dependency, and risk pre-briefing befor
 Where this sits in the workflow:
 
 ```text
-10-define or project-overview.md  ->  [brief]  ->  20-spec  ->  30-plan  ->  40-implement
+10-define or project-overview.md  ->  [brief]  ->  20-spec  ->  30-plan  ->  40-execute
 (proposed scope & context)            (read-only   (write        (break down)  (build it)
                                       explainer)    contract)
 ```

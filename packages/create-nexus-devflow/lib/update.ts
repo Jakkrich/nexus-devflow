@@ -109,7 +109,7 @@ export function createManifest(
         "10-define",
         "20-spec",
         "30-plan",
-        "40-implement",
+        "40-execute",
         "50-verify",
         "60-report",
         "70-release"

@@ -107,7 +107,7 @@ function validateWorkflowNumbering(failures: string[]): void {
     "10-define",
     "20-spec",
     "30-plan",
-    "40-implement",
+    "40-execute",
     "50-verify",
     "70-release",
     "60-report"

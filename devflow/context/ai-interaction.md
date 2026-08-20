@@ -24,12 +24,12 @@
 ## DevFlow Timeline Lifecycle
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 - Run `/00-Discover` to explore requests under a Discovery ID.
 - Run `/10-Define` to set delivery boundaries and allocate Running IDs.
 - Run `/20-Spec` and `/30-Plan` to establish formal delivery specifications and execution plans.
-- Run `/40-Implement` for step-by-step code implementation with evidence.
+- Run `/40-Execute` for step-by-step code implementation with evidence.
 - Run `/50-Verify`, `/60-Report`, and `/70-Release` for quality verification, reporting, and release packaging.
 - Use **Fast-Track / Quick-Fix mode** for minor hotfixes to skip heavy ceremony while keeping test evidence.

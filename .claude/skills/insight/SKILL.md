@@ -27,7 +27,7 @@ What Broke ➔ Business Impact ➔ Root Cause ➔ Fix Evidence ➔ Prevention & 
 
 ## 2. Process & Recording Destinations
 
-1. **Load Evidence**: Review `git diff`, `40-implement.md`, `50-verify.md`, or test logs.
+1. **Load Evidence**: Review `git diff`, `40-execute.md`, `50-verify.md`, or test logs.
 2. **Distill Insights**: Formulate clear, actionable, non-generic takeaways.
 3. **Save to Persistent Memory**:
    - Save project-wide engineering lessons to `devflow/context/lessons.md` (or `knowledge/lessons.md`).

@@ -10,7 +10,7 @@ Use these rules when changing the Nexus-DevFlow framework itself. Keep them prac
 
 Example:
 
-- `Debug` can support `/40-Implement` or `/50-Verify`, but it does not replace the mainline.
+- `Debug` can support `/40-Execute` or `/50-Verify`, but it does not replace the mainline.
 
 ## Placement Rules
 

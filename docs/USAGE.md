@@ -22,7 +22,7 @@ This guide describes the active DevFlow 2.0 surface used in the current reposito
 ## Timeline Workflow
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 Short meaning:
@@ -31,7 +31,7 @@ Short meaning:
 - `/10-Define`: lock delivery boundaries and create one or more Running IDs
 - `/20-Spec`: write the delivery contract and acceptance criteria
 - `/30-Plan`: create the execution plan
-- `/40-Implement`: do the implementation work
+- `/40-Execute`: do the implementation work
 - `/50-Verify`: validate behavior, quality, and evidence, with optional `50-verify-impact.md` when impact and rollback analysis are needed
 - `/60-Report`: produce the final summary before release packaging
 - `/70-Release`: prepare release-facing outputs after the report is approved
@@ -124,7 +124,7 @@ Examples of internal companions include:
 | approved discovery must become delivery runs | `/10-Define {discovery_id}` |
 | a delivery contract must be written | `/20-Spec` |
 | spec is ready and work must be broken down | `/30-Plan` |
-| implementation can begin | `/40-Implement` |
+| implementation can begin | `/40-Execute` |
 | completed work must be checked | `/50-Verify` |
 | final summary before release is needed | `/60-Report` |
 | release-facing packaging is needed | `/70-Release` |
@@ -141,7 +141,7 @@ flowchart LR
     D00["/00-Discover<br/>Discovery ID"] --> G{"Proceed?"}
     G -->|No| E["Defer or Reject<br/>No Running ID"]
     G -->|Approved| D10["/10-Define<br/>Create Running IDs"]
-    D10 --> D20["/20-Spec {ID}"] --> D30["/30-Plan {ID}"] --> D40["/40-Implement {ID}"] --> D50["/50-Verify {ID}"] --> D60["/60-Report {ID}"] --> D70["/70-Release {ID}"]
+    D10 --> D20["/20-Spec {ID}"] --> D30["/30-Plan {ID}"] --> D40["/40-Execute {ID}"] --> D50["/50-Verify {ID}"] --> D60["/60-Report {ID}"] --> D70["/70-Release {ID}"]
 ```
 
 ```text
@@ -149,7 +149,7 @@ flowchart LR
 /10-Define DISC-YYYYMMDD-NNN
 /20-Spec {ID}
 /30-Plan
-/40-Implement
+/40-Execute
 /50-Verify
 /60-Report
 /70-Release
@@ -209,7 +209,7 @@ PRD "Top priority initiative"
 
 ```mermaid
 flowchart LR
-    D00["/00-Discover"] --> X["Debug"] --> S["/00-Discover synthesis"] --> D10["/10-Define"] --> D20["/20-Spec {ID}"] --> D30["/30-Plan {ID}"] --> D40["/40-Implement {ID}"] --> D50["/50-Verify {ID}"]
+    D00["/00-Discover"] --> X["Debug"] --> S["/00-Discover synthesis"] --> D10["/10-Define"] --> D20["/20-Spec {ID}"] --> D30["/30-Plan {ID}"] --> D40["/40-Execute {ID}"] --> D50["/50-Verify {ID}"]
 ```
 
 ```text
@@ -219,7 +219,7 @@ Debug "Login redirects forever after session expiry"
 /10-Define DISC-YYYYMMDD-NNN
 /20-Spec {ID}
 /30-Plan
-/40-Implement
+/40-Execute
 /50-Verify
 ```
 
@@ -331,7 +331,7 @@ Status markers:
 Use this layer to:
 
 - expose current status to humans at a glance
-- track units of work across `/30-Plan`, `/40-Implement`, and `/50-Verify`
+- track units of work across `/30-Plan`, `/40-Execute`, and `/50-Verify`
 - attach evidence directly to checklist items
 - record blockers without hiding them inside long notes
 - feed final completion and blocker summaries into `/60-Report`
@@ -372,7 +372,7 @@ If older documents mention those concepts, treat them as historical reference on
 | run high-severity security check | `Security-Review` |
 | write the delivery contract | `/20-Spec` |
 | break work into execution steps | `/30-Plan` |
-| implement the changes | `/40-Implement` |
+| implement the changes | `/40-Execute` |
 | verify the work | `/50-Verify` |
 | produce the final wrap-up before release | `/60-Report` |
 | package release-facing work | `/70-Release` |

@@ -48,7 +48,7 @@ Run planning as an evidence loop, not as a one-shot outline.
 - **Observation**: use concrete evidence such as file paths, existing patterns, package scripts, validation commands, and unresolved assumptions.
 - **Adjustment**: if evidence is missing, search/read more, recommend `Research` or `Agent codebase-explorer`, split the work, or route back to `20-spec` when the contract is not plan-ready.
 - **Stop Condition**: stop only when phases are ordered, subtasks are scoped, verification is explicit, test decisions are recorded, and any blockers are visible.
-- **Handoff**: `30-plan.md` must give `40-implement` enough context to select one scoped unit and execute it without inventing intent.
+- **Handoff**: `30-plan.md` must give `40-execute` enough context to select one scoped unit and execute it without inventing intent.
 
 ### 1. Read Task Artifacts
 
@@ -161,12 +161,12 @@ If validation fails, repair only what is necessary and keep `30-plan.md` aligned
 
 ### 7. Manual Review Soft Gate
 
-Before recommending `40-implement`, check whether the plan still shows pending review.
+Before recommending `40-execute`, check whether the plan still shows pending review.
 If `Approval Status` is still pending or major dependencies remain unresolved:
 
 - warn that implementation should wait for review
 - recommend human confirmation of sequencing, scope, and verification strategy
-- keep `40-implement` as a soft recommendation only
+- keep `40-execute` as a soft recommendation only
 
 ## Output Checklist
 
@@ -184,7 +184,7 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 
 - Classification: Mainline workflow
 - Previous state: `20-spec`
-- Next state: `40-implement` when execution steps and verification are clear
+- Next state: `40-execute` when execution steps and verification are clear
 - Common companion commands: `Research` or `Agent` when architecture, data flow, or external constraints still need investigation; support skills: `grill-with-docs`, `domain-modeling`, `codebase-design`, `tdd`, and `to-issues` for final design stress-testing, durable terminology capture, test planning, and issue packaging
 
 ## Sources
@@ -192,11 +192,11 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
 - `.agent/resources/schemas/plan.template.md`
-- Related commands: `20-spec`, `Research`, `Agent`, `40-implement`
+- Related commands: `20-spec`, `Research`, `Agent`, `40-execute`
 
 ## Next Workflow Recommendation
 
-- **Primary**: `40-implement {ID}`
+- **Primary**: `40-execute {ID}`
 - **Why**: Approved planning is the gate before implementation in DevFlow 2.0.
 - **Alternatives**:
   - `Research` - choose this when the plan still depends on missing evidence.

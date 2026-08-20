@@ -150,7 +150,7 @@ devflow/
       10-define.md
       20-spec.md
       30-plan.md
-      40-implement.md
+      40-execute.md
       50-verify.md
       70-release.md
       60-report.md
@@ -323,7 +323,7 @@ Human checks:
 Recommended manual progression:
 
 ```text
-Goal -> /00-Discover -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+Goal -> /00-Discover -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 Recommended prompt style for large work:

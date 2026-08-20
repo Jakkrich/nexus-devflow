@@ -102,7 +102,7 @@ related_files:
 
 ## 17. Next Allowed Command
 
-- `/40-Implement {running_id}`
+- `/40-Execute {running_id}`
 
 ## 18. Change Log
 

@@ -37,7 +37,7 @@ devflow/
 | :--- | :--- | :--- | :--- |
 | `devflow/context/` | Source of truth project context (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `findings.md`) | All AI sessions & stages | Yes. This is the core context store. |
 | `devflow/discoveries/` | Pre-delivery `00-discover.md` artifacts grouped by Discovery ID, including route selection, companion findings, decision, and later related-run links | `/00-Discover`, plus discovery-owned `Brainstorm`, `PRD`, `Research`, and `Debug` | Yes. This is the decision store before Running IDs exist. |
-| `devflow/runs/` | Per-running-ID delivery artifacts such as `10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Implement`, `/50-Verify`, `/60-Report`, `/70-Release`, `Security-Review`, `Preview` | Yes. This is the approved delivery-run store. |
+| `devflow/runs/` | Per-running-ID delivery artifacts such as `10-define.md`, `20-spec.md`, `30-plan.md`, `40-execute.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Execute`, `/50-Verify`, `/60-Report`, `/70-Release`, `Security-Review`, `Preview` | Yes. This is the approved delivery-run store. |
 | `devflow/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
 | `devflow/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
 | `devflow/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
@@ -69,7 +69,7 @@ Discoveries live under `devflow/discoveries/{DISCOVERY_ID}-{slug}/` before deliv
 | `devflow/runs/{ID}-{slug}/10-define.md` | Locks one delivery boundary, creates the Running ID, and links to its source discovery. |
 | `20-spec.md` | Defines the delivery contract and acceptance criteria. |
 | `30-plan.md` | Breaks the work down into execution order, risks, and verification approach. |
-| `40-implement.md` | Records the implementation work, key changes, and any meaningful deviation. |
+| `40-execute.md` | Records the implementation work, key changes, and any meaningful deviation. |
 | `50-verify.md` | Stores verification evidence, findings, and the quality conclusion. |
 | `60-report.md` | Produces the readable final run summary before release packaging. |
 | `60-report.html` | Produces the human-facing rendered version of the final report. |
@@ -127,7 +127,7 @@ Principles:
 2. Checklist files make work visible during the run, not only after it finishes.
 3. Checklist items should include `status`, `owner`, `updated`, and `evidence`.
 4. When manual review flow is in use, checklist artifacts should also expose `review`, approval-gate notes, and the next suggested command when that signal matters.
-5. Checklist files support the stage files. They do not replace `30-plan.md`, `40-implement.md`, or `50-verify.md`.
+5. Checklist files support the stage files. They do not replace `30-plan.md`, `40-execute.md`, or `50-verify.md`.
 6. Markdown tables with a `Status` column remain supported for backward compatibility, but checklist UI lines are the preferred human-facing format.
 7. Mainline stages use stage-local loop evidence: intent, context, action, observation, adjustment, stop condition, and handoff. Each stage owns only the loop needed for its responsibility; this does not create one global loop across the whole flow.
 
@@ -153,7 +153,7 @@ This keeps the workflow manual-first even when AI prepares the artifact draft.
 Recommended use:
 
 - Create initial checklist files during `/30-Plan`.
-- Update implementation status during `/40-Implement`.
+- Update implementation status during `/40-Execute`.
 - Update validation status and release gates during `/50-Verify`.
 - Summarize completion, blockers, and evidence snapshots during `/60-Report`.
 - Carry release execution, operator approvals, and delivery notes into `/70-Release`.
@@ -176,7 +176,7 @@ Mainline:
   /10-Define         -> one or many devflow/runs/{ID}-*/10-define.md
   /20-Spec           -> devflow/runs/{ID}-*/20-spec.md
   /30-Plan           -> devflow/runs/{ID}-*/30-plan.md
-  /40-Implement      -> devflow/runs/{ID}-*/40-implement.md
+  /40-Execute      -> devflow/runs/{ID}-*/40-execute.md
   /50-Verify         -> devflow/runs/{ID}-*/50-verify.md
   Verify companion   -> devflow/runs/{ID}-*/50-verify-impact.md (optional)
   /60-Report         -> devflow/runs/{ID}-*/60-report.md and 60-report.html

@@ -29,7 +29,7 @@ The goal is predictable skill use. A skill should sharpen the active stage, not 
 
 6. Route contradictions back to the owning stage.
    - If implementation reveals a spec flaw, route back to `/20-Spec`.
-   - If verification reveals a plan or implementation gap, route back to `/30-Plan` or `/40-Implement`.
+   - If verification reveals a plan or implementation gap, route back to `/30-Plan` or `/40-Execute`.
    - Do not let a support skill silently rewrite stage intent.
 
 ## Selection Order
@@ -54,7 +54,7 @@ Apply these gates in order:
 | `PRD` vs `/20-Spec` | `PRD` for product framing, `/20-Spec` for delivery contract | PRD explains why and product shape; spec defines buildable acceptance targets. |
 | `to-prd` vs `PRD` | `PRD` as the public surface | `to-prd` is an imported synthesis method behind the existing command. |
 | `to-issues` vs `/30-Plan` | `/30-Plan` | Planning owns work breakdown; `to-issues` can package slices for an issue tracker. |
-| `implement` vs `/40-Implement` | `/40-Implement` | The mainline stage owns implementation state and artifact updates. |
+| `implement` vs `/40-Execute` | `/40-Execute` | The mainline stage owns implementation state and artifact updates. |
 | `diagnosing-bugs` vs `Debug` | `Debug` as public surface, `diagnosing-bugs` as method | Debug owns the user-facing workflow. |
 | `review` vs `/50-Verify` | `/50-Verify` | Verify owns validation evidence; review is one verification lane. |
 | `handoff` vs `/70-Report` | `/70-Report` for final stage report, `handoff` for temporary context transfer | Report is durable lifecycle closure; handoff is operational continuity. |
@@ -81,7 +81,7 @@ Rules:
 | `/10-Define` | `grill-with-docs`, `domain-modeling`, `to-prd` | Scope, language, or product intent remains unstable. |
 | `/20-Spec` | `grill-with-docs`, `domain-modeling`, `codebase-design`, `spec-research` | Acceptance criteria, constraints, or integration facts are not testable. |
 | `/30-Plan` | `planning-and-task-breakdown`, `codebase-design`, `tdd`, `to-issues` | Plan lacks file evidence, test decisions, or vertical slices. |
-| `/40-Implement` | `incremental-implementation`, `tdd`, `diagnosing-bugs`, `codebase-design` | Implementation exposes a stage contradiction or missing tests. |
+| `/40-Execute` | `incremental-implementation`, `tdd`, `diagnosing-bugs`, `codebase-design` | Implementation exposes a stage contradiction or missing tests. |
 | `/50-Verify` | `test-execution-and-coverage`, `review`, `diagnosing-bugs`, `silent-failure-audit` | Validation lacks evidence or a failure cannot be localized. |
 | `/60-Release` | `release-git-operations`, `resolving-merge-conflicts`, `setup-pre-commit` | Packaging, conflicts, or release gates block handoff. |
 | `/70-Report` | `handoff`, `insight-capture`, writing skills | Lessons should become durable project knowledge. |

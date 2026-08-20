@@ -1,0 +1,14 @@
+{
+  "skill": "fix",
+  "description": "\"[Devflow] Fast-Track Fix stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living spec.md contract for bug fixes.\"",
+  "positive": [
+    "run fix skill",
+    "invoke /fix command",
+    "use fix for devflow fast track bug fix living spec",
+    "apply fix guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

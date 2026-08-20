@@ -35,7 +35,7 @@ It keeps the app's root `README.md` alone and installs the DevFlow framework con
 The installed workflow guides AI assistants through an explicit 8-stage lifecycle:
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Implement -> /50-Verify -> /60-Report -> /70-Release
+/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
 ```
 
 It also includes public companion commands (`Goal`, `Brainstorm`, `Research`, `Debug`, `PRD`, `Issue-Triage`, `Security-Review`, `Wiki`, `Check-For-Updates`, `Help`) and the flagship guide command `/devflow`.
@@ -49,9 +49,9 @@ installing so the new slash commands are discovered.
 
 | Tool | Installed adapter | Invocation |
 | --- | --- | --- |
-| Codex | `.agents/skills/` | `$devflow`, `$00-discover`, `$40-implement`, or plain language |
-| Google Antigravity | Shared `.agents/skills/` project skills | `/devflow`, `/00-discover`, `/40-implement`, and other slash commands after restarting Antigravity |
-| Claude Code | `.claude/skills/` | `/devflow`, `/00-discover`, `/40-implement`, and other slash commands |
+| Codex | `.agents/skills/` | `$devflow`, `$00-discover`, `$40-execute`, or plain language |
+| Google Antigravity | Shared `.agents/skills/` project skills | `/devflow`, `/00-discover`, `/40-execute`, and other slash commands after restarting Antigravity |
+| Claude Code | `.claude/skills/` | `/devflow`, `/00-discover`, `/40-execute`, and other slash commands |
 | Other tools | `AGENTS.md` plus readable skill files | Ask the agent to follow the matching `SKILL.md` |
 
 Codex and Antigravity share `.agents/skills`. The `--antigravity` or `--codex` option installs

@@ -22,7 +22,7 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`
-- `40-implement.md`
+- `40-execute.md`
 - `50-verify.md`
 - `60-report.md`
 
@@ -50,7 +50,7 @@ Teams handling defects, regressions, incidents, operational fixes, or smaller re
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`
-- `40-implement.md`
+- `40-execute.md`
 - `50-verify.md`
 
 ### Optional Layers

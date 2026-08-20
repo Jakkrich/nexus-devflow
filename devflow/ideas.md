@@ -12,4 +12,4 @@
 
 ## 📦 Archived / Shipped Ideas
 
-*(ไอเดียที่ถูกหยิบไปทำด้วย `/spec IDEA-xxx` หรือ `/00-discover IDEA-xxx` จะถูกย้ายมาบันทึกที่นี่)*
+*(ไอเดียที่ถูกหยิบไปทำด้วย `/feature IDEA-xxx`, `/fix IDEA-xxx` หรือ `/00-discover IDEA-xxx` จะถูกย้ายมาบันทึกที่นี่)*

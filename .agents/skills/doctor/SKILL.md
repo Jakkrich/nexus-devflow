@@ -52,7 +52,7 @@ Run through these 5 health checks:
   - Are there active runs?
   - Is `current-stage.md` consistent with the latest stage artifact in the active run?
   - Are checklists (`checklists/implementation-checklist.md`, `checklists/verification-checklist.md`) properly tracked?
-  - Detect stage skips or workflow drift (e.g. jumping from `10-define` directly to `40-implement` without `20-spec` and `30-plan`).
+  - Detect stage skips or workflow drift (e.g. jumping from `10-define` directly to `40-execute` without `20-spec` and `30-plan`).
 
 ### Check 5: Findings Ledger Inspection
 - Inspect `devflow/context/findings.md`:
