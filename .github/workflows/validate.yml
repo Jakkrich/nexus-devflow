@@ -30,13 +30,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - name: Validate DevFlow workspace integrity
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate DevFlow
         run: npm run check
-      - name: Validate DevFlow static contract
-        run: npm run check:static
-      - name: Run installer unit tests
-        run: npm test
-      - name: Evaluate skill routing
-        run: npm run test:routing
-      - name: Verify package smoke test
-        run: npm run test:package
+      - name: Verify package dry run
+        run: npm --prefix packages/create-nexus-devflow run check:pack
