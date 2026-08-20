@@ -1,6 +1,6 @@
 ---
 name: sync-upstream
-description: "[Devflow Maintainer] Check AI Blueprint upstream for commits newer than the last Nexus review, clone and summarize upstream changes, identify conflicts with DevFlow behavior before editing, adapt approved compatible changes, verify the repository, and update the review GitHub issue with comments and status changes. Use only in the Nexus DevFlow maintainer repository when the user asks to check, review, pull, sync, or adopt AI Blueprint upstream updates."
+description: "[Devflow] [Devflow Maintainer] Check AI Blueprint upstream for commits newer than the last Nexus review, clone and summarize upstream changes, identify conflicts with DevFlow behavior before editing, adapt approved compatible changes, verify the repository, and update the review GitHub issue with comments and status changes. Use only in the Nexus DevFlow maintainer repository when the user asks to check, review, pull, sync, or adopt AI Blueprint upstream updates."
 ---
 
 # sync-upstream - Review and adapt AI Blueprint updates for DevFlow

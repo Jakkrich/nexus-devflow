@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: "[Devflow] Production deployment pre-flight checks, launch readiness, smoke validation, and deployment execution."
+description: "[Devflow] Production deployment pre-flight checks, smoke validation, and deployment execution."
 ---
 
 # Production Deployment & Launch Readiness

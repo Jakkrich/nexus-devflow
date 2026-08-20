@@ -36,13 +36,65 @@ interface CurrentWorkSummary {
   warnings: CurrentWorkWarning[];
 }
 
+const DEVFLOW_CURRENT_FEATURE_PATH = path.join("devflow", "context", "current-feature.md");
+const DEVFLOW_CURRENT_RUN_DIR = path.join("devflow", "context", "current-run");
 const CURRENT_STAGE_PATH = path.join("devflow", "context", "current-stage.md");
 const LEGACY_FEATURE_PATH = path.join("blueprint", "context", "current-feature.md");
 const RESET_MARKER = "_Nothing in progress.";
 const CHECKBOX_PATTERN = /^\s*-\s+\[([ xX])\]\s+(.+?)\s*$/;
 
 async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary> {
-  // First, check devflow/context/current-stage.md
+  // 1. Primary: Check devflow/context/current-feature.md
+  const devflowFeatureFile = path.join(projectRoot, DEVFLOW_CURRENT_FEATURE_PATH);
+  try {
+    const featStats = await fs.lstat(devflowFeatureFile).catch(() => null);
+    if (featStats?.isFile()) {
+      const featContent = await fs.readFile(devflowFeatureFile, "utf8");
+      if (featContent.trim() !== "" && !featContent.includes(RESET_MARKER)) {
+        const parsed = parseCurrentWork(featContent);
+        if (parsed.state === "active") {
+          return parsed;
+        }
+      }
+    }
+  } catch {
+    // Continue to next checks
+  }
+
+  // 2. Check devflow/context/current-run/ (Deep-Track active run)
+  const currentRunDir = path.join(projectRoot, DEVFLOW_CURRENT_RUN_DIR);
+  try {
+    const runStats = await fs.lstat(currentRunDir).catch(() => null);
+    if (runStats?.isDirectory()) {
+      const featurePath = path.join(currentRunDir, "current-feature.md");
+      const specPath = path.join(currentRunDir, "20-spec.md");
+      const checklistPath = path.join(currentRunDir, "checklists", "implementation-checklist.md");
+
+      const specFile = (await fs.lstat(featurePath).catch(() => null))?.isFile()
+        ? featurePath
+        : (await fs.lstat(specPath).catch(() => null))?.isFile()
+        ? specPath
+        : null;
+
+      if (specFile) {
+        const specContent = await fs.readFile(specFile, "utf8");
+        const parsed = parseCurrentWork(specContent);
+        if (parsed.state === "active") {
+          return parsed;
+        }
+      }
+
+      const checkStats = await fs.lstat(checklistPath).catch(() => null);
+      if (checkStats?.isFile()) {
+        const checklistContent = await fs.readFile(checklistPath, "utf8");
+        return parseChecklistWork(checklistContent, "current-run");
+      }
+    }
+  } catch {
+    // Continue
+  }
+
+  // 3. Check devflow/context/current-stage.md
   const currentStageFile = path.join(projectRoot, CURRENT_STAGE_PATH);
   try {
     const stageStats = await fs.lstat(currentStageFile).catch(() => null);
@@ -67,9 +119,17 @@ async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary>
         return idleSummary();
       }
 
-      // Check the active run directory
+      // Check legacy active run directory under devflow/runs/
       const activeRunDir = path.join(projectRoot, "devflow", "runs", activeRunningId);
-      const specPath = path.join(activeRunDir, "spec.md");
+      const featurePath = path.join(activeRunDir, "current-feature.md");
+      const legacySpecPath = path.join(activeRunDir, "spec.md");
+      const stage20Path = path.join(activeRunDir, "20-spec.md");
+      const specPath = (await fs.lstat(featurePath).catch(() => null))?.isFile()
+        ? featurePath
+        : (await fs.lstat(stage20Path).catch(() => null))?.isFile()
+        ? stage20Path
+        : legacySpecPath;
+
       const specStats = await fs.lstat(specPath).catch(() => null);
       if (specStats?.isFile()) {
         const specContent = await fs.readFile(specPath, "utf8");
@@ -88,37 +148,10 @@ async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary>
       return idleSummary();
     }
   } catch {
-    // Fall back to scanning devflow/runs
+    // Fall back to legacy
   }
 
-  // If current-stage.md is absent, scan devflow/runs/
-  const devflowRunsDir = path.join(projectRoot, "devflow", "runs");
-  try {
-    const runsStats = await fs.lstat(devflowRunsDir).catch(() => null);
-    if (runsStats?.isDirectory()) {
-      const runEntries = (await fs.readdir(devflowRunsDir)).sort().reverse();
-      for (const runDirName of runEntries) {
-        const runDirPath = path.join(devflowRunsDir, runDirName);
-        const dirStats = await fs.lstat(runDirPath).catch(() => null);
-        if (!dirStats?.isDirectory()) continue;
-
-        const specPath = path.join(runDirPath, "spec.md");
-        const specStats = await fs.lstat(specPath).catch(() => null);
-        if (specStats?.isFile()) {
-          const specContent = await fs.readFile(specPath, "utf8");
-          const parsed = parseCurrentWork(specContent);
-          if (parsed.state === "active") {
-            parsed.runId = runDirName;
-            return parsed;
-          }
-        }
-      }
-    }
-  } catch {
-    // Continue to legacy fallback
-  }
-
-  // Fallback to legacy current-feature.md
+  // 4. Fallback to legacy blueprint/context/current-feature.md
   const legacyPath = path.join(projectRoot, LEGACY_FEATURE_PATH);
   try {
     const stats = await fs.lstat(legacyPath);
@@ -192,7 +225,7 @@ function parseChecklistWork(markdown: string, runId: string): CurrentWorkSummary
     state: "active",
     type: "stage",
     title: heading,
-    status: "In Progress",
+    status: "in_progress",
     runId,
     steps,
     completed,
@@ -203,42 +236,31 @@ function parseChecklistWork(markdown: string, runId: string): CurrentWorkSummary
   };
 }
 
-function parseChecklistSteps(markdown: string): CurrentWorkStep[] | null {
+function parseChecklistSteps(markdown: string): CurrentWorkStep[] {
   const lines = markdown.split(/\r?\n/);
-  const candidates: CurrentWorkStep[] = [];
+  const steps: CurrentWorkStep[] = [];
 
   for (let index = 0; index < lines.length; index += 1) {
-    const line = lines[index] || "";
-    const match = line.match(CHECKBOX_PATTERN);
-    if (!match) {
-      continue;
+    const match = lines[index].match(CHECKBOX_PATTERN);
+    if (match) {
+      steps.push({
+        checked: match[1].toLowerCase() === "x",
+        line: index + 1,
+        title: match[2].trim()
+      });
     }
-
-    const marker = match[1] || "";
-    const content = match[2] || "";
-    candidates.push({
-      checked: marker.toLowerCase() === "x",
-      line: index + 1,
-      title: parseStepTitle(content)
-    });
   }
 
-  return candidates.length > 0 ? candidates : null;
+  return steps;
 }
 
-function parseStepTitle(content: string): string {
-  const boldTitle = content.match(/^\*\*(.+?)\*\*/)?.[1];
-  const label = boldTitle || content.split(/\s+-\s+/, 1)[0] || content;
-  return label.replace(/^Step\s+\d+\s*[-:]\s*/i, "").trim();
-}
-
-function normalizeWorkType(value: string | null): CurrentWorkType | null {
-  const normalized = value?.toLowerCase();
-
-  if (normalized === "feature" || normalized === "fix" || normalized === "rollback" || normalized === "stage" || normalized === "spec") {
-    return normalized === "spec" ? "feature" : (normalized as CurrentWorkType);
-  }
-
+function normalizeWorkType(label: string | null): CurrentWorkType | null {
+  if (!label) return null;
+  const normalized = label.toLowerCase();
+  if (normalized === "feature") return "feature";
+  if (normalized === "fix") return "fix";
+  if (normalized === "rollback") return "rollback";
+  if (normalized === "stage" || normalized === "spec") return "stage";
   return null;
 }
 
@@ -260,28 +282,29 @@ function idleSummary(): CurrentWorkSummary {
 
 function malformedSummary(warning: CurrentWorkWarning): CurrentWorkSummary {
   return {
-    ...idleSummary(),
     state: "malformed",
+    type: null,
+    title: null,
+    status: null,
+    runId: null,
+    steps: [],
+    completed: 0,
+    remaining: 0,
+    total: 0,
+    nextStep: null,
     warnings: [warning]
   };
 }
 
-function getErrorCode(error: unknown): string | undefined {
-  return typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    typeof error.code === "string"
-    ? error.code
-    : undefined;
-}
-
-export { CURRENT_STAGE_PATH, parseCurrentWork, readCurrentWork };
+export {
+  readCurrentWork,
+  parseCurrentWork
+};
 
 export type {
-  CurrentWorkState,
-  CurrentWorkStep,
   CurrentWorkSummary,
-  CurrentWorkType,
+  CurrentWorkStep,
   CurrentWorkWarning,
-  CurrentWorkWarningCode
+  CurrentWorkState,
+  CurrentWorkType
 };

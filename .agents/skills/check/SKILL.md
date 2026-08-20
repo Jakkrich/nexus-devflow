@@ -1,6 +1,6 @@
 ---
 name: check
-description: "[Devflow] Fast-Track Check stage in DevFlow (Blueprint Mode) - perform senior QA review, run multi-lane verification, and record evidence in spec.md."
+description: "[Devflow] Fast-Track Check stage in DevFlow (Blueprint Mode) - perform senior QA review, run multi-lane verification, and record evidence in current-feature.md in context."
 argument-hint: "{running-id or workspace path}"
 ---
 
@@ -8,18 +8,18 @@ argument-hint: "{running-id or workspace path}"
 
 $ARGUMENTS
 
-Quality assurance and multi-lane verification stage in Fast-Track. Validates the implementation against Acceptance Criteria, runs test suites, checks for regressions, and records evidence in the Single Living Spec (`spec.md`).
+Quality assurance and multi-lane verification stage in Fast-Track. Validates the implementation against Acceptance Criteria, runs test suites, checks for regressions, and records evidence in the Single Living Spec (`devflow/context/current-feature.md`).
 
 ## Invocations & Aliases
 
 - `/check`: Run verification on current active run
-- `/check {running-id}`: Run verification on specified running ID
+- `/check {id}`: Run verification on specified ID
 - `$check`: Codex CLI invocation
 
 ## Fast-Track Mainline Workflow
 
 ```text
-/spec ──▶ /implement ──▶ /check ──▶ /complete
+/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
 ## Behavior & Contract
@@ -27,8 +27,8 @@ Quality assurance and multi-lane verification stage in Fast-Track. Validates the
 When invoked:
 
 ### 1. Load Active Context
-1. Identify active Running ID from `devflow/context/current-stage.md` or argument.
-2. Read `devflow/runs/{RUNNING_ID}/spec.md`.
+1. Identify active Running ID from `devflow/context/current-stage.md` or `devflow/context/current-feature.md`.
+2. Read `devflow/context/current-feature.md`.
 3. Locate `## 1. Specification & Scope` (Acceptance Criteria) and `## 3. Implementation Checklist`.
 
 ### 2. Multi-lane Verification Execution
@@ -41,8 +41,8 @@ Execute the verification gates across all lanes:
    - Verify specific scenarios against Acceptance Criteria (`AC-1`, `AC-2`).
    - Summarize "Where to go", "What to click/call", and "What to expect".
 
-### 3. Update Living Spec (`spec.md`)
-Append or update `## 5. Verification Evidence` in `spec.md` in **Thai (`th`)**:
+### 3. Update Living Spec (`current-feature.md`)
+Append or update `## 5. Verification Evidence` in `devflow/context/current-feature.md` in **Thai (`th`)**:
 
 ```markdown
 ## 5. Verification Evidence
@@ -64,5 +64,5 @@ Update `devflow/context/current-stage.md`:
 ### 5. Output Summary & Next Step
 Report to the user:
 - Summary of verification results across all lanes
-- Evidence recorded in `spec.md`
-- **Next Command**: `/complete` (or `/complete {RUNNING_ID}`)
+- Evidence recorded in `devflow/context/current-feature.md`
+- **Next Command**: `/complete` (or `/complete {ID}`)

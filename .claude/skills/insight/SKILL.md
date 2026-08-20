@@ -1,6 +1,6 @@
 ---
 name: insight
-description: "[Devflow] Extract reusable lessons, architectural patterns, post-mortem incident learning, and token optimizations from completed work."
+description: "[Devflow] Extract reusable lessons, patterns, file insights, and post-mortem learning from completed work."
 ---
 
 # Insight Extraction & Post-Mortem Learning

@@ -1,6 +1,6 @@
 ---
 name: ci
-description: "[Devflow] CI/CD pipeline automation and GitHub Actions setup (.github/workflows/verify.yml). Automates quality gates, typechecks, tests, and build checks."
+description: "[Devflow] Set up automated GitHub Actions CI workflow (.github/workflows/verify.yml) aligned with project verify command."
 ---
 
 # CI/CD Pipeline Automation & Quality Gates

@@ -109,16 +109,16 @@ Alternatively, start directly with request discovery:
 Nexus-DevFlow 2.0 supports two delivery tracks based on task complexity:
 
 ### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 Steps)
-> **Recommended for 85% of daily work** (features, bug fixes, UI improvements, iterative tasks) driven by a **Single Living Spec (`spec.md`)**:
+> **Recommended for 85% of daily work** (features, bug fixes, UI improvements, iterative tasks) driven by a **Single Living Spec (`current-feature.md`)**:
 
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`feature` / `fix` (`/feature`, `/fix`)**: Allocates sequential Running ID and creates the Single Living Spec (`devflow/runs/{RUN_ID}-{slug}/spec.md`).
-2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with TDD discipline and appends progress to `spec.md`.
-3. **`check` (`/check`)**: Senior QA review, multi-lane verification (Typecheck, Lint, Test suites, manual proof), and records evidence into `spec.md`.
-4. **`complete` (`/complete`)**: Final safety pass, records Release Digest in `spec.md`, performs git merge, and closes the run without auto HTML generation.
+1. **`feature` / `fix` (`/feature`, `/fix`)**: Allocates sequential Running ID and creates the Single Living Spec (`devflow/runs/{RUN_ID}-{slug}/current-feature.md`).
+2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with TDD discipline and appends progress to `current-feature.md`.
+3. **`check` (`/check`)**: Senior QA review, multi-lane verification (Typecheck, Lint, Test suites, manual proof), and records evidence into `current-feature.md`.
+4. **`complete` (`/complete`)**: Final safety pass, records Release Digest in `current-feature.md`, performs git merge, and closes the run without auto HTML generation.
 
 ---
 

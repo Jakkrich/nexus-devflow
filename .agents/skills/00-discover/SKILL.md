@@ -1,5 +1,5 @@
----name: 00-discover
-
+---
+name: 00-discover
 description: "[Devflow] Discover stage in DevFlow 2.0 - explore a request, route supporting inquiry, and decide whether delivery work should begin without allocating a running ID."
 argument-hint: "{title, request, or discovery-id}"
 ---

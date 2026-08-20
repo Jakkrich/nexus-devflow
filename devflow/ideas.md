@@ -59,6 +59,19 @@
 
 ---
 
+### [IDEA-005] ระบบ Internal State (`devflow/.state/`) สำหรับจัดการ Version Manifest, File Hashes & Safe Update Backups
+- **บันทึกเมื่อ**: 2026-08-21
+- **ไอเดียตั้งต้น**: เพิ่มการทำงานของ `.state/` แบบ blueprint โฟลเดอร์ภายในสำหรับบันทึก metadata, version, tool adapters, file checksums ใน manifest.json เพื่อรองรับคำสั่งอัปเดต พร้อมระบบ auto-backup ไฟล์ที่เกิด conflict ลงใน `devflow/.state/backups/` (ถูก `.gitignore`)
+- **AI Feasibility & Tech**: **ง่ายถึงปานกลาง (High Feasibility)** — ใช้ Node.js built-in `crypto` (`createHash('sha256')`) ในการคำนวณ Checksum ของ workflow/skill/context files ร่วมกับ FS utilities ใน `packages/create-nexus-devflow` เพื่อรองรับคำสั่งอัปเดตเวอร์ชัน (`nexus-devflow update` / CLI updater) ตรวจจับ conflict และสร้าง backup อัตโนมัติ
+- **Value & Potential**: **สูงมาก (Enterprise-grade Lifecycle & Maintainability)** — ป้องกันปัญหาไฟล์ workflow โดนเขียนทับโดยไม่ตั้งใจเมื่ออัปเกรดเวอร์ชันใหม่ รองรับการตรวจจับความเปลี่ยนแปลงของผู้ใช้ และช่วยให้การอัปเดต DevFlow ในโปรเจกต์ปลายทางเป็นไปอย่างปลอดภัย 100%
+- **Quick Seed (กันลืม)**:
+  1. สร้างโครงสร้าง `devflow/.state/manifest.json` เก็บ `version`, `installedAt`, `adapters` (antigravity, codex, claude), และ `fileHashes` (SHA-256)
+  2. สร้าง `devflow/.state/.gitignore` เพื่อละเว้นโฟลเดอร์ `backups/` ไม่ให้ commit เข้า Git
+  3. พัฒนาระบบ Update & Conflict Resolver ใน CLI: ตรวจสอบ hash ปัจจุบันเทียบกับ hash ใน manifest หากผู้ใช้แก้ไขไฟล์เดิม ให้ทำสำเนาลง `backups/<timestamp>-<filename>` ก่อนผสานหรือแจ้งเตือน
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-005` หรือ `/00-discover IDEA-005`)
+
+---
+
 ## 📦 Archived / Shipped Ideas
 
 *(ไอเดียที่ถูกหยิบไปทำด้วย `/feature IDEA-xxx`, `/fix IDEA-xxx` หรือ `/00-discover IDEA-xxx` จะถูกย้ายมาบันทึกที่นี่)*

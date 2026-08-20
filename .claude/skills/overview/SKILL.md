@@ -13,7 +13,7 @@ codebase + devflow/history/HISTORY.md  ->  [overview]  ->  devflow/context/proje
                                              synthesize)
 ```
 
-`overview` is the context synchronization and synthesis engine for Nexus-DevFlow. It inspects the actual codebase (manifest, dependencies, directory layout, models/schemas, entry points) along with the completed delivery history (`devflow/history/HISTORY.md` and `devflow/runs/`) to build or refresh `devflow/context/project-overview.md`.
+`overview` is the context synchronization and synthesis engine for Nexus-DevFlow. It inspects the actual codebase (manifest, dependencies, directory layout, models/schemas, entry points) along with the completed delivery history (`devflow/history/HISTORY.md` and `devflow/history/`) to build or refresh `devflow/context/project-overview.md`.
 
 It ensures that `project-overview.md` remains a **Living Source of Truth** that evolves alongside your software, rather than a stale artifact left behind after onboarding.
 
@@ -26,7 +26,7 @@ overview
 ```
 
 Use this when:
-- Multiple delivery runs (`RUN-xxx`) have shipped and `project-overview.md` needs to reflect newly added capabilities.
+- Multiple delivery runs (`xxx-slug`) have shipped and `project-overview.md` needs to reflect newly added capabilities.
 - New database schemas, ORM models, or API boundaries were introduced.
 - Major dependencies or architectural patterns were added or modified.
 - After completing `70-release` to keep project context perfectly aligned.
@@ -59,7 +59,7 @@ Inspect the actual codebase to establish hard facts:
 Inspect DevFlow history records:
 
 1. Read `devflow/history/HISTORY.md` for completed and released milestones.
-2. Scan completed delivery runs in `devflow/runs/` to extract shipped user-visible capabilities and core system features.
+2. Scan completed delivery runs in `devflow/history/features/`, `devflow/history/fixes/`, and `devflow/history/rollbacks/` to extract shipped user-visible capabilities and core system features.
 
 ---
 

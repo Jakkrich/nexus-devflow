@@ -109,16 +109,16 @@ devflow
 Nexus-DevFlow 2.0 รองรับการส่งมอบงาน 2 รูปแบบ:
 
 ### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 ขั้นตอน)
-> **เหมาะสำหรับ 85% ของงานประจำวัน** ขับเคลื่อนด้วย **Single Living Spec (`spec.md`)** แผ่นเดียวจบ:
+> **เหมาะสำหรับ 85% ของงานประจำวัน** ขับเคลื่อนด้วย **Single Living Spec (`current-feature.md`)** แผ่นเดียวจบ:
 
 ```text
 /feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`feature` / `fix` (`/feature`, `/fix`)**: สร้าง Living Spec (`devflow/runs/{RUN_ID}-{slug}/spec.md`) พร้อม Scope, Acceptance Criteria และ Checklist
-2. **`implement` (`/implement`)**: พัฒนาโค้ดตาม Checklist ทีละขั้นด้วย TDD และอัปเดตความคืบหน้าลงใน `spec.md`
-3. **`check` (`/check`)**: Senior QA ตรวจสอบ Multi-lane verification (Typecheck, Lint, Tests, Proof) บันทึกหลักฐานลง `spec.md`
-4. **`complete` (`/complete`)**: Final Safety Pass, สรุป Release Digest ลง `spec.md`, ทำ Git Merge และปิดรอบอย่างปลอดภัย
+1. **`feature` / `fix` (`/feature`, `/fix`)**: สร้าง Living Spec (`devflow/runs/{RUN_ID}-{slug}/current-feature.md`) พร้อม Scope, Acceptance Criteria และ Checklist
+2. **`implement` (`/implement`)**: พัฒนาโค้ดตาม Checklist ทีละขั้นด้วย TDD และอัปเดตความคืบหน้าลงใน `current-feature.md`
+3. **`check` (`/check`)**: Senior QA ตรวจสอบ Multi-lane verification (Typecheck, Lint, Tests, Proof) บันทึกหลักฐานลง `current-feature.md`
+4. **`complete` (`/complete`)**: Final Safety Pass, สรุป Release Digest ลง `current-feature.md`, ทำ Git Merge และปิดรอบอย่างปลอดภัย
 
 ---
 

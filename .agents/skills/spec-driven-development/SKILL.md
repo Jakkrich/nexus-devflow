@@ -83,8 +83,8 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 
 Every specification must stand on its own in markdown under `devflow/runs/{ID}-*/`:
 
-1. **`define.md`**: Decision and scope framing when the problem still needs clarification.
-2. **`spec.md`**: The delivery contract following the template below.
+1. **`current-feature.md`**: Fast-Track Single Living Spec delivery contract.
+2. **`20-spec.md`**: Deep-Track formal specification delivery contract.
 
 **Spec template:**
 

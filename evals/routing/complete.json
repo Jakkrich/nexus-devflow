@@ -1,6 +1,6 @@
 {
   "skill": "complete",
-  "description": "\"[Devflow] Fast-Track Complete stage in DevFlow (Blueprint Mode) - perform final safety pass, record release digest in spec.md, git merge, and close run without auto HTML generation.\"",
+  "description": "\"[Devflow] Fast-Track Complete stage in DevFlow (Blueprint Mode) - perform final safety pass, record release digest in current-feature.md, git merge, and close run without auto HTML generation.\"",
   "positive": [
     "run complete skill",
     "invoke /complete command",
