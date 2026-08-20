@@ -1,6 +1,6 @@
 ---
 name: feature
-description: "[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living spec.md contract for new features."
+description: "[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract in context for new features."
 argument-hint: "{feature title, IDEA-xxx, or feature description}"
 ---
 
@@ -8,7 +8,7 @@ argument-hint: "{feature title, IDEA-xxx, or feature description}"
 
 $ARGUMENTS
 
-Fast-Track entry point combining Discovery, Definition, Specification, and Implementation Planning into one streamlined, review-gated step for **new features or enhancements**. Creates and maintains the **Single Living Spec (`spec.md`)** for the feature run. Supports intake from Idea Inbox (`IDEA-xxx`).
+Fast-Track entry point combining Discovery, Definition, Specification, and Implementation Planning into one streamlined, review-gated step for **new features or enhancements**. Creates and maintains the **Single Living Spec (`devflow/context/current-feature.md`)** for the feature run. Supports intake from Idea Inbox (`IDEA-xxx`).
 
 ## Invocations & Aliases
 
@@ -26,25 +26,31 @@ Fast-Track entry point combining Discovery, Definition, Specification, and Imple
 
 When invoked:
 
-### 1. Work Identity & Idea Intake
-1. Inspect `devflow/context/current-stage.md` and `devflow/runs/`.
-2. **Idea Inbox Intake**: If the argument is an idea identifier (e.g. `IDEA-001`):
+### 1. Single Active Run Guardrail (One Thing at a Time)
+1. Inspect `devflow/context/current-stage.md` and `devflow/context/current-feature.md`.
+2. If `Active Running ID` is not `None` and `Current Stage` is not `Idle`, or if `current-feature.md` contains an active uncompleted spec:
+   - **HALT and reject opening a new feature**.
+   - Explain to the user that an active run is currently in progress:
+     > ⚠️ *"มีงาน `{active_id}` กำลังดำเนินการอยู่ กรุณาปิดงานเดิมด้วย `/complete` หรือ `70-release` (หรือสั่ง `/rollback`) ก่อนเริ่มงานใหม่"*
+
+### 2. Work Identity & Idea Intake
+1. **Idea Inbox Intake**: If the argument is an idea identifier (e.g. `IDEA-001`):
    - Read `devflow/ideas.md` and extract the idea's title, raw problem statement, AI Feasibility notes, and Quick Seed points.
    - Use these details as the primary input for Specification & Scope.
-   - In `devflow/ideas.md`, update the item's status to `[x] Claimed ({RUNNING_ID})` and move it under `## 📦 Archived / Shipped Ideas`.
-3. Determine or allocate the sequential Running ID (e.g. `RUN-018-{slug}`).
-4. Identify Git branch naming:
-   - `feature/{slug}-{RUNNING_ID}`
-5. Create directory `devflow/runs/{RUNNING_ID}/`.
+   - In `devflow/ideas.md`, update the item's status to `[x] Claimed ({ID})` and move it under `## 📦 Archived / Shipped Ideas`.
+2. Inspect `devflow/history/HISTORY.md` and determine the next sequential ID without prefix (e.g. `022-{slug}`).
+3. Identify Git branch naming:
+   - `feature/{xxx-slug}`
 
-### 2. Generate the Single Living Spec (`spec.md`)
-Write `devflow/runs/{RUNNING_ID}/spec.md` using the structured template below in **Thai (`th`)**:
+### 3. Generate the Living Spec (`devflow/context/current-feature.md`)
+Write `devflow/context/current-feature.md` using the structured template below in **Thai (`th`)**:
 
 ```markdown
-# 📐 [{RUNNING_ID}] {Feature Title} (Living Spec)
+# 📐 [{ID}] {Feature Title} (Living Spec)
 
 > **Status**: In-Progress  
 > **Track**: Fast-Track (Blueprint Mode - Feature)  
+> **Category**: Feature  
 > **Branch**: `{branch_name}`  
 > **Created Date**: {YYYY-MM-DD}  
 > **Owner**: {Contributor or Team}  
@@ -87,17 +93,16 @@ Write `devflow/runs/{RUNNING_ID}/spec.md` using the structured template below in
 - *(จะถูกบันทึกเมื่อรัน /complete)*
 ```
 
-### 3. Update Workspace Status
+### 4. Update Workspace Status
 Update `devflow/context/current-stage.md`:
-- `Active Running ID`: `{RUNNING_ID}`
+- `Active Discovery ID`: `None`
+- `Active Running ID`: `{ID}`
 - `Current Stage`: `feature (Fast-Track -> Ready for /implement)`
-- `Living Spec`: `devflow/runs/{RUNNING_ID}/spec.md`
+- `Living Spec`: `devflow/context/current-feature.md`
 - `Last Updated`: `{YYYY-MM-DD}`
 
-### 4. Output Summary & Next Step
+### 5. Output Summary & Next Step
 Report to the user:
 - Running ID and allocated branch
 - Summary of Scope and Acceptance Criteria
-- Living Spec path: `devflow/runs/{RUNNING_ID}/spec.md`
-- If promoted from `IDEA-xxx`, confirm status update in `devflow/ideas.md`
-- **Next Command**: `/implement` (or `/implement {RUNNING_ID}`)
+- Explicit next step: `/implement`

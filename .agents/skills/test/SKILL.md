@@ -1,6 +1,6 @@
 ---
 name: test
-description: "[Devflow] Test-driven development, test generation, test execution, and coverage analysis across unit, integration, and smoke test suites."
+description: "[Devflow] Test execution, missing test generation, and coverage analysis across unit, integration, and smoke test suites."
 ---
 
 # Test-Driven Development, Generation & Execution

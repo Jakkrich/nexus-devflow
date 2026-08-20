@@ -1,6 +1,6 @@
 {
   "skill": "spec",
-  "description": "\"[Devflow] Fast-Track Spec stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the single living spec.md contract.\"",
+  "description": "\"[Devflow] Fast-Track Spec router in DevFlow (Blueprint Mode) - aliases and routes to /feature or /fix to create the single living current-feature.md contract.\"",
   "positive": [
     "run spec skill",
     "invoke /spec command",

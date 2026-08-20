@@ -1,6 +1,6 @@
 ---
 name: spec
-description: "[Devflow] Fast-Track Spec router in DevFlow (Blueprint Mode) - aliases and routes to /feature or /fix to create the single living spec.md contract."
+description: "[Devflow] Fast-Track Spec router in DevFlow (Blueprint Mode) - aliases and routes to /feature or /fix to create the living current-feature.md contract in context."
 argument-hint: "{feature title, bug description, IDEA-xxx, or running-id}"
 ---
 
@@ -8,7 +8,7 @@ argument-hint: "{feature title, bug description, IDEA-xxx, or running-id}"
 
 $ARGUMENTS
 
-Unified Fast-Track entry point that routes to `/feature` or `/fix` to create and maintain the **Single Living Spec (`spec.md`)**.
+Unified Fast-Track entry point that routes to `/feature` or `/fix` to create and maintain the **Single Living Spec (`devflow/context/current-feature.md`)**.
 
 > [!TIP]
 > **Preferred Commands**:
@@ -32,7 +32,8 @@ Unified Fast-Track entry point that routes to `/feature` or `/fix` to create and
 
 When invoked:
 
-1. If the input describes a bug or hotfix, routes to `/fix` behavior.
-2. Otherwise, routes to `/feature` behavior.
-3. Allocates sequential Running ID (`RUN-xxx`), creates directory `devflow/runs/{RUNNING_ID}/`, and generates `spec.md` in **Thai (`th`)**.
-4. Updates `devflow/context/current-stage.md` and reports next step: `/implement`.
+1. Checks Single Active Run Guardrail: rejects if an uncompleted active run already exists in `devflow/context/current-stage.md` or `devflow/context/current-feature.md`.
+2. If the input describes a bug or hotfix, routes to `/fix` behavior.
+3. Otherwise, routes to `/feature` behavior.
+4. Allocates sequential ID without prefix (`xxx-slug`), generates `devflow/context/current-feature.md` in **Thai (`th`)**.
+5. Updates `devflow/context/current-stage.md` and reports next step: `/implement`.

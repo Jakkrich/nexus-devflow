@@ -17,11 +17,10 @@ test("parseArgs parses status command and options", () => {
   assert.equal(options2.target, "./test-app");
 });
 
-test("readProjectStatus and formatHumanStatus work in a valid DevFlow project", async () => {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-full-"));
+test("readProjectStatus and formatHumanStatus work with 3-Pillars context/current-feature.md", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-3pillars-"));
   try {
     await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
-    await fs.mkdir(path.join(tempDir, "devflow", "runs", "RUN-001-example"), { recursive: true });
     await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
     await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
 
@@ -33,12 +32,13 @@ test("readProjectStatus and formatHumanStatus work in a valid DevFlow project", 
 `
     );
 
+    // Active spec directly in devflow/context/current-feature.md
     await fs.writeFile(
-      path.join(tempDir, "devflow", "runs", "RUN-001-example", "spec.md"),
+      path.join(tempDir, "devflow", "context", "current-feature.md"),
       `
-# Feature: Example Feature
+# Feature: 021-categorized-history-and-clean-living-spec-architecture
 **Status:** In Progress
-**Running ID:** \`RUN-001-example\`
+**Running ID:** \`021-categorized-history-and-clean-living-spec-architecture\`
 
 ## Implementation Steps
 - [x] Step 1: Initial setup
@@ -56,8 +56,31 @@ test("readProjectStatus and formatHumanStatus work in a valid DevFlow project", 
 
     const humanOutput = formatHumanStatus(status, { color: false });
     assert.ok(humanOutput.includes("Nexus-DevFlow Status"));
-    assert.ok(humanOutput.includes("RUN-001-example"));
+    assert.ok(humanOutput.includes("021-categorized-history"));
     assert.ok(humanOutput.includes("1/2 complete"));
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("readProjectStatus returns idle when current-feature.md contains reset stub", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-idle-"));
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      `# Current Feature
+
+_Nothing in progress. Run /feature, /fix, or /rollback to start._`
+    );
+
+    const status = await readProjectStatus(tempDir);
+    assert.equal(status.currentWork.state, "idle");
+    assert.equal(status.currentWork.completed, 0);
+    assert.equal(status.currentWork.total, 0);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

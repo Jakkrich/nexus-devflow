@@ -16,7 +16,7 @@ Use this skill to guide the user on what to do next, inspect current workspace s
 
 Nexus-DevFlow supports two seamless workflow tracks:
 1. **🏎️ Fast-Track (Blueprint Mode - 4 Steps)**: `/spec` ➔ `/implement` ➔ `/check` ➔ `/complete`  
-   *Driven by a **Single Living Spec (`spec.md`)** for fast, high-velocity daily development and bugfixes (85% of tasks).*
+   *Driven by a **Single Living Spec (`current-feature.md`)** for fast, high-velocity daily development and bugfixes (85% of tasks).*
 2. **🏗️ Deep-Track (Architect Mode - 8 Steps)**: `00-discover` ➔ `10-define` ➔ `20-spec` ➔ `30-plan` ➔ `40-execute` ➔ `50-verify` ➔ `60-report` ➔ `70-release`  
    *Driven by modular separate stage files for large, high-stakes architectural epics and multi-agent coordination.*
 
@@ -28,8 +28,8 @@ When invoked without an argument (or when determining the next step), inspect:
 
 1. **Project Setup Baseline**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`. If empty or default placeholders, recommend `onboard` (for fresh projects) or `adopt` (for existing codebases).
 2. **Active Delivery Run**: Read `devflow/context/current-stage.md` and check `devflow/runs/{RUNNING_ID}/`.
-   - **If Fast-Track (`spec.md` or `blueprint.md` present)**:
-     - If `spec.md` has incomplete checklist items -> Recommend `/implement` (or `implement {RUNNING_ID}`).
+   - **If Fast-Track (`current-feature.md`, `spec.md`, or `blueprint.md` present)**:
+     - If `current-feature.md` (or `spec.md`) has incomplete checklist items -> Recommend `/implement` (or `implement {RUNNING_ID}`).
      - If all tasks done but no passing verification evidence -> Recommend `/check` (or `check {RUNNING_ID}`).
      - If verification evidence passed -> Recommend `/complete` (or `complete {RUNNING_ID}`).
    - **If Deep-Track (numbered stage files present)**:
@@ -61,7 +61,7 @@ When invoked without an argument (or when determining the next step), inspect:
 | **"Execute implementation tasks"** | `implement` | `/implement` | **Fast-Track**: `/implement` -> `/check` |
 | **"Run QA verification & check"** | `check` | `/check` | **Fast-Track**: `/check` -> `/complete` |
 | **"Complete run & git merge"** | `complete` | `/complete` | **Fast-Track**: `/complete` |
-| **"Generate HTML dashboard report"**| `report-html` | `/report:html` | **Standalone**: Converts `spec.md` / `60-report.md` to HTML |
+| **"Generate HTML dashboard report"**| `report-html` | `/report:html` | **Standalone**: Converts `current-feature.md` / `60-report.md` to HTML |
 | "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `/spec` or `10-define` |
 | "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `/spec` or `10-define` |
 | "Check setup health & diagnostics" | `doctor` | `doctor` / `health` | `doctor` |
@@ -85,7 +85,7 @@ When invoked without an argument (or when determining the next step), inspect:
 ## Available Skills Sitemap
 
 ### 1. Fast-Track (Blueprint Mode - 4 Steps)
-- `spec` (`/spec`, `/feature`, `/fix`, `$spec`) - Define, spec, plan, and create `spec.md`
+- `spec` (`/spec`, `/feature`, `/fix`, `$spec`) - Define, spec, plan, and create `current-feature.md`
 - `implement` (`/implement`, `$implement`) - Execute planned checklist tasks with TDD
 - `check` (`/check`, `$check`) - Senior QA review, multi-lane verification, record evidence
 - `complete` (`/complete`, `$complete`) - Safety pass, release digest, git merge, close run

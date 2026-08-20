@@ -1,5 +1,5 @@
----name: 30-plan
-
+---
+name: 30-plan
 description: "[Devflow] Plan stage in DevFlow 2.0 - transform 20-spec.md into an executable task breakdown with test decisions."
 ---
 # Phase 30: Plan Implementation

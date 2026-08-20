@@ -1,5 +1,5 @@
----name: 20-spec
-
+---
+name: 20-spec
 description: "[Devflow] Spec stage in DevFlow 2.0 - write the formal markdown-first specification from a stable definition."
 argument-hint: "{running-id or workspace path}"
 ---

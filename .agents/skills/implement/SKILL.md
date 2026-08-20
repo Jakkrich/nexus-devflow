@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "[Devflow] Fast-Track Implement stage in DevFlow (Blueprint Mode) - execute checklist tasks incrementally with TDD and update spec.md."
+description: "[Devflow] Fast-Track Implement stage in DevFlow (Blueprint Mode) - execute checklist tasks incrementally with TDD and update current-feature.md in context."
 argument-hint: "{running-id or workspace path}"
 ---
 
@@ -8,18 +8,18 @@ argument-hint: "{running-id or workspace path}"
 
 $ARGUMENTS
 
-Incremental code execution stage in Fast-Track. Reads the Single Living Spec (`spec.md`), executes checklist tasks, implements tests (TDD), and updates the implementation record.
+Incremental code execution stage in Fast-Track. Reads the Single Living Spec (`devflow/context/current-feature.md`), executes checklist tasks, implements tests (TDD), and updates the implementation record.
 
 ## Invocations & Aliases
 
 - `/implement`: Run implementation on current active run
-- `/implement {running-id}`: Run implementation on specified running ID
+- `/implement {id}`: Run implementation on specified ID
 - `$implement`: Codex CLI invocation
 
 ## Fast-Track Mainline Workflow
 
 ```text
-/spec ──▶ /implement ──▶ /check ──▶ /complete
+/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
 ## Behavior & Contract
@@ -27,8 +27,8 @@ Incremental code execution stage in Fast-Track. Reads the Single Living Spec (`s
 When invoked:
 
 ### 1. Load Active Context
-1. Identify active Running ID from `devflow/context/current-stage.md` or argument.
-2. Read `devflow/runs/{RUNNING_ID}/spec.md`.
+1. Identify active Running ID from `devflow/context/current-stage.md` or `devflow/context/current-feature.md`.
+2. Read `devflow/context/current-feature.md`.
 3. Locate `## 2. Plan & Test Strategy` and `## 3. Implementation Checklist`.
 
 ### 2. Incremental Execution with TDD
@@ -37,10 +37,10 @@ When invoked:
    - **TDD (Red-Green-Refactor)**: When `Test Decision: Required`, create or update unit tests first.
    - Implement the minimal, clean code change satisfying the task.
    - Run localized verification (e.g. `npm test`, linter).
-   - Mark the item as `- [x]` in `spec.md`.
+   - Mark the item as `- [x]` in `current-feature.md`.
 
-### 3. Update Living Spec (`spec.md`)
-Append or update `## 4. Implementation Record` in `spec.md` with:
+### 3. Update Living Spec (`current-feature.md`)
+Append or update `## 4. Implementation Record` in `devflow/context/current-feature.md` with:
 - Summary of completed tasks and modified files
 - Key architectural observations or notes
 - Status of checklist items
@@ -61,4 +61,4 @@ Update `devflow/context/current-stage.md`:
 Report to the user:
 - Completed checklist items and modified files
 - Local verification results
-- **Next Command**: `/check` (or `/check {RUNNING_ID}`)
+- **Next Command**: `/check` (or `/check {ID}`)

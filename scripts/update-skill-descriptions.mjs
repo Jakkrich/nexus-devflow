@@ -45,8 +45,8 @@ const CUSTOM_DESCRIPTIONS = {
   '50-verify': '[Devflow] Verify stage in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement.',
   '60-report': '[Devflow] Report stage in DevFlow 2.0 - produce standardized markdown and HTML summary report for the completed run.',
   '70-release': '[Devflow] Release stage in DevFlow 2.0 - package verified work for delivery, git merge, PR, or deployment.',
-  'feature': '[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living spec.md contract for new features.',
-  'fix': '[Devflow] Fast-Track Fix stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living spec.md contract for bug fixes.'
+  'feature': '[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract for new features.',
+  'fix': '[Devflow] Fast-Track Fix stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract for bug fixes.'
 };
 
 const entries = fs.readdirSync(skillsDir, { withFileTypes: true })

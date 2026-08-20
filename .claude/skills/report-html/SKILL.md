@@ -1,6 +1,6 @@
 ---
 name: report-html
-description: "[Devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from spec.md or 60-report.md on demand."
+description: "[Devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from current-feature.md or 60-report.md on demand."
 argument-hint: "{running-id or workspace path}"
 ---
 
@@ -8,7 +8,7 @@ argument-hint: "{running-id or workspace path}"
 
 $ARGUMENTS
 
-Standalone companion command to generate an interactive, self-contained HTML report dashboard on demand from either a Fast-Track `spec.md` or a Deep-Track `60-report.md`.
+Standalone companion command to generate an interactive, self-contained HTML report dashboard on demand from either a Fast-Track `current-feature.md` or a Deep-Track `60-report.md`.
 
 > [!NOTE]
 > HTML reports are **never automatically generated** during normal mainline stages (`/complete` or `60-report`). Use this command whenever you or stakeholders wish to view or share an interactive web report.
@@ -27,7 +27,7 @@ When invoked:
 ### 1. Identify Target Run
 1. Locate target run directory in `devflow/runs/{running-id}` from argument or `devflow/context/current-stage.md`.
 2. Check for either:
-   - Fast-Track Living Spec: `devflow/runs/{RUNNING_ID}/spec.md` (or `blueprint.md`)
+   - Fast-Track Living Spec: `devflow/runs/{RUNNING_ID}/current-feature.md` (or `spec.md` / `blueprint.md`)
    - Deep-Track Report Digest: `devflow/runs/{RUNNING_ID}/60-report.md`
 
 ### 2. Render Interactive HTML Dashboard

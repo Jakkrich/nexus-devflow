@@ -1,6 +1,6 @@
 {
   "skill": "check",
-  "description": "\"[Devflow] Fast-Track Check stage in DevFlow (Blueprint Mode) - perform senior QA review, run multi-lane verification, and record evidence in spec.md.\"",
+  "description": "\"[Devflow] Fast-Track Check stage in DevFlow (Blueprint Mode) - perform senior QA review, run multi-lane verification, and record evidence in current-feature.md.\"",
   "positive": [
     "run check skill",
     "invoke /check command",

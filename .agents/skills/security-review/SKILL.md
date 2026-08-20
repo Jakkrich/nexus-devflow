@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: "[Devflow] Security review, vulnerability scanner, and code hardening. Audits for OWASP vulnerabilities, secrets, injections, and auth flaws."
+description: "[Devflow] High-severity security code review and vulnerability audit for folders, projects, files, or diffs."
 ---
 
 # Security Review, Hardening & Vulnerability Audit
