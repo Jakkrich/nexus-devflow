@@ -29,6 +29,8 @@ Primary source of truth for the project context, architecture, tech stack, and a
 
 ## Shipped Capabilities (Recent Milestones)
 
+- **`RUN-019` (2026-08-20)**: Native Terminal Status CLI (`nexus-devflow status` / `create-nexus-devflow status`), project root detection, metadata & findings parser, 15 Unit tests suite, and upstream AI Blueprint v0.9.1 baseline synchronization.
+- **`RUN-018` (2026-08-20)**: Complete website and documentation overhaul for Dual-Track Architecture (`website/src/content/docs/`).
 - **`RUN-017` (2026-08-20)**: Separate Fast-Track skills (`/feature`, `/fix`) and rename Deep-Track stage 40 to `40-execute` to eliminate command collisions.
 - **`RUN-016` (2026-08-20)**: Quick Idea Capture and AI Feasibility Assessment (`/idea`) with centralized Idea Inbox (`devflow/ideas.md`).
 - **`RUN-015` (2026-08-20)**: Dual-Track Architecture (Fast-Track 4 Steps & Deep-Track 8 Steps) + Living Spec (`spec.md`) + Standalone HTML Reporting Policy.
@@ -37,5 +39,5 @@ Primary source of truth for the project context, architecture, tech stack, and a
 ## DevFlow Workspace Status
 
 - **Active Discovery ID**: None (Idle)
-- **Active Running ID**: `RUN-018-update-documentation-and-guides`
-- **Last Completed Run**: `RUN-017-split-spec-and-rename-40-execute`
+- **Active Running ID**: None (Idle)
+- **Last Completed Run**: `RUN-019-sync-upstream-status-cli-and-project-detection` (2026-08-20)
