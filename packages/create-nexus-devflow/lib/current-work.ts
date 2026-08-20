@@ -42,7 +42,56 @@ const RESET_MARKER = "_Nothing in progress.";
 const CHECKBOX_PATTERN = /^\s*-\s+\[([ xX])\]\s+(.+?)\s*$/;
 
 async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary> {
-  // First, check active run living spec in devflow/runs/
+  // First, check devflow/context/current-stage.md
+  const currentStageFile = path.join(projectRoot, CURRENT_STAGE_PATH);
+  try {
+    const stageStats = await fs.lstat(currentStageFile).catch(() => null);
+    if (stageStats?.isFile()) {
+      const stageContent = await fs.readFile(currentStageFile, "utf8");
+
+      const activeRunningIdMatch = stageContent.match(
+        /-\s+\*\*Active Running ID\*\*:\s*`?([A-Za-z0-9-_]+|None)`?/i
+      );
+      const activeRunningId = activeRunningIdMatch ? activeRunningIdMatch[1].trim() : null;
+
+      const stageMatch = stageContent.match(
+        /-\s+\*\*Current Stage\*\*:\s*([^\r\n]+)/i
+      );
+      const stageName = stageMatch ? stageMatch[1].trim() : "";
+
+      if (
+        !activeRunningId ||
+        activeRunningId.toLowerCase() === "none" ||
+        stageName.toLowerCase().startsWith("idle")
+      ) {
+        return idleSummary();
+      }
+
+      // Check the active run directory
+      const activeRunDir = path.join(projectRoot, "devflow", "runs", activeRunningId);
+      const specPath = path.join(activeRunDir, "spec.md");
+      const specStats = await fs.lstat(specPath).catch(() => null);
+      if (specStats?.isFile()) {
+        const specContent = await fs.readFile(specPath, "utf8");
+        const parsed = parseCurrentWork(specContent);
+        parsed.runId = activeRunningId;
+        return parsed;
+      }
+
+      const checklistPath = path.join(activeRunDir, "checklists", "implementation-checklist.md");
+      const checklistStats = await fs.lstat(checklistPath).catch(() => null);
+      if (checklistStats?.isFile()) {
+        const checklistContent = await fs.readFile(checklistPath, "utf8");
+        return parseChecklistWork(checklistContent, activeRunningId);
+      }
+
+      return idleSummary();
+    }
+  } catch {
+    // Fall back to scanning devflow/runs
+  }
+
+  // If current-stage.md is absent, scan devflow/runs/
   const devflowRunsDir = path.join(projectRoot, "devflow", "runs");
   try {
     const runsStats = await fs.lstat(devflowRunsDir).catch(() => null);
@@ -53,7 +102,6 @@ async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary>
         const dirStats = await fs.lstat(runDirPath).catch(() => null);
         if (!dirStats?.isDirectory()) continue;
 
-        // Check for spec.md or checklists
         const specPath = path.join(runDirPath, "spec.md");
         const specStats = await fs.lstat(specPath).catch(() => null);
         if (specStats?.isFile()) {
@@ -64,52 +112,22 @@ async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary>
             return parsed;
           }
         }
-
-        // Check for 30-plan or implementation-checklist
-        const checklistPath = path.join(runDirPath, "checklists", "implementation-checklist.md");
-        const checklistStats = await fs.lstat(checklistPath).catch(() => null);
-        if (checklistStats?.isFile()) {
-          const checklistContent = await fs.readFile(checklistPath, "utf8");
-          const parsed = parseChecklistWork(checklistContent, runDirName);
-          if (parsed.state === "active") {
-            return parsed;
-          }
-        }
       }
     }
   } catch {
-    // Continue to current-stage.md
+    // Continue to legacy fallback
   }
 
-  // Next, check current-stage.md or legacy current-feature.md
-  const candidates = [
-    path.join(projectRoot, CURRENT_STAGE_PATH),
-    path.join(projectRoot, LEGACY_FEATURE_PATH)
-  ];
-
-  for (const currentWorkPath of candidates) {
-    try {
-      const stats = await fs.lstat(currentWorkPath);
-
-      if (stats.isSymbolicLink()) {
-        return malformedSummary({
-          code: "unsafe_current_work_path",
-          message: "Current work file is a symbolic link and was not read."
-        });
-      }
-
-      if (!stats.isFile()) {
-        continue;
-      }
-
-      const content = await fs.readFile(currentWorkPath, "utf8");
+  // Fallback to legacy current-feature.md
+  const legacyPath = path.join(projectRoot, LEGACY_FEATURE_PATH);
+  try {
+    const stats = await fs.lstat(legacyPath);
+    if (stats.isFile()) {
+      const content = await fs.readFile(legacyPath, "utf8");
       return parseCurrentWork(content);
-    } catch (error: unknown) {
-      if (getErrorCode(error) === "ENOENT") {
-        continue;
-      }
-      throw error;
     }
+  } catch {
+    // Return idle
   }
 
   return idleSummary();
