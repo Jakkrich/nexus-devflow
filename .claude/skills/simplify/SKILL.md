@@ -66,5 +66,5 @@ Delete commented-out code blocks, `// removed` notes, and unused variables (`_un
 ## Relationship To DevFlow 2.0
 
 - **Classification**: Companion command & Refactoring support
-- **Mainline integration**: Used during `40-implement` (Refactor step of TDD) or `50-verify`.
+- **Mainline integration**: Used during `40-execute` (Refactor step of TDD) or `50-verify`.
 - **Handoff**: `50-verify` (proves zero regressions).

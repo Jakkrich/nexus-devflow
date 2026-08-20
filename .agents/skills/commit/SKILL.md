@@ -55,5 +55,5 @@ Each commit should represent one atomic, self-contained change:
 ## Relationship To DevFlow 2.0
 
 - **Classification**: Companion command & Version control support
-- **Mainline integration**: Used during `40-implement` (checkpoint commits), `70-release` (final release commit).
+- **Mainline integration**: Used during `40-execute` (checkpoint commits), `70-release` (final release commit).
 - **Handoff**: `pr`, `merge`, `70-release`

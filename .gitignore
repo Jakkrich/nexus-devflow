@@ -66,6 +66,5 @@ __pycache__/
 .venv/
 venv/
 env/
-# Website & Docs (Work In Progress - temporarily ignored)
-website/
+# Website build output
 .astro/

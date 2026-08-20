@@ -1,0 +1,85 @@
+---
+title: Nexus DevFlow Documentation
+description: Dual-Track Agentic Delivery Framework for AI & Human Teams
+template: splash
+hero:
+  tagline: ยกระดับการพัฒนาซอฟต์แวร์ด้วย AI ผ่าน Dual-Track Delivery Model (Fast-Track 4 Steps & Deep-Track 8 Steps), Single Living Spec, Review Gates และ Multi-AI Adapters
+  image:
+    file: ../../assets/logo-nexus-devflow.png
+  actions:
+    - text: เริ่มต้นใช้งาน (Getting Started)
+      link: /nexus-devflow/start/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: ดูบน GitHub
+      link: https://github.com/Jakkrich/nexus-devflow
+      icon: external
+      variant: secondary
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<div class="pipeline-diagram">
+  <div class="pipeline-title">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B43BA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    🏎️ Fast-Track (Blueprint Mode - 4 Steps สำหรับงานประจำวัน 85%)
+  </div>
+  <div class="pipeline-flow">
+    <div class="pipeline-node">
+      <span class="stage-num">01</span>
+      <span class="stage-name">/feature or /fix</span>
+    </div>
+    <div class="pipeline-node">
+      <span class="stage-num">02</span>
+      <span class="stage-name">/implement</span>
+    </div>
+    <div class="pipeline-node">
+      <span class="stage-num">03</span>
+      <span class="stage-name">/check</span>
+    </div>
+    <div class="pipeline-node">
+      <span class="stage-num">04</span>
+      <span class="stage-name">/complete</span>
+    </div>
+  </div>
+</div>
+
+<div class="pipeline-diagram" style="margin-top: 1rem;">
+  <div class="pipeline-title">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    🏗️ Deep-Track (Architect Mode - 8 Steps สำหรับงานโครงสร้างใหญ่)
+  </div>
+  <div class="pipeline-flow">
+    <div class="pipeline-node"><span class="stage-num">00</span><span class="stage-name">discover</span></div>
+    <div class="pipeline-node"><span class="stage-num">10</span><span class="stage-name">define</span></div>
+    <div class="pipeline-node"><span class="stage-num">20</span><span class="stage-name">spec</span></div>
+    <div class="pipeline-node"><span class="stage-num">30</span><span class="stage-name">plan</span></div>
+    <div class="pipeline-node"><span class="stage-num">40</span><span class="stage-name">execute</span></div>
+    <div class="pipeline-node"><span class="stage-num">50</span><span class="stage-name">verify</span></div>
+    <div class="pipeline-node"><span class="stage-num">60</span><span class="stage-name">report</span></div>
+    <div class="pipeline-node"><span class="stage-num">70</span><span class="stage-name">release</span></div>
+  </div>
+</div>
+
+## สถาปัตยกรรมหลักของ Nexus DevFlow 2.0
+
+<CardGrid>
+	<Card title="🏎️ Dual-Track Delivery Model" icon="rocket">
+		เลือกความเร็วได้ตามลักษณะงาน: **Fast-Track (4 ขั้นตอน)** ด้วย Living Spec (<code>spec.md</code>) แผ่นเดียวจบ หรือ **Deep-Track (8 ขั้นตอน)** แยก Stage ชัดเจน
+	</Card>
+	<Card title="💡 Idea Capture Inbox (/idea)" icon="pencil">
+		จดบันทึกไอเดียด่วนพร้อม AI ช่วยวิเคราะห์ความเป็นไปได้ (Feasibility), Business Value และสรุป Key Points ลง <code>devflow/ideas.md</code> อัตโนมัติ
+	</Card>
+	<Card title="🧩 Multi-AI Engine Adapters" icon="puzzle">
+		รองรับทั้ง **Google Antigravity**, **Claude Code**, และ **OpenAI Codex** ผ่าน Canonical Commands และ Single Source of Truth
+	</Card>
+	<Card title="🛡️ Findings Ledger & Strict QA" icon="warning">
+		ระบบ State Machine ตรวจสอบบั๊กและช่องโหว่ความปลอดภัย (P0-P3) ที่ไม่อนุญาตให้ปิดงานจนกว่าจะได้รับการแก้ไขและตรวจสอบซ้ำ
+	</Card>
+	<Card title="📊 Interactive Standalone HTML Reports" icon="document">
+		สร้างรายงานส่งมอบงานแบบ Single-File Standalone HTML Dashboard ผ่านคำสั่ง <code>/report:html</code> พร้อมคู่มือ Try Guide
+	</Card>
+	<Card title="🧭 Smart State Inspector (/devflow)" icon="magnifier">
+		ตรวจเช็คสถานะ Workspace และแนะนำคำสั่งถัดไปที่ถูกต้องทันทีตามบริบทจริงของโครงการ
+	</Card>
+</CardGrid>

@@ -38,7 +38,7 @@ npx @jakkrichm/create-nexus-devflow
 
 DevFlow establishes a rigorous, stage-based control system for AI-assisted development:
 
-1. **Explicit 8-Stage Mainline.** Clear progression from Discovery (`/00-Discover`), Definition (`/10-Define`), Specification (`/20-Spec`), Planning (`/30-Plan`), Implementation (`/40-Implement`), Verification (`/50-Verify`), Reporting (`/60-Report`), to Release (`/70-Release`).
+1. **Explicit 8-Stage Mainline.** Clear progression from Discovery (`/00-Discover`), Definition (`/10-Define`), Specification (`/20-Spec`), Planning (`/30-Plan`), Implementation (`/40-Execute`), Verification (`/50-Verify`), Reporting (`/60-Report`), to Release (`/70-Release`).
 2. **Markdown-First State.** Every stage produces durable markdown artifacts under `devflow/discoveries/` and `devflow/runs/{RUNNING_ID}/`. Your work survives chat clears and context limits.
 3. **Dual Tool Adapters.** Native skills for OpenAI Codex & Google Antigravity (`.agents/skills/`) and Claude Code (`.claude/skills/`).
 4. **Senior QA & Verification Gates.** Stage `/50-Verify` performs automated and specialist verification before generating human-friendly HTML/markdown reports (`/60-Report`).
@@ -95,7 +95,7 @@ devflow
 ```
 *(or `/devflow`, `$devflow`, `status`)*
 
-> **Tip:** `devflow` is your entry command. It inspects your workspace state, checks framework health, and routes you to the exact next command (`00-discover`, `10-define`, `40-implement`, `50-verify`, etc.).
+> **Tip:** `devflow` is your entry command. It inspects your workspace state, checks framework health, and routes you to the exact next command (`00-discover`, `10-define`, `40-execute`, `50-verify`, etc.).
 
 Alternatively, start directly with request discovery:
 
@@ -104,18 +104,30 @@ Alternatively, start directly with request discovery:
 ```
 *(or `discover`, `/00-discover`, `$00-discover`)*
 
-## Mainline Timeline Workflow
+## Dual-Track Delivery Model
+
+Nexus-DevFlow 2.0 supports two delivery tracks based on task complexity:
+
+### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 Steps)
+> **Recommended for 85% of daily work** (features, bug fixes, UI improvements, iterative tasks) driven by a **Single Living Spec (`spec.md`)**:
 
 ```text
-00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-implement ➔ 50-verify ➔ 60-report ➔ 70-release
+/feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-| Stage | Command / Alias | Purpose & Artifact |
-| --- | --- | --- |
-> 💡 **Invocation by AI Provider**: All stages and companion tools use a single **Canonical Name**. Invocation format depends on your AI tool:
-> - **Plain Name**: e.g., `00-discover`, `devflow` (universal plain text)
-> - **Slash Prefix (`/`)**: For Claude Code, Google Antigravity, Gemini CLI (e.g., `/00-discover`, `/devflow`)
-> - **Dollar Prefix (`$`)**: For OpenAI Codex CLI (e.g., `$00-discover`, `$devflow`)
+1. **`feature` / `fix` (`/feature`, `/fix`)**: Allocates sequential Running ID and creates the Single Living Spec (`devflow/runs/{RUN_ID}-{slug}/spec.md`).
+2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with TDD discipline and appends progress to `spec.md`.
+3. **`check` (`/check`)**: Senior QA review, multi-lane verification (Typecheck, Lint, Test suites, manual proof), and records evidence into `spec.md`.
+4. **`complete` (`/complete`)**: Final safety pass, records Release Digest in `spec.md`, performs git merge, and closes the run without auto HTML generation.
+
+---
+
+### 🏗️ Track 2: Deep-Track (Architect Mode — 8 Steps)
+> **Recommended for large architectural epics, database migrations, and multi-agent coordination**:
+
+```text
+00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
+```
 
 | Stage | Canonical Command Name | Description & Core Artifacts |
 | :--- | :--- | :--- |
@@ -123,9 +135,9 @@ Alternatively, start directly with request discovery:
 | **10** | `10-define` | Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`). |
 | **20** | `20-spec` | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
 | **30** | `30-plan` | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
-| **40** | `40-implement` | Execute planned tasks incrementally with step evidence (`40-implement.md`). |
+| **40** | `40-execute` | Execute planned tasks incrementally with step evidence (`40-execute.md`). |
 | **50** | `50-verify` | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
-| **60** | `60-report` | Produce standardized markdown and self-contained HTML summary report (`60-report.md`, `60-report.html`). |
+| **60** | `60-report` | Produce standardized markdown delivery digest report (`60-report.md`). |
 | **70** | `70-release` | Package verified work for merge, PR, or deployment handoff (`70-release.md`). |
 
 ## Public Companion Commands
@@ -135,6 +147,8 @@ Companion commands provide specialized support without interrupting the linear m
 | Canonical Command Name | Purpose |
 | :--- | :--- |
 | `devflow` | Flagship interactive guide, state inspector, and intent router. |
+| `idea` | Quick idea capture and AI feasibility enrichment into `devflow/ideas.md`. |
+| `report-html` | Standalone interactive HTML report dashboard generator (`/report:html`). |
 | `onboard` | Baseline stack detection and setup for fresh/scaffolded projects. |
 | `adopt` | Survey existing codebase and bootstrap DevFlow into brownfield apps. |
 | `doctor` | Read-only health check for setup, scripts, adapters, and workflow drift. |
@@ -179,7 +193,7 @@ devflow/
 │       ├── 10-define.md
 │       ├── 20-spec.md
 │       ├── 30-plan.md
-│       ├── 40-implement.md
+│       ├── 40-execute.md
 │       ├── 50-verify.md
 │       ├── 60-report.md
 │       ├── 60-report.html

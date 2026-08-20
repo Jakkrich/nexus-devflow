@@ -5,6 +5,18 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.15] - 2026-08-20
+
+### Added
+- **Dual-Track Delivery Model**: High-velocity Fast-Track (4 Steps: `/feature`, `/fix` ➔ `/implement` ➔ `/check` ➔ `/complete`) with Single Living Spec (`spec.md`) alongside Deep-Track (8 Steps: `00-discover` ➔ `70-release`) for architectural epics.
+- **Dedicated Fast-Track Skills (`feature`, `fix`)**: Separate canonical commands for new feature specs and bugfix specs to prevent command collisions.
+- **Quick Idea Capture Inbox (`/idea`)**: Quick capture tool with AI feasibility and value enrichment storing to `devflow/ideas.md`.
+- **Standalone HTML Dashboard Command (`/report:html`)**: Dedicated interactive single-file HTML report generator on demand.
+
+### Changed
+- **Renamed Deep-Track Step 40 to `40-execute`**: Cleared naming ambiguity between Fast-Track `/implement` and Deep-Track `40-execute`.
+- **Updated Documentation & Guides**: Complete website overhaul (`website/src/content/docs/`), `README.md`, and `README.th.md` with Dual-Track guidance.
+
 ## [2.0.14] - 2026-08-20
 
 ### Added
@@ -15,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.10] - 2026-08-18
 
 ### Changed
-- **Standardized Canonical Command Naming**: Standardized all Mainline Stages (`00-discover`, `10-define`, `20-spec`, `30-plan`, `40-implement`, `50-verify`, `60-report`, `70-release`) and Companion Commands to use a single Canonical Name, completely removing confusing shorthand and redundant semantic aliases from core documentation and tables.
+- **Standardized Canonical Command Naming**: Standardized all Mainline Stages (`00-discover`, `10-define`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`) and Companion Commands to use a single Canonical Name, completely removing confusing shorthand and redundant semantic aliases from core documentation and tables.
 - **AI Provider Invocation Guideline**: Added clear and concise instructions across `AGENTS.md`, `README.md`, and `README.th.md` explaining that command invocation syntax (Plain Name, `/`, or `$`) depends on the AI Provider or tool being used (e.g., Slash Commands for Claude Code & Antigravity, Dollar Macro for OpenAI Codex CLI).
 - **Skill Adapters & Template Alignment**: Updated usage blocks and next-step references across all `SKILL.md` files in `.agents/skills/` and `.claude/skills/`, and synchronized template package.
 

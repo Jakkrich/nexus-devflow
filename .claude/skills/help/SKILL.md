@@ -77,14 +77,14 @@ Help Summary:
 Environment: All OK
 
 Active Runs:
-- 010-auth-refactor: stage=40-implement | approval=Pending | next=50-verify 010 | warnings: manual review open
+- 010-auth-refactor: stage=40-execute | approval=Pending | next=50-verify 010 | warnings: manual review open
 - 011-billing-phase-1: stage=20-spec | approval=Approved | next=30-plan 011
 - 012-admin-console: stage=50-verify | approval=Approved | next=60-report 012 | warnings: not ready for release
 
 Recommended Next Action:
 - 010 -> 50-verify 010
 - 011 -> 20-spec 011
-- 012 -> 40-implement 012
+- 012 -> 40-execute 012
 ```
 
 ### Phase C: Manual Review Soft Gate
@@ -114,7 +114,7 @@ Manual Review Warning:
 ## DevFlow 2.0 Mainline
 
 ```text
-00-discover -> 10-define -> 20-spec -> 30-plan -> 40-implement -> 50-verify -> 60-report -> 70-release
+00-discover -> 10-define -> 20-spec -> 30-plan -> 40-execute -> 50-verify -> 60-report -> 70-release
 ```
 
 ## Public Companion Commands
@@ -182,7 +182,7 @@ Recommend `30-plan`.
 
 ### 5. If planning is done and work should begin
 
-Recommend `40-implement`.
+Recommend `40-execute`.
 
 ### 6. If implementation exists and needs checking
 

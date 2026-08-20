@@ -77,7 +77,7 @@ Use Spec Kit concepts as backstage helpers only:
 | `tasks` | Generate candidate execution slices before converting them into DevFlow plans or checklists |
 | `analyze` | Check cross-artifact consistency between requirement, plan, and delivery intent |
 | `checklist` | Draft review rubrics for quality, completeness, or readiness |
-| `implement` | Study execution patterns only; do not let it replace `40-Implement` as the public implementation stage |
+| `implement` | Study execution patterns only; do not let it replace `40-Execute` as the public implementation stage |
 | `converge` | Use as an internal gap-finding pass during verification or follow-up planning |
 
 ## Authoring Rule

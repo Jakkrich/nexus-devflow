@@ -1,0 +1,14 @@
+{
+  "skill": "feature",
+  "description": "\"[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living spec.md contract for new features.\"",
+  "positive": [
+    "run feature skill",
+    "invoke /feature command",
+    "use feature for devflow fast track feature spec living spec",
+    "apply feature guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

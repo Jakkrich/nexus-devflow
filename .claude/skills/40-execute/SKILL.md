@@ -1,25 +1,23 @@
----name: 40-implement
-
-description: "[Devflow] Implement stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests."
 ---
-# Phase 40: Implement Code
+name: 40-execute
+description: "[Devflow] Execute stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests."
+---
+# Phase 40: Execute Code
 
-Implement the approved plan incrementally. Source code edits are allowed in this phase.
+Implement and execute the approved plan incrementally. Source code edits are allowed in this phase.
 
 ## Usage
 
 ```text
-40-implement {ID}
+40-execute {ID}
 ```
 
 ## Markdown-First Contract
 
-Use `40-implement.md` as the primary implementation artifact.
-Before writing `40-implement.md`, read `artifact_language` from `.agent/resources/schemas/implement.template.md` and produce the artifact in that language.
+Use `40-execute.md` as the primary execution artifact.
+Before writing `40-execute.md`, produce the artifact in Thai (`th`).
 
-Use controlled task-engine commands when progress state must be synchronized:
-
-Before implementation, confirm the plan is approved in the stage artifacts. Track subtask progress, implementation notes, and completion evidence directly in `40-implement.md` and related stage markdown files.
+Before execution, confirm the plan is approved in the stage artifacts. Track subtask progress, execution notes, and completion evidence directly in `40-execute.md` and related stage markdown files.
 
 ## Required Section Content
 
@@ -37,7 +35,7 @@ Before completing any generated artifact:
 
 ### Loop Contract
 
-Run implementation as scoped execution loops, one unit at a time.
+Run execution as scoped execution loops, one unit at a time.
 
 - **Intent**: complete the selected planned unit while preserving the spec, plan, and repository conventions.
 - **Context**: read `30-plan.md`, `20-spec.md`, relevant checklist items, target files, pattern files, and test decisions before editing.
@@ -45,7 +43,7 @@ Run implementation as scoped execution loops, one unit at a time.
 - **Observation**: inspect concrete evidence from diffs, command output, tests, manual checks, and checklist status before claiming progress.
 - **Adjustment**: if evidence does not match intent, fix within the current unit, capture the blocker, use `Debug`, or return to `30-plan` or `20-spec` when the work no longer matches the contract.
 - **Stop Condition**: stop the unit when the planned change is complete, verification evidence is recorded, deviations are explained, and the next unit or handoff is clear.
-- **Handoff**: `40-implement.md` must tell `50-verify` what changed, why it changed, which checks ran, what failed or was skipped, and what residual risk remains.
+- **Handoff**: `40-execute.md` must tell `50-verify` what changed, why it changed, which checks ran, what failed or was skipped, and what residual risk remains.
 
 ### 1. Get Bearings
 
@@ -61,7 +59,7 @@ Confirm the current Git branch with `git branch --show-current` and use that bra
 
 Select one scoped unit of work at a time. Do not implement the whole plan as one blob.
 
-### 2. Implement One Scoped Unit
+### 2. Execute One Scoped Unit
 
 Use the original coder discipline, adapted to 2.0:
 
@@ -73,7 +71,7 @@ Use the original coder discipline, adapted to 2.0:
 - make the smallest useful code change
 - preserve project style
 - run the planned verification
-- record observation, adjustment, stop condition status, and the result in `40-implement.md`
+- record observation, adjustment, stop condition status, and the result in `40-execute.md`
 - update checklist item status, timestamps, and evidence links as work progresses
 
 If tests are `Required`:
@@ -93,7 +91,7 @@ Use the old recovery discipline when blocked:
 
 Use `tdd` for behavior-change implementation loops, `diagnosing-bugs` when a tight repro is needed before a fix, and `codebase-design` when implementation exposes an awkward seam or shallow module.
 
-### 4. Finalize Implementation
+### 4. Finalize Execution
 
 When the scoped work is complete:
 
@@ -102,14 +100,13 @@ When the scoped work is complete:
 - record verification performed
 - record loop evidence for each completed unit: intent, observation, adjustment, and stop condition
 - record deviations, blockers, and manual checks
-- follow the `artifact_language` configured in `implement.template.md`
 - make sure checklist statuses match the actual state of the code and tests
-- make sure `40-implement.md` is ready for Verify
+- make sure `40-execute.md` is ready for Verify
 
 ### 5. Manual Review Soft Gate
 
-If the plan was not clearly approved, warn that implementation proceeded under review risk.
-When finishing `40-implement.md`:
+If the plan was not clearly approved, warn that execution proceeded under review risk.
+When finishing `40-execute.md`:
 
 - record any deviation from the approved plan explicitly
 - set reviewer expectations before `50-verify`
@@ -131,14 +128,13 @@ Report:
 
 - Classification: Mainline workflow
 - Previous state: `30-plan`
-- Next state: `50-verify` when scoped implementation is complete
+- Next state: `50-verify` when scoped execution is complete
 - Common companion commands: `Debug` for blockers, `Preview` for local checks; support skills: `tdd`, `diagnosing-bugs`, and `codebase-design` for behavior changes, root-cause loops, and implementation-time design pressure
 
 ## Sources
 
 - `AGENTS.md`
 - `docs/workspace-artifacts.md`
-- `.agent/resources/schemas/implement.template.md`
 - Related commands: `30-plan`, `Debug`, `Preview`, `50-verify`
 
 ## Next Workflow Recommendation
@@ -146,7 +142,7 @@ Report:
 - **Primary**: `50-verify {ID}` when the planned work is complete.
 - **Why**: Implementation needs independent verification before release or human acceptance.
 - **Alternatives**:
-  - `Debug "{blocker}"` - choose this when implementation is blocked by an unexplained failure.
+  - `Debug "{blocker}"` - choose this when execution is blocked by an unexplained failure.
   - `30-plan {ID}` - choose this when the plan is incomplete or no longer matches the work.
   - `Preview` - choose this when a local runtime or visual check is useful before formal verification.
   - `codebase-design` - choose this when the implementation cannot be tested cleanly because the module shape is wrong.
@@ -155,12 +151,11 @@ Report:
 
 - Use `Debug` when the conversation reveals an unexplained blocker, flaky behavior, or root-cause gap.
 - Use `Preview` when a runtime, UI, or local interaction check would reduce verification risk.
-- Return to `30-plan` when implementation drift shows the plan no longer matches reality.
+- Return to `30-plan` when execution drift shows the plan no longer matches reality.
 
 ## Wiki Update Recommendation
 
 - **Needed**: `yes` when coding discovers a reusable implementation pattern, gotcha, or context optimization.
 - **Scope**: `project` unless the discovery is about DevFlow itself.
 - **Reason**: Coding findings are useful only when they are stable enough to help future tasks.
-- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*40-implement.md`
-
+- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*40-execute.md`

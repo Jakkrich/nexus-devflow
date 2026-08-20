@@ -36,7 +36,7 @@ Read:
 - `devflow/runs/{ID}-*10-define.md`
 - `devflow/runs/{ID}-*20-spec.md`
 - `devflow/runs/{ID}-*30-plan.md`
-- `devflow/runs/{ID}-*40-implement.md`
+- `devflow/runs/{ID}-*40-execute.md`
 - `devflow/runs/{ID}-*50-verify.md` if present
 
 ### 2. Classify The Follow-Up
@@ -57,7 +57,7 @@ Append the follow-up scope directly to the relevant stage markdown files for the
 
 ### 4. Ask For Confirmation
 
-After adding or proposing follow-up subtasks, ask the user to confirm before `40-implement`.
+After adding or proposing follow-up subtasks, ask the user to confirm before `40-execute`.
 
 ## Output
 
@@ -66,18 +66,18 @@ Return:
 - follow-up category
 - new phase/subtask plan
 - validation result
-- next command: `40-implement {ID}`
+- next command: `40-execute {ID}`
 
 ## Relationship To DevFlow 2.0
 
 - Classification: Companion command
 - Mainline status: Not a numbered stage
 - Typical entry points: after review, triage, or release follow-up work is identified
-- Typical handoff targets: `10-define`, `20-spec`, `30-plan`, `40-implement`
+- Typical handoff targets: `10-define`, `20-spec`, `30-plan`, `40-execute`
 
 ## Sources
 
 - `AGENTS.md`
-- Related commands: `PR-Followup`, `Issue-Triage`, `Human-Feedback`, `10-define`, `20-spec`, `40-implement`
+- Related commands: `PR-Followup`, `Issue-Triage`, `Human-Feedback`, `10-define`, `20-spec`, `40-execute`
 
 

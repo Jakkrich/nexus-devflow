@@ -8,7 +8,7 @@ description: "[Devflow] Plan safe feature or run reversal with dependency and co
 Where this sits in the workflow:
 
 ```text
-completed run + git history  ->  [rollback]  ->  40-implement (or fix run)  ->  50-verify  ->  70-release
+completed run + git history  ->  [rollback]  ->  40-execute (or fix run)  ->  50-verify  ->  70-release
 (run archive + commits)          (risk review    (reverse product diff)          (prove)      (log & finalize)
                                   + plan)
 ```
@@ -51,7 +51,7 @@ Identify:
 
 - Exact commit SHA(s) introducing the feature.
 - Parent commit before the feature was introduced.
-- Associated stage artifacts (`20-spec.md`, `40-implement.md`, `70-release.md`).
+- Associated stage artifacts (`20-spec.md`, `40-execute.md`, `70-release.md`).
 
 ## Step 2 - Separate Product Changes From DevFlow History
 
@@ -98,7 +98,7 @@ Draft the rollback plan containing:
 Present the rollback plan to the user:
 
 - Summarize affected files and dependency risks.
-- If approved, route to `40-implement` (or allocate a dedicated Fixrollback Run) to safely execute the reversal steps behind review gates.
+- If approved, route to `40-execute` (or allocate a dedicated Fixrollback Run) to safely execute the reversal steps behind review gates.
 
 ## Rules
 

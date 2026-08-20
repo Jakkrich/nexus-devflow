@@ -81,7 +81,7 @@ For browser and UI features, unit tests alone are insufficient:
 
 ## 6. Test Generation & Persistent Execution Reports
 
-When generating or logging test runs during `40-implement` or `50-verify`:
+When generating or logging test runs during `40-execute` or `50-verify`:
 - Save summary reports to `devflow/reports/{date}-test-report-{slug}.md`
 - Include: Target, Test Cases (Happy Path, Error, Edge Cases), Pass/Fail statistics, and gaps/risks.
 
@@ -90,5 +90,5 @@ When generating or logging test runs during `40-implement` or `50-verify`:
 ## Relationship To DevFlow 2.0
 
 - **Classification**: Companion command & Engineering standard
-- **Mainline stages**: `30-plan` (TDD decisions), `40-implement` (TDD execution), `50-verify` (QA gate)
+- **Mainline stages**: `30-plan` (TDD decisions), `40-execute` (TDD execution), `50-verify` (QA gate)
 - **Handoff**: `50-verify`, `Debug`, `autopilot`

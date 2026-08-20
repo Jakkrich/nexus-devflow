@@ -8,7 +8,7 @@ const mainlineStages = [
   '10-define',
   '20-spec',
   '30-plan',
-  '40-implement',
+  '40-execute',
   '50-verify',
   '60-report',
   '70-release'
@@ -47,10 +47,10 @@ function standardizeMainlineSkills() {
         /```text\s*\n\/30-Plan \{running-id or workspace path\}\s*\n```/g,
         '```text\n30-plan {running-id or workspace path}\n```'
       );
-    } else if (entry.name === '40-implement') {
+    } else if (entry.name === '40-execute') {
       content = content.replace(
-        /```text\s*\n\/40-Implement \{running-id or workspace path\}\s*\n```/g,
-        '```text\n40-implement {running-id or workspace path}\n```'
+        /```text\s*\n\/40-Execute \{running-id or workspace path\}\s*\n```/g,
+        '```text\n40-execute {running-id or workspace path}\n```'
       );
     } else if (entry.name === '50-verify') {
       content = content.replace(
@@ -75,7 +75,8 @@ function standardizeMainlineSkills() {
       .replace(/\/10-define/gi, '10-define')
       .replace(/\/20-spec/gi, '20-spec')
       .replace(/\/30-plan/gi, '30-plan')
-      .replace(/\/40-implement/gi, '40-implement')
+      .replace(/\/40-execute/gi, '40-execute')
+      .replace(/\/40-execute/gi, '40-execute')
       .replace(/\/50-verify/gi, '50-verify')
       .replace(/\/60-report/gi, '60-report')
       .replace(/\/70-release/gi, '70-release')

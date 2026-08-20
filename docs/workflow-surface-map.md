@@ -109,7 +109,7 @@ This document decides which workflow surfaces should remain public commands, whi
 - Do not delete files just because they still contain useful prompt bodies.
 - Reduce public exposure first, then move the primary behavior into a skill or agent.
 - When a companion workflow has already offloaded its main behavior, keep it as a wrapper to preserve UX and continuity.
-- Keep the numbered mainline as the only canonical stage path: `00-Discover -> 10-Define -> 20-Spec -> 30-Plan -> 40-Implement -> 50-Verify -> 60-Report -> 70-Release`.
+- Keep the numbered mainline as the only canonical stage path: `00-Discover -> 10-Define -> 20-Spec -> 30-Plan -> 40-Execute -> 50-Verify -> 60-Report -> 70-Release`.
 - The main companion group in this phase has already moved its primary behavior into the skill layer as intended.
 - Optional questioning skills should stay thin and stage-supportive. They should collect only the information that can change the current stage decision.
 - `Next Allowed Command` stays Timeline-first. `Nexus Event` may expose side routes, support skills, or specialist lanes that branch temporarily and later return to the Timeline.

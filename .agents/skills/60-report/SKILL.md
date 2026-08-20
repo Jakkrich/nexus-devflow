@@ -69,7 +69,7 @@ Read all relevant stage artifacts:
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`
-- `40-implement.md`
+- `40-execute.md`
 - `50-verify.md`
 - `checklists/implementation-checklist.md` when present
 - `checklists/verification-checklist.md` when present

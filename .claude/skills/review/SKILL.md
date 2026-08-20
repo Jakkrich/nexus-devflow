@@ -68,4 +68,4 @@ Categorize all findings into actionable severities:
 
 - **Classification**: Companion command & Verification support
 - **Mainline stages**: `50-verify` (QA & Code Review lane), `70-release` (Pre-merge review)
-- **Handoff**: `40-implement` (for fixes), `50-verify`, `70-release`
+- **Handoff**: `40-execute` (for fixes), `50-verify`, `70-release`

@@ -12,7 +12,7 @@ const stageOrder = [
   '10-define',
   '20-spec',
   '30-plan',
-  '40-implement',
+  '40-execute',
   '50-verify',
   '60-report',
   '70-release'
@@ -96,7 +96,7 @@ function parseVerificationGate(runDir) {
     approvalStatus: parseLabeledValue(content, 'Approval Status'),
     readyForRelease: parseLabeledValue(content, 'Ready For `/60-Report`'),
     why: parseLabeledValue(content, 'Why'),
-    returnToImplementNeeded: parseLabeledValue(content, 'Return To `/40-Implement` Needed'),
+    returnToImplementNeeded: parseLabeledValue(content, 'Return To `/40-Execute` Needed'),
     humanReviewRequired: parseLabeledValue(content, 'Human Review Required'),
     nextAllowedCommand: parseLabeledValue(content, 'Next Allowed Command'),
     softGateWarning: parseLabeledValue(content, 'Soft-Gate Warning')

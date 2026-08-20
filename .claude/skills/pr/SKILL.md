@@ -40,7 +40,7 @@ You are an orchestrator. Your goal is to call the specialized Git PR Maker agent
 - Prefer markdown-first stage artifacts as the source narrative:
   - `20-spec.md`
   - `30-plan.md`
-  - `40-implement.md`
+  - `40-execute.md`
   - `50-verify.md`
   - `60-report.md` when the final summary already exists
   - `70-release.md` when release execution notes already exist
