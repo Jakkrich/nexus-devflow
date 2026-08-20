@@ -6,6 +6,11 @@ import path from "node:path";
 import readline from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import {
+  formatHumanStatus,
+  readProjectStatus,
+  shouldUseColor
+} from "../lib/status.js";
+import {
   applyPreparedUpdate,
   prepareUpdate,
   type PreparedUpdate
@@ -18,18 +23,19 @@ const templateRoot = path.join(packageRoot, "template");
 const adapterChoices = new Set(["codex", "antigravity", "claude", "both", "all"]);
 
 interface CliOptions {
-  command: "install" | "update";
+  command: "install" | "status" | "update";
   target: string | null;
   adapter: string;
   force: boolean;
   dryRun: boolean;
   help: boolean;
+  json: boolean;
   version: boolean;
   yes: boolean;
 }
 
-async function main() {
-  const options = parseArgs(process.argv.slice(2));
+async function main(args: readonly string[] = process.argv.slice(2)): Promise<void> {
+  const options = parseArgs(args);
 
   if (options.help) {
     printHelp();
@@ -41,13 +47,24 @@ async function main() {
     return;
   }
 
+  const targetDir = path.resolve(process.cwd(), options.target || ".");
+
+  if (options.command === "status") {
+    const status = await readProjectStatus(targetDir);
+    console.log(
+      options.json
+        ? JSON.stringify(status, null, 2)
+        : formatHumanStatus(status, { color: shouldUseColor() })
+    );
+    return;
+  }
+
   if (!fsSync.existsSync(templateRoot)) {
     throw new Error(
       "Installer template is missing. Run `npm run prepare-template` before local testing."
     );
   }
 
-  const targetDir = path.resolve(process.cwd(), options.target || ".");
   const version = readPackageVersion();
 
   if (options.command === "update") {
@@ -98,13 +115,14 @@ async function main() {
   printInstallSuccess(targetDir, result);
 }
 
-function parseArgs(args: string[]): CliOptions {
-  let command: "install" | "update" = "install";
+function parseArgs(args: readonly string[]): CliOptions {
+  let command: "install" | "status" | "update" = "install";
   let target: string | null = null;
   let adapter = "both";
   let force = false;
   let dryRun = false;
   let help = false;
+  let json = false;
   let version = false;
   let yes = false;
 
@@ -123,6 +141,11 @@ function parseArgs(args: string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--json") {
+      json = true;
+      continue;
+    }
+
     if (arg === "--force" || arg === "-f") {
       force = true;
       continue;
@@ -135,6 +158,20 @@ function parseArgs(args: string[]): CliOptions {
 
     if (arg === "-y" || arg === "--yes") {
       yes = true;
+      continue;
+    }
+
+    if (arg === "--target" || arg === "-t") {
+      const next = args[++i];
+      if (!next) {
+        throw new Error(`${arg} requires a path`);
+      }
+      target = next;
+      continue;
+    }
+
+    if (arg.startsWith("--target=")) {
+      target = arg.slice("--target=".length);
       continue;
     }
 
@@ -168,9 +205,12 @@ function parseArgs(args: string[]): CliOptions {
   }
 
   if (positional.length > 0) {
-    if (positional[0] === "update") {
+    if (positional[0] === "status") {
+      command = "status";
+      target = positional[1] || target || ".";
+    } else if (positional[0] === "update") {
       command = "update";
-      target = positional[1] || ".";
+      target = positional[1] || target || ".";
     } else {
       target = positional[0];
     }
@@ -183,6 +223,7 @@ function parseArgs(args: string[]): CliOptions {
     force,
     dryRun,
     help,
+    json,
     version,
     yes
   };
@@ -196,14 +237,21 @@ function readPackageVersion(): string {
 
 function printHelp(): void {
   console.log(`
-Nexus-DevFlow Installer v${readPackageVersion()}
+Nexus-DevFlow CLI v${readPackageVersion()}
 
 Usage:
   npx @jakkrichm/create-nexus-devflow [target-dir] [options]
-  npx @jakkrichm/create-nexus-devflow update [target-dir] [options]
+  nexus-devflow status [target-dir] [options]
+  nexus-devflow update [target-dir] [options]
+
+Commands:
+  status             Show project overview, progress, findings, git status, and next action
+  update             Update existing DevFlow installation without overwriting user changes
 
 Options:
   --adapter <name>   Tool adapters to install: codex, antigravity, claude, both (default: both)
+  --json             Print status as structured JSON object
+  --target, -t       Target project directory
   --force, -f        Overwrite conflicting files without prompting
   --dry-run          Preview changes without modifying disk
   -y, --yes          Automatically confirm interactive prompts
@@ -302,3 +350,5 @@ if (
     process.exit(1);
   });
 }
+
+export { main, parseArgs };
