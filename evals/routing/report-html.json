@@ -1,0 +1,14 @@
+{
+  "skill": "report-html",
+  "description": "\"[Devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from spec.md or 60-report.md on demand.\"",
+  "positive": [
+    "run report-html skill",
+    "invoke /report:html command",
+    "use report-html for standalone interactive HTML dashboard generator",
+    "apply report-html rendering"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

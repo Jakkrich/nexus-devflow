@@ -5,104 +5,113 @@ description: "[Devflow] Flagship interactive guide, state inspector, and intent 
 
 # devflow - Interactive Workflow Guide & Intent Router for Nexus-DevFlow
 
-Use this skill to guide the user on what to do next, inspect current workspace state, map their natural language intent to the right Nexus-DevFlow stage or companion command, or display a sitemap of available DevFlow skills.
+Use this skill to guide the user on what to do next, inspect current workspace state, map their natural language intent to the right Nexus-DevFlow track (Fast-Track or Deep-Track) or companion command, or display a sitemap of available DevFlow skills.
 
 ## Input
 
-- **No argument (`devflow`, `devflow`, `$devflow`, or `status`)**: Inspect current workspace state (active run in `devflow/runs/` or `devflow/context/current-stage.md`, active discovery in `devflow/discoveries/`, open findings in `devflow/context/findings.md`, and project overview in `devflow/context/project-overview.md`) and recommend the exact next action.
-- **With user request (`devflow "<request>"`)**: Classify the user's intent and guide them to the matching DevFlow 2.0 stage or companion command path.
+- **No argument (`devflow`, `devflow`, `$devflow`, or `status`)**: Inspect current workspace state (active run in `devflow/runs/` or `devflow/context/current-stage.md`, active discovery in `devflow/discoveries/`, pending ideas in `devflow/ideas.md`, open findings in `devflow/context/findings.md`, and project overview in `devflow/context/project-overview.md`) and recommend the exact next action.
+- **With user request (`devflow "<request>"`)**: Classify the user's intent and guide them to the matching DevFlow workflow track or companion command path.
+
+## Dual-Track Architecture
+
+Nexus-DevFlow supports two seamless workflow tracks:
+1. **🏎️ Fast-Track (Blueprint Mode - 4 Steps)**: `/spec` ➔ `/implement` ➔ `/check` ➔ `/complete`  
+   *Driven by a **Single Living Spec (`spec.md`)** for fast, high-velocity daily development and bugfixes (85% of tasks).*
+2. **🏗️ Deep-Track (Architect Mode - 8 Steps)**: `00-discover` ➔ `10-define` ➔ `20-spec` ➔ `30-plan` ➔ `40-implement` ➔ `50-verify` ➔ `60-report` ➔ `70-release`  
+   *Driven by modular separate stage files for large, high-stakes architectural epics and multi-agent coordination.*
+
+---
 
 ## Workspace State Inspection
 
 When invoked without an argument (or when determining the next step), inspect:
 
-1. **Project Setup Baseline**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`. If they are empty or default placeholders, recommend `onboard` (for fresh projects) or `adopt` (for existing codebases).
-2. **Active Delivery Run**: Read `devflow/context/current-stage.md` and check `devflow/runs/{RUNNING_ID}/` for active artifacts (`10-define.md`, `20-spec.md`, `30-plan.md`, `40-implement.md`, `50-verify.md`, `60-report.md`, `70-release.md`).
+1. **Project Setup Baseline**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`. If empty or default placeholders, recommend `onboard` (for fresh projects) or `adopt` (for existing codebases).
+2. **Active Delivery Run**: Read `devflow/context/current-stage.md` and check `devflow/runs/{RUNNING_ID}/`.
+   - **If Fast-Track (`spec.md` or `blueprint.md` present)**:
+     - If `spec.md` has incomplete checklist items -> Recommend `/implement` (or `implement {RUNNING_ID}`).
+     - If all tasks done but no passing verification evidence -> Recommend `/check` (or `check {RUNNING_ID}`).
+     - If verification evidence passed -> Recommend `/complete` (or `complete {RUNNING_ID}`).
+   - **If Deep-Track (numbered stage files present)**:
+     - If at `10-define.md` -> Recommend `20-spec {RUNNING_ID}`.
+     - If at `20-spec.md` -> Recommend `30-plan {RUNNING_ID}`.
+     - If at `30-plan.md` -> Recommend `40-implement {RUNNING_ID}`.
+     - If at `40-implement.md` with all tasks done -> Recommend `50-verify {RUNNING_ID}`.
+     - If passed `50-verify.md` -> Recommend `60-report {RUNNING_ID}` then `70-release {RUNNING_ID}`.
 3. **Active Discovery**: Check `devflow/discoveries/` for open discovery notes.
-4. **Audit Findings Ledger**: Check `devflow/context/findings.md` for open high-severity findings.
+4. **Pending Ideas Inbox**: Check `devflow/ideas.md`. If items exist under `## 📌 Pending Ideas`, summarize them in a **💡 Pending Ideas (Inbox)** list with their IDs (`[IDEA-xxx]`), feasibility, and mention that they can be started with `/spec IDEA-xxx`.
+5. **Audit Findings Ledger**: Check `devflow/context/findings.md` for open high-severity findings.
 
-### State-Based Recommendation Rules
+### Default State Recommendations
+- If no run is active and user wants to start a feature -> Recommend `/spec <name>` (or `/feature <name>`).
+- If no run is active and user wants to fix a bug -> Recommend `/fix <bug>`.
+- If no run is active and user has pending ideas in `devflow/ideas.md` -> Highlight `/spec IDEA-xxx`.
+- If no run is active and user wants deep architectural exploration -> Recommend `00-discover`.
+- If user asks to check system health -> Recommend `doctor`.
 
-- If context is empty/unconfigured -> Recommend `onboard` (for fresh project) or `adopt` (for brownfield codebase).
-- If a run is at `10-define.md` -> Recommend `20-spec {RUNNING_ID}` (or `20-spec`, `$20-spec`, `spec`).
-- If a run is at `20-spec.md` -> Recommend `30-plan {RUNNING_ID}` (or `30-plan`, `$30-plan`, `plan`).
-- If a run is at `30-plan.md` -> Recommend `40-implement {RUNNING_ID}` (or `40-implement`, `$40-implement`, `implement`).
-- If a run is at `40-implement.md` with incomplete tasks -> Recommend `40-implement {RUNNING_ID}`.
-- If a run is at `40-implement.md` with all tasks done -> Recommend `50-verify {RUNNING_ID}` (or `50-verify`, `$50-verify`, `verify`).
-- If a run passed `50-verify.md` -> Recommend `60-report {RUNNING_ID}` then `70-release {RUNNING_ID}`.
-- If no run is active and user wants to explore an idea -> Recommend `00-discover` (or `discover`, `Brainstorm`).
-- If no run is active and open P0/P1 findings exist -> Recommend `security-review` or `debug`.
-- If user asks to check system health or configuration -> Recommend `doctor` (or `doctor`, `$doctor`).
+---
 
 ## Intent Classification & Skill Routing
 
-When the user specifies a request, map it to the matching DevFlow 2.0 stage or companion command:
-
-| User Intent / Request Type | Recommended Skill | Normal Name / Alias | Lifecycle Path |
+| User Intent / Request Type | Recommended Skill | Normal Name / Alias | Track / Lifecycle Path |
 | :--- | :--- | :--- | :--- |
-| "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `00-discover` or `10-define` |
-| "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `00-discover` or `10-define` |
+| **"Spec new feature / lean workflow"** | `spec` | `/spec` / `/feature` | **Fast-Track**: `/spec` -> `/implement` -> `/check` -> `/complete` |
+| **"Quick bugfix / ad-hoc change"** | `spec` | `/fix` | **Fast-Track**: `/fix` -> `/implement` -> `/check` -> `/complete` |
+| **"Capture quick idea / thought"** | `idea` | `/idea` | **Companion**: Enriches & saves to `devflow/ideas.md` |
+| **"Execute implementation tasks"** | `implement` | `/implement` | **Fast-Track**: `/implement` -> `/check` |
+| **"Run QA verification & check"** | `check` | `/check` | **Fast-Track**: `/check` -> `/complete` |
+| **"Complete run & git merge"** | `complete` | `/complete` | **Fast-Track**: `/complete` |
+| **"Generate HTML dashboard report"**| `report-html` | `/report:html` | **Standalone**: Converts `spec.md` / `60-report.md` to HTML |
+| "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `/spec` or `10-define` |
+| "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `/spec` or `10-define` |
 | "Check setup health & diagnostics" | `doctor` | `doctor` / `health` | `doctor` |
-| "Explore a new request / idea" | `00-discover` | `discover` | `00-discover` -> `10-define` -> `20-spec` -> ... |
-| "Define delivery boundaries and ID" | `10-define` | `define` | `10-define` -> `20-spec` -> `30-plan` |
-| "Write formal markdown specification" | `20-spec` | `spec` | `20-spec` -> `30-plan` -> `40-implement` |
-| "Break down spec into actionable plan" | `30-plan` | `plan` | `30-plan` -> `40-implement` -> `50-verify` |
-| "Execute code implementation" | `40-implement` | `implement` | `40-implement` -> `50-verify` |
-| "Verify code quality & QA review" | `50-verify` | `verify` | `50-verify` -> `60-report` -> `70-release` |
-| "Generate summary HTML/MD report" | `60-report` | `report` | `60-report` -> `70-release` |
-| "Package for PR merge or deployment" | `70-release` | `release` | `70-release` |
-| "Human manual QA walkthrough guide" | `try` | `try` | `try` (after implement or verify) |
-| "Safely plan feature or run reversal" | `rollback` | `rollback` | `rollback` -> `40-implement` |
-| "Set up automatic GitHub Actions CI" | `ci` | `ci` | `ci` (after onboard or adopt) |
-| "Pre-check scope & risks before spec" | `brief` | `brief` | `brief` -> `20-spec` |
-| "Run autonomous bounded delivery loop"| `autopilot` | `autopilot` | `autopilot` -> `70-release` |
-| "High-level goal or long-running task" | `goal` | `goal` | `goal` -> `00-discover` |
-| "Brainstorm ideas without allocating ID" | `brainstorm` | `brainstorm` | `brainstorm` -> `00-discover` |
-| "Deep codebase or web research" | `research` | `research` | `research` |
-| "Investigate failure or root cause" | `debug` | `debug` | `debug` -> `40-implement` or `10-define` |
-| "Product framing & PRD creation" | `prd` | `prd` | `prd` -> `00-discover` |
-| "Intake and triage incoming bugs" | `issue-triage` | `issue-triage` | `issue-triage` -> `debug` or `10-define` |
-| "High-severity security audit" | `security-review` | `security-review` | `security-review` |
-| "Manage project knowledge base" | `wiki` | `wiki` | `wiki` |
-| "Verify or update DevFlow setup" | `check-for-updates` | `check-for-updates` | `check-for-updates` |
+| "Explore a new request / deep idea" | `00-discover` | `discover` | **Deep-Track**: `00` -> `10` -> `20` -> ... |
+| "Define delivery boundaries and ID" | `10-define` | `define` | **Deep-Track**: `10` -> `20` -> `30` |
+| "Break down spec into plan (Deep)" | `30-plan` | `plan` | **Deep-Track**: `30` -> `40` -> `50` |
+| "Deep code implementation" | `40-implement` | `implement` | **Deep-Track**: `40` -> `50` |
+| "Deep QA verification" | `50-verify` | `verify` | **Deep-Track**: `50` -> `60` -> `70` |
+| "Deep markdown digest report" | `60-report` | `report` | **Deep-Track**: `60` -> `70` |
+| "Deep release packaging & merge" | `70-release` | `release` | **Deep-Track**: `70-release` |
+| "Human manual QA walkthrough guide" | `try` | `try` | Companion (after implement or check) |
+| "Safely plan feature or run reversal" | `rollback` | `rollback` | Companion |
+| "Set up automatic GitHub Actions CI" | `ci` | `ci` | Companion |
+| "Pre-check scope & risks before spec" | `brief` | `brief` | Companion |
+| "Run autonomous bounded delivery loop"| `autopilot` | `autopilot` | Companion |
+| "Brainstorm ideas without ID" | `brainstorm` | `brainstorm` | Companion |
+| "Investigate failure or root cause" | `debug` | `debug` | Companion |
+
+---
 
 ## Available Skills Sitemap
 
-Always provide a clean summary of available Nexus-DevFlow skills grouped by lifecycle stage:
+### 1. Fast-Track (Blueprint Mode - 4 Steps)
+- `spec` (`/spec`, `/feature`, `/fix`, `$spec`) - Define, spec, plan, and create `spec.md`
+- `implement` (`/implement`, `$implement`) - Execute planned checklist tasks with TDD
+- `check` (`/check`, `$check`) - Senior QA review, multi-lane verification, record evidence
+- `complete` (`/complete`, `$complete`) - Safety pass, release digest, git merge, close run
 
-### 1. Mainline Lifecycle Stages (Linear Order)
-- `00-discover` (`discover`, `00-discover`, `$00-discover`) - Explore request, route inquiries, go/no-go under Discovery ID
-- `10-define` (`define`, `10-define`, `$10-define`) - Lock delivery boundaries and allocate Running ID (`devflow/runs/{ID}`)
-- `20-spec` (`spec`, `20-spec`, `$20-spec`) - Formalize markdown-first specifications and acceptance criteria
-- `30-plan` (`plan`, `30-plan`, `$30-plan`) - Transform spec into executable task breakdown with test decisions
-- `40-implement` (`implement`, `40-implement`, `$40-implement`) - Execute planned tasks incrementally with evidence
-- `50-verify` (`verify`, `50-verify`, `$50-verify`) - Senior QA review, validation checks, and pass/fail gate
-- `60-report` (`report`, `60-report`, `$60-report`) - Generate standardized markdown and HTML summary report
-- `70-release` (`release`, `70-release`, `$70-release`) - Package verified work for PR merge or deployment
+### 2. Deep-Track (Architect Mode - 8 Steps)
+- `00-discover` - Explore request and decide Proceed/Defer/Reject
+- `10-define` - Lock delivery boundaries and allocate Running ID
+- `20-spec` - Formalize markdown delivery contract
+- `30-plan` - Breakdown spec into phased tasks with test decisions
+- `40-implement` - Incremental task implementation
+- `50-verify` - Senior QA review and multi-lane validation
+- `60-report` - Generate standardized markdown digest report
+- `70-release` - Release packaging, release notes, and merge
 
-### 2. Public Companion Commands
-- `devflow` (`status`, `devflow`, `$devflow`) - Guide, state inspector, and intent router
-- `onboard` (`onboard`, `$onboard`) - Baseline stack setup for freshly scaffolded projects
-- `adopt` (`adopt`, `$adopt`) - Survey and bootstrap DevFlow into existing brownfield projects
-- `doctor` (`doctor`, `$doctor`) - Read-only health check for setup, scripts, and workflow drift
-- `try` (`try`, `$try`) - Step-by-step human manual QA review guide (where to go, what to click, what to expect)
-- `rollback` (`rollback`, `$rollback`) - Safe feature/run reversal planner with dependency risk analysis
-- `ci` (`ci`, `$ci`) - Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup
-- `brief` (`brief`, `$brief`) - Read-only scope, dependency, and size pre-briefing before speccing
-- `autopilot` (`autopilot`, `$autopilot`) - Optional bounded autonomous loop (spec -> plan -> implement -> verify -> report)
-- `goal` - Route broad goals before Discovery
+### 3. Public Companion Commands
+- `devflow` (`status`, `/devflow`) - Interactive guide, state inspector, and router
+- `idea` (`/idea`) - Quick idea capture and AI feasibility enrichment into `devflow/ideas.md`
+- `report-html` (`/report:html`) - Standalone interactive HTML report dashboard generator
+- `onboard` - Baseline stack setup for freshly scaffolded projects
+- `adopt` - Bootstrap DevFlow into existing brownfield projects
+- `doctor` - Read-only health check for setup and drift
+- `try` - Step-by-step human manual QA review guide
+- `rollback` - Safe feature/run reversal planner
+- `ci` - Automatic GitHub Actions workflow setup
+- `brief` - Read-only scope and risk pre-briefing
+- `autopilot` - Autonomous bounded delivery loop
 - `brainstorm` - Ideate without allocating running IDs
-- `research` - Conduct codebase or web research
 - `debug` - Root cause investigation before or during implementation
-- `prd` - Product framing before delivery commitment
-- `issue-triage` - Intake and triage incoming bug reports
-- `security-review` - High-severity security review
-- `wiki` - Knowledge base management under `devflow/wiki/`
-- `check-for-updates` - Verify or upgrade DevFlow setup
-- `help` - Process assistance and stage routing
-
-### 3. Engineering & Specialist Skills
-- **Frontend & UI**: `frontend-ui-engineering`, `nextjs-react-expert`, `tailwind-patterns`, `ui-ux-pro-max`, `mobile-design`
-- **Quality & Security**: `code-review-and-quality`, `security-and-hardening`, `test-driven-development`, `vulnerability-scanner`, `performance-optimization`
-- **Architecture & System**: `architecture`, `database-design`, `domain-modeling`, `codebase-design`, `api-and-interface-design`
-- **Tools & Productivity**: `md2html`, `obsidian-markdown`, `git-workflow-and-versioning`, `parallel-agents`, `context-engineering`
+- `overview` - Living context synchronization into project-overview.md

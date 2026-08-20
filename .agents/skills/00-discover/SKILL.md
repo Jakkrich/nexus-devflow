@@ -14,12 +14,14 @@ Explore a request before delivery commitment. Create or resume a Discovery ID, c
 
 ```text
 00-discover {title or request}
+00-discover IDEA-xxx
 00-discover {discovery-id}
 ```
 
 Use this when:
 
 - a new request needs discussion before the team commits to delivery
+- exploring a pending idea from `devflow/ideas.md` (`00-discover IDEA-xxx`)
 - the best route may be `Brainstorm`, `PRD`, `Research`, or `Debug`
 - supporting findings need to be synthesized into a go/no-go decision
 
