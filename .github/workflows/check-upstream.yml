@@ -31,6 +31,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Install dependencies
+        run: npm ci
       - name: Inspect AI Blueprint upstream
         run: npx tsx .agents/skills/sync-upstream/scripts/inspect-upstream.ts > "$RUNNER_TEMP/upstream-inspection.json"
       - name: Prepare update report
@@ -59,6 +61,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Install dependencies
+        run: npm ci
       - name: Restore Issue body
         env:
           ISSUE_BODY_BASE64: ${{ needs.detect.outputs.issue-body-base64 }}
