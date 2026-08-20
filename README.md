@@ -233,6 +233,23 @@ npx @jakkrichm/create-nexus-devflow update
 
 The updater manages only DevFlow framework files under `.agents/skills/`, `.claude/skills/`, and `devflow/reference/`, preserving your project's custom code, context, and run history.
 
+## Uninstalling & Ejecting DevFlow
+
+If you need to completely remove DevFlow from your codebase before handing off a project or making it open-source without leaving any DevFlow traces:
+
+```bash
+# Preview files and directories that will be deleted
+npx @jakkrichm/create-nexus-devflow uninstall --dry-run
+
+# Completely remove all DevFlow files and adapters
+npx @jakkrichm/create-nexus-devflow uninstall -y
+
+# Alternatively, use the eject alias
+npx @jakkrichm/create-nexus-devflow eject -y
+```
+
+This cleanly deletes `devflow/`, `.agents/`, `.claude/`, `.nexus/`, `AGENTS.md`, and `CLAUDE.md`, leaving your application source code (`src/`, `package.json`, `.git/`) 100% untouched.
+
 ## Documentation & References
 
 - [Quick Start Guide](docs/quickstart.md)
