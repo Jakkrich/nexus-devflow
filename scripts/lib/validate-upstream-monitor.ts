@@ -6,7 +6,7 @@ export function validateUpstreamMonitorContract(workflow: string): void {
     "  contents: read",
     "      issues: write",
     "          persist-credentials: false",
-    "npx tsx .agents/skills/sync-upstream/scripts/inspect-upstream.ts",
+    "npx tsx scripts/inspect-upstream.ts",
     "npx tsx scripts/upstream-monitor.ts",
     "npx tsx scripts/update-upstream-issue.ts",
     "    if: needs.detect.outputs.update-available == 'true'"

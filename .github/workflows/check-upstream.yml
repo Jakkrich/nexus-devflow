@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Inspect AI Blueprint upstream
-        run: npx tsx .agents/skills/sync-upstream/scripts/inspect-upstream.ts > "$RUNNER_TEMP/upstream-inspection.json"
+        run: npx tsx scripts/inspect-upstream.ts > "$RUNNER_TEMP/upstream-inspection.json"
       - name: Prepare update report
         id: report
         env:
