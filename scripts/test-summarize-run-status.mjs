@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const tempRoot = path.join(rootDir, 'node_modules', '.cache', '.test-workspace-run-status');
+const tempRoot = path.join(rootDir, '.agent', '.test-workspace-run-status');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
