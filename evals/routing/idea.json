@@ -4,8 +4,8 @@
   "positive": [
     "run idea skill",
     "invoke /idea command",
-    "use idea for quick idea capture and AI feasibility enrichment",
-    "apply idea note inbox recording"
+    "use idea for devflow quick idea capture enrichment analyze feasibility value",
+    "apply idea guidance"
   ],
   "negative": [
     "unrelated random task query",

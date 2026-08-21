@@ -30,7 +30,7 @@ Unused adapter families can be removed. Codex and Antigravity projects keep `.ag
 
 ### Universal Invocation & Agent Directives:
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `00-discover`, `10-define`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`, `report-html`, `devflow`, `onboard`, `adopt`, `doctor`, `try`, `rollback`, `ci`, `brief`, `autopilot`, `idea`, `spec`). The way you invoke commands depends on your AI Provider / Tool:
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `00-discover`, `10-define`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `idea`, `ci`, `test`, `autopilot`, `prototype`, `report-html`, `brief`). The way you invoke commands depends on your AI Provider / Tool:
    - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `40-execute`, `devflow`).
    - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/40-execute`, `/devflow`.
    - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$40-execute`, `$devflow`.

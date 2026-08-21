@@ -1,11 +1,11 @@
 {
   "skill": "implement",
-  "description": "\"[Devflow] Fast-Track Implement stage in DevFlow (Blueprint Mode) - execute checklist tasks incrementally with TDD and update current-feature.md.\"",
+  "description": "\"[Devflow] Fast-Track Implement stage in DevFlow (Blueprint Mode) - execute checklist tasks incrementally with TDD and update current-feature.md in context.\"",
   "positive": [
     "run implement skill",
     "invoke /implement command",
-    "use implement for fast track incremental code execution with TDD",
-    "apply implement checklist tasks"
+    "use implement for devflow fast track implement stage devflow blueprint mode",
+    "apply implement guidance"
   ],
   "negative": [
     "unrelated random task query",

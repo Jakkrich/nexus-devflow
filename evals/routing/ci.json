@@ -1,10 +1,10 @@
 {
   "skill": "ci",
-  "description": "\"[Devflow] CI/CD pipeline automation and GitHub Actions setup (.github/workflows/verify.yml). Automates quality gates, typechecks, tests, and build checks.\"",
+  "description": "\"[Devflow] Set up automated GitHub Actions CI workflow (.github/workflows/verify.yml) aligned with project verify command.\"",
   "positive": [
     "run ci skill",
     "invoke /ci command",
-    "use ci for devflow pipeline automation github actions setup github workflows",
+    "use ci for devflow automated github actions workflow github workflows verify",
     "apply ci guidance"
   ],
   "negative": [

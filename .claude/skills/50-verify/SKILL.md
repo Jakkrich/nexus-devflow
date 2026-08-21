@@ -2,9 +2,10 @@
 name: 50-verify
 description: "[Devflow] Verify stage in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement."
 ---
+
 # Phase 50: Verify Quality
 
-Review implementation quality, run validation, produce a verification report, and route the task forward or back to implementation.
+Review implementation quality, run multi-lane validation, produce a verification report, and route the task forward or back to implementation.
 
 ## Usage
 
@@ -16,173 +17,39 @@ Review implementation quality, run validation, produce a verification report, an
 
 Use `50-verify.md` as the primary verification artifact.
 Use `50-verify-impact.md` as an optional companion artifact when the run changes behavior, touches core logic, crosses integration boundaries, or needs explicit rollback and client impact analysis.
-Before writing either verification artifact, read `artifact_language` from the matching template and produce the markdown output in that language.
 
-Use these commands only to keep workflow status aligned with the task engine:
+## Process & Quality Gates
 
-Record verification start, results, open issues, and approval direction directly in `50-verify.md`. Use the stage markdown itself to indicate whether the work is ready for human review or needs to return to implementation.
-If an impact report is needed, create it in the same task directory and summarize its conclusions from `50-verify.md`.
-Keep the verification checklist aligned with the same soft-gate state so downstream report and release stages can see the current approval direction without re-reading the full verify narrative.
+### 1. Senior QA Review & Multi-Lane Verification
 
-## Required Section Content
+Execute verification across all essential quality dimensions:
 
-Before completing any generated artifact:
+1. **Lane 1: Typecheck & Static Code Quality**:
+   - Run typecheck and static analysis (`tsc --noEmit`, `npm run lint`).
+2. **Lane 2: Automated Test Suites (TDD Gate)**:
+   - Run automated unit and integration tests (`npm test`).
+   - Confirm 100% test pass rate with zero disabled or skipped tests.
+3. **Lane 3: Scrutinize QA & Edge Cases Review**:
+   - **Boundary Conditions**: Check empty inputs, 0/1 counts, off-by-one errors.
+   - **Null / Undefined Safety**: Verify nullish handling and strict type invariants.
+   - **Error Handling & Propagation**: Verify errors provide actionable diagnostics without swallowing.
+4. **Lane 4: Security & Hygiene Audit**:
+   - **Secrets Check**: Ensure no hardcoded credentials or API keys exist.
+   - **Input Sanitization**: Ensure parameterized queries and validated inputs.
+5. **Lane 5: Findings Ledger State Machine (`findings.md`)**:
+   - Inspect `devflow/context/findings.md`.
+   - **P0/P1 HARD GATE**: Any Finding of severity `P0` or `P1` in `open` or `fixed` status unconditionally blocks pass.
+6. **Lane 6: Manual Scenario Proof**:
+   - Provide clear manual verification instructions: "Where to go", "What to run/click", "What to expect".
 
-- preserve every heading required by the selected template
-- write concrete information under every heading
-- when no information exists or the section does not apply, write exactly `-`
-- never leave a heading immediately followed by another heading with no body content
-- remove template placeholders from the final artifact
-- do not invent facts merely to avoid using `-`
-- re-read the saved artifact and verify every heading satisfies this rule
+### 2. Decision & Route
 
-## Process
-
-### Loop Contract
-
-Run verification as an evidence review loop, not as a single pass/fail guess.
-
-- **Intent**: decide whether the implementation satisfies the spec and plan without introducing unacceptable regression risk.
-- **Context**: read `20-spec.md`, `30-plan.md`, `40-execute.md`, checklist state, changed files, test decisions, and available command/manual evidence.
-- **Action**: run or inspect validation, compare implementation evidence against the contract, review risk areas, and record findings by severity.
-- **Observation**: use concrete evidence from test output, validation output, diff review, manual checks, skipped checks, and impact notes.
-- **Adjustment**: if evidence is missing or failing, request targeted implementation follow-up, route to `Debug`, or return to `40-execute` with the exact evidence gap.
-- **Stop Condition**: stop only with a clear verdict: pass, fail, or blocked; include the evidence, residual risks, and next route.
-- **Handoff**: `50-verify.md` must tell `60-report` why the work is ready, or tell `40-execute` exactly what must change before verification resumes.
-
-### 1. Context Gathering
-
-Read:
-
-- `20-spec.md`
-- `30-plan.md`
-- `40-execute.md`
-- `checklists/verification-checklist.md` when present
-- changed files
-- test output, command output, screenshots, or manual-check evidence
-
-### 2. Artifact Gate
-
-Run the necessary validation for the current state before doing the full review.
-
-### 3. QA Review & Findings Ledger Verification
-
-Use the senior QA reviewer discipline, adapted to DevFlow 2.0 and Blueprint quality gates:
-
-- **STRICT MANDATE (กฎเหล็ก Unit Test)**: ตรวจสอบว่าโค้ดใหม่หรือการแก้ไข Bug (ที่มี behavior change) มีการสร้างหรืออัปเดต Unit Test คู่กันมาด้วยหรือไม่ หากไม่มีให้ทำเครื่องหมายว่า FAIL ทันที
-- **EMPIRICAL PROOF CONTRACT (หลักฐานเชิงประจักษ์)**: ห้ามเคลมว่า "ผ่าน" หรือ "ทำงานได้" โดยไม่มีหลักฐานรูปธรรม — ต้องระบุ Command, Test Output, Route, Screenshot, หรือ Log จริงที่พิสูจน์ผลลัพธ์
-- **FINDINGS LEDGER STATE MACHINE (`findings.md`)**:
-  - ตรวจสอบ `devflow/context/findings.md`
-  - ตรวจสอบสถานะ: `open` ➔ `fixed` ➔ `closed` (เฉพาะการตรวจซ้ำใน `50-verify` เท่านั้นที่สามารถเลื่อนสถานะ `fixed` เป็น `closed` ได้)
-  - **P0/P1 HARD GATE**: หากพบ Finding ระดับ P0 หรือ P1 ในสถานะ `open` หรือ `fixed` ที่ยังไม่ได้ถูกแก้ไข/ตรวจซ้ำ ให้ตัดสินเป็น FAIL ทันที
-- **MANUAL TRY GUIDE**: สรุปขั้นตอนการทดสอบด้วยมือสำหรับมนุษย์ (Where to go, What to click, What to expect) ไว้อย่างชัดเจน
-- compare claimed implementation evidence against the spec, plan, diff, and test decisions before forming a verdict
-- correctness, readability, architecture (DIP, SRP, Loose Coupling), security, and performance
-- test coverage (และตรวจสอบว่าไม่มีการ skip หรือ disable เทสต์)
-- test decision alignment and scope discipline
-
-Run project validation commands when available: lint, tests, typecheck, build, or targeted commands from the plan.
-
-For test-decision alignment, verify that planned verification was actually executed and that the evidence matches the claimed result.
-Use `review` for a two-axis standards/spec review, `diagnosing-bugs` when a failure needs root cause analysis, and `silent-failure-audit` when the risk is false-positive success.
-
-### 4. Verification Report
-
-Create or update `50-verify.md` in the task directory.
-Create or update `50-verify-impact.md` when the run includes behavior changes, client-facing flow changes, integration risk, or rollback considerations worth reviewing separately.
-
-Base the structure on:
-
-```text
-.agent/resources/schemas/verify.template.md
-.agent/resources/schemas/verify-impact.template.md
-```
-
-Before reporting completion, validate the markdown and replace all placeholders with concrete command output, manual checks, failures, screenshots, and residual risks.
-Follow the `artifact_language` configured in the selected template for both `50-verify.md` and `50-verify-impact.md`.
-
-Include:
-
-- verdict: pass or fail
-- evidence: commands and results
-- loop observation, adjustment, stop condition, and handoff notes
-- test-decision alignment
-- checklist alignment and any stale status corrections
-- approval gate summary copied into the verification checklist when relevant
-- findings grouped by severity
-- manual checks required
-- recommended next action
-- impact report summary or explicit note that no impact report was needed
-
-### 5. Decision
-
-**STRICT GATING (CRITICAL FAIL)**: หากพบว่าไม่มีการสร้าง/แก้ไข Unit Test ตามกฎ Unit Test Mandate หรือรันเทสต์แล้วไม่ผ่านทั้งหมด **บังคับให้ตัดสินเป็น FAIL ทันที**
-
-If pass:
-
-- route to `60-report`
-
-If fail:
-
-- route back to `40-execute` with exact failed evidence, missing checks, or required changes
-
-Use `Debug` when investigation is needed before implementation can resume.
-
-### 6. Manual Review Soft Gate
-
-Verification is the main human review checkpoint for implemented work.
-If the evidence is incomplete or `Approval Status` remains pending:
-
-- warn that release is not yet ready for confident handoff
-- recommend additional review or a return to `40-execute`
-- keep `60-report` as a soft recommendation only
+- **Pass**: Route to `60-report {ID}`.
+- **Fail**: Route back to `40-execute {ID}` with exact failure evidence and remediation steps.
 
 ## Output
 
 Report:
-
-- QA verdict
-- key findings
-- commands run
-- validation status
-- impact and rollback analysis when `50-verify-impact.md` is present
-- next command: `60-report {ID}` if pass, or `40-execute {ID}` if fail
-
-## Relationship To DevFlow 2.0
-
-- Classification: Mainline workflow
-- Previous state: `40-execute`
-- Next state: `60-report` when evidence is sufficient
-- Common companion commands: `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `Wiki`
-- Support skills: `review`, `diagnosing-bugs`, `tdd`, and `silent-failure-audit` for focused verification lanes
-
-## Sources
-
-- `AGENTS.md`
-- `docs/workspace-artifacts.md`
-- `.agent/resources/schemas/verify.template.md`
-- `.agent/resources/schemas/verify-impact.template.md`
-- Related commands: `40-execute`, `Debug`, `Test`, `QA-Orchestrate`, `PR-Review`, `Agent`, `60-report`
-
-## Next Workflow Recommendation
-
-- **Primary**: `60-report {ID}` when verification passes, or `40-execute {ID}` when verification fails.
-- **Why**: Verification decides whether work moves forward to the final report stage or loops back for fixes.
-- **Alternatives**:
-  - `Debug` - choose this when the failure needs root cause analysis before more implementation.
-  - `review` - choose this when changed work needs standards and spec review as separate axes.
-  - `Wiki project ingest devflow/runs/{ID}-*50-verify.md` - choose this when verification reveals reusable project knowledge.
-
-## Nexus Event
-
-- Use `Debug` when failures need deeper investigation before rework.
-- Use `PR-Review`, `QA-Orchestrate`, or `Agent code-reviewer` when a narrower review lane would change the verification decision quality.
-- Use `Wiki` when verified findings should become reusable project knowledge before the run continues.
-
-## Wiki Update Recommendation
-
-- **Needed**: `yes` when QA confirms a reusable lesson, regression pattern, manual check, or validation command.
-- **Scope**: `project` unless QA reveals a DevFlow framework rule.
-- **Reason**: Verified QA evidence is one of the safest sources for project wiki updates.
-- **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*50-verify.md`
-
+- QA verdict across all verification lanes
+- Evidence commands and outputs
+- Next command: `60-report {ID}` (if pass) or `40-execute {ID}` (if fail)

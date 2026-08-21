@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.21] - 2026-08-21
+
+### Changed
+- **Lean Skills Architecture (28 Core Skills)**: Streamlined multi-agent skills from 81 down to 28 core skills across Fast-Track (5), Deep-Track (8), and Companion Tools & Gates (15), eliminating bloated/redundant cheatsheet skills.
+- **In-Flow Best Practices Consolidation**: Absorbed Conventional Commits, SemVer calculation, Keep a Changelog updates, and PR templates into `complete` and `70-release`; Brainstorming Matrix and Empirical Research into `00-discover`; and 9arm Scrutinize QA and Security Review into `check` and `50-verify`.
+- **Enriched Coding Standards**: Added Deep Module Architecture, Code Simplification rules, API Boundary Stability, and Safe Database Migration standards to `devflow/context/coding-standards.md`.
+- **Multi-IDE Adapter Parity**: Synced `.agents/skills/` (Codex/Antigravity) and `.claude/skills/` (Claude Code) with 100% 1:1 parity.
+
 ## [2.0.17] - 2026-08-20
 
 ### Added

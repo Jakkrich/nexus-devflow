@@ -115,15 +115,26 @@ export function createManifest(
         "70-release"
       ],
       companionCommands: [
-        "goal",
-        "brainstorm",
-        "research",
+        "feature",
+        "fix",
+        "implement",
+        "check",
+        "complete",
+        "devflow",
+        "doctor",
+        "overview",
         "debug",
-        "prd",
-        "issue-triage",
-        "security-review",
-        "check-for-updates",
-        "help"
+        "onboard",
+        "adopt",
+        "try",
+        "rollback",
+        "idea",
+        "ci",
+        "test",
+        "autopilot",
+        "prototype",
+        "report-html",
+        "brief"
       ]
     },
     managedFiles
