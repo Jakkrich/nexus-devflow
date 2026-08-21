@@ -11,6 +11,10 @@ import {
   shouldUseColor
 } from "../lib/status.js";
 import {
+  createSpinner,
+  createStyle
+} from "../lib/ui.js";
+import {
   applyPreparedUpdate,
   prepareUpdate,
   type PreparedUpdate
@@ -66,10 +70,12 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   }
 
   if (options.command === "uninstall" || options.command === "eject") {
+    const spinner = createSpinner("Analyzing DevFlow footprint...").start();
     const prepared = await prepareUninstall({
       targetDir,
       keepHistory: options.keepHistory
     });
+    spinner.stop();
 
     if (options.json) {
       if (options.dryRun) {
@@ -84,12 +90,14 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     printUninstallPlan(prepared);
 
     if (prepared.itemsToDelete.length === 0) {
-      console.log("\nNo DevFlow files or directories found in target project.");
+      const style = createStyle();
+      console.log(`\n${style.dim("No DevFlow files or directories found in target project.")}`);
       return;
     }
 
     if (options.dryRun) {
-      console.log("\n[Dry-run] No files were removed.");
+      const style = createStyle();
+      console.log(`\n${style.yellow("[Dry-run] No files were removed.")}`);
       return;
     }
 
@@ -99,7 +107,9 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       return;
     }
 
+    spinner.start("Removing DevFlow files and adapters...");
     const result = await applyUninstall(prepared);
+    spinner.succeed("Nexus-DevFlow has been completely removed.");
     printUninstallSuccess(result);
     return;
   }
@@ -113,12 +123,15 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   const version = readPackageVersion();
 
   if (options.command === "update") {
+    const spinner = createSpinner("Checking for DevFlow updates...").start();
     const prepared = await prepareUpdate({
       targetDir,
       templateRoot,
       version,
       adapter: options.adapter
     });
+    spinner.stop();
+
     printUpdatePlan(prepared);
 
     if (options.dryRun) {
@@ -127,17 +140,22 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
     const replaceConflicts =
       options.force || (await confirmUpdateConflicts(prepared, options));
+
+    spinner.start("Applying DevFlow updates...");
     const result = await applyPreparedUpdate(prepared, { replaceConflicts });
+    spinner.succeed("Nexus-DevFlow update successfully applied!");
     printUpdateSuccess(prepared, result);
     return;
   }
 
+  const spinner = createSpinner("Analyzing target project...").start();
   const prepared = await prepareUpdate({
     targetDir,
     templateRoot,
     version,
     adapter: options.adapter
   });
+  spinner.stop();
 
   printInstallPlan(prepared);
 
@@ -153,9 +171,11 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
   }
 
+  spinner.start("Installing Nexus-DevFlow overlay...");
   const result = await applyPreparedUpdate(prepared, {
     replaceConflicts: options.force || prepared.conflictList.length > 0
   });
+  spinner.succeed("Nexus-DevFlow overlay successfully installed!");
 
   printInstallSuccess(targetDir, result);
 }
@@ -297,71 +317,75 @@ function readPackageVersion(): string {
 }
 
 function printHelp(): void {
+  const style = createStyle();
   console.log(`
-Nexus-DevFlow CLI v${readPackageVersion()}
+${style.bold(style.cyan("Nexus-DevFlow CLI"))} ${style.bold(`v${readPackageVersion()}`)}
 
-Usage:
-  npx @jakkrichm/create-nexus-devflow [target-dir] [options]
-  nexus-devflow status [target-dir] [options]
-  nexus-devflow update [target-dir] [options]
-  nexus-devflow uninstall [target-dir] [options]
-  nexus-devflow eject [target-dir] [options]
+${style.bold("Usage:")}
+  ${style.cyan("npx @jakkrichm/create-nexus-devflow")} [target-dir] [options]
+  ${style.cyan("nexus-devflow status")} [target-dir] [options]
+  ${style.cyan("nexus-devflow update")} [target-dir] [options]
+  ${style.cyan("nexus-devflow uninstall")} [target-dir] [options]
+  ${style.cyan("nexus-devflow eject")} [target-dir] [options]
 
-Commands:
-  status             Show project overview, progress, findings, git status, and next action
-  update             Update existing DevFlow installation without overwriting user changes
-  uninstall, eject   Completely remove DevFlow workflow files and adapters from project
+${style.bold("Commands:")}
+  ${style.brightCyan("status")}             Show project overview, progress, findings, git status, and next action
+  ${style.brightCyan("update")}             Update existing DevFlow installation without overwriting user changes
+  ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project
 
-Options:
-  --adapter <name>   Tool adapters to install: codex, antigravity, claude, both (default: both)
-  --keep-history     Keep devflow/history/ directory during uninstall
-  --json             Print output as structured JSON object
-  --target, -t       Target project directory
-  --force, -f        Overwrite conflicting files / force uninstall without prompting
-  --dry-run          Preview changes without modifying disk
-  -y, --yes          Automatically confirm interactive prompts
-  --version, -v      Show version number
-  --help, -h         Show help screen
+${style.bold("Options:")}
+  ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, both (default: both)
+  ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
+  ${style.cyan("--json")}             Print output as structured JSON object
+  ${style.cyan("--target, -t")}       Target project directory
+  ${style.cyan("--force, -f")}        Overwrite conflicting files / force uninstall without prompting
+  ${style.cyan("--dry-run")}          Preview changes without modifying disk
+  ${style.cyan("-y, --yes")}          Automatically confirm interactive prompts
+  ${style.cyan("--version, -v")}      Show version number
+  ${style.cyan("--help, -h")}         Show help screen
 `);
 }
 
 function printInstallPlan(prepared: PreparedUpdate): void {
-  console.log(`\nNexus-DevFlow v${readPackageVersion()}`);
-  console.log(`Target Directory: ${prepared.targetDir}`);
-  console.log(`Active Adapters : ${prepared.activeAdapters.join(", ")}\n`);
+  const style = createStyle();
+  console.log(`\n${style.bold(style.cyan("Nexus-DevFlow"))} ${style.bold(`v${readPackageVersion()}`)}`);
+  console.log(`  ${style.dim("Target Directory:")} ${style.bold(prepared.targetDir)}`);
+  console.log(`  ${style.dim("Active Adapters :")} ${style.cyan(prepared.activeAdapters.join(", "))}\n`);
 
-  console.log(`Files to create : ${prepared.createList.length}`);
-  console.log(`Files to update : ${prepared.updateList.length}`);
-  console.log(`Conflicts found : ${prepared.conflictList.length}`);
+  console.log(`  ${style.dim("Files to create :")} ${style.bold(style.green(String(prepared.createList.length)))}`);
+  console.log(`  ${style.dim("Files to update :")} ${style.bold(String(prepared.updateList.length))}`);
+  console.log(`  ${style.dim("Conflicts found :")} ${prepared.conflictList.length > 0 ? style.bold(style.red(String(prepared.conflictList.length))) : style.green("0")}`);
 
   if (prepared.conflictList.length > 0) {
-    console.log("\nConflicting files:");
+    console.log(`\n${style.yellow("Conflicting files:")}`);
     for (const conflict of prepared.conflictList) {
-      console.log(`  - ${conflict.relativePath} (${conflict.detail})`);
+      console.log(`  - ${style.yellow(conflict.relativePath)} (${conflict.detail})`);
     }
   }
 }
 
 function printUpdatePlan(prepared: PreparedUpdate): void {
-  console.log(`\nNexus-DevFlow Update Plan (v${readPackageVersion()})`);
-  console.log(`Target Directory: ${prepared.targetDir}`);
-  console.log(`Active Adapters : ${prepared.activeAdapters.join(", ")}\n`);
+  const style = createStyle();
+  console.log(`\n${style.bold(style.cyan("Nexus-DevFlow Update Plan"))} ${style.bold(`(v${readPackageVersion()})`)}`);
+  console.log(`  ${style.dim("Target Directory:")} ${style.bold(prepared.targetDir)}`);
+  console.log(`  ${style.dim("Active Adapters :")} ${style.cyan(prepared.activeAdapters.join(", "))}\n`);
 
-  console.log(`Files to create : ${prepared.createList.length}`);
-  console.log(`Files to update : ${prepared.updateList.length}`);
-  console.log(`Orphaned files  : ${prepared.orphanedFiles.length}`);
-  console.log(`Conflicts found : ${prepared.conflictList.length}`);
+  console.log(`  ${style.dim("Files to create :")} ${style.bold(style.green(String(prepared.createList.length)))}`);
+  console.log(`  ${style.dim("Files to update :")} ${style.bold(String(prepared.updateList.length))}`);
+  console.log(`  ${style.dim("Orphaned files  :")} ${style.bold(String(prepared.orphanedFiles.length))}`);
+  console.log(`  ${style.dim("Conflicts found :")} ${prepared.conflictList.length > 0 ? style.bold(style.red(String(prepared.conflictList.length))) : style.green("0")}`);
 }
 
 function printUninstallPlan(prepared: PreparedUninstall): void {
-  console.log(`\nNexus-DevFlow Clean Eject / Uninstall (v${readPackageVersion()})`);
-  console.log(`Target Directory: ${prepared.targetDir}\n`);
+  const style = createStyle();
+  console.log(`\n${style.bold(style.red("Nexus-DevFlow Clean Eject / Uninstall"))} ${style.bold(`(v${readPackageVersion()})`)}`);
+  console.log(`  ${style.dim("Target Directory:")} ${style.bold(prepared.targetDir)}\n`);
 
-  console.log(`Items to delete : ${prepared.itemsToDelete.length} (${prepared.totalFiles} files, ${prepared.totalDirectories} directories)`);
+  console.log(`  ${style.dim("Items to delete :")} ${style.bold(style.red(String(prepared.itemsToDelete.length)))} (${prepared.totalFiles} files, ${prepared.totalDirectories} directories)`);
   if (prepared.itemsToDelete.length > 0) {
-    console.log("DevFlow Footprint:");
+    console.log(`\n${style.yellow("DevFlow Footprint:")}`);
     for (const item of prepared.itemsToDelete) {
-      console.log(`  - ${item}`);
+      console.log(`  - ${style.dim(item)}`);
     }
   }
 }
@@ -409,33 +433,28 @@ async function confirmUninstall(prepared: PreparedUninstall, options: CliOptions
 }
 
 function printNextSteps(): void {
-  console.log("\nNext steps in your AI IDE (Antigravity, Claude Code, Codex, etc.):");
-  console.log("  1. Project Setup & Baseline:");
-  console.log("     - Existing project : Run `/adopt` (or `$adopt`) to scan codebase and bootstrap context.");
-  console.log("     - Fresh project    : Run `/onboard` (or `$onboard`) to configure project baseline.");
-  console.log("  2. System Health & CI:");
-  console.log("     - Health check     : Run `/doctor` (or `$doctor`) to verify adapters and setup.");
-  console.log("     - CI configuration : Run `/ci` (or `$ci`) to setup GitHub Actions workflow.");
-  console.log("  3. Delivery Flow:");
-  console.log("     - Interactive guide: Run `/devflow` (or `$devflow`) for state & routing assistance.");
-  console.log("     - Start new work   : Run `/00-discover` (or `$00-discover`) to begin delivery lifecycle.");
+  const style = createStyle();
+  console.log(`\n${style.bold("Next steps in your AI IDE")} ${style.dim("(Antigravity, Claude Code, Codex, Cursor, etc.):")}`);
+  console.log(`  - ${style.cyan("Existing project")} : Run ${style.bold(style.brightCyan("/adopt"))} ${style.dim("(or $adopt)")} to scan codebase and bootstrap context.`);
+  console.log(`  - ${style.cyan("Fresh project")}    : Run ${style.bold(style.brightCyan("/onboard"))} ${style.dim("(or $onboard)")} to configure project baseline.`);
 }
 
 function printInstallSuccess(targetDir: string, result: { appliedCount: number }): void {
-  console.log("\nNexus-DevFlow overlay successfully installed!");
-  console.log(`Applied ${result.appliedCount} file(s).`);
+  const style = createStyle();
+  console.log(`  ${style.dim("Applied:")} ${style.bold(style.green(String(result.appliedCount)))} file(s).`);
   printNextSteps();
 }
 
 function printUpdateSuccess(prepared: PreparedUpdate, result: { appliedCount: number; removedCount: number }): void {
-  console.log("\nNexus-DevFlow update successfully applied!");
-  console.log(`Applied ${result.appliedCount} file(s), removed ${result.removedCount} orphaned file(s).`);
+  const style = createStyle();
+  console.log(`  ${style.dim("Applied:")} ${style.bold(style.green(String(result.appliedCount)))} file(s), ${style.dim("removed")} ${style.bold(String(result.removedCount))} orphaned file(s).`);
   printNextSteps();
 }
 
 function printUninstallSuccess(result: { deletedCount: number; deletedItems: string[] }): void {
-  console.log("\nNexus-DevFlow has been completely removed from the project.");
-  console.log(`Deleted ${result.deletedCount} item(s). No DevFlow traces remain.`);
+  const style = createStyle();
+  console.log(`\n${style.green("✔")} ${style.bold("Nexus-DevFlow has been completely removed from the project.")}`);
+  console.log(`  ${style.dim("Deleted")} ${style.bold(String(result.deletedCount))} item(s). No DevFlow traces remain.`);
 }
 
 if (

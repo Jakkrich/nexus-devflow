@@ -5,6 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.22] - 2026-08-21
+
+### Added
+- **Interactive Terminal Spinner**: Added zero-dependency smooth terminal spinner animation during project inspection, file overlay, update, and uninstall operations.
+- **Enhanced ANSI Styling**: Colorized CLI headers, parameters, file counts, and command suggestions with bold bright cyan, green, and dimmed accents.
+
+### Changed
+- **Concise Onboarding Guide**: Streamlined post-install Next Steps to focus strictly on project baseline setup (`/adopt` for existing projects, `/onboard` for fresh projects) with clean unnumbered list.
+
 ## [2.0.21] - 2026-08-21
 
 ### Changed
