@@ -310,12 +310,20 @@ const DASHBOARD_HTML: string = `<!doctype html>
     }
 
     @keyframes livePulse {
-      0% { transform: scale(0.8); opacity: 0.6; }
-      100% { transform: scale(2.2); opacity: 0; }
+      0% { transform: scale(1); opacity: 0.7; }
+      70% { transform: scale(2.4); opacity: 0; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    @keyframes livePulseBox {
+      0% { box-shadow: 0 0 0 0 rgba(11, 122, 83, 0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(11, 122, 83, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(11, 122, 83, 0); }
     }
 
     .live-dot {
       position: relative;
+      display: inline-block;
       width: 8px;
       height: 8px;
       border-radius: 50%;
@@ -326,11 +334,16 @@ const DASHBOARD_HTML: string = `<!doctype html>
     .live-dot::after {
       content: "";
       position: absolute;
+      display: block;
       inset: -4px;
       border-radius: 50%;
       background: var(--green);
       opacity: 0;
       pointer-events: none;
+    }
+
+    .live-dot.is-live {
+      animation: livePulseBox 2.2s infinite;
     }
 
     .live-dot.is-live::after {
@@ -391,6 +404,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
     }
 
     .pill {
+      display: inline-block;
       padding: 5px 10px;
       border: 1px solid var(--line);
       border-radius: 999px;
