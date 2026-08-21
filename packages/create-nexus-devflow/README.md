@@ -1,128 +1,84 @@
 # @jakkrichm/create-nexus-devflow
 
-Install Nexus-DevFlow into an already scaffolded app or existing repository.
+Install and manage **Nexus-DevFlow 2.0** — an agentic workflow layer supporting **The 3-Pillars Model & Dual-Track Delivery** into any web app, backend, or existing codebase.
 
 [![npm version](https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef)](https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow)
 [![Validate DevFlow](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg)](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml)
 [![MIT license](https://img.shields.io/npm/l/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef)](LICENSE)
 
-[Repository](https://github.com/Jakkrich/nexus-devflow) |
+[GitHub Repository](https://github.com/Jakkrich/nexus-devflow) |
 [Documentation](https://github.com/Jakkrich/nexus-devflow#readme) |
 [Changelog](https://github.com/Jakkrich/nexus-devflow/blob/main/CHANGELOG.md)
 
-Requires Node.js 18 or newer. Run the installer from an application that has
-already been scaffolded and initialized as a Git repository.
+---
+
+## 🚀 Quick Installation
+
+Requires Node.js 18 or newer. Run the installer in your target project directory:
 
 ```bash
+# Automated install (Recommended)
+npx -y @jakkrichm/create-nexus-devflow@latest -y
+
+# Interactive install
 npx @jakkrichm/create-nexus-devflow@latest
 ```
 
-The installer copies the shared DevFlow workflow files into the current
-directory:
+The installer overlays the DevFlow workflow layer into your workspace:
+- `AGENTS.md` & `CLAUDE.md` (Universal AI guidelines)
+- `.agents/skills/` (28 Core Skills for Google Antigravity & OpenAI Codex)
+- `.claude/skills/` (28 Core Skills for Claude Code)
+- `devflow/ideas.md` (Idea inbox & backlog)
+- `devflow/context/` (Living spec & active state)
+- `devflow/history/` (Categorized delivery archives)
 
-- `AGENTS.md`
-- `CLAUDE.md`
-- `.nexus/nexus-devflow.json`
-- `devflow/context/`
-- `devflow/reference/`
+---
 
-It adds `.agents/skills/` for Codex and Google Antigravity. Claude Code uses `CLAUDE.md` plus
-`.claude/skills/`. The `--both` option (default) installs both adapter families.
+## 🏎️ Dual-Track Delivery Model
 
-It keeps the app's root `README.md` alone and installs the DevFlow framework context under
-`devflow/context/` and `devflow/reference/`.
-
-The installed workflow guides AI assistants through an explicit 8-stage lifecycle:
-
+### 1. Fast-Track (Blueprint Mode — 4 Steps)
+*Recommended for 85% of daily work (features, bug fixes, UI improvements):*
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
+/feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-It also includes public companion commands (`Goal`, `Brainstorm`, `Research`, `Debug`, `PRD`, `Issue-Triage`, `Security-Review`, `Wiki`, `Check-For-Updates`, `Help`) and the flagship guide command `/devflow`.
+### 2. Deep-Track (Architect Mode — 8 Steps)
+*Recommended for large architectural epics and database migrations:*
+```text
+00-discover ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
+```
 
-If you install Nexus-DevFlow while Claude Code is already open in the project,
-restart Claude Code in that folder so the newly added project skills appear.
-For Google Antigravity, start a new conversation or reopen the workspace after
-installing so the new slash commands are discovered.
+---
 
-## Tool support
-
-| Tool | Installed adapter | Invocation |
-| --- | --- | --- |
-| Codex | `.agents/skills/` | `$devflow`, `$00-discover`, `$40-execute`, or plain language |
-| Google Antigravity | Shared `.agents/skills/` project skills | `/devflow`, `/00-discover`, `/40-execute`, and other slash commands after restarting Antigravity |
-| Claude Code | `.claude/skills/` | `/devflow`, `/00-discover`, `/40-execute`, and other slash commands |
-| Other tools | `AGENTS.md` plus readable skill files | Ask the agent to follow the matching `SKILL.md` |
-
-Codex and Antigravity share `.agents/skills`. The `--antigravity` or `--codex` option installs
-that shared adapter.
-
-## Options
+## 🛠️ CLI Management Commands
 
 ```bash
-npx @jakkrichm/create-nexus-devflow@latest -- --codex
-npx @jakkrichm/create-nexus-devflow@latest -- --antigravity
-npx @jakkrichm/create-nexus-devflow@latest -- --claude
-npx @jakkrichm/create-nexus-devflow@latest -- --both
-npx @jakkrichm/create-nexus-devflow@latest -- --force
-npx @jakkrichm/create-nexus-devflow@latest -- --target ./my-app
+# Check project status, active work, findings, and next action
+npx @jakkrichm/create-nexus-devflow status
+
+# Update DevFlow files safely to latest version
+npx @jakkrichm/create-nexus-devflow update
+
+# Clean uninstall (keeps delivery history)
+npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
+
+# Clean eject (completely removes all DevFlow files)
+npx @jakkrichm/create-nexus-devflow eject -y
 ```
 
-Use `--force` to overwrite existing DevFlow files. Without `--force`, the
-installer asks before overwriting in an interactive terminal and exits in
-non-interactive runs.
+---
 
-## Updating an existing installation
+## 🤖 Tool Support & Invocation
 
-Preview the update plan:
+| Tool | Installed Adapter | Example Invocations |
+| :--- | :--- | :--- |
+| **Google Antigravity** | `.agents/skills/` | `/feature`, `/fix`, `/implement`, `/devflow`, `/adopt`, `/doctor` |
+| **OpenAI Codex** | `.agents/skills/` | `$feature`, `$fix`, `$implement`, `$devflow`, `$adopt`, `$doctor` |
+| **Claude Code** | `.claude/skills/` | `/feature`, `/fix`, `/implement`, `/devflow`, `/adopt`, `/doctor` |
+| **Cursor / Others** | `AGENTS.md` + `.agents/` | Follow `SKILL.md` or invoke matching command names |
 
-```bash
-npx @jakkrichm/create-nexus-devflow@latest update --dry-run
-```
+---
 
-Apply the update:
+## 📄 License
 
-```bash
-npx @jakkrichm/create-nexus-devflow@latest update
-```
-
-The updater detects the installed adapters and manages only these paths:
-
-- `.agents/skills/`
-- `.claude/skills/`
-- `devflow/reference/`
-
-It preserves `AGENTS.md`, `CLAUDE.md`, `devflow/context/`, `devflow/history/`,
-`devflow/runs/`, and `devflow/discoveries/`. The `.nexus/nexus-devflow.json` file records the
-installed version and hashes of managed files.
-
-Locally modified managed files are reported as conflicts. Interactive updates
-ask before replacing them. Non-interactive updates exit unless you pass
-`--force`, which backs up the conflicting files before replacement.
-
-## Artifact language
-
-New installations default user-facing artifacts and explanations to Thai via
-`artifact_language: "th"` in `devflow/context/ai-interaction.md`. Technical
-names, code, paths, commands, schema keys, quoted errors, and required template
-headings remain unchanged for compatibility. Because the updater preserves this
-project-owned file, the language choice remains in place across updates.
-
-For an older installation, add the same setting and guidance to its local
-`devflow/context/ai-interaction.md` once.
-
-## Help and contributing
-
-- Read the [full documentation](https://github.com/Jakkrich/nexus-devflow#readme).
-- Report reproducible problems through the repository's
-  [issue forms](https://github.com/Jakkrich/nexus-devflow/issues/new/choose).
-- Follow the repository's
-  [security policy](https://github.com/Jakkrich/nexus-devflow/security/policy)
-  for private vulnerability reports.
-- Read the
-  [contribution guide](https://github.com/Jakkrich/nexus-devflow/blob/main/CONTRIBUTING.md)
-  before opening a pull request.
-
-## License
-
-MIT License — Copyright (c) 2026 Nexus-DevFlow Contributors / Jakkrich
+MIT © [Jakkrich](https://github.com/Jakkrich)

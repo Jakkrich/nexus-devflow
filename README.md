@@ -26,7 +26,7 @@
 Install it inside any scaffolded or existing Git repository:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow
+npx -y @jakkrichm/create-nexus-devflow@latest -y
 ```
 
 > [!NOTE]
@@ -107,7 +107,7 @@ The zero-dependency CLI `@jakkrichm/create-nexus-devflow` manages the entire Dev
 
 ```bash
 # 1. Install DevFlow into current repository
-npx @jakkrichm/create-nexus-devflow
+npx -y @jakkrichm/create-nexus-devflow@latest -y
 
 # 2. Inspect project status, active tasks, findings, and recommended next action
 npx @jakkrichm/create-nexus-devflow status
