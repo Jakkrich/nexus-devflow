@@ -74,4 +74,6 @@
 
 ## 📦 Archived / Shipped Ideas
 
-*(ไอเดียที่ถูกหยิบไปทำด้วย `/feature IDEA-xxx`, `/fix IDEA-xxx` หรือ `/00-discover IDEA-xxx` จะถูกย้ายมาบันทึกที่นี่)*
+- [x] **[IDEA-006]** อัปเดตเอกสารคู่มือและ Reference ให้ครอบคลุม DevFlow v2.0.20 (The 3-Pillars Model, Categorized History & Clean Living Spec) — *Claimed in `022-update-documentation-and-guides-for-v2-0-20` (2026-08-21)*
+
+

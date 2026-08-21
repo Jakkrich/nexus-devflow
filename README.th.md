@@ -4,7 +4,7 @@
 
 <h1 align="center">Nexus-DevFlow 2.0</h1>
 
-<p align="center"><strong>เวิร์กโฟลว์ระดับขั้นแบบ Spec-Driven สำหรับการพัฒนาซอฟต์แวร์ระดับโปรดักชันร่วมกับ AI โดยที่คุณควบคุมได้ทุกขั้นตอน</strong></p>
+<p align="center"><strong>สถาปัตยกรรม 3 เสาหลัก และเวิร์กโฟลว์ Dual-Track แบบ Spec-Driven สำหรับการพัฒนาซอฟต์แวร์ระดับโปรดักชันร่วมกับ AI</strong></p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow"><img src="https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
@@ -21,7 +21,7 @@
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
-**Nexus-DevFlow 2.0** มอบสถาปัตยกรรมเวิร์กโฟลว์ 8 ขั้นตอน (`/00-Discover` ถึง `/70-Release`) สำหรับสร้างซอฟต์แวร์ร่วมกับ AI Assistant แทนที่จะทำ "Vibe Coding" แบบไม่มีโครงสร้าง DevFlow จะนำทาง AI ผ่านวงจรการพัฒนาที่มีโครงสร้างชัดเจน บันทึกสถานะเป็นไฟล์ Markdown และตรวจสอบย้อนกลับได้เสมอ
+**Nexus-DevFlow 2.0** มอบสถาปัตยกรรมเวิร์กโฟลว์ 3 เสาหลัก (**The 3-Pillars Model**) พร้อมการส่งมอบแบบ **Dual-Track Delivery** (Fast-Track 4 ขั้นตอน และ Deep-Track 8 ขั้นตอน) สำหรับสร้างซอฟต์แวร์ร่วมกับ AI Assistant แทนที่จะทำ "Vibe Coding" แบบไร้ทิศทาง DevFlow จะนำทาง AI ผ่านวงจรการพัฒนาที่มีสัญญาทางวิศวกรรมชัดเจน บันทึกสถานะเป็นไฟล์ Markdown และตรวจสอบย้อนกลับได้เสมอ
 
 ติดตั้งลงใน Git repository ใดๆ ที่ scaffold ไว้แล้วได้ทันที:
 
@@ -30,235 +30,167 @@ npx @jakkrichm/create-nexus-devflow
 ```
 
 > [!NOTE]
-> Nexus-DevFlow 2.0 ถูกออกแบบเป็น Overlay Layer ที่ครอบอยู่บน codebase ของแอปพลิเคชันคุณ เพื่อนำทักษะมัลติเอเจนต์ (`.agents/skills` & `.claude/skills`), อาร์ติแฟกต์ประจำขั้น (`devflow/`), และจุดตรวจ Senior QA ไปยัง AI IDE ที่คุณชื่นชอบ (Google Antigravity, OpenAI Codex, Claude Code, Cursor, Gemini CLI และอื่นๆ)
+> Nexus-DevFlow 2.0 ถูกออกแบบเป็น Overlay Layer ที่ครอบอยู่บน codebase ของแอปพลิเคชันคุณ เพื่อนำทักษะมัลติเอเจนต์ (`.agents/skills` & `.claude/skills`), อาร์ติแฟกต์ 3 เสาหลัก (`devflow/`), และจุดตรวจ Senior QA ไปยัง AI IDE ที่คุณชื่นชอบ (Google Antigravity, OpenAI Codex, Claude Code, Cursor, Gemini CLI และอื่นๆ)
 
-## นี่คืออะไร
+---
 
-"Vibe Coding" ที่ไร้โครงสร้างมักนำไปสู่โค้ดที่ซับซ้อนเกินควบคุม, บั๊กซ่อนแฝง, และปัญหา Context หลุดเมื่อสนทนายาวขึ้น
+## 🏛️ สถาปัตยกรรม 3 เสาหลัก (The 3-Pillars Architecture)
 
-DevFlow สร้างระบบควบคุมและกระบวนการวิศวกรรมซอฟต์แวร์ที่เข้มงวดสำหรับการพัฒนาด้วย AI:
-
-1. **สายหลัก 8 ขั้นตอนที่ชัดเจน.** ลำดับขั้นตั้งแต่การค้นหาความต้องการ (`/00-Discover`), กำหนดขอบเขต (`/10-Define`), เขียนสเปก (`/20-Spec`), วางแผน (`/30-Plan`), ลงมือพัฒนา (`/40-Execute`), ตรวจสอบคุณภาพ (`/50-Verify`), สรุปรายงาน (`/60-Report`), จนถึงการส่งมอบ (`/70-Release`)
-2. **สถานะเก็บเป็น Markdown (Markdown-First).** ทุกขั้นตอนสร้างไฟล์ Markdown ถาวรใต้ `devflow/discoveries/` และ `devflow/runs/{RUNNING_ID}/` งานของคุณจึงไม่สูญหายแม้ context ถูกล้าง
-3. **ตัวเชื่อมต่อ Dual Adapters.** รองรับทักษะ native สำหรับ OpenAI Codex & Google Antigravity (`.agents/skills/`) และ Claude Code (`.claude/skills/`)
-4. **จุดตรวจ Senior QA และรายงาน.** ขั้นตอน `/50-Verify` จะทำการตรวจสอบคุณภาพด้วย automated tests และ specialist review ก่อนสร้างรายงานสรุปทั้งแบบ HTML และ Markdown (`/60-Report`)
-
-## ภาพรวมแบบย่อ
-
-| หลักการ | ความหมาย |
-| --- | --- |
-| **สายหลักเป็นขั้นเป็นตอน** | การลำดับงานเป็นเส้นตรง (`/00-Discover` ➔ `/70-Release`) ประกันคุณภาพระดับวิศวกรรมซอฟต์แวร์ |
-| **สถานะเก็บใน Markdown** | สเปก แผน บันทึกการพัฒนา และคำตัดสิน QA อยู่ในไฟล์ Markdown ที่อ่านง่ายใต้ `devflow/` |
-| **ตัวเชื่อมต่อ Dual Adapters** | ใช้ `.agents/skills` ร่วมกันสำหรับ Codex & Antigravity และ `.claude/skills` สำหรับ Claude Code |
-| **คำสั่งผู้ช่วย (Companions)** | ผู้ช่วยเฉพาะทาง (`Brainstorm`, `PRD`, `Debug`, `Research`, `Security-Review`, `Issue-Triage`) สนับสนุนสายหลักโดยไม่ทำให้ลำดับขั้นตอนเสียไป |
-| **การตรวจสอบอัตโนมัติ** | การรัน test, การตรวจความสมบูรณ์ของเฟรมเวิร์ก และ static contract ป้องกันปัญหางานถอยหลัง (Regression) |
-
-## สารบัญ
-
-- [นี่คืออะไร](#นี่คืออะไร)
-- [ภาพรวมแบบย่อ](#ภาพรวมแบบย่อ)
-- [เริ่มต้นอย่างรวดเร็ว](#เริ่มต้นอย่างรวดเร็ว)
-- [วงจรสายหลัก (Mainline Timeline Workflow)](#วงจรสายหลัก-mainline-timeline-workflow)
-- [คำสั่งผู้ช่วยเฉพาะทาง (Companion Commands)](#คำสั่งผู้ช่วยเฉพาะทาง-companion-commands)
-- [การรองรับตัวเชื่อมต่อ AI (Tool Adapters)](#การรองรับตัวเชื่อมต่อ-ai-tool-adapters)
-- [โครงสร้างอาร์ติแฟกต์ในพื้นที่ทำงาน](#โครงสร้างอาร์ติแฟกต์ในพื้นที่ทำงาน)
-- [การอัปเดต DevFlow](#การอัปเดต-devflow)
-- [เอกสารและคู่มืออ้างอิง](#เอกสารและคู่มืออ้างอิง)
-- [ใบอนุญาต](#ใบอนุญาต)
-
-## เริ่มต้นอย่างรวดเร็ว
-
-### 1. ติดตั้ง Overlay ลงในโปรเจกต์ของคุณ
-
-Scaffold แอปพลิเคชันของคุณก่อน (เช่น Next.js, Vite, FastAPI ฯลฯ) จากนั้นเปิด terminal ในโฟลเดอร์ Git repository แล้วรันคำสั่ง:
-
-```bash
-npx @jakkrichm/create-nexus-devflow
-```
-
-คุณสามารถระบุโฟลเดอร์เป้าหมายหรือเลือกตัวเชื่อมต่อ AI เฉพาะได้:
-
-```bash
-# ระบุไดเรกทอรีเป้าหมาย
-npx @jakkrichm/create-nexus-devflow ./my-app
-
-# ระบุตัวเชื่อมต่อ AI (codex, antigravity, claude, หรือ both)
-npx @jakkrichm/create-nexus-devflow --adapter both
-```
-
-### 2. สั่งเปิดใช้งาน DevFlow ใน AI Assistant
-
-เปิดโปรเจกต์ของคุณใน AI Assistant ของคุณ (Google Antigravity, OpenAI Codex, Claude Code, Cursor ฯลฯ) แล้วรันคำสั่งเปิดตัวหลัก:
+DevFlow 2.0 จัดระเบียบบริบททั้งหมดของโปรเจกต์ออกเป็น 3 เสาหลักอย่างสะอาด ชัดเจน และประหยัด Token:
 
 ```text
-devflow
+devflow/
+│
+├── 🔮 ideas.md                 # [1. อนาคต / Future] กล่องบันทึกไอเดียพร้อม AI Scoring (Idea Inbox)
+│
+├── ⚡ context/                  # [2. ปัจจุบัน / Present] ข้อมูลแกนกลางของระบบ & งานที่กำลังทำ
+│   ├── project-overview.md     # Source of Truth สถาปัตยกรรมและ Tech Stack
+│   ├── coding-standards.md     # มาตรฐานโค้ด, กฎ TDD และ Test Gates
+│   ├── ai-interaction.md       # กฎการทำงานร่วมกับ AI และการตอบภาษาไทย
+│   ├── findings.md             # สมุดบันทึก Findings และจุดตรวจคุณภาพ (P0-P3)
+│   ├── current-stage.md        # ตัวชี้สถานะของรอบงานปัจจุบัน
+│   ├── current-feature.md      # Fast-Track Single Living Spec (สเปกมีชีวิตที่กำลังรัน)
+│   └── current-run/            # Deep-Track โฟลเดอร์รันชั่วคราว (ลบออกเมื่อ Release)
+│
+├── 📦 history/                  # [3. อดีต / Past] คลังประวัติการส่งมอบแยกตามหมวดหมู่ถาวร
+│   ├── features/               # ประวัติฟีเจอร์, สถาปัตยกรรม, เครื่องมือ (xxx-slug.md หรือโฟลเดอร์)
+│   ├── fixes/                  # ประวัติการแก้บั๊ก, Hotfix, Security patch (xxx-slug.md)
+│   ├── rollbacks/              # ประวัติการย้อนคืนฟีเจอร์อย่างปลอดภัย (YYYY-MM-DD-xxx-slug.md)
+│   └── HISTORY.md              # ตารางสรุป Master Release History Ledger
+│
+└── 🔍 discoveries/              # บันทึกผลการสำรวจล่วงหน้าก่อนเริ่มส่งมอบ (00-discover.md)
 ```
-*(หรือ `/devflow`, `$devflow`, `status`)*
 
-> **คำแนะนำ:** `devflow` คือคำสั่งเปิดตัวหลักของระบบ ทำหน้าที่สำรวจสถานะของพื้นที่ทำงาน ตรวจสอบความสมบูรณ์ของเฟรมเวิร์ก และนำทางคุณไปยังคำสั่งถัดไปที่เหมาะสมที่สุดทันที (`00-discover`, `10-define`, `40-execute`, `50-verify` ฯลฯ)
+---
 
-หรือเริ่มต้นขั้นตอนค้นหาความต้องการโดยตรงด้วยคำสั่ง:
+## 🏎️ วงจรการส่งมอบแบบ Dual-Track (Dual-Track Delivery)
 
-```text
-00-discover
-```
-*(หรือ `discover`, `/00-discover`, `$00-discover`)*
-
-## Dual-Track Delivery Model
-
-Nexus-DevFlow 2.0 รองรับการส่งมอบงาน 2 รูปแบบ:
+Nexus-DevFlow 2.0 รองรับ 2 เส้นทางการส่งมอบตามขนาดและความซับซ้อนของงาน:
 
 ### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 ขั้นตอน)
-> **เหมาะสำหรับ 85% ของงานประจำวัน** ขับเคลื่อนด้วย **Single Living Spec (`current-feature.md`)** แผ่นเดียวจบ:
+> **แนะนำสำหรับ 85% ของงานประจำวัน** (ฟีเจอร์ทั่วไป, การแก้บั๊ก, ปรับปรุง UI, Refactoring) ขับเคลื่อนด้วย **Single Living Spec (`devflow/context/current-feature.md`)**:
 
 ```text
 /feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`feature` / `fix` (`/feature`, `/fix`)**: สร้าง Living Spec (`devflow/runs/{RUN_ID}-{slug}/current-feature.md`) พร้อม Scope, Acceptance Criteria และ Checklist
-2. **`implement` (`/implement`)**: พัฒนาโค้ดตาม Checklist ทีละขั้นด้วย TDD และอัปเดตความคืบหน้าลงใน `current-feature.md`
-3. **`check` (`/check`)**: Senior QA ตรวจสอบ Multi-lane verification (Typecheck, Lint, Tests, Proof) บันทึกหลักฐานลง `current-feature.md`
-4. **`complete` (`/complete`)**: Final Safety Pass, สรุป Release Digest ลง `current-feature.md`, ทำ Git Merge และปิดรอบอย่างปลอดภัย
+1. **`feature` / `fix` (`/feature`, `/fix`)**: รวมขั้นตอน Discover, Define, Spec, Plan ไว้ในขั้นเดียว ตรวจสอบ Single Active Run Guardrail, กำหนดเลข Running ID (`xxx-slug`), และเขียนสเปกลงใน `devflow/context/current-feature.md` (รองรับการดึงไอเดียด้วย `/feature IDEA-xxx`)
+2. **`implement` (`/implement`)**: ทยอยเขียนโค้ดตาม Checklist ด้วยวินัย TDD (Red-Green-Refactor) และบันทึกผลลงใน `current-feature.md`
+3. **`check` (`/check`)**: ตรวจสอบคุณภาพระดับ Senior QA (Typecheck, Lint, Test suites, ตรวจสอบด้วยมือ) และบันทึกหลักฐานเชิงประจักษ์ลงใน `current-feature.md`
+4. **`complete` (`/complete`)**: ตรวจความปลอดภัยรอบสุดท้าย, สรุป Release Digest, ย้ายเข้าคลังประวัติ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, รีเซ็ต Stub ว่าง, รวม Git Branch และปิดรอบงาน
 
 ---
 
 ### 🏗️ Track 2: Deep-Track (Architect Mode — 8 ขั้นตอน)
-> **เหมาะสำหรับงานสถาปัตยกรรมใหญ่ งานเสี่ยงสูง หรืองาน Database Migration**:
+> **แนะนำสำหรับงานสถาปัตยกรรมขนาดใหญ่, การย้าย Database, Security Audit, และการทำงานร่วมกันของ Multi-Agents**:
 
 ```text
 00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
 ```
 
-| สเตจ | ชื่อคำสั่งมาตรฐาน (Canonical Name) | คำอธิบาย & อาร์ติแฟกต์หลัก |
+| สเตจ | คำสั่งมาตรฐาน | หน้าที่และผลลัพธ์หลัก |
 | :--- | :--- | :--- |
-| **00** | `00-discover` | สำรวจความต้องการ คัดกรองและตัดสินใจว่าควรส่งมอบงานหรือไม่ (`devflow/discoveries/`) |
-| **10** | `10-define` | ล็อกขอบเขตการส่งมอบและกำหนด Running ID (`devflow/runs/{RUNNING_ID}/10-define.md`) |
-| **20** | `20-spec` | เขียนสเปกและเกณฑ์การรับมอบงานอย่างเป็นทางการ (`20-spec.md`) |
-| **30** | `30-plan` | แปลงสเปกเป็นขั้นตอนงานที่ลงมือทำได้พร้อมรายการเช็กลิสต์ (`30-plan.md`) |
-| **40** | `40-execute` | ลงมือพัฒนาตามแผนทีละขั้นตอนพร้อมบันทึกหลักฐาน (`40-execute.md`) |
-| **50** | `50-verify` | ตรวจสอบคุณภาพโดย Senior QA รันการทดสอบและตัดสินผลลัพธ์ (`50-verify.md`) |
-| **60** | `60-report` | สรุปรายงานมาตรฐาน Markdown Report (`60-report.md`) |
-| **70** | `70-release` | แพ็กเกจงานที่ผ่านการตรวจสอบแล้วสำหรับ Merge, PR หรือส่งมอบ Deploy (`70-release.md`) |
+| **00** | `00-discover` | สำรวจความต้องการ, ตอบข้อซักถาม, และตัดสินใจว่าจะเริ่มทำหรือไม่ (`devflow/discoveries/`) |
+| **10** | `10-define` | กำหนดขอบเขตการส่งมอบและกำหนด Running ID (`devflow/context/current-run/10-define.md`) |
+| **20** | `20-spec` | เขียนสเปกอย่างเป็นทางการและกำหนดเกณฑ์การตรวจรับ Acceptance Criteria (`20-spec.md`) |
+| **30** | `30-plan` | แตกสเปกเป็นงานย่อยและสร้าง Checklist สำหรับการพัฒนา (`30-plan.md`) |
+| **40** | `40-execute` | ทยอยพัฒนาตามแผนพร้อมบันทึกหลักฐานการทดสอบ Unit Tests (`40-execute.md`) |
+| **50** | `50-verify` | ตรวจสอบคุณภาพอย่างละเอียดโดย Senior QA และตัดสินผล Pass/Fail (`50-verify.md`) |
+| **60** | `60-report` | สรุปรายงานผลการส่งมอบในรูปแบบ Markdown (`60-report.md`) |
+| **70** | `70-release` | แพ็กเกจการส่งมอบ, ย้าย `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, รวม Git และปิดรอบ |
 
-## คำสั่งผู้ช่วยเฉพาะทาง (Companion Commands)
+---
 
-คำสั่งผู้ช่วยให้การสนับสนุนเฉพาะทางแก่สายหลัก โดยไม่ทำให้ลำดับขั้นตอนเสียไป:
+## 🛠️ คู่มือคำสั่ง CLI และการใช้งาน Terminal
 
-| คำสั่งมาตรฐาน (Canonical Name) | วัตถุประสงค์ |
-| :--- | :--- |
-| `devflow` | สรุปสถานะพื้นที่ทำงาน ตรวจสอบความคืบหน้า และนำทางคำสั่งถัดไป |
-| `idea` | จดไอเดียด่วนพร้อม AI วิเคราะห์ Feasibility & Value ลง `devflow/ideas.md` |
-| `report-html` | สร้าง Interactive Standalone HTML Report Dashboard เมื่อต้องการพรีเซนต์ (`/report:html`) |
-| `onboard` | ตรวจจับ Stack และตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่ที่เพิ่งติดตั้ง |
-| `adopt` | สำรวจ Codebase เดิมและดึงบริบทเข้าสู่ DevFlow สำหรับโปรเจกต์เดิม |
-| `doctor` | ตรวจสุขภาพการตั้งค่า, Context files, Scripts และตรวจจับ Workflow Drift |
-| `try` | สร้างคู่มือการทดสอบด้วยมือทีละขั้นตอนสำหรับผู้ใช้และ Tester (Where to go / What to click / What to expect) |
-| `rollback` | วางแผนถอนฟีเจอร์หรือย้อนกลับ Run อย่างปลอดภัย พร้อมวิเคราะห์ Dependency Risks |
-| `ci` | ติดตั้ง GitHub Actions Pipeline (`.github/workflows/verify.yml`) อัตโนมัติจาก Verify Command จริง |
-| `brief` | สรุปขอบเขต ความเสี่ยง และขนาดงาน (S/M/L) แบบ Read-only ก่อนลงมือเขียนสเปก |
-| `autopilot` | โหมดทำงานอัตโนมัติต่อเนื่อง (Spec -> Plan -> Implement -> Verify -> Report) พร้อม Checkpoint commits และสรุปรายงาน |
-| `brainstorm` | ระดมความคิดและสำรวจแนวคิดโดยยังไม่เปิด Running ID |
-| `prd` | จัดทำเอกสารข้อกำหนดผลิตภัณฑ์ (PRD) ก่อนลงมือกำหนดการส่งมอบ |
-| `research` | วิจัยค้นคว้า codebase หรือค้นหาข้อมูลเว็บเพื่อสนับสนุนขั้น Discover และ Spec |
-| `debug` | วินิจฉัยหาสาเหตุของบั๊กก่อนหรือระหว่างการพัฒนา |
-| `security-review` | ตรวจสอบความปลอดภัยระดับเข้มงวดสำหรับโค้ด, diff หรือสถาปัตยกรรม |
-| `issue-triage` | รับเรื่อง คัดกรอง และตรวจสอบปัญหาบั๊กที่ได้รับแจ้ง |
-| `wiki` | จัดการคลังความรู้โปรเจกต์ใต้ `devflow/wiki/` |
-| `check-for-updates` | ตรวจสอบหรืออัปเดตชุดติดตั้ง DevFlow |
-| `help` | แนะนำขั้นตอน นำทางคำสั่ง และผังกระบวนการ |
-
-## การรองรับตัวเชื่อมต่อ AI (Tool Adapters)
-
-| เครื่องมือ | พาธตัวเชื่อมต่อ | รูปแบบการเรียกใช้งาน |
-| --- | --- | --- |
-| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`, `devflow`), slash commands (`/00-discover`), หรือภาษาธรรมชาติ |
-| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`), skill command (`$00-discover`), หรือภาษาธรรมชาติ |
-| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | ชื่อปกติ (`00-discover`), slash commands (`/00-discover`), หรือภาษาธรรมชาติ |
-| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | คำสั่งภาษาธรรมชาติหรือชื่อปกติโดยอ้างอิงแนวทางใน `AGENTS.md` |
-
-## โครงสร้างอาร์ติแฟกต์ในพื้นที่ทำงาน
-
-DevFlow 2.0 จัดเก็บอาร์ติแฟกต์ที่เป็นระเบียบอ่านง่ายใต้ `devflow/`:
-
-```text
-devflow/
-├── context/
-│   ├── project-overview.md     # แหล่งข้อมูลหลักบริบทโปรเจกต์
-│   ├── coding-standards.md     # มาตรฐานและข้อตกลงการเขียนโค้ด
-│   ├── ai-interaction.md       # ค่ากำหนดการทำงานของ AI
-│   └── findings.md             # ทะเบียนบันทึกข้อค้นพบการตรวจสอบคุณภาพ
-├── discoveries/                # อาร์ติแฟกต์ช่วงค้นหาความต้องการ (00-discover.md)
-├── runs/                       # อาร์ติแฟกต์การส่งมอบแยกตาม Running ID
-│   └── {RUNNING_ID}-{slug}/
-│       ├── 10-define.md
-│       ├── 20-spec.md
-│       ├── 30-plan.md
-│       ├── 40-execute.md
-│       ├── 50-verify.md
-│       ├── 60-report.md
-│       ├── 60-report.html
-│       └── 70-release.md
-├── research/                   # คลังข้อมูลการวิจัยค้นคว้า
-├── prds/                       # เอกสาร PRD ข้อกำหนดผลิตภัณฑ์
-├── debug/                      # รายงานการวินิจฉัยสาเหตุของปัญหา
-└── reports/                    # รายงานสรุปภาพรวมมาตรฐาน
-```
-
-## การตรวจสอบสถานะโปรเจกต์ (Terminal Status Inspection)
-
-คุณสามารถตรวจดูสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของงาน และคำแนะนำขั้นตอนถัดไปได้โดยตรงจาก Terminal โดยไม่ต้องเปิดแชทกับ AI:
+CLI แพ็กเกจ `@jakkrichm/create-nexus-devflow` (Zero Dependency) ช่วยให้คุณบริหารจัดการ DevFlow ได้โดยตรงจาก Terminal:
 
 ```bash
-# แสดงการ์ดสถานะแบบสี (ANSI Color) สวยงาม เข้าใจง่าย
+# 1. ติดตั้ง DevFlow ลงในโปรเจกต์ปัจจุบัน
+npx @jakkrichm/create-nexus-devflow
+
+# 2. ตรวจสอบสถานะโปรเจกต์, ความคืบหน้างาน, Findings, และคำสั่งแนะนำถัดไป
 npx @jakkrichm/create-nexus-devflow status
 
-# หรือแสดงผลลัพธ์เป็น Machine-Readable JSON สำหรับ CI/CD
+# แสดงผลเป็น JSON สำหรับระบบ CI/CD
 npx @jakkrichm/create-nexus-devflow status --json
 
-# หรือระบุโฟลเดอร์โปรเจกต์ที่ต้องการตรวจสอบ
-npx @jakkrichm/create-nexus-devflow status ./my-app
-```
-
-## การอัปเดต DevFlow
-
-อัปเดตโครงสร้าง DevFlow ในโปรเจกต์ของคุณให้เป็นปัจจุบันเสมอ:
-
-```bash
-# ตรวจสอบการเปลี่ยนแปลงก่อนอัปเดตจริง
-npx @jakkrichm/create-nexus-devflow update --dry-run
-
-# ดำเนินการอัปเดต
+# 3. อัปเดต DevFlow ในโปรเจกต์เป็นเวอร์ชันล่าสุดอย่างปลอดภัย
 npx @jakkrichm/create-nexus-devflow update
-```
 
-ตัวอัปเดตจะจัดการเฉพาะไฟล์เฟรมเวิร์กของ DevFlow ภายใต้ `.agents/skills/`, `.claude/skills/`, และ `devflow/reference/` โดยจะเก็บรักษาโค้ด บริบท และประวัติการทำงานของโปรเจกต์คุณไว้อย่างปลอดภัย
+# 4. ถอนการติดตั้ง DevFlow โดยยังคงเก็บประวัติงานเดิมไว้ใน history/
+npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
 
-## การถอนการติดตั้งและลบ DevFlow ออกจากโปรเจกต์ (Uninstall & Clean Eject)
-
-เมื่อคุณต้องการส่งมอบงานให้กับลูกค้า หรือเผยแพร่โค้ดเป็น Open-Source โดยไม่ต้องการให้หลงเหลือร่องรอยหรือไฟล์ของ DevFlow ในโปรเจกต์:
-
-```bash
-# ตรวจสอบรายชื่อไฟล์และโฟลเดอร์ที่จะถูกลบก่อน
-npx @jakkrichm/create-nexus-devflow uninstall --dry-run
-
-# ถอนการติดตั้งและลบไฟล์ DevFlow ทั้งหมดทันที
-npx @jakkrichm/create-nexus-devflow uninstall -y
-
-# หรือใช้คำสั่ง alias eject
+# หรือถอนการติดตั้งไฟล์ DevFlow ออกทั้งหมดแบบ 100% สะอาด (Eject)
 npx @jakkrichm/create-nexus-devflow eject -y
 ```
 
-คำสั่งนี้จะลบไฟล์ `devflow/`, `.agents/`, `.claude/`, `.nexus/`, `AGENTS.md`, และ `CLAUDE.md` ออกอย่างหมดจด 100% โดย **ไม่แตะต้องซอร์สโค้ดของแอปพลิเคชันคุณ** (`src/`, `package.json`, `.git/`) แน่นอนครับ
+---
 
-## เอกสารและคู่มืออ้างอิง
+## 🔄 คู่มือการอัปเกรด (Migration Guide จากเวอร์ชันเก่า / โฟลเดอร์ Runs)
 
-- [คู่มือเริ่มต้นอย่างรวดเร็ว (Quick Start)](docs/quickstart.md)
-- [คู่มือการใช้งานและวงจรชีวิต (Usage Guide)](docs/USAGE.md)
-- [ข้อกำหนดอาร์ติแฟกต์ในพื้นที่ทำงาน (Workspace Artifacts)](docs/workspace-artifacts.md)
-- [แผนผังหน้างานคำสั่ง (Workflow Surface Map)](docs/workflow-surface-map.md)
-- [สเปกเวิร์กโฟลว์การตรวจทานด้วยคน (Manual Review Spec)](docs/manual-review-workflow-spec.md)
-- [กฎเกณฑ์การบริหารจัดการ (Governance Rules)](docs/governance-rules.md)
+หากโปรเจกต์เดิมของคุณใช้ DevFlow เวอร์ชันเก่า (ที่มีโฟลเดอร์ `devflow/runs/RUN-xxx`) คุณสามารถอัปเกรดเป็น **DevFlow 2.0 (The 3-Pillars Model)** ได้ง่ายๆ:
 
-## ใบอนุญาต
+### วิธีที่ 1: Clean Reinstall (แนะนำที่สุด - สะอาด 100%)
+```bash
+# 1. ถอนการติดตั้งไฟล์ระบบเดิมออก โดยเก็บประวัติงานไว้
+npx @jakkrichm/create-nexus-devflow@latest uninstall --keep-history -y
 
-โปรเจกต์นี้อยู่ภายใต้ใบอนุญาต [MIT License](LICENSE)
+# 2. ติดตั้ง DevFlow 2.0 เวอร์ชันล่าสุด
+npx @jakkrichm/create-nexus-devflow@latest -y
+
+# 3. ให้ AI สแกนโค้ดจริงในโปรเจกต์เพื่อสร้าง Source of Truth
+/adopt
+```
+
+### วิธีที่ 2: In-Place Update (อัปเดตทับ)
+```bash
+# 1. รันคำสั่งอัปเดต
+npx @jakkrichm/create-nexus-devflow@latest update
+
+# 2. ย้ายโฟลเดอร์งานเก่าจาก devflow/runs/RUN-xxx ไปไว้ที่ devflow/history/features/xxx-slug
+# 3. ลบโฟลเดอร์ devflow/runs/ ที่ว่างเปล่าออก
+# 4. ให้ AI ซิงก์บริบทใหม่
+/overview
+```
+
+---
+
+## 🌐 คำสั่งผู้ช่วยเฉพาะทาง (Companion Commands)
+
+| คำสั่งมาตรฐาน | หน้าที่ |
+| :--- | :--- |
+| `devflow` | นำทางกระบวนการ, ตรวจสอบสถานะโปรเจกต์, และแนะนำคำสั่งถัดไป |
+| `idea` | จดบันทึกไอเดียเร็วๆ พร้อม AI ช่วยวิเคราะห์คะแนนความคุ้มค่าลง `devflow/ideas.md` |
+| `report-html` | สร้าง Dashboard สรุปผลแบบ HTML Interactive (`/report:html`) |
+| `onboard` | สำรวจเทคโนโลยีและตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่ |
+| `adopt` | สำรวจโค้ดเดิมและดึง DevFlow เข้าไปทำงานร่วมกับโปรเจกต์เดิมที่มีอยู่แล้ว |
+| `doctor` | ตรวจสอบสุขภาพของระบบ, สคริปต์, อะแดปเตอร์ และความสมบูรณ์ของเวิร์กโฟลว์ |
+| `try` | คู่มือการทดสอบด้วยมือทีละขั้นตอนสำหรับมนุษย์ (ต้องไปที่ไหน, คลิกอะไร, คาดหวังผลลัพธ์แบบใด) |
+| `rollback` | วางแผนย้อนคืนฟีเจอร์อย่างปลอดภัยพร้อมวิเคราะห์ความเสี่ยงของ Dependency |
+| `ci` | ตั้งค่าและสร้าง GitHub Actions Workflow สำหรับตรวจสอบคุณภาพอัตโนมัติ |
+| `brief` | ดูสรุปขอบเขตและขนาดของฟีเจอร์ก่อนเริ่มเขียนสเปก |
+| `autopilot` | โหมดทำงานอัตโนมัติแบบกำหนดขอบเขต (Spec -> Plan -> Implement -> Verify) |
+| `brainstorm` | ระดมความคิดและสำรวจแนวคิดใหม่ๆ โดยไม่ต้องสร้าง Running ID |
+| `prd` | ร่างเอกสาร Product Requirements Document ก่อนเริ่มกระบวนการส่งมอบ |
+| `research` | ค้นคว้าข้อมูลในโค้ดเบสหรืออินเทอร์เน็ตเพื่อสนับสนุนขั้นตอนสเปก |
+| `debug` | ค้นหาสาเหตุของบั๊กอย่างเป็นระบบก่อนลงมือแก้ไข |
+| `security-review` | ตรวจสอบความปลอดภัยระดับสูงสำหรับโค้ดและสถาปัตยกรรม |
+| `issue-triage` | รับเรื่อง, คัดกรอง และตรวจสอบประเด็นปัญหาที่ได้รับแจ้ง |
+
+---
+
+## 🔌 การรองรับตัวเชื่อมต่อ AI (Tool Adapters)
+
+| AI Assistant / IDE | ตำแหน่ง Adapter | รูปแบบการเรียกใช้งานที่รองรับ |
+| :--- | :--- | :--- |
+| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | เรียกด้วยชื่อ (`feature`, `devflow`), ใช้ Slash (`/feature`), หรือภาษาธรรมชาติ |
+| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | เรียกด้วยชื่อ (`feature`), ใช้ Dollar sign (`$feature`), หรือภาษาธรรมชาติ |
+| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | เรียกด้วยชื่อ (`feature`), ใช้ Slash (`/feature`), หรือภาษาธรรมชาติ |
+| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | เรียกตามชื่อคำสั่งหรือภาษาธรรมชาติที่อ้างอิง `AGENTS.md` |
+
+---
+
+## 📜 ใบอนุญาต (License)
+
+โปรเจกต์นี้เผยแพร่ภายใต้สัญญาอนุญาต [MIT License](LICENSE)

@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-21 | `022` | Feature | อัปเดตเอกสารคู่มือและ Reference ให้ครอบคลุม DevFlow v2.0.20 (The 3-Pillars Model, Dual-Track & Migration Guide) | `HEAD` | `Released` | [`022-update-documentation-and-guides-for-v2-0-20.md`](features/022-update-documentation-and-guides-for-v2-0-20.md) |
 | 2026-08-21 | `021` | Feature | สถาปัตยกรรม 3 เสาหลัก (The 3-Pillars Model), Categorized History, ตัด `runs/`, ใช้ ID `xxx-slug`, และ Single Active Run Guardrail | `HEAD` | `Released` | [`60-report.md`](features/021-categorized-history-and-clean-living-spec-architecture/60-report.md) |
 | 2026-08-20 | `020` | Feature | คำสั่ง Uninstall / Eject สำหรับถอนการติดตั้งไฟล์ DevFlow ออกจากโปรเจกต์อย่างหมดจด (Clean Eject) | `HEAD` | `Released` | [`current-feature.md`](features/020-uninstall-and-eject-devflow-cli/current-feature.md) |
 | 2026-08-20 | `019` | Feature | ซิงก์ฟีเจอร์ Status CLI, Project Detection, Unit Tests และ Upstream Baseline จาก AI Blueprint v0.9.1 | `HEAD` | `Released` | [`60-report.md`](features/019-sync-upstream-status-cli-and-project-detection/60-report.md) |
