@@ -4,7 +4,7 @@
 
 <h1 align="center">Nexus-DevFlow 2.0</h1>
 
-<p align="center"><strong>An agent-ready stage-based workflow layer for building production software with AI.</strong></p>
+<p align="center"><strong>The 3-Pillars & Dual-Track Agentic Workflow Layer for Building Production Software with AI.</strong></p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow"><img src="https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
@@ -21,7 +21,7 @@
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
-**Nexus-DevFlow 2.0** provides an 8-stage agentic workflow layer (`/00-Discover` through `/70-Release`) for building production software with AI assistants. Instead of unstructured "vibe coding", DevFlow guides AI through an explicit, markdown-first, auditable delivery lifecycle.
+**Nexus-DevFlow 2.0** provides a robust, dual-track agentic workflow layer supporting **The 3-Pillars Workspace Architecture** and **Dual-Track Delivery** (Fast-Track 4 Steps & Deep-Track 8 Steps) for building production software with AI assistants. Instead of unstructured "vibe coding", DevFlow guides AI through an explicit, markdown-first, auditable delivery lifecycle.
 
 Install it inside any scaffolded or existing Git repository:
 
@@ -30,100 +30,59 @@ npx @jakkrichm/create-nexus-devflow
 ```
 
 > [!NOTE]
-> Nexus-DevFlow 2.0 is designed as a workflow layer overlay that sits on top of your application codebase, bringing multi-agent skills (`.agents/skills` & `.claude/skills`), structured stage artifacts (`devflow/`), and senior QA gates to your favorite AI IDE (Google Antigravity, OpenAI Codex, Claude Code, Cursor, Gemini CLI, and others).
+> Nexus-DevFlow 2.0 is designed as a workflow layer overlay that sits on top of your application codebase, bringing multi-agent skills (`.agents/skills` & `.claude/skills`), structured 3-pillars context (`devflow/`), and senior QA gates to your favorite AI IDE (Google Antigravity, OpenAI Codex, Claude Code, Cursor, Gemini CLI, and others).
 
-## What this is
+---
 
-"Vibe coding" without structure leads to unmaintainable code, hidden regressions, and context loss. 
+## 🏛️ The 3-Pillars Workspace Architecture
 
-DevFlow establishes a rigorous, stage-based control system for AI-assisted development:
-
-1. **Explicit 8-Stage Mainline.** Clear progression from Discovery (`/00-Discover`), Definition (`/10-Define`), Specification (`/20-Spec`), Planning (`/30-Plan`), Implementation (`/40-Execute`), Verification (`/50-Verify`), Reporting (`/60-Report`), to Release (`/70-Release`).
-2. **Markdown-First State.** Every stage produces durable markdown artifacts under `devflow/discoveries/` and `devflow/runs/{RUNNING_ID}/`. Your work survives chat clears and context limits.
-3. **Dual Tool Adapters.** Native skills for OpenAI Codex & Google Antigravity (`.agents/skills/`) and Claude Code (`.claude/skills/`).
-4. **Senior QA & Verification Gates.** Stage `/50-Verify` performs automated and specialist verification before generating human-friendly HTML/markdown reports (`/60-Report`).
-
-## At a glance
-
-| Principle | What it means |
-| --- | --- |
-| **Stage-based Mainline** | Linear progression (`/00-Discover` ➔ `/70-Release`) guarantees structured software engineering. |
-| **Markdown-First State** | All specs, plans, implementation logs, and QA verdicts live in human-readable markdown files under `devflow/`. |
-| **Dual Adapter Layer** | Shared `.agents/skills` for Codex & Antigravity, `.claude/skills` for Claude Code. |
-| **Companion Commands** | On-demand specialists (`Brainstorm`, `PRD`, `Debug`, `Research`, `Security-Review`, `Issue-Triage`) support the mainline without breaking stage linearity. |
-| **Automatic Verification** | Built-in test execution, framework validation, and static contracts prevent regressions. |
-
-## Contents
-
-- [What this is](#what-this-is)
-- [At a glance](#at-a-glance)
-- [Quick start](#quick-start)
-- [Mainline Timeline Workflow](#mainline-timeline-workflow)
-- [Public Companion Commands](#public-companion-commands)
-- [Tool Adapter Support](#tool-adapter-support)
-- [Workspace Artifact Layout](#workspace-artifact-layout)
-- [Updating DevFlow](#updating-devflow)
-- [Documentation & References](#documentation--references)
-- [License](#license)
-
-## Quick start
-
-### 1. Overlay into your project
-
-Scaffold your application first (using Next.js, Vite, FastAPI, etc.), navigate into your Git repository, and run the overlay installer:
-
-```bash
-npx @jakkrichm/create-nexus-devflow
-```
-
-You can also specify a target path or select specific tool adapters:
-
-```bash
-# Target directory
-npx @jakkrichm/create-nexus-devflow ./my-app
-
-# Specific tool adapter (codex, antigravity, claude, or both)
-npx @jakkrichm/create-nexus-devflow --adapter both
-```
-
-### 2. Launch DevFlow in your AI Assistant
-
-Open your project in your AI Assistant (Google Antigravity, OpenAI Codex, Claude Code, Cursor, etc.) and run the flagship guide command:
+DevFlow 2.0 organizes all project intelligence and workflow history into three clean pillars representing Future, Present, and Past:
 
 ```text
-devflow
+devflow/
+│
+├── 🔮 ideas.md                 # [1. Future / Backlog] Centralized Idea Inbox with AI scoring
+│
+├── ⚡ context/                  # [2. Present / Active] Living Source of Truth & Active Work
+│   ├── project-overview.md     # Primary source of truth for architecture and tech stack
+│   ├── coding-standards.md     # Engineering conventions, TDD rules, and test gates
+│   ├── ai-interaction.md       # AI agent interaction rules and operational preferences
+│   ├── findings.md             # Quality, security, and verification ledger (P0-P3)
+│   ├── current-stage.md        # Active stage run tracker and state pointer
+│   ├── current-feature.md      # Fast-Track Single Living Spec (Active work / stub when idle)
+│   └── current-run/            # Deep-Track Active Run folder (Temporary during execution)
+│
+├── 📦 history/                  # [3. Past / Completed] Permanent Categorized Delivery Archives
+│   ├── features/               # Completed features, migrations, and tooling (xxx-slug.md or folder)
+│   ├── fixes/                  # Completed bug fixes, hotfixes, security patches (xxx-slug.md)
+│   ├── rollbacks/              # Safely reversed feature records (YYYY-MM-DD-xxx-slug.md)
+│   └── HISTORY.md              # Master release history ledger summary table
+│
+└── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug/00-discover.md)
 ```
-*(or `/devflow`, `$devflow`, `status`)*
 
-> **Tip:** `devflow` is your entry command. It inspects your workspace state, checks framework health, and routes you to the exact next command (`00-discover`, `10-define`, `40-execute`, `50-verify`, etc.).
+---
 
-Alternatively, start directly with request discovery:
+## 🏎️ Dual-Track Delivery Model
 
-```text
-00-discover
-```
-*(or `discover`, `/00-discover`, `$00-discover`)*
-
-## Dual-Track Delivery Model
-
-Nexus-DevFlow 2.0 supports two delivery tracks based on task complexity:
+Nexus-DevFlow 2.0 supports two distinct delivery tracks based on task scope and governance requirements:
 
 ### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 Steps)
-> **Recommended for 85% of daily work** (features, bug fixes, UI improvements, iterative tasks) driven by a **Single Living Spec (`current-feature.md`)**:
+> **Recommended for 85% of daily engineering work** (features, bug fixes, UI improvements, iterative refactoring) driven by the **Single Living Spec (`devflow/context/current-feature.md`)**:
 
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`feature` / `fix` (`/feature`, `/fix`)**: Allocates sequential Running ID and creates the Single Living Spec (`devflow/runs/{RUN_ID}-{slug}/current-feature.md`).
-2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with TDD discipline and appends progress to `current-feature.md`.
-3. **`check` (`/check`)**: Senior QA review, multi-lane verification (Typecheck, Lint, Test suites, manual proof), and records evidence into `current-feature.md`.
-4. **`complete` (`/complete`)**: Final safety pass, records Release Digest in `current-feature.md`, performs git merge, and closes the run without auto HTML generation.
+1. **`feature` / `fix` (`/feature`, `/fix`)**: Combines Discover, Define, Spec, and Plan. Checks Single Active Run Guardrail, allocates sequential ID (`xxx-slug`), and writes `devflow/context/current-feature.md`. Supports intake from Idea Inbox (`/feature IDEA-xxx`).
+2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with TDD discipline (Red-Green-Refactor) and appends progress to `current-feature.md`.
+3. **`check` (`/check`)**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof), and records evidence into `current-feature.md`.
+4. **`complete` (`/complete`)**: Final safety pass, records Release Digest, auto-archives `current-feature.md` ➔ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, resets idle stub, performs git merge, and closes the run.
 
 ---
 
 ### 🏗️ Track 2: Deep-Track (Architect Mode — 8 Steps)
-> **Recommended for large architectural epics, database migrations, and multi-agent coordination**:
+> **Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination**:
 
 ```text
 00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
@@ -132,17 +91,72 @@ Nexus-DevFlow 2.0 supports two delivery tracks based on task complexity:
 | Stage | Canonical Command Name | Description & Core Artifacts |
 | :--- | :--- | :--- |
 | **00** | `00-discover` | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
-| **10** | `10-define` | Lock delivery boundaries and allocate Running IDs (`devflow/runs/{RUNNING_ID}/10-define.md`). |
+| **10** | `10-define` | Lock delivery boundaries and allocate sequential IDs (`devflow/context/current-run/10-define.md`). |
 | **20** | `20-spec` | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
 | **30** | `30-plan` | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
-| **40** | `40-execute` | Execute planned tasks incrementally with step evidence (`40-execute.md`). |
+| **40** | `40-execute` | Execute planned tasks incrementally with step evidence and unit tests (`40-execute.md`). |
 | **50** | `50-verify` | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
 | **60** | `60-report` | Produce standardized markdown delivery digest report (`60-report.md`). |
-| **70** | `70-release` | Package verified work for merge, PR, or deployment handoff (`70-release.md`). |
+| **70** | `70-release` | Package verified work, archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, git merge, and close run. |
 
-## Public Companion Commands
+---
 
-Companion commands provide specialized support without interrupting the linear mainline stage progression:
+## 🛠️ CLI Quick Start & Commands
+
+The zero-dependency CLI `@jakkrichm/create-nexus-devflow` manages the entire DevFlow lifecycle directly from your terminal:
+
+```bash
+# 1. Install DevFlow into current repository
+npx @jakkrichm/create-nexus-devflow
+
+# 2. Inspect project status, active tasks, findings, and recommended next action
+npx @jakkrichm/create-nexus-devflow status
+
+# Output machine-readable JSON for CI/CD pipelines
+npx @jakkrichm/create-nexus-devflow status --json
+
+# 3. Update existing DevFlow installation safely to latest version
+npx @jakkrichm/create-nexus-devflow update
+
+# 4. Completely uninstall DevFlow while preserving past delivery history
+npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
+
+# Or completely remove all DevFlow files and adapters (eject)
+npx @jakkrichm/create-nexus-devflow eject -y
+```
+
+---
+
+## 🔄 Migration Guide (Upgrading from DevFlow 1.x / Runs Structure)
+
+If your existing codebase uses the older DevFlow layout (with `devflow/runs/RUN-xxx` folders), upgrade to **DevFlow 2.0 (The 3-Pillars Model)** using either of the following methods:
+
+### Option A: Clean Reinstall (Recommended)
+```bash
+# 1. Uninstall legacy files while preserving your history
+npx @jakkrichm/create-nexus-devflow@latest uninstall --keep-history -y
+
+# 2. Install the fresh DevFlow 2.0 baseline
+npx @jakkrichm/create-nexus-devflow@latest -y
+
+# 3. In your AI IDE, scan codebase to bootstrap context
+/adopt
+```
+
+### Option B: In-Place Update
+```bash
+# 1. Run updater
+npx @jakkrichm/create-nexus-devflow@latest update
+
+# 2. Move completed legacy runs from devflow/runs/RUN-xxx to devflow/history/features/xxx-slug
+# 3. Delete the empty devflow/runs/ directory
+# 4. In your AI IDE, refresh project overview
+/overview
+```
+
+---
+
+## 🌐 Public Companion Commands
 
 | Canonical Command Name | Purpose |
 | :--- | :--- |
@@ -154,7 +168,7 @@ Companion commands provide specialized support without interrupting the linear m
 | `doctor` | Read-only health check for setup, scripts, adapters, and workflow drift. |
 | `try` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
 | `rollback` | Safe feature/run reversal planner with dependency risk analysis. |
-| `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup and alignment. |
+| `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup. |
 | `brief` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
 | `autopilot` | Optional explicit bounded loop (spec -> plan -> implement -> verify -> report). |
 | `brainstorm` | Brainstorm ideas and explore concepts without allocating running IDs. |
@@ -163,102 +177,20 @@ Companion commands provide specialized support without interrupting the linear m
 | `debug` | Root cause investigation for bugs before or during implementation. |
 | `security-review` | High-severity security review for code, diffs, or architecture. |
 | `issue-triage` | Intake, triage, and duplicate checking for reported issues. |
-| `wiki` | Knowledge base management under `devflow/wiki/`. |
-| `check-for-updates` | Verify or upgrade DevFlow setup. |
-| `help` | Process assistance, intent routing, and sitemap guidance. |
 
-## Tool Adapter Support
+---
 
-| Tool | Adapter Path | Invocation Support |
-| --- | --- | --- |
-| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`, `devflow`), slash commands (`/00-discover`), or natural language |
-| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`), skill command (`$00-discover`), or natural language |
-| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Plain names (`00-discover`), slash commands (`/00-discover`), or natural language |
-| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Plain names or natural language instructions referencing `AGENTS.md` |
+## 🔌 Tool Adapter Support
 
-## Workspace Artifact Layout
+| AI Assistant / IDE | Adapter Path | Supported Invocations |
+| :--- | :--- | :--- |
+| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`, `devflow`), slash commands (`/00-discover`, `/feature`), or natural language |
+| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | Plain names (`feature`), skill command (`$feature`), or natural language |
+| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Plain names (`feature`), slash commands (`/feature`), or natural language |
+| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Plain names or natural language referencing `AGENTS.md` |
 
-DevFlow 2.0 maintains a clean, human-readable workspace under `devflow/`:
+---
 
-```text
-devflow/
-├── context/
-│   ├── project-overview.md     # Source of truth project context
-│   ├── coding-standards.md     # Project conventions & guidelines
-│   ├── ai-interaction.md       # AI operational preferences
-│   └── findings.md             # Quality & audit findings ledger
-├── discoveries/                # Pre-delivery discovery artifacts (00-discover.md)
-├── runs/                       # Per-running-ID delivery artifacts
-│   └── {RUNNING_ID}-{slug}/
-│       ├── 10-define.md
-│       ├── 20-spec.md
-│       ├── 30-plan.md
-│       ├── 40-execute.md
-│       ├── 50-verify.md
-│       ├── 60-report.md
-│       ├── 60-report.html
-│       └── 70-release.md
-├── research/                   # Durable research library
-├── prds/                       # Product Requirements Documents
-├── debug/                      # Root cause analysis reports
-└── reports/                    # Standardized cross-cutting reports
-```
-
-## Inspecting Project Status
-
-You can inspect the full status of your project directly from the terminal without opening an AI chat session:
-
-```bash
-# Display human-friendly ANSI colored status card
-npx @jakkrichm/create-nexus-devflow status
-
-# Or output machine-readable JSON for CI/CD pipelines
-npx @jakkrichm/create-nexus-devflow status --json
-
-# Or inspect a specific directory
-npx @jakkrichm/create-nexus-devflow status ./my-app
-```
-
-## Updating DevFlow
-
-Keep your project's DevFlow setup up to date:
-
-```bash
-# Preview changes before updating
-npx @jakkrichm/create-nexus-devflow update --dry-run
-
-# Apply update
-npx @jakkrichm/create-nexus-devflow update
-```
-
-The updater manages only DevFlow framework files under `.agents/skills/`, `.claude/skills/`, and `devflow/reference/`, preserving your project's custom code, context, and run history.
-
-## Uninstalling & Ejecting DevFlow
-
-If you need to completely remove DevFlow from your codebase before handing off a project or making it open-source without leaving any DevFlow traces:
-
-```bash
-# Preview files and directories that will be deleted
-npx @jakkrichm/create-nexus-devflow uninstall --dry-run
-
-# Completely remove all DevFlow files and adapters
-npx @jakkrichm/create-nexus-devflow uninstall -y
-
-# Alternatively, use the eject alias
-npx @jakkrichm/create-nexus-devflow eject -y
-```
-
-This cleanly deletes `devflow/`, `.agents/`, `.claude/`, `.nexus/`, `AGENTS.md`, and `CLAUDE.md`, leaving your application source code (`src/`, `package.json`, `.git/`) 100% untouched.
-
-## Documentation & References
-
-- [Quick Start Guide](docs/quickstart.md)
-- [Usage & Lifecycle Guide](docs/USAGE.md)
-- [Workspace Artifacts Specification](docs/workspace-artifacts.md)
-- [Workflow Surface Map](docs/workflow-surface-map.md)
-- [Manual Review Workflow Spec](docs/manual-review-workflow-spec.md)
-- [Governance Rules](docs/governance-rules.md)
-
-## License
+## 📜 License
 
 This project is licensed under the [MIT License](LICENSE).
