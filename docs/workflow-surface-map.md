@@ -1,115 +1,60 @@
+# Workflow Surface Map (28 Core Skills)
+
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.0**.
+
 ---
-title: Workflow Surface Map
-version: 2.0
-status: active
-updated: 2026-06-18
+
+## 1. Universal Command Invocations
+
+Each command in DevFlow has exactly **one canonical name** and can be invoked across AI IDEs:
+- **Slash Prefix (`/`)**: For Google Antigravity, Claude Code, Gemini CLI (e.g. `/feature`, `/devflow`, `/00-discover`).
+- **Dollar Prefix (`$`)**: For OpenAI Codex (e.g. `$feature`, `$devflow`, `$00-discover`).
+- **Plain Canonical Name**: Direct tool/skill calling in generic terminals or non-native agents.
+
 ---
 
-# Workflow Surface Map
+## 2. Canonical Surface Taxonomy (28 Core Skills)
 
-This document decides which workflow surfaces should remain public commands, which should stay internal companions, and which behaviors should live primarily in skills or agents in DevFlow 2.0.
+### 🏎️ Track 1: Fast-Track (5 Skills)
+| Command | Category | Purpose | Artifact |
+| :--- | :--- | :--- | :--- |
+| `feature` | Spec & Plan | Combines discovery, specification, and task breakdown for planned work. | `devflow/context/current-feature.md` |
+| `fix` | Spec & Plan | Documents and specs ad-hoc bug repairs or small changes. | `devflow/context/current-feature.md` |
+| `implement` | Execution | Incrementally executes checklist tasks with TDD discipline. | `devflow/context/current-feature.md` |
+| `check` | Quality Gate | Senior QA multi-lane verification matrix (Typecheck, Lint, Tests, Security). | `devflow/context/current-feature.md` |
+| `complete` | Delivery | Final safety audit, Conventional Commit, SemVer, branch merge, and archiving. | `devflow/history/{features\|fixes\|rollbacks}/` |
 
-## Decision Rule
+---
 
-- If users should call the surface directly and it has a clear input, output, or handoff contract, keep it as a `public command`.
-- If the behavior is mainly a reusable method that should be invoked from a workflow or agent, route it to a `skill target`.
-- If the behavior is mainly specialist ownership with accountable judgment, route it to an `agent target`.
-- If the content is still useful but should not be a first-choice public entry point, keep it as an `internal companion`.
-- If the surface remains only for history or backward reference, treat it as `archive`.
+### 🏗️ Track 2: Deep-Track (8 Skills)
+| Command | Category | Purpose | Artifact |
+| :--- | :--- | :--- | :--- |
+| `00-discover` | Exploration | Problem exploration and Go/No-Go routing before delivery commitment. | `devflow/discoveries/DISC-xxx/00-discover.md` |
+| `10-define` | Definition | Locks delivery boundaries, allocates sequential ID `xxx-slug`, and sets scope. | `devflow/context/current-run/10-define.md` |
+| `20-spec` | Specification | Formal markdown specification contract with acceptance criteria. | `devflow/context/current-run/20-spec.md` |
+| `30-plan` | Planning | Breaks down spec into executable tasks with TDD test decisions. | `devflow/context/current-run/30-plan.md` |
+| `40-execute` | Execution | Step-by-step task implementation behind review gates. | `devflow/context/current-run/40-execute.md` |
+| `50-verify` | Quality Gate | Senior QA 6-lane verification matrix. | `devflow/context/current-run/50-verify.md` |
+| `60-report` | Reporting | Standardized delivery digest and retrospective insights. | `devflow/context/current-run/60-report.md` |
+| `70-release` | Delivery | Release packaging, SemVer, git merge, and history archiving. | `devflow/history/{category}/{xxx-slug}/` |
 
-## Public Commands
+---
 
-| File | Decision | Why |
+### 🧰 Companion Tools & Quality Gates (15 Skills)
+| Command | Category | Purpose |
 | :--- | :--- | :--- |
-| `devflow` | `public command` | Flagship interactive guide, state inspector, and intent router. |
-| `onboard` | `public command` | Detects stack and tunes baseline setup for freshly scaffolded projects. |
-| `adopt` | `public command` | Surveys existing codebases and bootstraps DevFlow into brownfield projects. |
-| `doctor` | `public command` | Read-only health check for setup, scripts, adapters, and workflow drift. |
-| `try` | `public command` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
-| `rollback` | `public command` | Safe feature/run reversal planner with dependency risk analysis. |
-| `ci` | `public command` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup and alignment. |
-| `brief` | `public command` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
-| `autopilot` | `public command` | Explicit autonomous bounded delivery loop across spec/plan/implement/verify/report. |
-| `Goal.md` | `public command` | It routes broad goals before the work enters the mainline. |
-| `Brainstorm.md` | `public command` | It is a common user-facing ideation surface before direction is locked. |
-| `Research.md` | `public command` | It is a clear command that users can invoke directly for evidence gathering. |
-| `Debug.md` | `public command` | Root-cause analysis is a distinct public need. |
-| `PRD.md` | `public command` | Product framing still matters before a stable spec exists. |
-| `Issue-Triage.md` | `public command` | Issue-driven intake is a clear standalone use case. |
-| `Security-Review.md` | `public command` | Focused security review of target directory or project. |
-| `Wiki.md` | `public command` | It supports direct knowledge query and capture. |
-| `Check-For-Updates.md` | `public command` | Install and upgrade verification is a distinct maintainer and onboarding need. |
-| `Help.md` | `public command` | It remains the primary routing and onboarding command. |
-
-## Keep Internal For Now
-
-| File | Decision | Future direction |
-| :--- | :--- | :--- |
-| `Preview.md` | `internal companion` | Core behavior now lives in `preview-local-check`; keep this as a wrapper for now. |
-| `Simplify.md` | `internal companion` | `code-simplification` is now the primary behavior surface. |
-| `Spec-Research.md` | `internal companion` | Core behavior now lives in `spec-research`; keep this as a wrapper for now. |
-| `Competitor.md` | `internal companion` | Core behavior now lives in `competitor-analysis`; keep this as a wrapper for now. |
-| `Roadmap.md` | `internal companion` | Core behavior now lives in `roadmap-strategy`; keep this as a strategy wrapper for now. |
-| `Spec-Orchestrate.md` | `internal companion` | Core behavior now lives in `spec-orchestration`; keep this as a wrapper for now. |
-| `Test.md` | `internal companion` | Core behavior now lives in `test-execution-and-coverage`; keep this as a wrapper for now. |
-| `QA-Orchestrate.md` | `internal companion` | Core behavior now lives in `verification-orchestration`; keep this as a wrapper for now. |
-| `Followup.md` | `internal companion` | Core behavior now lives in `review-followup-routing` with `task-followup` behavior. |
-| `Human-Approve.md` | `internal companion` | Core behavior now lives in `human-review-decisions`; keep this as a wrapper for now. |
-| `Human-Feedback.md` | `internal companion` | Core behavior now lives in `human-review-decisions`; keep this as a wrapper for now. |
-| `Human-ReCheck.md` | `internal companion` | Core behavior now lives in `human-review-decisions`; keep this as a wrapper for now. |
-| `Human-Reject.md` | `internal companion` | Core behavior now lives in `human-review-decisions`; keep this as a wrapper for now. |
-| `Commit.md` | `internal companion` | Core behavior now lives in `release-git-operations`; keep this as a wrapper for now. |
-| `PR.md` | `internal companion` | Core behavior now lives in `release-git-operations`; keep this as a wrapper for now. |
-| `PR-Review.md` | `internal companion` | Core behavior now lives in `pr-review-analysis`; keep this as a wrapper for now. |
-| `PR-Followup.md` | `internal companion` | Core behavior now lives in `review-followup-routing` with `pr-followup` behavior. |
-| `Merge.md` | `internal companion` | Core behavior now lives in `release-git-operations`; keep this as a wrapper for now. |
-| `Deploy.md` | `internal companion` | Core behavior now lives in `release-git-operations`; keep this as a wrapper for now. |
-| `Changelog.md` | `internal companion` | Core behavior now lives in `release-git-operations`; keep this as a wrapper for now. |
-| `Insight.md` | `internal companion` | Core behavior now lives in `insight-capture`; keep this as a wrapper for now. |
-| `Agent.md` | `internal companion` | Core behavior now lives in `specialist-agent-routing`; keep this as an advanced wrapper for now. |
-| `grill-with-docs` (when present) | `internal skill` | Use as optional stage-support questioning for Define, Spec, or complex Plan work. Do not promote it to a required public pre-step. |
-| `grill-with-docs` (when present) | `internal skill` | Use as optional stage-support questioning for Define, Spec, or complex Plan work. Do not promote it to a required public pre-step. |
-
-## Agent Targets
-
-| Current file | Preferred target |
-| :--- | :--- |
-| `Spec-Orchestrate.md` | `spec-orchestration` or `orchestrator` |
-| `Roadmap.md` | `roadmap-strategy` or a strategy-oriented planner mode |
-| `Agent.md` | `specialist-agent-routing` or direct agent invocation guidance through `Help` |
-
-## Skill Targets
-
-| Current file | Preferred target |
-| :--- | :--- |
-| `Preview.md` | `preview-local-check` |
-| `Simplify.md` | `code-simplification` |
-| `Spec-Research.md` | `spec-research` |
-| `Spec-Orchestrate.md` | `spec-orchestration` |
-| `Competitor.md` | `competitor-analysis` |
-| `Roadmap.md` | `roadmap-strategy` |
-| `Test.md` | `test-execution-and-coverage` |
-| `QA-Orchestrate.md` | `verification-orchestration` |
-| `Followup.md` | `review-followup-routing` |
-| `Human-*` | `human-review-decisions` |
-| `Commit.md` | `release-git-operations` |
-| `PR.md` | `release-git-operations` |
-| `PR-Review.md` | `pr-review-analysis` |
-| `PR-Followup.md` | `review-followup-routing` |
-| `Merge.md` | `release-git-operations` |
-| `Deploy.md` | `release-git-operations` |
-| `Changelog.md` | `release-git-operations` |
-| `Insight.md` | `insight-capture` |
-| `Agent.md` | `specialist-agent-routing` |
-| `grill-with-docs` (when present) | `grill-with-docs` |
-| `grill-with-docs` (when present) | `grill-with-docs` |
-
-## Current Policy
-
-- Do not delete files just because they still contain useful prompt bodies.
-- Reduce public exposure first, then move the primary behavior into a skill or agent.
-- When a companion workflow has already offloaded its main behavior, keep it as a wrapper to preserve UX and continuity.
-- Keep the numbered mainline as the only canonical stage path: `00-Discover -> 10-Define -> 20-Spec -> 30-Plan -> 40-Execute -> 50-Verify -> 60-Report -> 70-Release`.
-- The main companion group in this phase has already moved its primary behavior into the skill layer as intended.
-- Optional questioning skills should stay thin and stage-supportive. They should collect only the information that can change the current stage decision.
-- `Next Allowed Command` stays Timeline-first. `Nexus Event` may expose side routes, support skills, or specialist lanes that branch temporarily and later return to the Timeline.
+| `devflow` | Navigation | Flagship interactive guide, state inspector, and intent router. |
+| `doctor` | Diagnostics | Read-only health check for setup, adapters, and workflow drift. |
+| `overview` | Context | Regenerate and validate `project-overview.md` from planning docs. |
+| `debug` | Diagnostics | Non-destructive root-cause analysis and defect reproduction. |
+| `onboard` | Onboarding | Setup baseline context on fresh or scaffolded projects. |
+| `adopt` | Onboarding | Survey existing codebase and bootstrap DevFlow context into brownfield apps. |
+| `try` | Quality Gate | Generate step-by-step human manual QA review guide. |
+| `rollback` | Delivery | Safe feature reversal with dependency risk analysis. |
+| `idea` | Backlog | Idea inbox capture and AI feasibility scoring into `devflow/ideas.md`. |
+| `ci` | Automation | Configure GitHub Actions verify workflow (`.github/workflows/verify.yml`). |
+| `test` | Quality Gate | Test runner, missing test generation, and coverage check. |
+| `autopilot` | Autonomous | Bounded autonomous spec-build-check loop stopping before merge. |
+| `prototype` | Ideation | Throwaway pre-build static HTML/CSS mockups sharing design tokens. |
+| `report-html` | Reporting | Standalone interactive HTML dashboard generator on demand. |
+| `brief` | Planning | Pre-briefing on upcoming features before speccing. |

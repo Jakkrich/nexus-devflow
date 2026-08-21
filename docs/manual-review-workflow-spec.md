@@ -86,15 +86,12 @@ Recommended levels:
 
 ### Project Context Layer
 
-Project context should live in durable shared artifacts such as:
+Project context should live in durable shared artifacts under `devflow/context/`:
 
-- `devflow/prds/{project-slug}.md`
-- `devflow/research/{project-slug}/source-summary.md`
-- `devflow/research/{project-slug}/open-questions.md`
-- `devflow/wiki/project/{project-slug}-global-rules.md`
-- `devflow/wiki/project/{project-slug}-phase-map.md`
-
-This layer stores broad requirements, domain language, global constraints, unresolved questions, and phase boundaries.
+- `devflow/context/project-overview.md` (Source of Truth for tech stack & architecture)
+- `devflow/context/coding-standards.md` (Engineering standards, Deep Modules, TDD rules)
+- `devflow/context/ai-interaction.md` (Operational preferences & guidelines)
+- `devflow/context/findings.md` (Quality and security findings ledger)
 
 ### Phase Delivery Layer
 
@@ -106,68 +103,62 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md
 
 This layer consumes no Running ID. Only an approved `Proceed` discovery may enter `/10-Define`.
 
-Each phase should use one running id under:
+Each delivery run executes inside:
 
-```text
-devflow/runs/{ID}-{phase-slug}/
-```
+- **Fast-Track (4 Steps)**: `devflow/context/current-feature.md` (Single Living Spec)
+- **Deep-Track (8 Steps)**: `devflow/context/current-run/` (`10-define.md` through `70-release.md`)
 
-Each running id begins with `10-define.md` and owns the delivery artifact set for one phase or capability slice. Multiple runs may link to one shared Discovery ID.
+Upon completion, completed work is permanently archived to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/` or `{xxx-slug}.md`.
 
 ### Task Execution Layer
 
 Tasks and subtasks should normally stay inside:
 
-- `30-plan.md`
-- `checklists/implementation-checklist.md`
-- `checklists/verification-checklist.md`
+- `devflow/context/current-feature.md` (Fast-Track)
+- `devflow/context/current-run/30-plan.md` (Deep-Track)
 
-Do not create a new running id for every small implementation task unless that task truly becomes a separate delivery phase.
+Do not create a new delivery run for every small implementation task unless that task truly becomes a separate delivery phase.
 
 ## Artifact Placement
 
-### Recommended Layout
+### Recommended Layout (The 3-Pillars Model)
 
 ```text
 devflow/
-  discoveries/
-    {DISCOVERY_ID}-{slug}/
-      00-discover.md
-  prds/
-    {project-slug}.md
-  research/
-    {project-slug}/
-      source-summary.md
-      open-questions.md
-      stakeholder-notes.md
-  wiki/
-    project/
-      {project-slug}-domain.md
-      {project-slug}-global-rules.md
-      {project-slug}-phase-map.md
-  specs/
-    {ID}-{phase-slug}/
+  ideas.md                    # 🔮 Future: Idea Inbox with AI scoring
+  context/                    # ⚡ Present: Living Spec & Active Context
+    project-overview.md
+    coding-standards.md
+    ai-interaction.md
+    findings.md
+    current-stage.md
+    current-feature.md        # Fast-Track Single Living Spec
+    current-run/              # Deep-Track Active Run (Temporary)
       10-define.md
       20-spec.md
       30-plan.md
       40-execute.md
       50-verify.md
-      70-release.md
       60-report.md
-      checklists/
-        implementation-checklist.md
-        verification-checklist.md
+      70-release.md
+  history/                    # 📦 Past: Categorized Delivery Archives
+    features/
+    fixes/
+    rollbacks/
+    HISTORY.md
+  discoveries/                # Pre-delivery discovery records
+    {DISCOVERY_ID}-{slug}/
+      00-discover.md
 ```
 
 ### Human Reading Model
 
 Humans should know where to look:
 
-- project framing: `prds/`
-- pre-delivery route and decision: `discoveries/{DISCOVERY_ID}-{slug}/`
-- evidence and research: `research/`
-- durable rules and domain language: `wiki/project/`
-- current phase state: `specs/{ID}-{phase-slug}/`
+- Future ideas & backlog: `devflow/ideas.md`
+- Active specifications & system rules: `devflow/context/`
+- Pre-delivery route and decision: `devflow/discoveries/{DISCOVERY_ID}-{slug}/`
+- Past delivery archives & release notes: `devflow/history/`
 - live execution progress: `checklists/`
 
 For a quick read-only summary across active runs, use the internal helper:

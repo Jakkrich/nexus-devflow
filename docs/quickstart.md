@@ -1,111 +1,109 @@
-# Quickstart
+# Quickstart Guide
 
-This guide gets Nexus-DevFlow ready for local use with the `.agent` bundle and the DevFlow 2.0 stage-based model.
+Getting started with **Nexus-DevFlow 2.0** — an agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Dual-Track Delivery Model** for Google Antigravity, OpenAI Codex, Claude Code, Cursor, and other AI IDEs.
 
-## 1. Activate
+---
 
-```powershell
-npm.cmd run activate
+## 1. Client Installation
+
+In your terminal, navigate to your target project folder (either a fresh scaffold or an existing codebase):
+
+```bash
+# Automated install (Recommended)
+npx -y @jakkrichm/create-nexus-devflow@latest -y
+
+# Interactive install (Select specific tool adapters)
+npx @jakkrichm/create-nexus-devflow@latest
 ```
 
-## 2. Validate
+This overlays the `.agents/`, `.claude/`, and `devflow/` workflow structures into your repository without modifying your existing application source code.
 
-```powershell
-npm.cmd run validate
-```
+---
 
-## 3. Choose A Start Point
+## 2. Project Baseline Setup
 
-- Start with `/00-Discover` when the work is new
-- Start with `Help` when the route is unclear
-- Let `/00-Discover` route to `Debug` when a new request begins with an unknown root cause
+Open your AI IDE (Antigravity, Claude Code, Codex, or Cursor) and run the appropriate starting command in the chat:
 
-## 4. First Example Path
+| Situation | Starting Command | Purpose |
+| :--- | :--- | :--- |
+| **Existing Codebase (Brownfield)** | `/adopt` *(or `$adopt`)* | Surveys your codebase, creates baseline planning docs, coding standards, and registers project context. |
+| **Fresh Project (Scaffolded)** | `/onboard` *(or `$onboard`)* | Configures project metadata, stack commands, coding standards, and tool adapters. |
+| **Health & Setup Check** | `/doctor` *(or `$doctor`)* | Read-only diagnostic checking adapters, config files, commands, and workflow integrity. |
+| **Interactive Navigation** | `/devflow` *(or `$devflow`)* | Flagship guide that analyzes workspace state and recommends the exact next action. |
 
-If you are starting new feature work:
+---
+
+## 3. Choose Your Delivery Track
+
+Nexus-DevFlow provides two optimized delivery tracks depending on task complexity:
+
+### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 Steps)
+*Recommended for 85% of daily work (features, bug fixes, UI improvements, iterative tasks).*
 
 ```text
-/00-Discover -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan
+/feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-If the work is large, multi-phase, requirement-heavy, or high-risk, use the same command path but treat it as a manual review flow.
-Review each stage artifact before moving to the next command and pay attention to `Approval Status` and `Next Allowed Command`.
+1. `/feature {title}` (or `/fix {bug}`): Allocates sequential ID (`xxx-slug`) and initializes the Single Living Spec in `devflow/context/current-feature.md`.
+2. `/implement`: Incrementally executes checklist tasks with TDD discipline.
+3. `/check`: Senior QA multi-lane verification (Typecheck, Lint, Tests, manual proof).
+4. `/complete`: Final safety audit, archives to `devflow/history/{features|fixes|rollbacks}/`, merges branch, and resets workspace to Idle.
 
-If a new request begins with a bug:
+---
+
+### 🏗️ Track 2: Deep-Track (Architect Mode — 8 Steps)
+*Recommended for large architectural epics, database migrations, and multi-agent coordination.*
 
 ```text
-/00-Discover -> Debug -> /00-Discover -> /10-Define -> /20-Spec -> /30-Plan
+00-discover ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
 ```
 
-See [docs/example-runs.md](example-runs.md) for a fuller walkthrough.
+1. `/00-discover`: Explore request before delivery commitment (`devflow/discoveries/DISC-xxx/00-discover.md`).
+2. `/10-define`: Lock delivery boundaries in `devflow/context/current-run/10-define.md`.
+3. `/20-spec`: Formalize markdown delivery contract & testable acceptance criteria.
+4. `/30-plan`: Break down spec into executable tasks with test decisions.
+5. `/40-execute`: Incremental task implementation behind review gates.
+6. `/50-verify`: Senior QA review across 6 verification lanes.
+7. `/60-report`: Standardized markdown delivery digest and retrospective lessons learned.
+8. `/70-release`: Package verified work, git merge, and archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`.
 
-## 5. Understand The Mainline
+---
+
+## 4. The 3-Pillars Workspace Architecture
 
 ```text
-/00-Discover -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
+devflow/
+├── ideas.md                    # 🔮 Future (Backlog): Idea Inbox with AI scoring
+├── context/                    # ⚡ Present (Active Context): Single Living Spec & Active State
+│   ├── current-feature.md      # Fast-Track Single Living Spec
+│   ├── current-stage.md        # Active stage inspector & guardrail
+│   ├── current-run/            # Deep-Track active stage artifacts (10-define to 70-release)
+│   ├── project-overview.md     # Single Source of Truth
+│   ├── coding-standards.md     # Engineering standards & conventions
+│   ├── ai-interaction.md       # AI interaction guidelines
+│   └── findings.md             # Quality & security findings ledger
+├── history/                    # 📦 Past (History Archive): Categorized delivery archives
+│   ├── features/               # Shipped features ({xxx-slug}/ or {xxx-slug}.md)
+│   ├── fixes/                  # Resolved bug fixes
+│   ├── rollbacks/              # Reversal audit logs
+│   └── HISTORY.md              # Master release ledger
+└── discoveries/                # Pre-delivery discovery records (DISC-xxx/)
 ```
 
-Public companion commands:
+---
 
-```text
-Goal
-Brainstorm
-Research
-Debug
-PRD
-Issue-Triage
-Security-Review
-Wiki
-Check-For-Updates
-Help
+## 5. Maintenance & CLI Commands
+
+```bash
+# Inspect project status, active work, findings, and next action
+npx @jakkrichm/create-nexus-devflow status
+
+# Update DevFlow files safely without overwriting project customizations
+npx @jakkrichm/create-nexus-devflow update
+
+# Generate interactive standalone HTML report on demand
+npm run report:html -- {RUN_ID}
+
+# Clean uninstall / eject from project
+npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
 ```
-
-For the full current command policy, see [workflow-surface-map.md](docs/workflow-surface-map.md:1).
-Use `Help` when you are unsure whether a run should stay lightweight or switch into the manual review flow.
-For a quick read-only status scan across existing runs, agents or maintainers can also use `node scripts/summarize-run-status.mjs`.
-
-## 6. Workspace Model
-
-DevFlow 2.0 uses markdown-first discovery artifacts under `devflow/discoveries/` and delivery stage artifacts under `devflow/runs/`.
-Markdown artifacts default to Thai through one `artifact_language: "th"` field in every matching schema template under `.agent/resources/schemas/`.
-The mainline stage templates also include manual review sections so humans can inspect `Source Inputs`, `AI Actions Performed`, `Human Review Required`, `Approval Status`, and `Next Allowed Command` before moving forward.
-
-Typical running-id layout:
-
-```text
-devflow/runs/{ID}-{slug}/
-  10-define.md
-  20-spec.md
-  30-plan.md
-  40-execute.md
-  50-verify.md
-  50-verify-impact.md
-  60-report.md
-  60-report.html
-  70-release.md
-```
-
-Pre-delivery discovery uses a separate namespace and does not consume a Running ID:
-
-```text
-devflow/discoveries/{DISCOVERY_ID}-{slug}/
-  00-discover.md
-```
-
-`50-verify-impact.md` is optional and is typically created during `/50-Verify` when the run needs explicit impact, regression-risk, or rollback analysis.
-
-See [workspace-artifacts.md](workspace-artifacts.md) for the canonical artifact contract.
-See [manual-review-workflow-spec.md](manual-review-workflow-spec.md) for the manual review operating model and naming guidance.
-Use `npm.cmd run artifact-language:switch -- th` to normalize all templates back to the tracked Thai default. An explicit `en` override remains available for local use, but tracked framework validation expects `th`.
-
-## Internal Surfaces
-
-Some additional workflow files still exist under `.agent/workflows/`, but they are now considered internal support surfaces or future skill/agent candidates. Do not treat them as the default public command set unless a stage document explicitly points to them.
-
-## Troubleshooting
-
-- If `.agent` files are missing, restore the framework bundle before running validation.
-- If `devflow/runs/` is missing, run `npm.cmd run activate`.
-- If validation fails after structural edits, fix the missing files or docs, then re-run `npm.cmd run validate`.
-
-Do not route new work through retired JSON artifacts. Use the stage markdown templates under `.agent/resources/schemas/` instead.

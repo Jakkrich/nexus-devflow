@@ -1,111 +1,45 @@
 # Skill Selection Policy
 
-Use this policy when deciding which support skill, companion command, or specialist agent should help a DevFlow stage.
+Use this policy when deciding which skill or workflow track to activate for a given task in Nexus-DevFlow 2.0.
 
-The goal is predictable skill use. A skill should sharpen the active stage, not compete with the stage for ownership.
+---
 
-## Core Rules
+## 1. Track Selection Policy
 
-1. Stage ownership wins.
-   - Mainline stages own lifecycle state, artifacts, and next-step guidance.
-   - Skills may support a stage, but they must not move work forward or backward by themselves.
+### A. Choose Fast-Track (4 Steps) When:
+- Scope is well-understood (iterative feature, UI enhancement, bug fix, refactor).
+- Fits within 1–5 focused tasks.
+- Does not alter core system architecture or database schemas.
+- **Commands**: `/feature` (or `/fix`) ➔ `/implement` ➔ `/check` ➔ `/complete`.
 
-2. Prefer the thinnest public surface.
-   - Use existing public companion commands before adding new commands.
-   - Keep imported skills as support skills unless users need to call them directly and often.
+### B. Choose Deep-Track (8 Steps) When:
+- Scope involves significant ambiguity or architectural trade-offs.
+- Requires multi-step discovery before delivery commitment.
+- Involves breaking changes, database migrations, or multi-agent orchestration.
+- **Commands**: `/00-discover` ➔ `/10-define` ➔ `/20-spec` ➔ `/30-plan` ➔ `/40-execute` ➔ `/50-verify` ➔ `/60-report` ➔ `/70-release`.
 
-3. Pick the most specific useful skill.
-   - If two skills overlap, choose the one with the narrowest fit for the current uncertainty.
-   - Do not stack broad skills when one specific skill can resolve the question.
+---
 
-4. Limit active skill load.
-   - Use one primary skill per pass.
-   - Add at most two support skills when they have distinct jobs.
-   - If more than three skills seem necessary, route through `intelligent-routing` or an orchestrator first.
+## 2. Core Selection Rules
 
-5. Separate exploration from commitment.
-   - Exploration skills produce options, evidence, questions, or prototypes.
-   - Mainline stages turn stable results into stage artifacts.
+1. **Stage Ownership Wins**: Mainline stages own the active state, markdown artifacts, and next-step decisions.
+2. **28 Core Skills**: All skills are self-contained and synchronized 1:1 across `.agents/skills/` and `.claude/skills/`.
+3. **Absorbed Best Practices**: Do not invoke external cheat-sheets for commits, tests, or security; they are built directly into `complete`, `70-release`, `check`, `50-verify`, and `coding-standards.md`.
+4. **State-Aware Routing**: When unsure what command to use, run `/devflow` or `npx @jakkrichm/create-nexus-devflow status` to inspect active context.
 
-6. Route contradictions back to the owning stage.
-   - If implementation reveals a spec flaw, route back to `/20-Spec`.
-   - If verification reveals a plan or implementation gap, route back to `/30-Plan` or `/40-Execute`.
-   - Do not let a support skill silently rewrite stage intent.
+---
 
-## Selection Order
+## 3. Companion Tools & Quality Gates Mapping
 
-Apply these gates in order:
-
-| Gate | Question | Route |
+| Need | Recommended Command | Behavior |
 | :--- | :--- | :--- |
-| 1 | Does this request advance lifecycle state? | Use the matching mainline stage. |
-| 2 | Is this support work the user may call directly? | Use a public companion command. |
-| 3 | Does the active stage need a reusable method? | Use a support skill. |
-| 4 | Does the active stage need expert judgment? | Use a specialist agent. |
-| 5 | Is routing still unclear? | Use `intelligent-routing` or `Help`. |
-
-## Conflict Rules
-
-| Conflict | Prefer | Reason |
-| :--- | :--- | :--- |
-| `Brainstorm` vs `grilling` | `Brainstorm` | Use when generating or comparing options. |
-| `grilling` vs `grill-with-docs` | `grill-with-docs` | Use when a codebase or durable docs should shape the interview. |
-| `grill-with-docs` vs `domain-modeling` | `grill-with-docs` first, `domain-modeling` only when terms or ADRs crystallize | The interview discovers decisions; domain modeling records durable language and decisions. |
-| `PRD` vs `/20-Spec` | `PRD` for product framing, `/20-Spec` for delivery contract | PRD explains why and product shape; spec defines buildable acceptance targets. |
-| `to-prd` vs `PRD` | `PRD` as the public surface | `to-prd` is an imported synthesis method behind the existing command. |
-| `to-issues` vs `/30-Plan` | `/30-Plan` | Planning owns work breakdown; `to-issues` can package slices for an issue tracker. |
-| `implement` vs `/40-Execute` | `/40-Execute` | The mainline stage owns implementation state and artifact updates. |
-| `diagnosing-bugs` vs `Debug` | `Debug` as public surface, `diagnosing-bugs` as method | Debug owns the user-facing workflow. |
-| `review` vs `/50-Verify` | `/50-Verify` | Verify owns validation evidence; review is one verification lane. |
-| `handoff` vs `/70-Report` | `/70-Report` for final stage report, `handoff` for temporary context transfer | Report is durable lifecycle closure; handoff is operational continuity. |
-
-## Grill-With-Docs Loop Safety Contract
-
-`grill-with-docs` is allowed to ask until material ambiguity is resolved. Loop safety must make the interview sharper, not shorter.
-
-Rules:
-
-- **Question Budget**: do not cap the total number of useful questions while unresolved scope, terminology, constraints, acceptance criteria, risk, or irreversible decisions remain.
-- **Repeat Budget**: cap repeated attempts on the same unresolved topic at two rounds.
-- **Topic Budget**: group questions by topic so the owning stage can see what remains unresolved.
-- **Exit Reason**: stop when each material ambiguity is resolved, accepted as an assumption, routed back to the owning stage, or marked blocked with the exact missing input.
-- **Anti-Perfection Rule**: do not ask polish-only questions once the owning stage stop condition is met.
-- **Blocked Rule**: if a necessary answer is missing after the repeat budget, record a blocked item instead of rephrasing indefinitely.
-
-## Stage Defaults
-
-| Stage or companion | Default support skills | Escalate when |
-| :--- | :--- | :--- |
-| `Goal`, `Help` | `intelligent-routing`, optional `ask-matt` adaptation | The route is still ambiguous after one pass. |
-| `/00-Discover` | `Brainstorm`, `grilling`, `prototype`, `decision-mapping` | Discovery needs runnable evidence or sequenced research. |
-| `/10-Define` | `grill-with-docs`, `domain-modeling`, `to-prd` | Scope, language, or product intent remains unstable. |
-| `/20-Spec` | `grill-with-docs`, `domain-modeling`, `codebase-design`, `spec-research` | Acceptance criteria, constraints, or integration facts are not testable. |
-| `/30-Plan` | `planning-and-task-breakdown`, `codebase-design`, `tdd`, `to-issues` | Plan lacks file evidence, test decisions, or vertical slices. |
-| `/40-Execute` | `incremental-implementation`, `tdd`, `diagnosing-bugs`, `codebase-design` | Implementation exposes a stage contradiction or missing tests. |
-| `/50-Verify` | `test-execution-and-coverage`, `review`, `diagnosing-bugs`, `silent-failure-audit` | Validation lacks evidence or a failure cannot be localized. |
-| `/60-Release` | `release-git-operations`, `resolving-merge-conflicts`, `setup-pre-commit` | Packaging, conflicts, or release gates block handoff. |
-| `/70-Report` | `handoff`, `insight-capture`, writing skills | Lessons should become durable project knowledge. |
-| `Issue-Triage` | `triage`, `domain-modeling` | Incoming reports need stable language or agent-ready issue briefs. |
-| `Wiki` | `domain-modeling`, `handoff`, writing skills | Stage learning should become reusable knowledge. |
-
-## Invocation Pattern
-
-When selecting skills, record a short routing line:
-
-```text
-Applying DevFlow skill policy: <stage or command> owns this work; using <primary skill> because <reason>.
-```
-
-If a second support skill is needed:
-
-```text
-Also loading <support skill> only for <bounded purpose>.
-```
-
-## Anti-Patterns
-
-- Loading every plausible skill at once.
-- Letting an imported skill create a new lifecycle path.
-- Promoting a support skill to public companion command before repeated use proves it.
-- Using a general interview skill when a specific stage artifact is already ready to write.
-- Writing durable docs from unresolved conversation instead of confirmed decisions.
+| **System Diagnostics** | `/doctor` | Read-only check of adapters, configs, and workflow drift. |
+| **Root-Cause Analysis** | `/debug` | Non-destructive reproduction and defect diagnosis without modifying source. |
+| **Manual QA Guide** | `/try` | Generates click-by-click human manual test guide. |
+| **Idea Capture** | `/idea` | Evaluates feasibility and adds to `devflow/ideas.md`. |
+| **Feature Reversal** | `/rollback` | Analyzes dependency risks and drafts rollback spec. |
+| **CI Setup** | `/ci` | Configures `.github/workflows/verify.yml` with detected package manager. |
+| **Unit Test Setup** | `/test` | Runs test suites or scaffolds missing unit tests. |
+| **Autonomous Pass** | `/autopilot` | Bounded spec-build-check loop stopping before merge. |
+| **Visual Mockup** | `/prototype` | Throwaway HTML/CSS mockups sharing design tokens. |
+| **Interactive Report** | `/report-html` | Generates standalone HTML dashboard on demand. |

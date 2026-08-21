@@ -1,263 +1,68 @@
-# Workspace Artifacts
+# Workspace Artifacts Contract (The 3-Pillars Model)
 
-Nexus-DevFlow 2.0 uses `devflow/` as the primary store for task artifacts and supporting run history, following the framework's `markdown-first` contract.
+Nexus-DevFlow 2.0 structures all project artifacts according to **The 3-Pillars Workspace Architecture** and the framework's `markdown-first` contract.
 
-Operational source of truth for command surfaces lives in [AGENTS.md](AGENTS.md:1) and [workflow-surface-map.md](docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
-# Workspace Artifacts
+---
 
-Nexus-DevFlow 2.0 uses `devflow/` as the primary store for task artifacts and supporting run history, following the framework's `markdown-first` contract.
-
-Operational source of truth for command surfaces lives in [AGENTS.md](AGENTS.md:1) and [workflow-surface-map.md](docs/workflow-surface-map.md:1). This document explains artifact layout, not command ownership policy.
-
-The tracked framework default is `artifact_language: "th"` exactly once in every `.agent/resources/schemas/*.template.md`. Workflows must read that value before generating markdown output.
-
-## Canonical Layout
+## 1. Canonical Folder Layout
 
 ```text
 devflow/
-|-- context/
-|   |-- project-overview.md
-|   |-- coding-standards.md
-|   |-- ai-interaction.md
-|   `-- findings.md
-|-- discoveries/
-|-- debug/
-|-- issues/
-|-- prds/
-|-- reports/
-|-- research/
-|-- roadmap/
-|-- wiki/
-`-- runs/
+├── ideas.md                    # 🔮 Future (Backlog): Idea Inbox with AI scoring
+├── context/                    # ⚡ Present (Active Context): Single Living Spec & Active State
+│   ├── current-feature.md      # Fast-Track Single Living Spec (Active feature/fix/rollback)
+│   ├── current-stage.md        # Active stage inspector & Single Active Run Guardrail
+│   ├── current-run/            # Deep-Track active stage artifacts (10-define.md to 70-release.md)
+│   ├── project-overview.md     # Single Source of Truth
+│   ├── coding-standards.md     # Engineering standards & conventions
+│   ├── ai-interaction.md       # AI interaction guidelines
+│   └── findings.md             # Quality & security findings ledger
+├── history/                    # 📦 Past (History Archive): Categorized delivery archives
+│   ├── features/               # Shipped features ({xxx-slug}/ or {xxx-slug}.md)
+│   ├── fixes/                  # Resolved bug fixes
+│   ├── rollbacks/              # Reversal audit logs
+│   └── HISTORY.md              # Master release ledger
+└── discoveries/                # Pre-delivery discovery records (DISC-xxx/00-discover.md)
 ```
 
-## Folder Responsibilities
+---
 
-| Path | Stores | Related workflows or commands | Keep? |
+## 2. Temporal Pillars & Responsibilities
+
+| Pillar | Location | Responsibility | Lifecycle & Mutation |
 | :--- | :--- | :--- | :--- |
-| `devflow/context/` | Source of truth project context (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `findings.md`) | All AI sessions & stages | Yes. This is the core context store. |
-| `devflow/discoveries/` | Pre-delivery `00-discover.md` artifacts grouped by Discovery ID, including route selection, companion findings, decision, and later related-run links | `/00-Discover`, plus discovery-owned `Brainstorm`, `PRD`, `Research`, and `Debug` | Yes. This is the decision store before Running IDs exist. |
-| `devflow/runs/` | Per-running-ID delivery artifacts such as `10-define.md`, `20-spec.md`, `30-plan.md`, `40-execute.md`, `50-verify.md`, optional `50-verify-impact.md`, `60-report.md`, `60-report.html`, `70-release.md`, `security-review.md`, and optional `checklists/` tracking files | `/10-Define`, `/20-Spec`, `/30-Plan`, `/40-Execute`, `/50-Verify`, `/60-Report`, `/70-Release`, `Security-Review`, `Preview` | Yes. This is the approved delivery-run store. |
-| `devflow/roadmap/` | Product discovery notes and supporting roadmap context in markdown form | `Roadmap` work outside the mainline | Yes. This is the roadmap support area. |
-| `devflow/research/` | Reusable research notes, source-backed findings, brainstorm outputs | `Research`, `Brainstorm`, Discover, Define, Spec | Yes. It is the durable research library. |
-| `devflow/issues/` | Issue analysis, triage notes, duplicate/spam decisions, source issue summaries | issue triage and debugging support | Yes. It links external issues to implementation work. |
-| `devflow/prds/` | Product Requirements Documents created before mainline execution | `PRD` and product-definition work | Yes. It bridges product thinking to executable work. |
-| `devflow/debug/` | Root cause analysis reports and debugging notes | `Debug`, verify follow-up work | Yes. It keeps RCA separate from implementation artifacts. |
-| `devflow/reports/` | Cross-cutting reports that are not tied to one stage file | verification, review, specialist summaries | Yes. It captures reusable reports outside a single run. |
-| `devflow/wiki/` | Compiled framework and project knowledge pages with source-backed links | `Wiki`, `Report`, `Help` | Optional. Create it only when wiki capture is actually needed. |
+| **🔮 Future (Backlog)** | `devflow/ideas.md` | Idea Inbox, AI feasibility scoring, backlog tags (`[IDEA-xxx]`). | Appended via `/idea` or manual edits. |
+| **⚡ Present (Active Context)** | `devflow/context/` | Source of Truth, Active Stage State, Single Living Spec, and Active Run. | Mutated during active delivery; reset to stub on `/complete` or `/70-release`. |
+| **📦 Past (History Archive)** | `devflow/history/` | Categorized immutable delivery records (`features/`, `fixes/`, `rollbacks/`) and Master Ledger (`HISTORY.md`). | Appended upon stage completion; immutable. |
 
-## Top-Level Files
+---
 
-| File | Purpose | Related workflows or commands |
-| :--- | :--- | :--- |
-| `devflow/lessons.md` | Durable project lessons, gotchas, patterns, and human preferences | `Debug`, `Wiki`, `Report`, release/review follow-up |
+## 3. Fast-Track vs Deep-Track Artifacts
 
-## Task Workspace Files
+### A. Fast-Track Artifact: `devflow/context/current-feature.md`
+- Acts as the Single Living Spec combining Definition, Spec, Checklist, Verification Evidence, and Review Gates.
+- Initialized by `/feature` or `/fix`.
+- Updated incrementally by `/implement` and `/check`.
+- Archived to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md` on `/complete`.
+- Reset to idle stub upon completion.
 
-Discoveries live under `devflow/discoveries/{DISCOVERY_ID}-{slug}/` before delivery commitment. An approved `/10-Define` creates one or more runs under `devflow/runs/{ID}-{slug}/`; each run then uses flat stage filenames so the work stays easy to inspect, resume, and validate.
+### B. Deep-Track Artifacts: `devflow/context/current-run/`
+- Contains individual stage markdown contracts:
+  - `10-define.md`: Delivery boundary and scope.
+  - `20-spec.md`: Formal specification & Given-When-Then acceptance criteria.
+  - `30-plan.md`: Executable task breakdown with TDD test decisions.
+  - `40-execute.md`: Implementation log and evidence.
+  - `50-verify.md`: QA 6-lane verification matrix.
+  - `60-report.md`: Delivery digest and retrospective insights.
+  - `70-release.md`: Release packaging and verification.
+- Archived to `devflow/history/{category}/{xxx-slug}/` on `/70-release`.
 
-- Markdown stage files are the source of truth across the mainline.
-- HTML files are derived artifacts created only when a stage policy requires or enables them.
-- In the current framework round, `60-report.html` is the only required HTML stage artifact.
-- Future stage HTML outputs should be rendered through the shared renderer path instead of re-implementing markdown-to-html logic per stage.
+---
 
-### Mainline Stage Files
+## 4. Standalone HTML Reporting Policy
 
-| File | Purpose |
-| :--- | :--- |
-| `devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md` | Routes focused inquiry and records `Proceed`, `Defer`, or `Reject` without a Running ID. |
-| `devflow/runs/{ID}-{slug}/10-define.md` | Locks one delivery boundary, creates the Running ID, and links to its source discovery. |
-| `20-spec.md` | Defines the delivery contract and acceptance criteria. |
-| `30-plan.md` | Breaks the work down into execution order, risks, and verification approach. |
-| `40-execute.md` | Records the implementation work, key changes, and any meaningful deviation. |
-| `50-verify.md` | Stores verification evidence, findings, and the quality conclusion. |
-| `60-report.md` | Produces the readable final run summary before release packaging. |
-| `60-report.html` | Produces the human-facing rendered version of the final report. |
-| `70-release.md` | Records release readiness, impact, and release-facing cautions. |
-
-`50-verify-impact.md` is an optional companion artifact. Create it during `/50-Verify` when the run needs explicit impact, regression-risk, or rollback analysis.
-
-### HTML Rendering Commands
-
-Use the existing report wrapper when rendering the final report:
-
-```powershell
-npm.cmd run report:html -- <workspace-path-or-running-id>
-```
-
-Use the shared renderer CLI when you want the stage-aware renderer surface directly:
-
-```powershell
-npm.cmd run render:html -- --stage 60-report <workspace-path-or-running-id>
-```
-
-### Checklist Layer
-
-Use a dedicated checklist folder when people need a live view of task execution:
-
-```text
-devflow/runs/{ID}-{slug}/checklists/
-  implementation-checklist.md
-  verification-checklist.md
-```
-
-Preferred live checklist format:
-
-```markdown
-- [ ] Pending item
-- [x] Completed item
-- [/] In-progress item
-- [!] Blocked item
-- [-] Skipped item
-```
-
-Supported marker mapping:
-
-| Marker | Status |
-| :--- | :--- |
-| `[ ]` | `pending` |
-| `[x]` | `done` |
-| `[/]` or `[~]` | `in_progress` |
-| `[!]` | `blocked` |
-| `[-]` | `skipped` |
-
-Principles:
-
-1. Checklist files are tied to one running ID.
-2. Checklist files make work visible during the run, not only after it finishes.
-3. Checklist items should include `status`, `owner`, `updated`, and `evidence`.
-4. When manual review flow is in use, checklist artifacts should also expose `review`, approval-gate notes, and the next suggested command when that signal matters.
-5. Checklist files support the stage files. They do not replace `30-plan.md`, `40-execute.md`, or `50-verify.md`.
-6. Markdown tables with a `Status` column remain supported for backward compatibility, but checklist UI lines are the preferred human-facing format.
-7. Mainline stages use stage-local loop evidence: intent, context, action, observation, adjustment, stop condition, and handoff. Each stage owns only the loop needed for its responsibility; this does not create one global loop across the whole flow.
-
-### Manual Review Visibility
-
-Mainline stage artifacts should make human review explicit.
-
-People reading a stage artifact should be able to find:
-
-- source inputs
-- preserved project context
-- AI actions performed
-- required human review
-- approval status
-- next allowed command
-
-Every heading must contain concrete body content. When information is genuinely unavailable or a section does not apply, write exactly `-`. An empty heading or unresolved template placeholder is a contract failure; AI must not invent information merely to fill the section.
-
-When checklist artifacts exist, people should also be able to find the same soft-gate state there without opening every stage file.
-
-This keeps the workflow manual-first even when AI prepares the artifact draft.
-
-Recommended use:
-
-- Create initial checklist files during `/30-Plan`.
-- Update implementation status during `/40-Execute`.
-- Update validation status and release gates during `/50-Verify`.
-- Summarize completion, blockers, and evidence snapshots during `/60-Report`.
-- Carry release execution, operator approvals, and delivery notes into `/70-Release`.
-
-### Retired Legacy Files
-
-Legacy task JSON files, roadmap JSON files, and `qa_report.md` are no longer part of the active DevFlow 2.0 workflow surface.
-
-If you find those files in an older workspace:
-
-1. Use them only for historical reading or migration work.
-2. Do not treat them as the source of truth for new work.
-3. Move any still-needed context back into the relevant stage `.md` file for the current run.
-
-## Workflow Relationships
-
-```text
-Mainline:
-  /00-Discover       -> devflow/discoveries/{DISCOVERY_ID}-*/00-discover.md
-  /10-Define         -> one or many devflow/runs/{ID}-*/10-define.md
-  /20-Spec           -> devflow/runs/{ID}-*/20-spec.md
-  /30-Plan           -> devflow/runs/{ID}-*/30-plan.md
-  /40-Execute      -> devflow/runs/{ID}-*/40-execute.md
-  /50-Verify         -> devflow/runs/{ID}-*/50-verify.md
-  Verify companion   -> devflow/runs/{ID}-*/50-verify-impact.md (optional)
-  /60-Report         -> devflow/runs/{ID}-*/60-report.md and 60-report.html
-  /70-Release        -> devflow/runs/{ID}-*/70-release.md
-  Checklist layer    -> devflow/runs/{ID}-*/checklists/*.md
-
-Companion commands:
-  Goal               -> routing before a Discovery ID exists or before mainline entry
-  Brainstorm         -> devflow/research/, then back to the requesting discovery or stage
-  Research           -> devflow/research/, then back to the requesting discovery or stage
-  Debug              -> devflow/debug/, then back to the requesting discovery or stage
-  PRD                -> devflow/prds/, then back to the requesting discovery or stage
-  Issue-Triage       -> devflow/issues/
-  Security-Review    -> devflow/runs/{ID}-*/security-review.md
-  Wiki               -> devflow/wiki/framework/ or devflow/wiki/project/ when the wiki surface is explicitly used
-  Help               -> workflow recommendation or routing note
-```
-
-## Markdown Metadata Contract
-
-Markdown artifacts in `devflow`, `docs`, and the template set should follow the shared rules in [markdown-metadata-contract.md](docs/markdown-metadata-contract.md).
-
-Core rules:
-
-1. Use YAML frontmatter for document-level metadata.
-2. Use heading and tag patterns when the artifact needs to support querying.
-3. Keep the required primary headings defined by the relevant stage or workflow template.
-4. Allow an open-ended final section when extra context is needed.
-
-## Wiki Layer
-
-The DevFlow wiki is compiled knowledge, not the primary source of truth.
-
-Primary source-of-truth material still lives in:
-
-- code
-- stage artifacts
-- research notes
-- review and debug evidence
-- release and report outputs
-
-## Deletion Policy
-
-Avoid creating speculative workspace folders that are never used, and feel free to remove empty or obsolete folders that are no longer referenced.
-
-Safe cleanup targets:
-
-- generated test workspaces such as `.agent/.test-workspace-node`
-- obsolete temporary files that are no longer referenced
-- migration leftovers that the team has already confirmed are unused
-
-Not safe to delete by default:
-
-- `devflow/specs`
-- `devflow/wiki` once wiki capture has started
-- `devflow/lessons.md`
-
-## Regeneration
-
-```powershell
-npm.cmd run activate
-npm.cmd run index
-```
-
-## Legacy Migration
-
-Use the migration helper when a project still has legacy run folders such as `devflow/001-some-task/00-discover/discover.md`:
-
-```powershell
-npm.cmd run migrate:artifacts -- D:\Projects\some-project
-npm.cmd run migrate:artifacts -- D:\Projects\some-project --write
-```
-
-The command runs as a dry-run by default and moves legacy task artifacts into `devflow/runs/{ID}-{slug}/` with flat stage filenames only when `--write` is provided.
-
-## Validation
-
-```powershell
-npm.cmd run roadmap:validate
-npm.cmd run validate
-npm.cmd run validate:all
-```
-
-Framework validation checks the main workspace structure, workflow naming, report naming, and roadmap markdown contracts.
+- **Markdown-First**: Mainline workflows (`/complete` and `/60-report`) strictly output clean Markdown.
+- **On-Demand HTML**: When an interactive dashboard is desired for human presentation or stakeholders, generate it on demand via `/report-html` or:
+  ```bash
+  npm run report:html -- {RUN_ID}
+  ```

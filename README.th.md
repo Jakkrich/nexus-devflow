@@ -26,7 +26,7 @@
 ติดตั้งลงใน Git repository ใดๆ ที่ scaffold ไว้แล้วได้ทันที:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow
+npx -y @jakkrichm/create-nexus-devflow@latest -y
 ```
 
 > [!NOTE]
@@ -107,7 +107,7 @@ CLI แพ็กเกจ `@jakkrichm/create-nexus-devflow` (Zero Dependency) �
 
 ```bash
 # 1. ติดตั้ง DevFlow ลงในโปรเจกต์ปัจจุบัน
-npx @jakkrichm/create-nexus-devflow
+npx -y @jakkrichm/create-nexus-devflow@latest -y
 
 # 2. ตรวจสอบสถานะโปรเจกต์, ความคืบหน้างาน, Findings, และคำสั่งแนะนำถัดไป
 npx @jakkrichm/create-nexus-devflow status
