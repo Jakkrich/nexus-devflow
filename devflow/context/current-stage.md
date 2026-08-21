@@ -2,7 +2,7 @@
 
 - **Active Discovery ID**: `None`
 - **Active Running ID**: `None (Idle)`
-- **Current Stage**: `Idle (Ready for new run)`
-- **Living Spec**: `devflow/context/current-feature.md (Idle Stub)`
-- **Last Completed Run**: `023-prune-unused-skills-and-consolidate (2026-08-21)`
+- **Current Stage**: `Idle (Ready for new /feature, /fix, or /00-discover)`
+- **Living Spec**: `None`
+- **Last Completed Run**: `024-sync-upstream-v0110 (2026-08-21)`
 - **Last Updated**: 2026-08-21

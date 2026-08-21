@@ -6,7 +6,8 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const upstreamRepository = "https://github.com/aiblueprinthq/ai-blueprint.git";
+const defaultLocalUpstreamPath = "d:/devtools/ai-blueprint";
+const fallbackRemoteRepository = "https://github.com/aiblueprinthq/ai-blueprint.git";
 const upstreamBranch = "main";
 const trackingRelativePath = ".nexus/upstream-ai-blueprint.json";
 
@@ -30,8 +31,9 @@ function run(command: string, args: string[], cwd: string): string {
 }
 
 function parseArgs(argv: string[]) {
-  const options: { repoRoot: string; cloneParent: string | null; help?: boolean } = {
+  const options: { repoRoot: string; upstreamPath: string | null; cloneParent: string | null; help?: boolean } = {
     repoRoot: process.cwd(),
+    upstreamPath: null,
     cloneParent: null
   };
 
@@ -40,7 +42,7 @@ function parseArgs(argv: string[]) {
 
     if (argument === "--help") {
       options.help = true;
-    } else if (argument === "--repo-root" || argument === "--clone-parent") {
+    } else if (argument === "--repo-root" || argument === "--clone-parent" || argument === "--upstream-path") {
       const value = argv[index + 1];
 
       if (!value) {
@@ -48,7 +50,9 @@ function parseArgs(argv: string[]) {
       }
 
       index += 1;
-      options[argument === "--repo-root" ? "repoRoot" : "cloneParent"] = value;
+      if (argument === "--repo-root") options.repoRoot = value;
+      else if (argument === "--clone-parent") options.cloneParent = value;
+      else options.upstreamPath = value;
     } else {
       throw new Error(`Unknown argument: ${argument}`);
     }
@@ -94,19 +98,22 @@ function readTracking(repoRoot: string, cloneRoot: string) {
 
   if (
     tracking.schemaVersion !== 1 ||
-    tracking.repository !== upstreamRepository ||
-    tracking.branch !== upstreamBranch ||
     !/^[0-9a-f]{40}$/.test(tracking.lastReviewedCommit || "")
   ) {
-    throw new Error(`${trackingRelativePath} has an unsupported tracking contract`);
+    return null;
   }
 
-  run("git", ["cat-file", "-e", `${tracking.lastReviewedCommit}^{commit}`], cloneRoot);
-  return tracking;
+  const exists = spawnSync("git", ["cat-file", "-e", `${tracking.lastReviewedCommit}^{commit}`], {
+    cwd: cloneRoot,
+    stdio: "ignore",
+    windowsHide: true
+  });
+
+  return exists.status === 0 ? tracking : null;
 }
 
 function discoverSharedBaseline(repoRoot: string, cloneRoot: string): string | null {
-  const upstreamCommits = run("git", ["rev-list", upstreamBranch], cloneRoot)
+  const upstreamCommits = run("git", ["rev-list", "--max-count=500", "HEAD"], cloneRoot)
     .split(/\r?\n/)
     .filter(Boolean);
 
@@ -175,8 +182,8 @@ function main() {
 
   if (options.help) {
     console.log(
-      "Usage: inspect-upstream.ts [--repo-root PATH] [--clone-parent PATH]\n" +
-      "Clones AI Blueprint and prints a read-only upstream comparison as JSON."
+      "Usage: inspect-upstream.ts [--repo-root PATH] [--upstream-path PATH] [--clone-parent PATH]\n" +
+      "Inspects local or remote AI Blueprint upstream repository and outputs comparison JSON."
     );
     return;
   }
@@ -184,49 +191,55 @@ function main() {
   const repoRoot = fs.realpathSync(path.resolve(options.repoRoot));
   validateNexusRepository(repoRoot);
 
-  const cloneParent = options.cloneParent
-    ? fs.realpathSync(path.resolve(options.cloneParent))
-    : fs.mkdtempSync(path.join(os.tmpdir(), "nexus-upstream-review-"));
-  const cloneRoot = path.join(cloneParent, "ai-blueprint");
+  let upstreamRoot = "";
+  let sourceMode = "local-disk";
 
-  if (fs.existsSync(cloneRoot)) {
-    throw new Error(`Clone target already exists: ${cloneRoot}`);
+  // Check for local project path first
+  const candidateLocalPath = options.upstreamPath
+    ? path.resolve(options.upstreamPath)
+    : (fs.existsSync(defaultLocalUpstreamPath) ? defaultLocalUpstreamPath : path.resolve(repoRoot, "../ai-blueprint"));
+
+  if (fs.existsSync(candidateLocalPath) && fs.existsSync(path.join(candidateLocalPath, ".git"))) {
+    upstreamRoot = fs.realpathSync(candidateLocalPath);
+    sourceMode = "local-disk";
+  } else {
+    // Fallback to clone if local path does not exist
+    const cloneParent = options.cloneParent
+      ? fs.realpathSync(path.resolve(options.cloneParent))
+      : fs.mkdtempSync(path.join(os.tmpdir(), "nexus-upstream-review-"));
+    upstreamRoot = path.join(cloneParent, "ai-blueprint");
+
+    if (fs.existsSync(upstreamRoot)) {
+      throw new Error(`Clone target already exists: ${upstreamRoot}`);
+    }
+
+    run(
+      "git",
+      ["clone", "--quiet", "--branch", upstreamBranch, "--single-branch", fallbackRemoteRepository, upstreamRoot],
+      repoRoot
+    );
+    sourceMode = "network-clone";
   }
 
-  run(
-    "git",
-    ["clone", "--quiet", "--branch", upstreamBranch, "--single-branch", upstreamRepository, cloneRoot],
-    repoRoot
-  );
-
-  const upstreamHead = run("git", ["rev-parse", upstreamBranch], cloneRoot);
-  const tracking = readTracking(repoRoot, cloneRoot);
-  const nexusComparisonBase = discoverSharedBaseline(repoRoot, cloneRoot);
+  const upstreamHead = run("git", ["rev-parse", "HEAD"], upstreamRoot);
+  const tracking = readTracking(repoRoot, upstreamRoot);
+  const nexusComparisonBase = discoverSharedBaseline(repoRoot, upstreamRoot);
   const baseline = tracking?.lastReviewedCommit || nexusComparisonBase || upstreamHead;
   const commitCount = Number(
-    run("git", ["rev-list", "--count", `${baseline}..${upstreamHead}`], cloneRoot)
+    run("git", ["rev-list", "--count", `${baseline}..${upstreamHead}`], upstreamRoot)
   );
   const upstreamChanges = parseChanges(
-    run("git", ["diff", "--name-status", "--find-renames", `${baseline}..${upstreamHead}`], cloneRoot)
+    run("git", ["diff", "--name-status", "--find-renames", `${baseline}..${upstreamHead}`], upstreamRoot)
   );
-  const nexusChanges = nexusComparisonBase
-    ? parseChanges(
-        run(
-          "git",
-          ["diff", "--name-status", "--find-renames", `${nexusComparisonBase}..HEAD`],
-          repoRoot
-        )
-      )
-    : [];
-  const nexusPaths = new Set(flattenPaths(nexusChanges));
-  const overlappingPaths = flattenPaths(upstreamChanges).filter((entry) =>
-    nexusPaths.has(entry)
-  );
+
+  const localPathsOutput = run("git", ["ls-files"], repoRoot);
+  const localPaths = new Set(localPathsOutput.split(/\r?\n/).filter(Boolean));
+  const overlappingPaths = flattenPaths(upstreamChanges).filter((entry) => localPaths.has(entry));
   const commits = parseCommits(
     run(
       "git",
       ["log", "--reverse", "--format=%H%x1f%aI%x1f%s%x1e", `${baseline}..${upstreamHead}`],
-      cloneRoot
+      upstreamRoot
     )
   );
 
@@ -234,15 +247,16 @@ function main() {
     JSON.stringify(
       {
         schemaVersion: 1,
-        repository: upstreamRepository,
+        sourceMode,
+        upstreamPath: upstreamRoot,
+        repository: sourceMode === "local-disk" ? upstreamRoot : fallbackRemoteRepository,
         branch: upstreamBranch,
-        cloneRoot,
         trackingSource: tracking ? trackingRelativePath : (nexusComparisonBase ? "shared-git-history" : "upstream-head"),
         nexusComparisonBase,
-        baseline: { commit: baseline, tag: tryDescribeTag(cloneRoot, baseline) },
+        baseline: { commit: baseline, tag: tryDescribeTag(upstreamRoot, baseline) },
         upstream: {
           commit: upstreamHead,
-          tag: tryDescribeTag(cloneRoot, upstreamHead)
+          tag: tryDescribeTag(upstreamRoot, upstreamHead)
         },
         updateAvailable: commitCount > 0,
         commitCount,

@@ -68,3 +68,5 @@ venv/
 env/
 # Website build output
 .astro/
+
+.agent-backup/

@@ -5,7 +5,7 @@ import { findProjectRoot } from "./project-root.js";
 import { readManifest } from "./update.js";
 
 const PROJECT_STATE_SCHEMA_VERSION = 1 as const;
-type ProjectAdapter = "codex" | "claude" | "antigravity";
+type ProjectAdapter = "codex" | "claude" | "copilot" | "antigravity";
 
 interface ProjectWarning {
   code: "invalid_manifest";
@@ -28,6 +28,7 @@ interface ProjectMetadata {
 const ADAPTER_PATHS: Record<ProjectAdapter, string> = {
   codex: path.join(".agents", "skills"),
   claude: path.join(".claude", "skills"),
+  copilot: path.join(".agents", "skills"),
   antigravity: path.join(".agents", "skills")
 };
 
@@ -74,13 +75,21 @@ async function readProjectMetadata(
     },
     devflow: {
       version: projectVersion,
-      adapters: await detectAdapters(projectRoot)
+      adapters: await detectAdapters(projectRoot, manifest?.adapters)
     },
     warnings
   };
 }
 
-async function detectAdapters(projectRoot: string): Promise<ProjectAdapter[]> {
+async function detectAdapters(
+  projectRoot: string,
+  manifestAdapters?: readonly string[]
+): Promise<ProjectAdapter[]> {
+  if (manifestAdapters) {
+    const validAdapters: readonly ProjectAdapter[] = ["codex", "claude", "copilot", "antigravity"];
+    return validAdapters.filter((adapter) => manifestAdapters.includes(adapter));
+  }
+
   const adapters: ProjectAdapter[] = [];
 
   for (const adapter of ["codex", "claude"] as const) {

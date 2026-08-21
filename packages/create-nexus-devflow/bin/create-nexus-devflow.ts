@@ -6,6 +6,10 @@ import path from "node:path";
 import readline from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import {
+  openDashboard,
+  startDashboardServer
+} from "../lib/dashboard.js";
+import {
   formatHumanStatus,
   readProjectStatus,
   shouldUseColor
@@ -29,16 +33,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..", "..");
 const templateRoot = path.join(packageRoot, "template");
 
-const adapterChoices = new Set(["codex", "antigravity", "claude", "both", "all"]);
+const adapterChoices = new Set(["codex", "antigravity", "claude", "copilot", "both", "all"]);
 
 interface CliOptions {
-  command: "install" | "status" | "update" | "uninstall" | "eject";
+  command: "install" | "status" | "ui" | "update" | "uninstall" | "eject";
   target: string | null;
   adapter: string;
   force: boolean;
   dryRun: boolean;
   help: boolean;
   json: boolean;
+  open: boolean;
   version: boolean;
   yes: boolean;
   keepHistory: boolean;
@@ -66,6 +71,22 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
         ? JSON.stringify(status, null, 2)
         : formatHumanStatus(status, { color: shouldUseColor() })
     );
+    return;
+  }
+
+  if (options.command === "ui") {
+    const server = await startDashboardServer(targetDir);
+    const style = createStyle();
+    console.log(style.bold(style.cyan(`Nexus-DevFlow Dashboard live at ${server.url}`)));
+    if (options.open) {
+      try {
+        await openDashboard(server.url);
+      } catch (err: unknown) {
+        console.error(style.yellow(`Could not open browser automatically: ${err instanceof Error ? err.message : String(err)}`));
+      }
+    }
+    await waitForShutdown();
+    await server.close();
     return;
   }
 
@@ -181,13 +202,14 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 }
 
 function parseArgs(args: readonly string[]): CliOptions {
-  let command: "install" | "status" | "update" | "uninstall" | "eject" = "install";
+  let command: "install" | "status" | "ui" | "update" | "uninstall" | "eject" = "install";
   let target: string | null = null;
   let adapter = "both";
   let force = false;
   let dryRun = false;
   let help = false;
   let json = false;
+  let open = true;
   let version = false;
   let yes = false;
   let keepHistory = false;
@@ -209,6 +231,11 @@ function parseArgs(args: readonly string[]): CliOptions {
 
     if (arg === "--json") {
       json = true;
+      continue;
+    }
+
+    if (arg === "--no-open") {
+      open = false;
       continue;
     }
 
@@ -250,7 +277,7 @@ function parseArgs(args: readonly string[]): CliOptions {
       const value = args[++i];
       if (!value || !adapterChoices.has(value.toLowerCase())) {
         throw new Error(
-          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, both, all`
+          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, copilot, both, all`
         );
       }
       adapter = value.toLowerCase();
@@ -261,7 +288,7 @@ function parseArgs(args: readonly string[]): CliOptions {
       const value = arg.slice("--adapter=".length);
       if (!adapterChoices.has(value.toLowerCase())) {
         throw new Error(
-          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, both, all`
+          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, copilot, both, all`
         );
       }
       adapter = value.toLowerCase();
@@ -278,6 +305,9 @@ function parseArgs(args: readonly string[]): CliOptions {
   if (positional.length > 0) {
     if (positional[0] === "status") {
       command = "status";
+      target = positional[1] || target || ".";
+    } else if (positional[0] === "ui") {
+      command = "ui";
       target = positional[1] || target || ".";
     } else if (positional[0] === "update") {
       command = "update";
@@ -304,10 +334,24 @@ function parseArgs(args: readonly string[]): CliOptions {
     dryRun,
     help,
     json,
+    open,
     version,
     yes,
     keepHistory
   };
+}
+
+async function waitForShutdown(): Promise<void> {
+  await new Promise<void>((resolve) => {
+    const stop = (): void => {
+      process.off("SIGINT", stop);
+      process.off("SIGTERM", stop);
+      resolve();
+    };
+
+    process.once("SIGINT", stop);
+    process.once("SIGTERM", stop);
+  });
 }
 
 function readPackageVersion(): string {
@@ -324,17 +368,20 @@ ${style.bold(style.cyan("Nexus-DevFlow CLI"))} ${style.bold(`v${readPackageVersi
 ${style.bold("Usage:")}
   ${style.cyan("npx @jakkrichm/create-nexus-devflow")} [target-dir] [options]
   ${style.cyan("nexus-devflow status")} [target-dir] [options]
+  ${style.cyan("nexus-devflow ui")} [target-dir] [options]
   ${style.cyan("nexus-devflow update")} [target-dir] [options]
   ${style.cyan("nexus-devflow uninstall")} [target-dir] [options]
   ${style.cyan("nexus-devflow eject")} [target-dir] [options]
 
 ${style.bold("Commands:")}
   ${style.brightCyan("status")}             Show project overview, progress, findings, git status, and next action
+  ${style.brightCyan("ui")}                 Run local interactive web dashboard for Nexus-DevFlow
   ${style.brightCyan("update")}             Update existing DevFlow installation without overwriting user changes
   ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project
 
 ${style.bold("Options:")}
-  ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, both (default: both)
+  ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, both, all
+  ${style.cyan("--no-open")}          Start local dashboard without opening a browser
   ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
   ${style.cyan("--json")}             Print output as structured JSON object
   ${style.cyan("--target, -t")}       Target project directory

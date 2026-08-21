@@ -9,6 +9,7 @@ export const MANIFEST_SCHEMA_VERSION = 1;
 export const MANAGED_ROOTS: Record<string, string[]> = {
   common: ["AGENTS.md", "CLAUDE.md", "devflow", "LICENSE"],
   codex: [".agents/skills"],
+  copilot: [".agents/skills"],
   antigravity: [".agents/skills", ".agent/workflows"],
   claude: [".claude/skills"]
 };
@@ -61,14 +62,14 @@ export interface PreparedUpdate {
 
 export function adapterListFromMode(adapter?: string): string[] {
   if (!adapter || adapter === "both" || adapter === "all") {
-    return ["codex", "claude"];
+    return ["codex", "claude", "copilot"];
   }
 
   if (adapter === "antigravity") {
     return ["codex"];
   }
 
-  if (adapter === "codex" || adapter === "claude") {
+  if (adapter === "codex" || adapter === "claude" || adapter === "copilot") {
     return [adapter];
   }
 
