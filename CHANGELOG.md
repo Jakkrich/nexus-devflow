@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Embedded Image Extractor Engine (`convert_any_to_md.py`)**: Added a Python conversion engine with automatic format detection, per-sheet image extraction for Excel, per-page appendix images for PDF, ZIP media extraction for Word, and folder batch processing (`--recursive`).
 - **Default Reference Destination (`devflow/reference/`)**: Set default output directory to `devflow/reference/` for seamless integration into DevFlow workflow and reference library.
 
+### Changed
+- **AI Blueprint Upstream v0.11.1 Sync**: Synced Dashboard UI accessibility improvements (ARIA attributes `aria-live`, `aria-label`, `role="progressbar"`), Project Health summary calculation, Active Build item progress status ("Current: xxx"), Connected server indicator label, and CSS hydration animation from AI Blueprint v0.11.1 (`d8e6700`).
+
 ## [2.0.23] - 2026-08-21
 
 ### Added

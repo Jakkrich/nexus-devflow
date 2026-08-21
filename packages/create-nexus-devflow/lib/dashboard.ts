@@ -563,7 +563,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
 <body>
   <main class="shell">
     <div class="brand">
-      <svg class="brand-mark" viewBox="0 0 48 48" role="img" aria-label="Nexus-DevFlow">
+      <svg class="brand-mark" viewBox="0 0 48 48" role="img" aria-label="Nexus-DevFlow" aria-hidden="true">
         <path fill="#155eef" d="M4 4h25.2L16.3 44H4zM39.7 4H44v40H26.8z"></path>
       </svg>
       <span>Nexus-DevFlow</span>
@@ -592,7 +592,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
       <article class="card wide card-enter" style="animation-delay: 0.08s;">
         <div class="card-head"><span class="label">Current Work</span><span class="pill" id="work-pill">Loading</span></div>
         <div class="value" id="work-title">Reading living spec...</div>
-        <div class="progress"><span class="progress-bar" id="work-progress-bar"></span></div>
+        <div class="progress"><span class="progress-bar" id="work-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="Loading checklist steps..."></span></div>
         <div class="muted" id="work-meta">Loading checklist steps...</div>
       </article>
 
@@ -607,28 +607,28 @@ const DASHBOARD_HTML: string = `<!doctype html>
 
       <article class="card card-enter" style="animation-delay: 0.16s;">
         <div class="card-head"><span class="label">Findings</span><span class="value" id="findings-count">-</span></div>
-        <ul id="findings-list"><li class="empty">Loading findings...</li></ul>
+        <ul id="findings-list" aria-live="polite"><li class="empty">Loading findings...</li></ul>
       </article>
 
       <article class="card card-enter" style="animation-delay: 0.20s;">
         <div class="card-head"><span class="label">Completion</span><span class="pill" id="completion-pill">Loading</span></div>
-        <ul id="completion-list"><li class="empty">Checking readiness...</li></ul>
+        <ul id="completion-list" aria-live="polite"><li class="empty">Checking readiness...</li></ul>
       </article>
 
       <article class="card card-enter" style="animation-delay: 0.24s;">
         <div class="card-head"><span class="label">Attention</span><span class="value" id="warnings-count">-</span></div>
-        <ul id="warnings-list"><li class="empty">Loading warnings...</li></ul>
+        <ul id="warnings-list" aria-live="polite"><li class="empty">Loading warnings...</li></ul>
       </article>
 
       <article class="card full card-enter" style="animation-delay: 0.28s;">
         <div class="card-head"><span class="label">Completed Work Archive</span><span class="value" id="history-count">-</span></div>
         <div class="muted">Categorized history of features, fixes, and rollbacks.</div>
-        <ul id="history-list"><li class="empty">Loading history archive...</li></ul>
+        <ul id="history-list" tabindex="0" aria-label="Completed work archive"><li class="empty">Loading history archive...</li></ul>
       </article>
 
       <article class="card full code-panel next-action card-enter" style="animation-delay: 0.32s;" id="next-panel">
         <span class="label">Next Action</span>
-        <div class="command" id="next-command">Loading...</div>
+        <div class="command" id="next-command" aria-live="polite">Loading...</div>
         <div class="muted" id="next-reason"></div>
       </article>
     </section>
@@ -642,10 +642,10 @@ const DASHBOARD_HTML: string = `<!doctype html>
     let isFirstLoad = true;
     let refreshing = false;
 
-    function setPill(id, value) {
+    function setPill(id, value, label = value) {
       const node = byId(id);
       if (!node) return;
-      const formatted = String(value || '').replaceAll("_", " ");
+      const formatted = String(label || '').replaceAll("_", " ");
       const newClass = "pill " + (value || 'idle');
       
       if (!isFirstLoad && (node.textContent !== formatted || !node.className.includes(value))) {
@@ -723,24 +723,36 @@ const DASHBOARD_HTML: string = `<!doctype html>
 
         byId('live-dot').style.background = '#0b7a53';
         byId('live-dot').classList.add('is-live');
-        byId('live-label').textContent = 'Live';
+        byId('live-label').textContent = 'Connected';
 
         byId('project-name').textContent = data.project?.name || 'Nexus-DevFlow';
         byId('project-path').textContent = data.project?.root || '';
 
-        setPill('health-pill', data.health || 'ok');
+        const healthIssues = (data.warnings || []).map((warning) => warning.message).concat(
+          (data.findings?.blockers || []).map((finding) => "Blocking finding " + finding.id + ": " + finding.title)
+        );
+        const healthCount = healthIssues.length;
+        setPill(
+          'health-pill',
+          data.health || 'ok',
+          healthCount === 0 ? 'Clear' : healthCount + (healthCount === 1 ? ' issue' : ' issues')
+        );
+
         byId('val-version').textContent = data.devflow?.version ? 'v' + data.devflow.version : '-';
         byId('val-adapters').textContent = (data.devflow?.adapters || []).join(', ') || 'none';
 
         const work = data.currentWork || {};
         setPill('work-pill', work.state || 'idle');
         byId('work-title').textContent = work.title || 'No active run in progress';
-        byId('work-meta').textContent = work.state === 'active'
+        const workSummary = work.state === 'active'
           ? (work.completed + ' of ' + work.total + ' steps completed')
           : 'Workspace is idle. Run /feature or /fix to start a new delivery run.';
+        byId('work-meta').textContent = workSummary;
         
         const pct = work.total > 0 ? Math.round((work.completed / work.total) * 100) : 0;
         const progressBar = byId('work-progress-bar');
+        progressBar.setAttribute('aria-valuenow', String(pct));
+        progressBar.setAttribute('aria-valuetext', workSummary);
         
         const prevPct = prevData?.currentWork ? (prevData.currentWork.total > 0 ? Math.round((prevData.currentWork.completed / prevData.currentWork.total) * 100) : 0) : 0;
         if (!isFirstLoad && pct > prevPct) {
@@ -758,7 +770,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
         progressBar.style.width = pct + '%';
 
         const git = data.git || {};
-        setPill('git-pill', git.clean ? 'ok' : 'warning');
+        setPill('git-pill', git.clean ? 'ok' : 'warning', !git.branch ? 'Unavailable' : git.clean ? 'Clean' : (git.changedFiles + ' changed'));
         byId('git-branch').textContent = git.branch || 'unknown';
         byId('git-changed').textContent = git.clean ? 'clean' : (git.changedFiles + ' changed files');
         byId('git-upstream').textContent = git.upstream || 'none';
@@ -816,6 +828,10 @@ const DASHBOARD_HTML: string = `<!doctype html>
         }
         cmdNode.textContent = next.command || '/feature';
         byId('next-reason').textContent = next.reason || 'Ready for next feature';
+
+        if (isFirstLoad) {
+          requestAnimationFrame(() => document.body.classList.add('hydrated'));
+        }
 
         prevData = {
           ...data,
