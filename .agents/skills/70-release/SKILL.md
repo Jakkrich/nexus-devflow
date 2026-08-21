@@ -8,7 +8,7 @@ argument-hint: "{running-id or workspace path}"
 
 $ARGUMENTS
 
-Package approved work for delivery after the report stage has captured the final verified story. Archives the active run from `devflow/context/current-run/` to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/`, updates `HISTORY.md`, performs git merge, and closes the run.
+Package approved work for delivery after the report stage has captured the final verified story. Archives the active run from `devflow/context/current-run/` to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/`, updates `HISTORY.md` and `CHANGELOG.md`, executes pre-flight smoke checks, performs conventional git commit & merge, and closes the run.
 
 ## Usage
 
@@ -40,14 +40,39 @@ Before packaging, merging, or releasing:
    - Inspect `devflow/context/findings.md`.
    - No Finding of severity `P0` or `P1` in `open` or `fixed` status is permitted.
    - `fixed` still blocks release until reviewed and closed in `50-verify`.
-2. **2-Stage Approval Separation**:
+2. **Pre-flight & Deployment Smoke Validation**:
+   - Verify environment variables and configuration parameters.
+   - Run production build or package smoke check (`npm run build` or `npm run test:package`).
+   - Validate that clean state exists with no untracked experimental files.
+3. **2-Stage Approval Separation**:
    - Consent to merge into `main` is strictly separate from consent to `git push` to remote or deploy.
-3. **Archive Resolved Findings**:
-   - Move resolved findings (`closed`, `accepted`, `invalid`) into release archive notes and clean `findings.md`.
-4. **Archive Run Folder to Categorized History**:
-   - Determine Category (`features`, `fixes`, `rollbacks`).
-   - Move directory `devflow/context/current-run/` (or `devflow/runs/{xxx-slug}/`) ➔ `devflow/history/{category}/{xxx-slug}/`.
-5. **Append to Master History Ledger**:
-   - Append entry to `devflow/history/HISTORY.md` linking to `history/{category}/{xxx-slug}/60-report.md`.
-6. **Update Workspace State**:
-   - Set `devflow/context/current-stage.md` to `Idle`.
+
+### 1. Changelog & SemVer Version Bump
+
+1. Calculate next version according to **Semantic Versioning (SemVer)**:
+   - `Major`: Breaking architectural changes, removed public APIs
+   - `Minor`: New backward-compatible features added
+   - `Patch`: Bug fixes, optimizations, documentation
+2. Append new release entry to `CHANGELOG.md` in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format (`Added`, `Changed`, `Fixed`, `Removed`, `Security`).
+
+### 2. Conventional Commit & Git Merge
+
+1. Stage all release and tracking files.
+2. Commit with conventional format: `chore(release): release {version}` or `feat({scope}): {summary}`.
+3. Squash-merge to base branch (`main`) with explicit user approval.
+
+### 3. Archive Run Folder to Categorized History
+
+1. Determine Category (`features`, `fixes`, `rollbacks`).
+2. Move directory `devflow/context/current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`.
+3. Clean resolved findings (`closed`, `accepted`, `invalid`) from `devflow/context/findings.md` and append to the release notes.
+4. Append entry to `devflow/history/HISTORY.md` linking to `history/{category}/{xxx-slug}/60-report.md`.
+
+### 4. Update Workspace State
+
+Set `devflow/context/current-stage.md` to:
+- `Active Discovery ID`: `None`
+- `Active Running ID`: `None (Idle)`
+- `Current Stage`: `Idle (Ready for new run)`
+- `Last Completed Run`: `{ID} ({YYYY-MM-DD})`
+- `Last Updated`: `{YYYY-MM-DD}`

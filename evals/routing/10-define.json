@@ -1,6 +1,6 @@
 {
   "skill": "10-define",
-  "description": "\"[Devflow] Define stage in DevFlow 2.0 - turn an approved discovery into one or more bounded delivery runs with stable scope.\"",
+  "description": "\"[Devflow] Define stage in DevFlow 2.0 - turn an approved discovery into a bounded delivery run in context/current-run with stable scope.\"",
   "positive": [
     "run 10-define skill",
     "invoke /10-define command",

@@ -76,7 +76,7 @@ Use the original coder discipline, adapted to 2.0:
 
 If tests are `Required`:
 
-1. **TDD Cycle (RED)**: ออกแบบและเขียนตัวเทสต์ให้พังก่อน (หรือเขียนโครงสร้างเทสต์ที่คาดหวังผลลัพธ์ที่ถูกต้อง) ตามแนวทางของ [test-driven-development](file:///.agents/skills/test-driven-development/SKILL.md)
+1. **TDD Cycle (RED)**: ออกแบบและเขียนตัวเทสต์ให้พังก่อน (หรือเขียนโครงสร้างเทสต์ที่คาดหวังผลลัพธ์ที่ถูกต้อง) ตามแนวทางใน [coding-standards.md](file:///devflow/context/coding-standards.md)
 2. **GREEN**: เขียนโค้ดระบบจริงให้สอดคล้องเพื่อให้เทสต์ผ่าน
 3. **REFACTOR**: ปรับปรุงโครงสร้างโค้ดโดยยังคงรันเทสต์ผ่านอย่างต่อเนื่อง
 

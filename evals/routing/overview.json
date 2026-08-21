@@ -1,0 +1,14 @@
+{
+  "skill": "overview",
+  "description": "\"[Devflow] Scan codebase architecture, data models, and shipped history to synthesize or refresh devflow/context/project-overview.md as the living source of truth.\"",
+  "positive": [
+    "run overview skill",
+    "invoke /overview command",
+    "use overview for devflow scan codebase architecture data models shipped history",
+    "apply overview guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

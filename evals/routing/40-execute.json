@@ -3,7 +3,7 @@
   "description": "\"[Devflow] Execute stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests.\"",
   "positive": [
     "run 40-execute skill",
-    "invoke 40-execute command",
+    "invoke /40-execute command",
     "use 40-execute for devflow execute stage devflow execute planned tasks incrementally",
     "apply 40-execute guidance"
   ],

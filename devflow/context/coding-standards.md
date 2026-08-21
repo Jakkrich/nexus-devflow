@@ -16,9 +16,14 @@
 
 ## 2. CLI Architecture & Engineering Principles
 
-- **Separation of Concerns (Deep Modules)**:
+- **Separation of Concerns (Deep Modules & Information Hiding)**:
   - Keep CLI entry points (`bin/create-nexus-devflow.ts`) thin: handle argument parsing, option normalization, and terminal formatting.
   - Encapsulate all core business logic, filesystem operations, and parsing inside modular libraries (`lib/current-work.ts`, `lib/findings.ts`, `lib/git.ts`, `lib/uninstall.ts`, `lib/update.ts`).
+  - **Deep Modules**: Strive for simple, narrow interfaces that hide extensive implementation complexity internally.
+- **Refactoring & Code Simplification (Simplify Discipline)**:
+  - **Early Returns**: Guard conditions should exit early to eliminate deep nesting.
+  - **Single Responsibility (SRP)**: Functions should do one cohesive thing and stay under 50 lines whenever possible.
+  - **Pure Functions**: Favor deterministic functions without side effects for data transformation and parsing.
 - **Safety Flags & Idempotency**:
   - Destructive or mutating operations (e.g. `uninstall`, `update`, `install`) must support safety flags:
     - `--dry-run`: Preview actions and affected files without modifying the disk.
@@ -33,18 +38,33 @@
 
 ---
 
-## 3. File Organization & Directory Structure
+## 3. Stable API & Interface Design Standards
+
+- **Contract Stability**: Public exports, CLI options, and stage artifact schemas form immutable delivery contracts. Never break contracts without a major version bump.
+- **Explicit Parameter Objects**: For functions with more than 2 arguments, use an options object interface with descriptive property names.
+- **Defensive Input Validation**: Validate all inputs at module boundaries before processing. Never trust user or external JSON input without structural validation.
+
+---
+
+## 4. Database & Storage Architecture (When Applicable)
+
+- **Migration Safety**: Schema changes must be backward-compatible (Expand and Contract pattern). Never drop columns or rename fields in a single step.
+- **Indexing Strategy**: Always index foreign keys, search filters, and unique constraints.
+- **Connection Hygiene**: Use connection pooling and ensure connections/file handles are closed cleanly in `finally` blocks.
+
+---
+
+## 5. File Organization & Directory Structure
 
 ```text
 nexus-devflow/
 ├── .agents/skills/             # Codex & Google Antigravity skill definitions
 ├── .claude/skills/             # Claude Code mirrored skill adapters
 ├── .nexus/                     # Metadata tracking & upstream baseline ledger
-├── devflow/                    # Framework workspace context, runs, and discoveries
+├── devflow/                    # Framework workspace context, history, and discoveries
 │   ├── context/                # Living source-of-truth context files
 │   ├── discoveries/            # Pre-delivery discovery records (00-discover.md)
-│   ├── runs/                   # Running delivery artifacts (current-feature.md / 00-70)
-│   ├── history/                # Master delivery archive (HISTORY.md)
+│   ├── history/                # Master delivery archive (features/, fixes/, rollbacks/, HISTORY.md)
 │   └── ideas.md                # Idea Inbox and backlog
 ├── packages/
 │   └── create-nexus-devflow/   # Distribution npm package source
@@ -56,7 +76,7 @@ nexus-devflow/
 
 ---
 
-## 4. Naming Conventions
+## 6. Naming Conventions
 
 - **Files & Directories**:
   - Skills and command directories: `kebab-case` (e.g. `00-discover`, `report-html`, `sync-upstream`).
@@ -70,7 +90,7 @@ nexus-devflow/
 
 ---
 
-## 5. Testing & Empirical Proof Standards
+## 7. Testing & Empirical Proof Standards
 
 Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
@@ -81,14 +101,15 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
   - Use isolated temporary directories (`fs.mkdtemp` in `os.tmpdir()`) and ensure cleanup in `finally` blocks.
 - **Empirical Proof Contract**:
   - Never claim a task is "working", "tested", or "verified" without providing concrete empirical proof (exact command executed, terminal output, pass/fail counts, exit code).
-- **3-Lane Verification Matrix**:
+- **Multi-Lane Verification Matrix**:
   - **Lane 1 (Type & Syntax Safety)**: `tsc --noEmit` (0 type errors).
   - **Lane 2 (Automated Test Suites & Evals)**: `npm test` (Unit tests 100% pass) + `npm run test:routing` (Skill routing accuracy).
-  - **Lane 3 (Manual / Scenario Proof)**: Concrete walkthrough steps ("Where to go", "What to run", "What to expect").
+  - **Lane 3 (Scrutinize & Security Audit)**: Edge cases, null-safety, 0 secrets, safe inputs.
+  - **Lane 4 (Manual / Scenario Proof)**: Concrete walkthrough steps ("Where to go", "What to run", "What to expect").
 
 ---
 
-## 6. Findings Ledger & Quality Gates (`findings.md`)
+## 8. Findings Ledger & Quality Gates (`findings.md`)
 
 - All quality defects, security findings, or regression issues identified during review must be logged in `devflow/context/findings.md`.
 - **Finding State Machine**:
@@ -100,7 +121,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
 ---
 
-## 7. Error Handling & Exit Codes
+## 9. Error Handling & Exit Codes
 
 - Use structured `try / catch` blocks around filesystem and process operations.
 - Create meaningful, actionable error messages for the user (explain what failed and how to resolve it).
@@ -110,22 +131,12 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
 ---
 
-## 8. Comments & Documentation Discipline
+## 10. Conventional Commits & Release Discipline
 
-Write code that explains itself; comment only what the code cannot say:
-
-- Comment the **why**, not the **what**. Avoid comments that simply rephrase the line of code.
-- Avoid noisy banner blocks, section divider lines (`// ====================`), or obvious step narrations.
-- Comments earn their place when documenting:
-  - Non-obvious architectural decisions.
-  - Upstream compatibility quirks or workarounds.
-  - Edge-case handling rationale.
-- Keep JSDoc minimal and useful: provide a one-line summary and document non-obvious parameters.
-
----
-
-## 9. Writing & Language Conventions
-
-- **Default Communication & Artifacts**: Thai (`th`) for all generated markdown stage artifacts (`current-feature.md`, `00-discover.md`, etc.), explanations, and user interactions.
-- **Code & Identifiers**: English for all source code, variable names, file paths, CLI flags, and commit messages.
-- **Typography**: Do not use em dashes (`—`) in AI-generated commit messages or technical summaries; use standard hyphens (`-`) or colons.
+- **Conventional Commits**:
+  - Format: `<type>(<scope>): <short imperative summary>`
+  - Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
+- **SemVer Versioning**:
+  - `Major`: Breaking architectural change
+  - `Minor`: New feature addition
+  - `Patch`: Bug fix or documentation update

@@ -8,7 +8,7 @@ argument-hint: "{running-id or workspace path}"
 
 $ARGUMENTS
 
-Final delivery, safety pass, archive, and run closure stage in Fast-Track. Validates verification status, archives `devflow/context/current-feature.md` to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, resets the stub, performs git merge, and closes the run **without auto-generating HTML reports**.
+Final delivery, safety pass, archive, and run closure stage in Fast-Track. Validates verification status, archives `devflow/context/current-feature.md` to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, resets the stub, updates changelog, performs conventional commit & git merge, and closes the run **without auto-generating HTML reports**.
 
 ## Invocations & Aliases
 
@@ -62,20 +62,30 @@ When invoked:
    _Nothing in progress. Run /feature, /fix, or /rollback to start._
    ```
 
-### 4. Update Master Ledger (`HISTORY.md`)
-Append a new row to `devflow/history/HISTORY.md` under `## 📜 Master Release Log`:
-```markdown
-| {YYYY-MM-DD} | `{ID}` | {Category} | {Title} | `{commit_hash}` | `Released` | [`{xxx-slug}.md`]({category}/{xxx-slug}.md) |
-```
+### 4. Update Master Ledger (`HISTORY.md`) & CHANGELOG.md
+1. Append a new row to `devflow/history/HISTORY.md` under `## 📜 Master Release Log`:
+   ```markdown
+   | {YYYY-MM-DD} | `{ID}` | {Category} | {Title} | `{commit_hash}` | `Released` | [`{xxx-slug}.md`]({category}/{xxx-slug}.md) |
+   ```
+2. **Keep a Changelog & SemVer**:
+   - If `CHANGELOG.md` exists, append a new version block following SemVer principles:
+     - `Major (+1.0.0)`: Breaking architectural changes or API removal
+     - `Minor (0.+1.0)`: New user-facing feature additions (`Added`)
+     - `Patch (0.0.+1)`: Bug fixes (`Fixed`), documentation (`Docs`), or tweaks (`Changed`)
 
 ### 5. Policy on HTML Reports (Strict Rule)
 > [!IMPORTANT]
 > **No Auto-Generated HTML**: ห้ามสร้างไฟล์ `report.html` หรือ `60-report.html` แบบอัตโนมัติในขั้นตอนนี้โดยเด็ดขาด!
 > หากผู้ใช้ต้องการดู HTML Dashboard สวยงาม ให้แจ้งผู้ใช้ว่าสามารถเรียกคำสั่งแยกได้: `/report:html`
 
-### 6. Git Merge & Branch Cleanup
-1. Commit all modified tracking files.
-2. Squash-merge feature branch into target base branch (`main` / `master`) with explicit user approval.
+### 6. Conventional Commits, Git Merge & Branch Cleanup
+1. **Conventional Commits Format**:
+   - Stage relevant files explicitly.
+   - Use imperative mood: `<type>(<scope>): <short imperative summary>` (e.g. `feat(auth): add password reset flow`, `fix(cli): handle missing config gracefully`).
+   - Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
+2. **Squash-Merge**:
+   - Squash-merge feature branch into target base branch (`main` / `master`) with explicit user approval.
+   - Clean up short-lived feature branch.
 
 ### 7. Close Active Run
 Update `devflow/context/current-stage.md`:
@@ -86,9 +96,10 @@ Update `devflow/context/current-stage.md`:
 - `Last Completed Run`: `{ID} ({YYYY-MM-DD})`
 - `Last Updated`: `{YYYY-MM-DD}`
 
-### 8. Output Completion Report
+### 8. Output Completion Report & PR Template
 Report to the user:
 - Run successfully completed and merged
 - Archived path: `devflow/history/{category}/{xxx-slug}.md`
 - Standalone HTML command tip: `/report:html` (if HTML view is desired)
+- Pull Request summary block (if PR creation is needed)
 - Workspace is now Idle and ready for the next task.

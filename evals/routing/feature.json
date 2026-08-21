@@ -1,10 +1,10 @@
 {
   "skill": "feature",
-  "description": "\"[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract for new features.\"",
+  "description": "\"[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract in context for new features.\"",
   "positive": [
     "run feature skill",
     "invoke /feature command",
-    "use feature for devflow fast track feature spec living spec",
+    "use feature for devflow fast track feature stage devflow blueprint mode",
     "apply feature guidance"
   ],
   "negative": [

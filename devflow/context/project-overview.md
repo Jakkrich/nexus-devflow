@@ -17,8 +17,8 @@
 
 ```text
 nexus-devflow/
-├── .agents/skills/             # OpenAI Codex & Google Antigravity skill adapters (80 skills)
-├── .claude/skills/             # Claude Code skill adapters (80 skills, synchronized 1:1)
+├── .agents/skills/             # OpenAI Codex & Google Antigravity skill adapters (28 lean skills)
+├── .claude/skills/             # Claude Code skill adapters (28 lean skills, synchronized 1:1)
 ├── .github/workflows/          # Automated GitHub Actions (Upstream monitor, CI checks)
 ├── .nexus/                     # Metadata manifests and upstream tracking configuration
 │

@@ -1,10 +1,10 @@
 {
   "skill": "test",
-  "description": "\"[Devflow] Test-driven development, test generation, test execution, and coverage analysis across unit, integration, and smoke test suites.\"",
+  "description": "\"[Devflow] Test execution, missing test generation, and coverage analysis across unit, integration, and smoke test suites.\"",
   "positive": [
     "run test skill",
     "invoke /test command",
-    "use test for devflow test driven development test generation test execution",
+    "use test for devflow test execution missing test generation coverage analysis",
     "apply test guidance"
   ],
   "negative": [
