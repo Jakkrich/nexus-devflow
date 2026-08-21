@@ -23,10 +23,10 @@ To start a new project, scaffold the application first in an empty folder, then 
 
 The workflow and skills are exposed through tool-specific adapters:
 
-- **OpenAI Codex & Google Antigravity**: `.agents/skills/<skill>/SKILL.md`
+- **OpenAI Codex, Google Antigravity & GitHub Copilot**: `.agents/skills/<skill>/SKILL.md`
 - **Claude Code**: `.claude/skills/<skill>/SKILL.md`
 
-Unused adapter families can be removed. Codex and Antigravity projects keep `.agents/` and `AGENTS.md`. Claude Code projects keep `.claude/` and `AGENTS.md` (via `CLAUDE.md`).
+Unused adapter families can be removed. Codex, Antigravity, and GitHub Copilot share `.agents/` and `AGENTS.md`. Claude Code projects keep `.claude/` and `AGENTS.md` (via `CLAUDE.md`).
 
 ### Universal Invocation & Agent Directives:
 

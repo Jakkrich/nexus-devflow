@@ -13,8 +13,9 @@ import {
 } from "../lib/update.js";
 
 test("adapterListFromMode resolves adapter aliases correctly", () => {
-  assert.deepEqual(adapterListFromMode("both"), ["codex", "claude"]);
-  assert.deepEqual(adapterListFromMode("all"), ["codex", "claude"]);
+  assert.deepEqual(adapterListFromMode("both"), ["codex", "claude", "copilot"]);
+  assert.deepEqual(adapterListFromMode("all"), ["codex", "claude", "copilot"]);
+  assert.deepEqual(adapterListFromMode("copilot"), ["copilot"]);
   assert.deepEqual(adapterListFromMode("antigravity"), ["codex"]);
   assert.deepEqual(adapterListFromMode("codex"), ["codex"]);
   assert.deepEqual(adapterListFromMode("claude"), ["claude"]);
