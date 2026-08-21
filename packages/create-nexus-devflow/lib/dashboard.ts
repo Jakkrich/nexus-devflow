@@ -310,12 +310,12 @@ const DASHBOARD_HTML: string = `<!doctype html>
     }
 
     @keyframes livePulse {
-      0% { box-shadow: 0 0 0 0 rgba(11, 122, 83, 0.4); }
-      70% { box-shadow: 0 0 0 8px rgba(11, 122, 83, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(11, 122, 83, 0); }
+      0% { transform: scale(0.8); opacity: 0.6; }
+      100% { transform: scale(2.2); opacity: 0; }
     }
 
     .live-dot {
+      position: relative;
       width: 8px;
       height: 8px;
       border-radius: 50%;
@@ -323,8 +323,18 @@ const DASHBOARD_HTML: string = `<!doctype html>
       transition: background-color .3s ease;
     }
 
-    .live-dot.is-live {
-      animation: livePulse 2.2s infinite;
+    .live-dot::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: var(--green);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .live-dot.is-live::after {
+      animation: livePulse 2.2s ease-out infinite;
     }
 
     .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
