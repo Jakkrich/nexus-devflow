@@ -5,6 +5,13 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.24] - 2026-08-21
+
+### Added
+- **Unified Document Converter Skill (`convert-any-to-md`)**: Integrated a single consolidated skill in `.agents/skills/convert-any-to-md/` and `.claude/skills/convert-any-to-md/` for converting Excel (`.xlsx`), PDF (`.pdf`), Word (`.docx`), and Plaintext (`.txt`, `.csv`, `.log`, `.json`, `.yaml`, etc.) documents into clean Markdown.
+- **Embedded Image Extractor Engine (`convert_any_to_md.py`)**: Added a Python conversion engine with automatic format detection, per-sheet image extraction for Excel, per-page appendix images for PDF, ZIP media extraction for Word, and folder batch processing (`--recursive`).
+- **Default Reference Destination (`devflow/reference/`)**: Set default output directory to `devflow/reference/` for seamless integration into DevFlow workflow and reference library.
+
 ## [2.0.23] - 2026-08-21
 
 ### Added
