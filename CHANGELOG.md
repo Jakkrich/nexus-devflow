@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Fast-Track & Flow Icons in QuickPick & Status Bar**: Added Fast-Track commands (`/feature`, `/fix`, `/implement`, `/check`, `/complete`), Deep-Track stages, and Utilities into 3-category QuickPick layout with stage icons.
 - **Stage Icons & Track Mode Logic**: Enhanced `scripts/summarize-run-status.mjs` with `stageIcons` dictionary and `trackMode` (`Fast-Track` vs `Deep-Track`) detection.
+- **Live Dashboard Micro-Animations & State Diffing**: Added CSS pulse animations, JS DOM state diffing, reduced motion accessibility, and visual feedback for live stage updates.
+- **AI Blueprint Upstream v0.11.0 Sync**: Synced GitHub Copilot adapter tooling and updated Live Dashboard UI baseline from AI Blueprint upstream.
+
+### Fixed
+- **Dashboard CSS Transform Animations**: Fixed transform scaling animations for `.live-dot` and status pills by setting explicit `display: inline-block`.
 
 ## [2.0.22] - 2026-08-21
 
