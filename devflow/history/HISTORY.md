@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-21 | `026` | Feature | เพิ่มการสนับสนุน Fast-Track และ Flow Icons ให้กับ DevFlow IDE Extension / QuickPick & Status Bar UI | `HEAD` | `Released` | [`60-report.md`](features/026-fast-track-and-flow-icons-extension-ui/60-report.md) |
 | 2026-08-21 | `025` | Feature | เพิ่ม Micro-animations, JS State Diffing, และ Reduced Motion ให้กับ Live Dashboard | `HEAD` | `Released` | [`025-dashboard-animations.md`](features/025-dashboard-animations.md) |
 | 2026-08-21 | `024` | Feature | ซิงก์ AI Blueprint Upstream v0.11.0 (Copilot Adapter & Live DevFlow Dashboard UI) | `HEAD` | `Released` | [`024-sync-upstream-v0110.md`](features/024-sync-upstream-v0110.md) |
 | 2026-08-21 | `023` | Feature | ปรับโครงสร้าง Skills ให้ Lean (เหลือ 28 Core Skills), ดูดซับ Best Practices, และตัด Cheatsheet Skills ออก | `8457b13` | `Released` | [`60-report.md`](features/023-prune-unused-skills-and-consolidate/60-report.md) |

@@ -103,12 +103,32 @@ function parseVerificationGate(runDir) {
   };
 }
 
+const stageIcons = {
+  'feature': '⚡',
+  'fix': '🐛',
+  'implement': '🔨',
+  'check': '🧪',
+  'complete': '📦',
+  '00-discover': '🔍',
+  '10-define': '📌',
+  '20-spec': '📝',
+  '30-plan': '📋',
+  '40-execute': '⚙️',
+  '50-verify': '🔬',
+  '60-report': '📊',
+  '70-release': '🚀'
+};
+
 function summarizeRun(runDir) {
   const runName = path.basename(runDir);
   const runId = runName.split('-')[0] || runName;
   const currentStage = detectCurrentStage(runDir);
   const stageSignals = parseStageSignals(runDir, currentStage);
   const verificationGate = parseVerificationGate(runDir);
+  const stageIcon = stageIcons[currentStage] || '📌';
+  const trackMode = currentStage && ['feature', 'fix', 'implement', 'check', 'complete'].includes(currentStage)
+    ? 'Fast-Track'
+    : 'Deep-Track';
 
   const approvalStatus = stageSignals.approvalStatus || verificationGate?.approvalStatus || 'Unknown';
   const nextAllowedCommand = stageSignals.nextAllowedCommand || verificationGate?.nextAllowedCommand || null;
@@ -123,6 +143,8 @@ function summarizeRun(runDir) {
     runId,
     runName,
     currentStage,
+    stageIcon,
+    trackMode,
     approvalStatus,
     nextAllowedCommand,
     manualReviewOpen,
@@ -159,7 +181,7 @@ function renderText(runs) {
     const next = run.nextAllowedCommand || 'review current artifact first';
     const warningText = run.warnings.length ? ` | warnings: ${run.warnings.join(', ')}` : '';
     lines.push(
-      `- ${run.runName}: stage=${run.currentStage || 'none'} | approval=${run.approvalStatus} | next=${next}${warningText}`
+      `- ${run.stageIcon || '📌'} ${run.runName}: stage=${run.currentStage || 'none'} | track=${run.trackMode} | approval=${run.approvalStatus} | next=${next}${warningText}`
     );
   }
 
