@@ -292,7 +292,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
     h1 { margin: 13px 0 8px; color: var(--ink); font-size: clamp(32px, 4vw, 50px); letter-spacing: -.045em; }
     .path { max-width: 760px; overflow-wrap: anywhere; color: var(--ink-muted); font: 12px/1.6 var(--font-mono); }
 
-    /* Live indicator dot animation */
+    /* Live status dot animation */
     .live {
       display: inline-flex;
       align-items: center;
@@ -306,7 +306,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
       font-weight: 600;
       white-space: nowrap;
       box-shadow: 0 1px 3px rgba(18, 24, 23, .06);
-      transition: all 0.3s ease;
+      transition: border-color .3s ease, background-color .3s ease;
     }
 
     @keyframes livePulse {
@@ -320,14 +320,18 @@ const DASHBOARD_HTML: string = `<!doctype html>
       height: 8px;
       border-radius: 50%;
       background: var(--green);
-      animation: livePulse 2s infinite;
+      transition: background-color .3s ease;
+    }
+
+    .live-dot.is-live {
+      animation: livePulse 2.2s infinite;
     }
 
     .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
 
-    /* Staggered Entrance Animations & Hover Motion */
-    @keyframes slideUpFade {
-      from { opacity: 0; transform: translateY(18px); }
+    /* Initial Load Card Entrance Animation */
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -340,32 +344,41 @@ const DASHBOARD_HTML: string = `<!doctype html>
       background: var(--surface);
       box-shadow: 0 1px 2px rgba(18, 24, 23, .05), 0 10px 30px rgba(18, 24, 23, .04);
       backdrop-filter: blur(14px);
-      animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .card-enter {
+      animation: cardEntrance 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 40px rgba(18, 24, 23, .09), 0 2px 6px rgba(18, 24, 23, .04);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(18, 24, 23, .08), 0 2px 6px rgba(18, 24, 23, .04);
       border-color: rgba(21, 94, 239, 0.4);
     }
-
-    .card:nth-child(1) { animation-delay: 0.04s; }
-    .card:nth-child(2) { animation-delay: 0.08s; }
-    .card:nth-child(3) { animation-delay: 0.12s; }
-    .card:nth-child(4) { animation-delay: 0.16s; }
-    .card:nth-child(5) { animation-delay: 0.20s; }
-    .card:nth-child(6) { animation-delay: 0.24s; }
-    .card:nth-child(7) { animation-delay: 0.28s; }
-    .card:nth-child(8) { animation-delay: 0.32s; }
 
     .card.wide { grid-column: span 8; }
     .card.full { grid-column: 1 / -1; }
 
     .card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
     .label { color: var(--blue-dark); font: 600 11px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
-    .value { color: var(--ink); font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
+    
+    .value {
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      transition: color .2s ease;
+    }
+
     .muted { color: var(--ink-muted); font-size: 13px; line-height: 1.6; }
+
+    /* Pill Transitions and Scale Pop */
+    @keyframes pillPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
 
     .pill {
       padding: 5px 10px;
@@ -376,9 +389,13 @@ const DASHBOARD_HTML: string = `<!doctype html>
       font: 600 10px/1 var(--font-mono);
       letter-spacing: .04em;
       text-transform: uppercase;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: background-color .3s ease, border-color .3s ease, color .3s ease, transform .2s ease;
     }
-    .pill:hover { transform: scale(1.06); }
+
+    .pill-pop {
+      animation: pillPop 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     .pill.ok, .pill.ready, .pill.active { border-color: #b9dfce; background: var(--green-soft); color: var(--green); }
     .pill.warning, .pill.blocked, .pill.needs_verification { border-color: #efd5a5; background: var(--amber-soft); color: var(--amber); }
 
@@ -388,7 +405,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
     .fact span:first-child { color: var(--ink-muted); font-size: 12px; }
     .fact span:last-child { max-width: 70%; overflow-wrap: anywhere; color: var(--ink-soft); font: 12px/1.45 var(--font-mono); text-align: right; }
 
-    /* Shimmering animated progress bar */
+    /* Progress bar with Shimmer and Increase Glow */
     .progress { height: 8px; margin: 16px 0 10px; overflow: hidden; border-radius: 999px; background: var(--surface-muted); }
 
     @keyframes shimmer {
@@ -396,38 +413,85 @@ const DASHBOARD_HTML: string = `<!doctype html>
       100% { background-position: 200% 0; }
     }
 
+    @keyframes progressGlow {
+      0% { box-shadow: 0 0 0 0 rgba(21, 94, 239, 0.6); }
+      50% { box-shadow: 0 0 12px 2px rgba(21, 94, 239, 0.7); }
+      100% { box-shadow: 0 0 0 0 rgba(21, 94, 239, 0); }
+    }
+
     .progress-bar {
       display: block;
       width: 0;
       height: 100%;
       border-radius: inherit;
-      background: linear-gradient(90deg, #155eef 0%, #4785ff 50%, #155eef 100%);
-      background-size: 200% 100%;
-      animation: shimmer 3s infinite linear;
+      background: var(--blue);
       transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Code Panel Glow Motion */
-    @keyframes codeGlow {
-      0%, 100% { border-color: var(--code-line); box-shadow: 0 24px 80px rgba(18, 24, 23, .12); }
-      50% { border-color: rgba(118, 168, 255, 0.35); box-shadow: 0 24px 80px rgba(21, 94, 239, .14); }
+    .progress-bar.active-shimmer {
+      background: linear-gradient(90deg, #155eef 0%, #4785ff 50%, #155eef 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s infinite linear;
+    }
+
+    .progress-glow {
+      animation: progressGlow 400ms ease-out;
+    }
+
+    /* Highlight Flash for values */
+    @keyframes flashGreen {
+      0% { background-color: rgba(11, 122, 83, 0.2); }
+      100% { background-color: transparent; }
+    }
+
+    @keyframes flashAmber {
+      0% { background-color: rgba(154, 87, 0, 0.2); }
+      100% { background-color: transparent; }
+    }
+
+    .flash-green { animation: flashGreen 600ms ease-out; border-radius: 4px; padding: 0 4px; }
+    .flash-amber { animation: flashAmber 600ms ease-out; border-radius: 4px; padding: 0 4px; }
+
+    /* Code Panel & Next Action Flip/Glow */
+    @keyframes commandFlip {
+      0% { opacity: 0; transform: translateY(-6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes panelGlowPulse {
+      0% { border-color: rgba(118, 168, 255, 0.9); box-shadow: 0 0 24px rgba(21, 94, 239, 0.35); }
+      100% { border-color: var(--code-line); box-shadow: 0 24px 80px rgba(18, 24, 23, .12); }
     }
 
     .code-panel {
       color: var(--code-text);
       border-color: var(--code-line);
       background: var(--code);
-      animation: codeGlow 4s ease-in-out infinite;
+      box-shadow: 0 24px 80px rgba(18, 24, 23, .12);
       backdrop-filter: none;
+      transition: border-color .3s ease, box-shadow .3s ease;
     }
-    .code-panel:hover {
-      transform: translateY(-2px);
-    }
+
     .code-panel .label { color: var(--code-blue); }
     .code-panel .muted { color: var(--code-muted); }
 
     .next-action { padding: 24px; }
-    .command { margin: 13px 0 8px; color: var(--code-blue); font: 600 clamp(20px, 3vw, 29px)/1.3 var(--font-mono); overflow-wrap: anywhere; }
+    
+    .command {
+      margin: 13px 0 8px;
+      color: var(--code-blue);
+      font: 600 clamp(20px, 3vw, 29px)/1.3 var(--font-mono);
+      overflow-wrap: anywhere;
+    }
+
+    .command-flip { animation: commandFlip 300ms ease-out; }
+    .next-action-pulse { animation: panelGlowPulse 800ms ease-out; }
+
+    /* Staggered List Items Fade-in */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     ul { margin: 0; padding: 0; list-style: none; }
     li {
@@ -446,6 +510,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
     li:last-child { border-bottom: 0; }
     li.empty { color: var(--ink-muted); }
     li.empty:hover { background-color: transparent; transform: none; }
+    li.fade-slide-in { animation: fadeSlideIn 250ms ease-out both; }
 
     footer { margin-top: 24px; color: var(--ink-muted); font: 11px/1.6 var(--font-mono); }
 
@@ -459,6 +524,15 @@ const DASHBOARD_HTML: string = `<!doctype html>
       header { flex-direction: column; }
       .brand { margin-bottom: 22px; }
       .card, .card.wide, .card.full { grid-column: 1 / -1; }
+    }
+
+    /* Accessibility Reduced Motion Rule */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
     }
   </style>
 </head>
@@ -478,11 +552,11 @@ const DASHBOARD_HTML: string = `<!doctype html>
         <h1 id="project-name">Loading project...</h1>
         <div class="path" id="project-path">...</div>
       </div>
-      <div class="live"><span class="live-dot" id="live-dot"></span><span id="live-label">Connecting</span></div>
+      <div class="live"><span class="live-dot is-live" id="live-dot"></span><span id="live-label">Connecting</span></div>
     </header>
 
     <section class="grid">
-      <article class="card">
+      <article class="card card-enter" style="animation-delay: 0.04s;">
         <div class="card-head"><span class="label">Nexus-DevFlow</span><span class="pill" id="health-pill">Loading</span></div>
         <div class="facts">
           <div class="fact"><span>Version</span><span id="val-version">-</span></div>
@@ -491,14 +565,14 @@ const DASHBOARD_HTML: string = `<!doctype html>
         </div>
       </article>
 
-      <article class="card wide">
+      <article class="card wide card-enter" style="animation-delay: 0.08s;">
         <div class="card-head"><span class="label">Current Work</span><span class="pill" id="work-pill">Loading</span></div>
         <div class="value" id="work-title">Reading living spec...</div>
         <div class="progress"><span class="progress-bar" id="work-progress-bar"></span></div>
         <div class="muted" id="work-meta">Loading checklist steps...</div>
       </article>
 
-      <article class="card">
+      <article class="card card-enter" style="animation-delay: 0.12s;">
         <div class="card-head"><span class="label">Git Status</span><span class="pill" id="git-pill">Loading</span></div>
         <div class="facts">
           <div class="fact"><span>Branch</span><span id="git-branch">-</span></div>
@@ -507,28 +581,28 @@ const DASHBOARD_HTML: string = `<!doctype html>
         </div>
       </article>
 
-      <article class="card">
+      <article class="card card-enter" style="animation-delay: 0.16s;">
         <div class="card-head"><span class="label">Findings</span><span class="value" id="findings-count">-</span></div>
         <ul id="findings-list"><li class="empty">Loading findings...</li></ul>
       </article>
 
-      <article class="card">
+      <article class="card card-enter" style="animation-delay: 0.20s;">
         <div class="card-head"><span class="label">Completion</span><span class="pill" id="completion-pill">Loading</span></div>
         <ul id="completion-list"><li class="empty">Checking readiness...</li></ul>
       </article>
 
-      <article class="card">
+      <article class="card card-enter" style="animation-delay: 0.24s;">
         <div class="card-head"><span class="label">Attention</span><span class="value" id="warnings-count">-</span></div>
         <ul id="warnings-list"><li class="empty">Loading warnings...</li></ul>
       </article>
 
-      <article class="card full">
+      <article class="card full card-enter" style="animation-delay: 0.28s;">
         <div class="card-head"><span class="label">Completed Work Archive</span><span class="value" id="history-count">-</span></div>
         <div class="muted">Categorized history of features, fixes, and rollbacks.</div>
         <ul id="history-list"><li class="empty">Loading history archive...</li></ul>
       </article>
 
-      <article class="card full code-panel next-action">
+      <article class="card full code-panel next-action card-enter" style="animation-delay: 0.32s;" id="next-panel">
         <span class="label">Next Action</span>
         <div class="command" id="next-command">Loading...</div>
         <div class="muted" id="next-reason"></div>
@@ -540,26 +614,74 @@ const DASHBOARD_HTML: string = `<!doctype html>
 
   <script>
     const byId = (id) => document.getElementById(id);
+    let prevData = null;
+    let isFirstLoad = true;
     let refreshing = false;
 
     function setPill(id, value) {
       const node = byId(id);
       if (!node) return;
-      node.textContent = String(value || '').replaceAll("_", " ");
-      node.className = "pill " + (value || 'idle');
+      const formatted = String(value || '').replaceAll("_", " ");
+      const newClass = "pill " + (value || 'idle');
+      
+      if (!isFirstLoad && (node.textContent !== formatted || !node.className.includes(value))) {
+        node.classList.remove('pill-pop');
+        void node.offsetWidth;
+        node.classList.add('pill-pop');
+      }
+
+      node.textContent = formatted;
+      node.className = newClass + (node.classList.contains('pill-pop') ? ' pill-pop' : '');
+    }
+
+    function animateCount(node, start, end, duration = 400) {
+      if (!node) return;
+      if (start === end) {
+        node.textContent = end;
+        return;
+      }
+      const startTime = performance.now();
+      function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const currentVal = Math.round(start + (end - start) * progress);
+        node.textContent = currentVal;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          node.textContent = end;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function triggerFlash(node, type) {
+      if (!node) return;
+      const className = type === 'green' ? 'flash-green' : 'flash-amber';
+      node.classList.remove('flash-green', 'flash-amber');
+      void node.offsetWidth;
+      node.classList.add(className);
+      setTimeout(() => node.classList.remove(className), 600);
     }
 
     function setList(id, values, emptyMessage) {
       const list = byId(id);
       if (!list) return;
+      const prevItemsText = Array.from(list.children).map(c => c.textContent);
       list.replaceChildren();
       const items = values.length > 0 ? values : [emptyMessage];
-      for (const value of items) {
+
+      items.forEach((value, idx) => {
         const item = document.createElement("li");
         item.textContent = value;
-        if (values.length === 0) item.className = "empty";
+        if (values.length === 0) {
+          item.className = "empty";
+        } else if (!isFirstLoad && !prevItemsText.includes(value)) {
+          item.className = "fade-slide-in";
+          item.style.animationDelay = (idx * 40) + 'ms';
+        }
         list.append(item);
-      }
+      });
     }
 
     async function refreshStatus() {
@@ -576,6 +698,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
         const historyData = resHistory && resHistory.ok ? await resHistory.json() : { items: [] };
 
         byId('live-dot').style.background = '#0b7a53';
+        byId('live-dot').classList.add('is-live');
         byId('live-label').textContent = 'Live';
 
         byId('project-name').textContent = data.project?.name || 'Nexus-DevFlow';
@@ -593,7 +716,22 @@ const DASHBOARD_HTML: string = `<!doctype html>
           : 'Workspace is idle. Run /feature or /fix to start a new delivery run.';
         
         const pct = work.total > 0 ? Math.round((work.completed / work.total) * 100) : 0;
-        byId('work-progress-bar').style.width = pct + '%';
+        const progressBar = byId('work-progress-bar');
+        
+        const prevPct = prevData?.currentWork ? (prevData.currentWork.total > 0 ? Math.round((prevData.currentWork.completed / prevData.currentWork.total) * 100) : 0) : 0;
+        if (!isFirstLoad && pct > prevPct) {
+          progressBar.classList.remove('progress-glow');
+          void progressBar.offsetWidth;
+          progressBar.classList.add('progress-glow');
+          setTimeout(() => progressBar.classList.remove('progress-glow'), 400);
+        }
+
+        if (work.state === 'active') {
+          progressBar.classList.add('active-shimmer');
+        } else {
+          progressBar.classList.remove('active-shimmer');
+        }
+        progressBar.style.width = pct + '%';
 
         const git = data.git || {};
         setPill('git-pill', git.clean ? 'ok' : 'warning');
@@ -602,7 +740,14 @@ const DASHBOARD_HTML: string = `<!doctype html>
         byId('git-upstream').textContent = git.upstream || 'none';
 
         const findings = data.findings || { total: 0, blockers: [] };
-        byId('findings-count').textContent = findings.total || '0';
+        const prevFindingsCount = prevData?.findings?.total ?? 0;
+        const findingsNode = byId('findings-count');
+        if (!isFirstLoad && findings.total !== prevFindingsCount) {
+          animateCount(findingsNode, prevFindingsCount, findings.total);
+          triggerFlash(findingsNode, findings.total < prevFindingsCount ? 'green' : 'amber');
+        } else {
+          findingsNode.textContent = findings.total || '0';
+        }
         setList('findings-list', findings.blockers.map(b => b.id + ': ' + b.title), 'No blocking findings');
 
         const comp = data.completion || { state: 'ready', blockers: [] };
@@ -610,21 +755,54 @@ const DASHBOARD_HTML: string = `<!doctype html>
         setList('completion-list', comp.blockers || [], 'All readiness checks passed');
 
         const warnings = data.warnings || [];
-        byId('warnings-count').textContent = warnings.length;
+        const prevWarningsCount = prevData?.warnings?.length ?? 0;
+        const warningsNode = byId('warnings-count');
+        if (!isFirstLoad && warnings.length !== prevWarningsCount) {
+          animateCount(warningsNode, prevWarningsCount, warnings.length);
+          triggerFlash(warningsNode, warnings.length < prevWarningsCount ? 'green' : 'amber');
+        } else {
+          warningsNode.textContent = warnings.length;
+        }
         setList('warnings-list', warnings.map(w => w.message), 'No active warnings or drift');
 
         const historyItems = historyData.items || [];
-        byId('history-count').textContent = historyItems.length;
+        const prevHistoryCount = prevData?.historyCount ?? 0;
+        const historyNode = byId('history-count');
+        if (!isFirstLoad && historyItems.length !== prevHistoryCount) {
+          animateCount(historyNode, prevHistoryCount, historyItems.length);
+          triggerFlash(historyNode, 'green');
+        } else {
+          historyNode.textContent = historyItems.length;
+        }
         setList('history-list', historyItems.map(h => h.type.toUpperCase() + ': ' + h.title + (h.status ? ' (' + h.status + ')' : '')), 'No completed work in history archive');
 
         const next = data.nextAction || {};
-        byId('next-command').textContent = next.command || '/feature';
+        const cmdNode = byId('next-command');
+        const nextPanelNode = byId('next-panel');
+        if (!isFirstLoad && prevData?.nextAction?.command !== next.command) {
+          cmdNode.classList.remove('command-flip');
+          nextPanelNode.classList.remove('next-action-pulse');
+          void cmdNode.offsetWidth;
+          cmdNode.classList.add('command-flip');
+          nextPanelNode.classList.add('next-action-pulse');
+          setTimeout(() => {
+            cmdNode.classList.remove('command-flip');
+            nextPanelNode.classList.remove('next-action-pulse');
+          }, 800);
+        }
+        cmdNode.textContent = next.command || '/feature';
         byId('next-reason').textContent = next.reason || 'Ready for next feature';
 
+        prevData = {
+          ...data,
+          historyCount: historyItems.length
+        };
       } catch (err) {
         byId('live-dot').style.background = '#a5333f';
+        byId('live-dot').classList.remove('is-live');
         byId('live-label').textContent = 'Disconnected';
       } finally {
+        isFirstLoad = false;
         refreshing = false;
       }
     }
