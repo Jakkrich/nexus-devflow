@@ -5,6 +5,12 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.23] - 2026-08-21
+
+### Added
+- **Fast-Track & Flow Icons in QuickPick & Status Bar**: Added Fast-Track commands (`/feature`, `/fix`, `/implement`, `/check`, `/complete`), Deep-Track stages, and Utilities into 3-category QuickPick layout with stage icons.
+- **Stage Icons & Track Mode Logic**: Enhanced `scripts/summarize-run-status.mjs` with `stageIcons` dictionary and `trackMode` (`Fast-Track` vs `Deep-Track`) detection.
+
 ## [2.0.22] - 2026-08-21
 
 ### Added
