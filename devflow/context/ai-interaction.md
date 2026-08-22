@@ -65,7 +65,7 @@ The entire lifecycle is driven by the **Single Living Spec (`devflow/context/cur
 *Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination.*
 
 ```text
-00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
+00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
 ```
 
 1. `00-explore`: Explore request before delivery commitment (`DISC-YYYYMMDD-NNN`).
@@ -75,7 +75,7 @@ The entire lifecycle is driven by the **Single Living Spec (`devflow/context/cur
 5. `40-execute`: Incremental task execution behind review gates (`40-execute.md`).
 6. `50-verify`: Senior QA review & multi-lane verification checks (`50-verify.md`).
 7. `60-report`: Standardized markdown delivery digest (`60-report.md`).
-8. `70-release`: Release packaging, git merge, archives `devflow/context/current-run/` ➔ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/`, and closes the run.
+8. `70-deliver`: Release packaging, git merge, archives `devflow/context/current-run/` ➔ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/`, and closes the run.
 
 ---
 
@@ -102,7 +102,7 @@ Progress lives in persistent files, not in transient chat history:
 ## 6. Single Active Run Guardrail (One Thing at a Time)
 
 - Only one active run is allowed at a time across both Fast-Track and Deep-Track.
-- The AI will actively block opening a new feature or fix until the current one is completed with `/complete` or `70-release` (or explicitly rolled back/cancelled).
+- The AI will actively block opening a new feature or fix until the current one is completed with `/complete` or `70-deliver` (or explicitly rolled back/cancelled).
 
 ---
 

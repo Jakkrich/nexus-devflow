@@ -14,7 +14,7 @@ Nexus-DevFlow structures development history and active context into three disti
 2. **⚡ Present (Active Context)**: `devflow/context/`
    - Single Source of Truth: `project-overview.md`, `coding-standards.md`, `ai-interaction.md`.
    - **Fast-Track Active Work**: `current-feature.md` (Single Living Spec).
-   - **Deep-Track Active Work**: `current-run/` (Artifacts `10-define.md` through `70-release.md`).
+   - **Deep-Track Active Work**: `current-run/` (Artifacts `10-define.md` through `70-deliver.md`).
    - Active Stage Inspector & Single Active Run Guardrail: `current-stage.md`.
    - Findings Ledger: `findings.md` (P0/P1 quality & security blockers).
 3. **📦 Past (History Archive)**: `devflow/history/`
@@ -45,7 +45,7 @@ Recommended for 85% of daily work (iterative features, UI updates, bug fixes):
 Recommended for complex architectural epics, database schema migrations, and multi-agent coordination:
 
 ```text
-00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
+00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-deliver
 ```
 
 | Stage | Command | Artifact | Stage Responsibility |
@@ -57,7 +57,7 @@ Recommended for complex architectural epics, database schema migrations, and mul
 | **40** | `/40-execute` | `context/current-run/40-execute.md` | Step-by-step task implementation behind review gates. |
 | **50** | `/50-verify` | `context/current-run/50-verify.md` | Multi-lane verification matrix (9arm Scrutinize QA, edge cases, null-safety). |
 | **60** | `/60-report` | `context/current-run/60-report.md` | Standardized markdown delivery digest and retrospective lessons learned. |
-| **70** | `/70-release` | `history/{cat}/{xxx-slug}/` | Release packaging, Conventional Commit, SemVer calculation, git merge, and archive. |
+| **70** | `/70-deliver` | `history/{cat}/{xxx-slug}/` | Release packaging, Conventional Commit, SemVer calculation, git merge, and archive. |
 
 ---
 
@@ -80,7 +80,7 @@ DevFlow provides exactly **28 Core Skills** synchronized 1:1 across `.agents/ski
 - `40-execute`: Incremental unit execution.
 - `50-verify`: Senior QA 6-lane verification.
 - `60-report`: Standardized delivery digest and retrospective insights.
-- `70-release`: Release packaging, git operations, and history archiving.
+- `70-deliver`: Release packaging, git operations, and history archiving.
 
 ### C. Companion Tools & Quality Gates (15)
 - `devflow`: Flagship interactive guide and state router.
@@ -94,7 +94,7 @@ DevFlow provides exactly **28 Core Skills** synchronized 1:1 across `.agents/ski
 - `idea`: Idea inbox management and AI feasibility scoring.
 - `ci`: Configure GitHub Actions verify workflow.
 - `test`: Test suite runner, missing test generation, and coverage check.
-- `autopilot`: Bounded autonomous spec-build-check-audit loop.
+- `autopilot`: Bounded Fast-Track (`feature`/`fix` -> `implement` -> `check`) or Deep-Track (`20` -> `30` -> `40` -> `50` -> `60`) autonomous loop.
 - `prototype`: Throwaway pre-build static HTML/CSS mockups.
 - `report-html`: Standalone interactive HTML dashboard generator.
 - `brief`: Pre-briefing on upcoming features before speccing.
@@ -104,7 +104,7 @@ DevFlow provides exactly **28 Core Skills** synchronized 1:1 across `.agents/ski
 ## 4. In-Flow Engineering Best Practices
 
 Best practices are absorbed directly into the workflow:
-- **Conventional Commits & SemVer**: Managed in `/complete` and `/70-release`.
+- **Conventional Commits & SemVer**: Managed in `/complete` and `/70-deliver`.
 - **9arm Scrutinize QA**: Embedded into `/check` and `/50-verify` (checking null safety, array bounds, async race conditions, security review).
 - **Deep Modules & Code Simplification**: Defined in `devflow/context/coding-standards.md`.
 - **Standalone HTML Dashboard**: Mainline stages output clean Markdown only. When an HTML dashboard is needed, run `/report-html` or `npm run report:html -- {ID}` on demand.

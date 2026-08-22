@@ -121,7 +121,7 @@ export function createManifest(
         "40-execute",
         "50-verify",
         "60-report",
-        "70-release"
+        "70-deliver"
       ],
       companionCommands: [
         "devflow",

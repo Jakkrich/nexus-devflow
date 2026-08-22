@@ -85,7 +85,7 @@ Nexus-DevFlow 2.0 supports two distinct delivery tracks based on task scope and 
 > **Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination**:
 
 ```text
-00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
+00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
 ```
 
 | Stage | Canonical Command Name | Description & Core Artifacts |
@@ -97,7 +97,7 @@ Nexus-DevFlow 2.0 supports two distinct delivery tracks based on task scope and 
 | **40** | `40-execute` | Execute planned tasks incrementally with step evidence and unit tests (`40-execute.md`). |
 | **50** | `50-verify` | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
 | **60** | `60-report` | Produce standardized markdown delivery digest report (`60-report.md`). |
-| **70** | `70-release` | Package verified work, archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, git merge, and close run. |
+| **70** | `70-deliver` | Package verified work, archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, git merge, and close run. |
 
 ---
 
@@ -172,7 +172,7 @@ npx @jakkrichm/create-nexus-devflow@latest update
 | `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup. |
 | `test` | Verify test suites and test runner configuration. |
 | `brief` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
-| `autopilot` | Optional explicit bounded loop (spec -> implement -> check). |
+| `autopilot` | Optional explicit bounded loop for Fast-Track (`feature`/`fix` -> `implement` -> `check`) or Deep-Track (`20` -> `30` -> `40` -> `50` -> `60`) |
 | `prototype` | Rapid throwaway static HTML/CSS mockups to lock UI/UX before build. |
 | `report-html` | Standalone interactive HTML report dashboard generator (`/report:html`). |
 

@@ -36,7 +36,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 | `40-execute` | Execution | Step-by-step task implementation behind review gates. | `devflow/context/current-run/40-execute.md` |
 | `50-verify` | Quality Gate | Senior QA 6-lane verification matrix. | `devflow/context/current-run/50-verify.md` |
 | `60-report` | Reporting | Standardized delivery digest and retrospective insights. | `devflow/context/current-run/60-report.md` |
-| `70-release` | Delivery | Release packaging, SemVer, git merge, and history archiving. | `devflow/history/{category}/{xxx-slug}/` |
+| `70-deliver` | Delivery | Release packaging, SemVer, git merge, and history archiving. | `devflow/history/{category}/{xxx-slug}/` |
 
 ---
 
@@ -54,7 +54,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 | `idea` | Backlog | Idea inbox capture and AI feasibility scoring into `devflow/ideas.md`. |
 | `ci` | Automation | Configure GitHub Actions verify workflow (`.github/workflows/verify.yml`). |
 | `test` | Quality Gate | Test runner, missing test generation, and coverage check. |
-| `autopilot` | Autonomous | Bounded autonomous spec-build-check loop stopping before merge. |
+| `autopilot` | Autonomous | Bounded Fast-Track (`feature`/`fix` -> `implement` -> `check`) or Deep-Track (`20-spec` -> `30-plan` -> `40-execute` -> `50-verify` -> `60-report`) loop stopping before merge. |
 | `prototype` | Ideation | Throwaway pre-build static HTML/CSS mockups sharing design tokens. |
 | `report-html` | Reporting | Standalone interactive HTML dashboard generator on demand. |
 | `brief` | Planning | Pre-briefing on upcoming features before speccing. |

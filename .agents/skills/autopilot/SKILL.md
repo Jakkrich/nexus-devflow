@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: "[Devflow] Optional explicit mode for one bounded spec/plan/implement/verify/report pass with checkpoint commits and review packet."
+description: "[Devflow] Optional explicit mode for one bounded Fast-Track or Deep-Track delivery pass with checkpoint commits and review packet."
 ---
 
 # autopilot - Autonomous Bounded DevFlow Loop
@@ -8,35 +8,37 @@ description: "[Devflow] Optional explicit mode for one bounded spec/plan/impleme
 Where this sits in the workflow:
 
 ```text
-devflow  ->  [autopilot]  ->  review packet  ->  70-release
-(where        (spec, plan,     (human review,     (package, PR,
- are we?)      build, verify,   walkthrough)       merge with approval)
-               report)
+devflow  ->  [autopilot]  ->  review packet  ->  /complete (fast) / 70-deliver (deep)
+(where        (fast or deep      (human review,        (package, PR,
+ are we?)      track loop)        walkthrough)           merge with approval)
 ```
 
-Autopilot is an explicit opt-in execution skill for Nexus-DevFlow 2.0. It runs a single bounded loop across the delivery lifecycle (**`20-spec` -> `30-plan` -> `40-execute` -> `50-verify` -> `60-report`**) without requiring human confirmation between every sub-step.
+Autopilot is an explicit opt-in execution skill for Nexus-DevFlow 2.0. It runs one bounded loop without requiring human confirmation between every sub-step, in either track:
 
-It does **not** replace the normal step-by-step workflow. Mainline commands (`20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`) remain the conservative default.
+- Fast-Track: `feature` / `fix` -> `implement` -> `check`.
+- Deep-Track: `20-spec` -> `30-plan` -> `40-execute` -> `50-verify` -> `60-report`.
+
+It does **not** replace the normal step-by-step workflow. Mainline commands (`feature`, `fix`, `implement`, `check`, `complete`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-deliver`) remain the conservative default.
 
 Do not suggest Autopilot as the default next action. Use it only when the user explicitly asks for it.
 
-The explicit Autopilot request is permission to create checkpoint commits on the feature or fix branch after passing implementation steps. It is **not** permission to merge into `main`, push to remote, deploy, publish, delete data, or run destructive actions.
+The explicit Autopilot request is permission to create checkpoint commits on the feature/fix branch after passing implementation steps. It is **not** permission to merge into `main`, push to remote, deploy, publish, delete data, or run destructive actions.
 
 ## Input
 
 Common forms:
 
 - **No argument**: resume the active run in `devflow/context/current-stage.md`, or target the next planned run/feature in `devflow/context/project-overview.md`.
-- **Running ID or feature name**: target that run, e.g. `autopilot RUN-004` or `autopilot "add user authentication"`.
-- **`fix "<issue>"`**: write and execute an ad-hoc fix run.
+- **`fast`**: force Fast-Track mode. Example: `autopilot fast "add auth header"`
+- **`deep`**: force Deep-Track mode. Example: `autopilot deep "data migration"`
+- **Running ID or feature name**: target that run, e.g. `autopilot RUN-004` or `autopilot "add user authentication"` (mode auto-selected from context).
+- **`fix "<issue>"`**: write and execute an ad-hoc fast-mode fix run.
 - **`resume`**: continue the current active run on its existing branch.
 
 If the requested target conflicts with a run already in progress, stop and ask which one should win. Do not overwrite active stage artifacts silently.
 
 > [!IMPORTANT]
 > Rollback is intentionally excluded from Autopilot. If the request is a rollback or the stage is marked Rollback, stop and direct the user to `rollback` and reviewed `40-execute`. Reversing completed work requires explicit dependency and human review gates.
-
----
 
 ## Step 1 - Preflight & Safety Check
 
@@ -45,10 +47,19 @@ Read the project state:
 - `AGENTS.md` & `CLAUDE.md`
 - `devflow/context/project-overview.md`
 - `devflow/context/current-stage.md`
+- `devflow/context/current-feature.md`
+- `devflow/context/current-run/` artifacts
 - `devflow/context/coding-standards.md`
 - `devflow/context/ai-interaction.md`
 - `devflow/context/findings.md`
 - git branch, status, and recent log
+
+Track mode selection:
+
+1. Use explicit `fast` or `deep` if provided.
+2. If `devflow/context/current-feature.md` is active and `current-run/` has no deep stage files, default to **fast**.
+3. If `devflow/context/current-run/` has deep stage files (`10-define.md`, `20-spec.md`, `30-plan.md`, etc.), default to **deep**.
+4. If both tracks are active, stop and ask which track should win.
 
 Stop before changing files when:
 
@@ -57,18 +68,24 @@ Stop before changing files when:
 3. `current-stage.md` has an active run and the user requested a different target without resolving conflict.
 4. The task requires architectural, financial, auth, billing, or destructive decisions not documented in the context.
 
----
+## Step 2 - Choose or Write Specification
 
-## Step 2 - Choose or Write Specification (`20-spec`)
+### Fast-Track
 
-1. If `devflow/runs/{running-id}-{slug}20-spec.md` already exists, resume it.
+1. If `devflow/context/current-feature.md` already exists and is active, resume it.
+2. If no spec exists:
+   - Write or refresh the spec in `devflow/context/current-feature.md`.
+   - Lock scope, acceptance criteria, and implementation checklist.
+   - Add feasibility checks and test hooks.
+3. Critique and red-team the spec (edge cases, unhappy paths, testable criteria), then apply fixes.
+
+### Deep-Track
+
+1. If `devflow/context/current-run/20-spec.md` already exists, resume it.
 2. If no spec exists:
    - Ensure `10-define.md` exists with locked scope and allocated Running ID.
    - Write `20-spec.md` following the DevFlow specification schema.
-   - Critique and red-team the spec (edge cases, unhappy paths, testable criteria).
-   - Apply fixes to the spec.
-
----
+   - Critique and red-team the spec (edge cases, unhappy paths, testable criteria), then apply fixes.
 
 ## Step 3 - Branch Setup & Implementation Plan (`30-plan`)
 
@@ -77,10 +94,8 @@ Stop before changing files when:
    - Fix: `fix/{slug}-{running-id}`
    - Switch to or create the working branch. Never run Autopilot directly on `main` or `master`.
 2. **Planning**:
-   - Write `devflow/runs/{running-id}-{slug}30-plan.md`.
-   - Seed `checklists/implementation-checklist.md` and `checklists/verification-checklist.md`.
-
----
+   - **Fast-Track**: maintain the implementation and verification checklist sections in `devflow/context/current-feature.md`.
+   - **Deep-Track**: write `devflow/context/current-run/30-plan.md` and seed `checklists/implementation-checklist.md` and `checklists/verification-checklist.md`.
 
 ## Step 4 - Implement in Small Increments (`40-execute`)
 
@@ -93,15 +108,19 @@ For every subtask:
 3. If UI is involved, inspect behavior, verify console errors and network calls.
 4. Self-review diff against `coding-standards.md`.
 5. Fix issues and rerun failed checks.
-6. Mark the task checked `[x]` in `checklists/implementation-checklist.md`.
+6. Mark the task checked `[x]`.
 7. **Create a Checkpoint Commit** on the feature/fix branch for the passing step:
    ```bash
-   git add <modified-files> devflow/runs/{running-id}-{slug}/checklists/implementation-checklist.md
+   # Fast-Track
+   git add <modified-files> devflow/context/current-feature.md
+   git commit -m "feat({running-id}): checkpoint <concise step description>"
+
+   # Deep-Track
+   git add <modified-files> devflow/context/current-run/{running-id}-{slug}/checklists/implementation-checklist.md
    git commit -m "feat({running-id}): checkpoint <concise step description>"
    ```
-8. Write `devflow/runs/{running-id}-{slug}40-execute.md`.
-
----
+8. **Fast-Track**: write implementation status to `devflow/context/current-feature.md`.
+9. **Deep-Track**: write `devflow/context/current-run/{running-id}-{slug}40-execute.md`.
 
 ## Step 5 - Senior QA Verification (`50-verify`)
 
@@ -110,10 +129,11 @@ For every subtask:
    - Static contracts (`npm run check:static` when applicable)
    - Project test suite (Unit tests, integration tests)
    - Build / Package smoke tests
-2. Update `checklists/verification-checklist.md` with concrete evidence.
-3. Write `devflow/runs/{running-id}-{slug}50-verify.md` with QA verdict (`PASS` / `FAIL`).
-
----
+2. Update verification evidence with concrete evidence in the active track artifact:
+   - **Fast-Track**: `devflow/context/current-feature.md`
+   - **Deep-Track**: `checklists/verification-checklist.md`
+3. **Deep-Track**: write `devflow/context/current-run/{running-id}-{slug}50-verify.md` with QA verdict (`PASS` / `FAIL`).
+4. **Fast-Track**: confirm check stage transition and verification state in `devflow/context/current-feature.md`.
 
 ## Step 6 - Targeted Quality Audit & Repair
 
@@ -125,16 +145,15 @@ Review diffs and inspect `devflow/context/findings.md`:
 4. Create a checkpoint commit for the fix.
 5. If a P0/P1 finding cannot be repaired within scope or fails twice consecutively, stop immediately and report.
 
----
+## Step 7 - Review Packet & Track Handoff
 
-## Step 7 - Delivery Digest & Review Packet (`60-report`)
-
-1. Write `devflow/runs/{running-id}-{slug}60-report.md`.
-2. Render standalone HTML dashboard `devflow/runs/{running-id}-{slug}60-report.html` (via `md2html` or report generator).
-3. Update `devflow/context/current-stage.md` to indicate ready for `70-release`.
-4. Stop with a concise **Review Packet Dashboard** for human approval.
-
----
+1. **Deep-Track**: write `devflow/context/current-run/{running-id}-{slug}60-report.md`, render standalone HTML dashboard `devflow/context/current-run/{running-id}-{slug}60-report.html` (via `md2html` or report generator), and set `devflow/context/current-stage.md` to ready for `70-deliver`.
+2. **Fast-Track**: keep final checkpoint and evidence in `devflow/context/current-feature.md`.
+3. Stop with a concise **Review Packet Dashboard** for human approval, including:
+   - Track used (`fast` or `deep`)
+   - Evidence summary
+   - Commit count
+   - Manual next action (`/complete` for fast, `/70-deliver` for deep)
 
 ## 🛑 Strict Hard Stops (Never Exceed)
 
@@ -147,29 +166,32 @@ Stop immediately and report to the user instead of continuing when Autopilot wou
 - Make product, business, or architecture decisions not specified in the context.
 - Continue after two failed attempts to fix the same issue (Two-attempt hard stop).
 
----
-
 ## Output Review Packet Format
 
 When Autopilot finishes successfully, output a scannable review packet:
 
 ```markdown
-### 🛸 Autopilot Execution Summary: [{running-id}]
+### 🛸 Autopilot Execution Summary: [{running-id}] ({track})
 
 - **Branch**: `{branch-name}`
 - **Target Run**: `{running-id} - {title}`
 - **Artifacts Generated**:
-  - Spec: `devflow/runs/{id}20-spec.md`
-  - Plan: `devflow/runs/{id}30-plan.md`
-  - Implement Evidence: `devflow/runs/{id}40-execute.md`
-  - QA Verify Report: `devflow/runs/{id}50-verify.md`
-  - Digest Report: `devflow/runs/{id}60-report.md`
-  - HTML Dashboard: `devflow/runs/{id}60-report.html`
-- **Validation & Tests**: `All Passed (Green)`
+  - **Fast-Track**:
+    - Spec/Build/Verify evidence: `devflow/context/current-feature.md`
+  - **Deep-Track**:
+    - Spec: `devflow/context/current-run/{id}20-spec.md`
+    - Plan: `devflow/context/current-run/{id}30-plan.md`
+    - Implement Evidence: `devflow/context/current-run/{id}40-execute.md`
+    - QA Verify Report: `devflow/context/current-run/{id}50-verify.md`
+    - Digest Report: `devflow/context/current-run/{id}60-report.md`
+    - HTML Dashboard: `devflow/context/current-run/{id}60-report.html`
+- **Validation & Tests**: track-aware PASS/FAIL evidence
 - **Checkpoint Commits**: `{count} commits created on {branch-name}`
 - **Manual QA Walkthrough**: Run `try {running-id}` for human review guide
 
 ---
 👉 **Next Recommended Action**:
-Inspect diffs and `try` walkthrough, then run `70-release {running-id}` to package, merge, or create PR.
+Inspect diffs and `try` walkthrough.
+- Fast-Track: run `/complete {running-id}` for final safety and merge flow.
+- Deep-Track: run `70-deliver {running-id}` to package, merge, or create PR.
 ```

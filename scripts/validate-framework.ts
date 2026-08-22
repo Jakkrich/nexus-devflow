@@ -109,7 +109,7 @@ function validateWorkflowNumbering(failures: string[]): void {
     "30-plan",
     "40-execute",
     "50-verify",
-    "70-release",
+    "70-deliver",
     "60-report"
   ]);
   const skillFolders = fs.readdirSync(skillsDir)

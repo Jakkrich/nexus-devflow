@@ -12,7 +12,7 @@ devflow/
 ├── context/                    # ⚡ Present (Active Context): Single Living Spec & Active State
 │   ├── current-feature.md      # Fast-Track Single Living Spec (Active feature/fix/rollback)
 │   ├── current-stage.md        # Active stage inspector & Single Active Run Guardrail
-│   ├── current-run/            # Deep-Track active stage artifacts (10-define.md to 70-release.md)
+│   ├── current-run/            # Deep-Track active stage artifacts (10-define.md to 70-deliver.md)
 │   ├── project-overview.md     # Single Source of Truth
 │   ├── coding-standards.md     # Engineering standards & conventions
 │   ├── ai-interaction.md       # AI interaction guidelines
@@ -32,7 +32,7 @@ devflow/
 | Pillar | Location | Responsibility | Lifecycle & Mutation |
 | :--- | :--- | :--- | :--- |
 | **🔮 Future (Backlog)** | `devflow/ideas.md` | Idea Inbox, AI feasibility scoring, backlog tags (`[IDEA-xxx]`). | Appended via `/idea` or manual edits. |
-| **⚡ Present (Active Context)** | `devflow/context/` | Source of Truth, Active Stage State, Single Living Spec, and Active Run. | Mutated during active delivery; reset to stub on `/complete` or `/70-release`. |
+| **⚡ Present (Active Context)** | `devflow/context/` | Source of Truth, Active Stage State, Single Living Spec, and Active Run. | Mutated during active delivery; reset to stub on `/complete` or `/70-deliver`. |
 | **📦 Past (History Archive)** | `devflow/history/` | Categorized immutable delivery records (`features/`, `fixes/`, `rollbacks/`) and Master Ledger (`HISTORY.md`). | Appended upon stage completion; immutable. |
 
 ---
@@ -54,8 +54,8 @@ devflow/
   - `40-execute.md`: Implementation log and evidence.
   - `50-verify.md`: QA 6-lane verification matrix.
   - `60-report.md`: Delivery digest and retrospective insights.
-  - `70-release.md`: Release packaging and verification.
-- Archived to `devflow/history/{category}/{xxx-slug}/` on `/70-release`.
+  - `70-deliver.md`: Release packaging and verification.
+- Archived to `devflow/history/{category}/{xxx-slug}/` on `/70-deliver`.
 
 ---
 

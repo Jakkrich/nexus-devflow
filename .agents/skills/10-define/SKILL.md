@@ -37,7 +37,7 @@ using:
 1. Inspect `devflow/context/current-stage.md`, `devflow/context/current-feature.md`, and `devflow/context/current-run/`.
 2. If an active uncompleted run exists:
    - **HALT and reject opening a new define stage**.
-   - Warn the user to complete or close the active run with `/complete` or `70-release` first.
+   - Warn the user to complete or close the active run with `/complete` or `70-deliver` first.
 
 ### 2. Validate The Discovery Gate
 Require:

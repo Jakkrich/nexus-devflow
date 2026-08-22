@@ -55,7 +55,7 @@ Nexus-DevFlow provides two optimized delivery tracks depending on task complexit
 *Recommended for large architectural epics, database migrations, and multi-agent coordination.*
 
 ```text
-00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
+00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-deliver
 ```
 
 1. `/00-explore`: Explore request before delivery commitment (`devflow/discoveries/DISC-xxx/00-explore.md`).
@@ -65,7 +65,7 @@ Nexus-DevFlow provides two optimized delivery tracks depending on task complexit
 5. `/40-execute`: Incremental task implementation behind review gates.
 6. `/50-verify`: Senior QA review across 6 verification lanes.
 7. `/60-report`: Standardized markdown delivery digest and retrospective lessons learned.
-8. `/70-release`: Package verified work, git merge, and archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`.
+8. `/70-deliver`: Package verified work, git merge, and archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`.
 
 ---
 
@@ -77,7 +77,7 @@ devflow/
 ├── context/                    # ⚡ Present (Active Context): Single Living Spec & Active State
 │   ├── current-feature.md      # Fast-Track Single Living Spec
 │   ├── current-stage.md        # Active stage inspector & guardrail
-│   ├── current-run/            # Deep-Track active stage artifacts (10-define to 70-release)
+│   ├── current-run/            # Deep-Track active stage artifacts (10-define to 70-deliver)
 │   ├── project-overview.md     # Single Source of Truth
 │   ├── coding-standards.md     # Engineering standards & conventions
 │   ├── ai-interaction.md       # AI interaction guidelines

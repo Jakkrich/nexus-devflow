@@ -9,7 +9,7 @@ const stageMappings = [
   { legacyDir: '30-plan', legacyFile: 'plan.md', targetFile: '30-plan.md' },
   { legacyDir: '40-execute', legacyFile: 'implement.md', targetFile: '40-execute.md' },
   { legacyDir: '50-verify', legacyFile: 'verify.md', targetFile: '50-verify.md' },
-  { legacyDir: '70-release', legacyFile: 'release.md', targetFile: '70-release.md' },
+  { legacyDir: '70-deliver', legacyFile: 'release.md', targetFile: '70-deliver.md' },
   { legacyDir: '60-report', legacyFile: 'report.md', targetFile: '60-report.md' },
   { legacyDir: '60-report', legacyFile: 'report.html', targetFile: '60-report.html' }
 ];

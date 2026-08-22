@@ -28,7 +28,7 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 
 ### Optional Layers
 
-- Add `70-release.md` when release-facing packaging or coordination matters
+- Add `70-deliver.md` when release-facing packaging or coordination matters
 - Add `checklists/` when the team wants live execution visibility across planning, implementation, and verification
 - Add `PRD` artifacts when product framing needs to mature before or during spec work
 - Skip unnecessary companion routes when the request is already clear, approve Proceed in Discover, and continue to `/10-Define {discovery_id}`
@@ -71,7 +71,7 @@ Maintainers evolving the Nexus-DevFlow framework itself, especially when the wor
 - `Help` when the right public route is still unclear
 - `/00-explore` for new framework work that needs scoped context
 - `Research` when framework decisions depend on source-backed tooling or policy checks
-- `/50-Verify` and `/70-Release` more often than product teams when the work is mainly framework hardening, validation, or packaging
+- `/50-Verify` and `/70-deliver` more often than product teams when the work is mainly framework hardening, validation, or packaging
 
 ### Minimum Artifact Set
 

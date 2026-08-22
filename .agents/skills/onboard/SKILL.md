@@ -9,7 +9,7 @@ Where this sits in the workflow:
 
 ```text
 scaffold app  ->  overlay DevFlow  ->  [onboard]  ->  00-explore or 10-define  ->  Mainline Loop
-(user/tool)       (create-nexus)       (tune setup)   (discovery / run scoping)      (20-spec -> 70-release)
+(user/tool)       (create-nexus)       (tune setup)   (discovery / run scoping)      (20-spec -> 70-deliver)
 ```
 
 `onboard` is the fresh-project on-ramp for Nexus-DevFlow. It assumes the application was scaffolded first (e.g. via `create-next-app`, `create-vite`, `cargo new`, etc.) and DevFlow was overlaid after.
