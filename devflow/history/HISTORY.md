@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-22 | `040` | Feature | Dashboard Blueprint Reference Mockup Parity, Dual-Track Visualizer, และ Snapshot API Backend | `HEAD` | `Released` | [`60-report.md`](features/040-dashboard-mockup-parity/60-report.md) |
 | 2026-08-22 | `039` | Feature | Dynamic Project Overview Compiler (`/overview`) พร้อมระบบ Living Context Sync อัตโนมัติ | `HEAD` | `Released` | [`039-dynamic-overview-compiler.md`](features/039-dynamic-overview-compiler.md) |
 | 2026-08-22 | `038` | Feature | Sub-Feature Automatic Splitting Engine (`4a`, `4b`), Sizing Heuristic, และ Sub-Feature ID Contract | `5b476b9` | `Released` | [`038-sub-feature-splitting-engine.md`](features/038-sub-feature-splitting-engine.md) |
 | 2026-08-22 | `037` | Feature | Feature Briefing & Deep Scope Assessment Skill (`/brief`) และ Sub-Feature Splitting Engine | `c9d4ed4` | `Released` | [`037-feature-briefing-skill.md`](features/037-feature-briefing-skill.md) |

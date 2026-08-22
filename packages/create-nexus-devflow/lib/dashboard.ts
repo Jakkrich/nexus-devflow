@@ -1,6 +1,9 @@
 import { spawn } from "node:child_process";
 import http from "node:http";
 
+import { DASHBOARD_PAGE_HTML } from "./dashboard-page.js";
+import { readDashboardSnapshot } from "./dashboard-snapshot.js";
+import type { DashboardSnapshotOptions } from "./dashboard-snapshot.js";
 import { readHistory } from "./history.js";
 import { readProjectStatus } from "./status.js";
 
@@ -11,6 +14,7 @@ interface DashboardServer {
 
 interface DashboardServerOptions {
   port?: number;
+  snapshotOptions?: DashboardSnapshotOptions;
 }
 
 const DASHBOARD_HOST = "127.0.0.1";
@@ -22,7 +26,7 @@ async function startDashboardServer(
   const initialStatus = await readProjectStatus(startPath);
   const projectRoot = initialStatus.project.root;
   const server = http.createServer((request, response) => {
-    void handleRequest(projectRoot, request, response);
+    void handleRequest(projectRoot, request, response, options.snapshotOptions);
   });
 
   await new Promise<void>((resolve, reject) => {
@@ -55,7 +59,8 @@ async function startDashboardServer(
 async function handleRequest(
   projectRoot: string,
   request: http.IncomingMessage,
-  response: http.ServerResponse
+  response: http.ServerResponse,
+  snapshotOptions?: DashboardSnapshotOptions
 ): Promise<void> {
   const method = request.method || "GET";
   if (method !== "GET" && method !== "HEAD") {
@@ -69,9 +74,9 @@ async function handleRequest(
   if (pathname === "/") {
     response.setHeader(
       "Content-Security-Policy",
-      "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src * 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+      "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
     );
-    sendResponse(response, method, 200, "text/html; charset=utf-8", DASHBOARD_HTML);
+    sendResponse(response, method, 200, "text/html; charset=utf-8", DASHBOARD_PAGE_HTML);
     return;
   }
 
@@ -93,6 +98,30 @@ async function handleRequest(
         "application/json; charset=utf-8",
         `${JSON.stringify({
           error: error instanceof Error ? error.message : "Unable to read Nexus-DevFlow status."
+        })}\n`
+      );
+    }
+    return;
+  }
+
+  if (pathname === "/api/dashboard") {
+    try {
+      const snapshot = await readDashboardSnapshot(projectRoot, snapshotOptions);
+      sendResponse(
+        response,
+        method,
+        200,
+        "application/json; charset=utf-8",
+        `${JSON.stringify(snapshot)}\n`
+      );
+    } catch (error: unknown) {
+      sendResponse(
+        response,
+        method,
+        500,
+        "application/json; charset=utf-8",
+        `${JSON.stringify({
+          error: error instanceof Error ? error.message : "Unable to read dashboard snapshot."
         })}\n`
       );
     }

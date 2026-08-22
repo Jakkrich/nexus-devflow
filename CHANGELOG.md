@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.26] - 2026-08-22
+
+### Added
+- **Dashboard Mockup & Blueprint Theme Parity (`040-dashboard-mockup-parity`)**: Redesigned Web Dashboard UI to achieve full visual and structural parity with Blueprint reference mockup (`#071626` navy grid theme, semantic color accents, card spacing, and clean responsive hierarchy).
+- **Interactive Dual-Track Visualizer**: Integrated dynamic stage pipelines for Fast-Track (4 stages) and Deep-Track (8 stages) with deterministic state rendering (`done`, `active`, `pending`).
+- **Quick Commands Tooltip & Interactive Copy**: Added accessible hover and keyboard focus tooltips with skill descriptions, along with one-click copy-to-clipboard functionality and visual `Copied!` feedback.
+- **Dedicated Dashboard Snapshot Backend (`/api/dashboard`)**: Implemented `/api/dashboard` composing live workflow state, history records, doctor checks, discoveries, package version status, command catalog, and adapter health, while retaining backward compatibility for `/api/status`.
+
 ## [2.0.25] - 2026-08-22
 
 ### Added

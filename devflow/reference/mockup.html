@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nexus-DevFlow — Blueprint Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-display:'Space Grotesk',sans-serif;
+  --font-sans:'Inter',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --bg:#0a2540; --bg-deep:#071b30; --panel:rgba(255,255,255,.035);
+  --ink:#eaf3ff; --ink-soft:#b7d3ef; --ink-muted:#6f93b8;
+  --line:rgba(191,224,255,.16); --line-strong:rgba(191,224,255,.34);
+  --cyan:#7dd8ff; --cyan-dim:#3f7fa8;
+  --gold:#f2c14e; --gold-soft:rgba(242,193,78,.14);
+  --mint:#6fe3b4; --mint-soft:rgba(111,227,180,.14);
+  --redline:#ff6b5b; --redline-soft:rgba(255,107,91,.14);
+  --violet:#b39bff; --violet-soft:rgba(179,155,255,.14);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+  font-family:var(--font-sans);-webkit-font-smoothing:antialiased;
+  background-image:
+    linear-gradient(rgba(125,216,255,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(125,216,255,.07) 1px,transparent 1px),
+    radial-gradient(circle at 8% -6%,rgba(125,216,255,.14),transparent 40rem);
+  background-size:34px 34px,34px 34px,auto;
+}
+.sheet{width:min(1180px,calc(100% - 40px));margin:0 auto;padding:34px 0 70px;position:relative}
+.crop{position:fixed;width:18px;height:18px;border-color:var(--line-strong);opacity:.7;pointer-events:none}
+.crop.tl{top:14px;left:14px;border-top:1px solid;border-left:1px solid}
+.crop.tr{top:14px;right:14px;border-top:1px solid;border-right:1px solid}
+.crop.bl{bottom:14px;left:14px;border-bottom:1px solid;border-left:1px solid}
+.crop.br{bottom:14px;right:14px;border-bottom:1px solid;border-right:1px solid}
+
+.titleblock{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding-bottom:18px;margin-bottom:10px;border-bottom:1px solid var(--line-strong);flex-wrap:wrap}
+.dwg-no{font:600 11px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.dwg-no::before{content:"";width:20px;height:1px;background:var(--cyan)}
+.titleblock h1{margin:0 0 6px;font-family:var(--font-display);font-weight:700;font-size:clamp(30px,4vw,46px);letter-spacing:-.02em}
+.path{color:var(--ink-muted);font:12px/1.6 var(--font-mono)}
+.badge-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.badge{padding:3px 9px;border:1px solid var(--line-strong);border-radius:3px;font:600 10px/1.6 var(--font-mono);letter-spacing:.04em;color:var(--ink-muted)}
+.badge.mint{border-color:rgba(111,227,180,.4);color:var(--mint);background:var(--mint-soft)}
+.badge.violet{border-color:rgba(179,155,255,.4);color:var(--violet);background:var(--violet-soft)}
+.tb-table{display:grid;grid-template-columns:auto auto;gap:3px 18px;font:11px/1.5 var(--font-mono);text-align:right}
+.tb-table dt{color:var(--ink-muted);letter-spacing:.06em;text-transform:uppercase;text-align:left}
+.tb-table dd{margin:0;color:var(--ink-soft)}
+.live-wrap{display:flex;align-items:center;gap:8px;margin-bottom:26px}
+.live-dot{position:relative;width:7px;height:7px;border-radius:50%;background:var(--mint)}
+.live-dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--mint);opacity:0;animation:pulseRing 2.2s ease-out infinite}
+@keyframes pulseRing{0%{transform:scale(.5);opacity:.5}100%{transform:scale(2.4);opacity:0}}
+
+/* ---- dual-track pipeline ---- */
+.pipeline{margin-bottom:26px;padding:22px 24px 20px;border:1px solid var(--line);border-radius:4px;background:var(--panel)}
+.pipeline-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.pipeline-title{font:600 11px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.track-tabs{display:flex;gap:6px}
+.tab{padding:6px 12px;border:1px solid var(--line-strong);border-radius:99px;background:transparent;color:var(--ink-muted);font:600 10.5px var(--font-mono);letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:.15s ease}
+.tab:hover{border-color:var(--cyan);color:var(--cyan)}
+.tab.on{background:var(--cyan);color:var(--bg-deep);border-color:var(--cyan)}
+.track-view{display:none}
+.track-view.on{display:block}
+.stepper{display:flex;gap:0;overflow-x:auto;padding-bottom:4px}
+.step{flex:1 1 0;min-width:100px;position:relative;padding:0 10px 0 0}
+.step:last-child{padding-right:0}
+.step-conn{position:absolute;top:9px;left:calc(50% + 10px);right:calc(-50% + 10px);height:1px;background:var(--line-strong)}
+.step:last-child .step-conn{display:none}
+.step.done .step-conn{background:var(--mint)}
+.step-dot{width:19px;height:19px;border-radius:50%;border:2px solid var(--line-strong);display:flex;align-items:center;justify-content:center;font:700 9px var(--font-mono);color:var(--ink-muted);background:var(--bg-deep);position:relative;z-index:1}
+.step.done .step-dot{border-color:var(--mint);color:var(--mint)}
+.step.active .step-dot{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 4px rgba(242,193,78,.18)}
+.step-name{margin-top:9px;font:600 10.5px/1.3 var(--font-mono);color:var(--ink-soft);letter-spacing:.02em}
+.step.active .step-name{color:var(--gold)}
+.step.done .step-name{color:var(--mint)}
+.step-cmd{margin-top:3px;font:10px var(--font-mono);color:var(--ink-muted)}
+.track-note{margin-top:14px;color:var(--ink-muted);font:11.5px/1.6 var(--font-mono);padding-top:12px;border-top:1px dashed var(--line)}
+.track-note b{color:var(--ink-soft)}
+
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:26px}
+.stat{background:var(--bg-deep);padding:14px 16px}
+.stat-num{font:700 24px/1 var(--font-display);color:var(--ink);letter-spacing:-.02em}
+.stat-num.mint{color:var(--mint)} .stat-num.gold{color:var(--gold)} .stat-num.redline{color:var(--redline)} .stat-num.violet{color:var(--violet)}
+.stat-label{margin-top:4px;color:var(--ink-muted);font:10px var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;margin-bottom:20px}
+.card{position:relative;grid-column:span 4;min-width:0;padding:clamp(20px,2.4vw,28px);border:1px solid var(--line);border-radius:4px;background:var(--panel);opacity:0;transform:translateY(8px);animation:cardIn .4s cubic-bezier(.4,0,.2,1) forwards}
+.sheet > .card{margin-bottom:20px}
+.card::before,.card::after{content:"";position:absolute;width:8px;height:8px;border-color:var(--line-strong);opacity:.8}
+.card::before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid}
+.card::after{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid}
+.card.wide{grid-column:span 8} .card.full{grid-column:1/-1}
+@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.label{color:var(--cyan);font:600 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase}
+.value{font:700 18px/1.3 var(--font-display);letter-spacing:-.01em}
+.muted{color:var(--ink-muted);font-size:12.5px;line-height:1.6}
+.tag{padding:4px 9px;border:1px solid var(--line-strong);border-radius:3px;color:var(--ink-muted);background:rgba(255,255,255,.03);font:600 10px/1 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;display:inline-block}
+.tag.ok,.tag.ready,.tag.active{border-color:rgba(111,227,180,.4);background:var(--mint-soft);color:var(--mint)}
+.tag.warning,.tag.blocked{border-color:rgba(255,107,91,.4);background:var(--redline-soft);color:var(--redline)}
+.tag.progress{border-color:rgba(242,193,78,.4);background:var(--gold-soft);color:var(--gold)}
+.tag.track{border-color:rgba(179,155,255,.4);background:var(--violet-soft);color:var(--violet)}
+.facts{display:grid;gap:10px}
+.fact{display:flex;justify-content:space-between;gap:16px;padding-bottom:9px;border-bottom:1px dashed var(--line)}
+.fact:last-child{border-bottom:0;padding-bottom:0}
+.fact span:first-child{color:var(--ink-muted);font-size:11.5px}
+.fact span:last-child{color:var(--ink-soft);font:11.5px var(--font-mono);text-align:right}
+.progress{height:6px;margin:14px 0 9px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.progress-bar{display:block;height:100%;border-radius:inherit;background:var(--gold);box-shadow:0 0 10px rgba(242,193,78,.5)}
+ul{margin:0;padding:0;list-style:none}
+li{padding:9px 0;border-bottom:1px dashed var(--line);color:var(--ink-soft);font-size:12.5px;line-height:1.55}
+li:last-child{border-bottom:0}
+li.empty{color:var(--ink-muted)}
+
+.sev-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.sev{flex:1;min-width:64px;text-align:center;padding:8px 6px;border:1px solid var(--line);border-radius:3px;background:rgba(255,255,255,.02)}
+.sev-count{font:700 17px var(--font-display)}
+.sev-label{font:9px var(--font-mono);color:var(--ink-muted);letter-spacing:.06em;margin-top:2px}
+.sev.p0 .sev-count{color:var(--redline)} .sev.p1 .sev-count{color:var(--gold)}
+.sev.p2 .sev-count{color:var(--cyan)} .sev.p3 .sev-count{color:var(--ink-muted)}
+
+.doctor-item{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12.5px;color:var(--ink-soft)}
+.doctor-item:last-child{border-bottom:0}
+.dchk{flex:0 0 auto;width:15px;height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;font:700 10px var(--font-mono);margin-top:1px}
+.dchk.ok{background:var(--mint-soft);color:var(--mint)} .dchk.warn{background:var(--redline-soft);color:var(--redline)}
+
+.disc-item{padding:9px 0;border-bottom:1px dashed var(--line)}
+.disc-item:last-child{border-bottom:0}
+.disc-id{font:700 11px var(--font-mono);color:var(--violet)}
+.disc-title{color:var(--ink-soft);font-size:12.5px;margin-top:2px}
+.disc-status{font:10px var(--font-mono);color:var(--ink-muted);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+
+.cmd-row{display:flex;flex-wrap:wrap;gap:10px}
+.cmdp{position:relative;padding:8px 13px;border:1px solid var(--line-strong);border-radius:3px;background:rgba(255,255,255,.02);color:var(--ink-soft);font:11px var(--font-mono);cursor:pointer;transition:.15s ease;white-space:nowrap}
+.cmdp:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(125,216,255,.06)}
+.cmdp b{color:var(--cyan);font-weight:700}
+.cmdp::after{content:attr(data-tip);position:absolute;z-index:20;left:50%;bottom:calc(100% + 10px);width:max-content;max-width:min(280px,80vw);padding:9px 11px;border:1px solid var(--line-strong);border-radius:3px;background:#041525;color:var(--ink-soft);font:10.5px/1.5 var(--font-mono);white-space:normal;text-align:left;box-shadow:0 10px 28px rgba(0,0,0,.35);opacity:0;visibility:hidden;transform:translate(-50%,5px);transition:.15s ease;pointer-events:none}
+.cmdp:hover::after,.cmdp:focus-visible::after{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
+.adapters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.adapter{padding:14px;border:1px solid var(--line);border-radius:3px;background:rgba(255,255,255,.02)}
+.adapter-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.adapter-badge{width:26px;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center;font:700 9px var(--font-mono);color:var(--bg-deep);flex:0 0 auto}
+.adapter-name{font:600 12px var(--font-mono);color:var(--ink-soft)}
+.adapter-path{font:10px var(--font-mono);color:var(--ink-muted);margin:2px 0 6px}
+.adapter-status{font:11px var(--font-mono);color:var(--ink-muted);display:flex;align-items:center;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%}
+.dot.mint{background:var(--mint)} .dot.redline{background:var(--redline)}
+
+.filters{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.chip{padding:6px 12px;border:1px solid var(--line-strong);border-radius:99px;background:transparent;color:var(--ink-muted);font:600 10.5px var(--font-mono);letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:.15s ease}
+.chip:hover{border-color:var(--cyan);color:var(--cyan)}
+.chip.on{background:var(--cyan);color:var(--bg-deep);border-color:var(--cyan)}
+.idea{display:grid;grid-template-columns:1fr auto;gap:8px 14px;padding:14px 0;border-bottom:1px dashed var(--line);align-items:start}
+.idea:last-child{border-bottom:0}
+.idea-id{font:700 11px var(--font-mono);color:var(--cyan);letter-spacing:.04em}
+.idea-title{font:600 13.5px var(--font-sans);color:var(--ink);margin-top:3px;line-height:1.4}
+.idea-desc{color:var(--ink-muted);font-size:12px;line-height:1.55;margin-top:5px}
+.idea-feas{margin-top:6px;font:11px var(--font-mono);color:var(--ink-muted)}
+.idea-feas b{color:var(--ink-soft)}
+.idea-feas.high{color:var(--mint)} .idea-feas.med{color:var(--gold)}
+.cmd-chip{align-self:start;padding:5px 10px;border:1px solid var(--line-strong);border-radius:3px;background:rgba(255,255,255,.03);color:var(--cyan);font:600 11px var(--font-mono);cursor:pointer;white-space:nowrap;transition:.15s ease}
+.cmd-chip:hover{background:var(--cyan);color:var(--bg-deep)}
+.more-note{margin-top:12px;color:var(--ink-muted);font:11px var(--font-mono);text-align:center;padding-top:10px;border-top:1px dashed var(--line)}
+
+.hist-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);align-items:baseline}
+.hist-item:last-child{border-bottom:0}
+.hist-bar{width:3px;align-self:stretch;border-radius:2px;flex:0 0 auto}
+.hist-bar.feature{background:var(--cyan)} .hist-bar.fix{background:var(--gold)} .hist-bar.rollback{background:var(--redline)}
+.hist-type{font:700 10px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);flex:0 0 76px}
+.hist-title{color:var(--ink-soft);font-size:12.5px;line-height:1.5}
+
+.ticket{background:var(--bg-deep);border:1px solid var(--line-strong)}
+.ticket-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.copy-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:3px;background:transparent;color:var(--cyan);border:1px solid var(--cyan-dim);font:600 11px var(--font-mono);cursor:pointer;transition:.15s ease}
+.copy-btn:hover{background:var(--cyan);color:var(--bg-deep)}
+.copy-btn.copied{background:var(--mint);color:var(--bg-deep);border-color:var(--mint)}
+.command{font:700 clamp(20px,3vw,28px)/1.3 var(--font-mono);color:var(--gold);margin:4px 0 8px}
+.ticket .muted{font-size:13px;color:var(--ink-soft)}
+
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--ink-muted);font:11px var(--font-mono)}
+footer a{color:var(--cyan);text-decoration:none}
+
+@media (max-width:920px){
+  .grid .card,.grid .card.wide{grid-column:1/-1}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .adapters{grid-template-columns:repeat(2,1fr)}
+  .titleblock{flex-direction:column;align-items:flex-start}
+  .tb-table{text-align:left}
+  .stepper{gap:14px}
+}
+@media (max-width:560px){
+  .sheet{width:min(100% - 24px,1180px);padding-top:22px}
+  .grid{gap:14px;margin-bottom:14px}
+  .card{padding:18px}
+  .sheet > .card{margin-bottom:14px}
+  .cmdp::after{position:fixed;left:12px;right:12px;bottom:18px;width:auto;max-width:none;transform:translateY(5px)}
+  .cmdp:hover::after,.cmdp:focus-visible::after{transform:translateY(0)}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
+
+<main class="sheet">
+
+  <header class="titleblock">
+    <div>
+      <div class="dwg-no">JAKKRICH / NEXUS-DEVFLOW · WORKSPACE STATUS</div>
+      <h1>nexus-devflow</h1>
+      <div class="path">The 3-Pillars &amp; Dual-Track Agentic Workflow Layer</div>
+      <div class="badge-row">
+        <span class="badge mint">npm v2.0.25</span>
+        <span class="badge mint">Health: OK</span>
+        <span class="badge">MIT license</span>
+        <span class="badge violet">Track: Idle</span>
+      </div>
+    </div>
+    <dl class="tb-table">
+      <dt>Package</dt><dd>@jakkrichm/create-nexus-devflow</dd>
+      <dt>Adapters</dt><dd>4 detected</dd>
+      <dt>Branch</dt><dd>main</dd>
+      <dt>Revision</dt><dd>2026-08-22</dd>
+    </dl>
+  </header>
+  <div class="live-wrap"><span class="live-dot"></span><span class="muted" style="font:11px var(--font-mono)">Status snapshot · health OK · npx @jakkrichm/create-nexus-devflow status</span></div>
+
+  <!-- Dual-Track Delivery Model -->
+  <section class="pipeline">
+    <div class="pipeline-head">
+      <span class="pipeline-title">Dual-Track Delivery Model</span>
+      <div class="track-tabs" id="track-tabs">
+        <button class="tab on" data-t="fast">🏎️ Fast-Track · 4 steps</button>
+        <button class="tab" data-t="deep">🏗️ Deep-Track · 8 stages</button>
+      </div>
+    </div>
+
+    <div class="track-view on" id="view-fast">
+      <div class="stepper">
+        <div class="step"><span class="step-conn"></span><span class="step-dot">1</span><div class="step-name">feature / fix</div><div class="step-cmd">/feature · /fix</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">2</span><div class="step-name">implement</div><div class="step-cmd">/implement</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">3</span><div class="step-name">check</div><div class="step-cmd">/check</div></div>
+        <div class="step"><span class="step-dot">4</span><div class="step-name">complete</div><div class="step-cmd">/complete</div></div>
+      </div>
+      <div class="track-note"><b>Idle:</b> no active Fast-Track run. Use <code>/feature</code> or <code>/fix</code> to create the Single Living Spec in <code>devflow/context/current-feature.md</code>. Recommended for about 85% of daily engineering work.</div>
+    </div>
+
+    <div class="track-view" id="view-deep">
+      <div class="stepper">
+        <div class="step"><span class="step-conn"></span><span class="step-dot">00</span><div class="step-name">00-explore</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">10</span><div class="step-name">10-define</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">20</span><div class="step-name">20-spec</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">30</span><div class="step-name">30-plan</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">40</span><div class="step-name">40-execute</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">50</span><div class="step-name">50-verify</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">60</span><div class="step-name">60-report</div></div>
+        <div class="step"><span class="step-dot">70</span><div class="step-name">70-deliver</div></div>
+      </div>
+      <div class="track-note"><b>Reference model:</b> no active Deep-Track run. Recommended for architectural epics, database migrations, security audits, and multi-agent coordination. Progress lives in <code>devflow/context/current-run/</code> and is archived on <code>/70-deliver</code>.</div>
+    </div>
+  </section>
+
+  <section class="card full ticket" style="animation-delay:.01s">
+    <div class="ticket-head">
+      <span class="label">Next Action</span>
+      <button class="copy-btn" id="copy-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        <span id="copy-text">Copy command</span>
+      </button>
+    </div>
+    <div class="command" id="next-command">/feature</div>
+    <div class="muted">Workspace is idle and ready for new work. Start a Fast-Track feature, or use <code>/00-explore</code> when the scope needs deeper discovery first.</div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><div class="stat-num mint">35</div><div class="stat-label">Runs released</div></div>
+    <div class="stat"><div class="stat-num redline">0</div><div class="stat-label">Active findings</div></div>
+    <div class="stat"><div class="stat-num gold">4</div><div class="stat-label">Pending ideas</div></div>
+    <div class="stat"><div class="stat-num">4/4</div><div class="stat-label">Adapters synced</div></div>
+    <div class="stat"><div class="stat-num violet">Idle</div><div class="stat-label">Current state</div></div>
+  </section>
+
+  <section class="grid">
+    <article class="card" style="animation-delay:.02s">
+      <div class="card-head"><span class="label">Nexus-DevFlow</span><span class="tag ok">up to date</span></div>
+      <div class="facts">
+        <div class="fact"><span>Installed / latest</span><span>v2.0.25 / v2.0.25</span></div>
+        <div class="fact"><span>Adapters</span><span>antigravity, codex, claude, copilot</span></div>
+        <div class="fact"><span>Architecture</span><span>3-Pillars + Dual-Track</span></div>
+      </div>
+    </article>
+
+    <article class="card wide" style="animation-delay:.05s">
+      <div class="card-head">
+        <span class="label">Current Work</span>
+        <span style="display:flex;gap:6px"><span class="tag track">no active track</span><span class="tag ready">ready</span></span>
+      </div>
+      <div class="value">No active delivery run</div>
+      <div class="progress"><span class="progress-bar" style="width:100%;background:var(--mint)"></span></div>
+      <div class="muted">Last completed: 039-dynamic-overview-compiler · 2026-08-22</div>
+    </article>
+
+    <article class="card" style="animation-delay:.08s">
+      <div class="card-head"><span class="label">Git Status</span><span class="tag warning">1 changed</span></div>
+      <div class="facts">
+        <div class="fact"><span>Branch</span><span>main</span></div>
+        <div class="fact"><span>Working Tree</span><span>1 changed file</span></div>
+        <div class="fact"><span>Upstream</span><span>origin/main</span></div>
+      </div>
+    </article>
+
+    <article class="card" style="animation-delay:.11s">
+      <div class="card-head"><span class="label">Findings Ledger</span><span class="value">0</span></div>
+      <div class="sev-row">
+        <div class="sev p0"><div class="sev-count">0</div><div class="sev-label">P0</div></div>
+        <div class="sev p1"><div class="sev-count">0</div><div class="sev-label">P1</div></div>
+        <div class="sev p2"><div class="sev-count">0</div><div class="sev-label">P2</div></div>
+        <div class="sev p3"><div class="sev-count">0</div><div class="sev-label">P3</div></div>
+      </div>
+      <ul><li class="empty">No blocking findings</li></ul>
+    </article>
+
+    <article class="card" style="animation-delay:.14s">
+      <div class="card-head"><span class="label">Completion</span><span class="tag ready">idle</span></div>
+      <ul><li>No active run to complete</li></ul>
+    </article>
+
+    <article class="card" style="animation-delay:.17s">
+      <div class="card-head"><span class="label">Warnings</span><span class="value">0</span></div>
+      <ul><li class="empty">No status warnings</li></ul>
+    </article>
+  </section>
+
+  <!-- new: doctor + discoveries (extra amenities) -->
+  <section class="grid">
+    <article class="card wide" style="animation-delay:.19s">
+      <div class="card-head"><span class="label">Doctor · Health Check</span><span class="muted">npx create-nexus-devflow doctor</span></div>
+      <div class="doctor-item"><span class="dchk ok">✓</span><span>Adapters detected — .agents/skills &amp; .claude/skills present and in sync</span></div>
+      <div class="doctor-item"><span class="dchk ok">✓</span><span>package.json scripts wired (devflow, doctor, status)</span></div>
+      <div class="doctor-item"><span class="dchk ok">✓</span><span>Installed version matches npm registry latest: <code>2.0.25</code></span></div>
+      <div class="doctor-item"><span class="dchk ok">✓</span><span>No orphaned devflow/runs/ legacy folders (2.0 layout confirmed)</span></div>
+    </article>
+
+    <article class="card" style="animation-delay:.22s">
+      <div class="card-head"><span class="label">Discoveries</span><span class="value">0</span></div>
+      <div class="disc-item">
+        <div class="disc-id">NO ACTIVE DISCOVERY</div>
+        <div class="disc-title">Use /00-explore to investigate a request before delivery commitment.</div>
+        <div class="disc-status" style="color:var(--mint)">workspace ready</div>
+      </div>
+    </article>
+  </section>
+
+  <!-- new: quick command palette -->
+  <section class="card full" style="animation-delay:.24s">
+    <div class="card-head"><span class="label">Quick Commands</span><span class="muted">click to copy</span></div>
+    <div class="cmd-row" id="cmd-palette">
+      <button class="cmdp" data-cmd="devflow" data-tip="Inspect workflow state and route your intent to the right next command."><b>devflow</b></button>
+      <button class="cmdp" data-cmd="doctor" data-tip="Run a read-only health check for setup, scripts, adapters, and workflow drift.">doctor</button>
+      <button class="cmdp" data-cmd="overview" data-tip="Compile plans and repository context into the living project-overview.md.">overview</button>
+      <button class="cmdp" data-cmd="idea" data-tip="Capture and enrich a new idea in the centralized Idea Inbox.">idea</button>
+      <button class="cmdp" data-cmd="debug" data-tip="Investigate a bug and establish its root cause before implementation.">debug</button>
+      <button class="cmdp" data-cmd="brief" data-tip="Preview scope, dependencies, risks, and likely size before creating a run.">brief</button>
+      <button class="cmdp" data-cmd="onboard" data-tip="Detect the stack and establish baseline context for a fresh project.">onboard</button>
+      <button class="cmdp" data-cmd="adopt" data-tip="Survey an existing codebase and bootstrap DevFlow context for it.">adopt</button>
+      <button class="cmdp" data-cmd="try" data-tip="Guide a human through manual QA: where to go, what to do, and what to expect.">try</button>
+      <button class="cmdp" data-cmd="rollback" data-tip="Plan a safe reversal with dependency and regression risk analysis.">rollback</button>
+      <button class="cmdp" data-cmd="ci" data-tip="Set up the GitHub Actions verification workflow for the project.">ci</button>
+      <button class="cmdp" data-cmd="test" data-tip="Inspect test suites and verify the test runner configuration.">test</button>
+      <button class="cmdp" data-cmd="autopilot" data-tip="Run a bounded Fast-Track or Deep-Track execution loop with quality gates.">autopilot</button>
+      <button class="cmdp" data-cmd="prototype" data-tip="Create a throwaway static HTML/CSS mockup to settle UI direction before build.">prototype</button>
+      <button class="cmdp" data-cmd="report-html" data-tip="Generate the optional standalone interactive HTML delivery report.">report-html</button>
+    </div>
+  </section>
+
+  <section class="card full" style="animation-delay:.26s">
+    <div class="card-head"><span class="label">Adapter Sync</span><span class="muted">.agents/ · .claude/ · AGENTS.md drift check</span></div>
+    <div class="adapters">
+      <div class="adapter"><div class="adapter-head"><span class="adapter-badge" style="background:var(--violet)">AG</span><span class="adapter-name">Antigravity</span></div><div class="adapter-path">.agents/skills/&lt;skill&gt;</div><div class="adapter-status"><span class="dot mint"></span>synced · 2m ago</div></div>
+      <div class="adapter"><div class="adapter-head"><span class="adapter-badge" style="background:var(--cyan)">CX</span><span class="adapter-name">Codex</span></div><div class="adapter-path">.agents/skills/&lt;skill&gt;</div><div class="adapter-status"><span class="dot mint"></span>synced · 2m ago</div></div>
+      <div class="adapter"><div class="adapter-head"><span class="adapter-badge" style="background:var(--gold)">CL</span><span class="adapter-name">Claude Code</span></div><div class="adapter-path">.claude/skills/&lt;skill&gt;</div><div class="adapter-status"><span class="dot mint"></span>synced · just now</div></div>
+      <div class="adapter"><div class="adapter-head"><span class="adapter-badge" style="background:var(--ink-muted)">GH</span><span class="adapter-name">GitHub Copilot</span></div><div class="adapter-path">.agents/skills/&lt;skill&gt;</div><div class="adapter-status"><span class="dot mint"></span>detected · synced</div></div>
+    </div>
+  </section>
+
+  <section class="card full" style="animation-delay:.28s">
+    <div class="card-head"><span class="label">Idea Inbox &amp; Backlog</span><span class="value">4 pending</span></div>
+    <div class="muted" style="margin-bottom:6px">From devflow/ideas.md — start with <code>/feature IDEA-xxx</code></div>
+    <div class="filters" id="filters">
+      <button class="chip on" data-f="all">All</button>
+      <button class="chip" data-f="high">High feasibility</button>
+      <button class="chip" data-f="med">Medium feasibility</button>
+    </div>
+    <ul id="idea-list">
+      <li class="idea" data-f="med"><div><div class="idea-id">IDEA-003</div><div class="idea-title">Interactive Terminal UI (TUI) Dashboard (Ink / Clack)</div><div class="idea-desc">แดชบอร์ดอินเตอร์แอคทีฟบน Terminal สำหรับ Living Spec, Checklists และ Next Action</div><div class="idea-feas med">⚡ <b>ปานกลาง</b> — ink / @clack/prompts</div></div><button class="cmd-chip" data-cmd="/feature IDEA-003">/feature IDEA-003</button></li>
+      <li class="idea" data-f="med"><div><div class="idea-id">IDEA-004</div><div class="idea-title">DevFlow MCP Server &amp; Multi-Agent API</div><div class="idea-desc">ยกระดับ CLI เป็น MCP Server เพื่อให้ AI agents เรียกใช้ DevFlow tools โดยตรง</div><div class="idea-feas med">⚡ <b>ปานกลาง</b> — @modelcontextprotocol/sdk</div></div><button class="cmd-chip" data-cmd="/feature IDEA-004">/feature IDEA-004</button></li>
+      <li class="idea" data-f="high"><div><div class="idea-id">IDEA-015</div><div class="idea-title">Configurable Artifact Language (th | en)</div><div class="idea-desc">สลับภาษาเริ่มต้นของเอกสารและบทสนทนาผ่าน nexus-devflow.json</div><div class="idea-feas high">⚡ <b>สูง</b> — artifactLanguage config</div></div><button class="cmd-chip" data-cmd="/feature IDEA-015">/feature IDEA-015</button></li>
+      <li class="idea" data-f="high"><div><div class="idea-id">IDEA-023</div><div class="idea-title">Lightweight Zero-Dependency Pure Markdown Mode</div><div class="idea-desc">Export DevFlow เป็น Pure Markdown สำหรับโปรเจกต์ที่ไม่มี Node.js</div><div class="idea-feas high">⚡ <b>สูง</b> — pure Markdown templates</div></div><button class="cmd-chip" data-cmd="/feature IDEA-023">/feature IDEA-023</button></li>
+    </ul>
+    <div class="more-note">20 shipped ideas archived in devflow/ideas.md</div>
+  </section>
+
+  <section class="card full" style="animation-delay:.30s">
+    <div class="card-head"><span class="label">Completed Work Archive</span><span class="value">35 released</span></div>
+    <div class="muted" style="margin-bottom:4px">Categorized: devflow/history/{features,fixes,rollbacks}/</div>
+    <div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 039</span><span class="hist-title">Dynamic Project Overview Compiler (/overview) พร้อม Living Context Sync</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 038</span><span class="hist-title">Sub-Feature Automatic Splitting Engine และ Sub-Feature ID Contract</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 037</span><span class="hist-title">Feature Briefing &amp; Deep Scope Assessment Skill (/brief)</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 036</span><span class="hist-title">Cloud Deployment Readiness Skill (/release) และ 70-deliver</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 035</span><span class="hist-title">Guided Project Discovery Interview Skill (/discovery)</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 034</span><span class="hist-title">Dedicated Code &amp; Security Audit Skill (/audit)</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 033</span><span class="hist-title">User-Owned Planning Documents (project-plan.md &amp; build-plan.md)</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 032</span><span class="hist-title">CI/CD Quality Gatekeeper และ Git Hooks</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 031</span><span class="hist-title">CLI subcommands: idea, findings, doctor --fix และ archive</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 030</span><span class="hist-title">AI Blueprint Upstream v0.12.1 sync</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Read-only DevFlow 2.0 status mockup · snapshot from local CLI · <a href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener">github.com/Jakkrich/nexus-devflow</a></span>
+    <span>rev 2.0.25 · sheet 1 of 1 · MIT license</span>
+  </footer>
+</main>
+
+<script>
+document.getElementById('track-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('#track-tabs .tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.track-view').forEach(v => v.classList.remove('on'));
+  document.getElementById('view-' + btn.dataset.t).classList.add('on');
+});
+
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if (!btn) return;
+  document.querySelectorAll('#filters .chip').forEach(c => c.classList.remove('on'));
+  btn.classList.add('on');
+  const f = btn.dataset.f;
+  document.querySelectorAll('#idea-list .idea').forEach(li => {
+    li.style.display = (f === 'all' || li.dataset.f === f) ? '' : 'none';
+  });
+});
+
+function wireCopy(selector, getText) {
+  document.querySelectorAll(selector).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = getText(btn);
+      navigator.clipboard?.writeText(text);
+      const orig = btn.innerHTML;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.innerHTML = orig, 1000);
+    });
+  });
+}
+wireCopy('.cmd-chip', btn => btn.dataset.cmd);
+wireCopy('.cmdp', btn => btn.dataset.cmd);
+
+const copyBtn = document.getElementById('copy-btn');
+copyBtn.addEventListener('click', () => {
+  navigator.clipboard?.writeText(document.getElementById('next-command').textContent.trim());
+  const t = document.getElementById('copy-text');
+  copyBtn.classList.add('copied');
+  t.textContent = 'Copied!';
+  setTimeout(() => { copyBtn.classList.remove('copied'); t.textContent = 'Copy command'; }, 1200);
+});
+</script>
+</body>
+</html>

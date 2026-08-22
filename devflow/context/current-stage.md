@@ -1,8 +1,9 @@
-# Current DevFlow Run Status
+# Current Stage
 
-- **Active Discovery ID**: `None`
-- **Active Running ID**: `None`
-- **Current Stage**: `idle`
-- **Living Spec**: `devflow/context/current-feature.md` (idle)
-- **Last Completed Run**: `039-dynamic-overview-compiler (2026-08-22)`
-- **Last Updated**: 2026-08-22
+- Active Discovery ID: `None`
+- Active Running ID: `None (Idle)`
+- Current Stage: `Idle (Ready for /feature, /fix, or /00-explore)`
+- Living Spec: `None`
+- Last Completed Run: `040-dashboard-mockup-parity (2026-08-22)`
+- Last Updated: 2026-08-22
+
