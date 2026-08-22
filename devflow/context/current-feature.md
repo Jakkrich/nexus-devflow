@@ -1,7 +1,7 @@
 # ⚡ Active Feature Context (Living Spec)
 
 > **Status**: `idle` (No active feature running)  
-> **Last Completed Run**: `037-feature-briefing-skill` (Completed 2026-08-22)  
+> **Last Completed Run**: `038-sub-feature-splitting-engine` (Completed 2026-08-22)  
 
 To start a new feature, run `/feature {name-or-id}` or `/fix {name-or-id}`.
 To explore a request first, run `/00-explore {topic}`.

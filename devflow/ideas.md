@@ -38,17 +38,7 @@
 
 
 
-### [IDEA-012] Sub-Feature Automatic Splitting Engine (4a, 4b, 4c)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: ระบบแบ่งฟีเจอร์ขนาดใหญ่ออกเป็นฟีเจอร์ย่อย (Sub-features) อัตโนมัติเมื่อขนาดงานเกินขีดจำกัด
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — เพิ่มตรรกะใน `/brief` และ `/feature` เพื่อตรวจเช็กขนาดงานและแตกเป็น `007a`, `007b` ให้อัตโนมัติ
-- **Value & Potential**: **สูง** — ป้องกันไม่ให้ AI ทำงานในขอบเขตที่กว้างเกินไปในรันเดียว
-- **Quick Seed (กันลืม)**:
-  1. กำหนดเกณฑ์ประเมินขนาดงาน (เช่น เกิน 5 ไฟล์ หรือ 100+ บรรทัด)
-  2. สับแบ่งเป็น sub-task เรียงตามลำดับความขึ้นตรงกัน (Dependencies)
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-012` หรือ `/00-explore IDEA-012`)
 
----
 
 ### [IDEA-013] Dynamic Project Overview Compiler (`/overview`)
 - **บันทึกเมื่อ**: 2026-08-22
@@ -198,6 +188,7 @@
 
 ## 📦 Archived / Shipped Ideas
 
+- [x] **[IDEA-012]** Sub-Feature Automatic Splitting Engine (4a, 4b, 4c) — *Claimed in `038-sub-feature-splitting-engine` (2026-08-22)*
 - [x] **[IDEA-011]** Feature Briefing Skill จากแผนงาน (`/brief`) — *Claimed in `037-feature-briefing-skill` (2026-08-22)*
 - [x] **[IDEA-010]** Cloud Deployment Readiness & Config Generator Skill (`/release`) — *Claimed in `036-cloud-deployment-readiness-skill` (2026-08-22)*
 - [x] **[IDEA-009]** Guided Discovery Interview Skill (`/discovery`) — *Claimed in `035-guided-discovery-interview-skill` (2026-08-22)*

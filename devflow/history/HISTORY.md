@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-22 | `038` | Feature | Sub-Feature Automatic Splitting Engine (`4a`, `4b`), Sizing Heuristic, และ Sub-Feature ID Contract | `5b476b9` | `Released` | [`038-sub-feature-splitting-engine.md`](features/038-sub-feature-splitting-engine.md) |
 | 2026-08-22 | `037` | Feature | Feature Briefing & Deep Scope Assessment Skill (`/brief`) และ Sub-Feature Splitting Engine | `c9d4ed4` | `Released` | [`037-feature-briefing-skill.md`](features/037-feature-briefing-skill.md) |
 | 2026-08-22 | `036` | Feature | Cloud Deployment Readiness Skill (`/release`), รีเนม `70-deliver`, และอัปเกรด `autopilot` Dual-Track | `7b94829` | `Released` | [`036-cloud-deployment-readiness-skill.md`](features/036-cloud-deployment-readiness-skill.md) |
 | 2026-08-22 | `035` | Feature | Guided Project Discovery Interview Skill (`/discovery`) และ 4 เสาหลักการวางแผนงาน | `c629a13` | `Released` | [`035-guided-discovery-interview-skill.md`](features/035-guided-discovery-interview-skill.md) |
