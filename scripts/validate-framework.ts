@@ -151,6 +151,35 @@ function validateUpstreamWorkflow(failures: string[]): void {
   }
 }
 
+function validateManifestSync(failures: string[]): void {
+  const pkg = readJson<{ version?: string }>("package.json", failures);
+  const devflowManifest = readJson<{
+    version?: string;
+    lifecycle?: {
+      fastTrackStages?: string[];
+      mainlineStages?: string[];
+      companionCommands?: string[];
+    };
+  }>(".nexus/nexus-devflow.json", failures);
+
+  if (!pkg || !devflowManifest) return;
+
+  if (devflowManifest.version !== pkg.version) {
+    fail(
+      `.nexus/nexus-devflow.json version ("${devflowManifest.version}") does not match package.json version ("${pkg.version}")`,
+      failures
+    );
+  } else {
+    ok(`.nexus/nexus-devflow.json version is synchronized ("${pkg.version}")`);
+  }
+
+  if (!devflowManifest.lifecycle?.fastTrackStages) {
+    fail(`.nexus/nexus-devflow.json is missing lifecycle.fastTrackStages`, failures);
+  } else {
+    ok(".nexus/nexus-devflow.json contains fastTrackStages");
+  }
+}
+
 function main() {
   const failures: string[] = [];
   const manifest = readJson<{ required_paths?: string[]; forbidden_legacy_paths?: string[] }>("agent-bundle.manifest.json", failures);
@@ -189,6 +218,7 @@ function main() {
   validateRoadmap(failures);
   validateWorkflowNumbering(failures);
   validateUpstreamWorkflow(failures);
+  validateManifestSync(failures);
 
   if (failures.length > 0) {
     console.error(`\nValidation failed with ${failures.length} issue(s).`);
