@@ -8,11 +8,12 @@ import { startDashboardServer } from "../lib/dashboard.js";
 
 test("startDashboardServer starts server and responds to / and /api/status", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-test-dash-"));
+  let server: Awaited<ReturnType<typeof startDashboardServer>> | undefined;
   try {
     await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
     await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Instructions\n");
 
-    const server = await startDashboardServer(tempDir);
+    server = await startDashboardServer(tempDir);
     assert.equal(typeof server.url, "string");
     assert.equal(server.url.startsWith("http://127.0.0.1"), true);
 
@@ -23,10 +24,12 @@ test("startDashboardServer starts server and responds to / and /api/status", asy
     const apiRes = await fetchUrl(`${server.url}/api/status`);
     assert.equal(apiRes.statusCode, 200);
     const json = JSON.parse(apiRes.body) as { project: { root: string } };
-    assert.equal(json.project.root, tempDir);
-
-    await server.close();
+    const expectedRoot = await fs.realpath(tempDir);
+    assert.equal(json.project.root, expectedRoot);
   } finally {
+    if (server) {
+      await server.close();
+    }
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
