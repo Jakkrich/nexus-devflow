@@ -161,7 +161,10 @@ npx @jakkrichm/create-nexus-devflow@latest update
 | คำสั่งมาตรฐาน | หน้าที่ |
 | :--- | :--- |
 | `devflow` | นำทางกระบวนการ, ตรวจสอบสถานะโปรเจกต์, และแนะนำคำสั่งถัดไป |
-| `doctor` | ตรวจสอบสุขภาพของระบบ, สคริปต์, อะแดปเตอร์ และความสมบูรณ์ของเวิร์กโฟลว์ |
+| `discovery` | สัมภาษณ์และวางแผนเชิงลึกเพื่อสร้าง `project-plan.md` และ `build-plan.md` |
+| `audit` | ตรวจสอบคุณภาพโค้ด ความปลอดภัย และ Performance พร้อมบันทึกลง `findings.md` |
+| `release` | เตรียมความพร้อมก่อน Deploy ขึ้น Cloud (Render / Vercel) พร้อมสร้าง Config |
+| `doctor` | ตรวจสอบสุขภาพของระบบ, สคริปต์, อะแดปเตอร์ และความสมบูรณ์ของเวิร์กโฟลว์ (`--fix` ได้) |
 | `overview` | สกัดแผนงานเป็น `project-overview.md` เพื่อเป็น Single Source of Truth |
 | `idea` | จดบันทึกไอเดียเร็วๆ พร้อม AI ช่วยวิเคราะห์คะแนนความคุ้มค่าลง `devflow/ideas.md` |
 | `debug` | ค้นหาสาเหตุของบั๊กอย่างเป็นระบบก่อนลงมือแก้ไขโค้ด |
@@ -170,8 +173,10 @@ npx @jakkrichm/create-nexus-devflow@latest update
 | `try` | คู่มือการทดสอบด้วยมือทีละขั้นตอนสำหรับมนุษย์ (ต้องไปที่ไหน, คลิกอะไร, คาดหวังผลลัพธ์แบบใด) |
 | `rollback` | วางแผนย้อนคืนฟีเจอร์อย่างปลอดภัยพร้อมวิเคราะห์ความเสี่ยงของ Dependency |
 | `ci` | ตั้งค่าและสร้าง GitHub Actions Workflow สำหรับตรวจสอบคุณภาพอัตโนมัติ |
-| `test` | ตรวจสอบชุดทดสอบและตั้งค่า Test Runner |
-| `brief` | ดูสรุปขอบเขตและขนาดของฟีเจอร์ก่อนเริ่มเขียนสเปก |
+| `tests` / `test` | ตรวจสอบชุดทดสอบ สร้างเคสที่ขาดหาย และตั้งค่า Test Runner |
+| `brief` | ดูสรุปขอบเขต Dependency และขนาดของฟีเจอร์ก่อนเริ่มเขียนสเปก |
+| `brainstorm` | ระดมไอเดียเชิงลึกและเปรียบเทียบข้อดีข้อเสียของทางเลือกทางเทคนิค |
+| `convert-any-to-md` | แปลงเอกสาร Excel, Word, PDF, Plaintext ทุกประเภทเป็น Markdown ใน `devflow/reference/` |
 | `autopilot` | โหมดทำงานอัตโนมัติแบบกำหนดขอบเขต (Fast-Track: Feature/Fix -> Implement -> Check; Deep-Track: 20 -> 30 -> 40 -> 50 -> 60) |
 | `prototype` | สร้าง Mockup HTML/CSS จำลองหน้าตา UI ก่อนลงมือเขียนโค้ดจริง |
 | `report-html` | สร้าง Dashboard สรุปผลแบบ HTML Interactive (`/report:html`) |

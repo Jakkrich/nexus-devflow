@@ -95,10 +95,13 @@ devflow/
 ## 5. Maintenance & CLI Commands
 
 ```bash
-# Inspect project status, active work, findings, and next action
+# Launch interactive Real-Time Local Dashboard (Dual-Track Visualizer & Tooltips)
+npx @jakkrichm/create-nexus-devflow dashboard
+
+# Inspect project status, active work, findings, and next action in terminal
 npx @jakkrichm/create-nexus-devflow status
 
-# Update DevFlow files safely without overwriting project customizations
+# Update DevFlow files safely with automatic backup and rollback
 npx @jakkrichm/create-nexus-devflow update
 
 # Generate interactive standalone HTML report on demand

@@ -61,63 +61,93 @@ Recommended for complex architectural epics, database schema migrations, and mul
 
 ---
 
-## 3. Core Skills Inventory (28 Skills)
+## 3. Core Skills Inventory (35 Skills)
 
-DevFlow provides exactly **28 Core Skills** synchronized 1:1 across `.agents/skills/` (Codex / Antigravity) and `.claude/skills/` (Claude Code):
+DevFlow provides **35 Core Skills** synchronized 1:1 across `.agents/skills/` (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code):
 
 ### A. Fast-Track Skills (5)
-- `feature`: Break down a planned build item into a living spec.
+- `feature`: Break down a planned build item into a living spec (`devflow/context/current-feature.md`).
 - `fix`: Document and spec an ad-hoc bug or issue.
 - `implement`: Step-by-step implementation behind review gates.
 - `check`: Senior QA verification matrix against the running app.
 - `complete`: Final safety audit, Conventional Commit, archiving, and branch merge.
 
 ### B. Deep-Track Skills (8)
-- `00-explore`: Problem space exploration and Go/No-Go routing.
-- `10-define`: Delivery run definition and scope boundaries.
-- `20-spec`: Formal markdown specification contract.
-- `30-plan`: Task breakdown with TDD test strategy.
-- `40-execute`: Incremental unit execution.
-- `50-verify`: Senior QA 6-lane verification.
-- `60-report`: Standardized delivery digest and retrospective insights.
-- `70-deliver`: Release packaging, git operations, and history archiving.
+- `00-explore`: Problem space exploration and Go/No-Go routing (`devflow/discoveries/DISC-xxx/00-explore.md`).
+- `10-define`: Delivery run definition and scope boundaries (`10-define.md`).
+- `20-spec`: Formal markdown specification contract (`20-spec.md`).
+- `30-plan`: Task breakdown with TDD test strategy (`30-plan.md`).
+- `40-execute`: Incremental unit execution behind review gates (`40-execute.md`).
+- `50-verify`: Senior QA 6-lane verification (`50-verify.md`).
+- `60-report`: Standardized delivery digest and retrospective insights (`60-report.md`).
+- `70-deliver`: Release packaging, git operations, and history archiving (`70-deliver.md`).
 
-### C. Companion Tools & Quality Gates (15)
+### C. Discovery, Architecture & Planning Skills (5)
+- `discovery`: Deep, multi-turn guided planning interview that drafts user-owned plans (`project-plan.md` & `build-plan.md`).
+- `brief`: Read-only briefing on an upcoming build-plan feature (scope, dependencies, sizing, and automatic splitting).
+- `brainstorm`: Structured divergent & convergent ideation generating 2-3 viable options with trade-off analysis.
+- `prototype`: Throwaway pre-build static HTML/CSS mockups sharing a common design theme.
+- `convert-any-to-md`: Unified document parser converting Excel (`.xlsx`), PDF (`.pdf`), Word (`.docx`), and plaintext to clean Markdown in `devflow/reference/`.
+
+### D. Verification, Governance & Deployment Skills (8)
+- `audit`: Comprehensive code, security, performance, and test quality audit maintaining `devflow/context/findings.md`.
+- `doctor`: Read-only health check for setup, adapters, planning readiness, and workflow drift (`--fix` supported).
+- `overview`: Regenerate and compile `devflow/context/project-overview.md` from plans and history.
+- `debug`: Non-destructive root-cause analysis and defect reproduction without modifying source code.
+- `tests` / `test`: Test suite runner, missing test generation, and coverage decision matrix.
+- `ci`: Configure project-specific Verify command and matching GitHub Actions CI workflow.
+- `release`: Cloud deployment readiness check and config generator (Render `render.yaml` or Vercel `vercel.json`).
+- `rollback`: Safe reversal of completed features with dependency risk analysis.
+
+### E. Companion & Workflow Guidance Skills (9)
 - `devflow`: Flagship interactive guide and state router.
-- `doctor`: Read-only health check for setup, adapters, and workflow drift.
-- `overview`: Regenerate and validate `project-overview.md` from plans.
-- `debug`: Non-destructive root-cause analysis and defect reproduction.
 - `onboard`: Setup baseline context on fresh or scaffolded projects.
 - `adopt`: Survey existing codebase and bootstrap DevFlow context.
 - `try`: Generate step-by-step human manual QA review guide.
-- `rollback`: Safe feature reversal with dependency risk analysis.
-- `idea`: Idea inbox management and AI feasibility scoring.
-- `ci`: Configure GitHub Actions verify workflow.
-- `test`: Test suite runner, missing test generation, and coverage check.
-- `autopilot`: Bounded Fast-Track (`feature`/`fix` -> `implement` -> `check`) or Deep-Track (`20` -> `30` -> `40` -> `50` -> `60`) autonomous loop.
-- `prototype`: Throwaway pre-build static HTML/CSS mockups.
-- `report-html`: Standalone interactive HTML dashboard generator.
-- `brief`: Pre-briefing on upcoming features before speccing.
+- `idea`: Idea inbox management, AI feasibility scoring, and status backlog integration.
+- `autopilot`: Autonomous spec/build/check/audit loop for Fast-Track or Deep-Track.
+- `report-html`: Standalone interactive HTML dashboard generator on demand.
+- `status`: Show project progress, build queue, and exact next action.
 
 ---
 
-## 4. In-Flow Engineering Best Practices
+## 4. Real-Time Web Dashboard & Dual-Track Visualizer
+
+Launch the local interactive dashboard in your browser:
+
+```bash
+npx @jakkrichm/create-nexus-devflow dashboard
+```
+
+- **Blueprint Parity Theme**: High-contrast `#071626` deep navy theme with semantic status indicators.
+- **Dual-Track Visualizer**: Dynamic pipeline steppers for Fast-Track (4 steps) and Deep-Track (8 stages).
+- **Auto-Focus & Active Badge**: Automatically selects the active track tab from `devflow/context/current-stage.md` and displays a pulsing `● ACTIVE` badge indicator.
+- **Quick Commands & Copy**: Hover tooltips with skill documentation and one-click command copy with visual feedback.
+- **Live Auto-Refresh**: Polls `/api/dashboard` every 2 seconds for real-time synchronization with active AI workflows.
+
+---
+
+## 5. In-Flow Engineering Best Practices
 
 Best practices are absorbed directly into the workflow:
+- **Unified Root Switch**: `devflow/context/current-stage.md` serves as the authoritative source of truth for active track and stage lifecycle.
 - **Conventional Commits & SemVer**: Managed in `/complete` and `/70-deliver`.
-- **9arm Scrutinize QA**: Embedded into `/check` and `/50-verify` (checking null safety, array bounds, async race conditions, security review).
+- **9arm Scrutinize QA**: Embedded into `/check` and `/50-verify` (null safety, array bounds, async race conditions, security review).
 - **Deep Modules & Code Simplification**: Defined in `devflow/context/coding-standards.md`.
 - **Standalone HTML Dashboard**: Mainline stages output clean Markdown only. When an HTML dashboard is needed, run `/report-html` or `npm run report:html -- {ID}` on demand.
 
 ---
 
-## 5. CLI & Status Commands
+## 6. CLI & Status Commands
 
 ```bash
-# Check status, active work, and next action
+# Launch interactive Real-Time Local Dashboard
+npx @jakkrichm/create-nexus-devflow dashboard
+
+# Check status, active work, and next action in terminal
 npx @jakkrichm/create-nexus-devflow status
 
-# Safe update to latest DevFlow version
+# Safe update to latest DevFlow version with automatic backup
 npx @jakkrichm/create-nexus-devflow update
 
 # Clean eject / uninstall
