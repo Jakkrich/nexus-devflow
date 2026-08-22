@@ -30,6 +30,7 @@ export interface Manifest {
     discoveriesDir: string;
   };
   lifecycle: {
+    fastTrackStages: string[];
     mainlineStages: string[];
     companionCommands: string[];
   };
@@ -105,6 +106,13 @@ export function createManifest(
       discoveriesDir: "devflow/discoveries"
     },
     lifecycle: {
+      fastTrackStages: [
+        "feature",
+        "fix",
+        "implement",
+        "check",
+        "complete"
+      ],
       mainlineStages: [
         "00-discover",
         "10-define",
@@ -116,11 +124,6 @@ export function createManifest(
         "70-release"
       ],
       companionCommands: [
-        "feature",
-        "fix",
-        "implement",
-        "check",
-        "complete",
         "devflow",
         "doctor",
         "overview",
