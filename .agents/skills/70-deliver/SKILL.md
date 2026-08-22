@@ -1,10 +1,10 @@
 ---
-name: 70-release
-description: "[Devflow] Release stage in DevFlow 2.0 - package verified work for delivery, archive run to categorized history, git merge, PR, or deployment."
+name: 70-deliver
+description: "[Devflow] Deliver stage in DevFlow 2.0 - package verified work for delivery, archive run to categorized history, git merge, PR, or deployment."
 argument-hint: "{running-id or workspace path}"
 ---
 
-# Phase 70: Release
+# Phase 70: Deliver
 
 $ARGUMENTS
 
@@ -13,7 +13,7 @@ Package approved work for delivery after the report stage has captured the final
 ## Usage
 
 ```text
-70-release {id or workspace path}
+70-deliver {id or workspace path}
 ```
 
 ## Markdown-First Contract
@@ -21,20 +21,14 @@ Package approved work for delivery after the report stage has captured the final
 Write the primary stage artifact to:
 
 ```text
-devflow/context/current-run/70-release.md
-```
-
-using:
-
-```text
-.agent/resources/schemas/release.template.md
+devflow/context/current-run/70-deliver.md
 ```
 
 ## Process & Quality Gates
 
 ### 0. Step 0 Safety Pass & Findings Ledger Gate
 
-Before packaging, merging, or releasing:
+Before packaging, merging, or delivering:
 
 1. **Findings Ledger Blockers**:
    - Inspect `devflow/context/findings.md`.

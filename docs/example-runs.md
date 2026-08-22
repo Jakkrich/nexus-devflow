@@ -67,7 +67,7 @@ Use Deep-Track for database migrations, core architectural shifts, or multi-agen
 /40-execute
 /50-verify
 /60-report
-/70-release
+/70-deliver
 ```
 
 ### Lifecycle Walkthrough:
@@ -78,4 +78,4 @@ Use Deep-Track for database migrations, core architectural shifts, or multi-agen
 5. **`/40-execute`**: Implements tasks incrementally behind review gates (`40-execute.md`).
 6. **`/50-verify`**: Senior QA 6-lane verification matrix and edge case proof (`50-verify.md`).
 7. **`/60-report`**: Creates standardized delivery digest and retrospective insights (`60-report.md`).
-8. **`/70-release`**: Packages release, calculates SemVer, archives `current-run/` ➔ `devflow/history/features/026-oauth2-thaid-migration/`, and closes run.
+8. **`/70-deliver`**: Packages release, calculates SemVer, archives `current-run/` ➔ `devflow/history/features/026-oauth2-thaid-migration/`, and closes run.

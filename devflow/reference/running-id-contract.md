@@ -36,4 +36,4 @@ devflow/
 
 1. Only **one active run** is permitted at any given time across both Fast-Track and Deep-Track.
 2. Before opening a new run (`/feature`, `/fix`, or `10-define`), the AI checks `current-stage.md` and `current-feature.md`.
-3. If an active run is in progress, the AI **blocks** starting a new task and requires closing the active run via `/complete` or `70-release` (or explicitly cancelling/rolling back).
+3. If an active run is in progress, the AI **blocks** starting a new task and requires closing the active run via `/complete` or `70-deliver` (or explicitly cancelling/rolling back).

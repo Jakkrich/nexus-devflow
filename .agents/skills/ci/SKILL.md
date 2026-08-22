@@ -75,4 +75,4 @@ jobs:
 
 - **Classification**: Companion command & Automated testing infrastructure
 - **Mainline integration**: Invoked via `/ci` during `onboard` or `adopt`.
-- **Handoff**: `50-verify`, `70-release`
+- **Handoff**: `50-verify`, `70-deliver`

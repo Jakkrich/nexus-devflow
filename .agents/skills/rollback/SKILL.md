@@ -8,7 +8,7 @@ description: "[Devflow] Plan safe feature or run reversal with dependency and co
 Where this sits in the workflow:
 
 ```text
-completed run + git history  ->  [rollback]  ->  40-execute (or fix run)  ->  50-verify  ->  70-release
+completed run + git history  ->  [rollback]  ->  40-execute (or fix run)  ->  50-verify  ->  70-deliver
 (run archive + commits)          (risk review    (reverse product diff)          (prove)      (log & finalize)
                                   + plan)
 ```
@@ -51,7 +51,7 @@ Identify:
 
 - Exact commit SHA(s) introducing the feature.
 - Parent commit before the feature was introduced.
-- Associated stage artifacts (`20-spec.md`, `40-execute.md`, `70-release.md`).
+- Associated stage artifacts (`20-spec.md`, `40-execute.md`, `70-deliver.md`).
 
 ## Step 2 - Separate Product Changes From DevFlow History
 

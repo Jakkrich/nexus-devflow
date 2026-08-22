@@ -36,7 +36,7 @@ const DEFAULT_FINDINGS_STUB = `# Findings Ledger
 > \`### <ID> [<SEVERITY>] <STATUS> - <Title>\`
 > - **Severities**: \`P0\` (Critical Blocker), \`P1\` (High Blocker), \`P2\` (Medium), \`P3\` (Low / Polish)
 > - **Statuses**: \`unverified\`, \`open\`, \`fixed\`, \`closed\`, \`accepted\`, \`invalid\`
-> - **Release Gate Rule**: Any \`P0\` or \`P1\` finding in \`open\` or \`fixed\` status unconditionally blocks \`/complete\` and \`70-release\`.
+> - **Release Gate Rule**: Any \`P0\` or \`P1\` finding in \`open\` or \`fixed\` status unconditionally blocks \`/complete\` and \`70-deliver\`.
 
 ---
 
@@ -73,7 +73,7 @@ const DEFAULT_IDEAS_STUB = `# 💡 DevFlow Idea Inbox & Backlog
 
 const DEFAULT_HISTORY_STUB = `# Nexus-DevFlow Master Release History Ledger
 
-This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` or \`70-release\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
+This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` or \`70-deliver\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
 
 ---
 

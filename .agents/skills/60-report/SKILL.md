@@ -53,5 +53,5 @@ Structure the report in **Thai (`th`)**:
 
 ## Next Workflow Recommendation
 
-- **Primary**: `70-release {ID}`
+- **Primary**: `70-deliver {ID}`
 - **Optional Standalone HTML**: `/report:html`

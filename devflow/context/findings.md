@@ -6,7 +6,7 @@
 > `### <ID> [<SEVERITY>] <STATUS> - <Title>`
 > - **Severities**: `P0` (Critical Blocker), `P1` (High Blocker), `P2` (Medium), `P3` (Low / Polish)
 > - **Statuses**: `unverified`, `open`, `fixed`, `closed`, `accepted`, `invalid`
-> - **Release Gate Rule**: Any `P0` or `P1` finding in `open` or `fixed` status unconditionally blocks `/complete` and `70-release`.
+> - **Release Gate Rule**: Any `P0` or `P1` finding in `open` or `fixed` status unconditionally blocks `/complete` and `70-deliver`.
 
 ---
 

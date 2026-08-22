@@ -136,6 +136,6 @@ Present a clean markdown report in **Thai (`th`)**:
 > Any `P0` or `P1` finding in `open` or `fixed` status in `devflow/context/findings.md` **unconditionally blocks**:
 > - `nexus-devflow check-gate` (Exit code 1)
 > - `/complete` (Fast-Track delivery close)
-> - `70-release` (Deep-Track release packaging)
+> - `70-deliver` (Deep-Track release packaging)
 >
 > Findings must be repaired via `/fix` and verified with `/check` to reach `closed`, `accepted`, or `invalid` status.

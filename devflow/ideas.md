@@ -33,17 +33,6 @@
 
 
 
----
-
-### [IDEA-010] Cloud Deployment Readiness & Config Generator Skill (`/release:cloud`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: สร้าง Skill สำหรับตรวจเช็กความพร้อมในการ Deploy บน Render / Vercel พร้อมสร้างไฟล์ `render.yaml` หรือ `vercel.json` ให้อัตโนมัติ
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — ตรวจสอบค่า Environment variables, Build command, Start command และเจนเนอเรตคอนฟิก
-- **Value & Potential**: **ปานกลางถึงสูง** — ช่วยให้การต่อยอดนำแอปพลิเคชันขึ้น Cloud Production ทำได้อย่างสะดวกรวดเร็ว
-- **Quick Seed (กันลืม)**:
-  1. ตรวจสอบการตั้งค่า Build script และ Port
-  2. ร่างและสร้าง `render.yaml` / `vercel.json` ตาม Cloud Provider ที่ผู้ใช้เลือก
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-010` หรือ `/00-explore IDEA-010`)
 
 ---
 
@@ -219,6 +208,7 @@
 
 ## 📦 Archived / Shipped Ideas
 
+- [x] **[IDEA-010]** Cloud Deployment Readiness & Config Generator Skill (`/release`) — *Claimed in `036-cloud-deployment-readiness-skill` (2026-08-22)*
 - [x] **[IDEA-009]** Guided Discovery Interview Skill (`/discovery`) — *Claimed in `035-guided-discovery-interview-skill` (2026-08-22)*
 - [x] **[IDEA-008]** Dedicated Code & Security Audit Skill (`/audit` with Durable Ledger) — *Claimed in `034-code-and-security-audit-skill` (2026-08-22)*
 - [x] **[IDEA-007]** Support Two User-Owned Planning Documents (`project-plan.md` & `build-plan.md`) — *Claimed in `033-user-owned-planning-docs` (2026-08-22)*

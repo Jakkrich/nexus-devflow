@@ -117,7 +117,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
   - `fixed`: Repaired in code, pending QA re-verification.
   - `closed`: Verified by QA as completely resolved without regressions.
   - `accepted`: Formally waived with recorded user justification.
-- **P0/P1 Blockers**: Any P0 or P1 finding in `open` or `fixed` status unconditionally blocks `/complete` and `70-release`.
+- **P0/P1 Blockers**: Any P0 or P1 finding in `open` or `fixed` status unconditionally blocks `/complete` and `70-deliver`.
 
 ---
 

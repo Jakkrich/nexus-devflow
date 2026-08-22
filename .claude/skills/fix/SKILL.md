@@ -31,7 +31,7 @@ When invoked:
 2. If `Active Running ID` is not `None` and `Current Stage` is not `Idle`, or if `current-feature.md` contains an active uncompleted spec:
    - **HALT and reject opening a new fix**.
    - Explain to the user that an active run is currently in progress:
-     > ⚠️ *"มีงาน `{active_id}` กำลังดำเนินการอยู่ กรุณาปิดงานเดิมด้วย `/complete` หรือ `70-release` (หรือสั่ง `/rollback`) ก่อนเริ่มงานใหม่"*
+     > ⚠️ *"มีงาน `{active_id}` กำลังดำเนินการอยู่ กรุณาปิดงานเดิมด้วย `/complete` หรือ `70-deliver` (หรือสั่ง `/rollback`) ก่อนเริ่มงานใหม่"*
 
 ### 2. Work Identity & Issue Intake
 1. **Idea / Issue Inbox Intake**: If the argument is an identifier (e.g. `IDEA-001`):

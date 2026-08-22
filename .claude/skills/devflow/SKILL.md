@@ -17,7 +17,7 @@ Use this skill to guide the user on what to do next, inspect current workspace s
 Nexus-DevFlow supports two seamless workflow tracks:
 1. **🏎️ Fast-Track (Blueprint Mode - 4 Steps)**: `/spec` ➔ `/implement` ➔ `/check` ➔ `/complete`  
    *Driven by a **Single Living Spec (`current-feature.md`)** for fast, high-velocity daily development and bugfixes (85% of tasks).*
-2. **🏗️ Deep-Track (Architect Mode - 8 Steps)**: `00-explore` ➔ `10-define` ➔ `20-spec` ➔ `30-plan` ➔ `40-execute` ➔ `50-verify` ➔ `60-report` ➔ `70-release`  
+2. **🏗️ Deep-Track (Architect Mode - 8 Steps)**: `00-explore` ➔ `10-define` ➔ `20-spec` ➔ `30-plan` ➔ `40-execute` ➔ `50-verify` ➔ `60-report` ➔ `70-deliver`  
    *Driven by modular separate stage files for large, high-stakes architectural epics and multi-agent coordination.*
 
 ---
@@ -37,7 +37,7 @@ When invoked without an argument (or when determining the next step), inspect:
      - If at `20-spec.md` -> Recommend `30-plan {RUNNING_ID}`.
      - If at `30-plan.md` -> Recommend `40-execute {RUNNING_ID}`.
      - If at `40-execute.md` with all tasks done -> Recommend `50-verify {RUNNING_ID}`.
-     - If passed `50-verify.md` -> Recommend `60-report {RUNNING_ID}` then `70-release {RUNNING_ID}`.
+     - If passed `50-verify.md` -> Recommend `60-report {RUNNING_ID}` then `70-deliver {RUNNING_ID}`.
 3. **Active Discovery**: Check `devflow/discoveries/` for open discovery notes.
 4. **Pending Ideas Inbox**: Check `devflow/ideas.md`. If items exist under `## 📌 Pending Ideas`, summarize them in a **💡 Pending Ideas (Inbox)** list with their IDs (`[IDEA-xxx]`), feasibility, and mention that they can be started with `/spec IDEA-xxx`.
 5. **Audit Findings Ledger**: Check `devflow/context/findings.md` for open high-severity findings.
@@ -71,7 +71,7 @@ When invoked without an argument (or when determining the next step), inspect:
 | "Deep code implementation" | `40-execute` | `implement` | **Deep-Track**: `40` -> `50` |
 | "Deep QA verification" | `50-verify` | `verify` | **Deep-Track**: `50` -> `60` -> `70` |
 | "Deep markdown digest report" | `60-report` | `report` | **Deep-Track**: `60` -> `70` |
-| "Deep release packaging & merge" | `70-release` | `release` | **Deep-Track**: `70-release` |
+| "Deep release packaging & merge" | `70-deliver` | `release` | **Deep-Track**: `70-deliver` |
 | "Human manual QA walkthrough guide" | `try` | `try` | Companion (after implement or check) |
 | "Safely plan feature or run reversal" | `rollback` | `rollback` | Companion |
 | "Set up automatic GitHub Actions CI" | `ci` | `ci` | Companion |
@@ -98,7 +98,7 @@ When invoked without an argument (or when determining the next step), inspect:
 - `40-execute` - Incremental task implementation
 - `50-verify` - Senior QA review and multi-lane validation
 - `60-report` - Generate standardized markdown digest report
-- `70-release` - Release packaging, release notes, and merge
+- `70-deliver` - Release packaging, release notes, and merge
 
 ### 3. Public Companion Commands
 - `devflow` (`status`, `/devflow`) - Interactive guide, state inspector, and router

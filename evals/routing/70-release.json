@@ -1,11 +1,11 @@
 {
-  "skill": "70-release",
+  "skill": "70-deliver",
   "description": "\"[Devflow] Release stage in DevFlow 2.0 - package verified work for delivery, archive run to categorized history, git merge, PR, or deployment.\"",
   "positive": [
-    "run 70-release skill",
-    "invoke /70-release command",
-    "use 70-release for devflow release stage devflow package verified work delivery",
-    "apply 70-release guidance"
+    "run 70-deliver skill",
+    "invoke /70-deliver command",
+    "use 70-deliver for devflow release stage devflow package verified work delivery",
+    "apply 70-deliver guidance"
   ],
   "negative": [
     "unrelated random task query",

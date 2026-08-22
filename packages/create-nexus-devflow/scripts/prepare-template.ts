@@ -111,7 +111,7 @@ async function sanitizeStarterFiles(): Promise<void> {
   // 2. Clean Starter HISTORY.md
   const starterHistory = `# Master Release History Ledger
 
-This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` or \`70-release\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
+This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` or \`70-deliver\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
 
 ---
 

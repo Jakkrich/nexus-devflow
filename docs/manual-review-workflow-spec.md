@@ -106,7 +106,7 @@ This layer consumes no Running ID. Only an approved `Proceed` discovery may ente
 Each delivery run executes inside:
 
 - **Fast-Track (4 Steps)**: `devflow/context/current-feature.md` (Single Living Spec)
-- **Deep-Track (8 Steps)**: `devflow/context/current-run/` (`10-define.md` through `70-release.md`)
+- **Deep-Track (8 Steps)**: `devflow/context/current-run/` (`10-define.md` through `70-deliver.md`)
 
 Upon completion, completed work is permanently archived to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/` or `{xxx-slug}.md`.
 
@@ -140,7 +140,7 @@ devflow/
       40-execute.md
       50-verify.md
       60-report.md
-      70-release.md
+      70-deliver.md
   history/                    # 📦 Past: Categorized Delivery Archives
     features/
     fixes/
@@ -314,7 +314,7 @@ Human checks:
 Recommended manual progression:
 
 ```text
-Goal -> /00-explore -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-explore -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-Release
+Goal -> /00-explore -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-explore -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-deliver
 ```
 
 Recommended prompt style for large work:

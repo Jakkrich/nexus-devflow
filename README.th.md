@@ -85,7 +85,7 @@ Nexus-DevFlow 2.0 รองรับ 2 เส้นทางการส่ง�
 > **แนะนำสำหรับงานสถาปัตยกรรมขนาดใหญ่, การย้าย Database, Security Audit, และการทำงานร่วมกันของ Multi-Agents**:
 
 ```text
-00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
+00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
 ```
 
 | สเตจ | คำสั่งมาตรฐาน | หน้าที่และผลลัพธ์หลัก |
@@ -97,7 +97,7 @@ Nexus-DevFlow 2.0 รองรับ 2 เส้นทางการส่ง�
 | **40** | `40-execute` | ทยอยพัฒนาตามแผนพร้อมบันทึกหลักฐานการทดสอบ Unit Tests (`40-execute.md`) |
 | **50** | `50-verify` | ตรวจสอบคุณภาพอย่างละเอียดโดย Senior QA และตัดสินผล Pass/Fail (`50-verify.md`) |
 | **60** | `60-report` | สรุปรายงานผลการส่งมอบในรูปแบบ Markdown (`60-report.md`) |
-| **70** | `70-release` | แพ็กเกจการส่งมอบ, ย้าย `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, รวม Git และปิดรอบ |
+| **70** | `70-deliver` | แพ็กเกจการส่งมอบ, ย้าย `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, รวม Git และปิดรอบ |
 
 ---
 
@@ -172,7 +172,7 @@ npx @jakkrichm/create-nexus-devflow@latest update
 | `ci` | ตั้งค่าและสร้าง GitHub Actions Workflow สำหรับตรวจสอบคุณภาพอัตโนมัติ |
 | `test` | ตรวจสอบชุดทดสอบและตั้งค่า Test Runner |
 | `brief` | ดูสรุปขอบเขตและขนาดของฟีเจอร์ก่อนเริ่มเขียนสเปก |
-| `autopilot` | โหมดทำงานอัตโนมัติแบบกำหนดขอบเขต (Spec -> Implement -> Check) |
+| `autopilot` | โหมดทำงานอัตโนมัติแบบกำหนดขอบเขต (Fast-Track: Feature/Fix -> Implement -> Check; Deep-Track: 20 -> 30 -> 40 -> 50 -> 60) |
 | `prototype` | สร้าง Mockup HTML/CSS จำลองหน้าตา UI ก่อนลงมือเขียนโค้ดจริง |
 | `report-html` | สร้าง Dashboard สรุปผลแบบ HTML Interactive (`/report:html`) |
 

@@ -11,7 +11,7 @@ const mainlineStages = [
   '40-execute',
   '50-verify',
   '60-report',
-  '70-release'
+  '70-deliver'
 ];
 
 function standardizeMainlineSkills() {
@@ -62,10 +62,10 @@ function standardizeMainlineSkills() {
         /```text\s*\n\/60-Report \{running-id or workspace path\}\s*\n```/g,
         '```text\n60-report {running-id or workspace path}\n```'
       );
-    } else if (entry.name === '70-release') {
+    } else if (entry.name === '70-deliver') {
       content = content.replace(
-        /```text\s*\n\/70-Release \{running-id or workspace path\}\s*\n```/g,
-        '```text\n70-release {running-id or workspace path}\n```'
+        /```text\s*\n\/70-deliver \{running-id or workspace path\}\s*\n```/g,
+        '```text\n70-deliver {running-id or workspace path}\n```'
       );
     }
 
@@ -79,7 +79,7 @@ function standardizeMainlineSkills() {
       .replace(/\/40-execute/gi, '40-execute')
       .replace(/\/50-verify/gi, '50-verify')
       .replace(/\/60-report/gi, '60-report')
-      .replace(/\/70-release/gi, '70-release')
+      .replace(/\/70-deliver/gi, '70-deliver')
       .replace(/\/devflow/gi, 'devflow')
       .replace(/\/onboard/gi, 'onboard')
       .replace(/\/adopt/gi, 'adopt')

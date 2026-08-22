@@ -34,7 +34,7 @@
       "40-execute",
       "50-verify",
       "60-report",
-      "70-release"
+      "70-deliver"
     ],
     "companionCommands": [
       "devflow",
@@ -51,7 +51,10 @@
       "autopilot",
       "prototype",
       "report-html",
-      "brief"
+      "brief",
+      "discovery",
+      "audit",
+      "release"
     ]
   },
   "installedAt": "2026-08-17T00:00:00.000Z"
