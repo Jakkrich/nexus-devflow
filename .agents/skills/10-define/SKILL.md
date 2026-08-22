@@ -1,6 +1,6 @@
 ---
 name: 10-define
-description: "[Devflow] Define stage in DevFlow 2.0 - turn an approved discovery into a bounded delivery run in context/current-run with stable scope."
+description: "[devflow][D] Define stage in DevFlow 2.0 - turn an approved discovery into a bounded delivery run in context/current-run with stable scope."
 argument-hint: "{approved discovery-id, discovery path, running-id, or run path}"
 ---
 

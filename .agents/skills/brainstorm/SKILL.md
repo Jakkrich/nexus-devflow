@@ -1,6 +1,6 @@
 ---
 name: brainstorm
-description: "[Devflow] Companion skill for structured divergent and convergent ideation, generating 2-3 viable options with trade-off analysis before committing to delivery."
+description: "[devflow][B] Companion skill for structured divergent and convergent ideation, generating 2-3 viable options with trade-off analysis before committing to delivery."
 argument-hint: "{topic, feature, or discovery-id}"
 ---
 

@@ -1,99 +1,100 @@
 ---
 name: brief
-description: "[Devflow] Deep read-only scope, codebase impact, dependency, and sub-feature split briefing before speccing a run (reads build-plan.md or ideas.md)."
-argument-hint: "[feature-number | 'feature-name' | IDEA-xxx]"
+description: "[devflow][B] Read-only briefing on an upcoming build-plan feature before you spec it. With no argument, briefs the next unchecked item; given a number or name, briefs that one. Reads build-plan.md and project-overview.md and explains what the feature is, what it depends on, what it will touch, how big it is, and whether it will split - without writing anything. Use when the user runs /brief, asks what the next feature involves, wants to understand or preview a feature before /feature, or is deciding what to build or reorder next."
 ---
 
-# brief - Deep Scope, Dependency & Codebase Impact Briefing
+# brief - understand a feature before you spec it
 
 Where this sits in the workflow:
 
-```text
-devflow/build-plan.md (or ideas.md)  ──▶  [brief]  ──▶  feature / 20-spec  ──▶  implement / 40-execute
-(feature queue & context)                 (deep read-only  (write spec)          (build it)
-                                           explainer)
-```
+    build-plan + overview  ->  [brief]  ->  /feature  ->  /implement
+    (what exists)              (read-only    (spec it)     (build it)
+                                explainer)
 
-This skill answers one essential question: ***"What does this upcoming feature actually touch and involve in the real codebase before I commit to writing a full specification?"***
+This skill answers one question: *what does this feature actually involve, before
+I commit to spec'ing it?* It reads the two files that describe the work and prints
+a short briefing so you can decide whether to spec it now, reorder it, split it,
+or clear a blocker first. It is the read-only precursor to `/feature`.
 
-It inspects `devflow/build-plan.md` (or `devflow/ideas.md` / `project-overview.md`) and conducts a **Deep Static Codebase Analysis** to provide a concise briefing — calculating files touched, dependency chains, estimated size (`XS`..`XL`), and actionable sub-feature split proposals before any work begins.
+It never writes anything: no spec, no edits to `build-plan.md`, no branch, no
+commit. `/feature` is the mutating step that turns a briefing into a spec; this
+one just explains.
 
-It is **strictly read-only 100%**. It never writes specs, creates directories, branches, or commits code.
+How it differs from its neighbors:
 
----
+- `/status` reports the *whole project*: progress, current work, git, next action.
+  `/brief` zooms into *one feature* and explains it in depth.
+- `/feature` *writes* the spec (and may split the item in `build-plan.md`).
+  `/brief` previews what `/feature` would tackle, changing nothing.
 
-## Usage & Invocations
+## Input
 
-```text
-brief                     # Briefs the next unchecked feature in build-plan.md
-brief 2                   # Briefs feature #2 in build-plan.md
-brief "OAuth Login"       # Briefs a specific feature by name
-brief IDEA-003            # Briefs a pending idea from ideas.md
-```
+A feature from `build-plan.md`, by number or name - e.g. `/brief 4` or
+`/brief "validator"`.
 
-If there is no build plan or pending idea, plainly report that context is needed and recommend `/discovery` or `/overview`.
+**With no argument, brief the next one** - the first unchecked leaf in
+`build-plan.md`, the same target `/feature` would pick.
 
----
+If `build-plan.md` is still a placeholder stub or the overview is missing, say so
+plainly and point at `/overview` (or filling the plans) rather than inventing a
+briefing.
 
-## 3-Step Briefing Protocol
+## What it reads
 
-### Step 1 - Read Context & Target Resolution (Read-Only)
+Gather these, then synthesize. Don't dump file contents; explain.
 
-1. **Target Item Resolution**:
-   - If argument provided (`2`, `"OAuth Login"`, `IDEA-003`): find matching item in `devflow/build-plan.md` or `devflow/ideas.md`.
-   - If no argument: locate the first unchecked item (`- [ ]`) in `devflow/build-plan.md`. If build plan is empty, locate the first pending item in `devflow/ideas.md`.
-2. **Project Architecture**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`.
-3. **Deep Codebase Inspection**:
-   - Inspect existing directory structures, routing files, data models/schemas, database migrations, API handlers, and UI component trees.
-   - Trace existing modules related to the target feature.
+1. **The target** - the feature's line in `devflow/build-plan.md`, plus whether
+   a parent was already split into sub-items (`4a`, `4b`, ...).
+2. **Full context** - `devflow/context/project-overview.md`: the data model,
+   routes/endpoints, stack, UI/UX, conventions, and open questions that touch this
+   feature.
+3. **What already exists** - earlier checked build-plan items and, if useful, git
+   history, to ground the dependency read (what must be in place first, what this
+   unblocks later).
+4. **Design reference** - if `prototypes/` exists and the feature is UI-facing,
+   note which mockups apply (that `/feature` will link them and port `theme.css`).
 
----
+## Output
 
-### Step 2 - Analyze Scope, Dependencies & Sizing
+A short, scannable briefing, not a wall of text. Aim for something like:
 
-Evaluate with concrete facts:
+    Feature 5 - Submission draft flow
+    What: maintainers submit a skill by GitHub URL (primary) or zip (fallback);
+      drafts are saved before validation runs.
+    Depends on: apps/api must be stood up first (this is the first feature that
+      needs the backend); builds on the Skill / SkillVersion shapes from feature 3.
+    Unblocks: queue-backed validation (6) and the publishable flow (7).
+    Touches: new User, Submission, SkillVersion tables (Drizzle); GitHub OAuth;
+      POST /submissions; R2 snapshot upload; a React upload island (client).
+    Size: large - likely splits into 5a (OAuth + maintainer profile), 5b
+      (GitHub-URL submission + draft record), 5c (zip upload + R2).
+    Reference: no prototype for this flow; upload.html covers the later validation
+      panel, not this form.
+    Open questions: apps/api (Hono) is not scaffolded yet - resolve before spec'ing.
 
-1. **What It Is**: Core capability and user-visible or system-visible outcome.
-2. **Dependencies & Prerequisites**: Upstream database models, authentication layers, environment variables, or sibling features that must be complete first.
-3. **Unblocks**: Downstream features or workflows enabled once this item ships.
-4. **Files & Modules Touched**: List predicted files and folders likely to be created or modified (e.g. `lib/`, `routes/`, `components/`, `test/`).
-5. **Estimated Size**:
-   - `XS`: Small tweak / config (~15-30 mins, 1-2 files)
-   - `S`: Single component or route (~1-2 hours, 2-4 files)
-   - `M`: Full CRUD feature or service integration (~half day, 4-7 files)
-   - `L`: Complex multi-component subsystem (~1 day, 7-12 files)
-   - `XL`: Major epic (>12 files or heavy cross-cutting concerns)
-6. **Sub-Feature Split Engine (for L and XL)**:
-   - If the feature is `L` or `XL`, draft a concrete 2-3 sub-feature breakdown (e.g. `4a: Backend Schema & Core APIs`, `4b: Frontend UI & Client State`) with individual sizing and sequential dependencies.
-7. **Key Risks & Open Questions**: Unsettled API contracts, performance bottlenecks, migration risks, or design decisions.
+    Next: run /feature 5 to spec 5a, or clear the apps/api blocker first.
 
----
+Adapt the lines to the feature; drop any that don't apply. Always end with a
+single **Next** action - usually `/feature N` to spec it, but `/overview` if the
+plans aren't ready, `/prototype` if it's UI-facing and the look isn't locked, or
+"clear X first" when a dependency blocks it.
 
-### Step 3 - Output Structured Briefing Card
+## Rules
 
-Produce a clean, scannable briefing directly in the chat in **Thai (`th`)**:
+- **Read-only, always.** Never write a file, never edit `build-plan.md` or
+  `current-feature.md`, never branch, commit, install, or build. To act on the
+  briefing, the user runs `/feature` next.
+- **Explain, don't spec.** Size, dependencies, and a likely sub-split are the
+  value here; the actual build steps are `/feature`'s job. Don't write step lists.
+- **Trace to the plans.** Everything in the briefing comes from `build-plan.md`
+  and `project-overview.md`. Don't invent scope; if something is underspecified,
+  say so and flag it as a question for `/feature` or `/overview`.
+- **Be honest about gaps.** If the plans are a stub, the overview is stale, or a
+  dependency isn't built yet, say that plainly - catching a blocker before
+  spec'ing is half the value.
 
-```markdown
-### 📋 Feature Briefing: [หมายเลขหรือรหัส - ชื่อฟีเจอร์]
+## Formatting
 
-- **🎯 What**: [สรุปเป้าหมายและความสามารถหลักสั้นๆ]
-- **🔗 Dependencies**: [ฟีเจอร์หรือโมดูลก่อนหน้าที่ต้องมี หรือ 'None']
-- **🔓 Unlocks**: [ฟีเจอร์ถัดไปในแผนงานที่จะถูกปลดล็อก]
-- **📁 Files Touched**: [รายชื่อไฟล์และโมดูลที่คาดว่าจะต้องแก้ไขหรือสร้างใหม่]
-- **⚖️ Estimated Scope & Size**: `[XS | S | M | L | XL]`
-- **✂️ Sub-Feature Split Proposal** *(กรณีขนาด L หรือ XL)*:
-  - `[ID]a: [ขอบเขตย่อยส่วนที่ 1]` (Size: M, Dependencies: None)
-  - `[ID]b: [ขอบเขตย่อยส่วนที่ 2]` (Size: M, Dependencies: [ID]a)
-- **⚠️ Key Risks & Open Questions**: [ความเสี่ยงทางเทคนิคหรือคำถามที่ต้องตอบใน Spec]
-
----
-👉 **Next Recommended Action**: `/feature {target}` (หรือเริ่มทำ sub-feature แรก เช่น `/feature 4a`)
-```
-
----
-
-## Strict Rules & Guardrails
-
-1. **Always Read-Only**: Never edit workspace files, allocate running IDs, switch branches, or commit code during `/brief`.
-2. **Explain, Don't Spec**: Focus on scope, architectural dependencies, and size estimation. The formal delivery contract belongs to `/feature` or `20-spec`.
-3. **Ground In Reality**: Trace all assertions back to `project-overview.md` and active codebase inspection. Do not hallucinate non-existent files or packages.
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
+enumerations and tables for matrices rather than dense paragraphs.

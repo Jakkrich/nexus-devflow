@@ -1,6 +1,6 @@
 ---
 name: idea
-description: "[Devflow] Quick idea capture and AI enrichment - analyze feasibility, value, key points, and record into devflow/ideas.md inbox."
+description: "[devflow][B] Quick idea capture and AI enrichment - analyze feasibility, value, key points, and record into devflow/ideas.md inbox."
 argument-hint: "\"<idea text or description>\""
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: 60-report
-description: "[Devflow] Report stage in DevFlow 2.0 - produce standardized markdown summary report with retrospective lessons learned."
+description: "[devflow][D] Report stage in DevFlow 2.0 - produce standardized markdown summary report with retrospective lessons learned."
 argument-hint: "{running-id or workspace path}"
 ---
 

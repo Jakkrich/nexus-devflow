@@ -1,6 +1,6 @@
 ---
 name: 20-spec
-description: "[Devflow] Spec stage in DevFlow 2.0 - write the formal markdown-first specification from a stable definition."
+description: "[devflow][D] Spec stage in DevFlow 2.0 - write the formal markdown-first specification from a stable definition."
 argument-hint: "{running-id or workspace path}"
 ---
 
@@ -153,4 +153,3 @@ Report:
 - Use `Research` when a requirement, rule, or integration constraint still lacks evidence.
 - Use `Spec-Research`, `Competitor`, or `PRD` when the contract needs stronger external, product, or market framing before planning.
 - Use `grill-with-docs` when available if clarification could materially change acceptance criteria, edge cases, exclusions, or rules.
-

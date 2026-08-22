@@ -1,108 +1,59 @@
 ---
 name: fix
-description: "[Devflow] Fast-Track Fix stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract in context for bug fixes."
-argument-hint: "{bug description, issue ID, or IDEA-xxx}"
+description: "[devflow][F] Document an ad-hoc bug fix or small change (one not in the build plan) into devflow/context/current-feature.md so it runs through the same build loop. Writes a short fix spec and stops; then /implement builds it and /complete logs it to devflow/history/fixes/ and merges. Use when the user runs /fix, reports a bug, or asks to fix or change something that isn't a planned build-plan feature."
 ---
 
-# Fast-Track: Fix (Blueprint Mode)
+# fix - document an ad-hoc fix, then build it like anything else
 
-$ARGUMENTS
+Where this sits in the workflow:
 
-Fast-Track entry point combining Bug Triage, Root Cause Isolation, Specification, and Implementation Planning into one streamlined, review-gated step for **bug fixes and hotfixes**. Creates and maintains the **Single Living Spec (`devflow/context/current-feature.md`)** for the fix run.
+    /fix  ->  /implement  ->  /complete  ->  back to your features
+    (spec     (build it,      (log to devflow/history/fixes/
+     the fix)  reviewed)       + merge)
 
-## Invocations & Aliases
+A fix is a bug or small change that isn't a planned build-plan feature. It runs
+through the same loop as a feature (build with review gates, iterate, then merge);
+it just starts here instead of `/feature`, and is logged separately.
 
-- `/fix <bug-description>` or `fix <bug-description>`: Fast-Track ad-hoc bugfix workflow
-- `/fix IDEA-xxx`: Intake and fix a reported issue or idea from `devflow/ideas.md`
-- `$fix`: Codex CLI invocation
+## Input
 
-## Fast-Track Mainline Workflow
+A description of the bug or change, for example `/fix "password reset email never
+sends"`. If the user just reported the problem in chat, use that.
 
-```text
-/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
-```
+The input may also be a finding ID from `devflow/context/findings.md`, alone
+or with a description, for example `/fix F-03`. Pull the problem statement from
+that ledger entry. Use this form only between work items, when
+`current-feature.md` is the reset stub: this skill overwrites that file, so
+while a spec is active, repair its findings through `/implement` instead.
 
-## Behavior & Contract
+## Step 1 - write the fix spec
 
-When invoked:
+Pull context from `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`,
+then write a short spec to `devflow/context/current-feature.md` (this file holds whatever
+is being built now, feature or fix). Keep it lighter than a feature spec:
 
-### 1. Single Active Run Guardrail (One Thing at a Time)
-1. Inspect `devflow/context/current-stage.md` and `devflow/context/current-feature.md`.
-2. If `Active Running ID` is not `None` and `Current Stage` is not `Idle`, or if `current-feature.md` contains an active uncompleted spec:
-   - **HALT and reject opening a new fix**.
-   - Explain to the user that an active run is currently in progress:
-     > ⚠️ *"มีงาน `{active_id}` กำลังดำเนินการอยู่ กรุณาปิดงานเดิมด้วย `/complete` หรือ `70-deliver` (หรือสั่ง `/rollback`) ก่อนเริ่มงานใหม่"*
+- **Title** - the bug or change in a few words.
+- **Type:** Fix  (so `/complete` logs it to `devflow/history/fixes/`, not `devflow/history/features/`).
+- **Fixes:** `<finding id>` - only when the fix targets a ledger finding. The
+  stamp makes the repair traceable: `/implement` marks that finding `fixed`
+  when the repairing step lands, and `/audit` re-reviews it before it closes.
+- **The problem** - what's wrong or what needs to change, and where.
+- **The fix** - the approach, and anything it must not break.
+- **Build steps** - usually one small step; split only if the diff would be too
+  big to read. Each ends with an observable "done when".
+- **Verify** - how to confirm it's fixed (what to click or test).
 
-### 2. Work Identity & Issue Intake
-1. **Idea / Issue Inbox Intake**: If the argument is an identifier (e.g. `IDEA-001`):
-   - Read `devflow/ideas.md` or issue notes and extract problem statement and root cause hints.
-   - In `devflow/ideas.md`, update status to `[x] Claimed ({ID})` and move under `## 📦 Archived / Shipped Ideas`.
-2. Inspect `devflow/history/HISTORY.md` and determine the next sequential ID without prefix (e.g. `022-{slug}`).
-3. Identify Git branch naming:
-   - `fix/{xxx-slug}`
+Then stop. Tell the user to review the fix spec, then run `/implement` to build it.
 
-### 3. Generate the Living Spec (`devflow/context/current-feature.md`)
-Write `devflow/context/current-feature.md` using the structured template below in **Thai (`th`)**:
+## Rules
 
-```markdown
-# 📐 [{ID}] {Bug/Fix Title} (Living Spec)
+- A fix is not a build-plan item; don't add it to `build-plan.md`.
+- Keep it small. If it's really a new feature, use `/feature` and the build plan
+  instead.
+- Same conventions as everything else (`devflow/context/coding-standards.md`).
 
-> **Status**: In-Progress  
-> **Track**: Fast-Track (Blueprint Mode - Fix)  
-> **Category**: Fix  
-> **Branch**: `{branch_name}`  
-> **Created Date**: {YYYY-MM-DD}  
-> **Owner**: {Contributor or Team}  
+## Formatting
 
----
-
-## 1. Specification & Scope
-- **Problem Statement & Reproduction**: {อาการบั๊กที่พบ ขั้นตอนที่ทำให้เกิดปัญหา หรือ Error Log}
-- **Root Cause Analysis**: {สาเหตุที่แท้จริงของบั๊ก}
-- **In-Scope**:
-  - {ขอบเขตการแก้ไขบั๊กและการป้องกัน regression}
-- **Out-of-Scope**:
-  - {สิ่งที่ไม่แตะต้องหรืออยู่นอกเหนือการแก้จุดนี้}
-- **Acceptance Criteria**:
-  - [ ] AC-1: {เงื่อนไขการแก้ปัญหาสำเร็จและพฤติกรรมที่ถูกต้อง}
-  - [ ] AC-2: {มี Regression Test ป้องกันไม่ให้เกิดซ้ำ}
-
-## 2. Plan & Test Strategy
-- **Files to Modify / Create**:
-  - `{path/to/file1}`: {หน้าที่ที่ต้องแก้ไข}
-  - `{path/to/test_file}`: {เทสต์เคสจำลองและป้องกันบั๊ก}
-- **Test Decision**: `Required (TDD / Regression Test)`
-  - *Rationale*: {การแก้บั๊กต้องมี Regression Test ยืนยันเสมอ}
-  - *Planned Cases*: {เคสทดสอบจำลองบั๊ก (Red) และทดสอบหลังแก้ (Green)}
-- **Impact & Rollback Strategy**:
-  - *Impact*: {ผลกระทบต่อโมดูลข้างเคียง}
-  - *Rollback*: {วิธีย้อนคืนการทำงานกรณีเกิดปัญหา}
-
-## 3. Implementation Checklist
-- [ ] Task 1.1: {เขียน Regression Test เพื่อ reproduce บั๊ก}
-- [ ] Task 1.2: {แก้ไขโค้ดที่จุดเกิดเหตุ}
-- [ ] Task 1.3: {รันชุดทดสอบเพื่อยืนยันว่าบั๊กหายและไม่กระทบจุดอื่น}
-
-## 4. Implementation Record
-- *(จะถูกบันทึกเมื่อรัน /implement)*
-
-## 5. Verification Evidence
-- *(จะถูกบันทึกเมื่อรัน /check)*
-
-## 6. Release & Handoff
-- *(จะถูกบันทึกเมื่อรัน /complete)*
-```
-
-### 4. Update Workspace Status
-Update `devflow/context/current-stage.md`:
-- `Active Discovery ID`: `None`
-- `Active Running ID`: `{ID}`
-- `Current Stage`: `fix (Fast-Track -> Ready for /implement)`
-- `Living Spec`: `devflow/context/current-feature.md`
-- `Last Updated`: `{YYYY-MM-DD}`
-
-### 5. Output Summary & Next Step
-Report to the user:
-- Running ID and allocated branch
-- Summary of Scope, Reproduction, and Acceptance Criteria
-- Explicit next step: `/implement`
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
+enumerations and tables for matrices rather than dense paragraphs.

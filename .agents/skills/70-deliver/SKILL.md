@@ -1,6 +1,6 @@
 ---
 name: 70-deliver
-description: "[Devflow] Deliver stage in DevFlow 2.0 - package verified work for delivery, archive run to categorized history, git merge, PR, or deployment."
+description: "[devflow][D] Deliver stage in DevFlow 2.0 - package verified work for delivery, archive run to categorized history, git merge, PR, or deployment."
 argument-hint: "{running-id or workspace path}"
 ---
 
