@@ -161,7 +161,10 @@ npx @jakkrichm/create-nexus-devflow@latest update
 | Canonical Command Name | Purpose |
 | :--- | :--- |
 | `devflow` | Flagship interactive guide, state inspector, and intent router. |
-| `doctor` | Read-only health check for setup, scripts, adapters, and workflow drift. |
+| `discovery` | Deep, multi-turn guided planning interview that drafts user-owned plans (`project-plan.md` & `build-plan.md`). |
+| `audit` | Comprehensive code, security, performance, and test quality audit maintaining `devflow/context/findings.md`. |
+| `release` | Cloud deployment readiness check and config generator (Render `render.yaml` or Vercel `vercel.json`). |
+| `doctor` | Read-only health check for setup, scripts, adapters, and workflow drift (`--fix` supported). |
 | `overview` | Distill plans into `project-overview.md` as the living source of truth. |
 | `idea` | Quick idea capture and AI feasibility enrichment into `devflow/ideas.md`. |
 | `debug` | Root cause investigation for bugs before or during implementation. |
@@ -170,8 +173,10 @@ npx @jakkrichm/create-nexus-devflow@latest update
 | `try` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
 | `rollback` | Safe feature/run reversal planner with dependency risk analysis. |
 | `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup. |
-| `test` | Verify test suites and test runner configuration. |
+| `tests` / `test` | Verify test suites, missing test generation, and test runner configuration. |
 | `brief` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
+| `brainstorm` | Structured divergent & convergent ideation with trade-off analysis. |
+| `convert-any-to-md` | Universal document parser converting Excel, Word, PDF, and plaintext to Markdown in `devflow/reference/`. |
 | `autopilot` | Optional explicit bounded loop for Fast-Track (`feature`/`fix` -> `implement` -> `check`) or Deep-Track (`20` -> `30` -> `40` -> `50` -> `60`) |
 | `prototype` | Rapid throwaway static HTML/CSS mockups to lock UI/UX before build. |
 | `report-html` | Standalone interactive HTML report dashboard generator (`/report:html`). |
