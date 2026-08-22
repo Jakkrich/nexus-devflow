@@ -1,3 +1,6 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+
 import { readCurrentWork } from "./current-work.js";
 import type {
   CurrentWorkSummary,
@@ -98,14 +101,20 @@ async function readProjectStatus(
     readIdeas(metadata.project.root)
   ]);
 
+  const stagePath = path.join(metadata.project.root, "devflow", "context", "current-stage.md");
+  let stageMarkdown = "";
+  try {
+    stageMarkdown = await fs.readFile(stagePath, "utf8");
+  } catch {}
+
   const warnings: StatusWarning[] = [
     ...metadata.warnings,
     ...currentWork.warnings,
     ...findings.warnings,
     ...findDrift(currentWork, git)
   ];
-  const completion = selectCompletion(currentWork, findings, git);
-  const nextAction = selectNextAction(currentWork, findings);
+  const completion = selectCompletion(currentWork, findings, git, stageMarkdown);
+  const nextAction = selectNextAction(currentWork, findings, stageMarkdown);
 
   return {
     schemaVersion: metadata.schemaVersion,
@@ -350,7 +359,8 @@ function formatFindings(findings: FindingsSummary): StatusFindings {
 function selectCompletion(
   currentWork: CurrentWorkSummary,
   findings: FindingsSummary,
-  git: GitStatusSummary
+  git: GitStatusSummary,
+  stageMarkdown?: string
 ): StatusCompletion {
   const blockers: string[] = [];
 
@@ -374,6 +384,23 @@ function selectCompletion(
     return { state: "blocked", blockers };
   }
 
+  const isVerified = Boolean(
+    stageMarkdown &&
+    (/ready\s+for\s+\/complete|Passed\s+->\s+Ready|\/complete/i.test(stageMarkdown) ||
+     /Current Stage:\s*check\s*\(Passed/i.test(stageMarkdown))
+  );
+
+  if (
+    isVerified ||
+    currentWork.status?.toLowerCase().includes("verified") ||
+    currentWork.status?.toLowerCase().includes("ready")
+  ) {
+    return {
+      state: "ready",
+      blockers: []
+    };
+  }
+
   return {
     state: "needs_verification",
     blockers: ["verification evidence is not persisted"]
@@ -382,7 +409,8 @@ function selectCompletion(
 
 function selectNextAction(
   currentWork: CurrentWorkSummary,
-  findings: FindingsSummary
+  findings: FindingsSummary,
+  stageMarkdown?: string
 ): StatusNextAction {
   if (currentWork.state === "malformed") {
     return {
@@ -391,7 +419,50 @@ function selectNextAction(
     };
   }
 
+  // 1. Authoritative Next Action from current-stage.md
+  if (stageMarkdown) {
+    const stageNextActionMatch = stageMarkdown.match(
+      /^-\s+(?:\*\*)?Next Action(?:\*\*)?:\s*`?(\/[^\r\n`]+)`?/im
+    );
+    const stageNextAction = stageNextActionMatch?.[1]?.trim();
+
+    const rawStage = stageMarkdown.match(
+      /^-\s+(?:\*\*)?Current Stage(?:\*\*)?:\s*`?([^\r\n`]+)`?/im
+    )?.[1]?.trim();
+
+    if (
+      stageNextAction &&
+      !stageNextAction.toLowerCase().includes("none") &&
+      !stageNextAction.toLowerCase().startsWith("/idle")
+    ) {
+      const isReadyForComplete =
+        stageNextAction.startsWith("/complete") ||
+        /ready\s+for\s+\/complete/i.test(rawStage || "");
+      const reason = isReadyForComplete
+        ? "Verification passed. Ready to complete, archive, and merge."
+        : `Continue active stage at ${rawStage || stageNextAction}.`;
+      return {
+        command: stageNextAction,
+        reason
+      };
+    }
+  }
+
   if (currentWork.state === "active") {
+    if (currentWork.type === "stage") {
+      const runSuffix = currentWork.runId ? ` ${currentWork.runId}` : "";
+      if (currentWork.nextStep) {
+        return {
+          command: `/40-execute${runSuffix}`,
+          reason: `Resume active stage task with ${currentWork.nextStep.title}.`
+        };
+      }
+      return {
+        command: `/50-verify${runSuffix}`,
+        reason: "Active stage tasks completed; run verification."
+      };
+    }
+
     if (currentWork.nextStep) {
       return {
         command: "/implement",

@@ -34,3 +34,12 @@ test("parseWorkflowState maps active feature to Fast-Track implementation", () =
   assert.equal(state.currentStage, "implement");
   assert.equal(state.fast.find((node) => node.id === "implement")?.state, "active");
 });
+
+test("parseWorkflowState respects explicit Track field and flexible markdown headers", () => {
+  const deepState = parseWorkflowState("- Active Running ID: `040-test`\n- Track: `deep`\n- Current Stage: `60-report (Ready for 70-deliver)`", idleWork);
+  assert.equal(deepState.track, "deep");
+  assert.equal(deepState.currentStage, "70-deliver");
+
+  const fastState = parseWorkflowState("- Active Running ID: `041-test`\n- Track: `fast`\n- Current Stage: `implement`", idleWork);
+  assert.equal(fastState.track, "fast");
+});

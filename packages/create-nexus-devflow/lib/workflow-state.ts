@@ -55,6 +55,7 @@ function parseWorkflowState(
   markdown: string,
   currentWork: StatusCurrentWork
 ): WorkflowState {
+  const explicitTrack = nullableField(markdown, "Track")?.toLowerCase();
   const activeDiscoveryId = nullableField(markdown, "Active Discovery ID");
   const activeRunId = nullableField(markdown, "Active Running ID");
   const rawStage = nullableField(markdown, "Current Stage");
@@ -65,7 +66,16 @@ function parseWorkflowState(
   let track: WorkflowTrack = "idle";
   let currentStage: string | null = null;
 
-  if (activeRunId && deepStage) {
+  if (explicitTrack === "deep") {
+    track = "deep";
+    currentStage = deepStage || (activeDiscoveryId ? "00-explore" : "10-define");
+  } else if (explicitTrack === "fast") {
+    track = "fast";
+    currentStage = fastStage(currentWork);
+  } else if (explicitTrack === "idle") {
+    track = "idle";
+    currentStage = null;
+  } else if (activeRunId && deepStage) {
     track = "deep";
     currentStage = deepStage;
   } else if (activeDiscoveryId) {
@@ -90,7 +100,9 @@ function parseWorkflowState(
 
 function nullableField(markdown: string, label: string): string | null {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const match = markdown.match(new RegExp(`^-\\s+\\*\\*${escaped}\\*\\*:\\s*\\x60?([^\\r\\n\\x60]+)`, "im"));
+  const match = markdown.match(
+    new RegExp(`^-\\s+(?:\\*\\*)?${escaped}(?:\\*\\*)?:\\s*\\x60?([^\\r\\n\\x60]+)`, "im")
+  );
   const value = match?.[1]?.trim() || "";
   return value === "" || value.toLowerCase() === "none" || value.toLowerCase() === "idle"
     ? null
