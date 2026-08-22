@@ -61,6 +61,7 @@
   1. ให้ `current-stage.md` เป็น Root Switch บันทึก `Track: fast | deep | idle`
   2. อัปเกรด `status.ts` ให้รู้จัก Deep-Track stages (`00-explore`...`70-deliver`)
   3. เพิ่มระบบ Auto-Detect & Auto-Sync เมื่อพบไฟล์งานค้าง
+  4. หน้าจอ Dashboard Auto-Focus แท็บตาม Track ที่ Active จาก Context พร้อมติดป้ายไฟ `● ACTIVE` (Option 1)
 - **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-025` หรือ `/10-define IDEA-025`)
 
 ---
