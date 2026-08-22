@@ -52,7 +52,16 @@
 - **Quick Seed (กันลืม)**:
   1. สกัดเฉพาะสคิลและเอกสาร Markdown
   2. รองรับการทำงานแบบก๊อปปี้โฟลเดอร์วางใช้งาน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-023` หรือ `/00-explore IDEA-023`)
+### [IDEA-025] Unified Dual-Track Root Switch & Context Auto-Sync Engine
+- **บันทึกเมื่อ**: 2026-08-22
+- **ไอเดียตั้งต้น**: รวมศูนย์การตัดสินใจเลือก Track (`fast` หรือ `deep`) ไว้ที่ `devflow/context/current-stage.md` เป็น Single Source of Truth พร้อมอัปเกรด `status.ts` และ `current-work.ts` ให้คำนวณ Next Action สอดคล้องตรงกันทั้ง Terminal CLI, AI Chat, และ Web Dashboard
+- **AI Feasibility & Tech**: **ง่ายถึงปานกลาง (High Feasibility)** — ปรับปรุง `readCurrentWork`, `selectNextAction` ใน `status.ts` และเชื่อมโยง Stage Lifecycle ให้ไม่มี Split-Brain
+- **Value & Potential**: **สูงสุด (Core DX & Reliability)** — แก้ปัญหาความขัดแย้งของสถานะงานระหว่าง Fast-Track และ Deep-Track ทำให้ AI และ Dashboard มองเห็น Next Action เดียวกันเสมอ 100%
+- **Quick Seed (กันลืม)**:
+  1. ให้ `current-stage.md` เป็น Root Switch บันทึก `Track: fast | deep | idle`
+  2. อัปเกรด `status.ts` ให้รู้จัก Deep-Track stages (`00-explore`...`70-deliver`)
+  3. เพิ่มระบบ Auto-Detect & Auto-Sync เมื่อพบไฟล์งานค้าง
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-025` หรือ `/10-define IDEA-025`)
 
 ---
 
