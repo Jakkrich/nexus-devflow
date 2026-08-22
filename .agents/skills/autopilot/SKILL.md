@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: "[Devflow] Optional explicit mode for one bounded Fast-Track or Deep-Track delivery pass with checkpoint commits and review packet."
+description: "[Devflow] Optional explicit mode for one bounded Fast-Track or Deep-Track delivery pass with checkpoint commits, audit gate, and review packet."
 ---
 
 # autopilot - Autonomous Bounded DevFlow Loop
@@ -31,6 +31,7 @@ Common forms:
 - **No argument**: resume the active run in `devflow/context/current-stage.md`, or target the next planned run/feature in `devflow/context/project-overview.md`.
 - **`fast`**: force Fast-Track mode. Example: `autopilot fast "add auth header"`
 - **`deep`**: force Deep-Track mode. Example: `autopilot deep "data migration"`
+- **`full` modifier**: run a full-repository audit in Deep-Track only. Example: `autopilot deep full "platform migration"`. Without this explicit modifier, audit only the active branch/run diff.
 - **Running ID or feature name**: target that run, e.g. `autopilot RUN-004` or `autopilot "add user authentication"` (mode auto-selected from context).
 - **`fix "<issue>"`**: write and execute an ad-hoc fast-mode fix run.
 - **`resume`**: continue the current active run on its existing branch.
@@ -135,15 +136,24 @@ For every subtask:
 3. **Deep-Track**: write `devflow/context/current-run/{running-id}-{slug}50-verify.md` with QA verdict (`PASS` / `FAIL`).
 4. **Fast-Track**: confirm check stage transition and verification state in `devflow/context/current-feature.md`.
 
-## Step 6 - Targeted Quality Audit & Repair
+## Step 6 - Formal Audit Gate & Repair Loop (`audit`)
 
-Review diffs and inspect `devflow/context/findings.md`:
+Invoke the `audit` skill contract after Step 5. The audit pass is non-destructive: it inspects code and records durable findings in `devflow/context/findings.md`; Autopilot performs remediation only through its implementation loop.
 
-1. **Repair confirmed P0 and P1 findings** within the current run scope.
-2. Update finding status in `devflow/context/findings.md`.
-3. Rerun verification tests after repairs.
-4. Create a checkpoint commit for the fix.
-5. If a P0/P1 finding cannot be repaired within scope or fails twice consecutively, stop immediately and report.
+1. **Resolve audit scope**:
+   - **Fast-Track**: audit the active branch diff or files recorded in `devflow/context/current-feature.md`.
+   - **Deep-Track**: audit the active run/branch diff.
+   - **Deep-Track with explicit `full` modifier**: audit the full repository. Never expand to full-repository scope implicitly.
+2. **Run all four audit lenses** against that scope: Security, Quality & Maintainability, Performance, and Test Quality.
+3. **Record every confirmed finding** in `devflow/context/findings.md` using the durable ID and severity rules from `audit`.
+4. **Handle P0/P1 blockers**:
+   - Repair only findings within the active run scope.
+   - Mark a repaired finding `fixed`, rerun the relevant Step 5 verification, then re-audit the affected scope.
+   - Mark it `closed` only when verification evidence proves the repair; `accepted` or `invalid` requires an explicit documented rationale.
+   - Create a checkpoint commit for each verified repair.
+5. **Handle P2/P3 findings**: leave them recorded for review and include them in the Review Packet. Do not expand implementation scope to repair them automatically.
+6. **Enforce the release gate**: any P0/P1 in `open` or `fixed` state blocks a successful Autopilot handoff to `/complete` or `70-deliver`.
+7. If the same P0/P1 cannot be repaired and verified within two attempts, stop immediately and report the blocker. Do not continue to Step 7.
 
 ## Step 7 - Review Packet & Track Handoff
 
@@ -152,6 +162,7 @@ Review diffs and inspect `devflow/context/findings.md`:
 3. Stop with a concise **Review Packet Dashboard** for human approval, including:
    - Track used (`fast` or `deep`)
    - Evidence summary
+   - Audit scope, lenses, finding counts by severity, and unresolved finding IDs
    - Commit count
    - Manual next action (`/complete` for fast, `/70-deliver` for deep)
 
@@ -186,6 +197,9 @@ When Autopilot finishes successfully, output a scannable review packet:
     - Digest Report: `devflow/context/current-run/{id}60-report.md`
     - HTML Dashboard: `devflow/context/current-run/{id}60-report.html`
 - **Validation & Tests**: track-aware PASS/FAIL evidence
+- **Audit Gate**: `{PASS | BLOCKED}` across Security, Quality, Performance, and Tests
+- **Audit Scope**: `{Active Branch Diff | Active Run Diff | Full Repository}`
+- **Findings**: `P0 {count} | P1 {count} | P2 {count} | P3 {count}` with unresolved IDs
 - **Checkpoint Commits**: `{count} commits created on {branch-name}`
 - **Manual QA Walkthrough**: Run `try {running-id}` for human review guide
 

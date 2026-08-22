@@ -26,11 +26,33 @@ devflow/
 └── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug/00-explore.md)
 ```
 
+---
+
 ## Running ID Naming Convention
 
+### 1. Standard Running IDs
 - **Format**: `xxx-slug` (e.g. `001-setup-auth`, `021-categorized-history-and-clean-living-spec-architecture`)
 - **Prefix Removal**: The legacy `RUN-` prefix is discontinued in favor of clean 3-digit sequential numbering.
 - **Git Branch Standard**: `feature/{xxx-slug}` or `fix/{xxx-slug}`.
+
+### 2. Sub-Feature Running IDs (`xxx[a-z]-slug`)
+- **Format**: `xxx[a-z]-slug` (e.g. `038a-backend-schema-and-api`, `038b-frontend-ui-and-state`)
+- **Git Branch Standard**: `feature/{xxx[a-z]-slug}`
+- **Build Plan Notation**: `- [ ] 4a. Backend Schema...`, `- [ ] 4b. Frontend UI...`
+- **When to Use**: Used when a feature is decomposed via the **Sub-Feature Automatic Splitting Engine** to prevent context overflow on `L`/`XL` tasks.
+
+---
+
+## Multi-Factor Sizing Heuristic & Splitting Engine
+
+A feature is considered **Oversized (`L` or `XL`)** and recommended for sub-feature splitting when any of the following conditions are met:
+1. **Files Touched**: Predicted to modify or create $\ge 6$ files.
+2. **Architectural Layers**: Crosses $\ge 3$ distinct layers (e.g. Database Migrations + Backend APIs + Frontend UI + State Store).
+3. **Task Complexity**: Contains $\ge 6$ checklist tasks or involves heavy multi-service integrations.
+
+When detected during `/feature` or `/brief`, the AI triggers the **Interactive Split Gate**, proposing a clean `4a`, `4b` sub-feature breakdown before opening the first spec.
+
+---
 
 ## Single Active Run Rule (One Thing at a Time)
 
