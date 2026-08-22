@@ -30,28 +30,6 @@
   3. เพิ่มไฟล์คอนฟิก `mcp_config.json` ให้ติดตั้งเข้า Antigravity/Claude ได้ในคลิกเดียว
 - **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-004` หรือ `/00-explore IDEA-004`)
 
-
-
-
-
----
-
-
-
-
-
-
-
-### [IDEA-014] Standalone `/status` Skill for AI Chat Context
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: สร้าง Skill `/status` ในรูปแบบ Markdown สำหรับ AI Agent ในแชตโดยเฉพาะ เพื่ออ่านสรุปความก้าวหน้า ตรวจสอบ Drift และแนะนำ Next Action
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — พัฒนา `.agents/skills/status/SKILL.md` และ `.claude/skills/status/SKILL.md`
-- **Value & Potential**: **ปานกลาง** — เพิ่มความสะดวกให้ผู้ใช้สั่งดูสถานะผ่านแชตโดยไม่ต้องสลับไปเทอร์มินัล
-- **Quick Seed (กันลืม)**:
-  1. อ่าน `current-feature.md` และ `current-stage.md`
-  2. แสดงผลสรุปความก้าวหน้าสั้นๆ พร้อมคำแนะนำ
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-014` หรือ `/00-explore IDEA-014`)
-
 ---
 
 ### [IDEA-015] Configurable Artifact Language (`artifactLanguage: th | en`)
@@ -63,90 +41,6 @@
   1. เพิ่มฟิลด์ `artifactLanguage` ใน schema
   2. สลับเทมเพลตภาษาตามคอนฟิก
 - **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-015` หรือ `/00-explore IDEA-015`)
-
----
-
-### [IDEA-016] Strict HTML Report Generation Control Policy
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: นโยบายและคำสั่งควบคุมการสร้าง HTML Report เพื่อป้องกันไม่ให้สร้างไฟล์ `.html` ขยะใน Repo โดยให้สร้างเฉพาะเมื่อเรียก `/report:html`
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — เพิ่ม Directive ในการตรวจเช็กคำสั่งสร้างรายงาน
-- **Value & Potential**: **ปานกลาง** — รักษาความสะอาดของ Git repository
-- **Quick Seed (กันลืม)**:
-  1. กำหนดกฎห้ามสร้าง HTML ในสเตจปกติ
-  2. เรียกสร้างด้วยสคริปต์ standalone แยกต่างหาก
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-016` หรือ `/00-explore IDEA-016`)
-
----
-
-### [IDEA-017] Automated AI Adapter Detection & Sync (`adapters: auto`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: ระบบตรวจจับ AI Client (Antigravity, Claude, Codex, Copilot) อัตโนมัติและคอยซิงก์โฟลเดอร์ `.agents/` หรือ `.claude/` ให้อัตโนมัติเมื่อสั่ง `update`
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — ตรวจจับการมีอยู่ของไฟล์คอนฟิก AI ในโฟลเดอร์ผู้ใช้
-- **Value & Potential**: **สูง** — ทำให้ผู้ใช้ไม่ต้องระบุ `--adapter` เองทุกครั้งที่อัปเดต
-- **Quick Seed (กันลืม)**:
-  1. สแกนไฟล์ `.agents/`, `.claude/`, `AGENTS.md`, `CLAUDE.md`
-  2. เลือก Adapter ให้อัตโนมัติเมื่อรัน CLI update
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-017` หรือ `/00-explore IDEA-017`)
-
----
-
-### [IDEA-018] Multi-Stage Deep-Track Directory Structure (`devflow/context/current-run/`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: รองรับการแยกไฟล์บริบทรายสเตจสำหรับงานสถาปัตยกรรมใหญ่ เพื่อบันทึกประวัติการตัดสินใจแต่ละสเตจอย่างเป็นระบบ
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — เพิ่มระบบจัดการโฟลเดอร์ `current-run/`
-- **Value & Potential**: **สูง** — เหมาะสำหรับงานที่มีความซับซ้อนสูงและต้องการบันทึก Traceability
-- **Quick Seed (กันลืม)**:
-  1. แยกโฟลเดอร์ `10-define.md`, `20-spec.md`...
-  2. อัปเดตสเตจทีละขั้นตอนในรันใหญ่
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-018` หรือ `/00-explore IDEA-018`)
-
----
-
-### [IDEA-019] Safe Scaffolding Overlay Guard System
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: ระบบป้องกันการเขียนทับเมื่อมีการใช้ Framework Scaffolder ร่วมกับ DevFlow
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — ปรับปรุง CLI `init` ให้สามารถติดตั้งทับโปรเจกต์ที่มีอยู่แล้วได้อย่างปลอดภัย
-- **Value & Potential**: **สูง** — ลดความผิดพลาดเมื่อนำ DevFlow ไปใช้งานกับ Brownfield Project
-- **Quick Seed (กันลืม)**:
-  1. ตรวจสอบไฟล์ที่มีอยู่ก่อนลงทับ
-  2. สร้างไฟล์สำรองอัตโนมัติหากมี conflict
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-019` หรือ `/00-explore IDEA-019`)
-
----
-
-### [IDEA-020] Upstream AI-Blueprint Sync Engine (`upstream-ai-blueprint.json`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: ระบบติดตามและเปรียบเทียบ Commit ของ AI-Blueprint ต้นฉบับเพื่อนำฟีเจอร์ใหม่ๆ มาปรับใช้ใน DevFlow
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — พัฒนาสคริปต์เปรียบเทียบ Diff และอัปเดต `upstream-ai-blueprint.json`
-- **Value & Potential**: **สูงมาก** — ช่วยให้ DevFlow ทันสมัยตามมาตรฐานสากลเสมอ
-- **Quick Seed (กันลืม)**:
-  1. อ่าน `lastReviewedCommit` จาก `upstream-ai-blueprint.json`
-  2. เปรียบเทียบ Diff ของ Blueprint และแจ้งเตือนจุดที่สามารถพอร์ตเข้ามาได้
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-020` หรือ `/00-explore IDEA-020`)
-
----
-
-### [IDEA-021] Single Active Run Lock & Concurrency Guardrail
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: ระบบล็อกไม่ให้เริ่มรันใหม่หากยังมีงานเก่าค้างอยู่ เพื่อป้องกันบริบทสับสน
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — ตรวจเช็กสถานะใน `current-feature.md` และ `current-stage.md`
-- **Value & Potential**: **สูง** — ป้องกันความผิดพลาดของ AI ในการสลับงานไปมา
-- **Quick Seed (กันลืม)**:
-  1. เช็กสถานะก่อนสร้างรันใหม่
-  2. แจ้งเตือนผู้ใช้ให้ทำ `/complete` รันเดิมก่อน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-021` หรือ `/00-explore IDEA-021`)
-
----
-
-### [IDEA-022] Universal Document Parser via Python Helper Integration
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: เพิ่มสคริปต์ Python ในการแปลงเอกสาร PDF, DOCX, XLSX เป็น Markdown ที่สมบูรณ์แบบ
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — รวมไลบรารี `pdfplumber`, `docx`, `openpyxl`
-- **Value & Potential**: **สูง** — ขยายความสามารถในการอ่านบริบทธุรกิจจากเอกสารต่างๆ
-- **Quick Seed (กันลืม)**:
-  1. พัฒนา `convert_any_to_md.py`
-  2. รองรับตารางและข้อความแบบหลายคอลัมน์
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-022` หรือ `/00-explore IDEA-022`)
 
 ---
 
@@ -162,22 +56,17 @@
 
 ---
 
-### [IDEA-024] Automated Categorized History Ledger (`devflow/history/HISTORY.md`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: ระบบบันทึกประวัติการส่งมอบงานทั้งหมดลงในตารางสรุป `HISTORY.md` แยกตามประเภทงาน (Feature, Fix, Rollback)
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — อัปเดตคำสั่ง `/complete` ให้บันทึกบรรทัดใหม่ลงใน `HISTORY.md` อัตโนมัติ
-- **Value & Potential**: **สูง** — ช่วยให้ติดตามประวัติการเปลี่ยนแปลงทั้งหมดของระบบได้อย่างรวดเร็ว
-- **Quick Seed (กันลืม)**:
-  1. บันทึก ID, วันที่, ชื่อฟีเจอร์, และ Git Commit Hash
-  2. สรุปเป็นตารางย่อใน `devflow/history/HISTORY.md`
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-024` หรือ `/00-explore IDEA-024`)
-
----
-
----
-
 ## 📦 Archived / Shipped Ideas
 
+- [x] **[IDEA-024]** Automated Categorized History Ledger (`devflow/history/HISTORY.md`) — *Claimed in `021-categorized-history-and-clean-living-spec-architecture` (2026-08-21)*
+- [x] **[IDEA-022]** Universal Document Parser via Python Helper (`convert-any-to-md`) — *Claimed in `027-convert-any-to-md` (2026-08-21)*
+- [x] **[IDEA-021]** Single Active Run Lock & Concurrency Guardrail — *Claimed in `021-categorized-history-and-clean-living-spec-architecture` (2026-08-21)*
+- [x] **[IDEA-020]** Upstream AI-Blueprint Sync Engine (`upstream-ai-blueprint.json` & scripts) — *Claimed in `014-typescript-migration-and-upstream-monitor-for-devflow` (2026-08-20)*
+- [x] **[IDEA-019]** Safe Scaffolding Overlay Guard System (`.nexus/backups/`) — *Claimed in `029-update-backup-system` (2026-08-22)*
+- [x] **[IDEA-018]** Multi-Stage Deep-Track Directory Structure (`devflow/context/current-run/`) — *Claimed in `021-categorized-history-and-clean-living-spec-architecture` (2026-08-21)*
+- [x] **[IDEA-017]** Automated AI Adapter Detection & Sync (`adapters: auto`) — *Implemented in `packages/create-nexus-devflow/lib/project-metadata.ts` & `update.ts`*
+- [x] **[IDEA-016]** Strict HTML Report Generation Control Policy (`/report:html`) — *Claimed in `015-fast-track-and-living-blueprint` (2026-08-20)*
+- [x] **[IDEA-014]** Standalone `/status` Skill for AI Chat Context — *Claimed in `019-sync-upstream-status-cli-and-project-detection` (2026-08-20)*
 - [x] **[IDEA-013]** Dynamic Project Overview Compiler (`/overview`) — *Claimed in `039-dynamic-overview-compiler` (2026-08-22)*
 - [x] **[IDEA-012]** Sub-Feature Automatic Splitting Engine (4a, 4b, 4c) — *Claimed in `038-sub-feature-splitting-engine` (2026-08-22)*
 - [x] **[IDEA-011]** Feature Briefing Skill จากแผนงาน (`/brief`) — *Claimed in `037-feature-briefing-skill` (2026-08-22)*
