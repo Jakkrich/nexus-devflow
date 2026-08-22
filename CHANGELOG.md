@@ -5,6 +5,13 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.25] - 2026-08-22
+
+### Added
+- **Update Backup & Safety Rollback Engine**: Added automatic backup of replaced/removed files and manifest metadata to `.nexus/backups/{timestamp}-{prevVersion}-to-{nextVersion}-{hash}/` upon `applyPreparedUpdate` in `packages/create-nexus-devflow/lib/update.ts`.
+- **Backup Metadata (`backup.json`) & Control GitIgnore**: Added `backup.json` recording `fromVersion`, `toVersion`, `replaced`, and `removed` lists, as well as automatic `.nexus/.gitignore` writing for `backups/` and `staging/`.
+- **Atomic Rollback Mechanism**: Added automatic rollback recovery if file writing fails mid-update, restoring original files from backup directory.
+
 ## [2.0.24] - 2026-08-21
 
 ### Added

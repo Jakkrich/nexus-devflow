@@ -354,52 +354,182 @@ export async function prepareUpdate({
   };
 }
 
+export interface ApplyUpdateOptions {
+  replaceConflicts?: boolean;
+  now?: () => Date;
+}
+
+export interface ApplyUpdateResult {
+  appliedCount: number;
+  removedCount: number;
+  backupDir: string | null;
+}
+
+function formatTimestamp(date: Date): string {
+  return date.toISOString().replace(/\.\d{3}Z$/, "Z").replaceAll(":", "-");
+}
+
+function sanitizeSegment(value: string): string {
+  return String(value).replace(/[^a-zA-Z0-9._-]+/g, "-");
+}
+
+export async function writeControlIgnore(targetDir: string): Promise<void> {
+  const ignoreFile = targetPath(targetDir, `${CONTROL_DIR}/.gitignore`);
+  await assertNoSymlinkParents(targetDir, `${CONTROL_DIR}/.gitignore`);
+  await fs.mkdir(path.dirname(ignoreFile), { recursive: true });
+  await fs.writeFile(ignoreFile, "backups/\nstaging/\n", "utf8");
+}
+
 export async function applyPreparedUpdate(
   prepared: PreparedUpdate,
-  { replaceConflicts = false }: { replaceConflicts?: boolean } = {}
-): Promise<{ appliedCount: number; removedCount: number }> {
+  { replaceConflicts = false, now = () => new Date() }: ApplyUpdateOptions = {}
+): Promise<ApplyUpdateResult> {
   if (prepared.conflictList.length > 0 && !replaceConflicts) {
     throw new Error(
       `Cannot apply update with ${prepared.conflictList.length} conflict(s). Pass force/replace option or resolve conflicts.`
     );
   }
 
-  const writeTargets = [
-    ...prepared.createList,
+  const replacements = [
     ...prepared.updateList,
     ...(replaceConflicts ? prepared.conflictList.map((item) => item.relativePath) : [])
   ];
+  const removals = prepared.orphanedFiles;
+  const existingOperations = [...replacements, ...removals];
 
-  let appliedCount = 0;
+  const previousVersion = prepared.previousManifest?.version || "legacy";
+  const nextVersion = prepared.nextManifest.version;
+  const identifier = `${formatTimestamp(now())}-${sanitizeSegment(
+    previousVersion
+  )}-to-${sanitizeSegment(nextVersion)}-${crypto.randomBytes(4).toString("hex")}`;
+
+  const backupDir = existingOperations.length > 0
+    ? targetPath(prepared.targetDir, `${CONTROL_DIR}/backups/${identifier}`)
+    : null;
+  const stagingDir = targetPath(prepared.targetDir, `${CONTROL_DIR}/staging/${identifier}`);
+  const previousManifestFile = targetPath(prepared.targetDir, MANIFEST_PATH);
+
+  const writeTargets = [...prepared.createList, ...replacements];
+  await fs.mkdir(stagingDir, { recursive: true });
+
   for (const relativePath of writeTargets) {
     const templateFile = prepared.templateFiles.get(relativePath);
-    if (!templateFile) {
-      continue;
-    }
+    if (!templateFile) continue;
 
-    await copyFileAtomic(prepared.targetDir, relativePath, templateFile.source);
-    appliedCount++;
+    const stageFile = path.join(stagingDir, ...relativePath.split("/"));
+    await fs.mkdir(path.dirname(stageFile), { recursive: true });
+    await fs.copyFile(templateFile.source, stageFile);
+
+    if ((await hashFile(stageFile)) !== templateFile.hash) {
+      throw new Error(`Template file changed during staging: ${relativePath}`);
+    }
   }
 
-  let removedCount = 0;
-  for (const relativePath of prepared.orphanedFiles) {
-    const fileToRemove = targetPath(prepared.targetDir, relativePath);
+  if (backupDir) {
+    for (const relativePath of existingOperations) {
+      const backupFile = path.join(backupDir, "files", ...relativePath.split("/"));
+      await fs.mkdir(path.dirname(backupFile), { recursive: true });
+      const sourceFile = targetPath(prepared.targetDir, relativePath);
+      try {
+        await fs.copyFile(sourceFile, backupFile);
+      } catch (error: unknown) {
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+          throw error;
+        }
+      }
+    }
+
     try {
-      await fs.unlink(fileToRemove);
-      removedCount++;
-      await cleanEmptyParentDirectories(prepared.targetDir, fileToRemove);
+      await fs.copyFile(previousManifestFile, path.join(backupDir, "nexus-devflow.json"));
     } catch (error: unknown) {
       if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
         throw error;
       }
     }
+
+    await fs.mkdir(backupDir, { recursive: true });
+    await fs.writeFile(
+      path.join(backupDir, "backup.json"),
+      `${JSON.stringify(
+        {
+          fromVersion: previousVersion,
+          toVersion: nextVersion,
+          replaced: replacements,
+          removed: removals
+        },
+        null,
+        2
+      )}\n`,
+      "utf8"
+    );
   }
 
-  await writeInstallManifest(prepared.targetDir, prepared.nextManifest);
+  let appliedCount = 0;
+  let removedCount = 0;
+
+  try {
+    for (const relativePath of writeTargets) {
+      const stageFile = path.join(stagingDir, ...relativePath.split("/"));
+      await copyFileAtomic(prepared.targetDir, relativePath, stageFile);
+      appliedCount++;
+    }
+
+    for (const relativePath of removals) {
+      const fileToRemove = targetPath(prepared.targetDir, relativePath);
+      try {
+        await fs.unlink(fileToRemove);
+        removedCount++;
+        await cleanEmptyParentDirectories(prepared.targetDir, fileToRemove);
+      } catch (error: unknown) {
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+          throw error;
+        }
+      }
+    }
+
+    await writeInstallManifest(prepared.targetDir, prepared.nextManifest);
+    await writeControlIgnore(prepared.targetDir);
+  } catch (error: unknown) {
+    try {
+      for (const relativePath of prepared.createList) {
+        const fileToRemove = targetPath(prepared.targetDir, relativePath);
+        try {
+          await fs.unlink(fileToRemove);
+        } catch {}
+      }
+
+      if (backupDir) {
+        for (const relativePath of existingOperations) {
+          const backupFile = path.join(backupDir, "files", ...relativePath.split("/"));
+          try {
+            await copyFileAtomic(prepared.targetDir, relativePath, backupFile);
+          } catch {}
+        }
+      }
+
+      if (prepared.previousManifest) {
+        await writeInstallManifest(prepared.targetDir, prepared.previousManifest);
+      } else {
+        try {
+          await fs.unlink(previousManifestFile);
+        } catch {}
+      }
+    } catch (rollbackError: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      const rbMsg = rollbackError instanceof Error ? rollbackError.message : String(rollbackError);
+      throw new Error(`Update failed: ${msg}. Rollback also failed: ${rbMsg}`);
+    }
+
+    const msg = error instanceof Error ? error.message : String(error);
+    throw new Error(`Update failed and was rolled back: ${msg}`);
+  } finally {
+    await fs.rm(stagingDir, { recursive: true, force: true });
+  }
 
   return {
     appliedCount,
-    removedCount
+    removedCount,
+    backupDir
   };
 }
 
@@ -426,6 +556,7 @@ export async function writeInstallManifest(targetDir: string, manifest: Manifest
   const manifestFile = targetPath(targetDir, MANIFEST_PATH);
   await fs.mkdir(path.dirname(manifestFile), { recursive: true });
   await fs.writeFile(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+  await writeControlIgnore(targetDir);
 }
 
 export async function copyFileAtomic(
