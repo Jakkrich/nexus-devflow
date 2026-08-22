@@ -220,7 +220,10 @@ function parseCurrentWork(markdown: string): CurrentWorkSummary {
     });
   }
 
-  if (markdown.includes(RESET_MARKER)) {
+  if (
+    markdown.includes(RESET_MARKER) ||
+    /Nothing in progress|None in progress/i.test(markdown)
+  ) {
     return idleSummary();
   }
 
