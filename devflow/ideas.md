@@ -36,17 +36,7 @@
 
 ---
 
-### [IDEA-011] Feature Briefing Skill จากแผนงาน (`/brief`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: ปรับปรุงคำสั่ง `/brief` ให้สามารถสแกนและประเมินฟีเจอร์ใน `ideas.md` หรือแผนงานล่วงหน้า โดยประเมินขนาดงาน, Dependencies, และไฟล์ที่ต้องแก้ไข ก่อนเริ่มทำ Spec
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — ปรับเพิ่มความสามารถในการอ่านและสรุปคิวไอเดีย
-- **Value & Potential**: **ปานกลาง** — ช่วยให้ผู้ใช้เข้าใจภาพรวมของงานถัดไปก่อนกดรัน `/feature`
-- **Quick Seed (กันลืม)**:
-  1. อ่านคิวไอเดียหรือแผนงานย่อย
-  2. ประเมินไฟล์ที่จะได้รับผลกระทบและขนาดความซับซ้อน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-011` หรือ `/00-explore IDEA-011`)
 
----
 
 ### [IDEA-012] Sub-Feature Automatic Splitting Engine (4a, 4b, 4c)
 - **บันทึกเมื่อ**: 2026-08-22
@@ -208,6 +198,7 @@
 
 ## 📦 Archived / Shipped Ideas
 
+- [x] **[IDEA-011]** Feature Briefing Skill จากแผนงาน (`/brief`) — *Claimed in `037-feature-briefing-skill` (2026-08-22)*
 - [x] **[IDEA-010]** Cloud Deployment Readiness & Config Generator Skill (`/release`) — *Claimed in `036-cloud-deployment-readiness-skill` (2026-08-22)*
 - [x] **[IDEA-009]** Guided Discovery Interview Skill (`/discovery`) — *Claimed in `035-guided-discovery-interview-skill` (2026-08-22)*
 - [x] **[IDEA-008]** Dedicated Code & Security Audit Skill (`/audit` with Durable Ledger) — *Claimed in `034-code-and-security-audit-skill` (2026-08-22)*

@@ -1,3 +1,8 @@
-# Current Feature
+# ⚡ Active Feature Context (Living Spec)
 
-_Nothing in progress. Run /feature, /fix, or /rollback to start._
+> **Status**: `idle` (No active feature running)  
+> **Last Completed Run**: `037-feature-briefing-skill` (Completed 2026-08-22)  
+
+To start a new feature, run `/feature {name-or-id}` or `/fix {name-or-id}`.
+To explore a request first, run `/00-explore {topic}`.
+To get a scope briefing on an upcoming item, run `/brief {number|name|IDEA-xxx}`.
