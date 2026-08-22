@@ -114,7 +114,7 @@ export function createManifest(
         "complete"
       ],
       mainlineStages: [
-        "00-discover",
+        "00-explore",
         "10-define",
         "20-spec",
         "30-plan",
@@ -498,7 +498,7 @@ export async function applyPreparedUpdate(
         const fileToRemove = targetPath(prepared.targetDir, relativePath);
         try {
           await fs.unlink(fileToRemove);
-        } catch {}
+        } catch { }
       }
 
       if (backupDir) {
@@ -506,7 +506,7 @@ export async function applyPreparedUpdate(
           const backupFile = path.join(backupDir, "files", ...relativePath.split("/"));
           try {
             await copyFileAtomic(prepared.targetDir, relativePath, backupFile);
-          } catch {}
+          } catch { }
         }
       }
 
@@ -515,7 +515,7 @@ export async function applyPreparedUpdate(
       } else {
         try {
           await fs.unlink(previousManifestFile);
-        } catch {}
+        } catch { }
       }
     } catch (rollbackError: unknown) {
       const msg = error instanceof Error ? error.message : String(error);

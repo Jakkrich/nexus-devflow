@@ -1,18 +1,19 @@
 ---
 name: feature
-description: "[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract in context for new features."
-argument-hint: "{feature title, IDEA-xxx, or feature description}"
+description: "[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - turn a build-plan item, idea, or new requirement into the living current-feature.md contract."
+argument-hint: "{feature title, number, IDEA-xxx, or empty for next item}"
 ---
 
 # Fast-Track: Feature (Blueprint Mode)
 
 $ARGUMENTS
 
-Fast-Track entry point combining Discovery, Definition, Specification, and Implementation Planning into one streamlined, review-gated step for **new features or enhancements**. Creates and maintains the **Single Living Spec (`devflow/context/current-feature.md`)** for the feature run. Supports intake from Idea Inbox (`IDEA-xxx`).
+Fast-Track entry point combining Discovery, Definition, Specification, and Implementation Planning into one streamlined, review-gated step for **new features or enhancements**. Creates and maintains the **Single Living Spec (`devflow/context/current-feature.md`)** for the feature run. Supports intake from Build Plan (`devflow/build-plan.md`) or Idea Inbox (`IDEA-xxx`).
 
 ## Invocations & Aliases
 
-- `/feature <title>` or `feature <title>`: Fast-Track feature specification
+- `/feature`: Specs the next unchecked feature from `devflow/build-plan.md`
+- `/feature <number | title>`: Specs a specific feature from the build plan or a new requirement
 - `/feature IDEA-xxx`: Intake and promote a pending idea from `devflow/ideas.md`
 - `$feature`: Codex CLI invocation
 
@@ -33,13 +34,18 @@ When invoked:
    - Explain to the user that an active run is currently in progress:
      > ⚠️ *"มีงาน `{active_id}` กำลังดำเนินการอยู่ กรุณาปิดงานเดิมด้วย `/complete` หรือ `70-release` (หรือสั่ง `/rollback`) ก่อนเริ่มงานใหม่"*
 
-### 2. Work Identity & Idea Intake
-1. **Idea Inbox Intake**: If the argument is an idea identifier (e.g. `IDEA-001`):
+### 2. Work Identity & Source Resolution
+1. **No Argument**:
+   - Inspect `devflow/build-plan.md` (or `devflow/ideas.md`).
+   - Pick the first unchecked feature (`- [ ]`) in sequence.
+2. **Idea Inbox Intake**: If the argument is an idea identifier (e.g. `IDEA-001`):
    - Read `devflow/ideas.md` and extract the idea's title, raw problem statement, AI Feasibility notes, and Quick Seed points.
    - Use these details as the primary input for Specification & Scope.
    - In `devflow/ideas.md`, update the item's status to `[x] Claimed ({ID})` and move it under `## 📦 Archived / Shipped Ideas`.
-2. Inspect `devflow/history/HISTORY.md` and determine the next sequential ID without prefix (e.g. `022-{slug}`).
-3. Identify Git branch naming:
+3. **Number or Title**:
+   - Match item in `devflow/build-plan.md` or treat as a new planned addition.
+4. Inspect `devflow/history/HISTORY.md` and determine the next sequential ID without prefix (e.g. `022-{slug}`).
+5. Identify Git branch naming:
    - `feature/{xxx-slug}`
 
 ### 3. Generate the Living Spec (`devflow/context/current-feature.md`)

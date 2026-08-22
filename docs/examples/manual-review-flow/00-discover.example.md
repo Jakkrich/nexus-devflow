@@ -2,7 +2,7 @@
 id: "{discovery_id}-discover"
 title: "Discover: {Work Title}"
 doc_type: "discovery"
-stage: "00-discover"
+stage: "00-explore"
 created: "{Date}"
 updated: "{Date}"
 owner: "{Owner}"
@@ -53,7 +53,7 @@ related_files: []
 ## 8. Selected Route
 
 - Route: [Brainstorm / PRD / Research / Debug / Direct decision]
-- Return target: `/00-Discover {discovery_id}`
+- Return target: `/00-explore {discovery_id}`
 
 ## 9. Returned Findings
 

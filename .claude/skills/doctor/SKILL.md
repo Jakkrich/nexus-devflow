@@ -36,7 +36,7 @@ Run through these 5 health checks:
   - `findings.md` (Check if ledger exists)
 
 ### Check 2: Tool Adapters Parity
-- Check if `.agents/skills/` exists and contains core lifecycle skills (`00-discover` through `70-release`, `devflow`, `onboard`, `adopt`, `doctor`).
+- Check if `.agents/skills/` exists and contains core lifecycle skills (`00-explore` through `70-release`, `devflow`, `onboard`, `adopt`, `doctor`).
 - Check if `.claude/skills/` is in sync with `.agents/skills/`.
 
 ### Check 3: Commands & Script Verification

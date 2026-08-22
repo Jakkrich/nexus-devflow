@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 A prototype is throwaway code that answers one question.
 
-Use this support skill behind `Research`, `Brainstorm`, `00-discover`, `10-define`, `20-spec`, or `30-plan` when conversation alone cannot settle the uncertainty.
+Use this support skill behind `Research`, `Brainstorm`, `00-explore`, `10-define`, `20-spec`, or `30-plan` when conversation alone cannot settle the uncertainty.
 
 ## Branches
 

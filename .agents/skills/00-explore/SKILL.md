@@ -1,10 +1,10 @@
 ---
-name: 00-discover
-description: "[Devflow] Discover stage in DevFlow 2.0 - explore a request, route supporting inquiry, and decide whether delivery work should begin without allocating a running ID."
+name: 00-explore
+description: "[Devflow] Explore stage in DevFlow 2.0 - explore a request, route supporting inquiry, and decide whether delivery work should begin without allocating a running ID."
 argument-hint: "{title, request, or discovery-id}"
 ---
 
-# Phase 00: Discover
+# Phase 00: Explore
 
 $ARGUMENTS
 
@@ -13,15 +13,15 @@ Explore a request before delivery commitment. Create or resume a Discovery ID, c
 ## Usage
 
 ```text
-00-discover {title or request}
-00-discover IDEA-xxx
-00-discover {discovery-id}
+00-explore {title or request}
+00-explore IDEA-xxx
+00-explore {discovery-id}
 ```
 
 Use this when:
 
 - a new request needs discussion before the team commits to delivery
-- exploring a pending idea from `devflow/ideas.md` (`00-discover IDEA-xxx`)
+- exploring a pending idea from `devflow/ideas.md` (`00-explore IDEA-xxx`)
 - the best route may be `Brainstorm`, `PRD`, `Research`, or `Debug`
 - supporting findings need to be synthesized into a go/no-go decision
 
@@ -30,7 +30,7 @@ Use this when:
 Write the primary discovery artifact to:
 
 ```text
-devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md
+devflow/discoveries/{DISCOVERY_ID}-{slug}/00-explore.md
 ```
 
 A Discovery ID uses a separate namespace such as `DISC-YYYYMMDD-NNN`. It is not a Running ID and must not reserve a numeric delivery run.
@@ -74,7 +74,7 @@ Set one decision:
 - `Defer`: the idea remains relevant but timing, evidence, or ownership is not ready
 - `Reject`: the idea should not proceed under the current framing
 
-### 3. Write `00-discover.md`
+### 3. Write `00-explore.md`
 
 Record selected routes, returned findings, open questions, decision, and rationale.
 

@@ -15,6 +15,36 @@ import {
   shouldUseColor
 } from "../lib/status.js";
 import {
+  addIdea,
+  formatIdeasHuman,
+  readIdeas
+} from "../lib/ideas.js";
+import {
+  addFinding,
+  formatFindingsHuman,
+  readFindings,
+  resolveFinding,
+  type FindingSeverity,
+  type FindingStatus
+} from "../lib/findings.js";
+import {
+  formatDoctorHuman,
+  runDoctor
+} from "../lib/doctor.js";
+import {
+  formatHistoryHuman,
+  readHistory
+} from "../lib/history.js";
+import {
+  evaluateGate,
+  formatGateReport
+} from "../lib/gatekeeper.js";
+import {
+  installGitHook,
+  uninstallGitHooks,
+  type GitHookType
+} from "../lib/git-hooks.js";
+import {
   createSpinner,
   createStyle
 } from "../lib/ui.js";
@@ -30,13 +60,44 @@ import {
 } from "../lib/uninstall.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const packageRoot = path.resolve(__dirname, "..", "..");
+const packageRoot = fsSync.existsSync(path.join(__dirname, "..", "package.json"))
+  ? path.resolve(__dirname, "..")
+  : path.resolve(__dirname, "..", "..");
 const templateRoot = path.join(packageRoot, "template");
 
 const adapterChoices = new Set(["codex", "antigravity", "claude", "copilot", "both", "all"]);
 
 interface CliOptions {
-  command: "install" | "status" | "ui" | "update" | "uninstall" | "eject";
+  command:
+  | "dashboard"
+  | "install"
+  | "status"
+  | "ui"
+  | "update"
+  | "uninstall"
+  | "eject"
+  | "idea"
+  | "ideas"
+  | "findings"
+  | "doctor"
+  | "archive"
+  | "check-gate"
+  | "hook";
+  subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall";
+  subcommandArg?: string;
+  hookType?: GitHookType;
+  ideaTitle?: string;
+  findingStatus?: FindingStatus;
+  findingSeverity?: FindingSeverity;
+  findingId?: string;
+  findingLocation?: string;
+  findingImpact?: string;
+  findingRemediation?: string;
+  blockersOnly: boolean;
+  fix: boolean;
+  statsOnly: boolean;
+  strict: boolean;
+  deprecatedUi: boolean;
   target: string | null;
   adapter: string;
   force: boolean;
@@ -64,6 +125,10 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
   const targetDir = path.resolve(process.cwd(), options.target || ".");
 
+  if (options.deprecatedUi) {
+    console.warn("Warning: `ui` is deprecated; use `dashboard` instead.");
+  }
+
   if (options.command === "status") {
     const status = await readProjectStatus(targetDir);
     console.log(
@@ -74,7 +139,175 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     return;
   }
 
-  if (options.command === "ui") {
+  if (options.command === "check-gate") {
+    const report = await evaluateGate(targetDir, {
+      strict: options.strict,
+      color: shouldUseColor()
+    });
+
+    if (options.json) {
+      console.log(JSON.stringify(report, null, 2));
+    } else {
+      console.log(formatGateReport(report, { color: shouldUseColor() }));
+    }
+
+    if (!report.passed) {
+      process.exitCode = 1;
+    }
+    return;
+  }
+
+  if (options.command === "hook") {
+    if (options.subcommandAction === "uninstall") {
+      const result = await uninstallGitHooks(targetDir);
+      if (options.json) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        const style = createStyle(shouldUseColor());
+        console.log(`\n${style.green("✔")} ${style.bold(result.message)}`);
+      }
+      return;
+    }
+
+    // Default: install
+    const hookType: GitHookType = options.hookType || "pre-commit";
+    const result = await installGitHook(targetDir, hookType, { strict: options.strict });
+    if (options.json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      const style = createStyle(shouldUseColor());
+      if (result.success) {
+        console.log(`\n${style.green("✔")} ${style.bold(result.message)}`);
+        console.log(`  ${style.dim("Hook:")} ${style.cyan(result.path)}`);
+      } else {
+        console.error(`\n${style.red("✖")} ${style.bold(result.message)}`);
+        process.exitCode = 1;
+      }
+    }
+    return;
+  }
+
+  if (options.command === "idea" || options.command === "ideas") {
+    if (options.subcommandAction === "add") {
+      const text = options.subcommandArg || "";
+      if (!text.trim()) {
+        throw new Error("Idea text is required. Example: nexus-devflow idea add \"My idea\"");
+      }
+      const created = await addIdea(targetDir, {
+        text,
+        title: options.ideaTitle
+      });
+      if (options.json) {
+        console.log(JSON.stringify(created, null, 2));
+      } else {
+        const style = createStyle(shouldUseColor());
+        console.log(`\n${style.green("✔")} ${style.bold("Idea added successfully!")}`);
+        console.log(`  ${style.dim("ID   :")} ${style.bold(style.cyan(created.id))}`);
+        console.log(`  ${style.dim("Title:")} ${style.bold(created.title)}`);
+        console.log(`  ${style.dim("Start:")} ${style.yellow(`/feature ${created.id}`)} or ${style.yellow(`/00-explore ${created.id}`)}`);
+      }
+      return;
+    }
+
+    const ideas = await readIdeas(targetDir);
+    console.log(
+      options.json
+        ? JSON.stringify(ideas, null, 2)
+        : formatIdeasHuman(ideas, { color: shouldUseColor() })
+    );
+    return;
+  }
+
+  if (options.command === "findings") {
+    if (options.subcommandAction === "add") {
+      const title = options.subcommandArg || "";
+      if (!title.trim()) {
+        throw new Error('Finding title is required. Example: nexus-devflow findings add "Hardcoded secret" --severity P0');
+      }
+      const result = await addFinding(targetDir, title, {
+        id: options.findingId,
+        severity: options.findingSeverity,
+        status: options.findingStatus,
+        location: options.findingLocation,
+        impact: options.findingImpact,
+        remediation: options.findingRemediation
+      });
+      if (options.json) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        const style = createStyle(shouldUseColor());
+        console.log(`\n${style.green("✔")} ${style.bold("Finding recorded successfully!")}`);
+        console.log(`  ${style.dim("ID      :")} ${style.bold(style.cyan(result.finding?.id || ""))}`);
+        const sev = result.finding?.severity || "P2";
+        const isBlocker = sev === "P0" || sev === "P1";
+        console.log(`  ${style.dim("Severity:")} ${style.bold(isBlocker ? style.red(`[${sev}]`) : style.yellow(`[${sev}]`))}`);
+        console.log(`  ${style.dim("Status  :")} ${style.yellow(result.finding?.status || "")}`);
+        console.log(`  ${style.dim("Title   :")} ${style.bold(result.finding?.title || "")}`);
+        console.log(`  ${style.dim("File    :")} ${style.dim(result.filePath)}`);
+      }
+      return;
+    }
+
+    if (options.subcommandAction === "resolve") {
+      const findingId = options.subcommandArg || "";
+      if (!findingId.trim()) {
+        throw new Error("Finding ID is required. Example: nexus-devflow findings resolve FIND-001");
+      }
+      const statusToSet: FindingStatus = options.findingStatus || "closed";
+      const result = await resolveFinding(targetDir, findingId, statusToSet);
+      if (options.json) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        const style = createStyle(shouldUseColor());
+        if (result.success) {
+          console.log(`\n${style.green("✔")} ${style.bold(result.message)}`);
+        } else {
+          console.error(`\n${style.red("✖")} ${style.bold(result.message)}`);
+          process.exitCode = 1;
+        }
+      }
+      return;
+    }
+
+    const findings = await readFindings(targetDir);
+    console.log(
+      options.json
+        ? JSON.stringify(findings, null, 2)
+        : formatFindingsHuman(findings, {
+          blockersOnly: options.blockersOnly,
+          color: shouldUseColor()
+        })
+    );
+    return;
+  }
+
+  if (options.command === "doctor") {
+    const report = await runDoctor(targetDir, {
+      fix: options.fix,
+      color: shouldUseColor()
+    });
+    console.log(
+      options.json
+        ? JSON.stringify(report, null, 2)
+        : formatDoctorHuman(report, { color: shouldUseColor() })
+    );
+    return;
+  }
+
+  if (options.command === "archive") {
+    const history = await readHistory(targetDir);
+    console.log(
+      options.json
+        ? JSON.stringify(history, null, 2)
+        : formatHistoryHuman(history, {
+          statsOnly: options.statsOnly,
+          color: shouldUseColor()
+        })
+    );
+    return;
+  }
+
+  if (options.command === "dashboard" || options.command === "ui") {
     const server = await startDashboardServer(targetDir);
     const style = createStyle();
     console.log(style.bold(style.cyan(`Nexus-DevFlow Dashboard live at ${server.url}`)));
@@ -202,7 +435,22 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 }
 
 function parseArgs(args: readonly string[]): CliOptions {
-  let command: "install" | "status" | "ui" | "update" | "uninstall" | "eject" = "install";
+  let command: CliOptions["command"] = "install";
+  let subcommandAction: CliOptions["subcommandAction"];
+  let subcommandArg: string | undefined;
+  let hookType: GitHookType | undefined;
+  let ideaTitle: string | undefined;
+  let findingStatus: FindingStatus | undefined;
+  let findingSeverity: FindingSeverity | undefined;
+  let findingId: string | undefined;
+  let findingLocation: string | undefined;
+  let findingImpact: string | undefined;
+  let findingRemediation: string | undefined;
+  let blockersOnly = false;
+  let fix = false;
+  let statsOnly = false;
+  let strict = false;
+  let deprecatedUi = false;
   let target: string | null = null;
   let adapter = "both";
   let force = false;
@@ -259,6 +507,124 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--blockers") {
+      blockersOnly = true;
+      continue;
+    }
+
+    if (arg === "--fix") {
+      fix = true;
+      continue;
+    }
+
+    if (arg === "--stats") {
+      statsOnly = true;
+      continue;
+    }
+
+    if (arg === "--strict") {
+      strict = true;
+      continue;
+    }
+
+    if (arg === "--title") {
+      const next = args[++i];
+      if (!next) {
+        throw new Error(`${arg} requires a title string`);
+      }
+      ideaTitle = next;
+      continue;
+    }
+
+    if (arg.startsWith("--title=")) {
+      ideaTitle = arg.slice("--title=".length);
+      continue;
+    }
+
+    if (arg === "--status") {
+      const next = args[++i];
+      if (!next) {
+        throw new Error(`${arg} requires a status string (e.g. closed, accepted, invalid)`);
+      }
+      findingStatus = next.toLowerCase() as FindingStatus;
+      continue;
+    }
+
+    if (arg.startsWith("--status=")) {
+      findingStatus = arg.slice("--status=".length).toLowerCase() as FindingStatus;
+      continue;
+    }
+
+    if (arg === "--severity" || arg === "-s") {
+      const next = args[++i];
+      if (!next) {
+        throw new Error(`${arg} requires a severity level (P0, P1, P2, P3)`);
+      }
+      const sev = next.toUpperCase() as FindingSeverity;
+      if (sev !== "P0" && sev !== "P1" && sev !== "P2" && sev !== "P3") {
+        throw new Error(`Invalid severity "${next}". Expected one of: P0, P1, P2, P3`);
+      }
+      findingSeverity = sev;
+      continue;
+    }
+
+    if (arg.startsWith("--severity=")) {
+      const sev = arg.slice("--severity=".length).toUpperCase() as FindingSeverity;
+      if (sev !== "P0" && sev !== "P1" && sev !== "P2" && sev !== "P3") {
+        throw new Error(`Invalid severity "${sev}". Expected one of: P0, P1, P2, P3`);
+      }
+      findingSeverity = sev;
+      continue;
+    }
+
+    if (arg === "--id") {
+      const next = args[++i];
+      if (!next) throw new Error(`${arg} requires an ID string`);
+      findingId = next;
+      continue;
+    }
+
+    if (arg.startsWith("--id=")) {
+      findingId = arg.slice("--id=".length);
+      continue;
+    }
+
+    if (arg === "--location") {
+      const next = args[++i];
+      if (!next) throw new Error(`${arg} requires a location string`);
+      findingLocation = next;
+      continue;
+    }
+
+    if (arg.startsWith("--location=")) {
+      findingLocation = arg.slice("--location=".length);
+      continue;
+    }
+
+    if (arg === "--impact") {
+      const next = args[++i];
+      if (!next) throw new Error(`${arg} requires an impact string`);
+      findingImpact = next;
+      continue;
+    }
+
+    if (arg.startsWith("--impact=")) {
+      findingImpact = arg.slice("--impact=".length);
+      continue;
+    }
+
+    if (arg === "--remediation") {
+      const next = args[++i];
+      if (!next) throw new Error(`${arg} requires a remediation string`);
+      findingRemediation = next;
+      continue;
+    }
+
+    if (arg.startsWith("--remediation=")) {
+      findingRemediation = arg.slice("--remediation=".length);
+      continue;
+    }
+
     if (arg === "--target" || arg === "-t") {
       const next = args[++i];
       if (!next) {
@@ -303,22 +669,105 @@ function parseArgs(args: readonly string[]): CliOptions {
   }
 
   if (positional.length > 0) {
-    if (positional[0] === "status") {
+    const first = positional[0].toLowerCase();
+    if (first === "status") {
       command = "status";
       target = positional[1] || target || ".";
-    } else if (positional[0] === "ui") {
-      command = "ui";
+    } else if (first === "check-gate") {
+      command = "check-gate";
       target = positional[1] || target || ".";
-    } else if (positional[0] === "update") {
+    } else if (first === "hook" || first === "hooks") {
+      command = "hook";
+      if (positional[1] === "uninstall") {
+        subcommandAction = "uninstall";
+        target = positional[2] || target || ".";
+      } else if (positional[1] === "install") {
+        subcommandAction = "install";
+        if (positional[2] === "pre-commit" || positional[2] === "pre-push") {
+          hookType = positional[2];
+          target = positional[3] || target || ".";
+        } else {
+          target = positional[2] || target || ".";
+        }
+      } else if (positional[1] === "pre-commit" || positional[1] === "pre-push") {
+        subcommandAction = "install";
+        hookType = positional[1];
+        target = positional[2] || target || ".";
+      } else {
+        subcommandAction = "install";
+        target = positional[1] || target || ".";
+      }
+    } else if (first === "dashboard") {
+      command = "dashboard";
+      target = positional[1] || target || ".";
+    } else if (first === "ui") {
+      command = "dashboard";
+      deprecatedUi = true;
+      target = positional[1] || target || ".";
+    } else if (first === "update") {
       command = "update";
       target = positional[1] || target || ".";
-    } else if (positional[0] === "uninstall") {
+    } else if (first === "uninstall") {
       command = "uninstall";
       target = positional[1] || target || ".";
-    } else if (positional[0] === "eject") {
+    } else if (first === "eject") {
       command = "eject";
       target = positional[1] || target || ".";
-    } else if (positional[0] === "install") {
+    } else if (first === "idea" || first === "ideas") {
+      command = first === "idea" ? "idea" : "ideas";
+      if (positional[1] === "add") {
+        subcommandAction = "add";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
+      } else if (positional[1] === "list") {
+        subcommandAction = "list";
+        target = positional[2] || target || ".";
+      } else if (positional[1] && !positional[1].startsWith("-")) {
+        subcommandAction = "add";
+        subcommandArg = positional[1];
+        target = positional[2] || target || ".";
+      } else {
+        subcommandAction = "list";
+        target = positional[1] || target || ".";
+      }
+    } else if (first === "findings") {
+      command = "findings";
+      if (positional[1] === "add") {
+        subcommandAction = "add";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
+      } else if (positional[1] === "resolve") {
+        subcommandAction = "resolve";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
+      } else if (positional[1] === "list") {
+        subcommandAction = "list";
+        target = positional[2] || target || ".";
+      } else if (positional[1] && !positional[1].startsWith("-")) {
+        subcommandAction = "add";
+        subcommandArg = positional[1];
+        target = positional[2] || target || ".";
+      } else {
+        subcommandAction = "list";
+        target = positional[1] || target || ".";
+      }
+    } else if (first === "doctor") {
+      command = "doctor";
+      target = positional[1] || target || ".";
+    } else if (first === "archive") {
+      command = "archive";
+      if (positional[1] === "list") {
+        subcommandAction = "list";
+        target = positional[2] || target || ".";
+      } else if (positional[1] === "stats") {
+        subcommandAction = "stats";
+        statsOnly = true;
+        target = positional[2] || target || ".";
+      } else {
+        subcommandAction = "list";
+        target = positional[1] || target || ".";
+      }
+    } else if (first === "install") {
       command = "install";
       target = positional[1] || target || ".";
     } else {
@@ -328,6 +777,21 @@ function parseArgs(args: readonly string[]): CliOptions {
 
   return {
     command,
+    subcommandAction,
+    subcommandArg,
+    hookType,
+    ideaTitle,
+    findingStatus,
+    findingSeverity,
+    findingId,
+    findingLocation,
+    findingImpact,
+    findingRemediation,
+    blockersOnly,
+    fix,
+    statsOnly,
+    strict,
+    deprecatedUi,
     target,
     adapter,
     force,
@@ -368,18 +832,42 @@ ${style.bold(style.cyan("Nexus-DevFlow CLI"))} ${style.bold(`v${readPackageVersi
 ${style.bold("Usage:")}
   ${style.cyan("npx @jakkrichm/create-nexus-devflow")} [target-dir] [options]
   ${style.cyan("nexus-devflow status")} [target-dir] [options]
-  ${style.cyan("nexus-devflow ui")} [target-dir] [options]
+  ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
+  ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
+  ${style.cyan("nexus-devflow hook uninstall")}
+  ${style.cyan("nexus-devflow dashboard")} [target-dir] [options]
+  ${style.cyan("nexus-devflow idea")} add "<text>" [--title "<title>"]
+  ${style.cyan("nexus-devflow ideas")} [list] [--json]
+  ${style.cyan("nexus-devflow findings add")} "<title>" [--severity P0|P1|P2|P3] [--location <loc>]
+  ${style.cyan("nexus-devflow findings")} [list] [--blockers] [--json]
+  ${style.cyan("nexus-devflow findings resolve")} <ID> [--status <status>]
+  ${style.cyan("nexus-devflow doctor")} [--fix] [--json]
+  ${style.cyan("nexus-devflow archive")} [list|stats] [--json]
   ${style.cyan("nexus-devflow update")} [target-dir] [options]
   ${style.cyan("nexus-devflow uninstall")} [target-dir] [options]
   ${style.cyan("nexus-devflow eject")} [target-dir] [options]
 
 ${style.bold("Commands:")}
   ${style.brightCyan("status")}             Show project overview, progress, findings, git status, and next action
-  ${style.brightCyan("ui")}                 Run local interactive web dashboard for Nexus-DevFlow
+  ${style.brightCyan("check-gate")}         CI/CD quality gatekeeper check (returns exit code 0 or 1)
+  ${style.brightCyan("hook")}               Install or remove local Git pre-commit/pre-push gatekeeper hooks
+  ${style.brightCyan("dashboard")}          Run local interactive web dashboard for Nexus-DevFlow (alias: ui)
+  ${style.brightCyan("idea, ideas")}        Manage idea backlog: add new ideas or list pending ideas
+  ${style.brightCyan("findings")}           Inspect findings ledger, record new findings, filter blockers, or resolve
+  ${style.brightCyan("doctor")}             Inspect project workspace health and auto-heal missing files (--fix)
+  ${style.brightCyan("archive")}            Explore delivered runs and release statistics from devflow/history/
   ${style.brightCyan("update")}             Update existing DevFlow installation without overwriting user changes
   ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project
 
 ${style.bold("Options:")}
+  ${style.cyan("--strict")}           Strict mode for check-gate (blocks unverified runs)
+  ${style.cyan("--title <text>")}     Custom title for idea add
+  ${style.cyan("--severity, -s")}     Finding severity: P0, P1, P2, P3 (default: P2)
+  ${style.cyan("--status <name>")}    Status to set when resolving finding (default: closed)
+  ${style.cyan("--location <path>")}  Finding source code file and line location
+  ${style.cyan("--blockers")}         Filter findings to only active P0/P1 blockers
+  ${style.cyan("--fix")}              Automatically repair/create missing context files in doctor
+  ${style.cyan("--stats")}            Display history summary statistics only
   ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, both, all
   ${style.cyan("--no-open")}          Start local dashboard without opening a browser
   ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall

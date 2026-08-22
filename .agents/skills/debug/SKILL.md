@@ -64,7 +64,7 @@ Structure:
 
 - **Classification**: Companion command & Investigation lane
 - **Mainline integration**:
-  - During `00-discover`: Unclear failure intake before allocation
+  - During `00-explore`: Unclear failure intake before allocation
   - During `40-execute`: Hard test failure or unexpected runtime exception
   - During `50-verify`: Defect found during QA inspection
 - **Handoff**: `test` (write repro test), `40-execute` (execute fix), `50-verify` (re-check)

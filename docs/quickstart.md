@@ -55,10 +55,10 @@ Nexus-DevFlow provides two optimized delivery tracks depending on task complexit
 *Recommended for large architectural epics, database migrations, and multi-agent coordination.*
 
 ```text
-00-discover ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
+00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
 ```
 
-1. `/00-discover`: Explore request before delivery commitment (`devflow/discoveries/DISC-xxx/00-discover.md`).
+1. `/00-explore`: Explore request before delivery commitment (`devflow/discoveries/DISC-xxx/00-explore.md`).
 2. `/10-define`: Lock delivery boundaries in `devflow/context/current-run/10-define.md`.
 3. `/20-spec`: Formalize markdown delivery contract & testable acceptance criteria.
 4. `/30-plan`: Break down spec into executable tasks with test decisions.

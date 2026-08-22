@@ -119,7 +119,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| _No shipped runs yet_ | - | - | Run \`/feature\` or \`/00-discover\` to start your first delivery run | - | - | - |
+| _No shipped runs yet_ | - | - | Run \`/feature\` or \`/00-explore\` to start your first delivery run | - | - | - |
 
 ---
 
@@ -190,7 +190,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 - **Active Discovery ID**: \`None\`
 - **Active Running ID**: \`None\`
-- **Current Stage**: \`Idle (Ready for new /feature, /fix, /00-discover, or /10-define)\`
+- **Current Stage**: \`Idle (Ready for new /feature, /fix, /00-explore, or /10-define)\`
 - **Living Spec**: \`None\`
 - **Last Completed Run**: \`None\`
 - **Last Updated**: \`None\`

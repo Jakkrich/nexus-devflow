@@ -65,10 +65,10 @@ The entire lifecycle is driven by the **Single Living Spec (`devflow/context/cur
 *Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination.*
 
 ```text
-00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
+00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
 ```
 
-1. `00-discover`: Explore request before delivery commitment (`DISC-YYYYMMDD-NNN`).
+1. `00-explore`: Explore request before delivery commitment (`DISC-YYYYMMDD-NNN`).
 2. `10-define`: Turn approved discovery into bounded delivery run in `devflow/context/current-run/10-define.md`.
 3. `20-spec`: Formalize markdown delivery contract & acceptance criteria (`20-spec.md`).
 4. `30-plan`: Breakdown spec into executable tasks with test decisions (`30-plan.md` + checklists).

@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { createStyle } from "./ui.js";
 
 type FindingSeverity = "P0" | "P1" | "P2" | "P3";
 type FindingStatus =
@@ -39,6 +40,27 @@ interface FindingsSummary {
 const DEVFLOW_FINDINGS_PATH = path.join("devflow", "context", "findings.md");
 const BLUEPRINT_FINDINGS_PATH = path.join("blueprint", "context", "findings.md");
 const FINDING_PATTERN = /^###\s+(\S+)\s+\[(P[0-3])\]\s+(unverified|open|fixed|closed|accepted|invalid)\s+-\s+(.+?)\s*$/i;
+
+async function getFindingsFilePath(projectRoot: string): Promise<string | null> {
+  const devflowPath = path.join(projectRoot, DEVFLOW_FINDINGS_PATH);
+  const blueprintPath = path.join(projectRoot, BLUEPRINT_FINDINGS_PATH);
+
+  try {
+    const stats = await fs.lstat(devflowPath);
+    if (stats.isFile()) return devflowPath;
+  } catch {
+    // try fallback
+  }
+
+  try {
+    const stats = await fs.lstat(blueprintPath);
+    if (stats.isFile()) return blueprintPath;
+  } catch {
+    // not found
+  }
+
+  return null;
+}
 
 async function readFindings(projectRoot: string): Promise<FindingsSummary> {
   let findingsPath = path.join(projectRoot, DEVFLOW_FINDINGS_PATH);
@@ -82,6 +104,116 @@ async function readFindings(projectRoot: string): Promise<FindingsSummary> {
 
     throw error;
   }
+}
+
+async function resolveFinding(
+  projectRoot: string,
+  findingId: string,
+  newStatus: FindingStatus = "closed"
+): Promise<{
+  success: boolean;
+  message: string;
+  previousStatus?: FindingStatus;
+  finding?: Finding;
+}> {
+  const filePath = await getFindingsFilePath(projectRoot);
+  if (!filePath) {
+    return {
+      success: false,
+      message: `Findings file not found in ${projectRoot}`
+    };
+  }
+
+  const content = await fs.readFile(filePath, "utf8");
+  const lines = content.split(/\r?\n/);
+  let targetIndex = -1;
+  let previousStatus: FindingStatus | undefined;
+  let updatedFinding: Finding | undefined;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const match = line.match(FINDING_PATTERN);
+    if (match && match[1]?.toLowerCase() === findingId.toLowerCase()) {
+      targetIndex = i;
+      const id = match[1];
+      const severity = (match[2] || "").toUpperCase() as FindingSeverity;
+      previousStatus = (match[3] || "").toLowerCase() as FindingStatus;
+      const title = (match[4] || "").trim();
+
+      lines[i] = `### ${id} [${severity}] ${newStatus} - ${title}`;
+      updatedFinding = {
+        id,
+        severity,
+        status: newStatus,
+        title,
+        line: i + 1
+      };
+      break;
+    }
+  }
+
+  if (targetIndex === -1 || !updatedFinding) {
+    return {
+      success: false,
+      message: `Finding with ID '${findingId}' not found in ${filePath}`
+    };
+  }
+
+  await fs.writeFile(filePath, lines.join("\n"), "utf8");
+
+  return {
+    success: true,
+    message: `Finding ${updatedFinding.id} status updated from '${previousStatus}' to '${newStatus}'`,
+    previousStatus,
+    finding: updatedFinding
+  };
+}
+
+function formatFindingsHuman(
+  summary: FindingsSummary,
+  options: { blockersOnly?: boolean; color?: boolean } = {}
+): string {
+  const style = createStyle(options.color);
+  const lines: string[] = [];
+
+  const items = options.blockersOnly ? summary.blockers : summary.items;
+  const headerTitle = options.blockersOnly
+    ? `Findings Blockers (${summary.blockers.length} active P0/P1)`
+    : `Findings Ledger (${summary.total} total, ${summary.blockers.length} blockers)`;
+
+  lines.push(style.bold(headerTitle));
+  lines.push("");
+
+  if (items.length === 0) {
+    lines.push(
+      style.dim(
+        options.blockersOnly
+          ? "  No active P0/P1 blockers! Ready for delivery."
+          : "  No findings recorded in devflow/context/findings.md"
+      )
+    );
+  } else {
+    for (const finding of items) {
+      const isBlocker =
+        (finding.severity === "P0" || finding.severity === "P1") &&
+        (finding.status === "open" || finding.status === "fixed");
+      const sevFormatted = isBlocker
+        ? style.bold(style.red(`[${finding.severity}]`))
+        : style.yellow(`[${finding.severity}]`);
+      const statusFormatted =
+        finding.status === "closed" || finding.status === "accepted"
+          ? style.green(finding.status)
+          : finding.status === "fixed"
+            ? style.cyan(finding.status)
+            : style.yellow(finding.status);
+
+      lines.push(
+        `  ${style.bold(style.cyan(finding.id))} ${sevFormatted} ${statusFormatted} - ${finding.title}`
+      );
+    }
+  }
+
+  return lines.join("\n").trimEnd();
 }
 
 function parseFindings(markdown: string): FindingsSummary {
@@ -157,9 +289,108 @@ function getErrorCode(error: unknown): string | undefined {
     : undefined;
 }
 
-export { DEVFLOW_FINDINGS_PATH, parseFindings, readFindings };
+interface AddFindingOptions {
+  id?: string;
+  severity?: FindingSeverity;
+  status?: FindingStatus;
+  location?: string;
+  impact?: string;
+  remediation?: string;
+}
+
+async function addFinding(
+  projectRoot: string,
+  title: string,
+  options: AddFindingOptions = {}
+): Promise<{
+  success: boolean;
+  message: string;
+  finding?: Finding;
+  filePath: string;
+}> {
+  let filePath = await getFindingsFilePath(projectRoot);
+  let content = "";
+
+  if (!filePath) {
+    filePath = path.join(projectRoot, DEVFLOW_FINDINGS_PATH);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    content = `# Findings Ledger\n\n> Durable record of audit findings, security issues, and code quality items.\n> Active P0 and P1 findings in \`open\` or \`fixed\` status block delivery and releases.\n\n`;
+  } else {
+    content = await fs.readFile(filePath, "utf8");
+  }
+
+  const existing = parseFindings(content);
+  const severity = options.severity || "P2";
+  const status = options.status || "open";
+
+  let id = options.id?.trim();
+  if (!id) {
+    let maxNum = 0;
+    for (const item of existing.items) {
+      const numMatch = item.id.match(/\d+$/);
+      if (numMatch) {
+        const n = parseInt(numMatch[0], 10);
+        if (!isNaN(n) && n > maxNum) {
+          maxNum = n;
+        }
+      }
+    }
+    const nextSeq = String(maxNum + 1).padStart(3, "0");
+    id = `FIND-${nextSeq}`;
+  }
+
+  const cleanTitle = title.trim();
+  const entryLines: string[] = [];
+  entryLines.push(`### ${id} [${severity}] ${status} - ${cleanTitle}`);
+
+  if (options.location) {
+    entryLines.push(`- **Location**: \`${options.location}\``);
+  }
+  if (options.impact) {
+    entryLines.push(`- **Impact**: ${options.impact}`);
+  }
+  if (options.remediation) {
+    entryLines.push(`- **Remediation**: ${options.remediation}`);
+  }
+
+  const newEntry = entryLines.join("\n") + "\n";
+
+  let updatedContent = content.trimEnd();
+  if (updatedContent.length > 0) {
+    updatedContent += "\n\n" + newEntry;
+  } else {
+    updatedContent = newEntry;
+  }
+
+  await fs.writeFile(filePath, updatedContent, "utf8");
+
+  const finding: Finding = {
+    id,
+    severity,
+    status,
+    title: cleanTitle,
+    line: updatedContent.split(/\r?\n/).length
+  };
+
+  return {
+    success: true,
+    message: `Added finding ${id} [${severity}] ${status} to ${filePath}`,
+    finding,
+    filePath
+  };
+}
+
+export {
+  DEVFLOW_FINDINGS_PATH,
+  addFinding,
+  formatFindingsHuman,
+  parseFindings,
+  readFindings,
+  resolveFinding
+};
 
 export type {
+  AddFindingOptions,
   Finding,
   FindingSeverity,
   FindingsSummary,
