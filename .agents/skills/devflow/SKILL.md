@@ -1,9 +1,15 @@
 ---
 name: devflow
-description: "[Devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows."
+description: "[devflow][B] Flagship interactive guide, state inspector, and intent router for DevFlow workflows."
 ---
 
 # devflow - Interactive Workflow Guide & Intent Router for Nexus-DevFlow
+
+## Command Track Policy
+- [F] Fast-Track only
+- [D] Deep-Track only
+- [B] Available in both tracks (Track-agnostic)
+
 
 Use this skill to guide the user on what to do next, inspect current workspace state, map their natural language intent to the right Nexus-DevFlow track (Fast-Track or Deep-Track) or companion command, or display a sitemap of available DevFlow skills.
 
@@ -43,7 +49,7 @@ When invoked without an argument (or when determining the next step), inspect:
 5. **Audit Findings Ledger**: Check `devflow/context/findings.md` for open high-severity findings.
 
 ### Default State Recommendations
-- If no run is active and user wants to start a feature -> Recommend `/spec <name>` (or `/feature <name>`).
+- if no run is active and user wants to start a feature -> Recommend `/feature <name>`.
 - If no run is active and user wants to fix a bug -> Recommend `/fix <bug>`.
 - If no run is active and user has pending ideas in `devflow/ideas.md` -> Highlight `/spec IDEA-xxx`.
 - If no run is active and user wants deep architectural exploration -> Recommend `00-explore`.

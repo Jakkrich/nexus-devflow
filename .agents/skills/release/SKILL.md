@@ -1,171 +1,160 @@
 ---
 name: release
-description: "Prepare a DevFlow project for deployment to Render or Vercel. Inspects project stack, package manager, commands, and environment variables; verifies local build, start, output, and health endpoints; creates or updates render.yaml or vercel.json; and enforces strict safety gates before any remote action. Use when the user runs /release, invokes $release, asks for Render setup, Vercel setup, deploy readiness, deployment config, render.yaml, or vercel.json."
-argument-hint: "[render | vercel | check | config]"
+description: "[devflow][B] Prepare a Blueprint project for deployment to Render or Vercel. Reads the plans, project commands, app config, and current repo state; verifies build, start, output, env, health checks, and provider config; can create or update render.yaml or vercel.json when requested; and stops before any external deploy, service creation, remote env change, push, publish, or destructive action unless the user explicitly approves. Use when the user runs /release, invokes $release, asks for Render setup, Vercel setup, deploy readiness, deployment config, render.yaml, or vercel.json."
 ---
 
 # release - deployment readiness for Render and Vercel
 
 Where this sits in the workflow:
 
-```text
-/complete (or 70-deliver)  ->  [release]  ->  deploy with explicit approval
-(feature / run finished)        (config,       (human confirms external action)
-                                 readiness)
-```
+    /complete  ->  [release]  ->  deploy with explicit approval
+    (feature       (config,       (human confirms
+     finished)      checks)        external action)
 
-`/release` is an optional deployment preparation step. It gets the application ready to ship, but it is **not** an auto-deploy button. It can inspect, recommend, create local config files (`render.yaml`, `vercel.json`), and run local readiness checks. It **must stop** before any external provider action unless the user gives an explicit confirmation in the current chat.
+`/release` is an optional deployment prep step. It gets the app ready to ship,
+but it is not a deploy button. It can inspect, recommend, create local config
+files, and run local checks. It must stop before any external provider action
+unless the user gives an explicit yes in the current chat.
 
-Supported initial targets:
+Initial targets:
 
-- **Render** - static sites, web services, background workers, cron jobs, databases, and `render.yaml`.
-- **Vercel** - frontend apps, full-stack framework apps, serverless functions, and `vercel.json`.
+- **Render** - static sites, web services, background workers, cron jobs, and
+  `render.yaml` when useful.
+- **Vercel** - frontend apps, full-stack framework apps, serverless functions,
+  and `vercel.json` when useful.
 
----
+## Input
 
-## Usage
+Optional scope:
 
-```text
-release
-release render
-release vercel
-release check
-release config
-```
+- no argument: inspect the project and recommend Render or Vercel if the target
+  is obvious; otherwise ask which target to prepare
+- `render`: prepare Render readiness and config
+- `vercel`: prepare Vercel readiness and config
+- `check`: read-only deployment readiness report
+- `config`: focus on creating or updating local provider config files
 
-### Scopes & Arguments
+If the user asks to deploy, connect a provider, create a remote service, set
+remote env vars, push, publish, or run provider commands that affect a remote,
+pause and ask for explicit confirmation before doing it.
 
-- **no argument**: inspect the project and recommend Render or Vercel if the target is obvious; otherwise ask which target to prepare.
-- `render`: prepare Render readiness and local configuration (`render.yaml`).
-- `vercel`: prepare Vercel readiness and local configuration (`vercel.json`).
-- `check`: read-only deployment readiness report (runs local checks without changing files).
-- `config`: focus on creating or updating local provider configuration files.
-
-> [!CAUTION]
-> **Strict Safety Gate**: If the user asks to deploy, connect a cloud provider, create a remote service, set remote env vars, push, publish, or run CLI commands that affect a remote infrastructure, pause and request explicit user confirmation before executing.
-
----
-
-## 5-Step Deployment Readiness Protocol
-
-### Step 1 - Read & Inspect the Project
+## Step 1 - read the project
 
 Read:
-- `AGENTS.md` and `devflow/context/project-overview.md`
-- `devflow/project-plan.md` and `devflow/build-plan.md` (if present)
-- `devflow/context/current-feature.md` or recent history
-- Package and build manifests: `package.json`, lockfiles, framework configs, Dockerfile, `render.yaml`, `vercel.json`, `.env.example`, README
-- Git working tree status
+
+- `AGENTS.md`
+- `devflow/project-plan.md`
+- `devflow/build-plan.md`
+- `devflow/context/project-overview.md`
+- `devflow/context/current-feature.md`
+- package or build files such as `package.json`, lockfiles, framework config,
+  Dockerfile, `render.yaml`, `vercel.json`, `.env.example`, and README files
+- git branch and working tree status
 
 Identify:
-- **App Type**: static frontend, SSR/hybrid app, API service, background worker, CLI, monorepo
-- **Commands & Output**: build command, start command, dev command, test command, output directory (`dist/`, `build/`, `.next/`, `out/`), package manager
-- **Runtime Needs**: Node version, Python version, Docker, database, cache, object storage, background jobs, cron, migrations
-- **Environment Variables**: identify required variables **by name only**; never print, request, or record secret values
-- **Health / Smoke Path**: health endpoint (e.g. `/api/health`, `/healthz`, `/`) or smoke test command
 
----
+- app type: static frontend, SSR app, API service, worker, CLI, monorepo, or
+  hybrid
+- build command, start command, dev command, test command, output directory, and
+  package manager
+- runtime needs: Node version, Python version, Docker, database, cache, object
+  storage, queues, background jobs, cron, migrations, or file uploads
+- env vars by name only; never print or write secret values
+- health path or smoke test path
 
-### Step 2 - Choose Provider Shape
+## Step 2 - choose the provider shape
 
-For **Render**, decide whether the service should be configured as:
-- **Static Site**: client-side SPAs (Vite, React, Vue) with static publish path
-- **Web Service**: Node.js/Python/Go API or SSR server running on a specified port
-- **Background Worker**: queue consumers or long-running worker processes
-- **Cron Job**: periodic scheduled jobs
-- **Database**: PostgreSQL or Redis paired with a service
+For **Render**, decide whether the app should be:
+
+- static site
+- web service
+- background worker
+- cron job
+- database paired with a service
 
 For **Vercel**, decide whether the app should be:
-- **Framework Deployment**: Next.js, Nuxt, SvelteKit, Astro with zero-config auto-detection
-- **Static Output**: static site export
-- **Serverless / Edge Functions**: API routes or standalone serverless functions
-- **Monorepo Project**: root directory specification
 
-*Note*: If a provider is a poor fit for the stack, state it plainly and recommend the better target (e.g. long-running background workers fit Render better than Vercel serverless).
+- framework deployment with auto-detected settings
+- static output deployment
+- serverless or edge function app
+- monorepo project with a root directory
 
----
+If the provider is a poor fit, say that plainly and recommend the better target.
+Examples: long-running workers usually fit Render better; a mostly frontend
+Next.js or Astro site usually fits Vercel well.
 
-### Step 3 - Verify Local Readiness
+## Step 3 - verify local readiness
 
-Run only local, non-destructive checks:
-1. **Dependency check**: verify required dependencies are installed.
-2. **Build check**: run the project build command (e.g. `npm run build`).
-3. **Test check**: run unit/integration tests when declared (e.g. `npm test`).
-4. **Smoke test**: start local server in test mode or verify health endpoints if safe.
-5. **Lint / Typecheck**: run typecheck/lint when listed in project scripts.
+Run only local, non-destructive checks that match `AGENTS.md`:
 
-If a command fails or is missing, report the exact gap. If a check requires remote credentials, list the required environment variable names and skip that check.
+- install check only if dependencies are already present or the user approves an
+  install
+- build command
+- test command when declared
+- preview or start command if safe, then smoke test the health path
+- lint or typecheck only when listed in project commands or package scripts
 
----
+If a command is missing, report the gap instead of inventing certainty. If a
+command needs secrets, list the env var names needed and skip that check.
 
-### Step 4 - Prepare Local Config Files
+## Step 4 - prepare local config
 
-Only create or update local configuration files when the target is clear or requested.
+Only create or update local config files when the target is clear or the user
+asked for config.
 
-#### For Render (`render.yaml`)
-Create or update `render.yaml` for repeatable infrastructure:
-```yaml
-services:
-  - type: web # or static, worker, cron
-    name: my-app
-    runtime: node # or python, docker, etc.
-    buildCommand: npm run build
-    startCommand: npm run start
-    staticPublishPath: dist # for static sites
-    healthCheckPath: /api/health
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: DATABASE_URL
-        sync: false # prompt in Render dashboard, no secret in code
-```
+For **Render**, prefer `render.yaml` when the app needs repeatable setup or has
+more than one service. Include:
 
-#### For Vercel (`vercel.json`)
-Create `vercel.json` only when default framework auto-detection is insufficient:
-```json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vite",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
-  ]
-}
-```
+- service type
+- build command
+- start command for web services
+- static publish path for static sites
+- health check path when known
+- env var names without values
+- region or plan only if the user specified it
 
-#### For Both Providers
-- Sync `.env.example` with newly required environment variable names (with empty or dummy placeholder values).
-- Add deployment instructions to `README.md` if requested.
-- **Never write secret values into config files or git commits.**
+For **Vercel**, create `vercel.json` only when the defaults are not enough.
+Many Vercel projects need no config file. Include:
 
----
+- build command only when it differs from defaults
+- output directory only when needed
+- rewrites or headers only when the app requires them
+- install command only when the package manager cannot be inferred
 
-### Step 5 - Report Deployment Readiness Packet
+For both providers:
 
-Produce a clean, scannable summary:
+- update `.env.example` with required names when useful
+- add a short deployment note to README only if the project already has a
+  deployment section or the user asks
+- never write secret values
 
-```markdown
-## 🚀 Deployment Readiness Packet
+## Step 5 - report the release packet
 
-- **Target Provider**: Render / Vercel (Rationale: ...)
-- **Service Shape**: Web Service / Static Site / Framework App / Worker
-- **Config Files Changed**: `render.yaml` / `vercel.json` / `.env.example` (or None)
-- **Local Checks Run**:
-  - Build: ✅ PASS
-  - Tests: ✅ PASS (X/X tests)
-  - Typecheck: ✅ PASS
-- **Required Env Variables**: `DATABASE_URL`, `API_KEY` (names only)
-- **Smoke Test Command / Path**: `/api/health`
-- **Blockers / Warnings**: None (or list any gaps)
-- **Next Action**: Review generated config files. When ready, deploy via Provider Dashboard or CLI.
-```
+Finish with a concise packet:
 
----
+- **Target** - Render or Vercel, and why
+- **Shape** - static site, web service, framework app, worker, or hybrid
+- **Config changed** - files created or edited, or "none"
+- **Checks run** - commands and result
+- **Env needed** - names only
+- **Smoke test** - exact path or command to verify after deploy
+- **Blockers** - anything that must be fixed before shipping
+- **Next action** - exact command or provider step, stopping before external
+  action unless approved
 
-## Strict Rules & Guardrails
+## Rules
 
-1. **Optional Step**: `/release` is an optional helper sitting outside the core development loop.
-2. **No Unprompted Remote Actions**: Never deploy, create remote cloud services, modify remote environment variables, push, or publish without explicit confirmation in the current chat.
-3. **Zero Secret Leaks**: Never print, log, or commit passwords, tokens, API keys, or private certificates.
-4. **Lean Configurations**: Do not add unnecessary configuration files if platform zero-config defaults suffice.
-5. **No Hallucinations**: Do not mask failing local builds or unknown output directories; report failures accurately.
+- Optional only. Do not add `/release` to the mandatory build loop.
+- Do not deploy, create remote services, set remote env vars, push, publish, or
+  transmit externally without explicit approval in the current chat.
+- Do not write secret values to files or chat.
+- Do not hide failing builds, missing env vars, or unknown output paths.
+- Do not add provider config if the platform defaults are better.
+- Keep the change small. Deployment setup should not become a full DevOps
+  framework.
+
+## Formatting
+
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
+enumerations and tables for matrices rather than dense paragraphs.

@@ -1,157 +1,201 @@
 ---
 name: feature
-description: "[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - turn a build-plan item, sub-feature (4a, 4b), idea, or requirement into the living current-feature.md contract with automatic sizing & splitting."
-argument-hint: "{feature title, number, 4a, IDEA-xxx, or empty for next item}"
+description: "[devflow][F] Turn a feature from build-plan.md into a buildable spec. With no argument, specs the next unchecked item in the build plan; given a number or name, specs that one. If a clearly new feature does not match the plan, proposes a reviewed plan addition, refreshes the overview after approval, then specs it. Sizes the feature and splits anything too big into smaller sub-features (4a, 4b, ...), writes small, reviewable build steps to devflow/context/current-feature.md, then red-teams its own draft for gaps, oversized steps, and scope creep before stopping at a review gate. Use when the user runs /feature, names or numbers a feature, asks to add and start a new feature, or asks to spec out, break down, or start the next feature."
 ---
 
-# Fast-Track: Feature (Blueprint Mode)
+# feature - turn a build-plan feature into a buildable spec
 
-$ARGUMENTS
+Where this sits in the workflow:
 
-Fast-Track entry point combining Discovery, Definition, Specification, and Implementation Planning into one streamlined, review-gated step for **new features or enhancements**. Creates and maintains the **Single Living Spec (`devflow/context/current-feature.md`)** for the feature run. Supports intake from Build Plan (`devflow/build-plan.md`), Sub-features (`4a`, `4b`), or Idea Inbox (`IDEA-xxx`).
+    project-overview.md  +  build-plan.md  ->  [this skill]  ->  build
+    (source of truth,        (which feature       (the spec for      (code,
+     from /overview)          to build)            one feature)        reviewed)
 
-Includes built-in **Multi-Factor Sizing Heuristic & Interactive Split Gate** to prevent context overflow on oversized tasks (`L`/`XL`).
+`build-plan.md` is intentionally high-level - one line per feature, no detail,
+no ordering ceremony. All of that is this skill's job: take one listed feature,
+read the full context from `project-overview.md`, and turn it into something
+buildable.
 
----
+## Input
 
-## Invocations & Aliases
+A feature from `build-plan.md`, by number or name - e.g. `/feature 3` or
+`/feature "typing engine"`.
 
-- `/feature`: Specs the next unchecked feature from `devflow/build-plan.md`
-- `/feature <number | title>`: Specs a specific feature from the build plan or a new requirement
-- `/feature <number[a-z]>` (e.g. `/feature 4a`): Specs a specific sub-feature
-- `/feature IDEA-xxx`: Intake and promote a pending idea from `devflow/ideas.md`
-- `$feature`: Codex CLI invocation
+The request may also describe a genuinely new feature that is not in the build
+plan yet. That goes through the new-feature intake in Step 1. Never silently add
+scope to the user-owned plans.
 
----
+**With no argument, build the next one.** `/feature` on its own specs the first
+unchecked item in `build-plan.md`. The build plan is a checklist; finished
+features are checked off, so the first unchecked item is always what's next. (If a
+big item has been split into sub-items, the next unchecked sub-item is the target.)
 
-## Fast-Track Mainline Workflow
+## Step 1 - pick the target
 
-```text
-/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
-```
+- Given a number or name that matches a build-plan item -> use it.
+- Given a request that clearly describes a new feature with no reasonable match
+  in the build plan -> follow **New-feature intake** below.
+- No argument -> read `build-plan.md` top to bottom and take the first unchecked
+  leaf (a plain item, or a sub-item under one that was split).
 
----
+### New-feature intake
 
-## Behavior & Contract
+Use this path for a new product capability, not a bug or small unplanned change.
+Those still belong in `/fix`.
 
-When invoked:
+1. Search checked and unchecked items for an existing or near-duplicate feature.
+   If the wording may simply be a mistaken name, show the closest matches instead
+   of creating new scope.
+2. If it is genuinely new, propose one feature-sized checkbox line and where it
+   belongs in `build-plan.md`. Preserve completed items and their numbering. Use
+   the next unused whole number for a new top-level item. If the existing plan is
+   complete, place it under an existing later milestone heading or propose a
+   `## Post-MVP` heading.
+3. Check whether the feature materially changes the product direction, users,
+   data, stack, monetization, UI/UX, or deployment. Include exact proposed edits
+   to the relevant `project-plan.md` sections only when needed. An incremental
+   feature normally changes only `build-plan.md`.
+4. Stop for approval before editing either user-owned plan. Show the complete
+   proposed plan change, including any project-plan edits, in the review request.
+5. After approval, write the plan changes, follow the installed `overview` skill
+   to regenerate `devflow/context/project-overview.md`, then resume this skill
+   with the newly added build-plan item as the target. If overview finds a
+   contradiction or decision the user must resolve, stop there and do not spec
+   against unresolved context.
 
-### 1. Single Active Run Guardrail (One Thing at a Time)
-1. Inspect `devflow/context/current-stage.md` and `devflow/context/current-feature.md`.
-2. If `Active Running ID` is not `None` and `Current Stage` is not `Idle`, or if `current-feature.md` contains an active uncompleted spec:
-   - **HALT and reject opening a new feature**.
-   - Explain to the user that an active run is currently in progress:
-     > ⚠️ *"มีงาน `{active_id}` กำลังดำเนินการอยู่ กรุณาปิดงานเดิมด้วย `/complete` หรือ `70-deliver` (หรือสั่ง `/rollback`) ก่อนเริ่มงานใหม่"*
+The result follows the same normal loop as any other planned feature. Do not
+create a second build plan or bypass overview regeneration.
 
----
+**If the build plan isn't a checklist yet** - a plain list with no `- [ ]` boxes -
+treat every item as unchecked: take the first item as the target, and offer to
+convert the list to a checklist so progress is trackable from here on. Proceed
+with the first item whether or not the user wants the conversion.
 
-### 2. Sizing Heuristic & Sub-Feature Splitting Engine
+State which feature you're building before going further.
 
-Before locking the spec, evaluate the target scope:
+## Step 2 - size it, and split if too big
 
-1. **Multi-Factor Sizing Heuristic**:
-   - **Files Touched**: $\ge 6$ files predicted to be created or modified.
-   - **Architectural Layers**: $\ge 3$ distinct layers (e.g. DB Schema/Migration + Backend API + Frontend UI + State Store).
-   - **Task Complexity**: $\ge 6$ checklist tasks or heavy multi-service integrations.
-2. **Interactive Split Gate**:
-   - If the feature is assessed as `L` or `XL` and no explicit sub-feature notation (`4a`) was requested:
-     - **Draft Sub-Feature Proposals**: Break into 2-3 focused sub-features (e.g. `4a: Backend Schema & Core APIs (Size: M)`, `4b: Frontend UI & Client State (Size: M)`).
-     - **Prompt User in Thai**:
-       > ⚠️ *"ฟีเจอร์นี้มีขนาดใหญ่ (`L`/`XL`) เพื่อรักษาคุณภาพและป้องกัน Context Overflow แนะนำให้แบ่งเป็น sub-features ดังนี้:*  
-       > *- `4a: [ขอบเขตย่อยส่วนที่ 1]` (Size: M)*  
-       > *- `4b: [ขอบเขตย่อยส่วนที่ 2]` (Size: M)*  
-       > *คุณต้องการให้เปิด Spec เริ่มทำ `4a` ทันทีเลยไหมครับ?"*
-     - If the user confirms or provides a sub-feature argument (e.g. `4a`), proceed with the sub-feature spec.
+Read the target line from `build-plan.md`, then pull full context from
+`devflow/context/project-overview.md` (the data model, stack, and conventions). Decide
+how big the feature is:
 
----
+- **Small enough to build and review as one unit** -> one spec. Continue to
+  Step 3.
+- **Too big for one reviewable spec** -> split it. Propose a short list of
+  sub-features in chat (title + one line each), let the user adjust it, then write
+  those sub-items back under the parent in `build-plan.md` as an indented
+  checklist (`4a`, `4b`, `4c` ...). Spec only the **first** sub-feature now; the
+  rest get picked up on later `/feature` runs.
 
-### 3. Work Identity & Source Resolution
+Two levels of breakdown - don't confuse them:
 
-1. **No Argument**:
-   - Inspect `devflow/build-plan.md` (or `devflow/ideas.md`).
-   - Pick the first unchecked feature (`- [ ]`) or sub-feature (`- [ ] 4a.`) in sequence.
-2. **Sub-Feature Notation** (e.g. `4a`, `038b-slug`):
-   - Allocate sub-feature running ID with alpha suffix: `xxx[a-z]-slug` (e.g. `038a-auth-schema-and-api`).
-   - Set Git branch: `feature/xxx[a-z]-slug`.
-3. **Idea Inbox Intake** (e.g. `IDEA-001`):
-   - Read `devflow/ideas.md` and extract the idea's title, raw problem statement, AI Feasibility notes, and Quick Seed points.
-   - In `devflow/ideas.md`, update the item's status to `[x] Claimed ({ID})` and move it under `## 📦 Archived / Shipped Ideas`.
-4. **Number or Title**:
-   - Match item in `devflow/build-plan.md` or treat as a new planned addition.
-5. Determine next sequential ID:
-   - For standard feature: `xxx-slug` (e.g. `038-payment-gateway`).
-   - For sub-feature: `xxx[a-z]-slug` (e.g. `038a-payment-api`, `038b-payment-ui`).
-6. Identify Git branch naming:
-   - `feature/{ID}`
+- **Sub-features** (here) - each is big enough to stand alone: its own branch,
+  spec, review-and-merge cycle, and archive entry.
+- **Build steps** (in the spec, Step 3) - small diffs *within* one feature.
 
----
+Worked example - "Authentication" is too big for one spec, so it splits into
+sub-features in `build-plan.md`:
 
-### 4. Generate the Living Spec (`devflow/context/current-feature.md`)
+    - [ ] 4. Authentication
+      - [ ] 4a. Registration - sign-up page + create Profile and handle
+      - [ ] 4b. Login - sign-in page + session
+      - [ ] 4c. Route protection - gate saving/drills/leaderboard, plus sign-out
 
-Write `devflow/context/current-feature.md` using the structured template below in **Thai (`th`)**:
+Then *within* 4a, the build steps are small: first "registration page UI", then
+"register server action + validation + redirect". The page and its logic are
+steps, not separate features.
 
-```markdown
-# 📐 [{ID}] {Feature Title} (Living Spec)
+This sizing call is the skill's job, not the build plan's - that's exactly why the
+build plan starts high-level.
 
-> **Status**: In-Progress  
-> **Track**: Fast-Track (Blueprint Mode - Feature)  
-> **Category**: Feature  
-> **Branch**: `{branch_name}`  
-> **Created Date**: {YYYY-MM-DD}  
-> **Owner**: {Contributor or Team}  
+## Step 3 - write the spec
 
----
+For the one (sub-)feature being built now, write a full spec to
+`devflow/context/current-feature.md` (create `devflow/context/` if needed), following
+`reference/feature-spec-template.md`. Fill every section: goal, in/out of scope,
+the build loop, small build steps as a checklist (`- [ ]`, each with an observable
+"done when" - `/implement` ticks them off and resumes from the first unchecked
+one), files/areas, data/contracts, testing, and notes for the AI.
 
-## 1. Specification & Scope
-- **Problem Statement**: {ปัญหาหรือที่มาของฟีเจอร์นี้}
-- **In-Scope**:
-  - {ขอบเขตสิ่งที่ต้องทำสำหรับฟีเจอร์นี้}
-- **Out-of-Scope**:
-  - {สิ่งที่ไม่ทำในรอบนี้}
-- **Acceptance Criteria**:
-  - [ ] AC-1: {เงื่อนไขการตรวจรับข้อที่ 1}
-  - [ ] AC-2: {เงื่อนไขการตรวจรับข้อที่ 2}
+**Visual or replication features need a reference image.** If the feature is
+"make it look like X" - recreating an existing design, matching a mockup, or
+rebuilding a Canva/Figma artifact - prose underspecifies the target and the build
+will approximate it wrong. Ask the user for a screenshot or image if one isn't
+already provided, save it under `devflow/reference/` (create the folder if
+needed), and link it from the spec's Design reference section. Don't write a
+visual spec from words alone when an image could exist.
 
-## 2. Plan & Test Strategy
-- **Files to Modify / Create**:
-  - `{path/to/file1}`: {หน้าที่ที่ต้องสร้าง/แก้ไข}
-  - `{path/to/file2}`: {หน้าที่ที่ต้องสร้าง/แก้ไข}
-- **Test Decision**: `Required (TDD)` | `Manual/Command Only` | `Not Required`
-  - *Rationale*: {เหตุผลความจำเป็นในการเขียนเทสต์}
-  - *Planned Cases*: {กรณีทดสอบหลักตาม AAA Pattern}
-- **Impact & Rollback Strategy**:
-  - *Impact*: {ผลกระทบต่อโมดูลอื่น}
-  - *Rollback*: {วิธีย้อนคืนการทำงานกรณีเกิดปัญหา}
+**If `prototypes/` exists, that is your design reference.** When `/prototype` has
+run, the repo holds `prototypes/theme.css` (the locked design tokens) and
+`prototypes/*.html` (the visual mockups). For a UI-facing feature, link the
+relevant mockups from the spec's Design reference section instead of asking for a
+screenshot - they beat a flat image, since they carry the exact tokens. Treat
+`theme.css` as the source of truth for colors, type, and spacing, and make the
+feature's **first build step** port those tokens into the app's global stylesheet
+(`@theme` for Tailwind v4, or the project's equivalent) before building components
+against the mockups. The mockups are throwaway: once the look is built they get
+discarded at `/complete`.
 
-## 3. Implementation Checklist
-- [ ] Task 1.1: {งานย่อยข้อที่ 1}
-- [ ] Task 1.2: {งานย่อยข้อที่ 2}
-- [ ] Task 1.3: {งานย่อยข้อที่ 3}
+This is a draft. Don't present it yet - critique it first.
 
-## 4. Implementation Record
-- *(จะถูกบันทึกเมื่อรัน /implement)*
+## Step 4 - red-team the draft, then tighten
 
-## 5. Verification Evidence
-- *(จะถูกบันทึกเมื่อรัน /check)*
+Before the user reads it, turn on the spec yourself and try to break it. The
+cheapest place to catch a scope problem or an oversized step is here, before any
+code exists. Run the draft against these questions:
 
-## 6. Release & Handoff
-- *(จะถูกบันทึกเมื่อรัน /complete)*
-```
+- **Coverage.** What does this feature need that no step delivers? Push on the
+  unhappy paths the happy-path spec skipped: empty / missing / malformed input,
+  the error / loading / empty states, the first-run case, failure of anything
+  external it calls.
+- **Visual fidelity.** If this is a look-alike or replication feature, is a
+  reference image linked in the spec - or are we about to build a design blind
+  from prose? If `prototypes/` exists, are the relevant mockups linked as the
+  Design reference and is porting `theme.css` into the app the first build step?
+  If a real design exists and nothing is captured, get it before building, not
+  after the approximation lands.
+- **Step size.** Would any step's diff be too big to read in one sitting? If so,
+  split it - oversized steps defeat the review gate.
+- **Order.** Does each step leave the app working, and depend only on earlier
+  steps, never a later one? Resequence if not.
+- **Contracts.** Is any type, route, or stored shape that a later feature will
+  touch left undefined here? Lock it now and flag it load-bearing.
+- **Scope honesty.** Is anything creeping in that belongs to a later feature? Is
+  anything pushed to "out of scope" that this feature actually can't ship without?
+- **Done-whens.** Is each one observable and checkable by `/check`, or is it a
+  vague "it works"? Make it concrete.
+- **Testing.** Does the predicted coverage match the gate - in-scope logic gets a
+  test when a `test` command is declared in `AGENTS.md`, UI/integration rides on
+  screenshot + build?
 
----
+Apply the fixes to `current-feature.md`. Then stop and present the spec, leading
+with a short **"what the critique changed"** note - the splits, gaps, or scope
+cuts you made (or "nothing - the draft held up"). That note is the point: it shows
+the gate working before a line of code is written.
 
-### 5. Update Workspace Status
-Update `devflow/context/current-stage.md`:
-- `Active Discovery ID`: `None`
-- `Active Running ID`: `{ID}`
-- `Current Stage`: `feature (Fast-Track -> Ready for /implement)`
-- `Living Spec`: `devflow/context/current-feature.md`
-- `Last Updated`: `{YYYY-MM-DD}`
+Tell the user to review and adjust. This skill plans; it never starts building.
 
----
+## Rules the spec must follow
 
-### 6. Output Summary & Next Step
-Report to the user in **Thai (`th`)**:
-- Running ID and allocated branch (`feature/{ID}`)
-- Summary of Scope, Acceptance Criteria, and Sizing evaluation
-- Explicit next step: `/implement` (หรือ `$implement`)
+- **Small, reviewable steps.** Each step ends with something working and a diff
+  small enough to read in full. If a step's diff would be too big to review, the
+  step is too big - split it. This review gate is the point.
+- **Build in order.** Sequence the steps so each builds on the last and leaves
+  the app working.
+- **Lock data contracts early.** If a shape (type, API response, stored field) is
+  used by a later feature, define it now and flag it as load-bearing.
+- **Flag client vs server** and any conventions from `devflow/context/coding-standards.md`
+  (for example, filtering user-scoped queries by the authenticated user's id).
+- **Scope honestly.** State what is deferred so the feature stays contained.
+
+## When a (sub-)feature is done
+
+Check its box in `build-plan.md` (and the parent item once all its sub-items are
+checked), archive the finished `devflow/context/current-feature.md` to
+`devflow/history/features/NN-name.md`, then run `/feature` again for the next one.
+
+## Formatting
+
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
+enumerations and tables for matrices rather than dense paragraphs.

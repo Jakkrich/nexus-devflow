@@ -1,6 +1,6 @@
 ---
 name: 30-plan
-description: "[Devflow] Plan stage in DevFlow 2.0 - transform 20-spec.md into an executable task breakdown with test decisions."
+description: "[devflow][D] Plan stage in DevFlow 2.0 - transform 20-spec.md into an executable task breakdown with test decisions."
 ---
 # Phase 30: Plan Implementation
 
@@ -217,5 +217,4 @@ If `Approval Status` is still pending or major dependencies remain unresolved:
 - **Scope**: `project` unless the planning lesson changes DevFlow framework behavior.
 - **Reason**: Plans often discover stable patterns that future sessions should reuse.
 - **Suggested Command**: `Wiki project ingest devflow/runs/{ID}-*30-plan.md`
-
 

@@ -1,6 +1,6 @@
 ---
 name: report-html
-description: "[Devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from current-feature.md or 60-report.md on demand."
+description: "[devflow][B] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from current-feature.md or 60-report.md on demand."
 argument-hint: "{running-id or workspace path}"
 ---
 
