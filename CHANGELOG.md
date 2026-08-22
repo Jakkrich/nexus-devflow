@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.27] - 2026-08-22
+
+### Added
+- **Unified Dual-Track Root Switch & Priority-Aware Reader (`041-unified-track-root-switch`)**: Set `devflow/context/current-stage.md` as the authoritative source of truth for `Track: fast | deep | idle`, resolving status split-brain between AI suggestions and CLI/Dashboard next actions.
+- **Context Auto-Sync & Auto-Detect Fallback**: Added auto-detection fallback in `readCurrentWork` to seamlessly switch tracks when active work files exist even if `current-stage.md` is idle.
+- **Dashboard Track Auto-Focus & Active Tab Badge**: Added automatic tab switching to active track from `workflow.track` with a pulsing `● ACTIVE` badge indicator.
+- **Authoritative Next Action for Complete Stage**: Enhanced `selectNextAction` and `selectCompletion` to recognize passed verification and transition to `/complete` smoothly.
+
 ## [2.0.26] - 2026-08-22
 
 ### Added

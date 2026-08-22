@@ -205,3 +205,67 @@ test("parseArgs parses idea, findings, doctor, and archive subcommands correctly
   assert.equal(hookUninstall.subcommandAction, "uninstall");
 });
 
+test("readProjectStatus prioritizes current-stage.md Root Switch and calculates Deep-Track nextAction", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-deep-"));
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "current-run"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-stage.md"),
+      `# Current Stage
+- Active Running ID: 040-dashboard-parity
+- Track: deep
+- Current Stage: 60-report (Ready for 70-deliver)
+- Next Action: /70-deliver 040-dashboard-parity
+`
+    );
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-run", "20-spec.md"),
+      `# 20 Spec: [040-dashboard-parity] Dashboard Parity
+**Status:** Implementation Ready
+`
+    );
+
+    const status = await readProjectStatus(tempDir);
+    assert.equal(status.nextAction.command, "/70-deliver 040-dashboard-parity");
+    assert.equal(status.currentWork.type, "stage");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("readProjectStatus auto-detects active fast-track spec when current-stage is idle", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-autodetect-"));
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-stage.md"),
+      `# Current Stage
+- Active Running ID: None
+- Track: idle
+- Current Stage: idle
+`
+    );
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      `# Feature: 041-test-feature
+- [ ] Task 1
+- [ ] Task 2
+`
+    );
+
+    const status = await readProjectStatus(tempDir);
+    assert.equal(status.currentWork.state, "active");
+    assert.equal(status.nextAction.command, "/implement");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

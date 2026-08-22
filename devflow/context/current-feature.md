@@ -1,3 +1,3 @@
 # Current Feature
 
-_Nothing in progress. Run /feature, /fix, or /rollback to start._
+None in progress. Use `/feature` to start one.
