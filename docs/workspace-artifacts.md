@@ -22,7 +22,7 @@ devflow/
 │   ├── fixes/                  # Resolved bug fixes
 │   ├── rollbacks/              # Reversal audit logs
 │   └── HISTORY.md              # Master release ledger
-└── discoveries/                # Pre-delivery discovery records (DISC-xxx/00-discover.md)
+└── discoveries/                # Pre-delivery discovery records (DISC-xxx/00-explore.md)
 ```
 
 ---

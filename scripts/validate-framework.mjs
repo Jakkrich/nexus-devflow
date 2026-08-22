@@ -105,7 +105,7 @@ function validateWorkflowNumbering(failures) {
     return;
   }
   const numberedMainline = new Set([
-    '00-discover',
+    '00-explore',
     '10-define',
     '20-spec',
     '30-plan',
@@ -139,7 +139,7 @@ function validateWorkflowNumbering(failures) {
 
 function validateArtifactLanguageWorkflowSurface(failures) {
   const stageSkills = [
-    '.agents/skills/00-discover/SKILL.md',
+    '.agents/skills/00-explore/SKILL.md',
     '.agents/skills/10-define/SKILL.md',
     '.agents/skills/20-spec/SKILL.md',
     '.agents/skills/30-plan/SKILL.md',

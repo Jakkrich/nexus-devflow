@@ -45,7 +45,7 @@ The installer overlays the DevFlow workflow layer into your workspace:
 ### 2. Deep-Track (Architect Mode — 8 Steps)
 *Recommended for large architectural epics and database migrations:*
 ```text
-00-discover ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
+00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
 ```
 
 ---

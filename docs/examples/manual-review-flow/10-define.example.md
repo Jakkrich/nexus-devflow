@@ -24,7 +24,7 @@ related_files: []
 
 ## 2. Source Inputs
 
-- `devflow/discoveries/{DISCOVERY_ID}-{slug}/00-discover.md`
+- `devflow/discoveries/{DISCOVERY_ID}-{slug}/00-explore.md`
 - Linked companion findings and project context
 
 ## 3. Project Context To Preserve
@@ -90,7 +90,7 @@ related_files: []
 
 ## 17. Nexus Event
 
-- `/00-Discover {discovery_id}`, `Research`, or `grill-with-docs` when needed
+- `/00-explore {discovery_id}`, `Research`, or `grill-with-docs` when needed
 
 ## 18. Change Log
 

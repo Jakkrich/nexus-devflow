@@ -5,6 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { parseArgs } from "../bin/create-nexus-devflow.js";
 import { formatHumanStatus, readProjectStatus } from "../lib/status.js";
+import { parseIdeasContent } from "../lib/ideas.js";
 
 test("parseArgs parses status and install command options correctly", () => {
   const options1 = parseArgs(["status"]);
@@ -24,6 +25,16 @@ test("parseArgs parses status and install command options correctly", () => {
   const options4 = parseArgs(["install", "./custom-dir", "-y"]);
   assert.equal(options4.command, "install");
   assert.equal(options4.target, "./custom-dir");
+  assert.equal(options4.yes, true);
+
+  const optionsDashboard = parseArgs(["dashboard", "--no-open"]);
+  assert.equal(optionsDashboard.command, "dashboard");
+  assert.equal(optionsDashboard.open, false);
+  assert.equal(optionsDashboard.deprecatedUi, false);
+
+  const optionsUi = parseArgs(["ui"]);
+  assert.equal(optionsUi.command, "dashboard");
+  assert.equal(optionsUi.deprecatedUi, true);
 });
 
 test("readProjectStatus and formatHumanStatus work with 3-Pillars context/current-feature.md", async () => {
@@ -94,3 +105,103 @@ _Nothing in progress. Run /feature, /fix, or /rollback to start._`
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("parseIdeasContent parses pending and archived ideas correctly", () => {
+  const sampleMarkdown = `# 💡 DevFlow Idea Inbox & Backlog
+
+## 📌 Pending Ideas
+
+### [IDEA-001] Test Idea One
+- **บันทึกเมื่อ**: 2026-08-20
+- **ไอเดียตั้งต้น**: Test detail
+- **AI Feasibility & Tech**: High Feasibility
+- **สถานะ**: Pending
+
+---
+
+### [IDEA-002] Test Idea Two
+- **บันทึกเมื่อ**: 2026-08-21
+- **สถานะ**: Pending
+
+---
+
+## 📦 Archived / Shipped Ideas
+
+### [IDEA-000] Shipped Idea
+- **สถานะ**: Claimed
+`;
+
+  const ideas = parseIdeasContent(sampleMarkdown);
+
+  assert.equal(ideas.totalPending, 2);
+  assert.equal(ideas.totalArchived, 1);
+  assert.equal(ideas.pending[0].id, "IDEA-001");
+  assert.equal(ideas.pending[0].title, "Test Idea One");
+  assert.equal(ideas.pending[0].feasibility, "High Feasibility");
+  assert.equal(ideas.pending[1].id, "IDEA-002");
+});
+
+test("parseArgs parses idea, findings, doctor, and archive subcommands correctly", () => {
+  const ideaAdd = parseArgs(["idea", "add", "My new idea", "--title", "Custom Title"]);
+  assert.equal(ideaAdd.command, "idea");
+  assert.equal(ideaAdd.subcommandAction, "add");
+  assert.equal(ideaAdd.subcommandArg, "My new idea");
+  assert.equal(ideaAdd.ideaTitle, "Custom Title");
+
+  const ideasList = parseArgs(["ideas", "list", "--json"]);
+  assert.equal(ideasList.command, "ideas");
+  assert.equal(ideasList.subcommandAction, "list");
+  assert.equal(ideasList.json, true);
+
+  const findingsBlockers = parseArgs(["findings", "--blockers"]);
+  assert.equal(findingsBlockers.command, "findings");
+  assert.equal(findingsBlockers.blockersOnly, true);
+
+  const findingsResolve = parseArgs(["findings", "resolve", "BUG-123", "--status", "accepted"]);
+  assert.equal(findingsResolve.command, "findings");
+  assert.equal(findingsResolve.subcommandAction, "resolve");
+  assert.equal(findingsResolve.subcommandArg, "BUG-123");
+  assert.equal(findingsResolve.findingStatus, "accepted");
+
+  const doctorFix = parseArgs(["doctor", "--fix"]);
+  assert.equal(doctorFix.command, "doctor");
+  assert.equal(doctorFix.fix, true);
+
+  const archiveStats = parseArgs(["archive", "stats"]);
+  assert.equal(archiveStats.command, "archive");
+  assert.equal(archiveStats.subcommandAction, "stats");
+  assert.equal(archiveStats.statsOnly, true);
+
+  const checkGateStrict = parseArgs(["check-gate", "--strict", "--json"]);
+  assert.equal(checkGateStrict.command, "check-gate");
+  assert.equal(checkGateStrict.strict, true);
+  assert.equal(checkGateStrict.json, true);
+
+  const hookInstall = parseArgs(["hook", "install", "pre-push"]);
+  assert.equal(hookInstall.command, "hook");
+  assert.equal(hookInstall.subcommandAction, "install");
+  assert.equal(hookInstall.hookType, "pre-push");
+
+  const findingsAdd = parseArgs([
+    "findings",
+    "add",
+    "Hardcoded API Key",
+    "--severity",
+    "P0",
+    "--location",
+    "src/config.ts:10",
+    "--id",
+    "SEC-001"
+  ]);
+  assert.equal(findingsAdd.command, "findings");
+  assert.equal(findingsAdd.subcommandAction, "add");
+  assert.equal(findingsAdd.subcommandArg, "Hardcoded API Key");
+  assert.equal(findingsAdd.findingSeverity, "P0");
+  assert.equal(findingsAdd.findingLocation, "src/config.ts:10");
+  assert.equal(findingsAdd.findingId, "SEC-001");
+
+  const hookUninstall = parseArgs(["hook", "uninstall"]);
+  assert.equal(hookUninstall.command, "hook");
+  assert.equal(hookUninstall.subcommandAction, "uninstall");
+});
+

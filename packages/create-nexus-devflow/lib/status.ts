@@ -14,6 +14,9 @@ import type { GitStatusSummary } from "./git-status.js";
 import { readProjectMetadata } from "./project-metadata.js";
 import type { ProjectAdapter } from "./project-metadata.js";
 
+import { readIdeas } from "./ideas.js";
+import type { IdeasSummary } from "./ideas.js";
+
 type CompletionState = "blocked" | "needs_verification" | "ready";
 
 interface StatusWarning {
@@ -77,6 +80,7 @@ interface ProjectStatus {
   };
   currentWork: StatusCurrentWork;
   findings: StatusFindings;
+  ideas: IdeasSummary;
   git: GitStatusSummary;
   completion: StatusCompletion;
   nextAction: StatusNextAction;
@@ -87,10 +91,11 @@ async function readProjectStatus(
   startPath: string = process.cwd()
 ): Promise<ProjectStatus> {
   const metadata = await readProjectMetadata(startPath);
-  const [currentWork, findings, git] = await Promise.all([
+  const [currentWork, findings, git, ideas] = await Promise.all([
     readCurrentWork(metadata.project.root),
     readFindings(metadata.project.root),
-    readGitStatus(metadata.project.root)
+    readGitStatus(metadata.project.root),
+    readIdeas(metadata.project.root)
   ]);
 
   const warnings: StatusWarning[] = [
@@ -111,6 +116,7 @@ async function readProjectStatus(
     devflow: metadata.devflow,
     currentWork: formatCurrentWork(currentWork),
     findings: formatFindings(findings),
+    ideas,
     git,
     completion,
     nextAction,

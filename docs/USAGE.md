@@ -45,12 +45,12 @@ Recommended for 85% of daily work (iterative features, UI updates, bug fixes):
 Recommended for complex architectural epics, database schema migrations, and multi-agent coordination:
 
 ```text
-00-discover ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
+00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-release
 ```
 
 | Stage | Command | Artifact | Stage Responsibility |
 | :--- | :--- | :--- | :--- |
-| **00** | `/00-discover` | `discoveries/DISC-xxx/00-discover.md` | Problem exploration, research, and Go/No-Go decision without allocating a delivery ID. |
+| **00** | `/00-explore` | `discoveries/DISC-xxx/00-explore.md` | Problem exploration, research, and Go/No-Go decision without allocating a delivery ID. |
 | **10** | `/10-define` | `context/current-run/10-define.md` | Locks delivery boundary, allocates sequential ID `xxx-slug`, and sets scope. |
 | **20** | `/20-spec` | `context/current-run/20-spec.md` | Markdown delivery contract with testable Given-When-Then criteria. |
 | **30** | `/30-plan` | `context/current-run/30-plan.md` | Breakdown into executable task units with TDD test decisions. |
@@ -73,7 +73,7 @@ DevFlow provides exactly **28 Core Skills** synchronized 1:1 across `.agents/ski
 - `complete`: Final safety audit, Conventional Commit, archiving, and branch merge.
 
 ### B. Deep-Track Skills (8)
-- `00-discover`: Problem space exploration and Go/No-Go routing.
+- `00-explore`: Problem space exploration and Go/No-Go routing.
 - `10-define`: Delivery run definition and scope boundaries.
 - `20-spec`: Formal markdown specification contract.
 - `30-plan`: Task breakdown with TDD test strategy.

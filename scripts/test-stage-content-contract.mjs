@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixtureDir = path.join(rootDir, 'devflow', 'discoveries', 'DISC-SECTION-CONTENT-TEST');
-const fixturePath = path.join(fixtureDir, '00-discover.md');
+const fixturePath = path.join(fixtureDir, '00-explore.md');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);

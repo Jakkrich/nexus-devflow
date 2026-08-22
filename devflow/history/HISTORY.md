@@ -7,7 +7,12 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-22 | `035` | Feature | Guided Project Discovery Interview Skill (`/discovery`) และ 4 เสาหลักการวางแผนงาน | `c629a13` | `Released` | [`035-guided-discovery-interview-skill.md`](features/035-guided-discovery-interview-skill.md) |
+| 2026-08-22 | `034` | Feature | Dedicated Code & Security Audit Skill (`/audit`) และ Findings Ledger Engine | `HEAD` | `Released` | [`034-code-and-security-audit-skill.md`](features/034-code-and-security-audit-skill.md) |
+| 2026-08-22 | `033` | Feature | รองรับ User-Owned Planning Documents (`project-plan.md` & `build-plan.md`) | `HEAD` | `Released` | [`033-user-owned-planning-docs.md`](features/033-user-owned-planning-docs.md) |
+| 2026-08-22 | `032` | Feature | CI/CD Quality Gatekeeper และ Git Hooks (`nexus-devflow check-gate` & `hook`) | `HEAD` | `Released` | [`032-ci-quality-gatekeeper-and-hooks.md`](features/032-ci-quality-gatekeeper-and-hooks.md) |
+| 2026-08-22 | `031` | Feature | ขยาย Subcommands สำหรับ CLI (`idea`, `findings`, `doctor --fix`, `archive`) | `HEAD` | `Released` | [`031-expand-cli-subcommands.md`](features/031-expand-cli-subcommands.md) |
+| 2026-08-22 | `030` | Feature | ซิงก์ AI Blueprint Upstream v0.12.1 (Dashboard Accessibility, Canonical Dashboard CLI & Onboarding Sequence) | `HEAD` | `Released` | [`030-sync-upstream-v0121.md`](features/030-sync-upstream-v0121.md) |
 | 2026-08-22 | `029` | Feature | เพิ่มระบบ Backup และ Safety Rollback ก่อนสั่ง Update ใน CLI (`.nexus/backups/`) | `c6f7a4c` | `Released` | [`029-update-backup-system.md`](features/029-update-backup-system.md) |
 | 2026-08-22 | `028` | Feature | ซิงก์ AI Blueprint Upstream v0.11.1 (Dashboard Accessibility & Health Status Clarification) | `HEAD` | `Released` | [`028-sync-upstream-v0111.md`](features/028-sync-upstream-v0111.md) |
 | 2026-08-21 | `027` | Feature | รวม Skill การแปลงเอกสารทุกชนิดเป็น `convert-any-to-md` พร้อม Default Destination `devflow/reference/` | `HEAD` | `Released` | [`027-convert-any-to-md.md`](features/027-convert-any-to-md.md) |

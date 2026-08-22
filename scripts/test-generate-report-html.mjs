@@ -50,7 +50,7 @@ related_run: "999"
 
 ## 2. Inputs
 
-- \`00-discover.md\`
+- \`00-explore.md\`
 
 ## 3. Required Content
 

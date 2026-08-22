@@ -55,7 +55,7 @@ Run planning as an evidence loop, not as a one-shot outline.
 Read:
 
 - `devflow/runs/{ID}-*20-spec.md`
-- `10-define.md` and the shared `00-discover.md` referenced by `source_discovery` when they help clarify intent
+- `10-define.md` and the shared `00-explore.md` referenced by `source_discovery` when they help clarify intent
 
 ### 2. Assess Complexity
 

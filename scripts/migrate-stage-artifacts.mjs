@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const stageMappings = [
-  { legacyDir: '00-discover', legacyFile: 'discover.md', targetFile: '00-discover.md' },
+  { legacyDir: '00-explore', legacyFile: 'discover.md', targetFile: '00-explore.md' },
   { legacyDir: '10-define', legacyFile: 'define.md', targetFile: '10-define.md' },
   { legacyDir: '20-spec', legacyFile: 'spec.md', targetFile: '20-spec.md' },
   { legacyDir: '30-plan', legacyFile: 'plan.md', targetFile: '30-plan.md' },

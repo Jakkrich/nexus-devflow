@@ -16,7 +16,7 @@ Use this policy when deciding which skill or workflow track to activate for a gi
 - Scope involves significant ambiguity or architectural trade-offs.
 - Requires multi-step discovery before delivery commitment.
 - Involves breaking changes, database migrations, or multi-agent orchestration.
-- **Commands**: `/00-discover` ➔ `/10-define` ➔ `/20-spec` ➔ `/30-plan` ➔ `/40-execute` ➔ `/50-verify` ➔ `/60-report` ➔ `/70-release`.
+- **Commands**: `/00-explore` ➔ `/10-define` ➔ `/20-spec` ➔ `/30-plan` ➔ `/40-execute` ➔ `/50-verify` ➔ `/60-report` ➔ `/70-release`.
 
 ---
 

@@ -91,7 +91,7 @@ When invoked:
 Update `devflow/context/current-stage.md`:
 - `Active Discovery ID`: `None`
 - `Active Running ID`: `None (Idle)`
-- `Current Stage`: `Idle (Ready for new /feature, /fix, or /00-discover)`
+- `Current Stage`: `Idle (Ready for new /feature, /fix, or /00-explore)`
 - `Living Spec`: `None`
 - `Last Completed Run`: `{ID} ({YYYY-MM-DD})`
 - `Last Updated`: `{YYYY-MM-DD}`

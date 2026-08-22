@@ -120,7 +120,7 @@ export function buildIssueBody(inspection: InspectionReport, { runUrl = "" }: { 
     "## ขั้นตอนอนุมัติและปรับใช้ใน DevFlow",
     "",
     "1. อ่าน Issue นี้และเปิด Nexus-DevFlow ใน AI Coding Assistant",
-    "2. เริ่มขั้นตอน Discovery: `/00-discover sync-upstream <issue-url>`",
+    "2. เริ่มขั้นตอน Discovery: `/00-explore sync-upstream <issue-url>`",
     "3. ตรวจสอบความเข้ากันได้ และเลือกฟีเจอร์ที่ต้องการนำมาปรับใช้",
     "4. ดำเนินการผ่านวงจร DevFlow Delivery Run (`10-define` ถึง `70-release`)",
     "",

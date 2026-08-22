@@ -4,7 +4,7 @@ import path from 'node:path';
 const skillsDir = path.resolve('.agents/skills');
 
 const mainlineStages = [
-  '00-discover',
+  '00-explore',
   '10-define',
   '20-spec',
   '30-plan',
@@ -27,10 +27,10 @@ function standardizeMainlineSkills() {
     let original = content;
 
     // Standardize usage blocks for mainline stages
-    if (entry.name === '00-discover') {
+    if (entry.name === '00-explore') {
       content = content.replace(
-        /```text\s*\n\/00-Discover \{title or request\}\s*\n\/00-Discover \{discovery-id\}\s*\n```/g,
-        '```text\n00-discover {title or request}\n00-discover {discovery-id}\n```'
+        /```text\s*\n\/00-explore \{title or request\}\s*\n\/00-explore \{discovery-id\}\s*\n```/g,
+        '```text\n00-explore {title or request}\n00-explore {discovery-id}\n```'
       );
     } else if (entry.name === '10-define') {
       content = content.replace(
@@ -71,7 +71,7 @@ function standardizeMainlineSkills() {
 
     // Replace slash references with canonical names across all SKILL.md files
     content = content
-      .replace(/\/00-discover/gi, '00-discover')
+      .replace(/\/00-explore/gi, '00-explore')
       .replace(/\/10-define/gi, '10-define')
       .replace(/\/20-spec/gi, '20-spec')
       .replace(/\/30-plan/gi, '30-plan')

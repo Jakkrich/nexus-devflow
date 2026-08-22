@@ -23,7 +23,7 @@ devflow/
 │   ├── rollbacks/              # Completed feature reversals (YYYY-MM-DD-xxx-slug.md)
 │   └── HISTORY.md              # Master release ledger summary table
 │
-└── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug/00-discover.md)
+└── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug/00-explore.md)
 ```
 
 ## Running ID Naming Convention

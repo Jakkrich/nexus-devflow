@@ -69,7 +69,7 @@ Run specification as a contract-hardening loop, not as a prose expansion of the 
 Read:
 
 - `10-define.md`
-- the shared `00-discover.md` referenced by `source_discovery` when the original framing still matters
+- the shared `00-explore.md` referenced by `source_discovery` when the original framing still matters
 - research notes if they impose real constraints
 
 ### 2. Write The Specification

@@ -58,7 +58,7 @@ devflow/
 │   ├── rollbacks/              # Safely reversed feature records (YYYY-MM-DD-xxx-slug.md)
 │   └── HISTORY.md              # Master release history ledger summary table
 │
-└── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug/00-discover.md)
+└── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug/00-explore.md)
 ```
 
 ---
@@ -85,12 +85,12 @@ Nexus-DevFlow 2.0 supports two distinct delivery tracks based on task scope and 
 > **Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination**:
 
 ```text
-00-discover ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
+00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-release
 ```
 
 | Stage | Canonical Command Name | Description & Core Artifacts |
 | :--- | :--- | :--- |
-| **00** | `00-discover` | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
+| **00** | `00-explore` | Explore a request, route supporting inquiries, and make delivery commitment decisions (`devflow/discoveries/`). |
 | **10** | `10-define` | Lock delivery boundaries and allocate sequential IDs (`devflow/context/current-run/10-define.md`). |
 | **20** | `20-spec` | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
 | **30** | `30-plan` | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
@@ -182,7 +182,7 @@ npx @jakkrichm/create-nexus-devflow@latest update
 
 | AI Assistant / IDE | Adapter Path | Supported Invocations |
 | :--- | :--- | :--- |
-| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-discover`, `devflow`), slash commands (`/00-discover`, `/feature`), or natural language |
+| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Plain names (`00-explore`, `devflow`), slash commands (`/00-explore`, `/feature`), or natural language |
 | **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | Plain names (`feature`), skill command (`$feature`), or natural language |
 | **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Plain names (`feature`), slash commands (`/feature`), or natural language |
 | **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Plain names or natural language referencing `AGENTS.md` |

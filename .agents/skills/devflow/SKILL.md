@@ -17,7 +17,7 @@ Use this skill to guide the user on what to do next, inspect current workspace s
 Nexus-DevFlow supports two seamless workflow tracks:
 1. **🏎️ Fast-Track (Blueprint Mode - 4 Steps)**: `/spec` ➔ `/implement` ➔ `/check` ➔ `/complete`  
    *Driven by a **Single Living Spec (`current-feature.md`)** for fast, high-velocity daily development and bugfixes (85% of tasks).*
-2. **🏗️ Deep-Track (Architect Mode - 8 Steps)**: `00-discover` ➔ `10-define` ➔ `20-spec` ➔ `30-plan` ➔ `40-execute` ➔ `50-verify` ➔ `60-report` ➔ `70-release`  
+2. **🏗️ Deep-Track (Architect Mode - 8 Steps)**: `00-explore` ➔ `10-define` ➔ `20-spec` ➔ `30-plan` ➔ `40-execute` ➔ `50-verify` ➔ `60-report` ➔ `70-release`  
    *Driven by modular separate stage files for large, high-stakes architectural epics and multi-agent coordination.*
 
 ---
@@ -46,7 +46,7 @@ When invoked without an argument (or when determining the next step), inspect:
 - If no run is active and user wants to start a feature -> Recommend `/spec <name>` (or `/feature <name>`).
 - If no run is active and user wants to fix a bug -> Recommend `/fix <bug>`.
 - If no run is active and user has pending ideas in `devflow/ideas.md` -> Highlight `/spec IDEA-xxx`.
-- If no run is active and user wants deep architectural exploration -> Recommend `00-discover`.
+- If no run is active and user wants deep architectural exploration -> Recommend `00-explore`.
 - If user asks to check system health -> Recommend `doctor`.
 
 ---
@@ -65,7 +65,7 @@ When invoked without an argument (or when determining the next step), inspect:
 | "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `/spec` or `10-define` |
 | "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `/spec` or `10-define` |
 | "Check setup health & diagnostics" | `doctor` | `doctor` / `health` | `doctor` |
-| "Explore a new request / deep idea" | `00-discover` | `discover` | **Deep-Track**: `00` -> `10` -> `20` -> ... |
+| "Explore a new request / deep idea" | `00-explore` | `discover` | **Deep-Track**: `00` -> `10` -> `20` -> ... |
 | "Define delivery boundaries and ID" | `10-define` | `define` | **Deep-Track**: `10` -> `20` -> `30` |
 | "Break down spec into plan (Deep)" | `30-plan` | `plan` | **Deep-Track**: `30` -> `40` -> `50` |
 | "Deep code implementation" | `40-execute` | `implement` | **Deep-Track**: `40` -> `50` |
@@ -91,7 +91,7 @@ When invoked without an argument (or when determining the next step), inspect:
 - `complete` (`/complete`, `$complete`) - Safety pass, release digest, git merge, close run
 
 ### 2. Deep-Track (Architect Mode - 8 Steps)
-- `00-discover` - Explore request and decide Proceed/Defer/Reject
+- `00-explore` - Explore request and decide Proceed/Defer/Reject
 - `10-define` - Lock delivery boundaries and allocate Running ID
 - `20-spec` - Formalize markdown delivery contract
 - `30-plan` - Breakdown spec into phased tasks with test decisions

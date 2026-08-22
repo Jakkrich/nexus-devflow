@@ -501,11 +501,55 @@ const DASHBOARD_HTML: string = `<!doctype html>
 
     .next-action { padding: 24px; }
     
+    .next-action-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .next-copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(118, 168, 255, 0.12);
+      color: var(--code-blue);
+      border: 1px solid rgba(118, 168, 255, 0.3);
+      font: 600 11px/1.3 var(--font-mono);
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease, color 0.2s ease;
+      user-select: none;
+    }
+    .next-copy-btn:hover {
+      background: var(--blue);
+      color: #ffffff;
+      border-color: var(--blue);
+      transform: translateY(-1px);
+    }
+    .next-copy-btn:active {
+      transform: translateY(0);
+    }
+    .next-copy-btn.copied {
+      background: var(--green);
+      color: #ffffff;
+      border-color: var(--green);
+    }
+
     .command {
       margin: 13px 0 8px;
       color: var(--code-blue);
       font: 600 clamp(20px, 3vw, 29px)/1.3 var(--font-mono);
       overflow-wrap: anywhere;
+      cursor: pointer;
+      border-radius: 6px;
+      padding: 4px 6px;
+      margin-left: -6px;
+      transition: background-color 0.2s ease;
+    }
+    .command:hover {
+      background: rgba(118, 168, 255, 0.08);
     }
 
     .command-flip { animation: commandFlip 300ms ease-out; }
@@ -534,7 +578,135 @@ const DASHBOARD_HTML: string = `<!doctype html>
     li:last-child { border-bottom: 0; }
     li.empty { color: var(--ink-muted); }
     li.empty:hover { background-color: transparent; transform: none; }
-    li.fade-slide-in { animation: fadeSlideIn 250ms ease-out both; }
+    /* Markdown Inline Formatting */
+    .inline-code, code.inline-code {
+      display: inline-block;
+      padding: 1.5px 6px;
+      margin: 0 2px;
+      border-radius: 5px;
+      background: var(--surface-muted);
+      color: var(--blue-dark);
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      line-height: 1.35;
+      vertical-align: baseline;
+      word-break: break-word;
+    }
+    strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+    em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+    del {
+      text-decoration: line-through;
+      color: var(--ink-muted);
+    }
+    .inline-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .inline-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Idea Inbox Item Styling */
+    .idea-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-solid);
+      margin-bottom: 12px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .idea-item:hover {
+      border-color: var(--blue);
+      box-shadow: 0 4px 16px rgba(21, 94, 239, 0.09);
+      transform: translateY(-1px);
+    }
+    .idea-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .idea-id-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: rgba(21, 94, 239, 0.08);
+      color: var(--blue-dark);
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: .04em;
+    }
+    .idea-title-text {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      line-height: 1.45;
+    }
+    .idea-title-text .inline-code {
+      font-size: 0.85em;
+      background: rgba(21, 94, 239, 0.06);
+      border-color: rgba(21, 94, 239, 0.2);
+    }
+    .idea-desc-text {
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .idea-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--line);
+    }
+    .idea-feasibility-tag {
+      color: var(--ink-soft);
+      font-size: 12px;
+      background: var(--surface-muted);
+      padding: 4px 9px;
+      border-radius: 6px;
+      line-height: 1.4;
+    }
+    .idea-feasibility-tag strong {
+      color: var(--ink);
+    }
+    .idea-feasibility-tag .inline-code {
+      font-size: 0.85em;
+      background: rgba(0, 0, 0, 0.04);
+    }
+    .idea-cmd-code {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--surface-muted);
+      color: var(--blue-dark);
+      font: 600 11px/1.3 var(--font-mono);
+      cursor: pointer;
+      border: 1px solid var(--line);
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      user-select: none;
+    }
+    .idea-cmd-code:hover {
+      background: var(--blue);
+      color: #ffffff;
+      border-color: var(--blue);
+    }
 
     footer { margin-top: 24px; color: var(--ink-muted); font: 11px/1.6 var(--font-mono); }
 
@@ -620,6 +792,12 @@ const DASHBOARD_HTML: string = `<!doctype html>
         <ul id="warnings-list" aria-live="polite"><li class="empty">Loading warnings...</li></ul>
       </article>
 
+      <article class="card full card-enter" style="animation-delay: 0.26s;">
+        <div class="card-head"><span class="label">Idea Inbox & Backlog</span><span class="value" id="ideas-count">-</span></div>
+        <div class="muted">Pending ideas from devflow/ideas.md. Start any idea with /feature IDEA-xxx or /00-explore IDEA-xxx.</div>
+        <ul id="ideas-list" tabindex="0" aria-label="Idea Inbox"><li class="empty">Loading ideas...</li></ul>
+      </article>
+
       <article class="card full card-enter" style="animation-delay: 0.28s;">
         <div class="card-head"><span class="label">Completed Work Archive</span><span class="value" id="history-count">-</span></div>
         <div class="muted">Categorized history of features, fixes, and rollbacks.</div>
@@ -627,8 +805,17 @@ const DASHBOARD_HTML: string = `<!doctype html>
       </article>
 
       <article class="card full code-panel next-action card-enter" style="animation-delay: 0.32s;" id="next-panel">
-        <span class="label">Next Action</span>
-        <div class="command" id="next-command" aria-live="polite">Loading...</div>
+        <div class="next-action-header">
+          <span class="label">Next Action</span>
+          <button class="next-copy-btn" id="next-copy-btn" type="button" aria-label="Copy next command" title="Click to copy next action command">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="next-copy-text">Copy Command</span>
+          </button>
+        </div>
+        <div class="command" id="next-command" aria-live="polite" title="Click to copy command">Loading...</div>
         <div class="muted" id="next-reason"></div>
       </article>
     </section>
@@ -688,6 +875,40 @@ const DASHBOARD_HTML: string = `<!doctype html>
       setTimeout(() => node.classList.remove(className), 600);
     }
 
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderMarkdownInline(text) {
+      if (!text) return '';
+      var str = escapeHtml(text);
+
+      // Inline code
+      str = str.replace(new RegExp('\\x60([^\\x60]+)\\x60', 'g'), '<code class="inline-code">$1</code>');
+
+      // Bold
+      str = str.replace(new RegExp('\\\\*\\\\*(.+?)\\\\*\\\\*', 'g'), '<strong>$1</strong>');
+      str = str.replace(new RegExp('__(.+?)__', 'g'), '<strong>$1</strong>');
+
+      // Strikethrough
+      str = str.replace(new RegExp('~~(.+?)~~', 'g'), '<del>$1</del>');
+
+      // Italic
+      str = str.replace(new RegExp('(^|[^*])\\\\*([^*\\\\r\\\\n]+)\\\\*([^*]|$)', 'g'), '$1<em>$2</em>$3');
+      str = str.replace(new RegExp('(^|[^_])_([^_\\\\r\\\\n]+)_([^_]|$)', 'g'), '$1<em>$2</em>$3');
+
+      // Links
+      str = str.replace(new RegExp('\\\\[([^\\\\]]+)\\\\]\\\\((https?:\\\\/\\\\/[^\\\\s\\\\)]+|#[^\\\\s\\\\)]+)\\\\)', 'g'), '<a href="$2" target="_blank" rel="noopener noreferrer" class="inline-link">$1</a>');
+
+      return str;
+    }
+
     function setList(id, values, emptyMessage) {
       const list = byId(id);
       if (!list) return;
@@ -697,7 +918,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
 
       items.forEach((value, idx) => {
         const item = document.createElement("li");
-        item.textContent = value;
+        item.innerHTML = renderMarkdownInline(value);
         if (values.length === 0) {
           item.className = "empty";
         } else if (!isFirstLoad && !prevItemsText.includes(value)) {
@@ -705,6 +926,86 @@ const DASHBOARD_HTML: string = `<!doctype html>
           item.style.animationDelay = (idx * 40) + 'ms';
         }
         list.append(item);
+      });
+    }
+
+    function setIdeas(ideas) {
+      const list = byId('ideas-list');
+      if (!list) return;
+      list.replaceChildren();
+
+      const items = ideas && ideas.pending && ideas.pending.length > 0 ? ideas.pending : [];
+      if (items.length === 0) {
+        const emptyItem = document.createElement('li');
+        emptyItem.className = 'empty';
+        emptyItem.textContent = 'No pending ideas in devflow/ideas.md';
+        list.append(emptyItem);
+        return;
+      }
+
+      items.forEach((idea, idx) => {
+        const li = document.createElement('li');
+        li.className = 'idea-item';
+        if (!isFirstLoad) {
+          li.classList.add('fade-slide-in');
+          li.style.animationDelay = (idx * 40) + 'ms';
+        }
+
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'idea-header';
+
+        const badgeSpan = document.createElement('span');
+        badgeSpan.className = 'idea-id-badge';
+        badgeSpan.textContent = idea.id;
+
+        const cmdCode = document.createElement('code');
+        cmdCode.className = 'idea-cmd-code';
+        cmdCode.textContent = '/feature ' + idea.id;
+        cmdCode.title = 'Click to copy command';
+        cmdCode.onclick = () => {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText('/feature ' + idea.id);
+            const orig = cmdCode.textContent;
+            cmdCode.textContent = 'Copied!';
+            setTimeout(() => { cmdCode.textContent = orig; }, 1200);
+          }
+        };
+
+        headerDiv.append(badgeSpan, cmdCode);
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'idea-title-text';
+        titleDiv.innerHTML = renderMarkdownInline(idea.title);
+
+        li.append(headerDiv, titleDiv);
+
+        if (idea.rawInput) {
+          const descDiv = document.createElement('div');
+          descDiv.className = 'idea-desc-text';
+          descDiv.innerHTML = renderMarkdownInline(idea.rawInput);
+          li.append(descDiv);
+        }
+
+        if (idea.feasibility || idea.value || idea.date) {
+          const metaDiv = document.createElement('div');
+          metaDiv.className = 'idea-meta-row';
+          if (idea.feasibility) {
+            const feasSpan = document.createElement('span');
+            feasSpan.className = 'idea-feasibility-tag';
+            feasSpan.innerHTML = '⚡ ' + renderMarkdownInline(idea.feasibility);
+            metaDiv.append(feasSpan);
+          }
+          if (idea.date) {
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'muted';
+            dateSpan.style.fontSize = '11px';
+            dateSpan.textContent = idea.date;
+            metaDiv.append(dateSpan);
+          }
+          li.append(metaDiv);
+        }
+
+        list.append(li);
       });
     }
 
@@ -801,6 +1102,17 @@ const DASHBOARD_HTML: string = `<!doctype html>
         }
         setList('warnings-list', warnings.map(w => w.message), 'No active warnings or drift');
 
+        const ideas = data.ideas || { totalPending: 0, pending: [] };
+        const prevIdeasCount = prevData?.ideas?.totalPending ?? 0;
+        const ideasNode = byId('ideas-count');
+        if (!isFirstLoad && ideas.totalPending !== prevIdeasCount) {
+          animateCount(ideasNode, prevIdeasCount, ideas.totalPending);
+          triggerFlash(ideasNode, 'green');
+        } else {
+          ideasNode.textContent = ideas.totalPending + ' pending';
+        }
+        setIdeas(ideas);
+
         const historyItems = historyData.items || [];
         const prevHistoryCount = prevData?.historyCount ?? 0;
         const historyNode = byId('history-count');
@@ -847,6 +1159,32 @@ const DASHBOARD_HTML: string = `<!doctype html>
       }
     }
 
+    function setupNextActionCopy() {
+      const copyBtn = byId('next-copy-btn');
+      const cmdNode = byId('next-command');
+      const copyText = byId('next-copy-text');
+
+      const performCopy = () => {
+        const textToCopy = cmdNode ? cmdNode.textContent.trim() : '';
+        if (!textToCopy || textToCopy === 'Loading...') return;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(textToCopy);
+          if (copyBtn && copyText) {
+            copyBtn.classList.add('copied');
+            copyText.textContent = '✓ Copied!';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyText.textContent = 'Copy Command';
+            }, 1400);
+          }
+        }
+      };
+
+      if (copyBtn) copyBtn.onclick = performCopy;
+      if (cmdNode) cmdNode.onclick = performCopy;
+    }
+
+    setupNextActionCopy();
     refreshStatus();
     setInterval(refreshStatus, 2000);
   </script>

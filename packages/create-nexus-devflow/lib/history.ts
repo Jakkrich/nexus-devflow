@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { createStyle } from "./ui.js";
 
 type HistoryItemType = "feature" | "fix" | "rollback";
 
@@ -173,6 +174,48 @@ function parseBuildPlanOrder(value: string | null): number {
   return whole * 100 + Math.max(0, suffix - 96);
 }
 
+function formatHistoryHuman(
+  summary: HistorySummary,
+  options: { color?: boolean; statsOnly?: boolean } = {}
+): string {
+  const style = createStyle(options.color);
+  const lines: string[] = [];
+
+  const features = summary.items.filter((i) => i.type === "feature");
+  const fixes = summary.items.filter((i) => i.type === "fix");
+  const rollbacks = summary.items.filter((i) => i.type === "rollback");
+
+  lines.push(
+    style.bold(
+      `Nexus-DevFlow Delivery Archives (${summary.total} total: ${features.length} features, ${fixes.length} fixes, ${rollbacks.length} rollbacks)`
+    )
+  );
+  lines.push("");
+
+  if (options.statsOnly) {
+    lines.push(`  ${style.cyan("Features:")}  ${features.length}`);
+    lines.push(`  ${style.yellow("Fixes:")}     ${fixes.length}`);
+    lines.push(`  ${style.red("Rollbacks:")} ${rollbacks.length}`);
+    return lines.join("\n");
+  }
+
+  if (summary.items.length === 0) {
+    lines.push(style.dim("  No archived delivery runs found in devflow/history/"));
+  } else {
+    for (const item of summary.items) {
+      let typeBadge = style.cyan(`[${item.type}]`);
+      if (item.type === "fix") typeBadge = style.yellow(`[${item.type}]`);
+      if (item.type === "rollback") typeBadge = style.red(`[${item.type}]`);
+
+      const idBadge = item.buildPlanItem ? style.bold(`[${item.buildPlanItem}]`) : "";
+      lines.push(`  ${typeBadge} ${idBadge} ${style.bold(item.title)}`);
+      lines.push(`     ${style.dim(item.file)}`);
+    }
+  }
+
+  return lines.join("\n").trimEnd();
+}
+
 function getErrorCode(error: unknown): string | undefined {
   return typeof error === "object" &&
     error !== null &&
@@ -182,6 +225,6 @@ function getErrorCode(error: unknown): string | undefined {
     : undefined;
 }
 
-export { HISTORY_PATH, parseHistoryItem, readHistory };
+export { HISTORY_PATH, formatHistoryHuman, parseHistoryItem, readHistory };
 
 export type { HistoryItem, HistoryItemType, HistorySummary };

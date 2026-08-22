@@ -6,33 +6,6 @@
 
 ## 📌 Pending Ideas
 
-### [IDEA-001] ขยาย Subcommands สำหรับ CLI (`idea`, `findings`, `doctor --fix`, `archive`)
-- **บันทึกเมื่อ**: 2026-08-20
-- **ไอเดียตั้งต้น**: เพิ่ม Subcommands ให้กับ CLI Engine เพื่อให้จัดการไอเดีย, ดู/แก้ Findings blockers, ทำ Auto-healing context, และจัดเก็บประวัติ (Archive) ผ่าน Terminal ได้โดยตรง
-- **AI Feasibility & Tech**: **ง่ายถึงปานกลาง (High Feasibility)** — สามารถต่อยอดจากโมดูลที่มีอยู่แล้วใน `packages/create-nexus-devflow/lib/` (`findings.ts`, `status.ts`) และเพิ่มฟังก์ชันจัดการไฟล์ `devflow/ideas.md` กับ `devflow/history/`
-- **Value & Potential**: **สูงมาก** — เพิ่มความคล่องตัวให้นักพัฒนาสามารถจัดการ Inbox, ตรวจ Blockers และสั่ง Auto-fix context ได้ทันทีโดยไม่ต้องเปิด Session คุยกับ AI
-- **Quick Seed (กันลืม)**:
-  1. `nexus-devflow idea add "<text>"` และ `nexus-devflow ideas list`
-  2. `nexus-devflow findings --blockers` และ `nexus-devflow findings resolve <ID>`
-  3. `nexus-devflow doctor --fix` ช่วยสร้าง Context Files และ Sync Adapters ที่หายไป
-  4. `nexus-devflow archive` ย้าย Runs ที่ Release แล้วไป `devflow/history/archived-runs/`
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-001` หรือ `/00-discover IDEA-001`)
-
----
-
-### [IDEA-002] CI/CD Quality Gatekeeper & Git Pre-commit Hooks (`devflow check-gate`)
-- **บันทึกเมื่อ**: 2026-08-20
-- **ไอเดียตั้งต้น**: สร้างระบบตรวจจับใน GitHub Actions PR และ Local Pre-commit เพื่อบล็อกการ Merge หรือ Commit หากยังมี P0/P1 Findings หรือ Checklist ยังไม่เสร็จ
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — ใช้ความสามารถของ `nexus-devflow status --json` ร่วมกับ `jq` หรือสร้าง subcommand `check-gate` ที่ return exit code `1` เมื่อ `completion.state == "blocked"`
-- **Value & Potential**: **สูงมาก (Enterprise Governance)** — รับประกันว่าทีมงานจะไม่สามารถ Merge โค้ดที่มีข้อผิดพลาดร้ายแรงหรือข้ามขั้นตอน QA Gate เข้าสู่ Branch หลักได้
-- **Quick Seed (กันลืม)**:
-  1. เพิ่มคำสั่ง `nexus-devflow check-gate` ที่อ่าน JSON Status และคืนค่า Exit Code 0 หรือ 1
-  2. สร้าง GitHub Actions Action / Reusable Workflow สำหรับตรวจ PR
-  3. เตรียมสคริปต์ติดตั้ง Git Hook (เช่น `husky` หรือ `.git/hooks/pre-commit`)
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-002` หรือ `/00-discover IDEA-002`)
-
----
-
 ### [IDEA-003] Interactive Terminal UI (TUI) Dashboard (Ink / Clack)
 - **บันทึกเมื่อ**: 2026-08-20
 - **ไอเดียตั้งต้น**: สร้างแดชบอร์ดอินเตอร์แอคทีฟบน Terminal แบบ Rich UI สำหรับแสดงสถานะงาน Living Spec, รายการ Checklists, Findings และคำแนะนำ Next Action
@@ -42,7 +15,7 @@
   1. แถบ Navigation ด้านบน: `[Status] [Tasks] [Findings] [Next Action]`
   2. หน้า Tasks แสดง Checkbox ที่กดติ๊ก Spacebar ได้จริงเพื่ออัปเดตไฟล์ Markdown
   3. ปรับแต่ง Theme ให้เข้ากับ Dark Mode และแสดงผลผ่าน ANSI 256 Colors
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-003` หรือ `/00-discover IDEA-003`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-003` หรือ `/00-explore IDEA-003`)
 
 ---
 
@@ -55,56 +28,10 @@
   1. สร้าง Subcommand `nexus-devflow mcp` สำหรับรันเป็น MCP Server
   2. กำหนด MCP Tools: `get_status`, `add_idea`, `update_task`, `record_finding`
   3. เพิ่มไฟล์คอนฟิก `mcp_config.json` ให้ติดตั้งเข้า Antigravity/Claude ได้ในคลิกเดียว
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-004` หรือ `/00-discover IDEA-004`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-004` หรือ `/00-explore IDEA-004`)
 
----
 
-### [IDEA-005] ระบบ Internal State (`devflow/.state/`) สำหรับจัดการ Version Manifest, File Hashes & Safe Update Backups
-- **บันทึกเมื่อ**: 2026-08-21
-- **ไอเดียตั้งต้น**: เพิ่มการทำงานของ `.state/` แบบ blueprint โฟลเดอร์ภายในสำหรับบันทึก metadata, version, tool adapters, file checksums ใน manifest.json เพื่อรองรับคำสั่งอัปเดต พร้อมระบบ auto-backup ไฟล์ที่เกิด conflict ลงใน `devflow/.state/backups/` (ถูก `.gitignore`)
-- **AI Feasibility & Tech**: **ง่ายถึงปานกลาง (High Feasibility)** — ใช้ Node.js built-in `crypto` (`createHash('sha256')`) ในการคำนวณ Checksum ของ workflow/skill/context files ร่วมกับ FS utilities ใน `packages/create-nexus-devflow` เพื่อรองรับคำสั่งอัปเดตเวอร์ชัน (`nexus-devflow update` / CLI updater) ตรวจจับ conflict และสร้าง backup อัตโนมัติ
-- **Value & Potential**: **สูงมาก (Enterprise-grade Lifecycle & Maintainability)** — ป้องกันปัญหาไฟล์ workflow โดนเขียนทับโดยไม่ตั้งใจเมื่ออัปเกรดเวอร์ชันใหม่ รองรับการตรวจจับความเปลี่ยนแปลงของผู้ใช้ และช่วยให้การอัปเดต DevFlow ในโปรเจกต์ปลายทางเป็นไปอย่างปลอดภัย 100%
-- **Quick Seed (กันลืม)**:
-  1. สร้างโครงสร้าง `devflow/.state/manifest.json` เก็บ `version`, `installedAt`, `adapters` (antigravity, codex, claude), และ `fileHashes` (SHA-256)
-  2. สร้าง `devflow/.state/.gitignore` เพื่อละเว้นโฟลเดอร์ `backups/` ไม่ให้ commit เข้า Git
-  3. พัฒนาระบบ Update & Conflict Resolver ใน CLI: ตรวจสอบ hash ปัจจุบันเทียบกับ hash ใน manifest หากผู้ใช้แก้ไขไฟล์เดิม ให้ทำสำเนาลง `backups/<timestamp>-<filename>` ก่อนผสานหรือแจ้งเตือน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-005` หรือ `/00-discover IDEA-005`)
 
----
-
-### [IDEA-007] Support Two User-Owned Planning Documents (`project-plan.md` & `build-plan.md`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: รองรับระบบวางแผนระยะยาวล่วงหน้าด้วย `project-plan.md` และ `build-plan.md` พร้อมคิวฟีเจอร์ย่อย เพื่อวางแผนโครงการขนาดใหญ่แบบ Long-term Roadmap
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — สร้างโครงสร้างไฟล์ใน `devflow/` และปรับให้ `/overview` สามารถอ่าน/เขียนรวบรวมแผนงานลงใน `project-overview.md` ได้
-- **Value & Potential**: **สูง** — ตอบโจทย์โครงการขนาดใหญ่ที่ต้องการกำหนดขอบเขตและแผนสร้างล่วงหน้าหลายๆ ฟีเจอร์
-- **Quick Seed (กันลืม)**:
-  1. สร้างเทมเพลต `devflow/project-plan.md` สำหรับภาพรวมสถาปัตยกรรม
-  2. สร้างเทมเพลต `devflow/build-plan.md` สำหรับแสดงคิวฟีเจอร์แบบ Checkbox
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-007` หรือ `/00-discover IDEA-007`)
-
----
-
-### [IDEA-008] Dedicated Code & Security Audit Skill (`/audit` with Durable Ledger)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: สร้างคำสั่ง `/audit` สำหรับสแกนตรวจสอบคุณภาพโค้ด, ความปลอดภัย (Security), ประสิทธิภาพ (Performance), และ Dead Code โดยบันทึกรายการข้อผิดพลาดลง `devflow/context/findings.md`
-- **AI Feasibility & Tech**: **ปานกลาง (Medium Feasibility)** — สร้าง Skill `/audit` ที่สามารถรับ Flag เลนส์ที่ต้องการตรวจ (เช่น Quality, Security, Tests) และมีระบบบล็อกการปิดงาน หากมีข้อผิดพลาดระดับ P0/P1
-- **Value & Potential**: **สูงมาก (Enterprise Quality Control)** — ช่วยเพิ่ม Governance และการควบคุมคุณภาพโค้ดอย่างเข็มงวดก่อนทำ Release
-- **Quick Seed (กันลืม)**:
-  1. สร้าง `.agents/skills/audit/SKILL.md` และ `.claude/skills/audit/SKILL.md`
-  2. กำหนดโครงสร้างบันทึก Findings ด้วย Durable ID (เช่น `AUDIT-001`) ใน `findings.md`
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-008` หรือ `/00-discover IDEA-008`)
-
----
-
-### [IDEA-009] Guided Discovery Interview Skill (`/discovery`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: พัฒนาทักษะ `/discovery` สำหรับทำบทสนทนาสัมภาษณ์แบบหลายรอบ (Multi-turn Deep Interview) ช่วยผู้ใช้คิดและตกผลึกความต้องการตั้งแต่ก่อนเริ่มเขียนโค้ด
-- **AI Feasibility & Tech**: **ง่ายถึงปานกลาง (High Feasibility)** — พัฒนา Skill สัมภาษณ์เชิงรุกที่ค่อยๆ ถามทีละประเด็น สรุปความต้องการ แล้วร่างเป็นแผนงาน
-- **Value & Potential**: **สูง** — เหมาะสำหรับผู้ใช้ที่เริ่มต้นไอเดียใหม่จากศูนย์ และยังไม่มีแผนงานชัดเจน
-- **Quick Seed (กันลืม)**:
-  1. สัมภาษณ์เชิงลึกทีละด้าน: เป้าหมาย, ฟีเจอร์หลัก, ข้อจำกัดทางเทคนิค
-  2. ร่างสรุปและขออนุมัติจากผู้ใช้ก่อนเขียนลงไฟล์แผนงาน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-009` หรือ `/00-discover IDEA-009`)
 
 ---
 
@@ -116,7 +43,7 @@
 - **Quick Seed (กันลืม)**:
   1. ตรวจสอบการตั้งค่า Build script และ Port
   2. ร่างและสร้าง `render.yaml` / `vercel.json` ตาม Cloud Provider ที่ผู้ใช้เลือก
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-010` หรือ `/00-discover IDEA-010`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-010` หรือ `/00-explore IDEA-010`)
 
 ---
 
@@ -128,7 +55,7 @@
 - **Quick Seed (กันลืม)**:
   1. อ่านคิวไอเดียหรือแผนงานย่อย
   2. ประเมินไฟล์ที่จะได้รับผลกระทบและขนาดความซับซ้อน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-011` หรือ `/00-discover IDEA-011`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-011` หรือ `/00-explore IDEA-011`)
 
 ---
 
@@ -140,7 +67,7 @@
 - **Quick Seed (กันลืม)**:
   1. กำหนดเกณฑ์ประเมินขนาดงาน (เช่น เกิน 5 ไฟล์ หรือ 100+ บรรทัด)
   2. สับแบ่งเป็น sub-task เรียงตามลำดับความขึ้นตรงกัน (Dependencies)
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-012` หรือ `/00-discover IDEA-012`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-012` หรือ `/00-explore IDEA-012`)
 
 ---
 
@@ -152,7 +79,7 @@
 - **Quick Seed (กันลืม)**:
   1. สแกนไฟล์บริบทและบันทึกสรุปความเปลี่ยนแปลง
   2. รักษาสครงสร้าง Single Source of Truth
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-013` หรือ `/00-discover IDEA-013`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-013` หรือ `/00-explore IDEA-013`)
 
 ---
 
@@ -164,7 +91,7 @@
 - **Quick Seed (กันลืม)**:
   1. อ่าน `current-feature.md` และ `current-stage.md`
   2. แสดงผลสรุปความก้าวหน้าสั้นๆ พร้อมคำแนะนำ
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-014` หรือ `/00-discover IDEA-014`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-014` หรือ `/00-explore IDEA-014`)
 
 ---
 
@@ -176,7 +103,7 @@
 - **Quick Seed (กันลืม)**:
   1. เพิ่มฟิลด์ `artifactLanguage` ใน schema
   2. สลับเทมเพลตภาษาตามคอนฟิก
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-015` หรือ `/00-discover IDEA-015`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-015` หรือ `/00-explore IDEA-015`)
 
 ---
 
@@ -188,7 +115,7 @@
 - **Quick Seed (กันลืม)**:
   1. กำหนดกฎห้ามสร้าง HTML ในสเตจปกติ
   2. เรียกสร้างด้วยสคริปต์ standalone แยกต่างหาก
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-016` หรือ `/00-discover IDEA-016`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-016` หรือ `/00-explore IDEA-016`)
 
 ---
 
@@ -200,7 +127,7 @@
 - **Quick Seed (กันลืม)**:
   1. สแกนไฟล์ `.agents/`, `.claude/`, `AGENTS.md`, `CLAUDE.md`
   2. เลือก Adapter ให้อัตโนมัติเมื่อรัน CLI update
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-017` หรือ `/00-discover IDEA-017`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-017` หรือ `/00-explore IDEA-017`)
 
 ---
 
@@ -212,7 +139,7 @@
 - **Quick Seed (กันลืม)**:
   1. แยกโฟลเดอร์ `10-define.md`, `20-spec.md`...
   2. อัปเดตสเตจทีละขั้นตอนในรันใหญ่
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-018` หรือ `/00-discover IDEA-018`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-018` หรือ `/00-explore IDEA-018`)
 
 ---
 
@@ -224,7 +151,7 @@
 - **Quick Seed (กันลืม)**:
   1. ตรวจสอบไฟล์ที่มีอยู่ก่อนลงทับ
   2. สร้างไฟล์สำรองอัตโนมัติหากมี conflict
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-019` หรือ `/00-discover IDEA-019`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-019` หรือ `/00-explore IDEA-019`)
 
 ---
 
@@ -236,7 +163,7 @@
 - **Quick Seed (กันลืม)**:
   1. อ่าน `lastReviewedCommit` จาก `upstream-ai-blueprint.json`
   2. เปรียบเทียบ Diff ของ Blueprint และแจ้งเตือนจุดที่สามารถพอร์ตเข้ามาได้
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-020` หรือ `/00-discover IDEA-020`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-020` หรือ `/00-explore IDEA-020`)
 
 ---
 
@@ -248,7 +175,7 @@
 - **Quick Seed (กันลืม)**:
   1. เช็กสถานะก่อนสร้างรันใหม่
   2. แจ้งเตือนผู้ใช้ให้ทำ `/complete` รันเดิมก่อน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-021` หรือ `/00-discover IDEA-021`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-021` หรือ `/00-explore IDEA-021`)
 
 ---
 
@@ -260,7 +187,7 @@
 - **Quick Seed (กันลืม)**:
   1. พัฒนา `convert_any_to_md.py`
   2. รองรับตารางและข้อความแบบหลายคอลัมน์
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-022` หรือ `/00-discover IDEA-022`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-022` หรือ `/00-explore IDEA-022`)
 
 ---
 
@@ -272,7 +199,7 @@
 - **Quick Seed (กันลืม)**:
   1. สกัดเฉพาะสคิลและเอกสาร Markdown
   2. รองรับการทำงานแบบก๊อปปี้โฟลเดอร์วางใช้งาน
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-023` หรือ `/00-discover IDEA-023`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-023` หรือ `/00-explore IDEA-023`)
 
 ---
 
@@ -284,7 +211,7 @@
 - **Quick Seed (กันลืม)**:
   1. บันทึก ID, วันที่, ชื่อฟีเจอร์, และ Git Commit Hash
   2. สรุปเป็นตารางย่อใน `devflow/history/HISTORY.md`
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-024` หรือ `/00-discover IDEA-024`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-024` หรือ `/00-explore IDEA-024`)
 
 ---
 
@@ -292,6 +219,10 @@
 
 ## 📦 Archived / Shipped Ideas
 
+- [x] **[IDEA-009]** Guided Discovery Interview Skill (`/discovery`) — *Claimed in `035-guided-discovery-interview-skill` (2026-08-22)*
+- [x] **[IDEA-008]** Dedicated Code & Security Audit Skill (`/audit` with Durable Ledger) — *Claimed in `034-code-and-security-audit-skill` (2026-08-22)*
+- [x] **[IDEA-007]** Support Two User-Owned Planning Documents (`project-plan.md` & `build-plan.md`) — *Claimed in `033-user-owned-planning-docs` (2026-08-22)*
+- [x] **[IDEA-002]** CI/CD Quality Gatekeeper & Git Pre-commit Hooks (`devflow check-gate`) — *Claimed in `032-ci-quality-gatekeeper-and-hooks` (2026-08-22)*
+- [x] **[IDEA-001]** ขยาย Subcommands สำหรับ CLI (`idea`, `findings`, `doctor --fix`, `archive`) — *Claimed in `031-expand-cli-subcommands` (2026-08-22)*
+- [x] **[IDEA-005]** ระบบ Internal State (`.nexus/`) สำหรับจัดการ Version Manifest, File Hashes & Safe Update Backups (`nexus-devflow update`) — *Implemented in `packages/create-nexus-devflow/lib/update.ts` & `.nexus/nexus-devflow.json`*
 - [x] **[IDEA-006]** อัปเดตเอกสารคู่มือและ Reference ให้ครอบคลุม DevFlow v2.0.20 (The 3-Pillars Model, Categorized History & Clean Living Spec) — *Claimed in `022-update-documentation-and-guides-for-v2-0-20` (2026-08-21)*
-
-

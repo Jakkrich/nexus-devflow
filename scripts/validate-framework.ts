@@ -103,7 +103,7 @@ function validateWorkflowNumbering(failures: string[]): void {
     return;
   }
   const numberedMainline = new Set([
-    "00-discover",
+    "00-explore",
     "10-define",
     "20-spec",
     "30-plan",

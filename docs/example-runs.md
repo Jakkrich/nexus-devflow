@@ -60,7 +60,7 @@ Use `/debug` for non-destructive reproduction, then resolve via `/fix`.
 Use Deep-Track for database migrations, core architectural shifts, or multi-agent orchestration.
 
 ```text
-/00-discover "Migrate user authentication to OAuth2 & ThaID"
+/00-explore "Migrate user authentication to OAuth2 & ThaID"
 /10-define
 /20-spec
 /30-plan
@@ -71,7 +71,7 @@ Use Deep-Track for database migrations, core architectural shifts, or multi-agen
 ```
 
 ### Lifecycle Walkthrough:
-1. **`/00-discover`**: Explores problem space, evaluates feasibility, and records Go/No-Go decision in `devflow/discoveries/DISC-xxx/00-discover.md`.
+1. **`/00-explore`**: Explores problem space, evaluates feasibility, and records Go/No-Go decision in `devflow/discoveries/DISC-xxx/00-explore.md`.
 2. **`/10-define`**: Locks delivery boundaries in `devflow/context/current-run/10-define.md` and allocates sequential ID `026-oauth2-thaid-migration`.
 3. **`/20-spec`**: Formalizes markdown delivery contract with strict boundary rules.
 4. **`/30-plan`**: Breaks down spec into executable task units with TDD test decisions.

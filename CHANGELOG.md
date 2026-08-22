@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Lean Skills Architecture (28 Core Skills)**: Streamlined multi-agent skills from 81 down to 28 core skills across Fast-Track (5), Deep-Track (8), and Companion Tools & Gates (15), eliminating bloated/redundant cheatsheet skills.
-- **In-Flow Best Practices Consolidation**: Absorbed Conventional Commits, SemVer calculation, Keep a Changelog updates, and PR templates into `complete` and `70-release`; Brainstorming Matrix and Empirical Research into `00-discover`; and 9arm Scrutinize QA and Security Review into `check` and `50-verify`.
+- **In-Flow Best Practices Consolidation**: Absorbed Conventional Commits, SemVer calculation, Keep a Changelog updates, and PR templates into `complete` and `70-release`; Brainstorming Matrix and Empirical Research into `00-explore`; and 9arm Scrutinize QA and Security Review into `check` and `50-verify`.
 - **Enriched Coding Standards**: Added Deep Module Architecture, Code Simplification rules, API Boundary Stability, and Safe Database Migration standards to `devflow/context/coding-standards.md`.
 - **Multi-IDE Adapter Parity**: Synced `.agents/skills/` (Codex/Antigravity) and `.claude/skills/` (Claude Code) with 100% 1:1 parity.
 
@@ -71,7 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.15] - 2026-08-20
 
 ### Added
-- **Dual-Track Delivery Model**: High-velocity Fast-Track (4 Steps: `/feature`, `/fix` ➔ `/implement` ➔ `/check` ➔ `/complete`) with Single Living Spec (`spec.md`) alongside Deep-Track (8 Steps: `00-discover` ➔ `70-release`) for architectural epics.
+- **Dual-Track Delivery Model**: High-velocity Fast-Track (4 Steps: `/feature`, `/fix` ➔ `/implement` ➔ `/check` ➔ `/complete`) with Single Living Spec (`spec.md`) alongside Deep-Track (8 Steps: `00-explore` ➔ `70-release`) for architectural epics.
 - **Dedicated Fast-Track Skills (`feature`, `fix`)**: Separate canonical commands for new feature specs and bugfix specs to prevent command collisions.
 - **Quick Idea Capture Inbox (`/idea`)**: Quick capture tool with AI feasibility and value enrichment storing to `devflow/ideas.md`.
 - **Standalone HTML Dashboard Command (`/report:html`)**: Dedicated interactive single-file HTML report generator on demand.
@@ -90,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.10] - 2026-08-18
 
 ### Changed
-- **Standardized Canonical Command Naming**: Standardized all Mainline Stages (`00-discover`, `10-define`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`) and Companion Commands to use a single Canonical Name, completely removing confusing shorthand and redundant semantic aliases from core documentation and tables.
+- **Standardized Canonical Command Naming**: Standardized all Mainline Stages (`00-explore`, `10-define`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-release`) and Companion Commands to use a single Canonical Name, completely removing confusing shorthand and redundant semantic aliases from core documentation and tables.
 - **AI Provider Invocation Guideline**: Added clear and concise instructions across `AGENTS.md`, `README.md`, and `README.th.md` explaining that command invocation syntax (Plain Name, `/`, or `$`) depends on the AI Provider or tool being used (e.g., Slash Commands for Claude Code & Antigravity, Dollar Macro for OpenAI Codex CLI).
 - **Skill Adapters & Template Alignment**: Updated usage blocks and next-step references across all `SKILL.md` files in `.agents/skills/` and `.claude/skills/`, and synchronized template package.
 
@@ -115,7 +115,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Blueprint-Style Self-Contained Model**: Upgraded [AGENTS.md](file:///d:/Projects/devtools/nexus-devflow/AGENTS.md) to a comprehensive, self-contained operating blueprint with execution rules for OpenAI Codex, Google Antigravity, Claude Code, Cursor, and generic AI coding assistants.
 - **Mandatory Tool Reading Directive**: Added explicit instructions in `AGENTS.md` for agents without background skill loaders (e.g. OpenAI Codex CLI, Aider) to inspect `.agents/skills/<skill>/SKILL.md` before executing stages.
-- **Universal Command Invocations**: Native support for normal stage names (`00-discover`, `10-define`, `20-spec`, `devflow`), semantic aliases (`discover`, `spec`, `implement`, `verify`, `report`, `release`, `status`), Codex macro syntax (`$00-discover`), and slash commands (`/00-discover`).
+- **Universal Command Invocations**: Native support for normal stage names (`00-explore`, `10-define`, `20-spec`, `devflow`), semantic aliases (`discover`, `spec`, `implement`, `verify`, `report`, `release`, `status`), Codex macro syntax (`$00-explore`), and slash commands (`/00-explore`).
 - **State-Aware Inspection in `devflow` Router**: Upgraded flagship `devflow` guide to automatically scan active runs in `devflow/runs/` and `devflow/context/current-stage.md` to recommend the exact next step.
 
 ### Fixed

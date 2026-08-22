@@ -8,7 +8,7 @@ description: "[Devflow] Survey existing brownfield codebase and bootstrap DevFlo
 Where this sits in the workflow:
 
 ```text
-existing codebase  ->  [adopt]  ->  project-overview + coding-standards  ->  00-discover or 10-define
+existing codebase  ->  [adopt]  ->  project-overview + coding-standards  ->  00-explore or 10-define
 (already has code)     (survey +    (seeded from the real code;               (first feature / refactoring
                         interview)   shipped architecture documented)          delivery lifecycle)
 ```
@@ -91,5 +91,5 @@ Present the adoption summary for review:
 - Inferred conventions and coding standards
 - Available verified commands in `AGENTS.md`
 - Recommended next step:
-  - Run `00-discover` (or `00-discover`, `$00-discover`) to explore the next major initiative or feature
+  - Run `00-explore` (or `00-explore`, `$00-explore`) to explore the next major initiative or feature
   - Run `10-define` (or `10-define`, `$10-define`) to immediately scope a delivery run for known roadmap items

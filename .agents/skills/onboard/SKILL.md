@@ -8,7 +8,7 @@ description: "[Devflow] Set up Nexus-DevFlow after overlaying it onto a freshly 
 Where this sits in the workflow:
 
 ```text
-scaffold app  ->  overlay DevFlow  ->  [onboard]  ->  00-discover or 10-define  ->  Mainline Loop
+scaffold app  ->  overlay DevFlow  ->  [onboard]  ->  00-explore or 10-define  ->  Mainline Loop
 (user/tool)       (create-nexus)       (tune setup)   (discovery / run scoping)      (20-spec -> 70-release)
 ```
 
@@ -125,5 +125,5 @@ Present a concise onboarding summary report:
 - Files tuned during onboarding
 - Adapter status (`.agents/`, `.claude/`)
 - Recommended next step:
-  - Run `00-discover` (or `00-discover`, `$00-discover`) to explore the first feature or product direction
+  - Run `00-explore` (or `00-explore`, `$00-explore`) to explore the first feature or product direction
   - Run `10-define` (or `10-define`, `$10-define`) if the initial delivery slice is already clear and ready for execution
