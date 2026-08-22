@@ -28,6 +28,14 @@ const HISTORY_GROUPS: ReadonlyArray<{
 ];
 
 async function readHistory(projectRoot: string): Promise<HistorySummary> {
+  const ledgerItems = await readHistoryLedger(projectRoot);
+  if (ledgerItems.length > 0) {
+    return {
+      items: ledgerItems.sort(compareHistoryItems),
+      total: ledgerItems.length
+    };
+  }
+
   const items = (
     await Promise.all(
       HISTORY_GROUPS.map((group) => readHistoryGroup(projectRoot, group))
@@ -38,6 +46,36 @@ async function readHistory(projectRoot: string): Promise<HistorySummary> {
     items: items.sort(compareHistoryItems),
     total: items.length
   };
+}
+
+async function readHistoryLedger(projectRoot: string): Promise<HistoryItem[]> {
+  const ledgerPath = path.join(projectRoot, HISTORY_PATH, "HISTORY.md");
+  try {
+    return parseHistoryLedger(await fs.readFile(ledgerPath, "utf8"));
+  } catch (error: unknown) {
+    if (getErrorCode(error) === "ENOENT") return [];
+    throw error;
+  }
+}
+
+function parseHistoryLedger(markdown: string): HistoryItem[] {
+  const items: HistoryItem[] = [];
+  for (const line of markdown.split(/\r?\n/)) {
+    if (!/^\|\s*\d{4}-\d{2}-\d{2}\s*\|/.test(line)) continue;
+    const cells = line.split("|").slice(1, -1).map((cell) => cell.trim());
+    if (cells.length < 7) continue;
+    const runId = stripCode(cells[1] || "");
+    const type = normalizeHistoryType(cells[2]) || "feature";
+    const title = cells[3] || titleFromFile(runId);
+    const status = stripCode(cells[5] || "") || null;
+    const file = cells[6]?.match(/\(([^)]+)\)/)?.[1] || "";
+    items.push({ type, title, buildPlanItem: runId || null, status, file });
+  }
+  return items;
+}
+
+function stripCode(value: string): string {
+  return value.replace(/^`|`$/g, "").trim();
 }
 
 async function readHistoryGroup(
@@ -56,23 +94,25 @@ async function readHistoryGroup(
     }
 
     const entries = await fs.readdir(directoryPath, { withFileTypes: true });
-    const markdownFiles = entries
+    const archiveEntries = entries
       .filter(
         (entry) =>
-          entry.isFile() &&
-          entry.name.endsWith(".md") &&
-          entry.name.toLowerCase() !== "readme.md" &&
-          entry.name.toLowerCase() !== "history.md"
+          !entry.isSymbolicLink() &&
+          (entry.isDirectory() || (
+            entry.isFile() &&
+            entry.name.endsWith(".md") &&
+            entry.name.toLowerCase() !== "readme.md" &&
+            entry.name.toLowerCase() !== "history.md"
+          ))
       )
       .sort((left, right) => left.name.localeCompare(right.name));
 
-    return Promise.all(
-      markdownFiles.map(async (entry) => {
-        const relativeFile = path.join(group.directory, entry.name);
-        const markdown = await fs.readFile(path.join(directoryPath, entry.name), "utf8");
-        return parseHistoryItem(markdown, group.type, relativeFile);
-      })
+    const items = await Promise.all(
+      archiveEntries.map((entry) =>
+        readHistoryEntry(directoryPath, group, entry.name, entry.isDirectory())
+      )
     );
+    return items.filter((item): item is HistoryItem => item !== null);
   } catch (error: unknown) {
     if (getErrorCode(error) === "ENOENT") {
       return [];
@@ -80,6 +120,36 @@ async function readHistoryGroup(
 
     throw error;
   }
+}
+
+async function readHistoryEntry(
+  directoryPath: string,
+  group: (typeof HISTORY_GROUPS)[number],
+  entryName: string,
+  isDirectory: boolean
+): Promise<HistoryItem | null> {
+  if (!isDirectory) {
+    const relativeFile = path.join(group.directory, entryName);
+    const markdown = await fs.readFile(path.join(directoryPath, entryName), "utf8");
+    return parseHistoryItem(markdown, group.type, relativeFile);
+  }
+
+  const archivePath = path.join(directoryPath, entryName);
+  const entries = await fs.readdir(archivePath, { withFileTypes: true });
+  const preferred = ["60-report.md", "current-feature.md", "20-spec.md", "10-define.md"];
+  const selected = preferred.find((name) =>
+    entries.some((entry) => entry.isFile() && !entry.isSymbolicLink() && entry.name === name)
+  ) || entries.find((entry) =>
+    entry.isFile() &&
+    !entry.isSymbolicLink() &&
+    entry.name.endsWith(".md") &&
+    entry.name.toLowerCase() !== "readme.md"
+  )?.name;
+  if (!selected) return null;
+
+  const relativeFile = path.join(group.directory, entryName, selected);
+  const markdown = await fs.readFile(path.join(archivePath, selected), "utf8");
+  return parseHistoryItem(markdown, group.type, relativeFile);
 }
 
 async function isRegularDirectory(directoryPath: string): Promise<boolean> {
@@ -225,6 +295,6 @@ function getErrorCode(error: unknown): string | undefined {
     : undefined;
 }
 
-export { HISTORY_PATH, formatHistoryHuman, parseHistoryItem, readHistory };
+export { HISTORY_PATH, formatHistoryHuman, parseHistoryItem, parseHistoryLedger, readHistory };
 
 export type { HistoryItem, HistoryItemType, HistorySummary };

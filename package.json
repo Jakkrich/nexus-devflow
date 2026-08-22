@@ -1,6 +1,6 @@
 {
   "name": "nexus-devflow",
-  "version": "2.0.25",
+  "version": "2.0.26",
   "description": "Agent-ready DevFlow 2.0 workflow layer framework with .agents and .claude adapter tooling.",
   "type": "module",
   "private": true,
