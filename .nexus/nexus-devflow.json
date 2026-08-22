@@ -6,16 +6,26 @@
   "repository": "https://github.com/Jakkrich/nexus-devflow",
   "artifactLanguage": "th",
   "adapters": [
+    "antigravity",
     "claude",
-    "codex"
+    "codex",
+    "copilot"
   ],
   "workspace": {
     "contextDir": "devflow/context",
     "historyDir": "devflow/history",
     "referenceDir": "devflow/reference",
+    "runsDir": "devflow/runs",
     "discoveriesDir": "devflow/discoveries"
   },
   "lifecycle": {
+    "fastTrackStages": [
+      "feature",
+      "fix",
+      "implement",
+      "check",
+      "complete"
+    ],
     "mainlineStages": [
       "00-discover",
       "10-define",
@@ -27,16 +37,21 @@
       "70-release"
     ],
     "companionCommands": [
-      "goal",
-      "brainstorm",
-      "research",
+      "devflow",
+      "doctor",
+      "overview",
       "debug",
-      "prd",
-      "issue-triage",
-      "security-review",
-      "wiki",
-      "check-for-updates",
-      "help"
+      "onboard",
+      "adopt",
+      "try",
+      "rollback",
+      "idea",
+      "ci",
+      "test",
+      "autopilot",
+      "prototype",
+      "report-html",
+      "brief"
     ]
   },
   "installedAt": "2026-08-17T00:00:00.000Z"
