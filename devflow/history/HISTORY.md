@@ -8,7 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 2026-08-22 | `029` | Feature | เพิ่มระบบ Backup และ Safety Rollback ก่อนสั่ง Update ใน CLI (`.nexus/backups/`) | `HEAD` | `Released` | [`029-update-backup-system.md`](features/029-update-backup-system.md) |
+| 2026-08-22 | `029` | Feature | เพิ่มระบบ Backup และ Safety Rollback ก่อนสั่ง Update ใน CLI (`.nexus/backups/`) | `c6f7a4c` | `Released` | [`029-update-backup-system.md`](features/029-update-backup-system.md) |
 | 2026-08-22 | `028` | Feature | ซิงก์ AI Blueprint Upstream v0.11.1 (Dashboard Accessibility & Health Status Clarification) | `HEAD` | `Released` | [`028-sync-upstream-v0111.md`](features/028-sync-upstream-v0111.md) |
 | 2026-08-21 | `027` | Feature | รวม Skill การแปลงเอกสารทุกชนิดเป็น `convert-any-to-md` พร้อม Default Destination `devflow/reference/` | `HEAD` | `Released` | [`027-convert-any-to-md.md`](features/027-convert-any-to-md.md) |
 | 2026-08-21 | `026` | Feature | เพิ่มการสนับสนุน Fast-Track และ Flow Icons ให้กับ DevFlow IDE Extension / QuickPick & Status Bar UI | `HEAD` | `Released` | [`60-report.md`](features/026-fast-track-and-flow-icons-extension-ui/60-report.md) |
