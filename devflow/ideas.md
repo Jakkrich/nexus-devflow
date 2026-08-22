@@ -40,17 +40,7 @@
 
 
 
-### [IDEA-013] Dynamic Project Overview Compiler (`/overview`)
-- **บันทึกเมื่อ**: 2026-08-22
-- **ไอเดียตั้งต้น**: พัฒนาคำสั่ง `/overview` ให้ทำหน้าที่รวบรวมและซิงก์ข้อมูลจากไอเดีย, เอกสารอ้างอิง, และบริบทโครงการ มาอัปเดตใส่ `devflow/context/project-overview.md` อัตโนมัติ
-- **AI Feasibility & Tech**: **ง่าย (High Feasibility)** — สร้างสคริปต์ซิงก์ข้อมูลภาพรวมโครงการ
-- **Value & Potential**: **ปานกลาง** — ช่วยรักษาความสดใหม่ของ `project-overview.md` เมื่อมีการเปลี่ยนแปลงสถาปัตยกรรม
-- **Quick Seed (กันลืม)**:
-  1. สแกนไฟล์บริบทและบันทึกสรุปความเปลี่ยนแปลง
-  2. รักษาสครงสร้าง Single Source of Truth
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-013` หรือ `/00-explore IDEA-013`)
 
----
 
 ### [IDEA-014] Standalone `/status` Skill for AI Chat Context
 - **บันทึกเมื่อ**: 2026-08-22
@@ -188,6 +178,7 @@
 
 ## 📦 Archived / Shipped Ideas
 
+- [x] **[IDEA-013]** Dynamic Project Overview Compiler (`/overview`) — *Claimed in `039-dynamic-overview-compiler` (2026-08-22)*
 - [x] **[IDEA-012]** Sub-Feature Automatic Splitting Engine (4a, 4b, 4c) — *Claimed in `038-sub-feature-splitting-engine` (2026-08-22)*
 - [x] **[IDEA-011]** Feature Briefing Skill จากแผนงาน (`/brief`) — *Claimed in `037-feature-briefing-skill` (2026-08-22)*
 - [x] **[IDEA-010]** Cloud Deployment Readiness & Config Generator Skill (`/release`) — *Claimed in `036-cloud-deployment-readiness-skill` (2026-08-22)*
