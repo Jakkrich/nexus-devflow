@@ -46,9 +46,8 @@ devflow/research/*
 devflow/brainstorm/*
 devflow/brainstorms/*
 devflow/scratch/*
-devflow/history/*
-!devflow/history/.gitkeep
 devflow/tmp/*
+
 .devflow/
 .nexus/branches/*
 
