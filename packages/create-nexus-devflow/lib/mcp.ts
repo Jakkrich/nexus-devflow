@@ -9,10 +9,12 @@ import { addIdea } from "./ideas.js";
 import { addFinding, resolveFinding, type FindingSeverity, type FindingStatus } from "./findings.js";
 import { evaluateGate, formatGateReport } from "./gatekeeper.js";
 import { sliceContextForStage, type SliceStage } from "./context-slicer.js";
+import { detectGitDrift, reconcileState } from "./drift-reconciler.js";
 
 const PROTOCOL_VERSION = "2024-11-05";
 const SERVER_NAME = "nexus-devflow-mcp";
 const SERVER_VERSION = "2.0.27";
+
 
 export interface JsonRpcRequest {
   jsonrpc: "2.0";
@@ -175,8 +177,34 @@ export const DEVFLOW_MCP_TOOLS: McpToolDefinition[] = [
       },
       required: ["stage"]
     }
+  },
+  {
+    name: "devflow_detect_drift",
+    description: "Detect git drift between actual repository modified files and the Living Spec (identifies undocumented files and phantom files).",
+    inputSchema: {
+      type: "object",
+      properties: {}
+    }
+  },
+  {
+    name: "devflow_reconcile_state",
+    description: "Automatically reconcile and heal workspace drift (syncs undocumented files into living spec and heals stage alignment).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        autoAddUndocumented: {
+          type: "boolean",
+          description: "When true, automatically adds undocumented files into current-feature.md (default: true)"
+        },
+        healStage: {
+          type: "boolean",
+          description: "When true, heals current-stage.md to match active branch (default: true)"
+        }
+      }
+    }
   }
 ];
+
 
 
 export async function handleToolCall(
@@ -360,6 +388,35 @@ export async function handleToolCall(
             {
               type: "text",
               text: `[JIT Context Slice - Stage: ${slice.stage}] (Tokens: ~${slice.estimatedTokens}, Saved: ${slice.reductionPercentage}%)\n\n${slice.content}`
+            }
+          ]
+        };
+      }
+
+      case "devflow_detect_drift": {
+        const drift = await detectGitDrift(projectRoot);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(drift, null, 2)
+            }
+          ]
+        };
+      }
+
+      case "devflow_reconcile_state": {
+        const autoAdd = args.autoAddUndocumented !== false;
+        const heal = args.healStage !== false;
+        const result = await reconcileState(projectRoot, {
+          autoAddUndocumented: autoAdd,
+          healStage: heal
+        });
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2)
             }
           ]
         };

@@ -44,6 +44,10 @@ import {
   type SliceStage
 } from "../lib/context-slicer.js";
 import {
+  detectGitDrift,
+  reconcileState
+} from "../lib/drift-reconciler.js";
+import {
   startMcpServer
 } from "../lib/mcp.js";
 import {
@@ -91,7 +95,9 @@ interface CliOptions {
   | "check-gate"
   | "hook"
   | "mcp"
-  | "slice";
+  | "slice"
+  | "drift"
+  | "reconcile";
   subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall";
   subcommandArg?: string;
   sliceStage?: SliceStage;
@@ -154,6 +160,60 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       console.log(`[DevFlow JIT Context Slice - Stage: ${sliceResult.stage}]`);
       console.log(`Estimated Tokens: ~${sliceResult.estimatedTokens} (Reduction: ~${sliceResult.reductionPercentage}%)\n`);
       console.log(sliceResult.content);
+    }
+    return;
+  }
+
+  if (options.command === "drift") {
+    const drift = await detectGitDrift(targetDir);
+    if (options.json) {
+      console.log(JSON.stringify(drift, null, 2));
+    } else {
+      const style = createStyle();
+      if (!drift.hasDrift && drift.phantomFiles.length === 0) {
+        console.log(style.green("✔ No Git drift detected. Living spec is in sync with repository files."));
+      } else {
+        console.log(style.bold(style.yellow("Git Drift Detection Report:")));
+        if (drift.undocumentedFiles.length > 0) {
+          console.log(style.red(`  - Undocumented modified files (${drift.undocumentedFiles.length}):`));
+          for (const f of drift.undocumentedFiles) {
+            console.log(`    ✖ ${f}`);
+          }
+        }
+        if (drift.phantomFiles.length > 0) {
+          console.log(style.yellow(`  - Phantom spec files (not modified in git) (${drift.phantomFiles.length}):`));
+          for (const f of drift.phantomFiles) {
+            console.log(`    ⚠ ${f}`);
+          }
+        }
+        if (drift.stageDrift.isDrifted) {
+          console.log(style.yellow(`  - Stage alignment drift: Active branch '${drift.stageDrift.activeBranch}' vs Stage ID '${drift.stageDrift.stageRunningId}'`));
+        }
+        console.log(`\nRun ${style.cyan("nexus-devflow reconcile --fix")} to auto-heal spec alignment.`);
+      }
+    }
+    return;
+  }
+
+  if (options.command === "reconcile") {
+    const result = await reconcileState(targetDir, {
+      autoAddUndocumented: options.fix,
+      healStage: options.fix
+    });
+    if (options.json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      const style = createStyle();
+      if (result.reconciled) {
+        console.log(style.green(`✔ ${result.message}`));
+        if (result.addedFiles.length > 0) {
+          for (const f of result.addedFiles) {
+            console.log(style.dim(`  + Added to spec: ${f}`));
+          }
+        }
+      } else {
+        console.log(style.dim(result.message));
+      }
     }
     return;
   }
@@ -740,6 +800,12 @@ function parseArgs(args: readonly string[]): CliOptions {
       } else {
         target = positional[1] || target || ".";
       }
+    } else if (first === "drift") {
+      command = "drift";
+      target = positional[1] || target || ".";
+    } else if (first === "reconcile") {
+      command = "reconcile";
+      target = positional[1] || target || ".";
     } else if (first === "check-gate") {
       command = "check-gate";
       target = positional[1] || target || ".";
@@ -903,6 +969,8 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow status")} [target-dir] [options]
   ${style.cyan("nexus-devflow mcp")} [target-dir]
   ${style.cyan("nexus-devflow slice")} [--stage <stage>] [--max-tokens <num>] [--json]
+  ${style.cyan("nexus-devflow drift")} [target-dir] [--json]
+  ${style.cyan("nexus-devflow reconcile")} [target-dir] [--fix] [--json]
   ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
   ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
   ${style.cyan("nexus-devflow hook uninstall")}
