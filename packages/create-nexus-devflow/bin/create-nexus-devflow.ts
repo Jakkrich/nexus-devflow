@@ -51,6 +51,13 @@ import {
   renderStudioHtml
 } from "../lib/webview-studio.js";
 import {
+  buildCodeGraph,
+  calculateBlastRadius
+} from "../lib/code-graph.js";
+import {
+  generateSwarmPlan
+} from "../lib/swarm-orchestrator.js";
+import {
   startMcpServer
 } from "../lib/mcp.js";
 import {
@@ -101,9 +108,12 @@ interface CliOptions {
   | "slice"
   | "drift"
   | "reconcile"
-  | "studio";
+  | "studio"
+  | "swarm"
+  | "graph";
   subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall";
   subcommandArg?: string;
+  graphFile?: string;
   sliceStage?: SliceStage;
   maxTokens?: number;
   hookType?: GitHookType;
@@ -228,6 +238,56 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       console.log(JSON.stringify({ html }, null, 2));
     } else {
       console.log(html);
+    }
+    return;
+  }
+
+  if (options.command === "swarm") {
+    const plan = await generateSwarmPlan(targetDir);
+    if (options.json) {
+      console.log(JSON.stringify(plan, null, 2));
+    } else {
+      const style = createStyle();
+      console.log(style.bold(style.cyan(`[Nexus-DevFlow Multi-Agent Swarm Matrix: ${plan.runId}]`)));
+      console.log(`Title: ${plan.title} (Strategy: ${plan.executionStrategy})\n`);
+      for (const t of plan.tasks) {
+        const roleIcon = t.role === "coder" ? "👨‍💻" : t.role === "qa" ? "🕵️" : t.role === "security" ? "🛡️" : "👑";
+        console.log(`  ${roleIcon} ${style.bold(t.id)}: ${t.title} [Role: ${t.role.toUpperCase()}]`);
+        console.log(style.dim(`     Context: ${t.requiredContext.join(", ")}`));
+        console.log(style.dim(`     Verify : ${t.verificationCriterion}`));
+      }
+    }
+    return;
+  }
+
+  if (options.command === "graph") {
+    const graph = await buildCodeGraph(targetDir);
+    if (options.graphFile) {
+      const blast = calculateBlastRadius(graph, options.graphFile);
+      if (options.json) {
+        console.log(JSON.stringify(blast, null, 2));
+      } else {
+        const style = createStyle();
+        console.log(style.bold(style.cyan(`[Code Graph Blast Radius: ${blast.targetFile}]`)));
+        console.log(`Impact Score: ${blast.impactScore} | Total Affected: ${blast.totalAffected} files\n`);
+        if (blast.directDependents.length > 0) {
+          console.log(style.bold("Direct Dependents:"));
+          for (const d of blast.directDependents) console.log(`  - ${d}`);
+        }
+        if (blast.transitiveDependents.length > 0) {
+          console.log(style.bold("Transitive Dependents:"));
+          for (const t of blast.transitiveDependents) console.log(`  ~ ${t}`);
+        }
+      }
+    } else {
+      if (options.json) {
+        console.log(JSON.stringify({ totalFiles: graph.totalFiles, totalEdges: graph.totalEdges, files: Object.keys(graph.nodes) }, null, 2));
+      } else {
+        const style = createStyle();
+        console.log(style.bold(style.cyan("[Nexus-DevFlow Semantic Code Graph]")));
+        console.log(`Indexed Files: ${graph.totalFiles} | Total Dependency Edges: ${graph.totalEdges}`);
+        console.log(`\nRun ${style.yellow("nexus-devflow graph --file <path>")} to calculate Blast Radius.`);
+      }
     }
     return;
   }
@@ -542,6 +602,7 @@ function parseArgs(args: readonly string[]): CliOptions {
   let command: CliOptions["command"] = "install";
   let subcommandAction: CliOptions["subcommandAction"];
   let subcommandArg: string | undefined;
+  let graphFile: string | undefined;
   let sliceStage: SliceStage | undefined;
   let maxTokens: number | undefined;
   let hookType: GitHookType | undefined;
@@ -618,6 +679,11 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--file" && args[i + 1] && !args[i + 1].startsWith("-")) {
+      graphFile = args[i + 1];
+      i++;
+      continue;
+    }
     if (arg === "--fix") {
       fix = true;
       continue;
@@ -823,6 +889,12 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (first === "studio") {
       command = "studio";
       target = positional[1] || target || ".";
+    } else if (first === "swarm") {
+      command = "swarm";
+      target = positional[1] || target || ".";
+    } else if (first === "graph") {
+      command = "graph";
+      target = positional[1] || target || ".";
     } else if (first === "check-gate") {
       command = "check-gate";
       target = positional[1] || target || ".";
@@ -929,6 +1001,7 @@ function parseArgs(args: readonly string[]): CliOptions {
     command,
     subcommandAction,
     subcommandArg,
+    graphFile,
     sliceStage,
     maxTokens,
     hookType,
@@ -989,6 +1062,8 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow drift")} [target-dir] [--json]
   ${style.cyan("nexus-devflow reconcile")} [target-dir] [--fix] [--json]
   ${style.cyan("nexus-devflow studio")} [target-dir] [--json]
+  ${style.cyan("nexus-devflow swarm")} [target-dir] [--json]
+  ${style.cyan("nexus-devflow graph")} [target-dir] [--file <path>] [--json]
   ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
   ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
   ${style.cyan("nexus-devflow hook uninstall")}

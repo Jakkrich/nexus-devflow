@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-23 | `048` | Feature | Multi-Agent Swarm Orchestrator & Semantic Code Graph RAG (`swarm` & `graph`) | `HEAD` | `Released` | [`048-multi-agent-swarm-and-code-graph-rag.md`](features/048-multi-agent-swarm-and-code-graph-rag.md) |
 | 2026-08-23 | `047` | Feature | IDE Native Extension & Interactive Webview Studio (`studio` & `devflow_get_studio_html`) | `HEAD` | `Released` | [`047-ide-native-extension-webview-studio.md`](features/047-ide-native-extension-webview-studio.md) |
 | 2026-08-23 | `046` | Feature | Git Diff Drift Reconciler & Self-Healing State Engine (`drift` & `reconcile`) | `HEAD` | `Released` | [`046-git-diff-drift-reconciler.md`](features/046-git-diff-drift-reconciler.md) |
 | 2026-08-23 | `045` | Feature | Just-In-Time (JIT) Dynamic Context Slicing Engine (`slice` & `devflow_get_sliced_context`) | `HEAD` | `Released` | [`045-jit-dynamic-context-slicing-engine.md`](features/045-jit-dynamic-context-slicing-engine.md) |

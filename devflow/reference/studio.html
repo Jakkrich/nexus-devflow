@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus-DevFlow Studio: nexus-devflow</title>
+  <style>
+    :root {
+      --bg: var(--vscode-editor-background, #090d16);
+      --bg-panel: var(--vscode-sideBar-background, rgba(17, 24, 39, 0.75));
+      --bg-card: rgba(30, 41, 59, 0.6);
+      --border: var(--vscode-panel-border, rgba(255, 255, 255, 0.08));
+      --border-accent: rgba(56, 189, 248, 0.3);
+      --fg: var(--vscode-editor-foreground, #f8fafc);
+      --fg-muted: var(--vscode-descriptionForeground, #94a3b8);
+      --accent: #38bdf8;
+      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      --green: #4ade80;
+      --yellow: #facc15;
+      --red: #f87171;
+      --font-mono: var(--vscode-editor-font-family, 'Fira Code', Consolas, monospace);
+      --font-sans: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--fg);
+      padding: 16px;
+      line-height: 1.5;
+      font-size: 13px;
+      overflow-x: hidden;
+    }
+
+    .studio-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Top Studio Header */
+    .studio-header {
+      background: var(--bg-panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .project-badge {
+      font-weight: 700;
+      font-size: 16px;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .branch-pill {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border-accent);
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge-pass {
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .badge-blocked {
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--red);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* Quick Action Dispatcher */
+    .action-bar {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+    }
+    .action-label {
+      font-weight: 600;
+      color: var(--fg-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      margin-right: 4px;
+      white-space: nowrap;
+    }
+    .btn-action {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-action:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-action.btn-primary {
+      background: var(--accent-gradient);
+      color: #040812;
+      font-weight: 700;
+      border: none;
+    }
+
+    /* 3-Pillars Kanban Grid */
+    .kanban-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .kanban-col {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .col-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .col-title {
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .col-count {
+      font-size: 11px;
+      background: var(--bg-card);
+      padding: 2px 8px;
+      border-radius: 10px;
+      color: var(--fg-muted);
+    }
+
+    .col-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    /* Card Items */
+    .card-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .card-item:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+    }
+    .card-item.active-item {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+    }
+
+    .item-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .badge-id {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .badge-history {
+      background: rgba(129, 140, 248, 0.2);
+      color: #818cf8;
+    }
+    .item-title {
+      font-weight: 600;
+      font-size: 12px;
+      flex: 1;
+    }
+
+    /* Progress bar */
+    .progress-bar-container {
+      background: rgba(0, 0, 0, 0.3);
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .progress-bar-fill {
+      background: var(--accent-gradient);
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .item-tags, .item-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--fg-muted);
+    }
+    .tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tag-feasibility { color: var(--green); }
+    .tag-value { color: var(--accent); }
+    .tag-cat { color: var(--yellow); }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--fg-muted);
+      font-size: 12px;
+    }
+
+    /* Pulse Notification */
+    .pulse-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="studio-container">
+    
+    <!-- Top Header -->
+    <header class="studio-header">
+      <div class="header-left">
+        <span class="project-badge">⚡ nexus-devflow</span>
+        <span class="branch-pill">🌿 main</span>
+        <span class="badge-track">Track: deep</span>
+      </div>
+      <div class="header-right">
+        <span class="badge-pass">✔ Gate Passed</span>
+        <button class="btn-action btn-primary" onclick="dispatchCommand('/feature')">
+          Next: /feature
+        </button>
+      </div>
+    </header>
+
+
+    <!-- Quick Action Bar -->
+    <div class="action-bar">
+      <span class="action-label">Quick Actions:</span>
+      <button class="btn-action" onclick="dispatchCommand('/feature')">/feature</button>
+      <button class="btn-action" onclick="dispatchCommand('/implement')">/implement</button>
+      <button class="btn-action" onclick="dispatchCommand('/check')">/check</button>
+      <button class="btn-action" onclick="dispatchCommand('/complete')">/complete</button>
+      <button class="btn-action" onclick="dispatchCommand('nexus-devflow slice --stage implement')">slice</button>
+      <button class="btn-action" onclick="dispatchCommand('nexus-devflow drift')">drift</button>
+      <button class="btn-action" onclick="dispatchCommand('nexus-devflow reconcile --fix')">reconcile</button>
+      <button class="btn-action" onclick="dispatchCommand('nexus-devflow doctor')">doctor</button>
+    </div>
+
+    <!-- 3-Pillars Kanban View -->
+    <main class="kanban-grid">
+      
+      <!-- 🔮 1. Future (Ideas Inbox) -->
+      <section class="kanban-col">
+        <div class="col-header">
+          <span class="col-title">🔮 Future (Ideas Inbox)</span>
+          <span class="col-count">4</span>
+        </div>
+        <div class="col-content">
+          
+        <div class="card-item idea-item">
+          <div class="item-header">
+            <span class="badge-id">IDEA-003</span>
+            <span class="item-title">Interactive Terminal UI (TUI) Dashboard (Ink / Clack)</span>
+          </div>
+          <div class="item-tags">
+            <span class="tag tag-feasibility">**ปานกลาง (Medium Feasibility)** — ใช้ไลบรารี CLI UI เช่น `@clack/prompts` หรือ `ink` (React for CLI) ในการเรนเดอร์ Interface แบบ Interactive</span>
+            <span class="tag tag-value">**สูง (Premium DX)** — สร้างความประทับใจระดับ Wow ให้กับผู้ใช้ สามารถใช้คีย์บอร์ดเลื่อนดู Task, ติ๊ก Checklist และกดคัดลอกคำสั่ง AI เข้า Clipboard ได้ทันที</span>
+          </div>
+        </div>
+      
+        <div class="card-item idea-item">
+          <div class="item-header">
+            <span class="badge-id">IDEA-004</span>
+            <span class="item-title">DevFlow MCP Server (Model Context Protocol) &amp; Multi-Agent API</span>
+          </div>
+          <div class="item-tags">
+            <span class="tag tag-feasibility">**ปานกลาง (Medium Feasibility)** — ใช้ `@modelcontextprotocol/sdk` ของ Anthropic ในการเปิด JSON-RPC Server ผ่าน Stdio</span>
+            <span class="tag tag-value">**สูงสุด (Next-Gen AI Integration)** — AI ไม่ต้องใช้ Regex คอยสแกนหรือแก้ Markdown เอง แต่สามารถเรียก Tools เช่น `devflow_add_finding`, `devflow_update_task`, `devflow_get_status` ได้แบบ 100% Type-safe</span>
+          </div>
+        </div>
+      
+        <div class="card-item idea-item">
+          <div class="item-header">
+            <span class="badge-id">IDEA-015</span>
+            <span class="item-title">Configurable Artifact Language (`artifactLanguage: th | en`)</span>
+          </div>
+          <div class="item-tags">
+            <span class="tag tag-feasibility">**ง่าย (High Feasibility)** — อ่านค่า `artifactLanguage` จาก `nexus-devflow.json` แล้วปรับ Directive ใน Skills</span>
+            <span class="tag tag-value">**สูง** — รองรับการใช้งานของทีมงานระดับสากลหรือทีมที่ต้องการเอกสารเป็นภาษาอังกฤษ</span>
+          </div>
+        </div>
+      
+        <div class="card-item idea-item">
+          <div class="item-header">
+            <span class="badge-id">IDEA-023</span>
+            <span class="item-title">Lightweight Zero-Dependency Pure Markdown Mode</span>
+          </div>
+          <div class="item-tags">
+            <span class="tag tag-feasibility">**ง่าย (High Feasibility)** — สร้างไฟล์เทมเพลตบริสุทธิ์แบบไม่ต้องใช้ CLI</span>
+            <span class="tag tag-value">**ปานกลาง** — รองรับสภาพแวดล้อมการทำงานแบบปิโตรเลียม/งานเครื่องมือพื้นฐานที่ไม่มี Node.js</span>
+          </div>
+        </div>
+      
+        </div>
+      </section>
+
+
+      <!-- ⚡ 2. Present (Active Living Context) -->
+      <section class="kanban-col">
+        <div class="col-header">
+          <span class="col-title">⚡ Present (Active Living Spec)</span>
+          <span class="col-count">0/0 Tasks</span>
+        </div>
+        <div class="col-content">
+          
+            <div class="empty-state">
+              Idle workspace.<br>Run <code>/feature</code> or <code>/fix</code> to start a run.
+            </div>
+          
+        </div>
+      </section>
+
+      <!-- 📦 3. Past (Release History Archive) -->
+      <section class="kanban-col">
+        <div class="col-header">
+          <span class="col-title">📦 Past (History Archives)</span>
+          <span class="col-count">43 Releases</span>
+        </div>
+        <div class="col-content">
+          
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">047</span>
+              <span class="item-title">IDE Native Extension &amp; Interactive Webview Studio (`studio` &amp; `devflow_get_studio_html`)</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">046</span>
+              <span class="item-title">Git Diff Drift Reconciler &amp; Self-Healing State Engine (`drift` &amp; `reconcile`)</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">045</span>
+              <span class="item-title">Just-In-Time (JIT) Dynamic Context Slicing Engine (`slice` &amp; `devflow_get_sliced_context`)</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">044</span>
+              <span class="item-title">Branch-Scoped Context Isolation &amp; Dynamic Router (`devflow/context/&lt;branch&gt;/`)</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">043</span>
+              <span class="item-title">DevFlow Model Context Protocol (MCP) Server Hub &amp; Type-Safe Schema Engine (`mcp`)</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">042</span>
+              <span class="item-title">Automated Quality Gatekeeper &amp; Pre-commit Hook Integration (`check-gate` &amp; `hook`)</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">041</span>
+              <span class="item-title">Unified Dual-Track Root Switch, Context Auto-Sync Engine, และ Dashboard Tab Auto-Focus</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+          <div class="card-item history-item">
+            <div class="item-header">
+              <span class="badge-id badge-history">040</span>
+              <span class="item-title">Dashboard Blueprint Reference Mockup Parity, Dual-Track Visualizer, และ Snapshot API Backend</span>
+            </div>
+            <div class="item-meta">
+              <span class="tag tag-cat">feature</span>
+            </div>
+          </div>
+        
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Pulse -->
+    <footer class="pulse-panel">
+      <div>Findings Blockers: <strong>0</strong> | Total Findings: <strong>0</strong></div>
+      <div>Git Drift: <strong>✔ In Sync</strong></div>
+    </footer>
+
+  </div>
+
+  <script>
+    function dispatchCommand(cmd) {
+      if (window.acquireVsCodeApi) {
+        const vscode = window.acquireVsCodeApi();
+        vscode.postMessage({ command: 'exec', text: cmd });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(cmd);
+        alert('Copied command to clipboard: ' + cmd);
+      }
+    }
+  </script>
+</body>
+</html>

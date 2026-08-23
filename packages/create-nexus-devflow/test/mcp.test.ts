@@ -70,7 +70,7 @@ test("MCP Server responds to initialize, ping, and initialized notification", as
   }
 });
 
-test("MCP Server lists all 10 DevFlow tools in tools/list", async () => {
+test("MCP Server lists all 12 DevFlow tools in tools/list", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-mcp-tools-"));
 
   try {
@@ -86,7 +86,7 @@ test("MCP Server lists all 10 DevFlow tools in tools/list", async () => {
     assert.equal(res.id, "tools-1");
 
     const tools = (res.result as { tools: typeof DEVFLOW_MCP_TOOLS }).tools;
-    assert.equal(tools.length, 10);
+    assert.equal(tools.length, 12);
 
     const names = tools.map((t) => t.name);
     assert.ok(names.includes("devflow_get_status"));
@@ -99,10 +99,13 @@ test("MCP Server lists all 10 DevFlow tools in tools/list", async () => {
     assert.ok(names.includes("devflow_detect_drift"));
     assert.ok(names.includes("devflow_reconcile_state"));
     assert.ok(names.includes("devflow_get_studio_html"));
+    assert.ok(names.includes("devflow_swarm_plan"));
+    assert.ok(names.includes("devflow_query_code_graph"));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
 
 
 

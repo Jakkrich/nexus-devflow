@@ -11,6 +11,8 @@ import { evaluateGate, formatGateReport } from "./gatekeeper.js";
 import { sliceContextForStage, type SliceStage } from "./context-slicer.js";
 import { detectGitDrift, reconcileState } from "./drift-reconciler.js";
 import { renderStudioHtml } from "./webview-studio.js";
+import { buildCodeGraph, calculateBlastRadius } from "./code-graph.js";
+import { generateSwarmPlan } from "./swarm-orchestrator.js";
 
 const PROTOCOL_VERSION = "2024-11-05";
 const SERVER_NAME = "nexus-devflow-mcp";
@@ -217,8 +219,30 @@ export const DEVFLOW_MCP_TOOLS: McpToolDefinition[] = [
         }
       }
     }
+  },
+  {
+    name: "devflow_swarm_plan",
+    description: "Generate a multi-agent specialized swarm execution plan (Coder, QA, Security, Architect) with task allocations and context requirements.",
+    inputSchema: {
+      type: "object",
+      properties: {}
+    }
+  },
+  {
+    name: "devflow_query_code_graph",
+    description: "Query the codebase semantic dependency graph to analyze imports, exports, and calculate the Blast Radius of file changes.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        file: {
+          type: "string",
+          description: "Optional target file path to calculate Blast Radius and impacted dependents"
+        }
+      }
+    }
   }
 ];
+
 
 
 
@@ -446,6 +470,49 @@ export async function handleToolCall(
             {
               type: "text",
               text: html
+            }
+          ]
+        };
+      }
+
+      case "devflow_swarm_plan": {
+        const plan = await generateSwarmPlan(projectRoot);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(plan, null, 2)
+            }
+          ]
+        };
+      }
+
+      case "devflow_query_code_graph": {
+        const graph = await buildCodeGraph(projectRoot);
+        if (typeof args.file === "string" && args.file.trim().length > 0) {
+          const blast = calculateBlastRadius(graph, args.file.trim());
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(blast, null, 2)
+              }
+            ]
+          };
+        }
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  totalFiles: graph.totalFiles,
+                  totalEdges: graph.totalEdges,
+                  files: Object.keys(graph.nodes)
+                },
+                null,
+                2
+              )
             }
           ]
         };
