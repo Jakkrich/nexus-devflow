@@ -30,10 +30,21 @@ test("readDashboardSnapshot composes status, workflow, history, doctor and offli
     assert.equal(snapshot.update.state, "offline");
     assert.equal(Array.isArray(snapshot.doctor.checks), true);
     assert.equal(Array.isArray(snapshot.commands), true);
+    assert.ok(snapshot.gatekeeper);
+    assert.equal(snapshot.gatekeeper.passed, true);
+    assert.ok(snapshot.drift);
+    assert.equal(snapshot.drift.hasDrift, false);
+    assert.ok(snapshot.swarm);
+    assert.equal(Array.isArray(snapshot.swarm.agentRoster), true);
+    assert.ok(snapshot.graph);
+    assert.equal(typeof snapshot.graph.totalFiles, "number");
+    assert.ok(Array.isArray(snapshot.mcpTools));
+    assert.equal(snapshot.mcpTools.length, 12);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
 
 test("selectDashboardNextAction prefers the explicit Deep-Track stage", () => {
   const status = {

@@ -6,6 +6,8 @@ import { readDashboardSnapshot } from "./dashboard-snapshot.js";
 import type { DashboardSnapshotOptions } from "./dashboard-snapshot.js";
 import { readHistory } from "./history.js";
 import { readProjectStatus } from "./status.js";
+import { buildCodeGraph, calculateBlastRadius } from "./code-graph.js";
+import { reconcileState } from "./drift-reconciler.js";
 
 interface DashboardServer {
   close: () => Promise<void>;
@@ -151,6 +153,72 @@ async function handleRequest(
     }
     return;
   }
+
+  if (pathname === "/api/graph") {
+    try {
+      const urlObj = new URL(request.url || "/", `http://${DASHBOARD_HOST}`);
+      const targetFile = urlObj.searchParams.get("file");
+      const graph = await buildCodeGraph(projectRoot);
+      if (targetFile && targetFile.trim().length > 0) {
+        const blast = calculateBlastRadius(graph, targetFile.trim());
+        sendResponse(
+          response,
+          method,
+          200,
+          "application/json; charset=utf-8",
+          `${JSON.stringify(blast)}\n`
+        );
+      } else {
+        sendResponse(
+          response,
+          method,
+          200,
+          "application/json; charset=utf-8",
+          `${JSON.stringify({
+            totalFiles: graph.totalFiles,
+            totalEdges: graph.totalEdges,
+            files: Object.keys(graph.nodes)
+          })}\n`
+        );
+      }
+    } catch (error: unknown) {
+      sendResponse(
+        response,
+        method,
+        500,
+        "application/json; charset=utf-8",
+        `${JSON.stringify({
+          error: error instanceof Error ? error.message : "Unable to query code graph."
+        })}\n`
+      );
+    }
+    return;
+  }
+
+  if (pathname === "/api/reconcile") {
+    try {
+      const result = await reconcileState(projectRoot, { healStage: true });
+      sendResponse(
+        response,
+        method,
+        200,
+        "application/json; charset=utf-8",
+        `${JSON.stringify(result)}\n`
+      );
+    } catch (error: unknown) {
+      sendResponse(
+        response,
+        method,
+        500,
+        "application/json; charset=utf-8",
+        `${JSON.stringify({
+          error: error instanceof Error ? error.message : "Unable to reconcile state."
+        })}\n`
+      );
+    }
+    return;
+  }
+
 
   if (pathname === "/favicon.ico") {
     sendResponse(response, method, 204, "text/plain; charset=utf-8", "");
