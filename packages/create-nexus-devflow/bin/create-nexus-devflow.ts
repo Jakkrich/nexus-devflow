@@ -40,6 +40,10 @@ import {
   formatGateReport
 } from "../lib/gatekeeper.js";
 import {
+  sliceContextForStage,
+  type SliceStage
+} from "../lib/context-slicer.js";
+import {
   startMcpServer
 } from "../lib/mcp.js";
 import {
@@ -86,9 +90,12 @@ interface CliOptions {
   | "archive"
   | "check-gate"
   | "hook"
-  | "mcp";
+  | "mcp"
+  | "slice";
   subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall";
   subcommandArg?: string;
+  sliceStage?: SliceStage;
+  maxTokens?: number;
   hookType?: GitHookType;
   ideaTitle?: string;
   findingStatus?: FindingStatus;
@@ -135,6 +142,19 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
   if (options.command === "mcp") {
     startMcpServer(targetDir);
+    return;
+  }
+
+  if (options.command === "slice") {
+    const stage = options.sliceStage || "implement";
+    const sliceResult = await sliceContextForStage(targetDir, stage, { maxTokens: options.maxTokens });
+    if (options.json) {
+      console.log(JSON.stringify(sliceResult, null, 2));
+    } else {
+      console.log(`[DevFlow JIT Context Slice - Stage: ${sliceResult.stage}]`);
+      console.log(`Estimated Tokens: ~${sliceResult.estimatedTokens} (Reduction: ~${sliceResult.reductionPercentage}%)\n`);
+      console.log(sliceResult.content);
+    }
     return;
   }
 
@@ -448,6 +468,8 @@ function parseArgs(args: readonly string[]): CliOptions {
   let command: CliOptions["command"] = "install";
   let subcommandAction: CliOptions["subcommandAction"];
   let subcommandArg: string | undefined;
+  let sliceStage: SliceStage | undefined;
+  let maxTokens: number | undefined;
   let hookType: GitHookType | undefined;
   let ideaTitle: string | undefined;
   let findingStatus: FindingStatus | undefined;
@@ -635,6 +657,30 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--stage") {
+      const next = args[++i];
+      if (!next) throw new Error(`${arg} requires a stage name`);
+      sliceStage = next.toLowerCase() as SliceStage;
+      continue;
+    }
+
+    if (arg.startsWith("--stage=")) {
+      sliceStage = arg.slice("--stage=".length).toLowerCase() as SliceStage;
+      continue;
+    }
+
+    if (arg === "--max-tokens") {
+      const next = args[++i];
+      if (!next || isNaN(Number(next))) throw new Error(`${arg} requires a number`);
+      maxTokens = Number(next);
+      continue;
+    }
+
+    if (arg.startsWith("--max-tokens=")) {
+      maxTokens = Number(arg.slice("--max-tokens=".length));
+      continue;
+    }
+
     if (arg === "--target" || arg === "-t") {
       const next = args[++i];
       if (!next) {
@@ -686,6 +732,14 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (first === "mcp") {
       command = "mcp";
       target = positional[1] || target || ".";
+    } else if (first === "slice") {
+      command = "slice";
+      if (positional[1] && !positional[1].startsWith("-")) {
+        sliceStage = positional[1].toLowerCase() as SliceStage;
+        target = positional[2] || target || ".";
+      } else {
+        target = positional[1] || target || ".";
+      }
     } else if (first === "check-gate") {
       command = "check-gate";
       target = positional[1] || target || ".";
@@ -792,6 +846,8 @@ function parseArgs(args: readonly string[]): CliOptions {
     command,
     subcommandAction,
     subcommandArg,
+    sliceStage,
+    maxTokens,
     hookType,
     ideaTitle,
     findingStatus,
@@ -846,6 +902,7 @@ ${style.bold("Usage:")}
   ${style.cyan("npx @jakkrichm/create-nexus-devflow")} [target-dir] [options]
   ${style.cyan("nexus-devflow status")} [target-dir] [options]
   ${style.cyan("nexus-devflow mcp")} [target-dir]
+  ${style.cyan("nexus-devflow slice")} [--stage <stage>] [--max-tokens <num>] [--json]
   ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
   ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
   ${style.cyan("nexus-devflow hook uninstall")}
@@ -864,6 +921,7 @@ ${style.bold("Usage:")}
 ${style.bold("Commands:")}
   ${style.brightCyan("status")}             Show project overview, progress, findings, git status, and next action
   ${style.brightCyan("mcp")}                Run Model Context Protocol (MCP) JSON-RPC Stdio Server for AI agents
+  ${style.brightCyan("slice")}              Generate JIT stage-aware context slice (reduces AI tokens by 60-70%)
   ${style.brightCyan("check-gate")}         CI/CD quality gatekeeper check (returns exit code 0 or 1)
   ${style.brightCyan("hook")}               Install or remove local Git pre-commit/pre-push gatekeeper hooks
   ${style.brightCyan("dashboard")}          Run local interactive web dashboard for Nexus-DevFlow (alias: ui)

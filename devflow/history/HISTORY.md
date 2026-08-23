@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-23 | `045` | Feature | Just-In-Time (JIT) Dynamic Context Slicing Engine (`slice` & `devflow_get_sliced_context`) | `HEAD` | `Released` | [`045-jit-dynamic-context-slicing-engine.md`](features/045-jit-dynamic-context-slicing-engine.md) |
 | 2026-08-23 | `044` | Feature | Branch-Scoped Context Isolation & Dynamic Router (`devflow/context/<branch>/`) | `HEAD` | `Released` | [`044-branch-scoped-context-isolation.md`](features/044-branch-scoped-context-isolation.md) |
 | 2026-08-23 | `043` | Feature | DevFlow Model Context Protocol (MCP) Server Hub & Type-Safe Schema Engine (`mcp`) | `HEAD` | `Released` | [`043-devflow-mcp-server-hub.md`](features/043-devflow-mcp-server-hub.md) |
 | 2026-08-23 | `042` | Feature | Automated Quality Gatekeeper & Pre-commit Hook Integration (`check-gate` & `hook`) | `HEAD` | `Released` | [`042-quality-gatekeeper-and-precommit-hooks.md`](features/042-quality-gatekeeper-and-precommit-hooks.md) |

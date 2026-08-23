@@ -8,6 +8,7 @@ import { resolveActiveContextPaths } from "./branch-context.js";
 import { addIdea } from "./ideas.js";
 import { addFinding, resolveFinding, type FindingSeverity, type FindingStatus } from "./findings.js";
 import { evaluateGate, formatGateReport } from "./gatekeeper.js";
+import { sliceContextForStage, type SliceStage } from "./context-slicer.js";
 
 const PROTOCOL_VERSION = "2024-11-05";
 const SERVER_NAME = "nexus-devflow-mcp";
@@ -155,8 +156,28 @@ export const DEVFLOW_MCP_TOOLS: McpToolDefinition[] = [
       },
       required: ["document"]
     }
+  },
+  {
+    name: "devflow_get_sliced_context",
+    description: "Retrieve a JIT Stage-Aware sliced context for AI coding (reduces tokens by 60-70% by extracting only relevant rules, tasks, and constraints for the current stage).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        stage: {
+          type: "string",
+          enum: ["implement", "check", "explore", "feature", "status"],
+          description: "Target DevFlow workflow stage"
+        },
+        maxTokens: {
+          type: "number",
+          description: "Optional maximum token budget limit"
+        }
+      },
+      required: ["stage"]
+    }
   }
 ];
+
 
 export async function handleToolCall(
   projectRoot: string,
@@ -329,6 +350,20 @@ export async function handleToolCall(
         }
       }
 
+
+      case "devflow_get_sliced_context": {
+        const stage = (typeof args.stage === "string" ? args.stage.toLowerCase() : "status") as SliceStage;
+        const maxTokens = typeof args.maxTokens === "number" ? args.maxTokens : undefined;
+        const slice = await sliceContextForStage(projectRoot, stage, { maxTokens });
+        return {
+          content: [
+            {
+              type: "text",
+              text: `[JIT Context Slice - Stage: ${slice.stage}] (Tokens: ~${slice.estimatedTokens}, Saved: ${slice.reductionPercentage}%)\n\n${slice.content}`
+            }
+          ]
+        };
+      }
 
       default:
         return {

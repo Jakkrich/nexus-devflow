@@ -31,7 +31,7 @@
 
 ## ✂️ Phase 4: JIT Context Slicing & Token Optimizer
 
-- [ ] **4. Just-In-Time (JIT) Dynamic Context Slicing Engine** `[Size: M]`
+- [x] **4. Just-In-Time (JIT) Dynamic Context Slicing Engine** `[Size: M]`
   - *Dependencies*: Feature 3
   - *Scope*: สร้างตัวตัดตอนบริบท (Context Slicer) สำหรับสคิล `/implement`, `/check`, `/00-explore` เพื่อส่งเฉพาะข้อมูลที่จำเป็นและควบคุม Token Budget ลดการใช้ Token 60–70%
 
