@@ -42,3 +42,35 @@ test("installGitHook and uninstallGitHooks manage git hooks properly", async () 
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("installGitHook handles Git worktrees properly", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-worktree-"));
+  const commonGitDir = path.join(tempDir, "common-git");
+
+  try {
+    await fs.mkdir(path.join(commonGitDir, "hooks"), { recursive: true });
+    const worktreeDir = path.join(tempDir, "worktree");
+    await fs.mkdir(worktreeDir, { recursive: true });
+
+    // Create .git file pointing to commonGitDir
+    await fs.writeFile(
+      path.join(worktreeDir, ".git"),
+      `gitdir: ${commonGitDir}\n`,
+      "utf8"
+    );
+
+    const installRes = await installGitHook(worktreeDir, "pre-commit");
+    assert.equal(installRes.success, true);
+    assert.equal(installRes.path, path.join(commonGitDir, "hooks", "pre-commit"));
+
+    const exists = await fs.lstat(installRes.path).then(() => true).catch(() => false);
+    assert.equal(exists, true);
+
+    const uninsRes = await uninstallGitHooks(worktreeDir);
+    assert.equal(uninsRes.success, true);
+    assert.equal(uninsRes.removed.length, 1);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

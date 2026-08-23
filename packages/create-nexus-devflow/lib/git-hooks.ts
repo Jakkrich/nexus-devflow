@@ -23,15 +23,46 @@ function createHookScript(strict: boolean = true): string {
   return `#!/bin/sh
 ${HOOK_MARKER}
 echo "[Nexus-DevFlow] Verifying Quality Gatekeeper before proceeding..."
-npx nexus-devflow check-gate${strictFlag}
+
+if command -v npx >/dev/null 2>&1; then
+  npx nexus-devflow check-gate${strictFlag}
+else
+  echo "[Nexus-DevFlow] Warning: 'npx' not found in PATH, skipping local gatekeeper check."
+  exit 0
+fi
+
 EXIT_CODE=$?
 if [ $EXIT_CODE -ne 0 ]; then
   echo ""
   echo "[Nexus-DevFlow] Action aborted: Quality Gatekeeper failed."
-  echo "[Nexus-DevFlow] Fix blockers or resolve findings before proceeding."
+  echo "[Nexus-DevFlow] Fix blockers, complete tasks, or resolve findings before proceeding."
   exit 1
 fi
 `;
+}
+
+async function resolveGitHooksDir(projectRoot: string): Promise<string | null> {
+  const gitPath = path.join(projectRoot, ".git");
+  try {
+    const stats = await fs.lstat(gitPath);
+    if (stats.isDirectory()) {
+      return path.join(gitPath, "hooks");
+    }
+    if (stats.isFile()) {
+      const content = await fs.readFile(gitPath, "utf8");
+      const match = content.match(/^gitdir:\s*(.+)$/m);
+      if (match) {
+        const rawGitDir = match[1].trim();
+        const gitDir = path.isAbsolute(rawGitDir)
+          ? rawGitDir
+          : path.resolve(projectRoot, rawGitDir);
+        return path.join(gitDir, "hooks");
+      }
+    }
+  } catch {
+    return null;
+  }
+  return null;
 }
 
 export async function installGitHook(
@@ -39,27 +70,16 @@ export async function installGitHook(
   hookType: GitHookType = "pre-commit",
   options: { strict?: boolean } = {}
 ): Promise<HookInstallResult> {
-  const gitDir = path.join(projectRoot, ".git");
-  try {
-    const gitStats = await fs.lstat(gitDir);
-    if (!gitStats.isDirectory()) {
-      return {
-        success: false,
-        hookType,
-        path: "",
-        message: "Target directory is not a Git repository (.git directory not found)."
-      };
-    }
-  } catch {
+  const hooksDir = await resolveGitHooksDir(projectRoot);
+  if (!hooksDir) {
     return {
       success: false,
       hookType,
       path: "",
-      message: "Target directory is not a Git repository (.git directory not found)."
+      message: "Target directory is not a Git repository (.git directory or worktree not found)."
     };
   }
 
-  const hooksDir = path.join(gitDir, "hooks");
   await fs.mkdir(hooksDir, { recursive: true });
 
   const hookPath = path.join(hooksDir, hookType);
@@ -78,10 +98,16 @@ export async function installGitHook(
 export async function uninstallGitHooks(
   projectRoot: string
 ): Promise<HookUninstallResult> {
-  const gitDir = path.join(projectRoot, ".git");
-  const hooksDir = path.join(gitDir, "hooks");
-  const removed: string[] = [];
+  const hooksDir = await resolveGitHooksDir(projectRoot);
+  if (!hooksDir) {
+    return {
+      success: true,
+      removed: [],
+      message: "Target directory is not a Git repository (.git directory or worktree not found)."
+    };
+  }
 
+  const removed: string[] = [];
   const types: GitHookType[] = ["pre-commit", "pre-push"];
 
   for (const t of types) {
@@ -106,3 +132,4 @@ export async function uninstallGitHooks(
         : "No DevFlow git hooks found to remove."
   };
 }
+
