@@ -1,4 +1,6 @@
 import { readProjectStatus } from "./status.js";
+import { readFindings } from "./findings.js";
+import { detectGitDrift } from "./drift-reconciler.js";
 import { createStyle } from "./ui.js";
 
 export interface GateOptions {
@@ -66,6 +68,15 @@ export async function evaluateGate(
       );
     }
   }
+
+  // Check 4: Git drift advisory check
+  try {
+    const drift = await detectGitDrift(projectRoot);
+    if (drift.hasDrift && drift.undocumentedFiles.length > 0) {
+      warnings.push(`Warning (git_drift): ${drift.undocumentedFiles.length} file(s) modified in git without being listed in living spec.`);
+    }
+  } catch {}
+
 
   const passed = violations.length === 0;
   const exitCode: 0 | 1 = passed ? 0 : 1;
