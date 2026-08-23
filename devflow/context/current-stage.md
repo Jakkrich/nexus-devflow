@@ -6,5 +6,5 @@
 - Current Stage: `idle`
 - Living Spec: `devflow/context/current-feature.md`
 - Next Action: `/feature`
-- Last Completed Run: `043-devflow-mcp-server-hub (2026-08-23)`
+- Last Completed Run: `044-branch-scoped-context-isolation (2026-08-23)`
 - Last Updated: 2026-08-23

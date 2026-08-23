@@ -50,6 +50,7 @@ devflow/history/*
 !devflow/history/.gitkeep
 devflow/tmp/*
 .devflow/
+.nexus/branches/*
 
 # Local databases & state files
 *.db

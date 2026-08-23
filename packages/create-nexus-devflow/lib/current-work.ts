@@ -1,6 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { resolveActiveContextPaths } from "./branch-context.js";
+
 type CurrentWorkState = "active" | "idle" | "malformed";
 type CurrentWorkType = "feature" | "fix" | "rollback" | "stage";
 
@@ -44,8 +46,9 @@ const RESET_MARKER = "_Nothing in progress.";
 const CHECKBOX_PATTERN = /^\s*-\s+\[([ xX])\]\s+(.+?)\s*$/;
 
 async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary> {
-  const currentStageFile = path.join(projectRoot, CURRENT_STAGE_PATH);
-  const devflowFeatureFile = path.join(projectRoot, DEVFLOW_CURRENT_FEATURE_PATH);
+  const contextPaths = await resolveActiveContextPaths(projectRoot);
+  const currentStageFile = contextPaths.stagePath;
+  const devflowFeatureFile = contextPaths.featureSpecPath;
 
   // 1. Root Switch Authority: Check devflow/context/current-stage.md
   try {

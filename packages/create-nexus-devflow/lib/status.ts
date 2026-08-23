@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { resolveActiveContextPaths } from "./branch-context.js";
 import { readCurrentWork } from "./current-work.js";
 import type {
   CurrentWorkSummary,
@@ -71,7 +72,7 @@ interface TextStyle {
 }
 
 interface ProjectStatus {
-  schemaVersion: 1;
+  schemaVersion: number;
   health: "ok" | "warning";
   project: {
     name: string;
@@ -94,17 +95,17 @@ async function readProjectStatus(
   startPath: string = process.cwd()
 ): Promise<ProjectStatus> {
   const metadata = await readProjectMetadata(startPath);
-  const [currentWork, findings, git, ideas] = await Promise.all([
+  const [contextPaths, currentWork, findings, git, ideas] = await Promise.all([
+    resolveActiveContextPaths(metadata.project.root),
     readCurrentWork(metadata.project.root),
     readFindings(metadata.project.root),
     readGitStatus(metadata.project.root),
     readIdeas(metadata.project.root)
   ]);
 
-  const stagePath = path.join(metadata.project.root, "devflow", "context", "current-stage.md");
   let stageMarkdown = "";
   try {
-    stageMarkdown = await fs.readFile(stagePath, "utf8");
+    stageMarkdown = await fs.readFile(contextPaths.stagePath, "utf8");
   } catch {}
 
   const warnings: StatusWarning[] = [

@@ -4,6 +4,7 @@ import readline from "node:readline";
 import type { Readable, Writable } from "node:stream";
 
 import { readProjectStatus } from "./status.js";
+import { resolveActiveContextPaths } from "./branch-context.js";
 import { addIdea } from "./ideas.js";
 import { addFinding, resolveFinding, type FindingSeverity, type FindingStatus } from "./findings.js";
 import { evaluateGate, formatGateReport } from "./gatekeeper.js";
@@ -280,32 +281,33 @@ export async function handleToolCall(
 
       case "devflow_get_context": {
         const doc = typeof args.document === "string" ? args.document.toLowerCase() : "";
-        let relativePath: string;
+        const contextPaths = await resolveActiveContextPaths(projectRoot);
+        let fullPath: string;
 
         switch (doc) {
           case "overview":
-            relativePath = path.join("devflow", "context", "project-overview.md");
+            fullPath = path.join(projectRoot, "devflow", "context", "project-overview.md");
             break;
           case "stage":
-            relativePath = path.join("devflow", "context", "current-stage.md");
+            fullPath = contextPaths.stagePath;
             break;
           case "standards":
-            relativePath = path.join("devflow", "context", "coding-standards.md");
+            fullPath = path.join(projectRoot, "devflow", "context", "coding-standards.md");
             break;
           case "findings":
-            relativePath = path.join("devflow", "context", "findings.md");
+            fullPath = contextPaths.findingsPath;
             break;
           case "ideas":
-            relativePath = path.join("devflow", "ideas.md");
+            fullPath = path.join(projectRoot, "devflow", "ideas.md");
             break;
           case "feature":
-            relativePath = path.join("devflow", "context", "current-feature.md");
+            fullPath = contextPaths.featureSpecPath;
             break;
           case "build-plan":
-            relativePath = path.join("devflow", "build-plan.md");
+            fullPath = path.join(projectRoot, "devflow", "build-plan.md");
             break;
           case "project-plan":
-            relativePath = path.join("devflow", "project-plan.md");
+            fullPath = path.join(projectRoot, "devflow", "project-plan.md");
             break;
           default:
             return {
@@ -314,7 +316,6 @@ export async function handleToolCall(
             };
         }
 
-        const fullPath = path.join(projectRoot, relativePath);
         try {
           const content = await fs.readFile(fullPath, "utf8");
           return {
@@ -322,11 +323,12 @@ export async function handleToolCall(
           };
         } catch {
           return {
-            content: [{ type: "text", text: `Document '${relativePath}' not found or empty.` }],
+            content: [{ type: "text", text: `Document '${doc}' not found or empty at ${fullPath}.` }],
             isError: false
           };
         }
       }
+
 
       default:
         return {
