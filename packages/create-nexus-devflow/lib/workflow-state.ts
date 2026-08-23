@@ -62,19 +62,24 @@ function parseWorkflowState(
   const lastCompletedRun = nullableField(markdown, "Last Completed Run");
   const lastUpdated = nullableField(markdown, "Last Updated");
   const deepStage = normalizeDeepStage(rawStage);
+  const fastStageFromMarkdown = normalizeFastStage(rawStage);
 
   let track: WorkflowTrack = "idle";
   let currentStage: string | null = null;
 
-  if (explicitTrack === "deep") {
+  const isIdle =
+    explicitTrack === "idle" ||
+    (rawStage === null && currentWork.state === "idle" && !activeRunId && !activeDiscoveryId);
+
+  if (isIdle) {
+    track = "idle";
+    currentStage = null;
+  } else if (explicitTrack === "deep") {
     track = "deep";
     currentStage = deepStage || (activeDiscoveryId ? "00-explore" : "10-define");
   } else if (explicitTrack === "fast") {
     track = "fast";
-    currentStage = fastStage(currentWork);
-  } else if (explicitTrack === "idle") {
-    track = "idle";
-    currentStage = null;
+    currentStage = fastStageFromMarkdown || fastStage(currentWork);
   } else if (activeRunId && deepStage) {
     track = "deep";
     currentStage = deepStage;
@@ -83,7 +88,7 @@ function parseWorkflowState(
     currentStage = "00-explore";
   } else if (currentWork.state === "active") {
     track = currentWork.type === "stage" ? "deep" : "fast";
-    currentStage = track === "deep" ? deepStage || "40-execute" : fastStage(currentWork);
+    currentStage = track === "deep" ? deepStage || "40-execute" : fastStageFromMarkdown || fastStage(currentWork);
   }
 
   return {
@@ -116,10 +121,21 @@ function normalizeDeepStage(value: string | null): string | null {
   return (handoff || direct || "").toLowerCase() || null;
 }
 
+function normalizeFastStage(value: string | null): string | null {
+  if (!value) return null;
+  const match = value.match(/\b(feature|fix|feature-fix|implement|check|complete)\b/i)?.[1];
+  if (!match) return null;
+  const normalized = match.toLowerCase();
+  if (normalized === "feature" || normalized === "fix") return "feature-fix";
+  return normalized;
+}
+
 function fastStage(work: StatusCurrentWork): string {
-  if (work.total === 0) return "implement";
+  if (work.state === "idle") return "feature-fix";
+  if (work.completed === 0 && work.total > 0) return "implement";
   return work.remaining > 0 ? "implement" : "check";
 }
+
 
 function buildPipeline(
   stages: readonly string[],

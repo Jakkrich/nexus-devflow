@@ -2,7 +2,7 @@
 
 - Active Discovery ID: `None`
 - Active Running ID: `None`
-- Track: `fast`
+- Track: `idle`
 - Current Stage: `idle`
 - Living Spec: `None`
 - Next Action: `/feature` หรือ `/fix`
