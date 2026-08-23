@@ -118,14 +118,64 @@ npx @jakkrichm/create-nexus-devflow status --json
 # 3. Update existing DevFlow installation safely to latest version
 npx @jakkrichm/create-nexus-devflow update
 
-# 4. Completely uninstall DevFlow while preserving past delivery history
-npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
+---
 
-# Or completely remove all DevFlow files and adapters (eject)
-npx @jakkrichm/create-nexus-devflow eject -y
+## 🛠️ Enterprise CLI Subcommands (v2.1.0)
+
+Nexus-DevFlow comes with a rich suite of developer CLI commands executable via `npx @jakkrichm/create-nexus-devflow <command>`:
+
+```bash
+# 1. Quality Gatekeeper & Git Pre-commit Hooks
+npx @jakkrichm/create-nexus-devflow check-gate [--strict] [--json]
+npx @jakkrichm/create-nexus-devflow hook install pre-commit
+npx @jakkrichm/create-nexus-devflow hook uninstall
+
+# 2. Model Context Protocol (MCP) Server Hub
+npx @jakkrichm/create-nexus-devflow mcp
+
+# 3. JIT Dynamic Context Slicing (60-70% Token Savings)
+npx @jakkrichm/create-nexus-devflow slice --stage implement [--max-tokens 2000]
+
+# 4. State Drift Detection & Self-Healing Engine
+npx @jakkrichm/create-nexus-devflow drift [--json]
+npx @jakkrichm/create-nexus-devflow reconcile --fix
+
+# 5. Interactive Visual Studio Dashboard & IDE Webview
+npx @jakkrichm/create-nexus-devflow studio [--json]
+
+# 6. Multi-Agent Swarm Orchestrator & Code Graph RAG
+npx @jakkrichm/create-nexus-devflow swarm [--json]
+npx @jakkrichm/create-nexus-devflow graph --file <path> [--json]
+
+# 7. Idea Inbox & Findings Ledger Management
+npx @jakkrichm/create-nexus-devflow idea add "OAuth2 Authentication"
+npx @jakkrichm/create-nexus-devflow findings add "SQL Injection in User Query" --severity P0
+npx @jakkrichm/create-nexus-devflow findings resolve FINDING-001
 ```
 
 ---
+
+## 🤖 Model Context Protocol (MCP) Integration for AI Agents
+
+Nexus-DevFlow exposes **12 Typed MCP Tools** for autonomous AI Coding Assistants (Google Antigravity, Claude Code, Cursor, Copilot, Gemini CLI):
+
+| MCP Tool Name | Purpose & Agent Capability |
+| :--- | :--- |
+| `devflow_get_status` | Inspect live project status, active living spec, and recommended next action |
+| `devflow_get_sliced_context` | Request JIT token-optimized context slice for specific stage |
+| `devflow_get_context` | Retrieve branch-scoped context from `devflow/context/<branch>/` |
+| `devflow_query_code_graph` | Query codebase AST dependency graph and compute **Blast Radius** |
+| `devflow_swarm_plan` | Generate specialized task allocations for Coder, QA, Security, and Architect |
+| `devflow_detect_drift` | Detect undeclared file modifications against the living spec |
+| `devflow_reconcile_state` | Self-heal and synchronize living spec with actual Git working tree |
+| `devflow_evaluate_gate` | Evaluate Hard Quality Gatekeeper criteria before commits/merges |
+| `devflow_get_studio_html` | Retrieve self-contained 3-Pillars Webview Studio HTML |
+| `devflow_add_idea` | Capture and analyze ideas into `devflow/ideas.md` |
+| `devflow_record_finding` | Record security/quality issues into `devflow/context/findings.md` |
+| `devflow_resolve_finding` | Mark resolved findings in the findings ledger |
+
+---
+
 
 ## 🔄 Migration Guide (Upgrading from DevFlow 1.x / Runs Structure)
 

@@ -53,18 +53,40 @@ The installer overlays the DevFlow workflow layer into your workspace:
 ## 🛠️ CLI Management Commands
 
 ```bash
-# Check project status, active work, findings, and next action
+# Quality Gatekeeper & Pre-commit Hooks
+npx @jakkrichm/create-nexus-devflow check-gate [--strict]
+npx @jakkrichm/create-nexus-devflow hook install pre-commit
+
+# Model Context Protocol (MCP) Server Hub
+npx @jakkrichm/create-nexus-devflow mcp
+
+# JIT Dynamic Context Slicing (60-70% Token Savings)
+npx @jakkrichm/create-nexus-devflow slice --stage implement
+
+# Git Drift Detection & Self-Healing State
+npx @jakkrichm/create-nexus-devflow drift
+npx @jakkrichm/create-nexus-devflow reconcile --fix
+
+# Visual Webview Studio Dashboard
+npx @jakkrichm/create-nexus-devflow studio
+
+# Multi-Agent Swarm Orchestration & Code Graph Blast Radius
+npx @jakkrichm/create-nexus-devflow swarm
+npx @jakkrichm/create-nexus-devflow graph --file <path>
+
+# Status & Updates
 npx @jakkrichm/create-nexus-devflow status
-
-# Update DevFlow files safely to latest version
 npx @jakkrichm/create-nexus-devflow update
-
-# Clean uninstall (keeps delivery history)
 npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
-
-# Clean eject (completely removes all DevFlow files)
 npx @jakkrichm/create-nexus-devflow eject -y
 ```
+
+---
+
+## 🤖 Model Context Protocol (MCP) Server & Tools
+
+Exposes 12 typed MCP tools for AI Coding Agents (`devflow_get_status`, `devflow_get_sliced_context`, `devflow_get_context`, `devflow_query_code_graph`, `devflow_swarm_plan`, `devflow_detect_drift`, `devflow_reconcile_state`, `devflow_evaluate_gate`, `devflow_get_studio_html`, `devflow_add_idea`, `devflow_record_finding`, `devflow_resolve_finding`).
+
 
 ---
 
