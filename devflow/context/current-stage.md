@@ -6,5 +6,5 @@
 - Current Stage: `idle`
 - Living Spec: `devflow/context/current-feature.md`
 - Next Action: `/feature`
-- Last Completed Run: `042-quality-gatekeeper-and-precommit-hooks (2026-08-23)`
+- Last Completed Run: `043-devflow-mcp-server-hub (2026-08-23)`
 - Last Updated: 2026-08-23

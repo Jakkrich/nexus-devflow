@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-23 | `043` | Feature | DevFlow Model Context Protocol (MCP) Server Hub & Type-Safe Schema Engine (`mcp`) | `HEAD` | `Released` | [`043-devflow-mcp-server-hub.md`](features/043-devflow-mcp-server-hub.md) |
 | 2026-08-23 | `042` | Feature | Automated Quality Gatekeeper & Pre-commit Hook Integration (`check-gate` & `hook`) | `HEAD` | `Released` | [`042-quality-gatekeeper-and-precommit-hooks.md`](features/042-quality-gatekeeper-and-precommit-hooks.md) |
 | 2026-08-22 | `041` | Feature | Unified Dual-Track Root Switch, Context Auto-Sync Engine, และ Dashboard Tab Auto-Focus | `HEAD` | `Released` | [`041-unified-track-root-switch.md`](features/041-unified-track-root-switch.md) |
 | 2026-08-22 | `040` | Feature | Dashboard Blueprint Reference Mockup Parity, Dual-Track Visualizer, และ Snapshot API Backend | `HEAD` | `Released` | [`60-report.md`](features/040-dashboard-mockup-parity/60-report.md) |
