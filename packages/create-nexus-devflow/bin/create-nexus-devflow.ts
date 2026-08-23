@@ -40,6 +40,9 @@ import {
   formatGateReport
 } from "../lib/gatekeeper.js";
 import {
+  startMcpServer
+} from "../lib/mcp.js";
+import {
   installGitHook,
   uninstallGitHooks,
   type GitHookType
@@ -82,7 +85,8 @@ interface CliOptions {
   | "doctor"
   | "archive"
   | "check-gate"
-  | "hook";
+  | "hook"
+  | "mcp";
   subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall";
   subcommandArg?: string;
   hookType?: GitHookType;
@@ -129,7 +133,13 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     console.warn("Warning: `ui` is deprecated; use `dashboard` instead.");
   }
 
+  if (options.command === "mcp") {
+    startMcpServer(targetDir);
+    return;
+  }
+
   if (options.command === "status") {
+
     const status = await readProjectStatus(targetDir);
     console.log(
       options.json
@@ -673,6 +683,9 @@ function parseArgs(args: readonly string[]): CliOptions {
     if (first === "status") {
       command = "status";
       target = positional[1] || target || ".";
+    } else if (first === "mcp") {
+      command = "mcp";
+      target = positional[1] || target || ".";
     } else if (first === "check-gate") {
       command = "check-gate";
       target = positional[1] || target || ".";
@@ -832,6 +845,7 @@ ${style.bold(style.cyan("Nexus-DevFlow CLI"))} ${style.bold(`v${readPackageVersi
 ${style.bold("Usage:")}
   ${style.cyan("npx @jakkrichm/create-nexus-devflow")} [target-dir] [options]
   ${style.cyan("nexus-devflow status")} [target-dir] [options]
+  ${style.cyan("nexus-devflow mcp")} [target-dir]
   ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
   ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
   ${style.cyan("nexus-devflow hook uninstall")}
@@ -849,6 +863,7 @@ ${style.bold("Usage:")}
 
 ${style.bold("Commands:")}
   ${style.brightCyan("status")}             Show project overview, progress, findings, git status, and next action
+  ${style.brightCyan("mcp")}                Run Model Context Protocol (MCP) JSON-RPC Stdio Server for AI agents
   ${style.brightCyan("check-gate")}         CI/CD quality gatekeeper check (returns exit code 0 or 1)
   ${style.brightCyan("hook")}               Install or remove local Git pre-commit/pre-push gatekeeper hooks
   ${style.brightCyan("dashboard")}          Run local interactive web dashboard for Nexus-DevFlow (alias: ui)
