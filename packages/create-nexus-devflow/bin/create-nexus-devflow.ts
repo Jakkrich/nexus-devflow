@@ -48,6 +48,9 @@ import {
   reconcileState
 } from "../lib/drift-reconciler.js";
 import {
+  renderStudioHtml
+} from "../lib/webview-studio.js";
+import {
   startMcpServer
 } from "../lib/mcp.js";
 import {
@@ -97,7 +100,8 @@ interface CliOptions {
   | "mcp"
   | "slice"
   | "drift"
-  | "reconcile";
+  | "reconcile"
+  | "studio";
   subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall";
   subcommandArg?: string;
   sliceStage?: SliceStage;
@@ -214,6 +218,16 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       } else {
         console.log(style.dim(result.message));
       }
+    }
+    return;
+  }
+
+  if (options.command === "studio") {
+    const html = await renderStudioHtml(targetDir);
+    if (options.json) {
+      console.log(JSON.stringify({ html }, null, 2));
+    } else {
+      console.log(html);
     }
     return;
   }
@@ -806,6 +820,9 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (first === "reconcile") {
       command = "reconcile";
       target = positional[1] || target || ".";
+    } else if (first === "studio") {
+      command = "studio";
+      target = positional[1] || target || ".";
     } else if (first === "check-gate") {
       command = "check-gate";
       target = positional[1] || target || ".";
@@ -971,6 +988,7 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow slice")} [--stage <stage>] [--max-tokens <num>] [--json]
   ${style.cyan("nexus-devflow drift")} [target-dir] [--json]
   ${style.cyan("nexus-devflow reconcile")} [target-dir] [--fix] [--json]
+  ${style.cyan("nexus-devflow studio")} [target-dir] [--json]
   ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
   ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
   ${style.cyan("nexus-devflow hook uninstall")}

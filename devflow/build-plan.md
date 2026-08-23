@@ -47,9 +47,10 @@
 
 ## 🖥️ Phase 6: IDE Native Extension & Visual Studio
 
-- [ ] **6. IDE Native Extension & Interactive Webview Studio** `[Size: L]`
+- [x] **6. IDE Native Extension & Interactive Webview Studio** `[Size: L]`
   - *Dependencies*: Feature 5
   - *Scope*: พัฒนา Extension สำหรับ VS Code / Antigravity Webview เพื่อแสดง Live Kanban Board, ปุ่มกดรันคำสั่ง DevFlow และ Diff Inspector ในตัว IDE
+
 
 ---
 

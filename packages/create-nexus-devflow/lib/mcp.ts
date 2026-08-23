@@ -10,6 +10,7 @@ import { addFinding, resolveFinding, type FindingSeverity, type FindingStatus } 
 import { evaluateGate, formatGateReport } from "./gatekeeper.js";
 import { sliceContextForStage, type SliceStage } from "./context-slicer.js";
 import { detectGitDrift, reconcileState } from "./drift-reconciler.js";
+import { renderStudioHtml } from "./webview-studio.js";
 
 const PROTOCOL_VERSION = "2024-11-05";
 const SERVER_NAME = "nexus-devflow-mcp";
@@ -202,8 +203,23 @@ export const DEVFLOW_MCP_TOOLS: McpToolDefinition[] = [
         }
       }
     }
+  },
+  {
+    name: "devflow_get_studio_html",
+    description: "Retrieve a self-contained, interactive HTML/CSS/JS Webview Studio for embedding inside IDE panels (VS Code, Cursor, Antigravity) or browsers.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        theme: {
+          type: "string",
+          enum: ["auto", "dark", "light"],
+          description: "Theme mode (default: auto)"
+        }
+      }
+    }
   }
 ];
+
 
 
 
@@ -417,6 +433,19 @@ export async function handleToolCall(
             {
               type: "text",
               text: JSON.stringify(result, null, 2)
+            }
+          ]
+        };
+      }
+
+      case "devflow_get_studio_html": {
+        const theme = (typeof args.theme === "string" ? args.theme : "auto") as "auto" | "dark" | "light";
+        const html = await renderStudioHtml(projectRoot, { theme });
+        return {
+          content: [
+            {
+              type: "text",
+              text: html
             }
           ]
         };

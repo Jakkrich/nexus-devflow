@@ -6,5 +6,5 @@
 - Current Stage: `idle`
 - Living Spec: `devflow/context/current-feature.md`
 - Next Action: `/feature`
-- Last Completed Run: `046-git-diff-drift-reconciler (2026-08-23)`
+- Last Completed Run: `047-ide-native-extension-webview-studio (2026-08-23)`
 - Last Updated: 2026-08-23
