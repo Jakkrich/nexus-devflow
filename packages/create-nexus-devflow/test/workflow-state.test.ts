@@ -43,3 +43,11 @@ test("parseWorkflowState respects explicit Track field and flexible markdown hea
   const fastState = parseWorkflowState("- Active Running ID: `041-test`\n- Track: `fast`\n- Current Stage: `implement`", idleWork);
   assert.equal(fastState.track, "fast");
 });
+
+test("parseWorkflowState maps Track: fast with Current Stage: idle to idle track", () => {
+  const state = parseWorkflowState("- Active Running ID: `None`\n- Track: `fast`\n- Current Stage: `idle`", idleWork);
+  assert.equal(state.track, "idle");
+  assert.equal(state.currentStage, null);
+  assert.equal(state.fast.every((node) => node.state === "pending"), true);
+});
+
