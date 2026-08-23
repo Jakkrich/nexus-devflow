@@ -84,3 +84,52 @@ test("evaluateGate blocks in strict mode when living spec needs verification", a
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("evaluateGate blocks when living spec has remaining uncompleted tasks", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-gate-tasks-"));
+
+  try {
+    await setupDevFlowTestProject(tempDir);
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      `# 📐 [001-test] Test Feature\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n- [ ] Task 2: In progress\n`
+    );
+
+    const report = await evaluateGate(tempDir);
+    assert.equal(report.passed, false);
+    assert.equal(report.exitCode, 1);
+    assert.equal(report.remainingTasks, 1);
+    assert.match(report.violations[0], /uncompleted task/);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("evaluateGate collects advisory warnings for P2/P3 open findings", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-gate-warn-"));
+
+  try {
+    await setupDevFlowTestProject(tempDir);
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      `# Current Feature\n\n_Nothing in progress. Run /feature, /fix, or /rollback to start._\n`
+    );
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "findings.md"),
+      `# Findings Ledger\n\n### PERF-001 [P2] open - Large image assets uncompressed\n`
+    );
+
+    const report = await evaluateGate(tempDir);
+    assert.equal(report.passed, true);
+    assert.equal(report.exitCode, 0);
+    assert.equal(report.warnings.length, 1);
+    assert.match(report.warnings[0], /PERF-001/);
+
+    const text = formatGateReport(report);
+    assert.match(text, /DevFlow Quality Gate PASSED/);
+    assert.match(text, /Warnings \/ Advisories/);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

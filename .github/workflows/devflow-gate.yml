@@ -1,0 +1,31 @@
+name: DevFlow Quality Gate
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check-gate:
+    name: DevFlow Quality Gatekeeper
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run DevFlow Quality Gatekeeper
+        run: npx --yes @jakkrichm/create-nexus-devflow check-gate --strict

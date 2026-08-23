@@ -1,40 +1,60 @@
 # 📋 Build Plan (User-Owned Feature Queue)
 
 > **Document Type**: Build Plan (User-Owned)  
-> **Purpose**: Master sequential feature build queue with dependencies and sizing. Inspected by `/brief` and consumed by `/feature`.
+> **Purpose**: รายการคิวฟีเจอร์การพัฒนาปรับปรุงระบบตามลำดับ พร้อมการประเมินขนาด (Sizing) และความสัมพันธ์ (Dependencies) สำหรับ `/brief` และ `/feature`
 
 ---
 
-## 🚀 Phase 1: Core Foundation & MVP
+## 🚀 Phase 1: Hard Quality Gates & Pre-commit Enforcement
 
-- [ ] **1. Project Baseline & Context Setup** `[Size: S]`
+- [x] **1. Automated Quality Gatekeeper & Pre-commit Hook Integration** `[Size: S]`
   - *Dependencies*: None
-  - *Scope*: Configure project scaffolding, coding standards, and initial workspace verification.
-- [ ] **2. Core Data Models & Store** `[Size: M]`
+  - *Scope*: ผสาน `nexus-devflow check-gate` เข้าสู่ Git Pre-commit Hooks และ CI เพื่อบล็อกการ Commit/Merge เมื่อมี Unchecked Tasks, Test ล้มเหลว หรือมี P0/P1 Finding ค้างอยู่
+
+---
+
+## ⚡ Phase 2: DevFlow Model Context Protocol (MCP) Server Hub
+
+- [ ] **2. DevFlow MCP Server Hub & Type-Safe Schema Engine (`IDEA-004`)** `[Size: M]`
   - *Dependencies*: Feature 1
-  - *Scope*: Implement foundational data schemas, types, and persistence layer.
-- [ ] **3. Primary User Interface & Navigation** `[Size: M]`
+  - *Scope*: สร้าง Subcommand `nexus-devflow mcp` เปิด JSON-RPC Server พร้อมเครื่องมือ Typed Tools (`update_task`, `record_finding`, `get_stage_context`) ด้วย Zod Schema Validation
+
+---
+
+## 🌿 Phase 3: Branch-Scoped Context Isolation
+
+- [ ] **3. Branch-Scoped Context Isolation & Dynamic Router** `[Size: M]`
   - *Dependencies*: Feature 2
-  - *Scope*: Build core views, interactive components, and responsive layout.
+  - *Scope*: แยกจัดเก็บ State ตาม Git Branch ใน `.nexus/branches/<branch-name>/`, ระบบ Canonical Dynamic Router สำหรับ AI Agent และระบบ Auto-Cleanup หลัง `/complete`
 
 ---
 
-## ⚡ Phase 2: Feature Expansion & Integrations
+## ✂️ Phase 4: JIT Context Slicing & Token Optimizer
 
-- [ ] **4. Automated Quality Gates & CI Pipeline** `[Size: M]`
-  - *Dependencies*: Phase 1
-  - *Scope*: Wire up `nexus-devflow check-gate`, GitHub Actions workflows, and pre-commit hooks.
-- [ ] **5. External Services & Tooling** `[Size: L]`
+- [ ] **4. Just-In-Time (JIT) Dynamic Context Slicing Engine** `[Size: M]`
+  - *Dependencies*: Feature 3
+  - *Scope*: สร้างตัวตัดตอนบริบท (Context Slicer) สำหรับสคิล `/implement`, `/check`, `/00-explore` เพื่อส่งเฉพาะข้อมูลที่จำเป็นและควบคุม Token Budget ลดการใช้ Token 60–70%
+
+---
+
+## 🔄 Phase 5: State Drift Detection & Self-Healing
+
+- [ ] **5. Git Diff Drift Reconciler & Self-Healing State Engine** `[Size: M]`
   - *Dependencies*: Feature 4
-  - *Scope*: Integrate third-party APIs, MCP servers, or background worker jobs.
+  - *Scope*: ตรวจจับความไม่สอดคล้องระหว่าง `git diff` กับรายการไฟล์ใน Living Spec พร้อมระบบแจ้งเตือนและ Auto-Reconcile ซิงค์สถานะอัตโนมัติ
 
 ---
 
-## 📦 Phase 3: Hardening & Production Release
+## 🖥️ Phase 6: IDE Native Extension & Visual Studio
 
-- [ ] **6. Security & Performance Audit** `[Size: M]`
-  - *Dependencies*: Phase 2
-  - *Scope*: Run `/audit`, resolve P0/P1 blockers, and optimize asset bundle sizes.
-- [ ] **7. Production Deployment & Cloud Smoke Tests** `[Size: S]`
+- [ ] **6. IDE Native Extension & Interactive Webview Studio** `[Size: L]`
+  - *Dependencies*: Feature 5
+  - *Scope*: พัฒนา Extension สำหรับ VS Code / Antigravity Webview เพื่อแสดง Live Kanban Board, ปุ่มกดรันคำสั่ง DevFlow และ Diff Inspector ในตัว IDE
+
+---
+
+## 🤖 Phase 7: Multi-Agent Swarm Orchestration & Code Graph RAG
+
+- [ ] **7. Multi-Agent Swarm Orchestrator & Semantic Code Graph RAG** `[Size: L]`
   - *Dependencies*: Feature 6
-  - *Scope*: Configure Render / Vercel deployment and run end-to-end smoke tests.
+  - *Scope*: พัฒนาระบบกระจายงานแบบคู่ขนานให้ Subagents (Coder, QA Verifier, Security Auditor) และระบบ Indexing Local Codebase Graph เพื่อดึงบริบทที่แม่นยำสูงสุด
