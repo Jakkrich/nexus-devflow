@@ -12,6 +12,11 @@ import { checkPackageVersion } from "./version-check.js";
 import type { FetchLike, PackageVersionStatus } from "./version-check.js";
 import { readWorkflowState } from "./workflow-state.js";
 import type { WorkflowState } from "./workflow-state.js";
+import { evaluateGate, type GateReport } from "./gatekeeper.js";
+import { detectGitDrift, type GitDriftReport } from "./drift-reconciler.js";
+import { generateSwarmPlan, type SwarmPlan } from "./swarm-orchestrator.js";
+import { buildCodeGraph, type CodeGraph } from "./code-graph.js";
+import { DEVFLOW_MCP_TOOLS, type McpToolDefinition } from "./mcp.js";
 
 interface DashboardDoctorSummary {
   checks: DoctorCheck[];
@@ -45,7 +50,17 @@ interface DashboardSnapshot {
   commands: CommandCatalogItem[];
   adapters: AdapterDashboardItem[];
   nextAction: DashboardNextAction;
+  gatekeeper: GateReport;
+  drift: GitDriftReport;
+  swarm: SwarmPlan;
+  graph: {
+    totalFiles: number;
+    totalEdges: number;
+    files: string[];
+  };
+  mcpTools: McpToolDefinition[];
 }
+
 
 interface DashboardSnapshotOptions {
   fetchImpl?: FetchLike;
@@ -59,6 +74,7 @@ interface SlowData {
   doctor: DoctorReport;
   discoveries: DiscoverySummary;
   commands: CommandCatalogItem[];
+  graph: CodeGraph;
 }
 
 interface SlowCacheEntry {
@@ -77,7 +93,7 @@ async function readDashboardSnapshot(
   const status = await readProjectStatus(startPath);
   const projectRoot = status.project.root;
   const workflow = await readWorkflowState(projectRoot, status.currentWork);
-  const [history, slow, update] = await Promise.all([
+  const [history, slow, update, gatekeeper, drift, swarm] = await Promise.all([
     readHistory(projectRoot),
     readSlowData(projectRoot, workflow.activeDiscoveryId, now, options.slowTtlMs ?? 15_000),
     checkPackageVersion({
@@ -86,7 +102,10 @@ async function readDashboardSnapshot(
       timeoutMs: options.versionTimeoutMs,
       cacheTtlMs: options.versionCacheTtlMs,
       now
-    })
+    }),
+    evaluateGate(projectRoot, { strict: false }),
+    detectGitDrift(projectRoot),
+    generateSwarmPlan(projectRoot)
   ]);
 
   return {
@@ -100,7 +119,16 @@ async function readDashboardSnapshot(
     update,
     commands: slow.commands,
     adapters: buildAdapterItems(status.devflow.adapters, slow.doctor),
-    nextAction: selectDashboardNextAction(status, workflow)
+    nextAction: selectDashboardNextAction(status, workflow),
+    gatekeeper,
+    drift,
+    swarm,
+    graph: {
+      totalFiles: slow.graph.totalFiles,
+      totalEdges: slow.graph.totalEdges,
+      files: Object.keys(slow.graph.nodes)
+    },
+    mcpTools: DEVFLOW_MCP_TOOLS
   };
 }
 
@@ -114,12 +142,13 @@ async function readSlowData(
   if (cached && cached.expiresAt > now() && cached.activeDiscoveryId === activeDiscoveryId) {
     return cached.value;
   }
-  const [doctor, discoveries, commands] = await Promise.all([
+  const [doctor, discoveries, commands, graph] = await Promise.all([
     runDoctor(projectRoot, { fix: false }),
     readDiscoveries(projectRoot, activeDiscoveryId),
-    readCommandCatalog(projectRoot)
+    readCommandCatalog(projectRoot),
+    buildCodeGraph(projectRoot)
   ]);
-  const value = { doctor, discoveries, commands };
+  const value = { doctor, discoveries, commands, graph };
   slowCache.set(projectRoot, { expiresAt: now() + ttlMs, activeDiscoveryId, value });
   return value;
 }
@@ -178,3 +207,4 @@ function selectDashboardNextAction(
 
 export { clearDashboardSnapshotCache, readDashboardSnapshot, selectDashboardNextAction };
 export type { AdapterDashboardItem, DashboardDoctorSummary, DashboardNextAction, DashboardSnapshot, DashboardSnapshotOptions };
+

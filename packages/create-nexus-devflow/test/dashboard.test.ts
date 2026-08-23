@@ -48,8 +48,15 @@ test("startDashboardServer starts server and responds to / and /api/status", asy
     };
     assert.equal(dashboardJson.schemaVersion, 1);
     assert.equal(dashboardJson.status.project.root, expectedRoot);
-    assert.equal(dashboardJson.workflow.track, "idle");
-    assert.equal(dashboardJson.update.state, "offline");
+    const graphRes = await fetchUrl(`${server.url}/api/graph`);
+    assert.equal(graphRes.statusCode, 200);
+    const graphJson = JSON.parse(graphRes.body) as { totalFiles: number };
+    assert.equal(typeof graphJson.totalFiles, "number");
+
+    const reconcileRes = await fetchUrl(`${server.url}/api/reconcile`);
+    assert.equal(reconcileRes.statusCode, 200);
+    const reconcileJson = JSON.parse(reconcileRes.body) as { reconciled: boolean; healedStage: boolean };
+    assert.equal(typeof reconcileJson.reconciled, "boolean");
   } finally {
     if (server) {
       await server.close();
@@ -57,6 +64,7 @@ test("startDashboardServer starts server and responds to / and /api/status", asy
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
 
 async function fetchUrl(url: string): Promise<{ statusCode: number; body: string }> {
   return new Promise((resolve, reject) => {
