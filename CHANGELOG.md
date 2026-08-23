@@ -5,7 +5,48 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-08-23
+
+### 🚀 Enterprise Agentic Architecture Release (Phases 1–7 Evolution)
+
+#### Added
+- **Multi-Agent Swarm Orchestrator & Semantic Code Graph RAG (`048-multi-agent-swarm-and-code-graph-rag`)**:
+  - `lib/swarm-orchestrator.ts`: Developed Role-based Swarm Engine allocating tasks across `👑 Lead Architect`, `👨‍💻 Coder Specialist`, `🕵️ QA Verifier`, and `🛡️ Security Auditor` with parallel group dispatch.
+  - `lib/code-graph.ts`: Developed In-Memory AST Dependency Graph indexer parsing module imports/exports and computing deterministic **Blast Radius** (Direct & Transitive Dependents) with Impact Scores (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
+  - Added CLI subcommands `nexus-devflow swarm [--json]` and `nexus-devflow graph [--file <path>] [--json]`.
+  - Added MCP tools `devflow_swarm_plan` and `devflow_query_code_graph`.
+
+- **IDE Native Extension & Interactive Webview Studio (`047-ide-native-extension-webview-studio`)**:
+  - `lib/webview-studio.ts`: Built a self-contained, zero-dependency HTML/CSS/JS 3-Pillars Kanban Studio (Ideas Inbox, Active Living Spec, History Archives) with dynamic Gatekeeper status, Git Drift indicator, and Interactive Quick Action bar with click-to-copy / IDE terminal dispatch.
+  - `lib/ide-extension.ts`: Created typed VS Code & Google Antigravity IDE Extension manifest generator (`package.json`) contributing Webview views and commands.
+  - Added CLI subcommand `nexus-devflow studio [--json]` and MCP tool `devflow_get_studio_html`.
+
+- **Git Diff Drift Reconciler & Self-Healing State Engine (`046-git-diff-drift-reconciler`)**:
+  - `lib/drift-reconciler.ts`: Built Git diff drift analyzer classifying Undocumented, Phantom, and Matched files, plus Stage Drift.
+  - Added self-healing engine auto-syncing living spec files list non-destructively and healing `current-stage.md`.
+  - Added CLI subcommands `nexus-devflow drift [--json]` and `nexus-devflow reconcile [--fix] [--json]`.
+  - Added MCP tools `devflow_detect_drift` and `devflow_reconcile_state`.
+
+- **Just-In-Time (JIT) Dynamic Context Slicing Engine (`045-jit-dynamic-context-slicing-engine`)**:
+  - `lib/context-slicer.ts`: Implemented stage-aware markdown context slicer reducing token consumption by 60–70% for `/implement`, `/check`, and `/00-explore`.
+  - Added CLI subcommand `nexus-devflow slice --stage <stage> [--max-tokens <N>] [--json]`.
+  - Added MCP tool `devflow_get_sliced_context`.
+
+- **Branch-Scoped Context Isolation & Dynamic Router (`044-branch-scoped-context-isolation`)**:
+  - `lib/branch-context.ts`: Engineered isolated context routing under `devflow/context/<branch>/` allowing seamless concurrent delivery runs across separate Git branches.
+  - Added auto-cleanup upon `/complete` and fallback to default `devflow/context/`.
+
+- **Model Context Protocol (MCP) Server Hub (`043-devflow-mcp-server-hub`)**:
+  - `lib/mcp.ts`: Implemented full JSON-RPC 2.0 MCP server over StdIO exposing 12 typed tools for AI agents.
+  - Added CLI subcommand `nexus-devflow mcp`.
+
+- **Automated Quality Gatekeeper & Pre-commit Hook Integration (`042-quality-gatekeeper-and-precommit-hooks`)**:
+  - `lib/gatekeeper.ts` & `lib/git-hooks.ts`: Added Hard Quality Gatekeeper blocking commits/merges on unchecked tasks, failing tests, or P0/P1 blockers.
+  - Added CLI subcommands `nexus-devflow check-gate [--strict]` and `nexus-devflow hook install/uninstall [pre-commit|pre-push]`.
+  - Added MCP tool `devflow_evaluate_gate`.
+
 ## [2.0.27] - 2026-08-22
+
 
 ### Added
 - **Unified Dual-Track Root Switch & Priority-Aware Reader (`041-unified-track-root-switch`)**: Set `devflow/context/current-stage.md` as the authoritative source of truth for `Track: fast | deep | idle`, resolving status split-brain between AI suggestions and CLI/Dashboard next actions.

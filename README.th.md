@@ -118,14 +118,64 @@ npx @jakkrichm/create-nexus-devflow status --json
 # 3. อัปเดต DevFlow ในโปรเจกต์เป็นเวอร์ชันล่าสุดอย่างปลอดภัย
 npx @jakkrichm/create-nexus-devflow update
 
-# 4. ถอนการติดตั้ง DevFlow โดยยังคงเก็บประวัติงานเดิมไว้ใน history/
-npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
+---
 
-# หรือถอนการติดตั้งไฟล์ DevFlow ออกทั้งหมดแบบ 100% สะอาด (Eject)
-npx @jakkrichm/create-nexus-devflow eject -y
+## 🛠️ คำสั่ง Enterprise CLI ประจำโปรเจกต์ (เวอร์ชัน 2.1.0)
+
+Nexus-DevFlow มาพร้อมชุดคำสั่ง Terminal CLI ครบวงจร สามารถเรียกใช้ผ่าน `npx @jakkrichm/create-nexus-devflow <command>`:
+
+```bash
+# 1. ระบบ Hard Quality Gatekeeper และ Git Pre-commit Hooks
+npx @jakkrichm/create-nexus-devflow check-gate [--strict] [--json]
+npx @jakkrichm/create-nexus-devflow hook install pre-commit
+npx @jakkrichm/create-nexus-devflow hook uninstall
+
+# 2. เปิด Model Context Protocol (MCP) Server Hub
+npx @jakkrichm/create-nexus-devflow mcp
+
+# 3. ตัดบริบท JIT Context Slicing (ประหยัด Token ของ AI 60-70%)
+npx @jakkrichm/create-nexus-devflow slice --stage implement [--max-tokens 2000]
+
+# 4. ตรวจจับ State Drift และซิงค์สเปกอัตโนมัติ (Self-Healing)
+npx @jakkrichm/create-nexus-devflow drift [--json]
+npx @jakkrichm/create-nexus-devflow reconcile --fix
+
+# 5. เปิดหน้าจอ Visual Studio Dashboard และ IDE Webview
+npx @jakkrichm/create-nexus-devflow studio [--json]
+
+# 6. แผนจัดทัพ Multi-Agent Swarm และคำนวณ Blast Radius ด้วย Code Graph
+npx @jakkrichm/create-nexus-devflow swarm [--json]
+npx @jakkrichm/create-nexus-devflow graph --file <path> [--json]
+
+# 7. จัดการ Idea Inbox และ Findings Ledger
+npx @jakkrichm/create-nexus-devflow idea add "OAuth2 Authentication"
+npx @jakkrichm/create-nexus-devflow findings add "SQL Injection in User Query" --severity P0
+npx @jakkrichm/create-nexus-devflow findings resolve FINDING-001
 ```
 
 ---
+
+## 🤖 เครื่องมือ Model Context Protocol (MCP) สำหรับ AI Agents
+
+Nexus-DevFlow มี **12 เครื่องมือ Typed MCP Tools** สำหรับ AI Coding Assistants (Google Antigravity, Claude Code, Cursor, Copilot, Gemini CLI):
+
+| ชื่อ MCP Tool | หน้าที่และความสามารถของ Agent |
+| :--- | :--- |
+| `devflow_get_status` | ตรวจสอบสถานะโปรเจกต์แบบสด สเปกที่กำลังทำ และคำสั่งแนะนำถัดไป |
+| `devflow_get_sliced_context` | ขอรับ JIT Context แบบประหยัด Token ตาม Stage งาน |
+| `devflow_get_context` | ดึงบริบทแยกตาม Git Branch จาก `devflow/context/<branch>/` |
+| `devflow_query_code_graph` | ค้นหาผังความสัมพันธ์ของโมดูลและคำนวณ **Blast Radius (รัศมีผลกระทบ)** |
+| `devflow_swarm_plan` | สร้าง Matrix แผนแบ่งงานให้ Coder, QA, Security, และ Architect |
+| `devflow_detect_drift` | ตรวจจับไฟล์ที่ถูกแก้ไขใน Git แต่มิได้ระบุไว้ใน Living Spec |
+| `devflow_reconcile_state` | ซิงค์และรักษาความสอดคล้องของ Spec กับ Git อัตโนมัติ (Self-Healing) |
+| `devflow_evaluate_gate` | ประเมินความปลอดภัย Hard Quality Gate ก่อน Commit/Merge |
+| `devflow_get_studio_html` | ดึงโค้ด HTML ของ 3-Pillars Webview Studio ไปแสดงผลใน IDE Panel |
+| `devflow_add_idea` | บันทึกไอเดียพร้อมประเมิน Feasibility/Value ลง `devflow/ideas.md` |
+| `devflow_record_finding` | บันทึกช่องโหว่ความปลอดภัยหรือบั๊กลง `devflow/context/findings.md` |
+| `devflow_resolve_finding` | บันทึกการแก้ไขปัญหาใน Findings Ledger ให้เป็น Resolved |
+
+---
+
 
 ## 🔄 คู่มือการอัปเกรด (Migration Guide จากเวอร์ชันเก่า / โฟลเดอร์ Runs)
 
