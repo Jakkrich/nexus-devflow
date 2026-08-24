@@ -35,7 +35,7 @@ async function checkPackageVersion(options: VersionCheckOptions): Promise<Packag
 
   const checkedAt = new Date(now()).toISOString();
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? 2500);
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? 1000);
   let value: PackageVersionStatus;
 
   try {
