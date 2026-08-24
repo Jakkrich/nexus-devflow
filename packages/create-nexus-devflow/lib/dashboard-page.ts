@@ -6,6 +6,8 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
   <title>Nexus-DevFlow Enterprise Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -283,9 +285,21 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       text('ideas-count', (ideas.totalPending || 0) + ' pending'); renderIdeas(ideas.pending || []); text('history-count', (history.total || 0) + ' released'); renderHistory(history.items || []);
     }
 
+    window.__INITIAL_SNAPSHOT__ = null;
+    if (window.__INITIAL_SNAPSHOT__) {
+      try {
+        renderSnapshot(window.__INITIAL_SNAPSHOT__);
+        byId('live-dot').classList.add('on');
+        text('live-label','Connected · live snapshot every 2 seconds');
+      } catch (e) {
+        console.error('Initial hydration error:', e);
+      }
+    }
+
     let refreshing = false;
     async function refresh() { if (refreshing) return; refreshing = true; try { const response = await fetch('/api/dashboard'); if (!response.ok) throw new Error('HTTP ' + response.status); renderSnapshot(await response.json()); byId('live-dot').classList.add('on'); text('live-label','Connected · live snapshot every 2 seconds'); } catch (error) { byId('live-dot').classList.remove('on'); text('live-label','Disconnected · ' + error.message); } finally { refreshing = false; } }
-    refresh(); setInterval(refresh, 2000);
+    if (!window.__INITIAL_SNAPSHOT__) { refresh(); }
+    setInterval(refresh, 2000);
   </script>
 </body>
 </html>`;
