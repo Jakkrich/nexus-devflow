@@ -12,39 +12,57 @@ interface GitStatusSummary {
   behind: number | null;
 }
 
+interface GitStatusCacheEntry {
+  expiresAt: number;
+  value: GitStatusSummary;
+}
+
+const gitCache = new Map<string, GitStatusCacheEntry>();
+const DEFAULT_GIT_CACHE_TTL_MS = 2000;
+
 const execFileAsync = promisify(execFile);
 
-async function readGitStatus(projectRoot: string): Promise<GitStatusSummary> {
-  if (!(await isGitRepository(projectRoot))) {
-    return unavailableSummary();
+function clearGitStatusCache(): void {
+  gitCache.clear();
+}
+
+async function readGitStatus(
+  projectRoot: string,
+  options: { ttlMs?: number; forceFresh?: boolean; now?: () => number } = {}
+): Promise<GitStatusSummary> {
+  const now = (options.now || Date.now)();
+  const ttlMs = options.ttlMs ?? DEFAULT_GIT_CACHE_TTL_MS;
+
+  if (!options.forceFresh) {
+    const cached = gitCache.get(projectRoot);
+    if (cached && cached.expiresAt > now) {
+      return cached.value;
+    }
   }
 
-  const porcelain = await runGit(projectRoot, [
-    "status",
-    "--porcelain=v1",
-    "--untracked-files=all"
+  if (!(await isGitRepository(projectRoot))) {
+    const unavail = unavailableSummary();
+    gitCache.set(projectRoot, { expiresAt: now + ttlMs, value: unavail });
+    return unavail;
+  }
+
+  const [porcelain, branch, lastCommit, upstream] = await Promise.all([
+    runGit(projectRoot, ["status", "--porcelain=v1", "--untracked-files=all"]),
+    readBranch(projectRoot),
+    runOptionalGit(projectRoot, ["log", "-1", "--format=%s"]),
+    runOptionalGit(projectRoot, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"])
   ]);
+
   const changedFiles = porcelain
     .split(/\r?\n/)
     .filter((line) => line.length > 0)
     .length;
-  const branch = await readBranch(projectRoot);
-  const lastCommit = await runOptionalGit(projectRoot, [
-    "log",
-    "-1",
-    "--format=%s"
-  ]);
-  const upstream = await runOptionalGit(projectRoot, [
-    "rev-parse",
-    "--abbrev-ref",
-    "--symbolic-full-name",
-    "@{upstream}"
-  ]);
+
   const divergence = upstream
     ? await readDivergence(projectRoot)
     : { ahead: null, behind: null };
 
-  return {
+  const value: GitStatusSummary = {
     available: true,
     branch,
     clean: changedFiles === 0,
@@ -54,6 +72,9 @@ async function readGitStatus(projectRoot: string): Promise<GitStatusSummary> {
     ahead: divergence.ahead,
     behind: divergence.behind
   };
+
+  gitCache.set(projectRoot, { expiresAt: now + ttlMs, value });
+  return value;
 }
 
 async function isGitRepository(projectRoot: string): Promise<boolean> {
@@ -121,6 +142,6 @@ function unavailableSummary(): GitStatusSummary {
   };
 }
 
-export { readGitStatus };
+export { readGitStatus, clearGitStatusCache };
 
 export type { GitStatusSummary };

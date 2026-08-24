@@ -93,20 +93,23 @@ async function readDashboardSnapshot(
   const status = await readProjectStatus(startPath);
   const projectRoot = status.project.root;
   const workflow = await readWorkflowState(projectRoot, status.currentWork);
-  const [history, slow, update, gatekeeper, drift, swarm] = await Promise.all([
+
+  const driftPromise = detectGitDrift(projectRoot, status.git.branch || undefined);
+  const [history, slow, update, drift, swarm] = await Promise.all([
     readHistory(projectRoot),
     readSlowData(projectRoot, workflow.activeDiscoveryId, now, options.slowTtlMs ?? 15_000),
     checkPackageVersion({
       installedVersion: status.devflow.version,
       fetchImpl: options.fetchImpl,
-      timeoutMs: options.versionTimeoutMs,
+      timeoutMs: options.versionTimeoutMs ?? 1000,
       cacheTtlMs: options.versionCacheTtlMs,
       now
     }),
-    evaluateGate(projectRoot, { strict: false }),
-    detectGitDrift(projectRoot),
+    driftPromise,
     generateSwarmPlan(projectRoot)
   ]);
+
+  const gatekeeper = await evaluateGate(projectRoot, { status, drift, strict: false });
 
   return {
     schemaVersion: 1,
