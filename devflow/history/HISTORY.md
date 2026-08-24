@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-24 | `056` | Feature | ยกเครื่องคู่มือการใช้งานและเอกสารอ้างอิงสู่มาตรฐาน Nexus-DevFlow 2.5.0 (EN/TH/NPM) | `HEAD` | `Released` | [`056-modernize-documentation-and-user-guides.md`](features/056-modernize-documentation-and-user-guides.md) |
 | 2026-08-24 | `055` | Fix | แก้ Dashboard Git cache stampede ด้วย single-flight cache, completion-based TTL และ pre-resolved swarm branch | `HEAD` | `Released` | [`055-eliminate-dashboard-git-cache-stampede.md`](fixes/055-eliminate-dashboard-git-cache-stampede.md) |
 | 2026-08-24 | `054` | Fix | ปรับปรุงประสิทธิภาพ Dashboard Snapshot (ลดเวลาจาก 17s เหลือ 122ms), Git Cache & SSR Hydration | `HEAD` | `Released` | [`054-optimize-dashboard-snapshot-latency.md`](fixes/054-optimize-dashboard-snapshot-latency.md) |
 | 2026-08-24 | `053` | Feature | รวม Deep-Track และ Fast-Track สู่ Single Living Spec Model (Nexus-DevFlow 2.5.0) | `HEAD` | `Released` | [`053-unify-deep-and-fast-track-model.md`](features/053-unify-deep-and-fast-track-model.md) |
