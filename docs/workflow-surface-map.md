@@ -7,8 +7,8 @@ This document outlines the active workflow surfaces and command taxonomy in **Ne
 ## 1. Universal Command Invocations
 
 Each command in DevFlow has exactly **one canonical name** and can be invoked across AI IDEs:
-- **Slash Prefix (`/`)**: For Google Antigravity, Claude Code, Gemini CLI (e.g. `/feature`, `/devflow`, `/00-explore`).
-- **Dollar Prefix (`$`)**: For OpenAI Codex (e.g. `$feature`, `$devflow`, `$00-explore`).
+- **Slash Prefix (`/`)**: For Google Antigravity, Claude Code, Gemini CLI (e.g. `/feature`, `/devflow`, `/discovery`).
+- **Dollar Prefix (`$`)**: For OpenAI Codex (e.g. `$feature`, `$devflow`, `$discovery`).
 - **Plain Canonical Name**: Direct tool/skill calling in generic terminals or non-native agents.
 
 ---
@@ -29,7 +29,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 ### 🏗️ Track 2: Deep-Track (8 Skills)
 | Command | Category | Purpose | Artifact |
 | :--- | :--- | :--- | :--- |
-| `00-explore` | Exploration | Problem exploration and Go/No-Go routing before delivery commitment. | `devflow/discoveries/DISC-xxx/00-explore.md` |
+| `discovery` | Exploration | Unified pre-delivery discovery and Go/No-Go routing before delivery commitment. | `devflow/discoveries/DISC-xxx/discovery.md` |
 | `10-define` | Definition | Locks delivery boundaries, allocates sequential ID `xxx-slug`, and sets scope. | `devflow/context/current-run/10-define.md` |
 | `20-spec` | Specification | Formal markdown specification contract with acceptance criteria. | `devflow/context/current-run/20-spec.md` |
 | `30-plan` | Planning | Breaks down spec into executable tasks with TDD test decisions. | `devflow/context/current-run/30-plan.md` |
@@ -40,10 +40,12 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-### 🧰 Companion Tools & Quality Gates (15 Skills)
+### 🧰 Companion Tools & Quality Gates (17 Skills)
 | Command | Category | Purpose |
 | :--- | :--- | :--- |
 | `devflow` | Navigation | Flagship interactive guide, state inspector, and intent router. |
+| `grill` | Alignment | Socratic alignment interview, domain glossary extraction, and ADR recording. |
+| `brainstorm` | Ideation | Structured divergent & convergent ideation with trade-off matrix. |
 | `doctor` | Diagnostics | Read-only health check for setup, adapters, and workflow drift. |
 | `overview` | Context | Regenerate and validate `project-overview.md` from planning docs. |
 | `debug` | Diagnostics | Non-destructive root-cause analysis and defect reproduction. |

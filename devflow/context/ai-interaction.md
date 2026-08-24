@@ -120,3 +120,14 @@ Progress lives in persistent files, not in transient chat history:
 - `autopilot` is an explicit opt-in command (`/autopilot`). Never suggest it as the default next action.
 - When invoked, it runs one bounded spec/plan/implement/verify pass.
 - Autopilot **MUST stop** before `/complete`, merge, push, deploy, or any destructive action.
+
+---
+
+## 9. Socratic Alignment & Grilling Discipline (`/grill`)
+
+- **Align Before You Build**: When plans, domain language, or architectural boundaries are fuzzy, invoke `/grill` (or use the Grilling Lens in `00-explore`) to conduct a structured interview before creating specifications.
+- **Codebase-Grounded Inquiry**: Inspect existing context and code before asking questions. Never ask questions the codebase already answers.
+- **Turn Discipline**: Ask only 1–2 high-leverage questions per turn with clear recommended defaults. Never dump a wall of questions.
+- **Lazy Inline Persistence**:
+  - Immediately append resolved terms to `devflow/context/glossary.md`.
+  - Immediately record major, hard-to-reverse architectural decisions as Architecture Decision Records in `devflow/decisions/ADR-xxx-{slug}.md`.

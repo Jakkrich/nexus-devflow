@@ -4,7 +4,7 @@ import path from 'node:path';
 const skillsDir = path.resolve('.agents/skills');
 
 const mainlineStages = [
-  '00-explore',
+  'discovery',
   '10-define',
   '20-spec',
   '30-plan',
@@ -27,10 +27,10 @@ function standardizeMainlineSkills() {
     let original = content;
 
     // Standardize usage blocks for mainline stages
-    if (entry.name === '00-explore') {
+    if (entry.name === 'discovery') {
       content = content.replace(
-        /```text\s*\n\/00-explore \{title or request\}\s*\n\/00-explore \{discovery-id\}\s*\n```/g,
-        '```text\n00-explore {title or request}\n00-explore {discovery-id}\n```'
+        /```text\s*\n\/discovery \{title or request\}\s*\n\/discovery \{discovery-id\}\s*\n```/g,
+        '```text\ndiscovery {title or request}\ndiscovery {discovery-id}\n```'
       );
     } else if (entry.name === '10-define') {
       content = content.replace(

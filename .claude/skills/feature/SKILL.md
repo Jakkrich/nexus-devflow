@@ -32,6 +32,7 @@ big item has been split into sub-items, the next unchecked sub-item is the targe
 
 ## Step 1 - pick the target
 
+- Given a Discovery ID or Idea ID (e.g. `/feature DISC-20260824-001` or `/feature IDEA-001`) -> import problem context, research, trade-offs, and ADRs from `devflow/discoveries/{DISC-ID}/discovery.md` or `devflow/ideas.md` into the living spec.
 - Given a number or name that matches a build-plan item -> use it.
 - Given a request that clearly describes a new feature with no reasonable match
   in the build plan -> follow **New-feature intake** below.

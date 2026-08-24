@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultProjectRoot = path.resolve(__dirname, '..');
 
 const stageOrder = [
-  '00-explore',
+  'discovery',
   '10-define',
   '20-spec',
   '30-plan',

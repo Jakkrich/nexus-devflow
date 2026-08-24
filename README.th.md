@@ -52,13 +52,15 @@ devflow/
 │   ├── current-feature.md      # Fast-Track Single Living Spec (สเปกมีชีวิตที่กำลังรัน)
 │   └── current-run/            # Deep-Track โฟลเดอร์รันชั่วคราว (ลบออกเมื่อ Release)
 │
+├── 🏛️ decisions/                # คลังบันทึกการตัดสินใจสถาปัตยกรรม (ADRs: ADR-xxx-slug.md)
+│
 ├── 📦 history/                  # [3. อดีต / Past] คลังประวัติการส่งมอบแยกตามหมวดหมู่ถาวร
 │   ├── features/               # ประวัติฟีเจอร์, สถาปัตยกรรม, เครื่องมือ (xxx-slug.md หรือโฟลเดอร์)
 │   ├── fixes/                  # ประวัติการแก้บั๊ก, Hotfix, Security patch (xxx-slug.md)
 │   ├── rollbacks/              # ประวัติการย้อนคืนฟีเจอร์อย่างปลอดภัย (YYYY-MM-DD-xxx-slug.md)
 │   └── HISTORY.md              # ตารางสรุป Master Release History Ledger
 │
-└── 🔍 discoveries/              # บันทึกผลการสำรวจล่วงหน้าก่อนเริ่มส่งมอบ (00-explore.md)
+└── 🔍 discoveries/              # บันทึกผลการสำรวจล่วงหน้าก่อนเริ่มส่งมอบ (discovery.md)
 ```
 
 ---
@@ -85,12 +87,12 @@ Nexus-DevFlow 2.0 รองรับ 2 เส้นทางการส่ง�
 > **แนะนำสำหรับงานสถาปัตยกรรมขนาดใหญ่, การย้าย Database, Security Audit, และการทำงานร่วมกันของ Multi-Agents**:
 
 ```text
-00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
+discovery ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
 ```
 
 | สเตจ | คำสั่งมาตรฐาน | หน้าที่และผลลัพธ์หลัก |
 | :--- | :--- | :--- |
-| **00** | `00-explore` | สำรวจความต้องการ, ตอบข้อซักถาม, และตัดสินใจว่าจะเริ่มทำหรือไม่ (`devflow/discoveries/`) |
+| **00** | `discovery` | รวมการสำรวจครบวงจร (วางแผนระดับโปรเจกต์ หรือเจาะลึกฟีเจอร์ด้วย 5 เลนส์: Brainstorm, Research, PRD, Bug Triage, Grill) (`devflow/discoveries/`) |
 | **10** | `10-define` | กำหนดขอบเขตการส่งมอบและกำหนด Running ID (`devflow/context/current-run/10-define.md`) |
 | **20** | `20-spec` | เขียนสเปกอย่างเป็นทางการและกำหนดเกณฑ์การตรวจรับ Acceptance Criteria (`20-spec.md`) |
 | **30** | `30-plan` | แตกสเปกเป็นงานย่อยและสร้าง Checklist สำหรับการพัฒนา (`30-plan.md`) |

@@ -45,12 +45,12 @@ Recommended for 85% of daily work (iterative features, UI updates, bug fixes):
 Recommended for complex architectural epics, database schema migrations, and multi-agent coordination:
 
 ```text
-00-explore ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-deliver
+discovery ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-deliver
 ```
 
 | Stage | Command | Artifact | Stage Responsibility |
 | :--- | :--- | :--- | :--- |
-| **00** | `/00-explore` | `discoveries/DISC-xxx/00-explore.md` | Problem exploration, research, and Go/No-Go decision without allocating a delivery ID. |
+| **00** | `/discovery` | `discoveries/DISC-xxx/discovery.md` | Problem exploration, roadmap planning, research, and Go/No-Go decision without allocating a delivery ID. |
 | **10** | `/10-define` | `context/current-run/10-define.md` | Locks delivery boundary, allocates sequential ID `xxx-slug`, and sets scope. |
 | **20** | `/20-spec` | `context/current-run/20-spec.md` | Markdown delivery contract with testable Given-When-Then criteria. |
 | **30** | `/30-plan` | `context/current-run/30-plan.md` | Breakdown into executable task units with TDD test decisions. |
@@ -61,9 +61,9 @@ Recommended for complex architectural epics, database schema migrations, and mul
 
 ---
 
-## 3. Core Skills Inventory (35 Skills)
+## 3. Core Skills Inventory (36 Skills)
 
-DevFlow provides **35 Core Skills** synchronized 1:1 across `.agents/skills/` (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code):
+DevFlow provides **36 Core Skills** synchronized 1:1 across `.agents/skills/` (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code):
 
 ### A. Fast-Track Skills (5)
 - `feature`: Break down a planned build item into a living spec (`devflow/context/current-feature.md`).
@@ -73,7 +73,7 @@ DevFlow provides **35 Core Skills** synchronized 1:1 across `.agents/skills/` (C
 - `complete`: Final safety audit, Conventional Commit, archiving, and branch merge.
 
 ### B. Deep-Track Skills (8)
-- `00-explore`: Problem space exploration and Go/No-Go routing (`devflow/discoveries/DISC-xxx/00-explore.md`).
+- `discovery`: Unified discovery and exploration (`devflow/discoveries/DISC-xxx/discovery.md`).
 - `10-define`: Delivery run definition and scope boundaries (`10-define.md`).
 - `20-spec`: Formal markdown specification contract (`20-spec.md`).
 - `30-plan`: Task breakdown with TDD test strategy (`30-plan.md`).
@@ -82,7 +82,8 @@ DevFlow provides **35 Core Skills** synchronized 1:1 across `.agents/skills/` (C
 - `60-report`: Standardized delivery digest and retrospective insights (`60-report.md`).
 - `70-deliver`: Release packaging, git operations, and history archiving (`70-deliver.md`).
 
-### C. Discovery, Architecture & Planning Skills (5)
+### C. Discovery, Architecture & Planning Skills (6)
+- `grill`: Interactive Socratic alignment & domain modeling - codebase-grounded interview, domain glossary extraction (`devflow/context/glossary.md`), and ADR recording (`devflow/decisions/`).
 - `discovery`: Deep, multi-turn guided planning interview that drafts user-owned plans (`project-plan.md` & `build-plan.md`).
 - `brief`: Read-only briefing on an upcoming build-plan feature (scope, dependencies, sizing, and automatic splitting).
 - `brainstorm`: Structured divergent & convergent ideation generating 2-3 viable options with trade-off analysis.

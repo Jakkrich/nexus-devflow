@@ -105,14 +105,13 @@ function validateWorkflowNumbering(failures) {
     return;
   }
   const numberedMainline = new Set([
-    '00-explore',
     '10-define',
     '20-spec',
     '30-plan',
     '40-execute',
     '50-verify',
-    '70-deliver',
-    '60-report'
+    '60-report',
+    '70-deliver'
   ]);
   const skillFolders = fs.readdirSync(skillsDir)
     .filter((name) => fs.statSync(path.join(skillsDir, name)).isDirectory());
@@ -139,14 +138,14 @@ function validateWorkflowNumbering(failures) {
 
 function validateArtifactLanguageWorkflowSurface(failures) {
   const stageSkills = [
-    '.agents/skills/00-explore/SKILL.md',
+    '.agents/skills/discovery/SKILL.md',
     '.agents/skills/10-define/SKILL.md',
     '.agents/skills/20-spec/SKILL.md',
     '.agents/skills/30-plan/SKILL.md',
     '.agents/skills/40-execute/SKILL.md',
     '.agents/skills/50-verify/SKILL.md',
-    '.agents/skills/70-deliver/SKILL.md',
-    '.agents/skills/60-report/SKILL.md'
+    '.agents/skills/60-report/SKILL.md',
+    '.agents/skills/70-deliver/SKILL.md'
   ];
 
   for (const relativePath of stageSkills) {

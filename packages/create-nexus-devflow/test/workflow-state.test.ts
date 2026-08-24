@@ -14,6 +14,14 @@ test("parseWorkflowState maps idle workspace to pending pipelines", () => {
   assert.equal(state.track, "idle");
   assert.equal(state.fast.every((node) => node.state === "pending"), true);
   assert.equal(state.deep.length, 8);
+  assert.equal(state.deep[0].id, "discovery");
+});
+
+test("parseWorkflowState maps Active Discovery ID to active discovery stage", () => {
+  const state = parseWorkflowState("- **Active Discovery ID**: `DISC-20260824-001`\n- **Active Running ID**: `None`\n- **Current Stage**: `discovery`", idleWork);
+  assert.equal(state.track, "deep");
+  assert.equal(state.currentStage, "discovery");
+  assert.equal(state.deep.find((node) => node.id === "discovery")?.state, "active");
 });
 
 test("parseWorkflowState maps Deep-Track handoff to active execute stage", () => {

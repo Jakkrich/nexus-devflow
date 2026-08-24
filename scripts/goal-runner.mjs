@@ -83,9 +83,9 @@ function classifyGoal(goal) {
         'Route findings to Discover stage to own the delivery decision'
       ],
       commands: [
-        '/00-explore {goal-id} (recommends Debug/Research support)',
-        '/10-Define {discovery-id}',
-        '/20-Spec {running-id}'
+        '/discovery {goal-id} (recommends Debug/Research support)',
+        '/10-define {discovery-id}',
+        '/20-spec {running-id}'
       ]
     };
   }
@@ -100,9 +100,9 @@ function classifyGoal(goal) {
         'Route actionable findings into Discover stage'
       ],
       commands: [
-        '/00-explore {goal-id} (recommends Security-Review support)',
-        '/10-Define {discovery-id}',
-        '/20-Spec {running-id}'
+        '/discovery {goal-id} (recommends Security-Review support)',
+        '/10-define {discovery-id}',
+        '/20-spec {running-id}'
       ]
     };
   }
@@ -116,9 +116,9 @@ function classifyGoal(goal) {
       'Formalize markdown-first spec and plan execution'
     ],
     commands: [
-      '/00-explore {goal-id}',
-      '/10-Define {discovery-id}',
-      '/20-Spec {running-id}'
+      '/discovery {goal-id}',
+      '/10-define {discovery-id}',
+      '/20-spec {running-id}'
     ]
   };
 }

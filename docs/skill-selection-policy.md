@@ -16,7 +16,7 @@ Use this policy when deciding which skill or workflow track to activate for a gi
 - Scope involves significant ambiguity or architectural trade-offs.
 - Requires multi-step discovery before delivery commitment.
 - Involves breaking changes, database migrations, or multi-agent orchestration.
-- **Commands**: `/00-explore` ➔ `/10-define` ➔ `/20-spec` ➔ `/30-plan` ➔ `/40-execute` ➔ `/50-verify` ➔ `/60-report` ➔ `/70-deliver`.
+- **Commands**: `/discovery` ➔ `/10-define` ➔ `/20-spec` ➔ `/30-plan` ➔ `/40-execute` ➔ `/50-verify` ➔ `/60-report` ➔ `/70-deliver`.
 
 ---
 
@@ -36,6 +36,8 @@ Use this policy when deciding which skill or workflow track to activate for a gi
 | **System Diagnostics** | `/doctor` | Read-only check of adapters, configs, and workflow drift. |
 | **Root-Cause Analysis** | `/debug` | Non-destructive reproduction and defect diagnosis without modifying source. |
 | **Manual QA Guide** | `/try` | Generates click-by-click human manual test guide. |
+| **Domain Alignment** | `/grill` | Interactive Socratic interview, domain glossary extraction, and ADR generation. |
+| **Option Brainstorming** | `/brainstorm` | Explores 2-3 architectural options with trade-off table without allocating an ID. |
 | **Idea Capture** | `/idea` | Evaluates feasibility and adds to `devflow/ideas.md`. |
 | **Feature Reversal** | `/rollback` | Analyzes dependency risks and drafts rollback spec. |
 | **CI Setup** | `/ci` | Configures `.github/workflows/verify.yml` with detected package manager. |

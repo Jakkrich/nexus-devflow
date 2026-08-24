@@ -120,7 +120,7 @@ export function createManifest(
         "complete"
       ],
       mainlineStages: [
-        "00-explore",
+        "discovery",
         "10-define",
         "20-spec",
         "30-plan",
@@ -144,7 +144,11 @@ export function createManifest(
         "autopilot",
         "prototype",
         "report-html",
-        "brief"
+        "brief",
+        "audit",
+        "release",
+        "brainstorm",
+        "grill"
       ]
     },
     managedFiles
