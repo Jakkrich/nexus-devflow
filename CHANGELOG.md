@@ -5,6 +5,24 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-08-24
+
+### 🔄 Upstream AI Blueprint v0.13.0 Sync & Multi-Adapter Expansion
+
+#### Added
+- **OpenCode AI Tool Adapter Support (`050-sync-upstream-adopt-visibility-and-opencode`)**:
+  - Added `opencode` adapter choice and sharing rules with `.agents/skills/` and `.claude/skills/` without duplicate skill trees.
+  - Added CLI flags `--opencode` and `--all` to installer.
+  - Added interactive multi-select checkbox prompt for flexible adapter selection during `create-nexus-devflow` installation.
+- **Adopt & Onboard DevFlow Visibility (Step 5/6)**:
+  - Added interactive choice between `1. Commit DevFlow workflow files` and `2. Keep DevFlow workflow files local` (`.gitignore`).
+  - Added Guarded Untracking safety check prompting before running `git rm --cached` on previously tracked workflow files.
+  - Ensured `AGENTS.md` remains public-safe in local-only mode.
+- **Doctor Diagnostics for Visibility & OpenCode**:
+  - Enhanced `/doctor` to verify ignored local-only files on disk, detect tracked files in local-only mode, and inspect OpenCode adapter health.
+- **Upstream Baseline Update**:
+  - Updated tracking SHA to `0b65166` (AI Blueprint v0.13.0).
+
 ## [2.1.0] - 2026-08-23
 
 ### 🚀 Enterprise Agentic Architecture Release (Phases 1–7 Evolution)
