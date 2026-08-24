@@ -1,6 +1,6 @@
 # Workflow Surface Map (28 Core Skills)
 
-This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.0**.
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.5.0**.
 
 ---
 
@@ -9,54 +9,52 @@ This document outlines the active workflow surfaces and command taxonomy in **Ne
 Each command in DevFlow has exactly **one canonical name** and can be invoked across AI IDEs:
 - **Slash Prefix (`/`)**: For Google Antigravity, Claude Code, Gemini CLI (e.g. `/feature`, `/devflow`, `/discovery`).
 - **Dollar Prefix (`$`)**: For OpenAI Codex (e.g. `$feature`, `$devflow`, `$discovery`).
-- **Plain Canonical Name**: Direct tool/skill calling in generic terminals or non-native agents.
+- **Plain Canonical Name**: Direct tool/skill calling in generic terminals or non-native agents (e.g. `feature`, `implement`, `check`, `complete`).
 
 ---
 
 ## 2. Canonical Surface Taxonomy (28 Core Skills)
 
-### 🏎️ Track 1: Fast-Track (5 Skills)
-| Command | Category | Purpose | Artifact |
+### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (6 Skills)
+| Command | Category | Purpose | Primary Artifact |
 | :--- | :--- | :--- | :--- |
 | `feature` | Spec & Plan | Combines discovery, specification, and task breakdown for planned work. | `devflow/context/current-feature.md` |
 | `fix` | Spec & Plan | Documents and specs ad-hoc bug repairs or small changes. | `devflow/context/current-feature.md` |
-| `implement` | Execution | Incrementally executes checklist tasks with TDD discipline. | `devflow/context/current-feature.md` |
+| `implement` | Execution | Incrementally executes checklist tasks with strict TDD discipline. | `devflow/context/current-feature.md` |
 | `check` | Quality Gate | Senior QA multi-lane verification matrix (Typecheck, Lint, Tests, Security). | `devflow/context/current-feature.md` |
-| `complete` | Delivery | Final safety audit, Conventional Commit, SemVer, branch merge, and archiving. | `devflow/history/{features\|fixes\|rollbacks}/` |
+| `complete` | Delivery | Final safety audit, records Release Digest, branch merge, and archiving. | `devflow/history/{features\|fixes\|rollbacks}/` |
+| `rollback` | Delivery | Safe feature reversal with dependency risk analysis preserving history. | `devflow/history/rollbacks/` |
 
 ---
 
-### 🏗️ Track 2: Deep-Track (8 Skills)
-| Command | Category | Purpose | Artifact |
+### 🔮 2. Pre-Flight Discovery & Alignment Suite (4 Skills)
+| Command | Category | Purpose | Primary Artifact |
 | :--- | :--- | :--- | :--- |
-| `discovery` | Exploration | Unified pre-delivery discovery and Go/No-Go routing before delivery commitment. | `devflow/discoveries/DISC-xxx/discovery.md` |
-| `10-define` | Definition | Locks delivery boundaries, allocates sequential ID `xxx-slug`, and sets scope. | `devflow/context/current-run/10-define.md` |
-| `20-spec` | Specification | Formal markdown specification contract with acceptance criteria. | `devflow/context/current-run/20-spec.md` |
-| `30-plan` | Planning | Breaks down spec into executable tasks with TDD test decisions. | `devflow/context/current-run/30-plan.md` |
-| `40-execute` | Execution | Step-by-step task implementation behind review gates. | `devflow/context/current-run/40-execute.md` |
-| `50-verify` | Quality Gate | Senior QA 6-lane verification matrix. | `devflow/context/current-run/50-verify.md` |
-| `60-report` | Reporting | Standardized delivery digest and retrospective insights. | `devflow/context/current-run/60-report.md` |
-| `70-deliver` | Delivery | Release packaging, SemVer, git merge, and history archiving. | `devflow/history/{category}/{xxx-slug}/` |
+| `idea` | Backlog | Idea inbox capture and AI feasibility scoring. | `devflow/ideas.md` |
+| `grill` / `align` | Alignment | Socratic alignment interview, domain glossary extraction, and ADR generation. | `devflow/decisions/` & `glossary.md` |
+| `brainstorm` | Ideation | Structured divergent & convergent ideation with trade-off matrices. | Interactive session |
+| `discovery` | Exploration | Deep multi-turn inception exploration and discovery records. | `devflow/discoveries/DISC-xxx.md` |
 
 ---
 
-### 🧰 Companion Tools & Quality Gates (17 Skills)
+### 🧰 3. Workspace Governance & Operations (18 Skills)
 | Command | Category | Purpose |
 | :--- | :--- | :--- |
 | `devflow` | Navigation | Flagship interactive guide, state inspector, and intent router. |
-| `grill` | Alignment | Socratic alignment interview, domain glossary extraction, and ADR recording. |
-| `brainstorm` | Ideation | Structured divergent & convergent ideation with trade-off matrix. |
 | `doctor` | Diagnostics | Read-only health check for setup, adapters, and workflow drift. |
 | `overview` | Context | Regenerate and validate `project-overview.md` from planning docs. |
+| `brief` | Planning | Scope and dependency briefing before speccing a feature. |
 | `debug` | Diagnostics | Non-destructive root-cause analysis and defect reproduction. |
 | `onboard` | Onboarding | Setup baseline context on fresh or scaffolded projects. |
 | `adopt` | Onboarding | Survey existing codebase and bootstrap DevFlow context into brownfield apps. |
 | `try` | Quality Gate | Generate step-by-step human manual QA review guide. |
-| `rollback` | Delivery | Safe feature reversal with dependency risk analysis. |
-| `idea` | Backlog | Idea inbox capture and AI feasibility scoring into `devflow/ideas.md`. |
+| `audit` | Quality Gate | Branch-aware or full-project code and security audit. |
 | `ci` | Automation | Configure GitHub Actions verify workflow (`.github/workflows/verify.yml`). |
 | `test` | Quality Gate | Test runner, missing test generation, and coverage check. |
-| `autopilot` | Autonomous | Bounded Fast-Track (`feature`/`fix` -> `implement` -> `check`) or Deep-Track (`20-spec` -> `30-plan` -> `40-execute` -> `50-verify` -> `60-report`) loop stopping before merge. |
+| `tests` | Quality Gate | Add or normalize unit test suite. |
+| `autopilot` | Autonomous | Bounded Living Spec execution loop (`feature`/`fix` -> `implement` -> `check`) stopping before merge. |
 | `prototype` | Ideation | Throwaway pre-build static HTML/CSS mockups sharing design tokens. |
-| `report-html` | Reporting | Standalone interactive HTML dashboard generator on demand. |
-| `brief` | Planning | Pre-briefing on upcoming features before speccing. |
+| `release` | Deployment | Cloud deployment readiness check (Render / Vercel). |
+| `status` | State | Progress summary and next action inspector. |
+| `report-html` | Reporting | Generate interactive standalone HTML report dashboard. |
+| `convert-any-to-md` | Utility | Document conversion utility into markdown in `devflow/reference/`. |

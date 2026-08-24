@@ -117,7 +117,7 @@ Progress lives in persistent files, not in transient chat history:
 ## 6. Single Active Run Guardrail (One Thing at a Time)
 
 - Only one active run is allowed at a time across both Fast-Track and Deep-Track.
-- The AI will actively block opening a new feature or fix until the current one is completed with `/complete` or `70-deliver` (or explicitly rolled back/cancelled).
+- The AI will actively block opening a new feature or fix until the current one is completed with `/complete` (or explicitly rolled back/cancelled).
 
 ---
 

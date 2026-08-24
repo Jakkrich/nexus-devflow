@@ -1,6 +1,6 @@
 # Quickstart Guide
 
-Getting started with **Nexus-DevFlow 2.0** — an agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Dual-Track Delivery Model** for Google Antigravity, OpenAI Codex, Claude Code, Cursor, and other AI IDEs.
+Getting started with **Nexus-DevFlow 2.5.0** — an enterprise agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Single Living Spec Model** for Google Antigravity, OpenAI Codex, Claude Code, Cursor, GitHub Copilot, and other AI IDEs.
 
 ---
 
@@ -33,80 +33,77 @@ Open your AI IDE (Antigravity, Claude Code, Codex, or Cursor) and run the approp
 
 ---
 
-## 3. Choose Your Delivery Track
+## 3. The Unified 4-Stage Living Spec Lifecycle
 
-Nexus-DevFlow provides two optimized delivery tracks depending on task complexity:
-
-### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 Steps)
-*Recommended for 85% of daily work (features, bug fixes, UI improvements, iterative tasks).*
+All development tasks (from small UI fixes to deep architectural features) execute through the 4-stage single living spec lifecycle:
 
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. `/feature {title}` (or `/fix {bug}`): Allocates sequential ID (`xxx-slug`) and initializes the Single Living Spec in `devflow/context/current-feature.md`.
-2. `/implement`: Incrementally executes checklist tasks with TDD discipline.
-3. `/check`: Senior QA multi-lane verification (Typecheck, Lint, Tests, manual proof).
-4. `/complete`: Final safety audit, archives to `devflow/history/{features|fixes|rollbacks}/`, merges branch, and resets workspace to Idle.
+1. **`/feature {title}`** (or **`/fix {bug}`**): Allocates sequential ID (`xxx-slug`) and initializes the Single Living Spec in `devflow/context/current-feature.md` with 6 structured sections.
+2. **`/implement`**: Incrementally executes checklist tasks with strict TDD discipline (Red-Green-Refactor).
+3. **`/check`**: Senior QA multi-lane verification (Typecheck, Lint, Test suites, and behavioral manual proof).
+4. **`/complete`**: Final safety audit, records Release Digest, auto-archives to `devflow/history/{features|fixes|rollbacks}/`, manages the git delivery gate, and resets workspace to Idle.
 
 ---
 
-### 🏗️ Track 2: Deep-Track (Architect Mode — 8 Steps)
-*Recommended for large architectural epics, database migrations, and multi-agent coordination.*
+## 4. Pre-Flight Discovery & Architectural Alignment
+
+Before committing to delivery, use specialized companion skills to refine complex requirements:
 
 ```text
-discovery ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-deliver
+/idea (Inbox) ──▶ /grill (Socratic ADR) ──▶ /discovery (Explore) ──▶ /feature (Deliver)
 ```
 
-1. `/discovery`: Unified discovery and exploration (`devflow/discoveries/DISC-xxx/discovery.md`).
-2. `/10-define`: Lock delivery boundaries in `devflow/context/current-run/10-define.md`.
-3. `/20-spec`: Formalize markdown delivery contract & testable acceptance criteria.
-4. `/30-plan`: Break down spec into executable tasks with test decisions.
-5. `/40-execute`: Incremental task implementation behind review gates.
-6. `/50-verify`: Senior QA review across 6 verification lanes.
-7. `/60-report`: Standardized markdown delivery digest and retrospective lessons learned.
-8. `/70-deliver`: Package verified work, git merge, and archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`.
+- **`/idea`**: Quick idea capture in `devflow/ideas.md` with instant AI feasibility scoring.
+- **`/grill`** (or **`/align`**): Socratic alignment & domain modeling; records Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
+- **`/brainstorm`**: Structured ideation with trade-off analysis.
+- **`/discovery`**: Deep inception and exploratory discovery (`devflow/discoveries/DISC-xxx.md`).
 
 ---
 
-## 4. The 3-Pillars Workspace Architecture
+## 5. The 3-Pillars Workspace Architecture
 
 ```text
 devflow/
 ├── ideas.md                    # 🔮 Future (Backlog): Idea Inbox with AI scoring
 ├── context/                    # ⚡ Present (Active Context): Single Living Spec & Active State
-│   ├── current-feature.md      # Fast-Track Single Living Spec
-│   ├── current-stage.md        # Active stage inspector & guardrail
-│   ├── current-run/            # Deep-Track active stage artifacts (10-define to 70-deliver)
+│   ├── current-feature.md      # The Single Living Spec (Active delivery spec / idle stub)
+│   ├── current-stage.md        # Active stage inspector & guardrail pointer
 │   ├── project-overview.md     # Single Source of Truth
 │   ├── coding-standards.md     # Engineering standards & conventions
 │   ├── ai-interaction.md       # AI interaction guidelines
-│   └── findings.md             # Quality & security findings ledger
+│   ├── findings.md             # Quality & security findings ledger
+│   └── glossary.md             # Domain glossary & architecture terms
+├── decisions/                  # 🏛️ Decisions: Architecture Decision Records (ADR-xxx.md)
 ├── history/                    # 📦 Past (History Archive): Categorized delivery archives
-│   ├── features/               # Shipped features ({xxx-slug}/ or {xxx-slug}.md)
-│   ├── fixes/                  # Resolved bug fixes
-│   ├── rollbacks/              # Reversal audit logs
+│   ├── features/               # Shipped features ({xxx-slug}.md)
+│   ├── fixes/                  # Resolved bug fixes ({xxx-slug}.md)
+│   ├── rollbacks/              # Reversal audit logs (YYYY-MM-DD-{xxx-slug}.md)
 │   └── HISTORY.md              # Master release ledger
-└── discoveries/                # Pre-delivery discovery records (DISC-xxx/)
+└── discoveries/                # 🔍 Discoveries: Pre-delivery discovery records (DISC-xxx.md)
 ```
 
 ---
 
-## 5. Maintenance & CLI Commands
+## 6. Maintenance & CLI Commands
 
 ```bash
-# Launch interactive Real-Time Local Dashboard (Dual-Track Visualizer & Tooltips)
+# Launch interactive Real-Time Local Dashboard (0ms SSR Hydration & Git Cache)
 npx @jakkrichm/create-nexus-devflow dashboard
 
-# Inspect project status, active work, findings, and next action in terminal
-npx @jakkrichm/create-nexus-devflow status
+# Automated Quality Gatekeeper & Pre-commit Hooks
+npx @jakkrichm/create-nexus-devflow check-gate [--strict]
+npx @jakkrichm/create-nexus-devflow hook install pre-commit
 
-# Update DevFlow files safely with automatic backup and rollback
-npx @jakkrichm/create-nexus-devflow update
+# Model Context Protocol (MCP) Server Hub
+npx @jakkrichm/create-nexus-devflow mcp
 
-# Generate interactive standalone HTML report on demand
-npm run report:html -- {RUN_ID}
+# Multi-Agent Swarm & Code Graph RAG
+npx @jakkrichm/create-nexus-devflow swarm
+npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
-# Clean uninstall / eject from project
-npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
+# JIT Context Slicing Engine
+npx @jakkrichm/create-nexus-devflow slice --stage implement
 ```

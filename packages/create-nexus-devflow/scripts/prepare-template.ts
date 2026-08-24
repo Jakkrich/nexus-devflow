@@ -121,7 +121,7 @@ async function sanitizeStarterFiles(): Promise<void> {
   // 2. Clean Starter HISTORY.md
   const starterHistory = `# Master Release History Ledger
 
-This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` or \`70-deliver\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
+This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
 
 ---
 
@@ -195,15 +195,17 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 `;
   await fs.writeFile(path.join(templateRoot, "devflow", "context", "project-overview.md"), starterOverview, "utf8");
 
-  // 5. Clean Starter current-stage.md
-  const starterStage = `# Current DevFlow Run Status
+  const starterStage = `# Current Stage
 
-- **Active Discovery ID**: \`None\`
-- **Active Running ID**: \`None\`
-- **Current Stage**: \`Idle (Ready for new /feature, /fix, /discovery, or /10-define)\`
-- **Living Spec**: \`None\`
-- **Last Completed Run**: \`None\`
-- **Last Updated**: \`None\`
+- Active Discovery ID: \`None\`
+- Active Running ID: \`None\`
+- Track: \`idle\`
+- Current Stage: \`idle\`
+- Active Branch: \`main\`
+- Living Spec: \`devflow/context/current-feature.md\`
+- Next Action: \`Run /feature, /fix, or /discovery to start new work.\`
+- Last Completed Run: \`None\`
+- Last Updated: \`None\`
 `;
   await fs.writeFile(path.join(templateRoot, "devflow", "context", "current-stage.md"), starterStage, "utf8");
 

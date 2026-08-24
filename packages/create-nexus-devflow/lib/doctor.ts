@@ -36,21 +36,24 @@ const DEFAULT_FINDINGS_STUB = `# Findings Ledger
 > \`### <ID> [<SEVERITY>] <STATUS> - <Title>\`
 > - **Severities**: \`P0\` (Critical Blocker), \`P1\` (High Blocker), \`P2\` (Medium), \`P3\` (Low / Polish)
 > - **Statuses**: \`unverified\`, \`open\`, \`fixed\`, \`closed\`, \`accepted\`, \`invalid\`
-> - **Release Gate Rule**: Any \`P0\` or \`P1\` finding in \`open\` or \`fixed\` status unconditionally blocks \`/complete\` and \`70-deliver\`.
+> - **Release Gate Rule**: Any \`P0\` or \`P1\` finding in \`open\` or \`fixed\` status unconditionally blocks \`/complete\`.
 
 ---
 
 _No active findings recorded. QA and audit passes append findings here as they are discovered._
 `;
 
-const DEFAULT_CURRENT_STAGE_STUB = `# Current DevFlow Run Status
+const DEFAULT_CURRENT_STAGE_STUB = `# Current Stage
 
-- **Active Discovery ID**: \`None\`
-- **Active Running ID**: \`None\`
-- **Current Stage**: \`Idle (Ready for /feature or /fix)\`
-- **Living Spec**: \`None\`
-- **Last Completed Run**: \`None\`
-- **Last Updated**: ${new Date().toISOString().split("T")[0]}
+- Active Discovery ID: \`None\`
+- Active Running ID: \`None\`
+- Track: \`idle\`
+- Current Stage: \`idle\`
+- Active Branch: \`main\`
+- Living Spec: \`devflow/context/current-feature.md\`
+- Next Action: \`Run /feature, /fix, or /discovery to start new work.\`
+- Last Completed Run: \`None\`
+- Last Updated: ${new Date().toISOString().split("T")[0]}
 `;
 
 const DEFAULT_CURRENT_FEATURE_STUB = `# Current Feature
@@ -73,7 +76,7 @@ const DEFAULT_IDEAS_STUB = `# 💡 DevFlow Idea Inbox & Backlog
 
 const DEFAULT_HISTORY_STUB = `# Nexus-DevFlow Master Release History Ledger
 
-This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` or \`70-deliver\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
+This master ledger tracks all released delivery runs, milestones, and rollbacks in chronological order. Each entry is recorded during \`/complete\` and links to its exact Git commit hash, release status, category, and archived delivery artifacts.
 
 ---
 
