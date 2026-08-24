@@ -101,21 +101,17 @@ Before the phase delivery layer, `/discovery` stores the request, selected suppo
 devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
 ```
 
-This layer consumes no Running ID. Only an approved `Proceed` discovery may enter `/10-Define`.
+This layer consumes no Running ID. An approved `Proceed` discovery can enter `/feature` or `/fix`.
 
 Each delivery run executes inside:
 
-- **Fast-Track (4 Steps)**: `devflow/context/current-feature.md` (Single Living Spec)
-- **Deep-Track (8 Steps)**: `devflow/context/current-run/` (`10-define.md` through `70-deliver.md`)
+- **Single Living Spec (4 Steps)**: `devflow/context/current-feature.md`
 
-Upon completion, completed work is permanently archived to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/` or `{xxx-slug}.md`.
+Upon completion, completed work is permanently archived to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`.
 
 ### Task Execution Layer
 
-Tasks and subtasks should normally stay inside:
-
-- `devflow/context/current-feature.md` (Fast-Track)
-- `devflow/context/current-run/30-plan.md` (Deep-Track)
+Tasks and subtasks stay inside `devflow/context/current-feature.md` (Section 3: Execution Plan & TDD Checklist).
 
 Do not create a new delivery run for every small implementation task unless that task truly becomes a separate delivery phase.
 
@@ -132,12 +128,15 @@ devflow/
     ai-interaction.md
     findings.md
     current-stage.md
-    current-feature.md        # Fast-Track Single Living Spec
-    current-run/              # Deep-Track Active Run (Temporary)
-      10-define.md
-      20-spec.md
-      30-plan.md
-      40-execute.md
+    current-feature.md        # Single Living Spec
+    glossary.md
+  decisions/                  # 🏛️ Decisions: ADRs
+  history/                    # 📦 Past: Categorized Archives
+    features/
+    fixes/
+    rollbacks/
+    HISTORY.md
+  discoveries/                # 🔍 Discoveries: Pre-delivery discovery records
       50-verify.md
       60-report.md
       70-deliver.md
@@ -314,7 +313,7 @@ Human checks:
 Recommended manual progression:
 
 ```text
-Goal -> /discovery -> [Brainstorm | PRD | Research | Debug | Direct | Grill] -> /discovery -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-deliver
+Goal -> /discovery -> [Brainstorm | PRD | Research | Debug | Direct | Grill] -> /discovery -> /feature -> /implement -> /check -> /complete
 ```
 
 Recommended prompt style for large work:

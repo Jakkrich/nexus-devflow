@@ -120,14 +120,11 @@ export function createManifest(
         "complete"
       ],
       mainlineStages: [
-        "discovery",
-        "10-define",
-        "20-spec",
-        "30-plan",
-        "40-execute",
-        "50-verify",
-        "60-report",
-        "70-deliver"
+        "feature",
+        "fix",
+        "implement",
+        "check",
+        "complete"
       ],
       companionCommands: [
         "devflow",

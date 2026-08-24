@@ -71,13 +71,13 @@ Use Spec Kit concepts as backstage helpers only:
 | Spec Kit concept | Allowed DevFlow use |
 | :--- | :--- |
 | `constitution` | Draft or pressure-test DevFlow principles, governance, quality bars, and authoring rules |
-| `specify` | Explore candidate inputs for `Discover`, `Define`, and `Spec` |
-| `clarify` | Pressure-test ambiguity before locking `10-Define` or `20-Spec` |
-| `plan` | Stress-test technical planning before finalizing `30-Plan` |
-| `tasks` | Generate candidate execution slices before converting them into DevFlow plans or checklists |
+| `specify` | Explore candidate inputs for Pre-Flight Discovery and `/feature` |
+| `clarify` | Pressure-test ambiguity before locking the Living Spec |
+| `plan` | Stress-test technical planning in Section 3 of the Living Spec |
+| `tasks` | Generate candidate execution slices before converting them into TDD checklists |
 | `analyze` | Check cross-artifact consistency between requirement, plan, and delivery intent |
 | `checklist` | Draft review rubrics for quality, completeness, or readiness |
-| `implement` | Study execution patterns only; do not let it replace `40-Execute` as the public implementation stage |
+| `implement` | Study execution patterns only; do not let it replace `/implement` as the public implementation stage |
 | `converge` | Use as an internal gap-finding pass during verification or follow-up planning |
 
 ## Authoring Rule

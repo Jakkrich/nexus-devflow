@@ -1,94 +1,48 @@
 # Team Presets
 
-This guide is for maintainers who need to recommend a practical DevFlow adoption shape without changing the public command model.
+This guide is for engineering leads and maintainers adopting **Nexus-DevFlow 2.5.0** across different team structures.
 
-Presets are recommendation bundles on top of the same DevFlow 2.0 mainline and public companion commands. They do not create alternate workflows, new commands, or forked operating systems for teams.
+Presets are recommendation bundles on top of the same DevFlow 2.5.0 Single Living Spec Model and companion commands.
 
-## Product Feature Team
+---
 
-### Who It Is For
-
-Teams shipping new product capability, multi-step enhancements, or user-facing changes that benefit from fuller discovery, definition, specification, planning, verification, and reporting discipline.
-
-### Recommended Starting Commands
-
-- `/discovery` for new requests or broad goals
-- `Brainstorm` when direction is still fuzzy before definition locks
-- `Research` when external docs, integrations, or product evidence are needed
-
-### Minimum Artifact Set
-
-- `devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md`
-- `10-define.md`
-- `20-spec.md`
-- `30-plan.md`
-- `40-execute.md`
-- `50-verify.md`
-- `60-report.md`
-
-### Optional Layers
-
-- Add `70-deliver.md` when release-facing packaging or coordination matters
-- Add `checklists/` when the team wants live execution visibility across planning, implementation, and verification
-- Add `PRD` artifacts when product framing needs to mature before or during spec work
-- Skip unnecessary companion routes when the request is already clear, approve Proceed in Discover, and continue to `/10-define {discovery_id}`
-
-## Bugfix Or Operations Team
+## 1. Product Feature Team
 
 ### Who It Is For
+Teams shipping new product capabilities, user-facing features, or architectural enhancements that benefit from pre-flight discovery, strict TDD discipline, senior QA verification, and auditable history archives.
 
-Teams handling defects, regressions, incidents, operational fixes, or smaller reliability work where root-cause clarity and verification discipline matter more than long upfront discovery.
+### Recommended Workflow Flow
+1. `/discovery` or `/idea`: Explore new capability proposals or score backlog ideas.
+2. `/grill`: Pressure-test domain models, extract terminology to `glossary.md`, and record ADRs.
+3. `/feature {title}`: Initialize the Single Living Spec in `devflow/context/current-feature.md`.
+4. `/implement`: Execute tasks incrementally with strict TDD discipline (Red-Green-Refactor).
+5. `/check`: Senior QA multi-lane verification.
+6. `/complete`: Final safety audit, records Release Digest, and manages the Git delivery gate.
 
-### Recommended Starting Commands
+---
 
-- `/discovery` for a new failure, routing to `Debug` when root cause is still unknown
-- `Issue-Triage` when the work begins from ticket intake or an ops queue
-- `/10-define {discovery_id}` when the discovery decision is approved and the required fix is understood
-
-### Minimum Artifact Set
-
-- `10-define.md`
-- `20-spec.md`
-- `30-plan.md`
-- `40-execute.md`
-- `50-verify.md`
-
-### Optional Layers
-
-- Keep the shared `discovery.md` concise when the issue is already well understood
-- Add `60-report.md` when the fix needs a durable wrap-up for handoff, incident learning, or stakeholder visibility
-- Add `50-verify-impact.md` when rollback, blast radius, or impact analysis should be captured explicitly
-- Skip heavier discovery or PRD-style framing when the issue is narrow and urgency is high
-
-## Framework Maintainer Team
+## 2. Bugfix & Reliability Team
 
 ### Who It Is For
+Teams handling defects, regressions, security patches, or operational hotfixes where rapid isolation, minimal blast radius, and verification proof are paramount.
 
-Maintainers evolving the Nexus-DevFlow framework itself, especially when the work touches workflow docs, validation, release readiness, install or update guidance, governance, or stable surface policy.
+### Recommended Workflow Flow
+1. `/debug`: Non-destructive reproduction and root-cause analysis.
+2. `/fix {bug-title}`: Document and spec the fix in `devflow/context/current-feature.md`.
+3. `/implement`: Apply the targeted fix with failing regression test proof.
+4. `/check`: Verify defect resolution across test suites and running app.
+5. `/complete`: Archive fix record to `devflow/history/fixes/` and merge cleanly.
 
-### Recommended Starting Commands
+---
 
-- `Help` when the right public route is still unclear
-- `/discovery` for new framework work that needs scoped context
-- `Research` when framework decisions depend on source-backed tooling or policy checks
-- `/50-verify` and `/70-deliver` more often than product teams when the work is mainly framework hardening, validation, or packaging
+## 3. Platform & Architecture Team
 
-### Minimum Artifact Set
+### Who It Is For
+Teams building shared platforms, microservices, core libraries, or complex migrations with high governance and multi-agent coordination.
 
-- The stage markdown artifacts required by the active mainline work item
-- Maintainer-facing docs affected by the change, such as `README.md`, `USAGE.md`, `SETUP.md`, `AGENTS.md`, or supporting docs under `docs/`
-- Validation evidence for the framework commands touched by the change
-
-### Optional Layers
-
-- Add `30-plan.md` when the change spans multiple docs, scripts, or policy surfaces
-- Add `60-report.md` when the change needs a durable release or governance summary
-- Add roadmap or governance documentation updates when the work changes stable expectations
-- Skip broader discovery layers when the change is already tightly scoped and the required surfaces are known
-
-## How To Use Presets
-
-- Use presets to recommend a starting shape, not to replace the mainline
-- Keep the numbered workflow order intact once a team is on the mainline
-- Prefer the smallest preset that still preserves definition, implementation, and verification discipline
-- Add optional layers later when the team needs more visibility, evidence, or product framing
+### Recommended Workflow Flow
+1. `/discovery`: Comprehensive pre-delivery feasibility study (`devflow/discoveries/`).
+2. `/grill`: Formalize Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
+3. `nexus-devflow graph`: Analyze AST dependency graph and calculate blast radius.
+4. `nexus-devflow swarm`: Orchestrate 4-role multi-agent execution (Architect, Coder, QA, Security).
+5. `/feature`: Execute delivery through the Single Living Spec.
