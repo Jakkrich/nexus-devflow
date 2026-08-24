@@ -88,19 +88,23 @@ broad checkout. Ask whether to resolve only the conflict allowed by the approved
 spec or abandon the attempt. A cascade into another completed feature needs a
 new rollback plan.
 
-## Step 2 - build one step, review, iterate, checkpoint
+## Step 2 - build one step, review, iterate, checkpoint (Strict TDD)
 
 Work through the spec's build steps in order, one at a time. For each step:
 
-1. Implement just that step: the smallest change that satisfies its "done when."
-2. Show the **diff**, not whole files.
-3. **Explain it, and prove it.** Give a short summary: what the step delivered,
+1. **Strict TDD Cycle (for logic & behavior changes)**:
+   - **🔴 RED**: Write the unit test first in the relevant test file. Execute the test command and show the failing assertion output.
+   - **🟢 GREEN**: Implement only the minimal code in the source file necessary to make the test pass. Re-run test and show passing output.
+   - **🔵 REFACTOR**: Refactor and format cleanly, verifying that 100% of tests remain green.
+   - *Code Reversion Rule*: If production code is written without a prior test for behavior changes, revert it and write the test first.
+2. Implement just that step: the smallest change that satisfies its "done when."
+3. Show the **diff**, not whole files.
+4. **Explain it, and prove it.** Give a short summary: what the step delivered,
    one line per changed file on what it does and why, then confirm the step's
-   "done when" is met with evidence (build output, a screenshot, a passing
-   assertion). This summary is the comprehension gate, so keep it concrete, not
-   ceremonial. Include a short **How to try it** note when the step has a manual
+   "done when" is met with empirical evidence (test pass output, build output, or screenshot). This summary is the comprehension gate, so keep it concrete, not
+   vague. Include a short **How to try it** note when the step has a manual
    path: the command, URL, click, endpoint, or output the user can check.
-4. **Verify the step.** If `AGENTS.md` declares a `Verify` command, run that exact
+5. **Verify the step.** If `AGENTS.md` declares a `Verify` command, run that exact
    command as the automated gate. It is only an umbrella for checks the project
    actually has, so do not invent tests or other checks to satisfy it. If no
    `Verify` command exists, run the documented build command and the test command

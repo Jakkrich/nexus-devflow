@@ -65,21 +65,37 @@ The entire lifecycle is driven by the **Single Living Spec (`devflow/context/cur
 *Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination.*
 
 ```text
-00-explore ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
+discovery ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
 ```
 
-1. `00-explore`: Explore request before delivery commitment (`DISC-YYYYMMDD-NNN`).
+1. `discovery`: Unified pre-delivery discovery & Socratic alignment (`DISC-YYYYMMDD-NNN` or project roadmap).
 2. `10-define`: Turn approved discovery into bounded delivery run in `devflow/context/current-run/10-define.md`.
 3. `20-spec`: Formalize markdown delivery contract & acceptance criteria (`20-spec.md`).
-4. `30-plan`: Breakdown spec into executable tasks with test decisions (`30-plan.md` + checklists).
-5. `40-execute`: Incremental task execution behind review gates (`40-execute.md`).
-6. `50-verify`: Senior QA review & multi-lane verification checks (`50-verify.md`).
+4. `30-plan`: Breakdown spec into atomic 2-5 min tasks with explicit TDD decisions (`30-plan.md` + checklists).
+5. `40-execute`: Strict Red-Green-Refactor task execution behind review gates (`40-execute.md`).
+6. `50-verify`: Senior QA Two-Stage Review (Spec Fidelity + Quality/Security Gate) (`50-verify.md`).
 7. `60-report`: Standardized markdown delivery digest (`60-report.md`).
-8. `70-deliver`: Release packaging, git merge, archives `devflow/context/current-run/` ➔ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}/`, and closes the run.
+8. `70-deliver`: Release packaging, git merge, archives `devflow/context/current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, and closes the run.
 
 ---
 
-## 4. Standalone HTML Reporting Policy
+## 4. Strict TDD & Two-Stage Review Interaction Rules
+
+### 🔴🟢 Strict TDD Execution Discipline
+During implementation in `/implement` and `40-execute`:
+- **Show Red Phase**: First execute tests to demonstrate expected failure *before* adding production code.
+- **Show Green Phase**: Add minimal production code, re-run tests, and report pass rate.
+- **Show Refactor Phase**: Polish and clean up with zero test regression.
+- **Forbidden**: Never present functional code changes without matching test execution evidence.
+
+### 🛡️ Two-Stage Verification Reporting
+During `/check` and `50-verify`:
+- **Stage 1 (Spec Fidelity Gate)**: Report each Acceptance Criterion and "Done When" status.
+- **Stage 2 (Code Quality & Security Gate)**: Report Typecheck, Lint, Test Suites, Security checks, and Findings Ledger (0 blockers).
+
+---
+
+## 5. Standalone HTML Reporting Policy
 
 > [!IMPORTANT]
 > **No Auto-Generated HTML**: Mainline stages (`/complete` and `60-report`) strictly output Markdown only.

@@ -83,12 +83,12 @@ Record important findings in `30-plan.md`. Use legacy context updates only when 
 
 ### 4. Build The Plan
 
-Use the old planner discipline, but keep `30-plan.md` as the main contract:
+Use strict planning discipline, keeping `30-plan.md` as the main contract:
 
+- **Atomic Micro-Task Sizing (2–5 Minutes)**: Every subtask must be a small, verifiable unit that can be implemented and reviewed cleanly without context sprawl.
 - record the planning loop evidence: context read, observations, adjustments made, stop condition, and handoff notes
 - add phases in dependency order
-- add subtasks that are small, verifiable units
-- include explicit files to modify or create
+- include explicit files to modify or create (exact file paths)
 - include patterns to follow
 - include verification command or manual check
 - include a test decision for every subtask
@@ -97,18 +97,24 @@ Use the old planner discipline, but keep `30-plan.md` as the main contract:
 Each subtask should answer:
 
 - what to change
-- where to change it
+- where to change it (exact path)
 - which pattern to follow
 - how to verify it
 - whether automated tests are required, manual, or not required
 
-### 4.1 Test Decision Gate
+### 4.1 Strict TDD Task Breakdown & Test Decision Gate
 
-**STRICT MANDATE (กฎเหล็ก Unit Test)**: สำหรับทุก subtask ที่มีการเพิ่ม แก้ไข หรือเปลี่ยนแปลงการทำงานของโค้ด (Behavior Change) **ต้องระบุเป็น `Required` เสมอ** ห้ามละเว้นเด็ดขาด ยกเว้นงานประเภทเอกสารหรือแก้ไข Configuration เท่านั้น
+**STRICT MANDATE (กฎเหล็ก Unit Test & TDD)**: สำหรับทุก subtask ที่มีการเพิ่ม แก้ไข หรือเปลี่ยนแปลงการทำงานของโค้ด (Behavior Change) **ต้องระบุเป็น `Required` เสมอ** และต้องย่อยงานเป็น **TDD Triplet Sub-tasks** ดังนี้:
+
+```markdown
+- [ ] Task 1.1 [TDD-Red]: Write failing test for {feature/behavior} in {test_file} and verify failure
+- [ ] Task 1.2 [TDD-Green]: Implement minimal code in {src_file} to satisfy Task 1.1 test
+- [ ] Task 1.3 [TDD-Refactor]: Refactor logic, eliminate duplication, and verify zero regression
+```
 
 For every subtask, decide one of:
 
-- `Required`: automated tests must be created or updated (Mandatory for all behavior changes)
+- `Required`: automated tests must be created or updated (Mandatory for all behavior changes, formatted as TDD Triplet)
 - `Manual/Command Only`: verification is non-test but still explicit (Only for configuration/infrastructure tasks)
 - `Not Required`: no new automated test is needed because there is no meaningful behavior surface (Only for documentation/comments)
 

@@ -113,10 +113,14 @@ build plan starts high-level.
 
 For the one (sub-)feature being built now, write a full spec to
 `devflow/context/current-feature.md` (create `devflow/context/` if needed), following
-`reference/feature-spec-template.md`. Fill every section: goal, in/out of scope,
-the build loop, small build steps as a checklist (`- [ ]`, each with an observable
-"done when" - `/implement` ticks them off and resumes from the first unchecked
-one), files/areas, data/contracts, testing, and notes for the AI.
+`reference/feature-spec-template.md`. Fill every section:
+- Goal, Problem Statement, and In/Out of scope
+- Acceptance Criteria (AC-1, AC-2, ...)
+- Small build steps as atomic 2-5 min checklist items (`- [ ]`, supporting `[TDD-Red]`, `[TDD-Green]`, `[TDD-Refactor]` triplets for functional logic)
+- Two-Stage Verification Strategy:
+  - **Stage 1**: Spec Fidelity & Acceptance Criteria Gate
+  - **Stage 2**: Technical Multi-lane quality, tests, security, and findings ledger
+- Files/areas to modify, data/contracts, and notes for the AI.
 
 **Visual or replication features need a reference image.** If the feature is
 "make it look like X" - recreating an existing design, matching a mockup, or

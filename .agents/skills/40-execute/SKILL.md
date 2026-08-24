@@ -59,26 +59,23 @@ Confirm the current Git branch with `git branch --show-current` and use that bra
 
 Select one scoped unit of work at a time. Do not implement the whole plan as one blob.
 
-### 2. Execute One Scoped Unit
+### 2. Execute One Scoped Unit (Strict TDD Red-Green-Refactor)
 
-Use the original coder discipline, adapted to 2.0:
+Use the strict coder discipline:
 
-- **STRICT MANDATE (กฎเหล็ก Unit Test)**: ต้องสร้าง/แก้ไข Unit Test ควบคู่กับการแก้ไขโค้ดเสมอ โดยห้ามแก้ไขเฉพาะไฟล์โค้ดหลัก (Production Code) โดยไม่แก้ไขหรือสร้างไฟล์เทสต์ควบคู่กัน
+- **STRICT MANDATE (กฎเหล็ก Unit Test & TDD)**: สำหรับทุกงานที่มีการแก้ไข logic การทำงาน ต้องสร้างหรือแก้ไข Unit Test ควบคู่กับการแก้ไขโค้ดเสมอ โดยห้ามเขียนเฉพาะ Production Code โดยไม่มีเทสต์
+- **🔴 RED (Test First)**: ออกแบบและเขียน Test Case ในไฟล์เทสต์ก่อนเสมอ แล้วรันคำสั่งเทสต์เพื่อพิสูจน์ว่า **Test ล้มเหลว (FAIL)** ตามที่คาดหวัง
+- **🟢 GREEN (Minimal Implementation)**: เขียน Production Code เท่าที่จำเป็นเพื่อให้เทสต์ผ่าน แล้วรันคำสั่งเทสต์เพื่อพิสูจน์ว่า **Test ผ่าน 100% (PASS)**
+- **🔵 REFACTOR (Clean Code)**: ปรับปรุงโครงสร้างโค้ดให้อ่านง่าย กำจัดความซ้ำซ้อน (DRY) โดยที่เทสต์ยังคงเขียว 100%
+- **Code Deletion / Reversion Rule**: หากเผลอเขียน Production Code ก่อนมีเทสต์ ให้ Revert หรือลบโค้ดส่วนนั้น แล้วเริ่มวงจร RED ก่อนเสมอ
 - start each scoped unit by naming its intent, context, expected observation, adjustment route, and stop condition
 - read referenced pattern files before editing
 - read the test decision from `30-plan.md`
 - confirm assumptions, target files, and success criteria before editing
-- make the smallest useful code change
 - preserve project style
-- run the planned verification
+- run the planned verification and capture concrete terminal outputs
 - record observation, adjustment, stop condition status, and the result in `40-execute.md`
 - update checklist item status, timestamps, and evidence links as work progresses
-
-If tests are `Required`:
-
-1. **TDD Cycle (RED)**: ออกแบบและเขียนตัวเทสต์ให้พังก่อน (หรือเขียนโครงสร้างเทสต์ที่คาดหวังผลลัพธ์ที่ถูกต้อง) ตามแนวทางใน [coding-standards.md](file:///devflow/context/coding-standards.md)
-2. **GREEN**: เขียนโค้ดระบบจริงให้สอดคล้องเพื่อให้เทสต์ผ่าน
-3. **REFACTOR**: ปรับปรุงโครงสร้างโค้ดโดยยังคงรันเทสต์ผ่านอย่างต่อเนื่อง
 
 ### 3. Recovery
 
