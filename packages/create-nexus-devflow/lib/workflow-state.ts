@@ -55,25 +55,26 @@ function parseWorkflowState(
   const preflightStage = normalizePreflightStage(rawStage);
   const fastStageFromMarkdown = normalizeFastStage(rawStage);
 
+  const isExplicitIdle = explicitTrack === "idle" || explicitTrack === "none";
+  const isExplicitFast = Boolean(explicitTrack?.includes("fast") || explicitTrack?.includes("living"));
+  const isExplicitDeep = Boolean(explicitTrack?.includes("deep") || explicitTrack?.includes("preflight") || explicitTrack?.includes("discovery"));
+
   let track: WorkflowTrack = "idle";
   let currentStage: string | null = null;
 
   const isIdle =
-    explicitTrack === "idle" ||
+    isExplicitIdle ||
     (rawStage === null && currentWork.state === "idle" && !activeRunId && !activeDiscoveryId);
 
   if (isIdle) {
     track = "idle";
     currentStage = null;
-  } else if (explicitTrack === "deep" || explicitTrack === "preflight") {
-    track = "deep";
-    currentStage = preflightStage || (activeDiscoveryId ? "discovery" : "discovery");
-  } else if (explicitTrack === "fast") {
+  } else if (isExplicitFast || (activeRunId && currentWork.state === "active")) {
     track = "fast";
     currentStage = fastStageFromMarkdown || fastStage(currentWork);
-  } else if (activeDiscoveryId) {
+  } else if (isExplicitDeep || activeDiscoveryId) {
     track = "deep";
-    currentStage = "discovery";
+    currentStage = preflightStage || "discovery";
   } else if (currentWork.state === "active") {
     track = "fast";
     currentStage = fastStageFromMarkdown || fastStage(currentWork);
