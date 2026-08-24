@@ -1,109 +1,155 @@
 ---
 name: rollback
-description: "[Devflow] Plan safe feature or run reversal with dependency and commit risk analysis."
+description: "[devflow][B] Plan a safe reversal of a completed Blueprint feature using its archived spec and squashed git commit. Finds the exact feature commit, reviews later commits for dependency risk, writes a Type: Rollback spec to devflow/context/current-feature.md, and stops for review before /implement applies any code change. Use when the user runs /rollback, asks to remove or undo a completed feature, or wants to return the app to its pre-feature behavior without erasing Blueprint history."
 ---
 
-# rollback - Safe Feature Reversal & Rollback Planner
+# rollback - safely reverse a completed feature
 
 Where this sits in the workflow:
 
-```text
-completed run + git history  ->  [rollback]  ->  40-execute (or fix run)  ->  50-verify  ->  70-deliver
-(run archive + commits)          (risk review    (reverse product diff)          (prove)      (log & finalize)
-                                  + plan)
-```
+    completed feature + git history  ->  [rollback]  ->  /implement  ->  /check  ->  /complete
+    (archive + squashed commit)           (risk review     (reverse       (prove)     (log + merge)
+                                           + spec)          product diff)
 
-This skill **plans a rollback**. It does not silently alter product code, reset branches destructively, force-push, or mutate repository history. It identifies the completed run and its exact git commit, analyzes what changed afterward, drafts a guarded rollback specification, and stops for human review before execution.
+This skill plans a rollback. It does not change product code, create a branch,
+commit, merge, or push. It identifies the completed feature and its exact git
+commit, checks what changed afterward, writes a guarded rollback spec, then stops
+for review. `/implement` performs the reversal only after the user approves that
+spec.
 
 ## Input
 
-A completed run by Running ID, name, or run path, plus an optional reason. Examples:
+A completed feature by build-plan number, name, or archive path, plus an optional
+reason. Examples:
 
-```text
-rollback RUN-002-add-onboard-adopt-doctor-skills
-rollback "auth login" because OAuth provider changed
-rollback devflow/runs/RUN-001-align-devflow-blueprint
-```
+    /rollback 4 because the new export flow is corrupting files
+    /rollback "PDF export"
+    /rollback devflow/history/features/04-pdf-export.md
 
-With no target, list recent completed runs from `devflow/runs/` and `devflow/context/current-stage.md` and ask the user to choose. Never silently guess the target. If the reason is missing, ask for one before finalizing the rollback plan.
+With no target, list a short set of recent completed feature archives and ask the
+user to choose. Never silently pick the latest feature. If the reason is missing,
+ask for one before writing the spec because the rollback archive must explain why
+the feature was removed.
 
-## Step 0 - Preflight Check
+## Step 0 - preflight
 
-Read `AGENTS.md`, `devflow/context/current-stage.md`, `devflow/context/project-overview.md`, completed run archives under `devflow/runs/`, and git state.
+Read `AGENTS.md`, `devflow/build-plan.md`,
+`devflow/context/current-feature.md`, the completed feature archives, and git
+state.
 
-Stop before planning when:
+Stop before writing when:
 
-- The directory is not a git repository.
-- There is uncommitted active work in the working tree (unless the user asks to inspect it).
-- The target run cannot be identified unambiguously in `devflow/runs/` or Git history.
+- the directory is not a git repository
+- `current-feature.md` already holds active work
+- the working tree is dirty, including unrelated untracked work
+- the current branch is not the local main or default branch
+- the target is not a checked build-plan feature with a matching archive
+- the archive or its introducing commit cannot be identified unambiguously
 
-Do not discard, force-reset, switch branches, or destroy untracked files automatically.
+Do not stash, discard, fetch, pull, switch branches, or clean the tree from this
+skill.
 
-## Step 1 - Resolve Target Run & Commits
+## Step 1 - resolve the exact feature
 
-Match the requested ID or name against `devflow/runs/` and git commit history:
+Match the requested number or name against both the checked build-plan items and
+`devflow/history/features/*.md`. Exclude the directory README.
 
-```bash
-git log --grep="RUN-002" --oneline
-```
+Use the archive path to locate the commit that added it:
 
-Identify:
+    git log --diff-filter=A --format="%H %s" HEAD -- <archive-path>
 
-- Exact commit SHA(s) introducing the feature.
-- Parent commit before the feature was introduced.
-- Associated stage artifacts (`20-spec.md`, `40-execute.md`, `70-deliver.md`).
+Use the newest matching commit reachable from the current branch. Confirm the
+archive was added by that commit, the commit has exactly one parent, and its
+subject and diff are consistent with the requested feature. A merge commit needs
+mainline selection, so stop rather than guessing. If the archive was never
+committed, explain that git cannot reconstruct a safe rollback from it.
 
-## Step 2 - Separate Product Changes From DevFlow History
+## Step 2 - separate product changes from Blueprint history
 
-Inspect the files touched by the target commit(s).
+Inspect the target commit and build the product-path set from the files it
+changed. Exclude these protected workflow paths:
 
-**Protected Workflow Paths (Never Revert Automatically):**
 - `.agents/**`
 - `.claude/**`
-- `devflow/**` (preserve run records, schemas, and historical reports)
-- `AGENTS.md` / `CLAUDE.md` (unless explicitly intended to update commands)
-- `.nexus/**`
+- `devflow/**`
+- `AGENTS.md`
+- `CLAUDE.md`
+- `prototypes/**`
 
-The rollback must preserve DevFlow's durable history while isolating the **Product Code Diff** (application code, UI components, backend APIs, configuration).
+The rollback must preserve the original feature archive, later planning changes,
+the active rollback spec, adapter skills, and throwaway prototype history. Root
+`README.md` and ordinary app docs are product files unless the project says
+otherwise.
 
-## Step 3 - Review Later-Commit Risk (Dependency Risk Analysis)
+If no product paths remain, stop. Do not create an empty rollback that only
+rewrites Blueprint records.
 
-Inspect every commit after the target commit through `HEAD` that touches any of the product files.
+## Step 3 - review later-change risk
 
-Classify the risk into one of 4 standard categories:
+Inspect every commit after the target through `HEAD` that touches one of the
+product paths. Also read later completed feature specs when they mention the
+target, its contracts, routes, data, or files.
 
-| Risk Level | Meaning | Action |
-| :--- | :--- | :--- |
-| **No Overlap** | No subsequent commits touched these product files. | Clean reversal is safe and straightforward. |
-| **Overlap, Compatible** | Later edits touched the same files, but the target code can be cleanly extracted without breaking newer behavior. | Plan selective reverse-patching. |
-| **Dependency Risk** | Subsequent features or bugfixes directly depend on types, APIs, tables, or exports introduced by the target. | Explicitly warn that dependent features will be affected; plan compatibility shims. |
-| **Blocked** | Reversing the target would cause data loss, break database schema, or require a cascading rollback of multiple runs. | Stop and present the blocker to the user for explicit architectural guidance. |
+Classify the result:
 
-## Step 4 - Produce The Guarded Rollback Plan
+- **No overlap** - no later commit touched the target product paths.
+- **Overlap, likely compatible** - later edits touched the same paths, but the
+  target change can be reversed without removing their behavior.
+- **Dependency risk** - later work appears to require the target's API, schema,
+  route, component, or data.
+- **Blocked** - safe behavior after reversal is unclear, data migration would be
+  destructive, or a cascading rollback would be required.
 
-Draft the rollback plan containing:
+Path overlap is a warning signal, not proof of dependency. Explain the concrete
+later commit and contract involved. Never silently cascade into reverting other
+features. For a blocked case, stop and ask the user to choose a narrower
+remediation or explicitly plan the dependent rollbacks.
 
-1. **Target Run & Rationale**: Running ID, original commit SHA, author, and reason for reversal.
-2. **Product Files to Revert**: Exact list of application files to modify/delete/restore.
-3. **Protected Paths**: Explicit declaration of preserved history files.
-4. **Risk Classification**: Dependency analysis findings and required compatibility repairs.
-5. **Step-by-Step Reversal Steps**:
-   - Step 1: Apply reverse product diff.
-   - Step 2: Apply compatibility fixes for downstream dependencies.
-   - Step 3: Run project verify command (`npm test`, `npm run check`).
-6. **Acceptance & Verification Criteria**: How to prove the removed behavior is truly gone without breaking existing unaffected features.
+## Step 4 - write the rollback spec
 
-## Step 5 - Stop For Human Confirmation
+Write `devflow/context/current-feature.md` using
+`reference/rollback-spec-template.md`. Fill in:
 
-Present the rollback plan to the user:
+- target feature, archive, exact commit, and parent commit
+- user's reason
+- product paths introduced or changed by the target
+- protected workflow paths
+- later commits reviewed and the risk classification
+- compatibility work that is allowed, if any
+- exact verification commands and observable removal criteria
 
-- Summarize affected files and dependency risks.
-- If approved, route to `40-execute` (or allocate a dedicated Fixrollback Run) to safely execute the reversal steps behind review gates.
+The first build step must apply the target commit's product diff in reverse using
+the guarded Type: Rollback behavior in `/implement`. Later steps may repair only
+the specific downstream compatibility issues named in the spec. Do not use a
+rollback as permission for unrelated cleanup.
+
+Older installations may not have `devflow/history/rollbacks/` yet because
+updates preserve user history. That is not a planning blocker; `/complete`
+creates the directory when it archives the approved rollback.
+
+Red-team the draft before presenting it:
+
+- does it preserve all Blueprint history and later plan changes?
+- could it remove data or require a destructive migration?
+- does later code import or call something the target introduced?
+- are the removal criteria observable rather than phrased as "feature gone"?
+- can each compatibility edit be reviewed separately?
+
+Tighten the spec, then stop. Summarize the target commit, affected product paths,
+later-change risk, and what the critique changed. Tell the user to review the
+spec, then run `/implement` to create the rollback branch and apply it.
 
 ## Rules
 
-- **Preserve History**: Never delete run folders under `devflow/runs/`. Historical reports must remain intact.
-- **Update History Ledger**: When the rollback is completed and verified, update the target entry's status in `devflow/history/HISTORY.md` to `Rolled Back` with reference to the reversal commit.
-- **No Destructive Git Commands**: Never execute `git reset --hard HEAD~N` or `git push --force`. All reversals must be applied as forward commits.
-- **One Target Per Rollback**: Avoid bundling multiple unrelated rollbacks into one pass.
-- **Explicit Human Gate**: Always wait for user approval before applying any reverse diffs to code.
+- Preserve history. Never delete or rewrite the original feature archive.
+- Plan only. This skill writes the rollback spec and nothing else.
+- One completed feature per rollback.
+- Never use `git reset --hard`, force-push, history rewriting, or broad file
+  restoration.
+- Never infer permission to cascade into later features or destroy stored data.
+- A rollback still uses `/implement`, `/check`, and `/complete` review gates.
+
+## Formatting
+
+Format the output to match `devflow/context/ai-interaction.md`: concise,
+scannable markdown with a small risk table when later commits overlap.

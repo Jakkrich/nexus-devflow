@@ -27,8 +27,8 @@ None. `/doctor` takes no argument.
 
 Gather these, then summarize. Do not dump file contents.
 
-1. **Required Blueprint files**
-   - Confirm `AGENTS.md`, `blueprint/`, `devflow/project-plan.md`,
+1. **Required DevFlow files**
+   - Confirm `AGENTS.md`, `devflow/project-plan.md`,
      `devflow/build-plan.md`, and `devflow/context/` exist.
    - Confirm `devflow/context/coding-standards.md`,
      `devflow/context/ai-interaction.md`,
@@ -45,15 +45,22 @@ Gather these, then summarize. Do not dump file contents.
      `### <id> [<severity>] <status> - <title>` and warn on a malformed ledger.
      Report any P0 or P1 finding still `open` or `fixed` by ID, since it will
      block `/complete`. Never block on the ledger yourself.
-   - If `.gitignore` marks Blueprint workflow files as local-only, still require
+   - If `.gitignore` marks DevFlow workflow files as local-only, still require
      the files to exist on disk. Ignored but present is healthy; ignored and
      missing means the local workflow needs to be restored.
 2. **Tool adapters**
-   - Confirm at least one adapter exists: `.agents/skills/` for Codex or
-     `.claude/skills/` for Claude Code.
-   - If both adapters are present, say that is healthy when both tools are used.
-   - If both adapters are present, compare their skill folder names. Warn about
-     missing skills on either side.
+   - Read `.nexus/nexus-devflow.json` when present and report its exact
+     logical adapters: Codex, Claude Code, GitHub Copilot, Antigravity, and OpenCode.
+   - Confirm at least one compatible skill tree exists. Codex, Antigravity, and
+     GitHub Copilot use `.agents/skills/`. Claude Code uses `.claude/skills/`.
+     OpenCode can use either tree.
+   - If both skill trees are present, say that is healthy when the selected
+     tools require both. Compare their skill folder names and warn about missing
+     skills on either side.
+   - If OpenCode is selected, do not require `.opencode/skills/`. If it contains
+     duplicate DevFlow skills alongside `.agents/skills/` or `.claude/skills/`,
+     warn that OpenCode discovers all of those locations and the duplicate tree
+     should be reviewed.
    - If git shows changes under `.agents/skills/` or `.claude/skills/`, check
      the matching adapter file too. Warn when workflow behavior was updated in
      one adapter but not the other.
@@ -62,11 +69,11 @@ Gather these, then summarize. Do not dump file contents.
    - If `CLAUDE.md` exists and still starts with `# Project Name`, flag that
      `/onboard` probably has not finished.
 3. **Commands and project setup**
-   - Check whether root `README.md` is still the copied Blueprint workflow doc
+   - Check whether root `README.md` is still the copied DevFlow workflow doc
      by looking for `# AI Coding Blueprint` or opening text that describes the
-     Blueprint workflow instead of the app. If so, warn that `/onboard` should
+     workflow instead of the app. If so, warn that `/onboard` should
      replace it with a project README before publishing.
-   - If `devflow/README.md` clearly contains copied Blueprint workflow docs,
+   - If `devflow/README.md` clearly contains copied workflow docs,
      report it as an obsolete installer artifact. Its absence is healthy. An
      unchanged managed copy can be removed by the updater; a modified copy needs
      user review.
@@ -84,14 +91,14 @@ Gather these, then summarize. Do not dump file contents.
      detected runtime and package manager, and starts with read-only contents
      permission. Preserve other workflows and report overlap for review.
    - A missing `Verify` command or GitHub workflow is informational. It means the
-     optional automatic-check setup was not selected, not that the Blueprint is
+     optional automatic-check setup was not selected, not that DevFlow is
      unhealthy.
 4. **Ignore rules**
    - Check obvious ignore patterns for the detected stack. For Node or Astro,
      look for `node_modules`, `.env`, `dist`, and framework cache folders such as
      `.astro` or `.next` when relevant.
-   - Detect local-only Blueprint mode if `.gitignore` ignores `.agents/`,
-     `.claude/`, `blueprint/`, or `CLAUDE.md`. Report it as a visibility choice,
+   - Detect local-only DevFlow mode if `.gitignore` ignores `.agents/`,
+     `.claude/`, `devflow/`, or `CLAUDE.md`. Report it as a visibility choice,
      not a failure, when the local files exist.
    - In local-only mode, check whether tracked `AGENTS.md` still describes the
      Blueprint workflow, lists hidden adapter paths, or exposes the core skill
@@ -153,8 +160,8 @@ Choose the repair order in this priority:
 - Required Blueprint files missing -> overlay the Blueprint again, or use
   `/adopt` for a brownfield app.
 - No git repo -> initialize git before using the build loop.
-- No tool adapter -> restore `.agents/skills/` or `.claude/skills/` for the tool
-  being used.
+- No tool adapter -> restore `.agents/skills/` or `.claude/skills/` for the
+  selected tool. OpenCode can use either compatible tree.
 - Onboarding incomplete -> run `/onboard`.
 - Root README is still the Blueprint workflow doc -> run `/onboard` to replace
   it with a project README before publishing.

@@ -2,8 +2,7 @@
   "schemaVersion": 1,
   "repository": "https://github.com/aiblueprinthq/ai-blueprint.git",
   "branch": "main",
-  "lastReviewedCommit": "a3877632a37dad28a9bea23cf0f745a68eaa93ee",
-  "reviewedAt": "2026-08-22T10:59:00.0000000+07:00",
-  "nexusPackageVersion": "2.0.15"
+  "lastReviewedCommit": "0b651667c4d55d985b9cc91e6c155c9f9b47b73f",
+  "reviewedAt": "2026-08-24T09:55:00.0000000+07:00",
+  "nexusPackageVersion": "2.1.0"
 }
-

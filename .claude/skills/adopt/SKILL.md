@@ -1,95 +1,211 @@
 ---
 name: adopt
-description: "[Devflow] Survey existing brownfield codebase and bootstrap DevFlow context files."
+description: "[devflow][B] Bring the blueprint into an existing (brownfield) codebase. Surveys the real repo, interviews for intent, generates the owned plans and coding standards, documents existing verification and CI, asks whether DevFlow workflow files should be committed or kept local-only, and points to the optional standalone CI setup. Use when the user runs /adopt, is overlaying the blueprint onto an app that already has meaningful code, or asks to adopt or bootstrap the workflow into an existing project. For freshly scaffolded or early projects, use onboard instead."
 ---
 
-# adopt - Bootstrap Nexus-DevFlow from an Existing Codebase
+# adopt - bootstrap the blueprint from an existing codebase
 
 Where this sits in the workflow:
 
-```text
-existing codebase  ->  [adopt]  ->  project-overview + coding-standards  ->  00-explore or 10-define
-(already has code)     (survey +    (seeded from the real code;               (first feature / refactoring
-                        interview)   shipped architecture documented)          delivery lifecycle)
-```
+    existing codebase  ->  [adopt]  ->  project-plan + build-plan + coding-standards  ->  /overview  ->  normal loop
+    (already has code)     (survey +     (seeded from the real code; shipped               (project-       (/feature,
+                            interview)     features already checked off)                    overview.md)     /implement, ...)
 
-Standard onboarding assumes a freshly scaffolded, near-empty app. That does not fit a codebase that already has thousands of lines of working code.
+The standard onboarding assumes a freshly scaffolded, near-empty app: you write
+the two plans from scratch and build forward. That doesn't fit a project that
+already has thousands of lines of working code. `/adopt` is the brownfield
+on-ramp: it reads what's already there, asks you only for what the code can't tell
+it (the *why* and the *roadmap*), and produces the same input files the rest of
+the workflow expects - so an existing project joins the loop without you
+hand-writing everything.
 
-`adopt` is the brownfield on-ramp for Nexus-DevFlow: it reads what is already there, asks only for what the code cannot reveal (the *intent*, the *why*, and the *upcoming roadmap*), and produces the exact context files the rest of the DevFlow lifecycle expects (`project-overview.md`, `coding-standards.md`, `AGENTS.md` commands).
-
----
+It generates the inputs; it does not generate `project-overview.md`. That stays
+`/overview`'s job. `/adopt` ends by telling you to run `/overview`.
 
 ## Input
 
-A description of what the project is, if provided. Otherwise, inspect the repository directly. No argument is required.
+A description of what the project is, if the user offers one. Otherwise just the
+repository itself. No argument is required.
 
----
+## Step 0 - confirm it's brownfield and safe
 
-## Step 0 - Confirm Brownfield Safety
+Look at `devflow/project-plan.md` and `devflow/build-plan.md`.
 
-Inspect `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`:
+- If they're missing or still the empty worksheet/placeholder, proceed.
+- If they already hold real content, this project is already adopted. Stop and say
+  so; offer to refresh a specific file instead of overwriting work the user owns.
 
-- If they contain default placeholders or empty templates, proceed.
-- If they already hold rich, user-owned content, stop and inform the user; offer to refresh specific sections rather than overwriting existing context without confirmation.
+Never overwrite a filled-in plan without explicit confirmation. Never run a
+framework scaffolder (the blueprint is an overlay, never a generator).
 
-Never run a framework scaffolder (DevFlow is an overlay, never a generator).
+Protect the project README:
 
----
+- If the root `README.md` already looks like a real project README, leave it
+  alone.
+- If the root `README.md` is the copied DevFlow workflow doc (for example it
+  starts with `# AI Coding Blueprint`), report it as obsolete overlay content
+  and ask before replacing or removing it. Do not move it into `devflow/`.
+- Do not create or overwrite a root project README for a brownfield app unless
+  the user explicitly asks. The existing project face belongs to the app, not the
+  workflow.
 
-## Step 1 - Survey the Codebase (Read-Only)
+## Step 1 - survey the codebase (read-only)
 
-Read the repository to establish the facts. Change nothing in this step:
+Read the repo to establish the facts. Change nothing in this step. Establish:
 
-- **Stack & Tooling**: Languages, frameworks, and versions from manifest files (`package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `Cargo.toml`, etc.). Note the active package manager from lockfiles.
-- **Commands**: Real dev, build, test, lint, and verify scripts.
-- **Conventions in Practice**: Directory layout, component naming, state management, styling, data-fetching, error handling, validation. Read what the code *actually does*.
-- **Testing Reality**: Inspect existing test suites, runners, and coverage. Be honest about test status.
-- **Shipped Capabilities & Architecture**: Inferred from routes, pages, controllers, database schemas, and entry points.
+- **Stack and tooling** - language(s), framework(s), and versions, from the real
+  manifest (`package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`,
+  `Gemfile`, `Cargo.toml`, etc.). Note the package manager actually in use (lockfile).
+- **Commands** - the real dev / build / test / lint scripts. These feed the
+  Commands section of `AGENTS.md` and, per the testing opt-in switch, decide
+  whether a testing gate even applies.
+- **Conventions in practice** - directory layout, component/file naming, styling
+  approach, state management, data-fetching pattern, error handling. Read what the
+  code *does*, not what a default template prescribes.
+- **Testing reality** - is a runner configured and are there tests, or none? Be
+  honest; don't describe a gate the project doesn't have.
+- **Verification and CI** - note any combined verification command, GitHub
+  remote, `.github/workflows/`, or external CI. Preserve what already exists.
+- **What the app already does** - the shipped features, inferred from routes,
+  pages, entry points, and modules. This becomes the *checked* part of the build plan.
 
-Keep structured notes for generation in Step 3.
+Keep notes; you'll turn them into the files in Step 3.
 
----
+## Step 2 - interview for intent
 
-## Step 2 - Interview for Intent
+The code reveals *what* and *how*, never *why* or *what next*. Ask the user a short
+set of questions (aim for three to five, not an interrogation) to fill the gaps:
 
-The code reveals *what* and *how*, but not *why* or *what next*. Ask a short set of 3-4 questions to fill the gaps:
+- What is this project for, and who uses it? (the problem and the users)
+- Is the stack and structure you found intentional, or are there parts they'd call
+  legacy / want to change?
+- What do you want to build next? (the unchecked items in the build plan)
+- Anything the survey got wrong or missed?
 
-1. **Purpose & Users**: What is the core problem this project solves, and who are the target users?
-2. **Architecture Status**: Is the current structure and stack intentional, or are there legacy parts/technical debt the team wants to change or refactor?
-3. **Upcoming Roadmap**: What are the top priorities to build, fix, or refactor next?
-4. **Clarifications**: Anything the survey got wrong or missed?
+If the user already gave intent up front, skip what they've answered. Don't ask
+what you can read from the code.
 
-*(If the user already provided this context in the prompt, skip questions that are already answered).*
+## Step 3 - generate the inputs
 
----
+Write these, drawn from the survey (facts) and the interview (intent). Mark every
+inference you're unsure of with a clear `> TODO (confirm)` so the user can correct
+it rather than inherit a wrong guess.
 
-## Step 3 - Generate the Context Artifacts
+- **`devflow/project-plan.md`** - the what & why, following the existing
+  worksheet structure (problem, users, features, data, tech, monetization, UI/UX).
+  The "features" and "tech" sections describe what *already exists*; the rest comes
+  from the interview.
+- **`devflow/build-plan.md`** - the ordered feature list as a checklist. **Mark
+  shipped features `- [x]`** (this is the brownfield difference: the build plan
+  reflects reality, so most of an existing app starts checked) and the roadmap
+  items from the interview as `- [ ]`. This makes `/status` and `/feature` work
+  immediately - the next unchecked item is genuinely what's next.
+- **`devflow/context/coding-standards.md`** - rewrite the default to match the
+  project's *actual* conventions from Step 1, not the shipped Next.js/Prisma
+  defaults. Keep the Writing and Comments sections; replace the stack-specific ones
+  with what the code really does. Its Testing section must reflect the real testing
+  state (the opt-in switch is a `test` command in `AGENTS.md`).
+- **`AGENTS.md` Commands section** - fill in the real dev / build / test / lint
+  commands you found, so the rest of the workflow (and the testing gate) uses the
+  project's actual scripts. Include `Verify` when a real combined command exists.
 
-Write the baseline context files drawn from the survey (facts) and interview (intent):
+Do not write `project-overview.md`; that's `/overview`'s job, downstream of these.
 
-1. **`devflow/context/project-overview.md`**:
-   - Project Name, Purpose, and Target Users
-   - Architecture summary and directory layout
-   - Shipped capabilities and existing major modules
-   - Key technical stack components and verified commands
-   - Known technical debt or architectural focus areas
+## Step 4 - point to optional CI setup
 
-2. **`devflow/context/coding-standards.md`**:
-   - Rewrite defaults to reflect the project's *actual* conventions discovered in Step 1
-   - Framework patterns, state management, error handling, styling, and test rules based on real code
+Do not create or change Verify commands or GitHub workflows during adoption.
+Report any verification command or CI already present. When equivalent automatic
+pull-request checks are absent, mention the optional standalone setup:
 
-3. **`AGENTS.md` Commands Section**:
-   - Fill in the real dev, build, test, lint, and verify commands found during survey.
+```text
+Run /ci or $ci when you want automatic GitHub checks.
+```
 
----
+Explain that CI is not required to finish adoption. The `/ci` skill owns
+project-specific Verify and GitHub workflow setup.
 
-## Step 4 - Review Gate and Handoff
+## Step 5 - ask about DevFlow visibility
 
-Present the adoption summary for review:
+Ask how the DevFlow workflow files should be handled in git, unless the user
+already gave a preference:
 
-- Shipped features and architectural baseline recorded
-- Inferred conventions and coding standards
-- Available verified commands in `AGENTS.md`
-- Recommended next step:
-  - Run `00-explore` (or `00-explore`, `$00-explore`) to explore the next major initiative or feature
-  - Run `10-define` (or `10-define`, `$10-define`) to immediately scope a delivery run for known roadmap items
+```text
+DevFlow visibility?
+
+1. Commit DevFlow workflow files
+   Portable. Best for teams and working across machines.
+
+2. Keep DevFlow workflow files local
+   Adds .agents/, .claude/, devflow/, and CLAUDE.md to .gitignore.
+   Keeps AGENTS.md public as the lightweight project agent guide.
+```
+
+Recommend option 1 by default. If the user chooses option 2:
+
+- Add this block to `.gitignore`, preserving existing entries:
+
+  ```gitignore
+  # DevFlow local workflow files
+  .agents/
+  .claude/
+  devflow/
+  CLAUDE.md
+  ```
+
+- Keep `AGENTS.md` tracked. It remains the lightweight public project guide for
+  commands and conventions.
+- Make `AGENTS.md` public-safe: keep project description, commands, testing gate,
+  and coding conventions, but remove or avoid DevFlow workflow explanations,
+  hidden adapter paths, workflow-document pointers, and core skill lists that
+  would expose the local-only workflow.
+- Explain that local-only mode hides the workflow contents from the repo, but the
+  `.gitignore` names still reveal the ignored paths.
+- Explain that DevFlow state, specs, findings, and history will not travel
+  with the repo; another machine needs DevFlow reinstalled or restored
+  locally.
+- Because adoption runs right after the DevFlow files were added to an
+  existing repository, they are more likely to already be staged or committed
+  than in a fresh install. If any of `.agents/`, `.claude/`, `devflow/`, or
+  `CLAUDE.md` are already tracked, say `.gitignore` will not hide tracked files.
+  Ask before running
+  `git rm --cached -r .agents .claude devflow CLAUDE.md`, and
+  only run it if the user explicitly approves. Never delete the local files.
+
+## Step 6 - review gate, then hand off
+
+Stop and show the user what you generated, calling out:
+
+- the **build-plan split** - what you marked shipped vs not, since that's the
+  judgment most worth their eyes,
+- every `> TODO (confirm)` you left,
+- anything the survey and the interview disagreed on,
+- verification command and GitHub checks status,
+- DevFlow visibility choice, and a tracked-file warning if local-only mode was
+  chosen after files were already tracked.
+
+These files are the ones the user *owns*. Have them review and adjust, then tell
+them to run `/overview` to distill the plans into `project-overview.md` and start
+the normal loop.
+
+## Rules
+
+- **Read-only until Step 3.** The survey changes nothing; only generation writes.
+- **Reflect reality, don't prescribe.** `coding-standards.md` must match the code
+  that exists. A project using Zustand and REST routes should not be handed
+  standards about Server Actions and Prisma just because that's the default.
+- **Never invent intent.** Ask for the why and the roadmap; mark anything inferred
+  with `> TODO (confirm)`. Silent guesses about purpose are the main failure mode.
+- **Don't clobber owned work.** If the plans already have real content, confirm
+  before touching them. Never run a scaffolder.
+- **Be honest about testing.** If there's no runner, say testing is opt-in and not
+  yet set up; don't describe a gate the project hasn't adopted.
+- Keep `AGENTS.md` public in local-only mode unless the user explicitly asks for
+  a more advanced setup.
+- Do not untrack DevFlow files with `git rm --cached` without a separate
+  explicit approval.
+
+## Formatting
+
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
+enumerations and tables for matrices rather than dense paragraphs.

@@ -1,108 +1,120 @@
 ---
 name: try
-description: "[Devflow] Generate human manual QA review walkthrough guide (where to go, what to click, what to expect)."
+description: "[devflow][B] Generate a human manual try guide for the current or most recently completed Blueprint feature, fix, or rollback. Reads the spec, project commands, and available app context, then tells the user exactly what to start, where to go, what to click or run, what to expect, and what would count as wrong. Read-only. Use when the user runs /try, invokes $try, asks how to test manually, asks where to click, asks how to see the change, or wants a manual review path after /implement, /autopilot, /check, or /complete."
 ---
 
-# try - Manual QA & Review Walkthrough Guide
+# try - manual review guide
 
 Where this sits in the workflow:
 
-```text
-40-execute or 50-verify or 60-report  ->  [try]  ->  human review & verification
-(work implemented / verified)                  (manual    (where to go,
-                                               steps)     what to click)
-```
+    /implement or /complete  ->  [try]  ->  human review
+    (work exists)                (manual   (where to go,
+                                  path)     what to click)
 
-`50-verify` proves behavior from automated QA and test runs. `try` gives the user and testers an actionable, step-by-step manual walkthrough: start this command, open this route, click these controls, expect this result, and watch for these failure signs.
+`/check` proves behavior from the agent side. `/try` gives the user a practical
+manual walkthrough: start this command, open this route, click these controls,
+expect this result, and watch for these failure signs.
 
-It is always **read-only 100%**. It does not edit files, install dependencies, commit, merge, push, or run destructive commands.
+It is always read-only. It does not edit files, install dependencies, commit,
+merge, push, or run destructive commands.
 
 ## Input
 
 Optional scope:
 
-- **no argument**: use the active run in `devflow/context/current-stage.md` (or the latest completed run under `devflow/runs/`)
-- `latest`: use the most recent completed run in `devflow/runs/`
-- a run ID or path: e.g. `try RUN-002-add-onboard-adopt-doctor-skills`
-- a specific route, endpoint, or CLI command: focus the walkthrough on that surface
+- no argument: use the active feature, fix, or rollback in
+  `devflow/context/current-feature.md`
+- `latest`: use the most recent archive under `devflow/history/features/`,
+  `devflow/history/fixes/`, or `devflow/history/rollbacks/`
+- a step name or number: focus the guide on that current-feature step
+- a path, route, or command: include it as the main thing to try
 
-If there is no active run and no run history, ask what change or feature the user wants to test manually.
+If there is no active feature and no useful archive, ask what change the user
+wants to try instead of guessing.
 
-## Step 1 - Find The Work To Explain
+## Step 1 - find the work to explain
 
 Read:
 
-- `AGENTS.md` (Commands section)
-- `devflow/context/current-stage.md`
+- `AGENTS.md`
+- `devflow/context/current-feature.md`
 - `devflow/context/project-overview.md`
 - `devflow/context/coding-standards.md`
-- Active run artifacts: `20-spec.md`, `30-plan.md`, `40-execute.md`, `50-verify.md` (or archived run artifacts)
-- Current git branch and status
+- `devflow/build-plan.md`
+- latest files under `devflow/history/features/`,
+  `devflow/history/fixes/`, and `devflow/history/rollbacks/`, if the current
+  feature is reset
+- git branch and working tree status
 
-Do not dump the full spec. Extract only the concrete routes, screens, CLI commands, API endpoints, test data, and expected outcomes that a human needs to verify the feature.
+Prefer the active spec. If `current-feature.md` is the reset stub, use the most
+recent archived feature, fix, or rollback by filename or modification time and
+say that is what you used.
 
-## Step 2 - Identify How To Run The App
+Do not dump the spec. Pull out the routes, commands, UI surfaces, CLI commands,
+API endpoints, data states, and done-whens that matter for a human trying it.
+For a rollback, lead with the path that proves the removed behavior is gone, then
+include one unaffected regression path from the rollback spec.
 
-Check the Commands section in `AGENTS.md`. Adapt to the project type:
+## Step 2 - identify how to run the app
 
-- **Web app**: dev server command (e.g. `npm run dev`), local URL (e.g. `http://localhost:3000`), and specific route/screen.
-- **Server / API**: start command, base URL, endpoint, HTTP method, payload, and expected response shape.
-- **CLI**: exact CLI command, flags, arguments, and expected terminal output.
-- **Library / Module**: sample usage snippet, REPL call, or interactive test command.
-- **Fullstack / Microservices**: minimal combined startup commands (e.g. backend + frontend).
+Use the Commands section in `AGENTS.md`. Match the project type:
 
-If a startup command is missing or unclear in `AGENTS.md`, report that as a configuration gap rather than guessing.
+- **Web app** - dev server command, URL, and the route or screen to open.
+- **Server/API** - server command, base URL, endpoint, method, and expected
+  response shape.
+- **CLI** - exact command(s), arguments, and expected output.
+- **Library** - example command, test fixture, REPL snippet, or sample call.
+- **Hybrid app** - list the smallest set of commands needed, such as backend plus
+  web dev server.
 
-## Step 3 - Produce The Manual Walkthrough Guide
+If the app may already be running, say how to reuse it. If a command is missing
+from `AGENTS.md`, report that as a gap rather than inventing certainty.
 
-Format the guide with these 5 standard sections:
+## Step 3 - write the manual guide
 
-1. **1. Start** - exact command(s) to start the system and where to run them.
-2. **2. Open** - URL(s), screens, tabs, API endpoints, or terminal locations.
-3. **3. Do** - specific clicks, form inputs, toggles, selections, or arguments.
-4. **4. Expect** - expected visible UI change, response payload, state change, output, or absence of errors.
-5. **5. Watch For** - common failure symptoms, console errors, network 4xx/5xx errors, stale state, layout breakage, or safety warnings.
+Produce a short guide with these sections:
 
-### Example Walkthrough Style:
+1. **Start** - commands to run and where to run them.
+2. **Open** - URLs, screens, tabs, API endpoints, or CLI commands.
+3. **Do** - clicks, inputs, selections, or command arguments.
+4. **Expect** - visible result, output, response, state change, file, or lack of
+   error.
+5. **Watch For** - common wrong outcomes, console or network errors, stale data,
+   missing fields, bad empty states, layout issues, or safety warnings.
 
-```markdown
-### 1. Start
-Run `npm run dev` in the project root.
+Keep it concrete. Prefer:
 
-### 2. Open
-Navigate to `http://localhost:3000/dashboard/reports`.
+    Open http://127.0.0.1:7788/api/snapshot
+    Expect a JSON object with `generated_at`, `services`, `projects`, and
+    `conflicts`.
 
-### 3. Do
-1. Click the **"Export Report"** button in the top right.
-2. Select **"Format: HTML"** from the dropdown.
-3. Click **"Download"**.
+Avoid:
 
-### 4. Expect
-- A new file `report.html` is downloaded.
-- The UI displays a green success toast: *"Report exported successfully"*.
-- The downloaded HTML file opens in the browser with full styling and charts.
+    Check that the snapshot works.
 
-### 5. Watch For
-- Spinner hanging indefinitely without downloading.
-- Console error related to `Blob` or `URL.createObjectURL`.
-- Broken styling or unrendered Mermaid charts in the exported HTML.
-```
+## Step 4 - include confidence and gaps
 
-## Step 4 - Include Confidence, Best Signal & Gaps
+End with:
 
-Conclude with:
+- **Best signal** - the one thing the user should try first.
+- **Optional deeper checks** - only if useful.
+- **Gaps** - anything the guide cannot know from the docs, such as missing route
+  names, seed data, credentials, or external services.
 
-- **Best Signal**: the single most critical action the user should try first to confirm functionality.
-- **Edge Cases & Error Flows**: optional secondary checks (e.g. invalid input, empty state, network failure).
-- **Gaps & Assumptions**: anything the guide cannot know for certain (e.g. seed credentials, third-party API keys, required database fixtures).
+If the feature is not user-visible, say so and provide the closest manual signal,
+such as an API response, CLI output, log line, or unit test command.
 
 ## Rules
 
-- **Strictly Read-Only**: Never edit code, commit, push, install packages, or mutate repository state.
-- **Do Not Run Automatically**: Do not launch the server or run commands unless the user explicitly instructs you to do so in the chat.
-- **Be Concrete & Specific**: Provide exact URLs, button labels, and payloads.
-- **Acknowledge Uncertainty**: If a route or behavior is not specified in the spec, state it clearly as an assumption.
+- Read-only only. Do not edit, commit, merge, push, install, or delete.
+- Do not run the app unless the user explicitly asks you to try it for them.
+- Do not pretend a path is known when the spec does not say it. Give the best
+  likely path and label uncertainty.
+- Keep the guide short enough to follow while the app is open.
+- Match the project's commands from `AGENTS.md`.
 
-## Output Formatting
+## Formatting
 
-Follow the project conventions in `devflow/context/ai-interaction.md`: concise, scannable markdown with numbered steps and clear bold headers.
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with numbered
+steps for the manual path and short bullets for warnings.

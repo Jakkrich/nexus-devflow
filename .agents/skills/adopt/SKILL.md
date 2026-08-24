@@ -1,6 +1,6 @@
 ---
 name: adopt
-description: "[devflow][B] Bring the blueprint into an existing (brownfield) codebase. Surveys the real repo, interviews for intent, generates the owned plans and coding standards, documents existing verification and CI, and points to the optional standalone CI setup. Use when the user runs /adopt, is overlaying the blueprint onto an app that already has meaningful code, or asks to adopt or bootstrap the workflow into an existing project. For freshly scaffolded or early projects, use onboard instead."
+description: "[devflow][B] Bring the blueprint into an existing (brownfield) codebase. Surveys the real repo, interviews for intent, generates the owned plans and coding standards, documents existing verification and CI, asks whether DevFlow workflow files should be committed or kept local-only, and points to the optional standalone CI setup. Use when the user runs /adopt, is overlaying the blueprint onto an app that already has meaningful code, or asks to adopt or bootstrap the workflow into an existing project. For freshly scaffolded or early projects, use onboard instead."
 ---
 
 # adopt - bootstrap the blueprint from an existing codebase
@@ -42,9 +42,9 @@ Protect the project README:
 
 - If the root `README.md` already looks like a real project README, leave it
   alone.
-- If the root `README.md` is the copied Blueprint workflow doc (for example it
+- If the root `README.md` is the copied DevFlow workflow doc (for example it
   starts with `# AI Coding Blueprint`), report it as obsolete overlay content
-  and ask before replacing or removing it. Do not move it into `blueprint/`.
+  and ask before replacing or removing it. Do not move it into `devflow/`.
 - Do not create or overwrite a root project README for a brownfield app unless
   the user explicitly asks. The existing project face belongs to the app, not the
   workflow.
@@ -124,7 +124,54 @@ Run /ci or $ci when you want automatic GitHub checks.
 Explain that CI is not required to finish adoption. The `/ci` skill owns
 project-specific Verify and GitHub workflow setup.
 
-## Step 5 - review gate, then hand off
+## Step 5 - ask about DevFlow visibility
+
+Ask how the DevFlow workflow files should be handled in git, unless the user
+already gave a preference:
+
+```text
+DevFlow visibility?
+
+1. Commit DevFlow workflow files
+   Portable. Best for teams and working across machines.
+
+2. Keep DevFlow workflow files local
+   Adds .agents/, .claude/, devflow/, and CLAUDE.md to .gitignore.
+   Keeps AGENTS.md public as the lightweight project agent guide.
+```
+
+Recommend option 1 by default. If the user chooses option 2:
+
+- Add this block to `.gitignore`, preserving existing entries:
+
+  ```gitignore
+  # DevFlow local workflow files
+  .agents/
+  .claude/
+  devflow/
+  CLAUDE.md
+  ```
+
+- Keep `AGENTS.md` tracked. It remains the lightweight public project guide for
+  commands and conventions.
+- Make `AGENTS.md` public-safe: keep project description, commands, testing gate,
+  and coding conventions, but remove or avoid DevFlow workflow explanations,
+  hidden adapter paths, workflow-document pointers, and core skill lists that
+  would expose the local-only workflow.
+- Explain that local-only mode hides the workflow contents from the repo, but the
+  `.gitignore` names still reveal the ignored paths.
+- Explain that DevFlow state, specs, findings, and history will not travel
+  with the repo; another machine needs DevFlow reinstalled or restored
+  locally.
+- Because adoption runs right after the DevFlow files were added to an
+  existing repository, they are more likely to already be staged or committed
+  than in a fresh install. If any of `.agents/`, `.claude/`, `devflow/`, or
+  `CLAUDE.md` are already tracked, say `.gitignore` will not hide tracked files.
+  Ask before running
+  `git rm --cached -r .agents .claude devflow CLAUDE.md`, and
+  only run it if the user explicitly approves. Never delete the local files.
+
+## Step 6 - review gate, then hand off
 
 Stop and show the user what you generated, calling out:
 
@@ -132,7 +179,9 @@ Stop and show the user what you generated, calling out:
   judgment most worth their eyes,
 - every `> TODO (confirm)` you left,
 - anything the survey and the interview disagreed on,
-- verification command and GitHub checks status.
+- verification command and GitHub checks status,
+- DevFlow visibility choice, and a tracked-file warning if local-only mode was
+  chosen after files were already tracked.
 
 These files are the ones the user *owns*. Have them review and adjust, then tell
 them to run `/overview` to distill the plans into `project-overview.md` and start
@@ -150,6 +199,10 @@ the normal loop.
   before touching them. Never run a scaffolder.
 - **Be honest about testing.** If there's no runner, say testing is opt-in and not
   yet set up; don't describe a gate the project hasn't adopted.
+- Keep `AGENTS.md` public in local-only mode unless the user explicitly asks for
+  a more advanced setup.
+- Do not untrack DevFlow files with `git rm --cached` without a separate
+  explicit approval.
 
 ## Formatting
 

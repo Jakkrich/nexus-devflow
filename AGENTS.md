@@ -25,8 +25,9 @@ The workflow and skills are exposed through tool-specific adapters:
 
 - **OpenAI Codex, Google Antigravity & GitHub Copilot**: `.agents/skills/<skill>/SKILL.md`
 - **Claude Code**: `.claude/skills/<skill>/SKILL.md`
+- **OpenCode**: `AGENTS.md` plus the compatible `.agents/skills/` or `.claude/skills/` tree already installed for the selected tools
 
-Unused adapter families can be removed. Codex, Antigravity, and GitHub Copilot share `.agents/` and `AGENTS.md`. Claude Code projects keep `.claude/` and `AGENTS.md` (via `CLAUDE.md`).
+Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and OpenCode share `.agents/` and `AGENTS.md`. OpenCode can also reuse `.claude/` when Claude Code is selected. Claude Code projects keep `.claude/` and `AGENTS.md` (via `CLAUDE.md`). Do not duplicate the same DevFlow skills under `.opencode/skills/`; OpenCode already discovers the compatible trees.
 
 ### Universal Invocation & Agent Directives:
 

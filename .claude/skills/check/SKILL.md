@@ -1,80 +1,100 @@
 ---
 name: check
-description: "[Devflow] Fast-Track Check stage in DevFlow (Blueprint Mode) - perform senior QA review, run multi-lane verification, and record evidence in current-feature.md in context."
-argument-hint: "{running-id or workspace path}"
+description: "[devflow][F] Prove the current work actually does what its spec says by running the real app and observing behavior against the \"done when\" criteria in current-feature.md. Drives the app (browser, CLI, or server), captures evidence (screenshots, output, console/network errors), and reports pass/fail per criterion. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build. (Supersedes the built-in /verify with a spec-aware version inside blueprint projects.)"
 ---
 
-# Fast-Track: Check (Blueprint Mode)
+# check - prove it works against the spec, with evidence
 
-$ARGUMENTS
+Where this sits in the workflow:
 
-Quality assurance and multi-lane verification stage in Fast-Track. Validates implementation against Acceptance Criteria, executes Scrutinize QA & Security checks, runs test suites, checks for regressions, and records evidence in the Single Living Spec (`devflow/context/current-feature.md`).
+    /implement  ->  [check]  ->  /complete
+    (built a       (run the app,    (only once the
+     step or        prove each       done-whens are
+     the feature)   done-when)       proven)
 
-## Invocations & Aliases
+`/implement` builds and does a quick build-plus-screenshot check inline. `/check`
+is the deeper, repeatable gate for when a "done when" needs the *real running app*,
+not just a green build: a click that triggers a download, a route that returns a
+file, a flow across screens. Run it on a single step whose done-when is
+behavioral, or on the whole feature as the acceptance check before `/complete`.
 
-- `/check`: Run verification on current active run
-- `/check {id}`: Run verification on specified ID
-- `$check`: Codex CLI invocation
+The point is evidence. A passing build proves the code compiles; `/check` proves
+the thing the spec promised actually happens. It changes no source and commits
+nothing - it runs the app and reports what it saw.
 
-## Fast-Track Mainline Workflow
+## Input
 
-```text
-/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
-```
+Optional: a specific thing to check (a step, a flow, a URL). With no argument,
+verify the whole current feature against every "done when" in
+`devflow/context/current-feature.md`.
 
-## Behavior & Contract
+## Step 1 - build the checklist
 
-When invoked:
+Read `devflow/context/current-feature.md`. Pull the observable "done when"
+criteria from the build steps (and any acceptance notes in the Testing section).
+Turn them into a concrete checklist of claims to prove - each one a specific,
+observable behavior, not "it works". If the user named one thing, scope to that.
 
-### 1. Load Active Context
-1. Identify active Running ID from `devflow/context/current-stage.md` or `devflow/context/current-feature.md`.
-2. Read `devflow/context/current-feature.md`.
-3. Locate `## 1. Specification & Scope` (Acceptance Criteria) and `## 3. Implementation Checklist`.
+If there's no current feature spec, ask what to verify rather than guessing.
 
-### 2. Multi-lane Verification & Scrutinize QA
+## Step 2 - get the app running
 
-Execute verification gates across all lanes:
+Use the project's real commands (see Commands in `AGENTS.md`). Match the project
+type:
 
-1. **Lane 1: Typecheck & Static Code Quality**:
-   - Run typecheck and linting (e.g. `npm run typecheck`, `npm run lint`).
-   - Confirm 0 type errors, 0 lint warnings.
-2. **Lane 2: Automated Test Suites (TDD Gate)**:
-   - Run automated unit and integration tests (e.g. `npm test`).
-   - Confirm 100% tests pass with no disabled/skipped tests.
-3. **Lane 3: Scrutinize & Edge Cases Review**:
-   - **Boundary Conditions**: Check empty collections, 0/1 limits, off-by-one errors.
-   - **Null / Undefined Safety**: Verify optional chaining and nullish coalescing.
-   - **Error Handling & Propagation**: Verify errors are logged and handled without swallow.
-4. **Lane 4: Security & Hygiene Audit**:
-   - **Secrets Check**: No hardcoded API keys, passwords, or tokens in source code.
-   - **Injection & Sanitization**: Ensure inputs are validated and parameterized.
-5. **Lane 5: Manual Scenario Proof**:
-   - Verify specific scenarios against Acceptance Criteria (`AC-1`, `AC-2`).
-   - Provide concrete walkthrough: "Where to go", "What to run/click", "What to expect".
+- **Web app** - start (or reuse) the dev/preview server, then drive a real browser
+  to the relevant routes. Prefer reusing an already-running server over starting a
+  duplicate. If Playwright is already installed or declared in `AGENTS.md`, prefer
+  it for browser driving, screenshots, console errors, and failed request checks.
+  If it is not installed, do not add it from `/check`; use another real-browser
+  evidence path and report what you used.
+- **CLI** - run the actual command(s) with representative inputs.
+- **Server/API** - start it and hit the endpoints.
+- **Library** - exercise the public API through an example or the test command.
 
-### 3. Update Living Spec (`current-feature.md`)
-Append or update `## 5. Verification Evidence` in `devflow/context/current-feature.md` in **Thai (`th`)**:
+If a `test` command is declared in `AGENTS.md`, you may run it as *one* input, but
+`/check` is broader than unit tests: it checks real behavior, which is exactly the
+evidence UI and integration steps ride on instead of unit tests.
 
-```markdown
-## 5. Verification Evidence
-- **Typecheck & Linter**: Passed (0 errors, 0 warnings)
-- **Automated Test Suites**: All tests passed (e.g. 12/12 passed, 0 failed)
-- **Scrutinize & Security Audit**: Clean (No boundary issues, 0 secrets, safe inputs)
-- **Acceptance Criteria Verification**:
-  - [x] AC-1: {ผลการตรวจสอบเงื่อนไขที่ 1 ผ่าน 100%}
-  - [x] AC-2: {ผลการตรวจสอบเงื่อนไขที่ 2 ผ่าน 100%}
-- **Manual Verification Guide**:
-  - *Where to go*: `http://localhost:3000/api/auth`
-  - *Action*: Send POST request with test credentials
-  - *Expected Result*: Received HTTP 200 with valid JWT token
-```
+## Step 3 - exercise each claim
 
-### 4. Update Workspace Status
-Update `devflow/context/current-stage.md`:
-- `Current Stage`: `check (Fast-Track -> Verification Passed -> Ready for /complete)`
+Drive the app to each checklist item and capture evidence as you go:
 
-### 5. Output Summary & Next Step
-Report to the user:
-- Summary of verification results across all lanes
-- Evidence recorded in `devflow/context/current-feature.md`
-- **Next Command**: `/complete` (or `/complete {ID}`)
+- Navigate and interact for real (click, type, submit, download) - don't assert
+  from the code what the running app would do.
+- Capture **screenshots** for visual/UI claims, **output** for CLI/API claims.
+- Watch for **console errors and failed network requests**; a clean-looking screen
+  with errors in the console is not a pass.
+
+## Step 4 - report
+
+Give a short, honest verdict, one line per checklist item:
+
+    [pass] Download PDF saves certificate-<slug>.pdf - file downloaded, opened to the cert
+    [pass] Both buttons show a loading state - screenshot: loading-state.png
+    [fail] PDF border missing - printBackground not set; screenshot: pdf-no-border.png
+    [skip] Vercel render - can't verify locally (feature 9)
+
+Then state the bottom line: are all the feature's done-whens proven, or not yet.
+
+- All proven -> say it's ready for `/complete`.
+- Anything failed -> hand back to `/implement` to fix; name what to fix. Don't fix
+  it here.
+- Anything unverifiable -> say so plainly and why; never report it as a pass.
+
+## Rules
+
+- **Observe, don't change.** `/check` runs the app and reports. It never edits
+  source, never commits, never merges. Fixing is `/implement`'s job.
+- **Evidence or it didn't happen.** Every `pass` is backed by something observed -
+  a screenshot, output, a response. No assumed passes from reading the code.
+- **Honest over green.** "Couldn't verify" and "failed" are valid, useful results.
+  Faking a pass defeats the entire gate.
+- **Check the spec, not vibes.** Verify against the done-whens in
+  `current-feature.md`, so "works" means what the spec said it would do.
+
+## Formatting
+
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
+enumerations and tables for matrices rather than dense paragraphs.

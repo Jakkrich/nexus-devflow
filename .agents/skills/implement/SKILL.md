@@ -65,7 +65,7 @@ Before the first rollback build step:
    and the only dirty path before applying the patch is the approved rollback
    spec. Stop on drift.
 3. Preview the target's product diff while excluding `.agents/**`, `.claude/**`,
-   `blueprint/**`, `AGENTS.md`, `CLAUDE.md`, and
+   `devflow/**`, `AGENTS.md`, `CLAUDE.md`, and
    `prototypes/**`. Confirm the preview is non-empty and matches the Product
    paths in the spec.
 4. Apply that product diff in reverse with three-way conflict detection and
@@ -73,7 +73,7 @@ Before the first rollback build step:
 
        git diff --binary <target-parent> <target-commit> -- . \
          ':(exclude).agents/**' \
-         ':(exclude).claude/**' ':(exclude)blueprint/**' \
+         ':(exclude).claude/**' ':(exclude)devflow/**' \
          ':(exclude)AGENTS.md' ':(exclude)CLAUDE.md' \
          ':(exclude)prototypes/**' |
          git apply --reverse --3way --index
