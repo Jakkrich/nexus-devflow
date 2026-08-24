@@ -46,17 +46,17 @@ test("readDashboardSnapshot composes status, workflow, history, doctor and offli
 });
 
 
-test("selectDashboardNextAction prefers the explicit Deep-Track stage", () => {
+test("selectDashboardNextAction prefers the active workflow stage", () => {
   const status = {
     nextAction: { command: "/check", reason: "No checklist steps remain." }
   } as ProjectStatus;
   const workflow = {
     track: "deep",
-    currentStage: "40-execute",
-    activeRunId: "040-dashboard"
+    currentStage: "discovery",
+    activeRunId: "DISC-001"
   } as WorkflowState;
   assert.deepEqual(selectDashboardNextAction(status, workflow), {
-    command: "/40-execute 040-dashboard",
-    reason: "Continue the active Deep-Track run at 40-execute."
+    command: "/discovery DISC-001",
+    reason: "Continue active workflow at /discovery."
   });
 });

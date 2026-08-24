@@ -2,21 +2,23 @@
   "schemaVersion": 1,
   "name": "nexus-devflow",
   "package": "@jakkrichm/create-nexus-devflow",
-  "version": "2.2.2",
+  "version": "2.5.0",
   "repository": "https://github.com/Jakkrich/nexus-devflow",
   "artifactLanguage": "th",
   "adapters": [
     "antigravity",
     "claude",
     "codex",
-    "copilot"
+    "copilot",
+    "opencode"
   ],
   "workspace": {
     "contextDir": "devflow/context",
     "historyDir": "devflow/history",
     "referenceDir": "devflow/reference",
     "runsDir": "devflow/runs",
-    "discoveriesDir": "devflow/discoveries"
+    "discoveriesDir": "devflow/discoveries",
+    "decisionsDir": "devflow/decisions"
   },
   "lifecycle": {
     "fastTrackStages": [
@@ -27,17 +29,15 @@
       "complete"
     ],
     "mainlineStages": [
-      "discovery",
-      "10-define",
-      "20-spec",
-      "30-plan",
-      "40-execute",
-      "50-verify",
-      "60-report",
-      "70-deliver"
+      "feature",
+      "fix",
+      "implement",
+      "check",
+      "complete"
     ],
     "companionCommands": [
       "devflow",
+      "discovery",
       "doctor",
       "overview",
       "debug",
@@ -48,6 +48,7 @@
       "idea",
       "ci",
       "test",
+      "tests",
       "autopilot",
       "prototype",
       "report-html",
@@ -55,7 +56,8 @@
       "audit",
       "release",
       "brainstorm",
-      "grill"
+      "grill",
+      "convert-any-to-md"
     ]
   },
   "installedAt": "2026-08-17T00:00:00.000Z"

@@ -1,0 +1,9 @@
+{
+  "skill": "convert-any-to-md",
+  "positive": [
+    "run convert-any-to-md skill",
+    "invoke /convert-any-to-md command",
+    "use convert-any-to-md to convert document into markdown",
+    "apply convert-any-to-md guidance"
+  ]
+}

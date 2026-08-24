@@ -1,12 +1,12 @@
-# Nexus-DevFlow 2.0 (The 3-Pillars & Dual-Track Model)
+# Nexus-DevFlow 2.5.0 (The 3-Pillars & Single Living Spec Model)
 
 Instructions for AI coding agents working in this project. This is the cross-tool entry point: Codex, Google Antigravity, Cursor, GitHub Copilot, Gemini CLI, Aider, Zed, Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports this file (`@AGENTS.md`), so there is a single source of truth.
 
 ## What this is
 
-This project uses **Nexus-DevFlow**, an agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Dual-Track Delivery**:
+This project uses **Nexus-DevFlow**, an agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Single Living Spec Model**:
 1. **🔮 Future (Backlog)**: `devflow/ideas.md` — Centralized Idea Inbox with AI scoring.
-2. **⚡ Present (Active Context)**: `devflow/context/` — Living Source of Truth & Active Work (`current-feature.md` for Fast-Track, `current-run/` for Deep-Track).
+2. **⚡ Present (Active Context)**: `devflow/context/` — Living Source of Truth & Active Work (`current-feature.md` Single Living Spec).
 3. **📦 Past (History Archive)**: `devflow/history/` — Categorized delivery archives (`features/`, `fixes/`, `rollbacks/`, and `HISTORY.md`).
 
 To start a new project, scaffold the application first in an empty folder, then run `npx @jakkrichm/create-nexus-devflow` to overlay DevFlow onto your codebase.
@@ -18,6 +18,7 @@ To start a new project, scaffold the application first in an empty folder, then 
 - `devflow/context/ai-interaction.md` - how to interact with the user on this project
 - `devflow/context/current-stage.md` - active discovery or running delivery state
 - `devflow/context/findings.md` - quality, security, and verification ledger
+- `devflow/context/glossary.md` - domain terms & architecture definitions
 
 ## Tool-Specific Adapters & Execution Rules
 
@@ -31,60 +32,50 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### Universal Invocation & Agent Directives:
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `discovery`, `10-define`, `20-spec`, `30-plan`, `40-execute`, `50-verify`, `60-report`, `70-deliver`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `idea`, `ci`, `test`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `brainstorm`, `grill`). The way you invoke commands depends on your AI Provider / Tool:
-   - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `40-execute`, `devflow`, `discovery`).
-   - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/40-execute`, `/devflow`, `/discovery`.
-   - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$40-execute`, `$devflow`, `$discovery`.
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `discovery`, `idea`, `grill`, `brainstorm`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`). The way you invoke commands depends on your AI Provider / Tool:
+   - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `implement`, `devflow`, `discovery`).
+   - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/devflow`, `/discovery`.
+   - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$devflow`, `$discovery`.
 2. **OpenAI Codex & Non-Native CLI Tools**: In environments without automatic background skill discovery (such as OpenAI Codex CLI, Aider, or generic terminals), **you MUST use your file reading tool to inspect `.agents/skills/<skill>/SKILL.md` before executing the stage** to strictly follow its schema, artifact contract, and quality gates.
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover and surface `.agents/skills/` and `.claude/skills/`.
 4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` to automatically inspect `devflow/context/current-stage.md` and active context in `devflow/context/`.
-5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`current-feature.md`, `00-explore.md`...`70-deliver.md`) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
+5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`current-feature.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 
 ---
 
-## 🏎️ Track 1: Fast-Track (Blueprint Mode - 4 Steps)
+## ⚡ The Unified 4-Stage Living Spec Lifecycle
 
-Recommended for 85% of daily work (features, bug fixes, UI improvements, iterative tasks):
+All development tasks (from lean UI fixes to deep architectural epics) execute through the 4-step progressive lifecycle:
 
 ```text
 /feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
 1. **`feature` / `fix` (`/feature`, `/fix`, `/spec`)**:
-   - **Purpose**: Combines Discover, Define, Spec, and Plan into one unified step. Checks Single Active Run Guardrail, allocates sequential ID (`xxx-slug`), and creates the **Single Living Spec (`devflow/context/current-feature.md`)**.
+   - **Purpose**: Combines Discover, Define, Spec, and Plan into one unified step. Checks Single Active Run Guardrail, allocates sequential ID (`xxx-slug`), and creates the **Single Living Spec (`devflow/context/current-feature.md`)** with 6 structured sections.
    - **Artifact**: `devflow/context/current-feature.md`
 2. **`implement` (`/implement`)**:
-   - **Purpose**: Incrementally executes checklist tasks with TDD discipline and appends progress to `devflow/context/current-feature.md`.
+   - **Purpose**: Incrementally executes checklist tasks with TDD discipline (Red-Green-Refactor) and appends diff evidence to `current-feature.md`.
 3. **`check` (`/check`)**:
-   - **Purpose**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof), and records evidence into `devflow/context/current-feature.md`.
+   - **Purpose**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof), and records empirical proof into `current-feature.md`.
 4. **`complete` (`/complete`)**:
-   - **Purpose**: Final safety pass, records Release Digest, automatically archives to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, resets the stub, performs git merge, and closes the run without auto HTML generation.
+   - **Purpose**: Final safety pass, records Release Digest, automatically archives to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, resets the stub, and performs git squash-merge.
 
 ---
 
-## 🏗️ Track 2: Deep-Track (Architect Mode - 8 Steps)
+## 🔮 Pre-Flight Discovery & Architectural Alignment (Companions)
 
-Recommended for large architectural epics, database migrations, and multi-agent coordination:
-
-```text
-discovery ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-deliver
-```
-
-1. `discovery`: Unified pre-delivery discovery & exploration (project-level roadmap planning or feature-level exploration with 5 lenses: Brainstorm, Research, PRD, Bug Triage, Grill) before delivery commitment (`devflow/discoveries/{DISC-ID}/discovery.md`).
-2. `10-define`: Turn approved discovery into bounded delivery run in `devflow/context/current-run/10-define.md`.
-3. `20-spec`: Formalize markdown-first delivery contract & acceptance criteria (`20-spec.md`).
-4. `30-plan`: Breakdown spec into executable tasks with test decisions (`30-plan.md` + checklists).
-5. `40-execute`: Incremental task execution behind review gates (`40-execute.md`).
-6. `50-verify`: Senior QA review & multi-lane verification checks (`50-verify.md`).
-7. `60-report`: Standardized markdown delivery digest (`60-report.md`).
-8. `70-deliver`: Release packaging, git merge, archives `devflow/context/current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, and closes run.
+- `discovery`: Unified pre-delivery discovery & exploration (`devflow/discoveries/{DISC-ID}/discovery.md`).
+- `idea`: Quick idea capture and AI feasibility scoring (`devflow/ideas.md`).
+- `grill` (or `align`): Socratic alignment, domain modeling, and ADR recording (`devflow/decisions/`).
+- `brainstorm`: Divergent/convergent ideation with trade-off analysis.
 
 ---
 
 ## 🌐 Standalone HTML Reporting Policy
 
 > [!IMPORTANT]
-> **No Auto-Generated HTML**: Mainline flows (`/complete` and `60-report`) strictly output Markdown only.
+> **No Auto-Generated HTML**: Mainline flows (`/complete`) strictly output Markdown only.
 > When an interactive web dashboard is desired for presentation or sharing, invoke the standalone companion command:
 > `/report:html` (or `npm run report:html -- {ID}`).
 

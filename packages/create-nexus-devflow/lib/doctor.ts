@@ -112,7 +112,7 @@ const DEFAULT_PROJECT_PLAN_STUB = `# 🗺️ Project Plan (User-Owned Architectu
 ## 3. Constraints & Non-Goals
 - **Non-Goals**: What this project explicitly will NOT do in the current scope.
 - **Technical Constraints**: Performance targets, security standards, offline requirements, or backward compatibility rules.
-- **Delivery Rules**: Dual-Track workflow discipline (Fast-Track for standard features, Deep-Track for epics).
+- **Delivery Rules**: The 3-Pillars & Single Living Spec Model (Fast-Track 4 steps with Deep Architectural Rigour).
 
 ## 4. Key Milestones & Roadmap
 - **Milestone 1**: Core Foundation & MVP

@@ -27,57 +27,56 @@ Format every response for fast scanning and readability:
 
 ---
 
-## 3. Dual-Track Workflow Lifecycle (The 3-Pillars Model)
+## 3. The 3-Pillars Unified Architecture (DevFlow 2.5.0)
 
 ```text
 devflow/
-├── 🔮 ideas.md        # [Future] Idea Inbox
-├── ⚡ context/         # [Present] Living Spec (current-feature.md) & Active State
+├── 🔮 ideas.md        # [Future] Idea Inbox with AI Feasibility Scoring
+├── ⚡ context/         # [Present] Single Living Spec (current-feature.md) & Active State
 └── 📦 history/         # [Past] features/, fixes/, rollbacks/, and HISTORY.md
 ```
 
-### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 Steps)
-*Recommended for 85% of daily engineering work (features, bug fixes, UI improvements, iterative refactoring).*
-
-The entire lifecycle is driven by the **Single Living Spec (`devflow/context/current-feature.md`)**:
-
-1. **Spec (`/feature` or `/fix`)**:
-   - Checks **Single Active Run Guardrail** (rejects if an uncompleted task is still active).
-   - Analyzes request (or consumes `IDEA-xxx` from `devflow/ideas.md`).
-   - Allocates sequential ID without prefix (e.g. `022-{slug}`) and creates branch `feature/{xxx-slug}` or `fix/{xxx-slug}`.
-   - Generates `devflow/context/current-feature.md` containing **Section 1 (Scope & AC)**, **Section 2 (Plan & Test Strategy)**, and **Section 3 (Checklist)**.
-2. **Implement (`/implement`)**:
-   - Executes checklist tasks incrementally one small diff at a time using **TDD (Red-Green-Refactor)**.
-   - Updates `## 4. Implementation Record` and marks tasks `- [x]` in `current-feature.md`.
-3. **Check (`/check`)**:
-   - Senior QA multi-lane verification (Lane 1: Typecheck/Lint, Lane 2: Test Suites, Lane 3: Manual Proof).
-   - Records empirical proof under `## 5. Verification Evidence` in `current-feature.md`.
-4. **Complete (`/complete`)**:
-   - Final safety pass, updates `## 6. Release & Handoff` digest in `current-feature.md`.
-   - Automatically archives `current-feature.md` ➔ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`.
-   - Appends resolved findings and cleans `findings.md`.
-   - Resets `current-feature.md` back to the idle stub.
-   - Performs Git squash-merge into `main`, updates `devflow/history/HISTORY.md`, and sets workspace to Idle.
-
----
-
-### 🏗️ Track 2: Deep-Track (Architect Mode — 8 Steps)
-*Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination.*
+### ⚡ The Unified 4-Stage Living Spec Lifecycle
+*ขับเคลื่อนการพัฒนาทุกระดับ (ตั้งแต่ Fast Fix จนถึง Architectural Epic) ด้วยเอกสารฉบับเดียว **Single Living Spec (`devflow/context/current-feature.md`)** ที่รวมความลึกระดับ Architect Mode เข้ากับความคล่องตัวระดับ Lean Velocity:*
 
 ```text
-discovery ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
+/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. `discovery`: Unified pre-delivery discovery & Socratic alignment (`DISC-YYYYMMDD-NNN` or project roadmap).
-2. `10-define`: Turn approved discovery into bounded delivery run in `devflow/context/current-run/10-define.md`.
-3. `20-spec`: Formalize markdown delivery contract & acceptance criteria (`20-spec.md`).
-4. `30-plan`: Breakdown spec into atomic 2-5 min tasks with explicit TDD decisions (`30-plan.md` + checklists).
-5. `40-execute`: Strict Red-Green-Refactor task execution behind review gates (`40-execute.md`).
-6. `50-verify`: Senior QA Two-Stage Review (Spec Fidelity + Quality/Security Gate) (`50-verify.md`).
-7. `60-report`: Standardized markdown delivery digest (`60-report.md`).
-8. `70-deliver`: Release packaging, git merge, archives `devflow/context/current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, and closes the run.
+1. **Stage 1: Spec (`/feature` หรือ `/fix`)**:
+   - ตรวจสอบ **Single Active Run Guardrail** (บล็อกการเปิดงานซ้อนถ้ามีงานที่ยังไม่เสร็จ)
+   - ดึงบริบทจาก `devflow/discoveries/`, `devflow/ideas.md`, หรือคำขอของผู้ใช้
+   - จัดสรร Running ID (`xxx-slug`) และสร้าง Branch `feature/{xxx-slug}` หรือ `fix/{xxx-slug}`
+   - เขียน **Single Living Spec (`current-feature.md`)** ครอบคลุม:
+     - `## 🎯 1. Define & Boundaries` (Problem, In/Out Scope, Risks, Success Criteria)
+     - `## 📐 2. Technical Spec & Contracts` (Architecture, Models, Interface Contracts, Non-functional, ACs)
+     - `## 📋 3. Execution Plan & TDD Checklist` (Atomic tasks, `[TDD-Red/Green/Refactor]` Triplets)
+
+2. **Stage 2: Implement (`/implement`)**:
+   - ดำเนินการ Task-by-task ตาม Checklist อย่างเคร่งครัดด้วย **TDD (Red-Green-Refactor)**
+   - ติ๊กเครื่องหมาย `- [x]` และบันทึก `## ⚡ 4. Implementation Log & Evidence` (Diff summary, Checkpoints) ลงใน `current-feature.md`
+
+3. **Stage 3: Check (`/check`)**:
+   - Senior QA Multi-Lane Verification (Typecheck, Lint, Test Suites, Manual Proof)
+   - บันทึกผลการพิสูจน์เชิงประจักษ์ลงใน `## 🧪 5. Multi-Lane Verification Matrix` ใน `current-feature.md`
+
+4. **Stage 4: Complete (`/complete`)**:
+   - สรุปผล `## 📦 6. Release Digest & Retrospective` (Changelog, Lessons Learned, ADRs)
+   - ทำการ Archive `current-feature.md` ไปเป็นไฟล์เดี่ยวที่ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`
+   - **Mandatory Delivery Gate**: บังคับถามผู้ใช้ก่อนเสมอว่าต้องการ Delivery รูปแบบใด:
+     - **Option 1 (Team MR/PR Flow)**: Pull master/main ล่าสุดมารวมกับ Feature/Dev Branch แล้ว push branch ขึ้นไปเพื่อเปิด MR/PR (ไม่ merge เข้า main/master ในเครื่อง และไม่แตะ protected branch)
+     - **Option 2 (Direct Squash-Merge)**: ทำการ Squash-merge เข้า main/master ในเครื่องเฉพาะเมื่อผู้ใช้สั่งโดยตรงเท่านั้น
+   - รีเซ็ต `current-feature.md` กลับเป็น Idle stub เมื่อปิดรอบงานเรียบร้อย
 
 ---
+
+### 🔮 Pre-Flight Discovery & Architectural Alignment (Companion Tools)
+สำหรับงานที่ต้องการสำรวจไอเดีย, ค้นคว้าทางเทคนิค, หรือการออกแบบสถาปัตยกรรมก่อนเริ่มสร้าง Spec:
+- `/discovery`: Unified Pre-delivery Discovery & Research (บันทึกใน `devflow/discoveries/`)
+- `/idea`: วิเคราะห์และบันทึกไอเดียลงใน `devflow/ideas.md`
+- `/grill` (หรือ `/align`): Socratic Alignment, Domain Modeling & บันทึก ADRs ลงใน `devflow/decisions/`
+- `/brainstorm`: เครื่องมือระดมความคิดทางเลือก 2-3 Options พร้อมเปรียบเทียบ Trade-offs
+
 
 ## 4. Strict TDD & Two-Stage Review Interaction Rules
 

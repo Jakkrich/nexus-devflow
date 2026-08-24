@@ -195,14 +195,14 @@ function selectDashboardNextAction(
   status: ProjectStatus,
   workflow: WorkflowState
 ): DashboardNextAction {
-  if (workflow.track !== "deep" || !workflow.currentStage) {
-    return status.nextAction;
+  if (workflow.currentStage) {
+    const suffix = workflow.activeRunId ? ` ${workflow.activeRunId}` : "";
+    return {
+      command: `/${workflow.currentStage}${suffix}`,
+      reason: `Continue active workflow at /${workflow.currentStage}.`
+    };
   }
-  const suffix = workflow.activeRunId ? ` ${workflow.activeRunId}` : "";
-  return {
-    command: `/${workflow.currentStage}${suffix}`,
-    reason: `Continue the active Deep-Track run at ${workflow.currentStage}.`
-  };
+  return status.nextAction;
 }
 
 export { clearDashboardSnapshotCache, readDashboardSnapshot, selectDashboardNextAction };
