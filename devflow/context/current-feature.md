@@ -5,7 +5,7 @@
 - **Type**: `Fix`
 - **Target Branch**: `2.5.0`
 - **Version**: `2.5.0`
-- **Status**: `Spec Ready`
+- **Status**: `Verified / Ready for /complete`
 - **Track**: `Unified Fast-Track (The 4-Stage Living Spec Lifecycle)`
 - **Discovery Reference**: [`DISC-20260824-001-dashboard-latency.md`](../discoveries/DISC-20260824-001-dashboard-latency.md)
 
