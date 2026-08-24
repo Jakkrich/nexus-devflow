@@ -1,18 +1,18 @@
 ---
 name: complete
-description: "[devflow][F] Wrap up a finished feature, fix, or rollback. Runs a final safety pass, archives its spec to devflow/history/features/, devflow/history/fixes/, or devflow/history/rollbacks/, updates the build plan for features and rollbacks, resets devflow/context/current-feature.md to its stub, makes one work-level commit, then squash-merges the branch to main and deletes it. Merges only with explicit approval, then asks separately before pushing main. Use when the user runs /complete, or asks to finish, wrap up, merge, or close out the current feature, fix, or rollback after it is built and reviewed."
+description: "[devflow][F] Wrap up a finished feature, fix, or rollback. Runs a final safety pass, archives its spec to devflow/history/features/, devflow/history/fixes/, or devflow/history/rollbacks/, updates the build plan for features and rollbacks, resets devflow/context/current-feature.md to its stub, and makes the work commit. Enforces a mandatory user gate: asks whether to squash-merge to main/master OR pull latest main/master into the feature/dev branch and push to remote for Merge Request (MR / PR) creation. Never merges into main/master without explicit user instruction."
 ---
 
-# complete - log the finished work, make the work commit, and merge
+# complete - log the finished work, make the work commit, and deliver
 
 Where this sits in the workflow:
 
     /feature, /fix, or /rollback  ->  /implement  ->  [complete]  ->  next
-    (the spec)                         (build it)      (commit + merge + log)
+    (the spec)                         (build it)      (commit + delivery gate)
 
 `/implement` built the feature, fix, or rollback on its branch, with optional per-step commit
 checkpoints. This skill closes it out: it logs the work, makes the single
-work-level commit, and squash-merges. Run it only when the work is done,
+work-level commit, and guides the delivery through a **Mandatory User Delivery Gate**. Run it only when the work is done,
 reviewed, and the documented `Verify` command, or the fallback build and tests,
 passes.
 
@@ -22,7 +22,7 @@ Confirm the work is actually finished: `devflow/context/current-feature.md`
 holds a real spec, its steps are built on a branch, and `Verify`, or the fallback
 build and tests, passes. If any of the
 spec's done-whens are behavioral, `/check` should have proven them against the
-running app first - don't merge on an unverified claim. Uncommitted step work is
+running app first - don't merge or complete on an unverified claim. Uncommitted step work is
 expected (per-step checkpoints are optional); this skill commits it. Don't require
 the steps to be pre-committed.
 
@@ -30,7 +30,7 @@ the steps to be pre-committed.
 
 Before logging or committing, run a short safety pass and report blockers only:
 
-- active spec exists and the work is not being completed from `main` or `master`
+- active spec exists and the work is not being completed directly from `main` or `master`
 - changed files are tied to the active spec, with no unrelated dirty work mixed
   in (a dirty `devflow/context/findings.md` is expected, since `/audit` writes it)
 - the exact `Verify` command from `AGENTS.md` passed in this session, when one is
@@ -107,25 +107,47 @@ into the app - delete the `prototypes/` folder now. The tokens live in the real
 stylesheet and the HTML mockups were always throwaway; fold the deletion into this
 feature's commit. Skip this if the feature didn't consume prototypes.
 
-## Step 2 - make the work commit
+## Step 2 - make the work commit on feature branch
 
 Stage everything on the branch (any uncommitted step work plus the Step 1 logging
-changes) and make one conventional work commit (for example `feat: <feature>`,
+changes) and make one conventional work commit on the active branch (for example `feat: <feature>`,
 `fix: <name>`, or `revert: roll back <feature>`). `Verify`, or the fallback build
 and tests, must pass first.
 
-## Step 3 - merge
+## Step 3 - Mandatory Delivery Gate (Ask User First)
 
-1. Squash-merge the branch into main, only with the user's explicit go-ahead, so
-   the feature lands as one clean commit regardless of how many checkpoints the
-   branch carried.
-2. Delete the branch after a clean merge.
-3. Stop and ask whether to push local `main` to its upstream. The merge approval
-   does not count as push approval.
-4. Push main only after a separate explicit yes to push main in the current chat.
-   If the repo has no remote or upstream, say so instead of guessing.
+> [!IMPORTANT]
+> **MANDATORY USER SELECTION**: In real-world engineering teams, developers often do NOT have direct merge/push access to `main` or `master` (protected branches).
+> Therefore, you **MUST STOP AND ASK** the user to choose their desired delivery flow. **NEVER automatically merge into `main` or `master` without explicit user choice.**
 
-Then point the user at `/feature`, `/fix`, or `/rollback` for the next thing.
+Present the user with two clear delivery options:
+
+### 🔀 Option 1: Team MR / PR Flow (Pull latest main/master & Push dev branch) [Default for Teams]
+- **When to choose**: When working in a team where code reviews happen via GitLab Merge Request (MR) or GitHub Pull Request (PR), or where developers lack direct write access to protected `main`/`master` branches.
+- **Execution Actions**:
+  1. Detect default base branch name (`main` or `master`).
+  2. Run `git pull origin <main/master>` (or `git fetch origin <main/master> && git merge origin/<main/master>`) to bring the latest upstream changes into the active feature/dev branch.
+  3. If merge conflicts occur, highlight them clearly and help the user resolve them.
+  4. Run `Verify` (or build & tests) to ensure integrity after the merge.
+  5. Run `git push origin <current-feature-branch>` to push the up-to-date branch to the remote repository.
+  6. Stop and inform the user that the branch is synchronized and pushed, ready for them to open a Merge Request (MR / PR) on GitLab/GitHub.
+  7. **Do NOT merge into local `main`/`master` and do NOT delete the branch.**
+
+### 🔀 Option 2: Direct Local Squash-Merge (Solo / Direct Access Mode)
+- **When to choose**: Only when the user explicitly instructs that they want to merge directly into `main` or `master` locally now (e.g. solo projects or Tech Leads with merge privileges).
+- **Execution Actions**:
+  1. Switch to `main` or `master`: `git checkout <main/master>`.
+  2. Squash-merge the branch: `git merge --squash <feature-branch>`.
+  3. Commit the squash-merge.
+  4. Delete the local feature branch only with the user's explicit consent.
+  5. **Stop and ask separately** before pushing local `main`/`master` to remote upstream. The merge approval does NOT count as push approval.
+  6. Run `git push origin <main/master>` only after separate explicit confirmation.
+
+---
+
+## Step 4 - Finish & Try Path
+
+Point the user at `/feature`, `/fix`, or `/rollback` for the next task.
 
 Finish with a concise **How to try it** note for the completed work. For a
 rollback, explain how to confirm the removed behavior is gone and name one
@@ -135,26 +157,15 @@ that command can read the archived feature after `current-feature.md` is reset.
 
 ## Rules
 
+- **Mandatory User Confirmation Gate**: Always ask before choosing between Team MR/PR Push vs Direct Squash-Merge.
+- **Never auto-merge into main/master**: The decision to merge into `main` or `master` belongs strictly to the user.
 - The work item is the unit of history: one squashed feature, fix, or rollback
-  commit on main, even if the branch carried several checkpoint commits.
+  commit, even if the branch carried several checkpoint commits.
 - A rollback preserves the original feature archive and adds a separate rollback
   archive. Never rewrite history to make the feature look as if it never existed.
-- Don't merge unfinished or failing work. The documented `Verify` command, or
+- Don't merge or push unfinished or failing work. The documented `Verify` command, or
   the fallback build and tests, must pass first.
-- Never merge while a P0 or P1 finding is `open` or `fixed` in the ledger. The
-  recorded ways past the gate without code are `accepted` (only by the user's
-  explicit decision, with their reason) or `invalid` (only from re-examination
-  evidence or the user's explicit call); both travel into the archive, never a
-  silent drop.
-- Merging and pushing are the user's calls: get an explicit yes for the merge,
-  then ask whether to push main. Do not treat merge approval, `/complete`, or
-  "looks good" as permission to push.
-- Push main only after a separate explicit yes to push main in the current chat.
+- Never merge or push while a P0 or P1 finding is `open` or `fixed` in the ledger.
+- Pushing to remote is always explicit: confirm before running `git push`.
 - One item per completion. If a parent feature still has unchecked sub-features,
   leave the parent unchecked.
-
-## Formatting
-
-Format the output to match the project's conventions in
-`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.

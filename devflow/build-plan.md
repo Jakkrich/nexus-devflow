@@ -76,5 +76,14 @@
   - *Dependencies*: None
   - *Scope*: นำ Strict TDD (Red-Green-Refactor) Sub-Tasks และ Two-Stage Review Pattern (Stage 1: Spec Fidelity, Stage 2: Quality & Security Gate) ผสานเข้าสู่ Prompt Rules, Coding Standards, AI Interaction และ Stage Skills (`30-plan`, `40-execute`, `50-verify`, `feature`, `implement`, `check`, `debug`) พร้อมอัปเดต Template และ Unit Tests
 
+---
+
+## ⚡ Phase 10: Nexus-DevFlow 2.5.0 (Unified Living Spec Model)
+
+- [x] **10. Unify Deep-Track and Fast-Track into Single Living Spec Model** `[Size: L]`
+  - *Dependencies*: ADR-001
+  - *Scope*: รวมความสามารถเชิงสถาปัตยกรรมระดับลึกของ Deep-Track เข้าสู่ 4 ขั้นตอนหลักของ Fast-Track บนเอกสาร Single Living Spec (`current-feature.md`) จัดเก็บประวัติแบบ Single Archive (`.md`), ปลดระวาง stage skills 10-70 ที่ซ้ำซ้อน, และปรับปรุงเอกสาร & Schemas ทั้งหมด
+
+
 
 

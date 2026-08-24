@@ -87,21 +87,21 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
 
     <section class="panel" id="dual-track">
       <div class="panel-head">
-        <span class="label">Dual-Track Delivery Model</span>
+        <span class="label">Unified Living Spec Model (DevFlow 2.5.0)</span>
         <div class="track-tabs" role="tablist" aria-label="Delivery tracks">
-          <button class="tab on" id="tab-fast" role="tab" aria-selected="true" aria-controls="view-fast" data-track="fast"><span>🚀 Fast-Track · 4 steps</span><span class="tab-active-dot">● ACTIVE</span></button>
-          <button class="tab" id="tab-deep" role="tab" aria-selected="false" aria-controls="view-deep" data-track="deep"><span>♟️ Deep-Track · 8 stages</span><span class="tab-active-dot">● ACTIVE</span></button>
+          <button class="tab on" id="tab-preflight" role="tab" aria-selected="true" aria-controls="view-preflight" data-track="preflight"><span>🔮 Pre-Flight Discovery</span><span class="tab-active-dot">● ACTIVE</span></button>
+          <button class="tab" id="tab-fast" role="tab" aria-selected="false" aria-controls="view-fast" data-track="fast"><span>⚡ Living Spec · 4 steps</span><span class="tab-active-dot">● ACTIVE</span></button>
           <button class="tab" id="tab-swarm" role="tab" aria-selected="false" aria-controls="view-swarm" data-track="swarm"><span>🤖 Multi-Agent Swarm</span></button>
           <button class="tab" id="tab-graph" role="tab" aria-selected="false" aria-controls="view-graph" data-track="graph"><span>🗺️ Code Graph</span></button>
         </div>
       </div>
-      <div class="track-view on" id="view-fast" role="tabpanel" aria-labelledby="tab-fast">
-        <div class="stepper" id="pipeline-fast"></div>
-        <div class="track-note" id="note-fast">Fast-Track for daily features, fixes, UI work and iterative refactoring.</div>
+      <div class="track-view on" id="view-preflight" role="tabpanel" aria-labelledby="tab-preflight">
+        <div class="stepper" id="pipeline-preflight"></div>
+        <div class="track-note" id="note-preflight">Pre-Flight Discovery & Architectural Alignment (/idea, /grill, /brainstorm, /discovery).</div>
       </div>
-      <div class="track-view" id="view-deep" role="tabpanel" aria-labelledby="tab-deep">
-        <div class="stepper" id="pipeline-deep"></div>
-        <div class="track-note" id="note-deep">Deep-Track for architecture, migrations, security audits and coordinated delivery.</div>
+      <div class="track-view" id="view-fast" role="tabpanel" aria-labelledby="tab-fast">
+        <div class="stepper" id="pipeline-fast"></div>
+        <div class="track-note" id="note-fast">Single Living Spec (/feature, /implement, /check, /complete) with TDD Discipline & QA Matrix.</div>
       </div>
       <div class="track-view" id="view-swarm" role="tabpanel" aria-labelledby="tab-swarm">
         <div class="section-note">Role-based specialized AI Subagents roster & execution matrix</div>
@@ -153,11 +153,11 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
     const text = (id, value) => { const node = byId(id); if (node) node.textContent = value == null ? '-' : String(value); };
     const pill = (id, state, label) => { const node = byId(id); if (!node) return; node.className = 'pill ' + (state || 'configured'); node.textContent = label || state || '-'; };
     const list = (id, values, empty) => { const node = byId(id); if (!node) return; node.replaceChildren(); const rows = values.length ? values : [empty]; rows.forEach((value) => { const li = document.createElement('li'); li.textContent = value; if (!values.length) li.className = 'empty'; node.append(li); }); };
-    const titleCase = (value) => String(value || '').replaceAll('_',' ').replace(/\\b\\w/g, (c) => c.toUpperCase());
-    const FLOW_ICON_NAMES = ['compass','target','document','list','code','shield','report','package'];
-    const EMOJI_ICONS = { compass:'🔎',target:'🎯',document:'📄',list:'🧩',code:'⚙️',shield:'🛡️',report:'📊',package:'📦',bulb:'⚡',check:'✅',wrench:'🛠️',rollback:'↩️',search:'🔍',alert:'⚠️' };
+    const titleCase = (value) => String(value || '').replaceAll('_',' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const FLOW_ICON_NAMES = ['target','code','shield','package'];
+    const EMOJI_ICONS = { compass:'🔎',target:'🎯',document:'📄',list:'🧩',code:'⚙️',shield:'🧪',report:'📊',package:'📦',bulb:'💡',check:'✅',wrench:'🛠️',rollback:'↩️',search:'🔍',alert:'⚠️',grill:'🔥',brainstorm:'💭',idea:'💡' };
     function iconImage(name) { const icon = document.createElement('span'); icon.className = 'icon-glyph'; icon.setAttribute('aria-hidden','true'); icon.textContent = EMOJI_ICONS[name] || '📄'; return icon; }
-    function decoratePipeline(id) { byId(id)?.querySelectorAll('.step').forEach((step,index) => { step.classList.add('flow-' + index); const icon = document.createElement('span'); icon.className = 'step-icon'; icon.setAttribute('aria-hidden','true'); icon.append(iconImage(FLOW_ICON_NAMES[index] || 'document')); const name = step.querySelector('.step-name'); step.insertBefore(icon,name || null); }); }
+    function decoratePipeline(id) { byId(id)?.querySelectorAll('.step').forEach((step,index) => { step.classList.add('flow-' + index); const icon = document.createElement('span'); icon.className = 'step-icon'; icon.setAttribute('aria-hidden','true'); const cmd = step.querySelector('.step-cmd')?.textContent?.replace('/','') || ''; const iconKey = id.includes('preflight') ? (cmd || ['bulb','target','compass','search'][index] || 'search') : (FLOW_ICON_NAMES[index] || 'document'); icon.append(iconImage(iconKey)); const name = step.querySelector('.step-name'); step.insertBefore(icon,name || null); }); }
     function richText(root,value) { const source = String(value || ''); let cursor = 0; const plain = (end) => { if (end > cursor) root.append(document.createTextNode(source.slice(cursor,end))); cursor = end; }; while (cursor < source.length) { if (source.startsWith('**',cursor)) { const end = source.indexOf('**',cursor + 2); if (end > cursor + 2) { const node = document.createElement('strong'); node.textContent = source.slice(cursor + 2,end); root.append(node); cursor = end + 2; continue; } } if (source[cursor] === '*') { const end = source.indexOf('*',cursor + 1); if (end > cursor + 1) { const node = document.createElement('em'); node.textContent = source.slice(cursor + 1,end); root.append(node); cursor = end + 1; continue; } } if (source.charCodeAt(cursor) === 96) { const end = source.indexOf(String.fromCharCode(96),cursor + 1); if (end > cursor + 1) { const node = document.createElement('code'); node.textContent = source.slice(cursor + 1,end); root.append(node); cursor = end + 1; continue; } } const next = [source.indexOf('**',cursor + 1),source.indexOf('*',cursor + 1),source.indexOf(String.fromCharCode(96),cursor + 1)].filter((index) => index >= 0).sort((a,b) => a-b)[0] ?? source.length; plain(next > cursor ? next : cursor + 1); } }
     function recordCard(options) { const card = document.createElement('article'); card.className = 'record-item tone-' + (options.tone || 'cyan'); const icon = document.createElement('span'); icon.className = 'record-icon'; icon.append(iconImage(options.icon || 'document')); const body = document.createElement('div'); body.className = 'record-body'; const meta = document.createElement('div'); meta.className = 'record-meta'; richText(meta,options.meta); const title = document.createElement('div'); title.className = 'record-title'; richText(title,options.title); const desc = document.createElement('div'); desc.className = 'record-desc'; richText(desc,options.description); body.append(meta,title,desc); card.append(icon,body); if (options.badge) { const badge = document.createElement('span'); badge.className = 'record-badge'; badge.textContent = options.badge; card.append(badge); } return card; }
     function renderRecords(id,items,empty,mapper) { const root = byId(id); root.replaceChildren(); if (!items?.length) { const node = document.createElement('div'); node.className = 'empty'; node.textContent = empty; root.append(node); return; } items.forEach((item,index) => root.append(recordCard(mapper(item,index)))); }
@@ -178,6 +178,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       });
     }
 
+    let userHasSwitchedTab = false;
     function selectTrack(track) {
       document.querySelectorAll('.tab').forEach((node) => { const on = node.dataset.track === track; node.classList.toggle('on', on); node.setAttribute('aria-selected', String(on)); });
       document.querySelectorAll('.track-view').forEach((node) => node.classList.toggle('on', node.id === 'view-' + track));
@@ -193,7 +194,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       });
     }
 
-    document.querySelectorAll('.tab').forEach((node) => node.addEventListener('click', () => selectTrack(node.dataset.track)));
+    document.querySelectorAll('.tab').forEach((node) => node.addEventListener('click', () => { userHasSwitchedTab = true; selectTrack(node.dataset.track); }));
     wireCopy(byId('next-copy'), () => byId('next-command').textContent.trim());
 
     function renderCommands(commands) {
@@ -253,19 +254,26 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
     function renderSnapshot(data) {
       const status = data.status || {}; const project = status.project || {}; const devflow = status.devflow || {}; const work = status.currentWork || {}; const git = status.git || {}; const findings = status.findings || { active: [], blockers: [] }; const workflow = data.workflow || {}; const update = data.update || {}; const doctor = data.doctor || { checks: [] }; const discoveries = data.discoveries || { recent: [] }; const history = data.history || { items: [], total: 0 }; const ideas = status.ideas || { pending: [], totalPending: 0 }; const gate = data.gatekeeper || { passed: true }; const drift = data.drift || { hasDrift: false };
 
-      text('project-name', project.name || 'Nexus-DevFlow'); text('project-path', project.root || ''); text('version-badge', 'v' + (devflow.version || '2.1.0'));
+      text('project-name', project.name || 'Nexus-DevFlow'); text('project-path', project.root || ''); text('version-badge', 'v' + (devflow.version || '2.5.0'));
       pill('health-badge', status.health, status.health === 'ok' ? 'Health OK' : 'Health warning');
       pill('gate-badge', gate.passed ? 'ok' : 'blocked', gate.passed ? '✔ Gate Passed' : '✖ Gate Blocked');
       pill('drift-badge', !drift.hasDrift ? 'ok' : 'warning', !drift.hasDrift ? '✔ In Sync' : '⚠ Drift Detected');
       pill('track-badge', workflow.track, 'Track ' + titleCase(workflow.track || 'idle'));
 
       text('adapter-count', (devflow.adapters || []).length + ' configured'); text('header-branch', git.branch || 'unknown'); text('generated-at', new Date(data.generatedAt).toLocaleTimeString()); text('footer-revision', 'snapshot ' + data.generatedAt);
-      renderPipeline('pipeline-fast', workflow.fast); renderPipeline('pipeline-deep', workflow.deep); decoratePipeline('pipeline-fast'); decoratePipeline('pipeline-deep');
+      renderPipeline('pipeline-preflight', workflow.deep || workflow.preflight); renderPipeline('pipeline-fast', workflow.fast); decoratePipeline('pipeline-preflight'); decoratePipeline('pipeline-fast');
+      if (!userHasSwitchedTab) {
+        if (work.state === 'active' || workflow.track === 'fast') {
+          selectTrack('fast');
+        } else {
+          selectTrack('preflight');
+        }
+      }
       renderSwarm(data.swarm); renderMcp(data.mcpTools); text('stat-mcp', (data.mcpTools || []).length + ' Ready');
 
       const nextCommand = data.nextAction?.command || status.nextAction?.command || '/feature'; text('next-command', nextCommand); text('next-reason', data.nextAction?.reason || 'Ready for new work.');
       text('stat-runs', history.total || 0); text('stat-findings', (findings.active || []).length); text('stat-ideas', ideas.totalPending || 0); text('stat-state', titleCase(work.state || 'idle'));
-      pill('update-pill', update.state, update.state === 'current' ? 'up to date' : update.state); text('installed-latest', (update.installedVersion || '2.1.0') + ' / ' + (update.latestVersion || '2.1.0')); text('system-health', status.health || 'ok');
+      pill('update-pill', update.state, update.state === 'current' ? 'up to date' : update.state); text('installed-latest', (update.installedVersion || '2.5.0') + ' / ' + (update.latestVersion || '2.5.0')); text('system-health', status.health || 'ok');
       pill('work-pill', work.state, work.state || 'idle'); text('work-title', work.title || 'No active delivery run'); const pct = work.total > 0 ? Math.round((work.completed / work.total) * 100) : 0; byId('work-progress').style.width = pct + '%'; text('work-meta', work.state === 'active' ? work.completed + ' of ' + work.total + ' steps completed' : 'Ready');
       pill('git-pill', git.clean ? 'ok' : 'warning', git.clean ? 'clean' : (git.changedFiles || 0) + ' changed'); text('git-branch', git.branch || 'unknown'); text('git-changed', git.clean ? 'clean' : (git.changedFiles || 0) + ' changed files'); text('git-drift', drift.clean ? 'In Sync' : 'Drift detected'); text('git-commit', git.lastCommit || '-');
       text('findings-count', findings.total || 0); ['P0','P1','P2','P3'].forEach((severity) => text('sev-' + severity.toLowerCase(), (findings.active || []).filter((item) => item.severity === severity).length)); list('findings-list', (findings.active || []).map((item) => item.id + ' · ' + item.title), 'No active findings');

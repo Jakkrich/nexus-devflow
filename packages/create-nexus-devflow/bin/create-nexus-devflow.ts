@@ -472,7 +472,12 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   }
 
   if (options.command === "dashboard" || options.command === "ui") {
-    const server = await startDashboardServer(targetDir);
+    let server: Awaited<ReturnType<typeof startDashboardServer>>;
+    try {
+      server = await startDashboardServer(targetDir, { port: 4318 });
+    } catch {
+      server = await startDashboardServer(targetDir, { port: 0 });
+    }
     const style = createStyle();
     console.log(style.bold(style.cyan(`Nexus-DevFlow Dashboard live at ${server.url}`)));
     if (options.open) {
@@ -1062,7 +1067,9 @@ function parseArgs(args: readonly string[]): CliOptions {
 
 async function waitForShutdown(): Promise<void> {
   await new Promise<void>((resolve) => {
+    const keepAliveTimer = setInterval(() => {}, 10_000);
     const stop = (): void => {
+      clearInterval(keepAliveTimer);
       process.off("SIGINT", stop);
       process.off("SIGTERM", stop);
       resolve();

@@ -104,33 +104,19 @@ function validateWorkflowNumbering(failures) {
     fail('Missing .agents/skills directory', failures);
     return;
   }
-  const numberedMainline = new Set([
-    '10-define',
-    '20-spec',
-    '30-plan',
-    '40-execute',
-    '50-verify',
-    '60-report',
-    '70-deliver'
-  ]);
   const skillFolders = fs.readdirSync(skillsDir)
     .filter((name) => fs.statSync(path.join(skillsDir, name)).isDirectory());
 
   const invalid = [];
   for (const name of skillFolders) {
     const isNumbered = /^\d{2}-[a-z0-9-]+$/.test(name);
-    if (numberedMainline.has(name)) {
-      if (!isNumbered) invalid.push(`${name} (mainline skills must keep numbering)`);
-      continue;
-    }
     if (isNumbered) {
-      invalid.push(`${name} (non-mainline skills must not use numbering)`);
-      continue;
+      invalid.push(`${name} (skills must not use legacy numbered prefixes under DevFlow 2.5.0)`);
     }
   }
 
   if (invalid.length) {
-    fail(`Skill naming is invalid under DevFlow 2.0:\n  ${invalid.join('\n  ')}`, failures);
+    fail(`Skill naming is invalid under DevFlow 2.5.0:\n  ${invalid.join('\n  ')}`, failures);
   } else {
     ok(`Skill naming passed for ${skillFolders.length} skills in .agents/skills`);
   }
@@ -139,13 +125,11 @@ function validateWorkflowNumbering(failures) {
 function validateArtifactLanguageWorkflowSurface(failures) {
   const stageSkills = [
     '.agents/skills/discovery/SKILL.md',
-    '.agents/skills/10-define/SKILL.md',
-    '.agents/skills/20-spec/SKILL.md',
-    '.agents/skills/30-plan/SKILL.md',
-    '.agents/skills/40-execute/SKILL.md',
-    '.agents/skills/50-verify/SKILL.md',
-    '.agents/skills/60-report/SKILL.md',
-    '.agents/skills/70-deliver/SKILL.md'
+    '.agents/skills/feature/SKILL.md',
+    '.agents/skills/fix/SKILL.md',
+    '.agents/skills/implement/SKILL.md',
+    '.agents/skills/check/SKILL.md',
+    '.agents/skills/complete/SKILL.md'
   ];
 
   for (const relativePath of stageSkills) {

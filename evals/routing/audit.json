@@ -1,0 +1,9 @@
+{
+  "skill": "audit",
+  "positive": [
+    "run audit skill",
+    "invoke /audit command",
+    "use audit for code quality review and security audit",
+    "apply audit guidance"
+  ]
+}

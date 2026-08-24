@@ -1,0 +1,9 @@
+{
+  "skill": "status",
+  "positive": [
+    "run status skill",
+    "invoke /status command",
+    "use status to check where project stands and progress",
+    "apply status guidance"
+  ]
+}

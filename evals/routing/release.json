@@ -1,0 +1,9 @@
+{
+  "skill": "release",
+  "positive": [
+    "run release skill",
+    "invoke /release command",
+    "use release for deployment readiness and vercel render check",
+    "apply release guidance"
+  ]
+}

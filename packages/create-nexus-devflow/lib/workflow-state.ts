@@ -25,16 +25,7 @@ interface WorkflowState {
 }
 
 const FAST_STAGES = ["feature-fix", "implement", "check", "complete"] as const;
-const DEEP_STAGES = [
-  "discovery",
-  "10-define",
-  "20-spec",
-  "30-plan",
-  "40-execute",
-  "50-verify",
-  "60-report",
-  "70-deliver"
-] as const;
+const PREFLIGHT_STAGES = ["idea", "grill", "brainstorm", "discovery"] as const;
 
 async function readWorkflowState(
   projectRoot: string,
@@ -61,7 +52,7 @@ function parseWorkflowState(
   const rawStage = nullableField(markdown, "Current Stage");
   const lastCompletedRun = nullableField(markdown, "Last Completed Run");
   const lastUpdated = nullableField(markdown, "Last Updated");
-  const deepStage = normalizeDeepStage(rawStage);
+  const preflightStage = normalizePreflightStage(rawStage);
   const fastStageFromMarkdown = normalizeFastStage(rawStage);
 
   let track: WorkflowTrack = "idle";
@@ -74,21 +65,18 @@ function parseWorkflowState(
   if (isIdle) {
     track = "idle";
     currentStage = null;
-  } else if (explicitTrack === "deep") {
+  } else if (explicitTrack === "deep" || explicitTrack === "preflight") {
     track = "deep";
-    currentStage = deepStage || (activeDiscoveryId ? "discovery" : "10-define");
+    currentStage = preflightStage || (activeDiscoveryId ? "discovery" : "discovery");
   } else if (explicitTrack === "fast") {
     track = "fast";
     currentStage = fastStageFromMarkdown || fastStage(currentWork);
-  } else if (activeRunId && deepStage) {
-    track = "deep";
-    currentStage = deepStage;
   } else if (activeDiscoveryId) {
     track = "deep";
     currentStage = "discovery";
   } else if (currentWork.state === "active") {
-    track = currentWork.type === "stage" ? "deep" : "fast";
-    currentStage = track === "deep" ? deepStage || "40-execute" : fastStageFromMarkdown || fastStage(currentWork);
+    track = "fast";
+    currentStage = fastStageFromMarkdown || fastStage(currentWork);
   }
 
   return {
@@ -99,7 +87,7 @@ function parseWorkflowState(
     lastCompletedRun,
     lastUpdated,
     fast: buildPipeline(FAST_STAGES, track === "fast" ? currentStage : null),
-    deep: buildPipeline(DEEP_STAGES, track === "deep" ? currentStage : null)
+    deep: buildPipeline(PREFLIGHT_STAGES, track === "deep" ? currentStage : null)
   };
 }
 
@@ -114,13 +102,13 @@ function nullableField(markdown: string, label: string): string | null {
     : value;
 }
 
-function normalizeDeepStage(value: string | null): string | null {
+function normalizePreflightStage(value: string | null): string | null {
   if (!value) return null;
-  const handoff = value.match(/(?:ready\s+for|executing)\s+(discovery|00-explore|10-define|20-spec|30-plan|40-execute|50-verify|60-report|70-deliver)/i)?.[1];
-  const direct = value.match(/\b(discovery|00-explore|10-define|20-spec|30-plan|40-execute|50-verify|60-report|70-deliver)\b/i)?.[1];
-  const raw = (handoff || direct || "").toLowerCase();
-  if (raw === "00-explore") return "discovery";
-  return raw || null;
+  const match = value.match(/\b(idea|grill|brainstorm|discovery|explore)\b/i)?.[1];
+  if (!match) return null;
+  const raw = match.toLowerCase();
+  if (raw === "explore") return "discovery";
+  return raw;
 }
 
 function normalizeFastStage(value: string | null): string | null {

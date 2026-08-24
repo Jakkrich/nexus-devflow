@@ -4,7 +4,8 @@
 - Active Running ID: `None`
 - Track: `idle`
 - Current Stage: `idle`
+- Active Branch: `2.5.0`
 - Living Spec: `devflow/context/current-feature.md`
-- Next Action: `/feature` or `/fix`
-- Last Completed Run: `052-strict-tdd-and-two-stage-review-guardrails (2026-08-24)`
+- Next Action: `Run /feature, /fix, or /discovery to start new work.`
+- Last Completed Run: `053-unify-deep-and-fast-track-model (2026-08-24)`
 - Last Updated: 2026-08-24

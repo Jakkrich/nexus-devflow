@@ -36,7 +36,7 @@ const FALLBACK_DESCRIPTIONS: Record<string, string> = {
 async function readCommandCatalog(projectRoot: string): Promise<CommandCatalogItem[]> {
   const manifest = await readManifest(projectRoot);
   const fast = manifest?.lifecycle.fastTrackStages || ["feature", "fix", "implement", "check", "complete"];
-  const deep = manifest?.lifecycle.mainlineStages || ["discovery", "10-define", "20-spec", "30-plan", "40-execute", "50-verify", "60-report", "70-deliver"];
+  const deep = manifest?.lifecycle.mainlineStages || ["idea", "grill", "brainstorm", "discovery"];
   const companion = manifest?.lifecycle.companionCommands || Object.keys(FALLBACK_DESCRIPTIONS);
   const families: Array<[CommandFamily, string[]]> = [["fast", fast], ["deep", deep], ["companion", companion]];
   const seen = new Set<string>();
