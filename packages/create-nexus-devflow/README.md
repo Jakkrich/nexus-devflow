@@ -1,6 +1,6 @@
 # @jakkrichm/create-nexus-devflow
 
-Install and manage **Nexus-DevFlow 2.0** — an agentic workflow layer supporting **The 3-Pillars Model & Dual-Track Delivery** into any web app, backend, or existing codebase.
+Install and manage **Nexus-DevFlow 2.5.0** — an enterprise-grade agentic workflow layer supporting **The 3-Pillars Model & Single Living Spec Model** into any web app, backend, or existing codebase.
 
 [![npm version](https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef)](https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow)
 [![Validate DevFlow](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg)](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml)
@@ -25,27 +25,46 @@ npx @jakkrichm/create-nexus-devflow@latest
 ```
 
 The installer overlays the DevFlow workflow layer into your workspace:
-- `AGENTS.md` & `CLAUDE.md` (Universal AI guidelines)
-- `.agents/skills/` (28 Core Skills for Google Antigravity & OpenAI Codex)
+- `AGENTS.md` & `CLAUDE.md` (Universal AI guidelines & cross-tool entry point)
+- `.agents/skills/` (28 Core Skills for Google Antigravity, OpenAI Codex, Cursor, Copilot)
 - `.claude/skills/` (28 Core Skills for Claude Code)
-- `devflow/ideas.md` (Idea inbox & backlog)
-- `devflow/context/` (Living spec & active state)
+- `devflow/ideas.md` (Idea inbox with AI feasibility scoring)
+- `devflow/context/` (Living spec & active delivery context)
 - `devflow/history/` (Categorized delivery archives)
 
 ---
 
-## 🏎️ Dual-Track Delivery Model
+## ⚡ The Unified 4-Stage Living Spec Lifecycle
 
-### 1. Fast-Track (Blueprint Mode — 4 Steps)
-*Recommended for 85% of daily work (features, bug fixes, UI improvements):*
+All development tasks execute through the 4-stage single living spec lifecycle:
+
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-### 2. Deep-Track (Architect Mode — 8 Steps)
-*Recommended for large architectural epics and database migrations:*
-```text
-discovery ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-execute ──▶ 50-verify ──▶ 60-report ──▶ 70-deliver
+1. **`feature` / `fix` (`/feature`, `/fix`)**: Combines Discover, Define, Spec, and Plan. Allocates sequential ID (`xxx-slug`) and initializes the **Single Living Spec (`devflow/context/current-feature.md`)**.
+2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with strict **TDD discipline (Red-Green-Refactor)**.
+3. **`check` (`/check`)**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof).
+4. **`complete` (`/complete`)**: Final safety pass, records Release Digest, auto-archives living spec to `devflow/history/`, resets the stub, and manages the git delivery gate.
+
+---
+
+## 🔮 Pre-Flight Discovery Suite
+
+- **`/idea`**: Capture raw ideas in `devflow/ideas.md` with instant AI feasibility scoring.
+- **`/grill`** (or **`/align`**): Socratic alignment & domain modeling; records Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
+- **`/brainstorm`**: Structured divergent/convergent ideation with trade-off analysis.
+- **`/discovery`**: Deep inception and exploratory discovery (`devflow/discoveries/DISC-xxx.md`).
+
+---
+
+## 🌐 Web Dashboard & Real-Time Studio
+
+Launch the local interactive Web Dashboard with 0ms SSR First Paint and Single-Flight Git caching:
+
+```bash
+# Launch dashboard on http://127.0.0.1:4318
+npx @jakkrichm/create-nexus-devflow dashboard
 ```
 
 ---
@@ -53,51 +72,30 @@ discovery ──▶ 10-define ──▶ 20-spec ──▶ 30-plan ──▶ 40-e
 ## 🛠️ CLI Management Commands
 
 ```bash
-# Quality Gatekeeper & Pre-commit Hooks
+# Start Web Dashboard
+npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
+
+# Automated Quality Gatekeeper & Pre-commit Hooks
 npx @jakkrichm/create-nexus-devflow check-gate [--strict]
 npx @jakkrichm/create-nexus-devflow hook install pre-commit
 
-# Model Context Protocol (MCP) Server Hub
+# Model Context Protocol (MCP) Server Hub (12 Native Tools)
 npx @jakkrichm/create-nexus-devflow mcp
 
-# JIT Dynamic Context Slicing (60-70% Token Savings)
+# Just-In-Time (JIT) Dynamic Context Slicing
 npx @jakkrichm/create-nexus-devflow slice --stage implement
 
-# Git Drift Detection & Self-Healing State
+# Git Diff Drift Detection & Reconciler
 npx @jakkrichm/create-nexus-devflow drift
-npx @jakkrichm/create-nexus-devflow reconcile --fix
+npx @jakkrichm/create-nexus-devflow reconcile
 
-# Visual Webview Studio Dashboard
-npx @jakkrichm/create-nexus-devflow studio
-
-# Multi-Agent Swarm Orchestration & Code Graph Blast Radius
+# Multi-Agent Swarm & Code Graph
 npx @jakkrichm/create-nexus-devflow swarm
-npx @jakkrichm/create-nexus-devflow graph --file <path>
+npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
-# Status & Updates
-npx @jakkrichm/create-nexus-devflow status
-npx @jakkrichm/create-nexus-devflow update
-npx @jakkrichm/create-nexus-devflow uninstall --keep-history -y
-npx @jakkrichm/create-nexus-devflow eject -y
+# Framework Update & Safety Rollback
+npx @jakkrichm/create-nexus-devflow update [--check]
 ```
-
----
-
-## 🤖 Model Context Protocol (MCP) Server & Tools
-
-Exposes 12 typed MCP tools for AI Coding Agents (`devflow_get_status`, `devflow_get_sliced_context`, `devflow_get_context`, `devflow_query_code_graph`, `devflow_swarm_plan`, `devflow_detect_drift`, `devflow_reconcile_state`, `devflow_evaluate_gate`, `devflow_get_studio_html`, `devflow_add_idea`, `devflow_record_finding`, `devflow_resolve_finding`).
-
-
----
-
-## 🤖 Tool Support & Invocation
-
-| Tool | Installed Adapter | Example Invocations |
-| :--- | :--- | :--- |
-| **Google Antigravity** | `.agents/skills/` | `/feature`, `/fix`, `/implement`, `/devflow`, `/adopt`, `/doctor` |
-| **OpenAI Codex** | `.agents/skills/` | `$feature`, `$fix`, `$implement`, `$devflow`, `$adopt`, `$doctor` |
-| **Claude Code** | `.claude/skills/` | `/feature`, `/fix`, `/implement`, `/devflow`, `/adopt`, `/doctor` |
-| **Cursor / Others** | `AGENTS.md` + `.agents/` | Follow `SKILL.md` or invoke matching command names |
 
 ---
 

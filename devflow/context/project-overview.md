@@ -4,14 +4,16 @@
 
 ## 1. Project Purpose & Target Users
 
-- **What this is**: **Nexus-DevFlow** คือระบบ **Agentic Workflow Layer & Pair Programming Operating System** ที่เชื่อมต่อระหว่างนักพัฒนา (Human Developer) และปัญญาประดิษฐ์ (AI Coding Agents เช่น Google Antigravity, Claude Code, OpenAI Codex, Cursor, GitHub Copilot) เพื่อยกระดับการพัฒนาซอฟต์แวร์สู่มาตรฐานระดับวิศวกรรมสากล
+- **What this is**: **Nexus-DevFlow 2.5.0** คือระบบ **Agentic Workflow Layer & Pair Programming Operating System** ที่เชื่อมต่อระหว่างนักพัฒนา (Human Developer) และปัญญาประดิษฐ์ (AI Coding Agents เช่น Google Antigravity, Claude Code, OpenAI Codex, Cursor, GitHub Copilot) เพื่อยกระดับการพัฒนาซอฟต์แวร์สู่มาตรฐานระดับวิศวกรรมสากล
 - **Target Audience**:
   - นักพัฒนาเดี่ยว (Solo Developers) ที่ต้องการความเร็วสูงแต่ยังคงมีระเบียบวินัยและหลักฐานการทดสอบที่ชัดเจน
   - ทีมพัฒนาและองค์กร (Engineering Teams & Tech Leads) ที่ต้องการมาตรฐานการส่งมอบโค้ดที่ตรวจสอบได้ (Traceable), ตรวจสอบย้อนหลังได้ (Auditable) และไม่มีปัญหาโค้ดตีกัน (Zero Merge Conflict)
 - **Core Value Proposition**:
   - **The 3-Pillars Model**: จัดระเบียบบริบทเป็น 3 เสาหลักอย่างชัดเจน — *🔮 Future (Inbox `ideas.md`)* ➔ *⚡ Present (Living Context `devflow/context/`)* ➔ *📦 Past (Categorized History `devflow/history/`)*
-  - **Dual-Track Delivery Model**: เลือกความเร็วให้เหมาะกับขนาดงาน — *Fast-Track (4 ขั้นตอน)* สำหรับ 85% ของงานประจำวัน และ *Deep-Track (8 ขั้นตอน)* สำหรับ 15% ของงานสถาปัตยกรรม
+  - **The Single Living Spec Model**: วงจร 4 ขั้นตอนทรงพลัง (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`) ขับเคลื่อนด้วยสเปกมีชีวิตเพียงไฟล์เดียว พร้อมโครงสร้าง 6 ส่วนมาตรฐาน
+  - **Pre-Flight Discovery Suite**: ชุดเครื่องมือเตรียมความพร้อมทางสถาปัตยกรรม (`/idea`, `/grill`, `/brainstorm`, `/discovery`)
   - **Hard Quality Gates**: ระบบปฏิเสธการปล่อยงานเมื่อไม่ผ่านเกณฑ์การทดสอบ หรือมีข้อบกพร่องความปลอดภัยค้างอยู่
+  - **Enterprise Web Dashboard & Swarm**: แดชบอร์ดมอนิเตอร์สถานะแบบ Real-time พร้อม 0ms SSR Hydration, Multi-Agent Swarm 4 บทบาท, และ Semantic Code Graph RAG
 
 ---
 
@@ -24,10 +26,11 @@
   - Local State Management & Backup Snapshots (`.nexus/`)
 - **Key Modules & Subsystems**:
   - **Distribution CLI & Package**: `packages/create-nexus-devflow` (Scaffolding, Doctor, Status, Update, Gatekeeper)
-  - **Interactive Web Dashboard**: Embedded Local Webview Dashboard (`/dashboard`) พร้อม Dual-Track Visualizer และ Real-time Snapshot
+  - **Interactive Web Dashboard**: Embedded Local Webview Dashboard (`/dashboard`) พร้อม Single-Flight Git Cache, 0ms SSR Hydration, และ Multi-Agent Swarm Visualizer
   - **Gatekeeper Engine**: ระบบตรวจสอบคุณภาพโค้ดและ Finding Blockers (`nexus-devflow check-gate`)
-  - **Model Context Protocol (MCP) Server**: JSON-RPC Hub สำหรับเชื่อมต่อ AI Agents แบบ Type-Safe
+  - **Model Context Protocol (MCP) Server**: JSON-RPC Hub สำหรับเชื่อมต่อ AI Agents แบบ Type-Safe (12 Native Tools)
   - **Dynamic Context Slicer**: ระบบจัดสรรและตัดตอนบริบทแบบ Just-In-Time (JIT) เพื่อประหยัด Token
+  - **Semantic Code Graph RAG**: ระบบวิเคราะห์โครงสร้างโค้ดและคำนวณผลกระทบการแก้ไข (Blast Radius)
 - **Integration Points & AI Adapters**:
   - Google Antigravity & OpenAI Codex (`.agents/skills/`)
   - Claude Code (`.claude/skills/`)

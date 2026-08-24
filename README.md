@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="docs/logo-nexus-devflow.png" alt="Nexus-DevFlow 2.0" width="120">
+  <img src="docs/logo-nexus-devflow.png" alt="Nexus-DevFlow 2.5.0" width="120">
 </p>
 
-<h1 align="center">Nexus-DevFlow 2.0</h1>
+<h1 align="center">Nexus-DevFlow 2.5.0</h1>
 
-<p align="center"><strong>The 3-Pillars & Dual-Track Agentic Workflow Layer for Building Production Software with AI.</strong></p>
+<p align="center"><strong>The 3-Pillars & Single Living Spec Model for Building Production Software with AI Coding Agents.</strong></p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow"><img src="https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
@@ -21,231 +21,188 @@
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
-**Nexus-DevFlow 2.0** provides a robust, dual-track agentic workflow layer supporting **The 3-Pillars Workspace Architecture** and **Dual-Track Delivery** (Fast-Track 4 Steps & Deep-Track 8 Steps) for building production software with AI assistants. Instead of unstructured "vibe coding", DevFlow guides AI through an explicit, markdown-first, auditable delivery lifecycle.
+**Nexus-DevFlow 2.5.0** is an enterprise-grade agentic workflow layer supporting **The 3-Pillars Workspace Architecture** and the **Single Living Spec Model**. Instead of unstructured "vibe coding", DevFlow guides AI assistants through an auditable, markdown-first, spec-driven engineering lifecycle with automated quality gates and real-time dashboard observability.
 
-Install it inside any scaffolded or existing Git repository:
+Install it inside any scaffolded or existing Git repository in seconds:
 
 ```bash
 npx -y @jakkrichm/create-nexus-devflow@latest -y
 ```
 
 > [!NOTE]
-> Nexus-DevFlow 2.0 is designed as a workflow layer overlay that sits on top of your application codebase, bringing multi-agent skills (`.agents/skills` & `.claude/skills`), structured 3-pillars context (`devflow/`), and senior QA gates to your favorite AI IDE (Google Antigravity, OpenAI Codex, Claude Code, Cursor, Gemini CLI, and others).
+> Nexus-DevFlow is designed as a non-intrusive workflow layer that overlays on top of your application codebase, bringing multi-agent skills (`.agents/skills` & `.claude/skills`), structured context (`devflow/`), and senior QA gates to your favorite AI IDE (**Google Antigravity**, **Claude Code**, **OpenAI Codex**, **Cursor**, **GitHub Copilot**, **Gemini CLI**, **Aider**, **OpenCode**, and others).
 
 ---
 
-## 🏛️ The 3-Pillars Workspace Architecture
+## 🏛️ 1. The 3-Pillars Workspace Architecture
 
-DevFlow 2.0 organizes all project intelligence and workflow history into three clean pillars representing Future, Present, and Past:
+DevFlow organizes all project intelligence and workflow history into three clean pillars representing Future, Present, and Past:
 
 ```text
 devflow/
 │
-├── 🔮 ideas.md                 # [1. Future / Backlog] Centralized Idea Inbox with AI scoring
+├── 🔮 ideas.md                 # [1. Future / Backlog] Centralized Idea Inbox with AI feasibility scoring
 │
 ├── ⚡ context/                  # [2. Present / Active] Living Source of Truth & Active Work
 │   ├── project-overview.md     # Primary source of truth for architecture and tech stack
-│   ├── coding-standards.md     # Engineering conventions, TDD rules, and test gates
+│   ├── coding-standards.md     # Engineering conventions, strict TDD rules, and test gates
 │   ├── ai-interaction.md       # AI agent interaction rules and operational preferences
-│   ├── findings.md             # Quality, security, and verification ledger (P0-P3)
+│   ├── findings.md             # Quality, security, and verification findings ledger (P0-P3)
 │   ├── current-stage.md        # Active stage run tracker and state pointer
-│   ├── current-feature.md      # Fast-Track Single Living Spec (Active work / stub when idle)
-│   └── current-run/            # Deep-Track Active Run folder (Temporary during execution)
+│   └── current-feature.md      # The Single Living Spec (Active delivery spec / idle stub)
 │
 ├── 🏛️ decisions/                # Architecture Decision Records (ADR-xxx-slug.md)
 │
 ├── 📦 history/                  # [3. Past / Completed] Permanent Categorized Delivery Archives
-│   ├── features/               # Completed features, migrations, and tooling (xxx-slug.md or folder)
+│   ├── features/               # Completed features, migrations, and tooling (xxx-slug.md)
 │   ├── fixes/                  # Completed bug fixes, hotfixes, security patches (xxx-slug.md)
 │   ├── rollbacks/              # Safely reversed feature records (YYYY-MM-DD-xxx-slug.md)
 │   └── HISTORY.md              # Master release history ledger summary table
 │
-└── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug/discovery.md)
+└── 🔍 discoveries/              # Pre-delivery discovery records (DISC-YYYYMMDD-NNN-slug.md)
 ```
 
 ---
 
-## 🏎️ Dual-Track Delivery Model
+## ⚡ 2. The Unified 4-Stage Living Spec Lifecycle
 
-Nexus-DevFlow 2.0 supports two distinct delivery tracks based on task scope and governance requirements:
-
-### 🏎️ Track 1: Fast-Track (Blueprint Mode — 4 Steps)
-> **Recommended for 85% of daily engineering work** (features, bug fixes, UI improvements, iterative refactoring) driven by the **Single Living Spec (`devflow/context/current-feature.md`)**:
+All development tasks (from lean UI fixes to deep architectural epics) execute through a progressive, 4-stage single living spec lifecycle:
 
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`feature` / `fix` (`/feature`, `/fix`)**: Combines Discover, Define, Spec, and Plan. Checks Single Active Run Guardrail, allocates sequential ID (`xxx-slug`), and writes `devflow/context/current-feature.md`. Supports intake from Idea Inbox (`/feature IDEA-xxx`).
-2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with TDD discipline (Red-Green-Refactor) and appends progress to `current-feature.md`.
-3. **`check` (`/check`)**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof), and records evidence into `current-feature.md`.
-4. **`complete` (`/complete`)**: Final safety pass, records Release Digest, auto-archives `current-feature.md` ➔ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, resets idle stub, performs git merge, and closes the run.
+| Stage | Command | Purpose & Description | Output Artifact |
+| :--- | :--- | :--- | :--- |
+| **1. Spec** | `/feature` or `/fix` | Discovers, defines, sizes, breaks down tasks, and establishes acceptance criteria. Allocates sequential ID (`xxx-slug`) and initializes the living spec. | `devflow/context/current-feature.md` |
+| **2. Build** | `/implement` | Incrementally executes checklist tasks with strict **TDD discipline (Red-Green-Refactor)**, proving each step with diffs and test logs. | `current-feature.md` (Appended) |
+| **3. Verify** | `/check` | Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof), and records empirical verification evidence. | `current-feature.md` (Evidence) |
+| **4. Deliver** | `/complete` | Runs final safety pass, records Release Digest, auto-archives living spec to `devflow/history/`, resets the stub, and manages the git delivery gate. | `devflow/history/` & `HISTORY.md` |
+
+### 📄 The 6 Structured Sections of the Living Spec:
+1. **🎯 1. Define & Boundaries**: Problem statement, proposed solution, scope boundaries, and non-breaking invariants.
+2. **📐 2. Technical Spec & Contracts**: Data contracts, API schemas, and testable Acceptance Criteria (AC-1..AC-N).
+3. **📋 3. Execution Plan & TDD Checklist**: Sequential task breakdown with granular `[TDD-Red]`, `[TDD-Green]`, and `[TDD-Refactor]` sub-tasks.
+4. **⚡ 4. Implementation Log & Evidence**: Live engineering log recording step-by-step implementation evidence.
+5. **🧪 5. Multi-Lane Verification Matrix**: Empirical test logs, benchmark data, and manual proof verification.
+6. **📦 6. Release Digest & Retrospective**: Release summary, key architectural decisions, and retrospective notes.
 
 ---
 
-### 🏗️ Track 2: Deep-Track (Architect Mode — 8 Steps)
-> **Recommended for large architectural epics, database migrations, security audits, and multi-agent coordination**:
+## 🔮 3. Pre-Flight Discovery & Architectural Alignment
+
+Before committing to delivery, use specialized companion skills to brainstorm, stress-test, and refine complex concepts:
 
 ```text
-discovery ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver
+/idea (Inbox) ──▶ /grill (Socratic ADR) ──▶ /discovery (Explore) ──▶ /feature (Deliver)
 ```
 
-| Stage | Canonical Command Name | Description & Core Artifacts |
-| :--- | :--- | :--- |
-| **00** | `discovery` | Unified discovery and exploration (project-level roadmap or feature-level exploration with 5 lenses: Brainstorm, Research, PRD, Bug Triage, Grill) (`devflow/discoveries/`). |
-| **10** | `10-define` | Lock delivery boundaries and allocate sequential IDs (`devflow/context/current-run/10-define.md`). |
-| **20** | `20-spec` | Formalize markdown-first specifications and acceptance criteria (`20-spec.md`). |
-| **30** | `30-plan` | Transform spec into executable task breakdowns and execution checklists (`30-plan.md`). |
-| **40** | `40-execute` | Execute planned tasks incrementally with step evidence and unit tests (`40-execute.md`). |
-| **50** | `50-verify` | Conduct Senior QA review, test verification, and verdict decision (`50-verify.md`). |
-| **60** | `60-report` | Produce standardized markdown delivery digest report (`60-report.md`). |
-| **70** | `70-deliver` | Package verified work, archive `current-run/` ➔ `devflow/history/{category}/{xxx-slug}/`, git merge, and close run. |
+- **`/idea`**: Capture raw ideas in `devflow/ideas.md` with instant AI feasibility, effort, and value scoring.
+- **`/grill`** (or **`/align`**): Socratic alignment & domain modeling. Stress-tests requirements, extracts domain terminology into `devflow/context/glossary.md`, and generates Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
+- **`/brainstorm`**: Structured divergent and convergent ideation, generating 2–3 viable options with trade-off matrices.
+- **`/discovery`**: Unified pre-delivery discovery and deep exploration (`devflow/discoveries/DISC-xxx.md`).
 
 ---
 
-## 🛠️ CLI Quick Start & Commands
+## 🌐 4. Enterprise Web Dashboard & Real-Time Studio
 
-The zero-dependency CLI `@jakkrichm/create-nexus-devflow` manages the entire DevFlow lifecycle directly from your terminal:
+Launch the local interactive Web Dashboard with sub-millisecond snapshot response and zero-second first paint:
 
 ```bash
-# 1. Install DevFlow into current repository
-npx -y @jakkrichm/create-nexus-devflow@latest -y
+npm run dashboard
+# Or via CLI directly:
+npx @jakkrichm/create-nexus-devflow dashboard
+```
 
-# 2. Inspect project status, active tasks, findings, and recommended next action
-npx @jakkrichm/create-nexus-devflow status
+```text
++----------------------------------------------------------------------------------------------------+
+|  nexus-devflow                                                                                     |
+|  D:\Projects\devtools\nexus-devflow                                                                |
+|                                                                                                    |
+|  [v2.5.0]  [HEALTH OK]  [✔ GATE PASSED]  [✔ IN SYNC]  [TRACK FAST]                                 |
++----------------------------------------------------------------------------------------------------+
+|  [🔮 Pre-Flight Discovery]   [⚡ Living Spec · 4 steps]   [🤖 Multi-Agent Swarm]   [🗺️ Code Graph]   |
++----------------------------------------------------------------------------------------------------+
+|  [ Card: Current Work ]        |  [ Card: Git & Branch ]                                           |
++--------------------------------+-------------------------------------------------------------------+
+|  [ Card: Findings Ledger ]     |  [ Card: Completion & Gate ]                                      |
++----------------------------------------------------------------------------------------------------+
+```
 
-# Output machine-readable JSON for CI/CD pipelines
-npx @jakkrichm/create-nexus-devflow status --json
-
-# 3. Update existing DevFlow installation safely to latest version
-npx @jakkrichm/create-nexus-devflow update
+### Key Dashboard Capabilities:
+- ⚡ **0ms First Paint**: Server-Side Hydration (`window.__INITIAL_SNAPSHOT__`) renders UI instantly on cold start.
+- ⚡ **Single-Flight Git Caching**: In-flight Promise coalescing eliminates subprocess storms on Windows/Linux.
+- 🤖 **Multi-Agent Swarm Visualizer**: Live orchestration panel for 4 specialized AI roles:
+  - 👑 **Lead Architect**: Architecture boundaries, data contracts, ADR sign-off.
+  - 👨‍💻 **Core Coder**: Clean, type-safe implementation adhering to standards.
+  - 🕵️ **QA Verifier**: Red-team test writing, edge-case validation, behavioral proof.
+  - 🛡️ **Security Auditor**: Vulnerability scanning, secret detection, zero-blocker sign-off.
+- 🗺️ **Semantic Code Graph RAG**: AST dependency parser with transitive blast-radius calculation.
+- 📋 **Live Kanban Studio**: Real-time visualization of living spec tasks and stage transitions.
 
 ---
 
-## 🛠️ Enterprise CLI Subcommands (v2.1.0)
+## 🛠️ 5. CLI Management Commands
 
-Nexus-DevFlow comes with a rich suite of developer CLI commands executable via `npx @jakkrichm/create-nexus-devflow <command>`:
+Nexus-DevFlow provides a comprehensive CLI for workspace automation:
 
 ```bash
-# 1. Quality Gatekeeper & Git Pre-commit Hooks
-npx @jakkrichm/create-nexus-devflow check-gate [--strict] [--json]
+# Start Web Dashboard
+npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
+
+# Automated Quality Gatekeeper & Pre-commit Hooks
+npx @jakkrichm/create-nexus-devflow check-gate [--strict]
 npx @jakkrichm/create-nexus-devflow hook install pre-commit
-npx @jakkrichm/create-nexus-devflow hook uninstall
 
-# 2. Model Context Protocol (MCP) Server Hub
+# Model Context Protocol (MCP) Server Hub (12 Native Tools)
 npx @jakkrichm/create-nexus-devflow mcp
 
-# 3. JIT Dynamic Context Slicing (60-70% Token Savings)
-npx @jakkrichm/create-nexus-devflow slice --stage implement [--max-tokens 2000]
+# Just-In-Time (JIT) Dynamic Context Slicing
+npx @jakkrichm/create-nexus-devflow slice --stage implement
 
-# 4. State Drift Detection & Self-Healing Engine
-npx @jakkrichm/create-nexus-devflow drift [--json]
-npx @jakkrichm/create-nexus-devflow reconcile --fix
+# Git Diff Drift Detection & Reconciler
+npx @jakkrichm/create-nexus-devflow drift
+npx @jakkrichm/create-nexus-devflow reconcile
 
-# 5. Interactive Visual Studio Dashboard & IDE Webview
-npx @jakkrichm/create-nexus-devflow studio [--json]
+# Multi-Agent Swarm & Code Graph
+npx @jakkrichm/create-nexus-devflow swarm
+npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
-# 6. Multi-Agent Swarm Orchestrator & Code Graph RAG
-npx @jakkrichm/create-nexus-devflow swarm [--json]
-npx @jakkrichm/create-nexus-devflow graph --file <path> [--json]
+# Interactive HTML Delivery Report
+npm run report:html -- 054-optimize-dashboard-snapshot-latency
 
-# 7. Idea Inbox & Findings Ledger Management
-npx @jakkrichm/create-nexus-devflow idea add "OAuth2 Authentication"
-npx @jakkrichm/create-nexus-devflow findings add "SQL Injection in User Query" --severity P0
-npx @jakkrichm/create-nexus-devflow findings resolve FINDING-001
+# Framework Update & Safety Rollback
+npx @jakkrichm/create-nexus-devflow update [--check]
 ```
 
 ---
 
-## 🤖 Model Context Protocol (MCP) Integration for AI Agents
+## 🧪 6. Verification & Engineering Standards
 
-Nexus-DevFlow exposes **12 Typed MCP Tools** for autonomous AI Coding Assistants (Google Antigravity, Claude Code, Cursor, Copilot, Gemini CLI):
+Nexus-DevFlow enforces rigorous engineering discipline across all development:
 
-| MCP Tool Name | Purpose & Agent Capability |
-| :--- | :--- |
-| `devflow_get_status` | Inspect live project status, active living spec, and recommended next action |
-| `devflow_get_sliced_context` | Request JIT token-optimized context slice for specific stage |
-| `devflow_get_context` | Retrieve branch-scoped context from `devflow/context/<branch>/` |
-| `devflow_query_code_graph` | Query codebase AST dependency graph and compute **Blast Radius** |
-| `devflow_swarm_plan` | Generate specialized task allocations for Coder, QA, Security, and Architect |
-| `devflow_detect_drift` | Detect undeclared file modifications against the living spec |
-| `devflow_reconcile_state` | Self-heal and synchronize living spec with actual Git working tree |
-| `devflow_evaluate_gate` | Evaluate Hard Quality Gatekeeper criteria before commits/merges |
-| `devflow_get_studio_html` | Retrieve self-contained 3-Pillars Webview Studio HTML |
-| `devflow_add_idea` | Capture and analyze ideas into `devflow/ideas.md` |
-| `devflow_record_finding` | Record security/quality issues into `devflow/context/findings.md` |
-| `devflow_resolve_finding` | Mark resolved findings in the findings ledger |
+1. **Strict TDD Discipline**: Every checklist task enforces `[TDD-Red]` (failing test), `[TDD-Green]` (minimal passing code), and `[TDD-Refactor]` (clean up and optimize).
+2. **Two-Stage Review Pattern**:
+   - **Stage 1 (Spec Gate)**: The AI pauses after writing the spec to review edge cases, sizing, and non-goals with the developer.
+   - **Stage 2 (Delivery Gate)**: Mandatory user approval gate before any squash-merge or pull-request push.
+3. **Automated CI Quality Gate**: Documented in `AGENTS.md` and automated via `.github/workflows/verify.yml`.
 
 ---
 
+## 🎯 7. Supported AI IDEs & Tools
 
-## 🔄 Migration Guide (Upgrading from DevFlow 1.x / Runs Structure)
+Nexus-DevFlow integrates seamlessly with all leading AI coding assistants:
 
-If your existing codebase uses the older DevFlow layout (with `devflow/runs/RUN-xxx` folders), upgrade to **DevFlow 2.0 (The 3-Pillars Model)** using either of the following methods:
-
-### Option A: Clean Reinstall (Recommended)
-```bash
-# 1. Uninstall legacy files while preserving your history
-npx @jakkrichm/create-nexus-devflow@latest uninstall --keep-history -y
-
-# 2. Install the fresh DevFlow 2.0 baseline
-npx @jakkrichm/create-nexus-devflow@latest -y
-
-# 3. In your AI IDE, scan codebase to bootstrap context
-/adopt
-```
-
-### Option B: In-Place Update
-```bash
-# 1. Run updater
-npx @jakkrichm/create-nexus-devflow@latest update
-
-# 2. Move completed legacy runs from devflow/runs/RUN-xxx to devflow/history/features/xxx-slug
-# 3. Delete the empty devflow/runs/ directory
-# 4. In your AI IDE, refresh project overview
-/overview
-```
-
----
-
-## 🌐 Public Companion Commands
-
-| Canonical Command Name | Purpose |
-| :--- | :--- |
-| `devflow` | Flagship interactive guide, state inspector, and intent router. |
-| `discovery` | Deep, multi-turn guided planning interview that drafts user-owned plans (`project-plan.md` & `build-plan.md`). |
-| `audit` | Comprehensive code, security, performance, and test quality audit maintaining `devflow/context/findings.md`. |
-| `release` | Cloud deployment readiness check and config generator (Render `render.yaml` or Vercel `vercel.json`). |
-| `doctor` | Read-only health check for setup, scripts, adapters, and workflow drift (`--fix` supported). |
-| `overview` | Distill plans into `project-overview.md` as the living source of truth. |
-| `idea` | Quick idea capture and AI feasibility enrichment into `devflow/ideas.md`. |
-| `debug` | Root cause investigation for bugs before or during implementation. |
-| `onboard` | Baseline stack detection and setup for fresh/scaffolded projects. |
-| `adopt` | Survey existing codebase and bootstrap DevFlow into brownfield apps. |
-| `try` | Step-by-step human manual QA review guide (where to go, what to click, what to expect). |
-| `rollback` | Safe feature/run reversal planner with dependency risk analysis. |
-| `ci` | Automatic GitHub Actions workflow (`.github/workflows/verify.yml`) setup. |
-| `tests` / `test` | Verify test suites, missing test generation, and test runner configuration. |
-| `brief` | Read-only scope, dependency, and size pre-briefing before speccing a run. |
-| `brainstorm` | Structured divergent & convergent ideation with trade-off analysis. |
-| `convert-any-to-md` | Universal document parser converting Excel, Word, PDF, and plaintext to Markdown in `devflow/reference/`. |
-| `autopilot` | Optional explicit bounded loop for Fast-Track (`feature`/`fix` -> `implement` -> `check`) or Deep-Track (`20` -> `30` -> `40` -> `50` -> `60`) |
-| `prototype` | Rapid throwaway static HTML/CSS mockups to lock UI/UX before build. |
-| `report-html` | Standalone interactive HTML report dashboard generator (`/report:html`). |
-
----
-
-## 🔌 Tool Adapter Support
-
-| AI Assistant / IDE | Adapter Path | Supported Invocations |
+| AI Tool / IDE | Adapter Location | Invocation Method |
 | :--- | :--- | :--- |
-| **Google Antigravity** | `.agents/skills/<skill>/SKILL.md` | Plain names (`discovery`, `devflow`), slash commands (`/discovery`, `/feature`), or natural language |
-| **OpenAI Codex** | `.agents/skills/<skill>/SKILL.md` | Plain names (`feature`), skill command (`$feature`), or natural language |
-| **Claude Code** | `.claude/skills/<skill>/SKILL.md` | Plain names (`feature`), slash commands (`/feature`), or natural language |
-| **Cursor / Gemini / Aider** | `AGENTS.md` / `CLAUDE.md` | Plain names or natural language referencing `AGENTS.md` |
+| **Google Antigravity** | `.agents/skills/<skill>/` | Slash command (e.g. `/feature`, `/implement`) |
+| **Claude Code** | `.claude/skills/<skill>/` | Slash command (e.g. `/feature`, `/implement`) |
+| **OpenAI Codex CLI** | `.agents/skills/<skill>/` | Skill invocation (e.g. `$feature`, `$implement`) |
+| **Cursor / Copilot** | `AGENTS.md` + `.agents/` | Prompting by Canonical name |
+| **OpenCode / Windsurf** | Compatible adapter trees | Direct skill execution |
 
 ---
 
-## 📜 License
+## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+MIT © [Jakkrich](https://github.com/Jakkrich)
