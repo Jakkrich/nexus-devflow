@@ -1,6 +1,6 @@
 ---
 name: 40-execute
-description: "[Devflow] Execute stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests."
+description: "[devflow][D] Execute stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests."
 ---
 # Phase 40: Execute Code
 

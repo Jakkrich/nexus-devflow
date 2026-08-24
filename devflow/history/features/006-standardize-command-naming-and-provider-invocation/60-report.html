@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RUN-006: Standardize Command Naming & Provider Invocation - Delivery Report</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #4ade80;
+      --accent-purple: #c084fc;
+      --border-color: #475569;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      background-color: rgba(74, 222, 128, 0.15);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      margin: 0.5rem 0;
+      font-size: 2rem;
+      color: var(--accent-blue);
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+      background-color: var(--bg-secondary);
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+    .meta-item strong {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+    .card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      margin-top: 0;
+      color: var(--accent-purple);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      font-size: 1.35rem;
+    }
+    ul {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    th {
+      background-color: var(--bg-card);
+      color: var(--accent-blue);
+    }
+    .status-pass {
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+    code {
+      background-color: var(--bg-card);
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--accent-blue);
+      font-size: 0.9em;
+    }
+    .btn {
+      display: inline-block;
+      background-color: var(--accent-blue);
+      color: #0f172a;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">QA VERDICT: PASS ✅</span>
+      <h1>RUN-006: Standardize Command Naming & Provider Invocation</h1>
+      <p style="color: var(--text-secondary); margin: 0;">ปรับชื่อเรียกคำสั่งและ Mainline Stages เป็น Canonical Name เดี่ยว ตัด Alias ย่อ และเพิ่มคำแนะนำการเรียกใช้งานตาม AI Provider</p>
+      
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>RUNNING ID</strong>
+          RUN-006-standardize-command-naming-and-provider-invocation
+        </div>
+        <div class="meta-item">
+          <strong>TARGET INITIATIVE</strong>
+          Command Naming & Provider Invocation Guideline
+        </div>
+        <div class="meta-item">
+          <strong>DATE</strong>
+          2026-08-18
+        </div>
+        <div class="meta-item">
+          <strong>VERIFICATION STATUS</strong>
+          <span class="status-pass">All 4 Check Layers Passed</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>🚀 สรุปผลการส่งมอบ (Executive Summary)</h2>
+      <ul>
+        <li><strong>กำหนด Canonical Name เดี่ยวทุกที่</strong>: Mainline Stages (<code>00-discover</code>, <code>10-define</code>, <code>20-spec</code>, <code>30-plan</code>, <code>40-implement</code>, <code>50-verify</code>, <code>60-report</code>, <code>70-release</code>) และ Companion Commands (<code>devflow</code>, <code>onboard</code>, <code>adopt</code>, <code>doctor</code>, <code>try</code>, <code>rollback</code>, <code>ci</code>, <code>brief</code>, <code>autopilot</code> ฯลฯ)</li>
+        <li><strong>ตัด Shorthand & Aliases ที่สับสน</strong>: ยกเลิกการแสดงผลแบบมีหลายชื่อปะปน เช่น <code>00-discover (discover, /00-discover)</code> ให้เหลือเพียง <code>00-discover</code> เท่านั้น</li>
+        <li><strong>เพิ่มกล่องคำแนะนำ Invocation Rule ตาม AI Provider</strong>: อธิบายชัดเจนว่ารูปแบบการเรียกใช้ (ชื่อปกติ, <code>/</code>, หรือ <code>$</code>) ขึ้นอยู่กับ AI Provider/Tool ที่ใช้งาน</li>
+        <li><strong>ความสอดคล้องข้ามระบบ 100%</strong>: ซิงค์ <code>.agents/skills/</code> (104 skills), <code>.claude/skills/</code>, และเทมเพลต <code>packages/create-nexus-devflow/template/</code> เรียบร้อยครบถ้วน</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>🛡️ ผลการทดสอบคุณภาพ (Verification Matrix)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ชั้นการทดสอบ</th>
+            <th>คำสั่ง</th>
+            <th>ผลลัพธ์</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Static Framework Contract</strong></td>
+            <td><code>npm run check:static</code></td>
+            <td><span class="status-pass">PASS (104 Skills Validated)</span></td>
+          </tr>
+          <tr>
+            <td><strong>Workspace Integrity</strong></td>
+            <td><code>npm run check</code></td>
+            <td><span class="status-pass">PASS (All Core Files Present)</span></td>
+          </tr>
+          <tr>
+            <td><strong>Installer Package Tests</strong></td>
+            <td><code>npm test</code></td>
+            <td><span class="status-pass">PASS (3/3 Unit Tests)</span></td>
+          </tr>
+          <tr>
+            <td><strong>Package Smoke Test</strong></td>
+            <td><code>npm run test:package</code></td>
+            <td><span class="status-pass">PASS (Overlay 377 files installed)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>📦 สรุป Checkpoint Commits บน Feature Branch</h2>
+      <ul>
+        <li><code>ecbecda</code>: docs(RUN-006): checkpoint standardize command names and provider invocation in AGENTS and READMEs</li>
+        <li><code>a694d3d</code>: feat(RUN-006): checkpoint standardize command references in skill adapters</li>
+        <li><code>92d60df</code>: feat(RUN-006): checkpoint sync updated templates into create-nexus-devflow</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

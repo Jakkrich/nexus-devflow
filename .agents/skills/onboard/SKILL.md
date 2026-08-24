@@ -69,7 +69,7 @@ obsolete overlay content in the product README slot:
 - Create a small root `README.md` stub for the actual project using the detected
   project name, one-line purpose when known, and the Commands from `AGENTS.md`.
   Keep it minimal if the project plan is not filled yet.
-- Do not move or copy the workflow document into `blueprint/`. Agents use the
+- Do not move or copy the workflow document into `devflow/`. Agents use the
   local skills, plans, and context files directly.
 - Remove any `AGENTS.md` claim that a project README explains the Blueprint
   workflow.
@@ -91,7 +91,7 @@ If no test command exists, say so explicitly. Do not claim tests are a gate unti
 a real test command is configured.
 
 If `CLAUDE.md` exists and still has the placeholder `# Project Name`, replace it
-with the detected project name. Keep the `@AGENTS.md` and `@blueprint/...`
+with the detected project name. Keep the `@AGENTS.md` and `@devflow/...`
 imports intact. Do not move detailed app context into `CLAUDE.md`; that belongs
 in `AGENTS.md` and the generated project overview.
 
@@ -147,17 +147,17 @@ preserving existing entries. Typical examples include dependencies, build output
 framework caches, logs, environment files, test output, temporary files, and OS or
 editor files.
 
-Ask how Blueprint workflow files should be handled in git, unless the user
+Ask how DevFlow workflow files should be handled in git, unless the user
 already gave a preference:
 
 ```text
-Blueprint visibility?
+DevFlow visibility?
 
-1. Commit Blueprint workflow files
+1. Commit DevFlow workflow files
    Portable. Best for teams and working across machines.
 
-2. Keep Blueprint workflow files local
-   Adds .agents/, .claude/, blueprint/, and CLAUDE.md to .gitignore.
+2. Keep DevFlow workflow files local
+   Adds .agents/, .claude/, devflow/, and CLAUDE.md to .gitignore.
    Keeps AGENTS.md public as the lightweight project agent guide.
 ```
 
@@ -166,37 +166,38 @@ Recommend option 1 by default. If the user chooses option 2:
 - Add this block to `.gitignore`, preserving existing entries:
 
   ```gitignore
-  # AI Blueprint local workflow files
+  # DevFlow local workflow files
   .agents/
   .claude/
-  blueprint/
+  devflow/
   CLAUDE.md
   ```
 
 - Keep `AGENTS.md` tracked. It remains the lightweight public project guide for
   commands and conventions.
 - Make `AGENTS.md` public-safe: keep project description, commands, testing gate,
-  and coding conventions, but remove or avoid Blueprint workflow explanations,
+  and coding conventions, but remove or avoid DevFlow workflow explanations,
   hidden adapter paths, workflow-document pointers, and core skill lists that
   would expose the local-only workflow.
 - Explain that local-only mode hides the workflow contents from the repo, but the
   `.gitignore` names still reveal the ignored paths.
-- Explain that Blueprint state, specs, findings, and history will not travel
-  with the repo; another machine needs the Blueprint reinstalled or restored
+- Explain that DevFlow state, specs, findings, and history will not travel
+  with the repo; another machine needs DevFlow reinstalled or restored
   locally.
-- If any of `.agents/`, `.claude/`, `blueprint/`, or
+- If any of `.agents/`, `.claude/`, `devflow/`, or
   `CLAUDE.md` are already tracked, say `.gitignore` will not hide tracked files.
   Ask before running
-  `git rm --cached -r .agents .claude blueprint CLAUDE.md`, and
+  `git rm --cached -r .agents .claude devflow CLAUDE.md`, and
   only run it if the user explicitly approves. Never delete the local files.
 
 Then report which adapter folders are needed:
 
-- Codex only: keep `AGENTS.md`, `.agents/`, and `blueprint/`; `CLAUDE.md` and
+- Codex, Antigravity, and GitHub Copilot: keep `AGENTS.md`, `.agents/`, and `devflow/`; `CLAUDE.md` and
   `.claude/` can be deleted.
-- Claude Code only: keep `AGENTS.md`, `CLAUDE.md`, `.claude/`, and `blueprint/`;
+- Claude Code only: keep `AGENTS.md`, `CLAUDE.md`, `.claude/`, and `devflow/`;
   `.agents/` can be deleted.
-- Mixed tools: keep both adapters.
+- OpenCode: shares either `.agents/` or `.claude/` compatible skill tree without duplicate folders.
+- Mixed tools: keep both `.agents/` and `.claude/` adapters.
 
 Do not delete adapters unless the user explicitly asks.
 

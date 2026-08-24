@@ -13,10 +13,11 @@ import {
 } from "../lib/update.js";
 
 test("adapterListFromMode resolves adapter aliases correctly", () => {
-  assert.deepEqual(adapterListFromMode("both"), ["codex", "claude", "copilot"]);
-  assert.deepEqual(adapterListFromMode("all"), ["codex", "claude", "copilot"]);
+  assert.deepEqual(adapterListFromMode("both"), ["codex", "claude", "copilot", "antigravity", "opencode"]);
+  assert.deepEqual(adapterListFromMode("all"), ["codex", "claude", "copilot", "antigravity", "opencode"]);
   assert.deepEqual(adapterListFromMode("copilot"), ["copilot"]);
-  assert.deepEqual(adapterListFromMode("antigravity"), ["codex"]);
+  assert.deepEqual(adapterListFromMode("opencode"), ["opencode"]);
+  assert.deepEqual(adapterListFromMode("antigravity"), ["antigravity", "codex"]);
   assert.deepEqual(adapterListFromMode("codex"), ["codex"]);
   assert.deepEqual(adapterListFromMode("claude"), ["claude"]);
   assert.throws(() => adapterListFromMode("invalid"), /Unknown adapter mode/);

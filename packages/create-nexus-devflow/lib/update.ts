@@ -11,6 +11,7 @@ export const MANAGED_ROOTS: Record<string, string[]> = {
   codex: [".agents/skills"],
   copilot: [".agents/skills"],
   antigravity: [".agents/skills", ".agent/workflows"],
+  opencode: [".agents/skills"],
   claude: [".claude/skills"]
 };
 
@@ -63,14 +64,19 @@ export interface PreparedUpdate {
 
 export function adapterListFromMode(adapter?: string): string[] {
   if (!adapter || adapter === "both" || adapter === "all") {
-    return ["codex", "claude", "copilot"];
+    return ["codex", "claude", "copilot", "antigravity", "opencode"];
   }
 
   if (adapter === "antigravity") {
-    return ["codex"];
+    return ["antigravity", "codex"];
   }
 
-  if (adapter === "codex" || adapter === "claude" || adapter === "copilot") {
+  if (
+    adapter === "codex" ||
+    adapter === "claude" ||
+    adapter === "copilot" ||
+    adapter === "opencode"
+  ) {
     return [adapter];
   }
 

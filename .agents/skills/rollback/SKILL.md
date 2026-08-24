@@ -71,7 +71,7 @@ changed. Exclude these protected workflow paths:
 
 - `.agents/**`
 - `.claude/**`
-- `blueprint/**`
+- `devflow/**`
 - `AGENTS.md`
 - `CLAUDE.md`
 - `prototypes/**`

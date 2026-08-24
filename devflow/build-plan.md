@@ -60,3 +60,11 @@
   - *Dependencies*: Feature 6
   - *Scope*: พัฒนาระบบกระจายงานแบบคู่ขนานให้ Subagents (Coder, QA Verifier, Security Auditor) และระบบ Indexing Local Codebase Graph เพื่อดึงบริบทที่แม่นยำสูงสุด
 
+---
+
+## 🔄 Phase 8: Upstream Synchronization & Multi-Adapter Expansion
+
+- [x] **8. Sync Upstream v0.13.0 (Adopt Visibility, OpenCode & Multi-Adapter Selection)** `[Size: M]`
+  - *Dependencies*: None
+  - *Scope*: ผสานความสามารถ Adopt Workflow Visibility (Commit vs Local-only), การรองรับ OpenCode และ Multi-Adapter Checkbox Prompt ใน CLI พร้อมอัปเดต Doctor checks และซิงก์ Baseline SHA เป็น v0.13.0 (`0b65166`)
+

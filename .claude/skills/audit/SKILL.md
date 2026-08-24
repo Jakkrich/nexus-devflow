@@ -1,141 +1,275 @@
 ---
 name: audit
-description: "[Devflow] Code, quality, security, performance, and test audit skill with durable ledger tracking in devflow/context/findings.md."
-argument-hint: "{scope/path or lens: quality | security | performance | tests | full}"
+description: "[devflow][B] Read-only code audit for a Blueprint project, except for the findings ledger it maintains at devflow/context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review."
 ---
 
-# audit - Dedicated Multi-Lens Audit & Quality Ledger
+# audit - review code quality against the project standards
 
 Where this sits in the workflow:
 
-```text
-git diff / codebase / path  ->  [audit]  ->  devflow/context/findings.md  ->  check-gate / /complete
-(target scope & lenses)         (analyze &   (durable findings ledger)        (quality gates)
-                                 record)
-```
+    /implement or /autopilot  ->  [audit]  ->  fixes or /complete
+    (code exists)                 (review +    (repair quality issues
+                                   ledger)      or close the feature)
 
-`audit` is the dedicated quality, security, performance, and test review engine for Nexus-DevFlow. It inspects changed files in the active branch, a targeted path, or the full repository, evaluates them through specialized review lenses, and records findings with durable IDs into `devflow/context/findings.md`.
+`/check` proves behavior against the spec. `/doctor` checks Blueprint setup and
+workflow health. This skill checks the code itself through either a broad review
+or one focused lens: quality, security, performance, or tests.
 
-It is **strictly non-destructive**: it inspects and records findings in `findings.md`, but never modifies source code directly. Remediation is handled via `/fix <ID>` or `/implement`.
+It reviews code without changing it: it never edits source files, installs
+dependencies, commits, merges, pushes, or starts product work. Its one write is
+the findings ledger at `devflow/context/findings.md` (Step 4), the durable
+record of findings and their status.
 
-## Usage & Invocations
+## Input
 
-```text
-/audit                      # Audit active branch changes across all lenses (Default)
-/audit security             # Focused Security audit on active changes
-/audit quality              # Focused Quality, dead code & code smells audit
-/audit performance          # Focused Performance & efficiency audit
-/audit tests                # Focused Test quality & coverage gap audit
-/audit full                 # Full repository audit across all lenses
-/audit <path>               # Targeted audit on a specific file or directory
-$audit                      # Codex CLI invocation
-```
+Treat scope and lens as separate controls. Arguments may appear in either order,
+such as `/audit security current` or `/audit src/auth tests`.
 
----
+Optional scope:
 
-## Process
+- no scope argument: use `current` when an active feature exists, otherwise use
+  `changed` when local changes exist, otherwise use `full`
+- `current`: audit the active `current-feature.md`, every committed feature-branch
+  change from its merge base through `HEAD`, staged and unstaged changes,
+  untracked source files, and nearby code affected by the feature
+- `changed`: audit staged, unstaged, and untracked source files plus nearby code
+- `full`: audit all project-owned source, tests, and configuration while excluding
+  dependencies, generated files, build output, coverage output, caches, vendored
+  code, and minified assets unless the user explicitly includes them
+- path or directory: audit that area and the tests or callers needed to understand it
 
-### Step 1 - Determine Scope & Lens
+Optional lens:
 
-1. **Scope Resolution**:
-   - **Branch / Active Run (Default)**: Inspect `git diff main...HEAD` or files touched in `devflow/context/current-feature.md`.
-   - **Targeted Path**: If a directory/file path is passed (e.g. `src/auth/`), scope analysis to that path.
-   - **Full Project**: If `full` is passed, scope analysis across the entire project repository.
-2. **Lens Selection**:
-   - If a lens name is provided (`security`, `quality`, `performance`, `tests`), focus primarily on that domain.
-   - If none is provided, evaluate across all four lenses.
+- no lens: review all four lenses
+- `quality`: maintainability, duplication, dead code, consistency, complexity,
+  and standards drift
+- `security`: authorization, input trust, injection, data exposure, secret
+  handling, and unsafe configuration
+- `performance`: query, network, rendering, memory, payload, concurrency, and
+  unbounded-work risks
+- `tests`: missing coverage for important logic, weak assertions, skipped or
+  focused tests, poor isolation, brittle mocks, and likely flakiness
 
----
+`full` is always the full-project scope, not a lens. `/audit full` therefore runs
+all lenses across the full project. When only a lens is supplied, select scope
+with the normal no-scope rules. A focused pass may name one or more lenses. If
+the request names multiple lenses, review their union and report them separately.
 
-### Step 2 - Multi-Lens Inspection
+If the requested scope is unclear, pick the smallest useful scope and state it.
+If the lens is unclear, use all lenses and state that choice.
 
-Evaluate code against standard criteria:
+## Step 1 - gather context
 
-#### 1. 🛡️ Security Lens
-- **Secrets & Credentials**: Look for hardcoded API keys, JWT secrets, passwords, or tokens.
-- **Injection Risks**: Unsanitized SQL, shell command execution, template injection, path traversal.
-- **Access Control & Auth**: Unprotected API routes, missing permission checks, insecure direct object references.
-- **Data Protection & Sanitization**: Missing XSS sanitization, unsafe HTML rendering, sensitive data leaks in logs.
+Read:
 
-#### 2. 💎 Quality & Maintainability Lens
-- **Code Smells & Complexity**: Overly complex functions, deep nesting, high cyclomatic complexity.
-- **Duplication & Dead Code**: Repeated logic that should be abstracted, unused variables/imports/functions.
-- **Contract & Type Safety**: Unsafe `any` casts, missing error handling, unhandled Promise rejections.
-- **Standards & Conventions**: Compliance with `devflow/context/coding-standards.md`.
+- `AGENTS.md`
+- `devflow/context/project-overview.md`
+- `devflow/context/coding-standards.md`
+- `devflow/context/current-feature.md`
+- `devflow/context/findings.md`, for existing IDs and statuses
+- `devflow/context/ai-interaction.md`
+- `devflow/build-plan.md`, when feature order matters
+- git branch and working tree status
+- relevant source files, tests, and configs for the chosen scope
 
-#### 3. ⚡ Performance Lens
-- **Database & Query Efficiency**: N+1 queries, unindexed filter columns, unbounded queries without pagination.
-- **Resource Management**: Memory leaks, unclosed streams/handles, blocking synchronous operations in async loops.
-- **Bundle & Asset Footprint**: Unnecessary heavy dependencies, oversized client-side bundles.
+For `current`, resolve the comparison base without network access:
 
-#### 4. 🧪 Test Quality Lens
-- **Coverage Gaps**: Critical business logic or branch conditions lacking unit or integration tests.
-- **Negative & Error Cases**: Testing only the happy path without asserting error handling and failure boundaries.
-- **Flakiness & Assertions**: Tests with race conditions, missing awaits, or non-deterministic assertions.
+1. Use a base branch declared by the active spec or project instructions.
+2. Otherwise use the locally recorded remote default branch when available.
+3. Otherwise use an existing local `main`, then `master`.
+4. Find the merge base and inspect the committed delta through `HEAD`, then add
+   staged, unstaged, and untracked work.
+5. If no reliable base exists, say so and use the active spec plus local changes.
+   Never claim that committed feature work was fully covered in that case.
 
----
+Do not fetch or pull to discover the base. For `full`, state the excluded paths
+before reviewing so generated or third-party code does not consume the audit.
 
-### Step 3 - Record Findings in `devflow/context/findings.md`
+Prefer `rg` and targeted file reads. Do not dump large files into the response.
 
-For every confirmed issue found:
+## Step 2 - run available signals
 
-1. Determine **Severity**:
-   - `P0` (Critical Blocker): Security vulnerabilities, data corruption bugs, crash-level defects.
-   - `P1` (High Blocker): Major regressions, broken critical flows, unhandled failure paths.
-   - `P2` (Medium): Code smells, missing non-critical tests, performance bottlenecks.
-   - `P3` (Low / Polish): Minor naming inconsistencies, style polish, documentation gaps.
+Use existing commands only. Do not install tools.
 
-2. Determine **Durable ID**:
-   - Check existing IDs in `devflow/context/findings.md` and use the next sequential ID:
-     - `SEC-001`, `SEC-002` (Security)
-     - `QUAL-001`, `QUAL-002` (Quality)
-     - `PERF-001`, `PERF-002` (Performance)
-     - `TEST-001`, `TEST-002` (Tests)
-     - Or universal `FIND-001`, `FIND-002`
+Run or inspect only the signals relevant to the selected lens and scope:
 
-3. Append to `devflow/context/findings.md`:
-   ```markdown
-   ### SEC-001 [P0] open - Hardcoded Secret Key in config.ts
-   - **Location**: `src/config.ts:24`
-   - **Impact**: API secret key exposed in client bundle
-   - **Remediation**: Move to environment variable `process.env.API_SECRET`
-   ```
+- lint and typecheck commands when declared and relevant
+- test command for the tests lens or when it directly validates a suspected risk
+- build command when the selected lens needs compilation or bundle evidence
+- existing security command for the security lens, when declared and locally runnable
+- existing performance command for the performance lens, when declared and locally runnable
+- targeted lightweight searches for the chosen lens, such as unused exports and
+  copied logic for quality, unsafe trust boundaries for security, repeated or
+  unbounded work for performance, and skipped or weak tests for tests
 
----
+Do not run broad checks unrelated to a focused lens. If a useful command is
+missing, report that as a gap. Do not invent a pass or claim that a focused
+review covered the other lenses.
 
-### Step 4 - Output Audit Summary & Recommendations
+## Step 3 - review the code
 
-Present a clean markdown report in **Thai (`th`)**:
+For all lenses, ground findings in reachable code and project-specific
+expectations. Apply only the selected lens or lenses:
 
-```markdown
-### 🛡️ ผลการตรวจสอบความปลอดภัยและคุณภาพโค้ด (Audit Summary)
+- **Quality:** duplicated logic, dead or unused code, unreachable paths,
+  oversized modules, abstractions that do not pay for themselves, risky missing
+  abstractions, inconsistent patterns, and drift from the standards or spec.
+- **Security:** missing authentication or authorization, client-controlled
+  ownership, injection, unsafe parsing or deserialization, sensitive-data
+  exposure, secret handling, insecure defaults, and trust-boundary mistakes.
+  Inspect existing dependency or scanner output when available, but never imply
+  that local manifest inspection is a current vulnerability scan.
+- **Performance:** N+1 queries, repeated network or database work, unnecessary
+  rendering, blocking work on hot paths, unbounded loops or collections, memory
+  growth, oversized payloads, missing pagination, and unsafe concurrency. Mark
+  hypotheses as unverified when runtime or profiling evidence is missing.
+- **Tests:** important logic without coverage when a test command exists, weak
+  assertions, tests that only mirror implementation, excessive mocking, shared
+  state, time or order dependence, skipped or focused tests, placeholder tests,
+  swallowed failures, and missing browser or integration evidence where behavior
+  crosses a real boundary. Never invent a coverage percentage.
 
-- **ขอบเขตการตรวจสอบ (Scope)**: `{Branch Diff | Path | Full Project}`
-- **เลนส์การตรวจ (Lenses)**: `{Quality, Security, Performance, Tests}`
-- **ข้อบกพร่องที่พบ (Findings Summary)**:
-  - 🔴 **P0 (Critical)**: {count}
-  - 🟠 **P1 (High)**: {count}
-  - 🟡 **P2 (Medium)**: {count}
-  - 🔵 **P3 (Low)**: {count}
+Do not nitpick harmless style differences unless they signal drift from the local
+patterns. Prefer a short list of real findings over a broad list of guesses.
 
-#### รายการข้อบกพร่องใหม่ที่บันทึกใน Findings Ledger:
-1. `SEC-001 [P0] open - Hardcoded Secret Key in config.ts` (`src/config.ts:24`)
-2. `PERF-001 [P2] open - Unbounded query in user list` (`src/users.ts:58`)
+Do not broaden a focused pass because another category might be interesting.
+Do not report or call out non-critical concerns from omitted lenses, even as
+suggestions for a later audit. If an obvious P0 is directly encountered outside
+the selected lens, report and record it as an out-of-lens critical risk, but do
+not continue searching that other lens.
 
----
-👉 **คำแนะนำถัดไป (Next Actions)**:
-- หากมีข้อบกพร่องระดับ P0/P1: เรียก `/fix SEC-001` เพื่อเริ่มการแก้ไขที่ติดตามได้
-- ตรวจสอบสถานะ Blockers: `nexus-devflow findings --blockers`
-```
+If a possible secret is found, never quote its value, paste the matching source
+line, or include raw command output containing it. Report only the redacted secret
+category, file, line, risk, and remediation. Redact sensitive values from all
+audit evidence before responding.
 
----
+## Step 4 - update the findings ledger
 
-## Release Gatekeeper Rule
+`devflow/context/findings.md` is the durable record of findings. Chat reports
+do not survive a context clear; the ledger does. It is the only file this skill
+writes. If it is missing (an older install), create it with a `# Findings`
+heading first.
 
-> [!IMPORTANT]
-> Any `P0` or `P1` finding in `open` or `fixed` status in `devflow/context/findings.md` **unconditionally blocks**:
-> - `nexus-devflow check-gate` (Exit code 1)
-> - `/complete` (Fast-Track delivery close)
-> - `70-deliver` (Deep-Track release packaging)
->
-> Findings must be repaired via `/fix` and verified with `/check` to reach `closed`, `accepted`, or `invalid` status.
+**The ledger never scopes the review.** Review the code fresh in Step 3, then
+record what the review found. Working from the open findings as a checklist and
+verifying only those is the exact failure this file exists to prevent: a repair
+can introduce a new defect that no existing entry points at.
+
+One block per finding. The header line is the machine-readable contract and must
+keep this exact shape; the prose below it is for humans and may vary:
+
+    ### F-03 [P0] open - Retained auth volumes carry the run label
+
+    **File:** ops/agent-proof/compose.yaml:86
+    **Found:** 2026-07-21 by /audit (scope: current; lens: security)
+    **Why it matters:** ...
+    **Suggested fix:** ...
+    **Resolution:**
+
+IDs are sequential within the ledger (`F-01`, `F-02`, ...), never reused and
+never renumbered while their entries live here, even after a finding closes.
+Bare IDs are scoped to the live ledger: `/complete` archives resolved entries
+under a work-item prefix (feature 12's `F-03` becomes `12/F-03`), and that
+prefixed form is the permanent reference. A later ledger that has emptied and
+reset starts at `F-01` again without colliding. Severity reuses the P0-P3
+scheme from Step 5; only P0 and P1 block `/complete`. Status is one of:
+
+| Status | Meaning | Blocks P0/P1 at /complete |
+|---|---|---|
+| `unverified` | Suspected, no confirming evidence yet | No |
+| `open` | Confirmed, not yet repaired | Yes |
+| `fixed` | Repaired, not yet re-reviewed | Yes |
+| `closed` | Repaired and re-reviewed against the new code | No |
+| `accepted` | Not fixing, by the user's explicit decision; reason recorded in Resolution | No |
+| `invalid` | Re-examination proved the finding wrong; evidence recorded in Resolution | No |
+
+After the review:
+
+- Append each new confirmed finding as `open` with the next sequential ID, one
+  past the highest ID present in the ledger (entries carried forward from
+  earlier work count; a fresh ledger starts at `F-01`).
+- Record an unverified risk worth tracking as `unverified`. It is a lead, not a
+  defect, and never gates a merge.
+- Update the entries this pass re-examined: correct the status or severity and
+  note the evidence in **Resolution**.
+- Move a `fixed` finding to `closed` only when all three hold: this pass's
+  reviewed set included the finding's file, re-examining the repaired code
+  confirmed the original defect is gone and the repair introduced no new one,
+  and the report names the finding as closed. An unrelated new finding in the
+  same file gets its own entry and does not keep the repaired one open. Never
+  close a finding implicitly.
+- Set `accepted` only on the user's explicit decision in the current session,
+  and record their reason. Never accept a finding on their behalf.
+- Set `invalid` only when re-examination shows the finding was wrong, and
+  record that evidence in **Resolution**. It is a review verdict (or the
+  user's explicit call), never a shortcut past the gate for blocked work.
+
+`fixed` blocking `/complete` is deliberate: a repair is not done when the code
+changes, it is done when a review has looked at the result. `/implement` marks
+repairs `fixed`; only a review pass moves them to `closed`.
+
+## Step 5 - report findings
+
+Lead with findings, ordered by severity, using the IDs the ledger assigned:
+
+    F-04 [P1] Title
+    File: path:line
+    Why it matters: ...
+    Suggested fix: ...
+
+Severity:
+
+- `P0` - data loss, security break, or code that cannot ship
+- `P1` - likely bug, broken contract, missing guard, or high-risk duplication
+- `P2` - maintainability issue worth fixing before the feature closes
+- `P3` - small cleanup, consistency issue, or follow-up candidate
+
+Use P0 or P1 only when a concrete code path, violated contract or security
+boundary, failing command or test, or reproducible behavior confirms the risk. If
+the evidence is incomplete, list it under `Unverified risks` with the missing
+validation instead of presenting it as a confirmed high-severity finding.
+
+If there are no findings, say that clearly for the selected lens and name any
+remaining risk or missing signal, such as "no test command declared" or
+"browser flow not audited."
+
+Then include:
+
+- ledger changes: findings added, updated, or closed this pass, by ID
+- commands run and results
+- selected scope
+- selected lens or lenses
+- base branch, merge base, and commit range for `current`, when available
+- files or directories reviewed
+- generated, third-party, or otherwise excluded paths
+- applicable standards checked
+- browser or runtime evidence inspected, when relevant
+- skipped, focused, or placeholder tests found, when the tests lens was selected
+- checks that were unavailable or could not run
+- suggested repair order
+
+For `full`, say whether coverage was complete or partial. Never label a partial
+review as a full-project audit.
+
+## Rules
+
+- The findings ledger is the only file this skill writes. Never edit, format,
+  install, commit, merge, push, or delete anything else.
+- A focused lens is not a broad audit. State what was not reviewed and never
+  imply that omitted lenses passed.
+- The ledger reports status; it never defines what the review looks at. Do not
+  turn open findings into the review checklist.
+- Never fetch, pull, or run network-backed audit tools without explicit approval.
+- Never reproduce secrets or sensitive values in findings or command output.
+- Findings first. Keep summaries short.
+- Ground every finding in a file path and line number when possible.
+- Avoid speculative rewrites. Recommend the smallest fix that removes the risk.
+- Respect existing project patterns over generic advice.
+- Do not require perfection. The goal is code that is understandable, consistent,
+  testable where it matters, and safe to keep building on.
+
+## Formatting
+
+Format the output to match the project's conventions in
+`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
+enumerations and tables for matrices rather than dense paragraphs.

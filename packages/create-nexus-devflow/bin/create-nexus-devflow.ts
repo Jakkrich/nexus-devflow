@@ -86,7 +86,7 @@ const packageRoot = fsSync.existsSync(path.join(__dirname, "..", "package.json")
   : path.resolve(__dirname, "..", "..");
 const templateRoot = path.join(packageRoot, "template");
 
-const adapterChoices = new Set(["codex", "antigravity", "claude", "copilot", "both", "all"]);
+const adapterChoices = new Set(["codex", "antigravity", "claude", "copilot", "opencode", "both", "all"]);
 
 interface CliOptions {
   command:
@@ -839,7 +839,7 @@ function parseArgs(args: readonly string[]): CliOptions {
       const value = args[++i];
       if (!value || !adapterChoices.has(value.toLowerCase())) {
         throw new Error(
-          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, copilot, both, all`
+          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, copilot, opencode, both, all`
         );
       }
       adapter = value.toLowerCase();
@@ -850,10 +850,40 @@ function parseArgs(args: readonly string[]): CliOptions {
       const value = arg.slice("--adapter=".length);
       if (!adapterChoices.has(value.toLowerCase())) {
         throw new Error(
-          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, copilot, both, all`
+          `Invalid --adapter value "${value}". Expected one of: codex, antigravity, claude, copilot, opencode, both, all`
         );
       }
       adapter = value.toLowerCase();
+      continue;
+    }
+
+    if (arg === "--codex") {
+      adapter = "codex";
+      continue;
+    }
+
+    if (arg === "--claude") {
+      adapter = "claude";
+      continue;
+    }
+
+    if (arg === "--copilot") {
+      adapter = "copilot";
+      continue;
+    }
+
+    if (arg === "--antigravity") {
+      adapter = "antigravity";
+      continue;
+    }
+
+    if (arg === "--opencode") {
+      adapter = "opencode";
+      continue;
+    }
+
+    if (arg === "--all" || arg === "--both") {
+      adapter = "all";
       continue;
     }
 
@@ -1102,7 +1132,7 @@ ${style.bold("Options:")}
   ${style.cyan("--blockers")}         Filter findings to only active P0/P1 blockers
   ${style.cyan("--fix")}              Automatically repair/create missing context files in doctor
   ${style.cyan("--stats")}            Display history summary statistics only
-  ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, both, all
+  ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, opencode, both, all
   ${style.cyan("--no-open")}          Start local dashboard without opening a browser
   ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
   ${style.cyan("--json")}             Print output as structured JSON object

@@ -59,3 +59,16 @@ test("readProjectMetadata reads metadata from project with manifest", async () =
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("detectAdapters detects opencode adapter from manifest", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-opencode-"));
+  try {
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+
+    const adapters = await detectAdapters(tempDir, ["opencode"]);
+    assert.deepEqual(adapters, ["opencode"]);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
