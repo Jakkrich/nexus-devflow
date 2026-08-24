@@ -133,3 +133,27 @@ test("evaluateGate collects advisory warnings for P2/P3 open findings", async ()
   }
 });
 
+test("evaluateGate evaluates and formats Two-Stage Review status correctly", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-gate-twostage-"));
+
+  try {
+    await setupDevFlowTestProject(tempDir);
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      `# 📐 [001-test] Test Feature\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n\n## 5. Verification Evidence\n- Verified: all tests passing.\n`
+    );
+
+    const report = await evaluateGate(tempDir, { strict: false });
+    assert.equal(report.twoStage.stage1SpecFidelity, true);
+    assert.equal(report.twoStage.stage2CodeQuality, true);
+
+    const text = formatGateReport(report);
+    assert.match(text, /Two-Stage Review Status:/);
+    assert.match(text, /Stage 1 \(Spec Fidelity & Tasks\)/);
+    assert.match(text, /Stage 2 \(Code Quality & Security\)/);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+

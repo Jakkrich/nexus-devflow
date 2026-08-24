@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-24 | `052` | Feature | อัปเกรด Strict TDD Sub-tasks, Red-Green-Refactor Loop, และ Two-Stage Review Pattern | `842c325` | `Released` | [`052-strict-tdd-and-two-stage-review-guardrails.md`](features/052-strict-tdd-and-two-stage-review-guardrails.md) |
 | 2026-08-24 | `051` | Feature | รวม Unified Discovery Engine (`/discovery`), Companion Skill (`/grill`) และ Architecture Decision Records (ADRs) | `HEAD` | `Released` | [`051-unified-discovery-and-socratic-alignment-grill.md`](features/051-unified-discovery-and-socratic-alignment-grill.md) |
 | 2026-08-24 | `050` | Feature | ซิงก์ AI Blueprint Upstream v0.13.0 (Adopt Visibility, OpenCode Adapter & Multi-Adapter CLI) | `4f06598` | `Released` | [`050-sync-upstream-adopt-visibility-and-opencode.md`](features/050-sync-upstream-adopt-visibility-and-opencode.md) |
 | 2026-08-23 | `049` | Feature | Modernize Web Dashboard with Enterprise Features 1–7 Integration (`dashboard`) | `HEAD` | `Released` | [`049-dashboard-modernization-features-1-7.md`](features/049-dashboard-modernization-features-1-7.md) |

@@ -66,21 +66,29 @@ Drive the app to each checklist item and capture evidence as you go:
 - Watch for **console errors and failed network requests**; a clean-looking screen
   with errors in the console is not a pass.
 
-## Step 4 - report
+## Step 4 - report (Two-Stage Review Pattern)
 
-Give a short, honest verdict, one line per checklist item:
+Format the verification report into two explicit review stages:
 
-    [pass] Download PDF saves certificate-<slug>.pdf - file downloaded, opened to the cert
-    [pass] Both buttons show a loading state - screenshot: loading-state.png
-    [fail] PDF border missing - printBackground not set; screenshot: pdf-no-border.png
-    [skip] Vercel render - can't verify locally (feature 9)
+### Stage 1: Spec Fidelity & Acceptance Gate
+Give a line-by-line verdict for each Acceptance Criterion and "done when" item:
 
-Then state the bottom line: are all the feature's done-whens proven, or not yet.
+    [pass] AC-1: Download PDF saves certificate-<slug>.pdf - file downloaded, opened to cert
+    [pass] AC-2: Both buttons show a loading state - screenshot: loading-state.png
+    [fail] AC-3: PDF border missing - printBackground not set; screenshot: pdf-no-border.png
+    [skip] AC-4: Vercel deploy smoke test - can't verify locally (pending staging)
 
-- All proven -> say it's ready for `/complete`.
-- Anything failed -> hand back to `/implement` to fix; name what to fix. Don't fix
-  it here.
-- Anything unverifiable -> say so plainly and why; never report it as a pass.
+### Stage 2: Code Quality, Security & Architecture Gate
+Report the multi-lane technical verification results:
+- **Type & Syntax**: `tsc --noEmit` (0 errors)
+- **Automated Tests**: Unit & integration tests (100% pass)
+- **Security & Hygiene**: Zero secrets, sanitized inputs
+- **Findings Ledger**: 0 blockers (P0/P1) in `devflow/context/findings.md`
+
+### Final Verdict & Route
+- **All Passed**: State that the feature is verified and ready for `/complete`.
+- **Any Failure**: Hand back to `/implement` with exact failure evidence and reproduction steps. Never fix issues inside `/check`.
+- **Unverifiable**: Clearly state reasons and residual risk. Never fabricate a pass.
 
 ## Rules
 

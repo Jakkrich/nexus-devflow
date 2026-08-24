@@ -18,6 +18,10 @@ export interface GateReport {
   warnings: string[];
   findingsBlockers: number;
   remainingTasks: number;
+  twoStage: {
+    stage1SpecFidelity: boolean;
+    stage2CodeQuality: boolean;
+  };
   summary: string;
 }
 
@@ -77,6 +81,8 @@ export async function evaluateGate(
     }
   } catch {}
 
+  const stage1SpecFidelity = remaining === 0 && (status.currentWork.state === "idle" || status.completion.state === "ready" || !options.strict);
+  const stage2CodeQuality = blockers.length === 0;
 
   const passed = violations.length === 0;
   const exitCode: 0 | 1 = passed ? 0 : 1;
@@ -86,7 +92,7 @@ export async function evaluateGate(
     summary =
       status.currentWork.state === "idle"
         ? "Quality Gate Passed: Workspace is clean with 0 blockers."
-        : "Quality Gate Passed: Active run satisfies all gatekeeper criteria.";
+        : "Quality Gate Passed: Active run satisfies all gatekeeper criteria (Stage 1 Spec & Stage 2 Quality).";
   } else {
     summary = `Quality Gate Failed: ${violations.length} blocker(s) detected.`;
   }
@@ -100,6 +106,10 @@ export async function evaluateGate(
     warnings,
     findingsBlockers: blockers.length,
     remainingTasks: remaining,
+    twoStage: {
+      stage1SpecFidelity,
+      stage2CodeQuality
+    },
     summary
   };
 }
@@ -118,6 +128,13 @@ export function formatGateReport(
 
   lines.push(header);
   lines.push(`  ${style.dim(report.summary)}`);
+  lines.push("");
+
+  const s1Badge = report.twoStage.stage1SpecFidelity ? style.green("✔ PASS") : style.red("✖ FAIL");
+  const s2Badge = report.twoStage.stage2CodeQuality ? style.green("✔ PASS") : style.red("✖ FAIL");
+  lines.push(style.bold("Two-Stage Review Status:"));
+  lines.push(`  - Stage 1 (Spec Fidelity & Tasks) : ${s1Badge}`);
+  lines.push(`  - Stage 2 (Code Quality & Security): ${s2Badge}`);
   lines.push("");
 
   if (report.violations.length > 0) {

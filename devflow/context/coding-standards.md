@@ -91,22 +91,33 @@ nexus-devflow/
 
 ---
 
-## 7. Testing & Empirical Proof Standards
+## 7. Testing & Empirical Proof Standards (Strict TDD & Two-Stage Review)
 
 Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
 - **Unit Test Mandate**: Any new feature, modified logic, parser improvement, or bug fix **MUST ship with automated unit tests** in the same diff.
+- **Strict TDD (Red-Green-Refactor) Protocol**:
+  1. **🔴 RED (Test First)**: Always write automated tests *before* writing or modifying functional logic. Run the test command and verify that it fails for the expected reason.
+  2. **🟢 GREEN (Minimal Code)**: Write only the minimal production code necessary to make the failing test pass. Run the test command and verify 100% green pass.
+  3. **🔵 REFACTOR (Clean & Robust)**: Refactor code for readability, performance, and DRY/YAGNI discipline while ensuring all tests stay green.
+  - *Code Deletion / Reversion Rule*: If functional code is created without a prior failing test for behavior changes, it must be reverted or immediately backed by tests before continuing.
 - **Test Framework**: Use Node.js native test runner executed via `tsx --test test/*.test.ts` under `packages/create-nexus-devflow/`.
 - **Test Design (AAA Pattern)**:
   - Structure each test case cleanly: **Arrange** (setup fixtures/mock directories), **Act** (execute function), **Assert** (verify invariants).
   - Use isolated temporary directories (`fs.mkdtemp` in `os.tmpdir()`) and ensure cleanup in `finally` blocks.
 - **Empirical Proof Contract**:
   - Never claim a task is "working", "tested", or "verified" without providing concrete empirical proof (exact command executed, terminal output, pass/fail counts, exit code).
-- **Multi-Lane Verification Matrix**:
-  - **Lane 1 (Type & Syntax Safety)**: `tsc --noEmit` (0 type errors).
-  - **Lane 2 (Automated Test Suites & Evals)**: `npm test` (Unit tests 100% pass) + `npm run test:routing` (Skill routing accuracy).
-  - **Lane 3 (Scrutinize & Security Audit)**: Edge cases, null-safety, 0 secrets, safe inputs.
-  - **Lane 4 (Manual / Scenario Proof)**: Concrete walkthrough steps ("Where to go", "What to run", "What to expect").
+- **Two-Stage Review Pattern (Verification Gate)**:
+  - **Stage 1: Spec Fidelity & Acceptance Gate**:
+    - Verify 100% conformance against the living spec (`current-feature.md` or `20-spec.md`).
+    - Validate all Acceptance Criteria (ACs) and "Done When" observables without missing requirements or scope creep.
+    - Test edge cases and boundary conditions defined in the specification.
+  - **Stage 2: Code Quality, Security & Architecture Gate**:
+    - **Lane 1 (Type & Syntax Safety)**: `tsc --noEmit` (0 type errors).
+    - **Lane 2 (Automated Test Suites & Evals)**: `npm test` (Unit tests 100% pass) + `npm run test:routing` (Skill routing accuracy).
+    - **Lane 3 (Scrutinize & Security Audit)**: Edge cases, null-safety, 0 secrets, safe inputs.
+    - **Lane 4 (Manual / Scenario Proof)**: Concrete walkthrough steps ("Where to go", "What to run", "What to expect").
+    - **Findings Ledger State**: 0 blockers (P0/P1) in `devflow/context/findings.md`.
 
 ---
 

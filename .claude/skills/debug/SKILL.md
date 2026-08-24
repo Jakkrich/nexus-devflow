@@ -117,14 +117,10 @@ Give a concise debug report:
 
 Choose the next action without writing files:
 
-- Active feature or fix caused the failure -> return the diagnosis to
-  `/implement`.
-- No active work item and the bug is confirmed -> recommend
-  `/fix "<concise bug and confirmed cause>"`.
-- Cause is only likely or blocked -> recommend the next diagnostic evidence, not
-  a speculative repair.
-- The issue is planned product work rather than a defect -> point to
-  `/feature`.
+- Active feature or fix caused the failure -> return the diagnosis to `/implement` with instructions to write a failing reproduction test ([TDD-Red]) first.
+- No active work item and the bug is confirmed -> recommend `/fix "<concise bug and confirmed cause>"` (which will write a failing test first before fixing).
+- Cause is only likely or blocked -> recommend the next diagnostic evidence, not a speculative repair.
+- The issue is planned product work rather than a defect -> point to `/feature`.
 
 ## Rules
 

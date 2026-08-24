@@ -68,3 +68,13 @@
   - *Dependencies*: None
   - *Scope*: ผสานความสามารถ Adopt Workflow Visibility (Commit vs Local-only), การรองรับ OpenCode และ Multi-Adapter Checkbox Prompt ใน CLI พร้อมอัปเดต Doctor checks และซิงก์ Baseline SHA เป็น v0.13.0 (`0b65166`)
 
+---
+
+## 🧪 Phase 9: Strict TDD Sub-Tasks & Two-Stage Review Guardrails
+
+- [x] **9. Strict TDD Sub-Tasks & Two-Stage Review Guardrails** `[Size: M]`
+  - *Dependencies*: None
+  - *Scope*: นำ Strict TDD (Red-Green-Refactor) Sub-Tasks และ Two-Stage Review Pattern (Stage 1: Spec Fidelity, Stage 2: Quality & Security Gate) ผสานเข้าสู่ Prompt Rules, Coding Standards, AI Interaction และ Stage Skills (`30-plan`, `40-execute`, `50-verify`, `feature`, `implement`, `check`, `debug`) พร้อมอัปเดต Template และ Unit Tests
+
+
+
