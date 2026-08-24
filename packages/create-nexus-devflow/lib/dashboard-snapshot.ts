@@ -198,11 +198,15 @@ function selectDashboardNextAction(
   status: ProjectStatus,
   workflow: WorkflowState
 ): DashboardNextAction {
-  if (workflow.currentStage) {
-    const suffix = workflow.activeRunId ? ` ${workflow.activeRunId}` : "";
+  if (workflow.track !== "idle" && workflow.currentStage) {
+    const stageCmd = workflow.currentStage === "feature-fix" ? "feature" : workflow.currentStage;
+    const suffix =
+      workflow.activeRunId && (workflow.track === "deep" || stageCmd === "complete")
+        ? ` ${workflow.activeRunId}`
+        : "";
     return {
-      command: `/${workflow.currentStage}${suffix}`,
-      reason: `Continue active workflow at /${workflow.currentStage}.`
+      command: `/${stageCmd}${suffix}`,
+      reason: `Continue active workflow at /${stageCmd}.`
     };
   }
   return status.nextAction;
