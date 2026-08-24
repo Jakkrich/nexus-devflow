@@ -32,7 +32,7 @@ This spec covers:
 - a manual-first operating model for the existing mainline
 - artifact placement rules in `devflow/`
 - a recommended naming scheme for project, phase, and running-id work
-- stage-level review gates for `00-explore`, `10-Define`, `20-Spec`, and `30-Plan`
+- stage-level review gates for `discovery`, `10-Define`, `20-Spec`, and `30-Plan`
 - example template structure for those four stages
 
 This spec does not fully define:
@@ -95,10 +95,10 @@ Project context should live in durable shared artifacts under `devflow/context/`
 
 ### Phase Delivery Layer
 
-Before the phase delivery layer, `/00-explore` stores the request, selected support routes, evidence, and decision under:
+Before the phase delivery layer, `/discovery` stores the request, selected support routes, evidence, and decision under:
 
 ```text
-devflow/discoveries/{DISCOVERY_ID}-{slug}/00-explore.md
+devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
 ```
 
 This layer consumes no Running ID. Only an approved `Proceed` discovery may enter `/10-Define`.
@@ -148,7 +148,7 @@ devflow/
     HISTORY.md
   discoveries/                # Pre-delivery discovery records
     {DISCOVERY_ID}-{slug}/
-      00-explore.md
+      discovery.md
 ```
 
 ### Human Reading Model
@@ -248,7 +248,7 @@ The next mainline command should not be considered the default path until the cu
 
 ## Stage Responsibilities
 
-### `00-explore`
+### `discovery`
 
 Purpose:
 
@@ -314,13 +314,13 @@ Human checks:
 Recommended manual progression:
 
 ```text
-Goal -> /00-explore -> [Brainstorm | PRD | Research | Debug | Direct] -> /00-explore -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-deliver
+Goal -> /discovery -> [Brainstorm | PRD | Research | Debug | Direct | Grill] -> /discovery -> /10-Define -> /20-Spec -> /30-Plan -> /40-Execute -> /50-Verify -> /60-Report -> /70-deliver
 ```
 
 Recommended prompt style for large work:
 
 ```text
-/00-explore {initiative or request}
+/discovery {initiative or request}
 Use existing project documents as source of truth.
 Choose only the supporting route needed to make the delivery decision.
 Do not create a Running ID.

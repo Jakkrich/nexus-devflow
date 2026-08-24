@@ -891,7 +891,7 @@ const DASHBOARD_HTML: string = `<!doctype html>
 
       <article class="card full card-enter" style="animation-delay: 0.26s;">
         <div class="card-head"><span class="label">Idea Inbox & Backlog</span><span class="value" id="ideas-count">-</span></div>
-        <div class="muted">Pending ideas from devflow/ideas.md. Start any idea with /feature IDEA-xxx or /00-explore IDEA-xxx.</div>
+        <div class="muted">Pending ideas from devflow/ideas.md. Start any idea with /feature IDEA-xxx or /discovery IDEA-xxx.</div>
         <ul id="ideas-list" tabindex="0" aria-label="Idea Inbox"><li class="empty">Loading ideas...</li></ul>
       </article>
 

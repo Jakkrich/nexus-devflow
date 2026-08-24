@@ -12,13 +12,13 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 
 ### Recommended Starting Commands
 
-- `/00-explore` for new requests or broad goals
+- `/discovery` for new requests or broad goals
 - `Brainstorm` when direction is still fuzzy before definition locks
 - `Research` when external docs, integrations, or product evidence are needed
 
 ### Minimum Artifact Set
 
-- `devflow/discoveries/{DISCOVERY_ID}-{slug}/00-explore.md`
+- `devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md`
 - `10-define.md`
 - `20-spec.md`
 - `30-plan.md`
@@ -31,7 +31,7 @@ Teams shipping new product capability, multi-step enhancements, or user-facing c
 - Add `70-deliver.md` when release-facing packaging or coordination matters
 - Add `checklists/` when the team wants live execution visibility across planning, implementation, and verification
 - Add `PRD` artifacts when product framing needs to mature before or during spec work
-- Skip unnecessary companion routes when the request is already clear, approve Proceed in Discover, and continue to `/10-Define {discovery_id}`
+- Skip unnecessary companion routes when the request is already clear, approve Proceed in Discover, and continue to `/10-define {discovery_id}`
 
 ## Bugfix Or Operations Team
 
@@ -41,9 +41,9 @@ Teams handling defects, regressions, incidents, operational fixes, or smaller re
 
 ### Recommended Starting Commands
 
-- `/00-explore` for a new failure, routing to `Debug` when root cause is still unknown
+- `/discovery` for a new failure, routing to `Debug` when root cause is still unknown
 - `Issue-Triage` when the work begins from ticket intake or an ops queue
-- `/10-Define {discovery_id}` when the discovery decision is approved and the required fix is understood
+- `/10-define {discovery_id}` when the discovery decision is approved and the required fix is understood
 
 ### Minimum Artifact Set
 
@@ -55,7 +55,7 @@ Teams handling defects, regressions, incidents, operational fixes, or smaller re
 
 ### Optional Layers
 
-- Keep the shared `00-explore.md` concise when the issue is already well understood
+- Keep the shared `discovery.md` concise when the issue is already well understood
 - Add `60-report.md` when the fix needs a durable wrap-up for handoff, incident learning, or stakeholder visibility
 - Add `50-verify-impact.md` when rollback, blast radius, or impact analysis should be captured explicitly
 - Skip heavier discovery or PRD-style framing when the issue is narrow and urgency is high
@@ -69,9 +69,9 @@ Maintainers evolving the Nexus-DevFlow framework itself, especially when the wor
 ### Recommended Starting Commands
 
 - `Help` when the right public route is still unclear
-- `/00-explore` for new framework work that needs scoped context
+- `/discovery` for new framework work that needs scoped context
 - `Research` when framework decisions depend on source-backed tooling or policy checks
-- `/50-Verify` and `/70-deliver` more often than product teams when the work is mainly framework hardening, validation, or packaging
+- `/50-verify` and `/70-deliver` more often than product teams when the work is mainly framework hardening, validation, or packaging
 
 ### Minimum Artifact Set
 

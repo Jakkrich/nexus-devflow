@@ -58,11 +58,12 @@
 
 ```text
 nexus-devflow/
-├── .agents/skills/             # Codex & Google Antigravity skill definitions
+├── .agents/skills/             # Codex, Google Antigravity & Copilot skill definitions
 ├── .claude/skills/             # Claude Code mirrored skill adapters
 ├── .nexus/                     # Metadata tracking & upstream baseline ledger
 ├── devflow/                    # Framework workspace context, history, and discoveries
 │   ├── context/                # Living source-of-truth context files
+│   ├── decisions/              # Architecture Decision Records (ADRs)
 │   ├── discoveries/            # Pre-delivery discovery records (00-explore.md)
 │   ├── history/                # Master delivery archive (features/, fixes/, rollbacks/, HISTORY.md)
 │   └── ideas.md                # Idea Inbox and backlog
@@ -140,3 +141,16 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
   - `Major`: Breaking architectural change
   - `Minor`: New feature addition
   - `Patch`: Bug fix or documentation update
+
+---
+
+## 11. Architecture Decision Records (ADRs) & Domain Glossary
+
+- **Domain Glossary (`devflow/context/glossary.md`)**:
+  - Keep domain terms concise, precise, and unambiguous.
+  - Define entity boundaries, invariants, and lifecycle rules.
+  - Do NOT store implementation specs or ephemeral task lists in the glossary.
+- **Architecture Decision Records (`devflow/decisions/ADR-xxx-{slug}.md`)**:
+  - Store durable, high-impact, hard-to-reverse architectural decisions in `devflow/decisions/`.
+  - Number sequentially (`ADR-001`, `ADR-002`, ...).
+  - Must include: Context, Decision, Alternatives Considered (with trade-offs), and Consequences (positive gains and accepted risks).

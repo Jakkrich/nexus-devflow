@@ -27,13 +27,16 @@ const FALLBACK_DESCRIPTIONS: Record<string, string> = {
   test: "Inspect test suites and verify test runner configuration.",
   autopilot: "Run one bounded implementation and verification loop.",
   prototype: "Create a disposable UI mockup before production implementation.",
-  "report-html": "Generate the optional standalone interactive HTML report."
+  "report-html": "Generate the optional standalone interactive HTML report.",
+  brainstorm: "Explore vague requests and formulate option trade-offs without allocating a running ID.",
+  grill: "Conduct interactive Socratic alignment, extract domain glossary, and record architecture decision records (ADRs).",
+  discovery: "Conduct project-level roadmap discovery or feature-level exploration before delivery commitment."
 };
 
 async function readCommandCatalog(projectRoot: string): Promise<CommandCatalogItem[]> {
   const manifest = await readManifest(projectRoot);
   const fast = manifest?.lifecycle.fastTrackStages || ["feature", "fix", "implement", "check", "complete"];
-  const deep = manifest?.lifecycle.mainlineStages || ["00-explore", "10-define", "20-spec", "30-plan", "40-execute", "50-verify", "60-report", "70-deliver"];
+  const deep = manifest?.lifecycle.mainlineStages || ["discovery", "10-define", "20-spec", "30-plan", "40-execute", "50-verify", "60-report", "70-deliver"];
   const companion = manifest?.lifecycle.companionCommands || Object.keys(FALLBACK_DESCRIPTIONS);
   const families: Array<[CommandFamily, string[]]> = [["fast", fast], ["deep", deep], ["companion", companion]];
   const seen = new Set<string>();

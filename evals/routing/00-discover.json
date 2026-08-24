@@ -1,11 +1,11 @@
 {
-  "skill": "00-explore",
-  "description": "\"[Devflow] Discover stage in DevFlow 2.0 - explore a request, route supporting inquiry, and decide whether delivery work should begin without allocating a running ID.\"",
+  "skill": "discovery",
+  "description": "\"[Devflow] Unified discovery and exploration stage in DevFlow 2.0 - conducts project roadmap planning or feature exploration before delivery commitment.\"",
   "positive": [
-    "run 00-explore skill",
-    "invoke /00-explore command",
-    "use 00-explore for devflow discover stage devflow explore request route supporting",
-    "apply 00-explore guidance"
+    "run discovery skill",
+    "invoke /discovery command",
+    "use discovery for devflow explore request route supporting lenses",
+    "apply discovery guidance"
   ],
   "negative": [
     "unrelated random task query",

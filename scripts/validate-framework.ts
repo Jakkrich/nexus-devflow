@@ -103,14 +103,13 @@ function validateWorkflowNumbering(failures: string[]): void {
     return;
   }
   const numberedMainline = new Set([
-    "00-explore",
     "10-define",
     "20-spec",
     "30-plan",
     "40-execute",
     "50-verify",
-    "70-deliver",
-    "60-report"
+    "60-report",
+    "70-deliver"
   ]);
   const skillFolders = fs.readdirSync(skillsDir)
     .filter((name) => fs.statSync(path.join(skillsDir, name)).isDirectory());

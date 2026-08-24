@@ -5,6 +5,28 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-08-24
+
+### 🔍 Unified Discovery Engine (`/discovery`) & Socratic Alignment (`/grill`)
+
+#### Added
+- **Unified `/discovery` Dual-Mode Engine**:
+  - Consolidated `00-explore` and `discovery` into a single, seamless entry point.
+  - **Macro Project Mode**: Invoked without arguments or `--project` to conduct product roadmap discovery and draft `project-plan.md` & `build-plan.md` before `/overview`.
+  - **Micro Feature Mode (Stage 00)**: Invoked with a feature title, request, or `IDEA-xxx` to explore problem space, evaluate feasibility across 5 lenses (Brainstorm, Research, PRD, Bug Triage, Grill), and produce `devflow/discoveries/{DISC-ID}/discovery.md` with explicit Proceed/Defer/Reject decisions before `10-define`.
+- **Socratic Alignment Companion Skill (`/grill` / `/align`)**:
+  - Added codebase-grounded interactive interview loop to stress-test designs and eliminate ambiguity before speccing.
+  - Added lazy inline persistence for project domain terminology in `devflow/context/glossary.md`.
+  - Added Architecture Decision Records (ADRs) generation under `devflow/decisions/ADR-xxx-{slug}.md` for durable architectural governance.
+  - Integrated as **Lens 5** within `/discovery`.
+
+#### Changed
+- **Consolidated Deep-Track Lifecycle**:
+  - Standardized Deep-Track 8-step pipeline to: `discovery ➔ 10-define ➔ 20-spec ➔ 30-plan ➔ 40-execute ➔ 50-verify ➔ 60-report ➔ 70-deliver`.
+  - Removed obsolete `.agents/skills/00-explore` and `.claude/skills/00-explore` skill directories.
+  - Updated CLI tools, status inspection, manifest, maintainer scripts, and documentation across all adapters to use `discovery`.
+  - Added backward-compatible fallback parsing for legacy `00-explore.md` artifacts in `devflow/discoveries/`.
+
 ## [2.2.0] - 2026-08-24
 
 ### 🔄 Upstream AI Blueprint v0.13.0 Sync & Multi-Adapter Expansion

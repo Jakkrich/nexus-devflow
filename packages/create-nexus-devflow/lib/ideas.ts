@@ -80,7 +80,7 @@ export async function addIdea(
   const feasibility = options.feasibility || "**รอวิเคราะห์ (Pending AI Review)**";
   const value = options.value || "**รอวิเคราะห์**";
 
-  const newIdeaBlock = `### [${newId}] ${title}\n- **บันทึกเมื่อ**: ${dateStr}\n- **ไอเดียตั้งต้น**: ${cleanText}\n- **AI Feasibility & Tech**: ${feasibility}\n- **Value & Potential**: ${value}\n- **Quick Seed (กันลืม)**:\n  1. ${cleanText.slice(0, 100)}\n- **สถานะ**: \`Pending\` (หยิบไปทำได้ด้วย \`/feature ${newId}\` หรือ \`/00-explore ${newId}\`)\n\n---\n\n`;
+  const newIdeaBlock = `### [${newId}] ${title}\n- **บันทึกเมื่อ**: ${dateStr}\n- **ไอเดียตั้งต้น**: ${cleanText}\n- **AI Feasibility & Tech**: ${feasibility}\n- **Value & Potential**: ${value}\n- **Quick Seed (กันลืม)**:\n  1. ${cleanText.slice(0, 100)}\n- **สถานะ**: \`Pending\` (หยิบไปทำได้ด้วย \`/feature ${newId}\` หรือ \`/discovery ${newId}\`)\n\n---\n\n`;
 
   const pendingIndex = content.indexOf("## 📌 Pending Ideas");
   if (pendingIndex !== -1) {
@@ -133,7 +133,7 @@ export function formatIdeasHuman(
         lines.push(`    ${style.dim("Feasibility:")} ${idea.feasibility}`);
       }
       lines.push(
-        `    ${style.dim("Start:")} ${style.yellow(`/feature ${idea.id}`)} or ${style.yellow(`/00-explore ${idea.id}`)}`
+        `    ${style.dim("Start:")} ${style.yellow(`/feature ${idea.id}`)} or ${style.yellow(`/discovery ${idea.id}`)}`
       );
       lines.push("");
     }

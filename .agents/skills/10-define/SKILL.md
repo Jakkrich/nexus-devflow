@@ -43,7 +43,7 @@ using:
 Require:
 - `Decision: Proceed`
 - `Approval Status: Approved`
-- A resolvable Discovery ID and `00-explore.md`
+- A resolvable Discovery ID and `discovery.md` (or legacy `00-explore.md`)
 
 ### 3. Allocate Sequential ID
 - Inspect `devflow/history/HISTORY.md` and allocate sequential ID without prefix (e.g. `022-{slug}`).

@@ -368,7 +368,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
         console.log(`\n${style.green("✔")} ${style.bold("Idea added successfully!")}`);
         console.log(`  ${style.dim("ID   :")} ${style.bold(style.cyan(created.id))}`);
         console.log(`  ${style.dim("Title:")} ${style.bold(created.title)}`);
-        console.log(`  ${style.dim("Start:")} ${style.yellow(`/feature ${created.id}`)} or ${style.yellow(`/00-explore ${created.id}`)}`);
+        console.log(`  ${style.dim("Start:")} ${style.yellow(`/feature ${created.id}`)} or ${style.yellow(`/discovery ${created.id}`)}`);
       }
       return;
     }

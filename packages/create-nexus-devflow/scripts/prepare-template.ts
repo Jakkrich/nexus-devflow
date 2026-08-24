@@ -56,6 +56,13 @@ async function copyEntry(entry: string): Promise<void> {
         ) {
           return false;
         }
+        if (
+          normalized.startsWith("devflow/decisions/") &&
+          !normalized.endsWith(".gitkeep") &&
+          !normalized.endsWith("README.md")
+        ) {
+          return false;
+        }
         if (normalized.startsWith("devflow/research/")) {
           return false;
         }
@@ -77,16 +84,19 @@ async function copyEntry(entry: string): Promise<void> {
 
 async function ensureEmptyDirectories(): Promise<void> {
   const discDir = path.join(templateRoot, "devflow", "discoveries");
+  const decDir = path.join(templateRoot, "devflow", "decisions");
   const featDir = path.join(templateRoot, "devflow", "history", "features");
   const fixDir = path.join(templateRoot, "devflow", "history", "fixes");
   const rollDir = path.join(templateRoot, "devflow", "history", "rollbacks");
 
   await fs.mkdir(discDir, { recursive: true });
+  await fs.mkdir(decDir, { recursive: true });
   await fs.mkdir(featDir, { recursive: true });
   await fs.mkdir(fixDir, { recursive: true });
   await fs.mkdir(rollDir, { recursive: true });
 
   await fs.writeFile(path.join(discDir, ".gitkeep"), "", "utf8");
+  await fs.writeFile(path.join(decDir, ".gitkeep"), "", "utf8");
 }
 
 async function sanitizeStarterFiles(): Promise<void> {
@@ -119,7 +129,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| _No shipped runs yet_ | - | - | Run \`/feature\` or \`/00-explore\` to start your first delivery run | - | - | - |
+| _No shipped runs yet_ | - | - | Run \`/feature\` or \`/discovery\` to start your first delivery run | - | - | - |
 
 ---
 
@@ -190,7 +200,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 - **Active Discovery ID**: \`None\`
 - **Active Running ID**: \`None\`
-- **Current Stage**: \`Idle (Ready for new /feature, /fix, /00-explore, or /10-define)\`
+- **Current Stage**: \`Idle (Ready for new /feature, /fix, /discovery, or /10-define)\`
 - **Living Spec**: \`None\`
 - **Last Completed Run**: \`None\`
 - **Last Updated**: \`None\`

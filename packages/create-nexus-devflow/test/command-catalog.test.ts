@@ -15,12 +15,12 @@ test("readCommandCatalog uses manifest order and skill descriptions", async () =
       schemaVersion: 1, name: "nexus-devflow", package: "pkg", version: "1.0.0", repository: "repo",
       artifactLanguage: "th", adapters: ["codex"],
       workspace: { contextDir: "devflow/context", historyDir: "devflow/history", referenceDir: "devflow/reference", runsDir: "devflow/runs", discoveriesDir: "devflow/discoveries" },
-      lifecycle: { fastTrackStages: ["feature"], mainlineStages: ["00-explore"], companionCommands: ["doctor"] },
+      lifecycle: { fastTrackStages: ["feature"], mainlineStages: ["discovery"], companionCommands: ["doctor"] },
       managedFiles: {}
     }));
     await fs.writeFile(path.join(tempDir, ".agents", "skills", "feature", "SKILL.md"), "---\ndescription: \"[devflow][B] Create a bounded feature spec.\"\n---");
     const items = await readCommandCatalog(tempDir);
-    assert.deepEqual(items.map((item) => item.name), ["feature", "00-explore", "doctor"]);
+    assert.deepEqual(items.map((item) => item.name), ["feature", "discovery", "doctor"]);
     assert.equal(items[0].description, "Create a bounded feature spec.");
     assert.match(items[2].description, /health check/i);
   } finally {
