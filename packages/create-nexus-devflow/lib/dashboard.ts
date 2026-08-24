@@ -52,6 +52,9 @@ async function startDashboardServer(
     throw new Error("Nexus-DevFlow dashboard could not determine its local address.");
   }
 
+  // Pre-warm dashboard snapshot in the background on startup
+  void readDashboardSnapshot(projectRoot, options.snapshotOptions).catch(() => {});
+
   return {
     url: `http://${DASHBOARD_HOST}:${address.port}`,
     close: () => closeServer(server)
@@ -78,7 +81,16 @@ async function handleRequest(
       "Content-Security-Policy",
       "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
     );
-    sendResponse(response, method, 200, "text/html; charset=utf-8", DASHBOARD_PAGE_HTML);
+    try {
+      const snapshot = await readDashboardSnapshot(projectRoot, snapshotOptions);
+      const injectedHtml = DASHBOARD_PAGE_HTML.replace(
+        "window.__INITIAL_SNAPSHOT__ = null;",
+        `window.__INITIAL_SNAPSHOT__ = ${JSON.stringify(snapshot).replace(/</g, "\\u003c")};`
+      );
+      sendResponse(response, method, 200, "text/html; charset=utf-8", injectedHtml);
+    } catch {
+      sendResponse(response, method, 200, "text/html; charset=utf-8", DASHBOARD_PAGE_HTML);
+    }
     return;
   }
 
