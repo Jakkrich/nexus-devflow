@@ -98,6 +98,36 @@ test("generateSwarmPlan assigns specialized roles from spec tasks", async () => 
   }
 });
 
+test("generateSwarmPlan uses a pre-resolved branch context without Git discovery", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-swarm-branch-"));
+
+  try {
+    await setupTestCodebase(tempDir);
+    const branchContextDir = path.join(
+      tempDir,
+      "devflow",
+      "context",
+      "feature-055-cache"
+    );
+    await fs.mkdir(branchContextDir, { recursive: true });
+    await fs.writeFile(
+      path.join(branchContextDir, "current-feature.md"),
+      `# 📐 [055-branch-context] Branch Scoped Swarm
+
+## 3. Implementation Checklist
+- [ ] **Task 1: Branch Context Implementation**
+`,
+      "utf8"
+    );
+
+    const plan = await generateSwarmPlan(tempDir, { branch: "feature/055-cache" });
+    assert.equal(plan.runId, "055-branch-context");
+    assert.equal(plan.totalTasks, 1);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 test("MCP devflow_swarm_plan and devflow_query_code_graph execute properly", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-swarm-mcp-"));
 

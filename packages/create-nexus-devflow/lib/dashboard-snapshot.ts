@@ -106,7 +106,7 @@ async function readDashboardSnapshot(
       now
     }),
     driftPromise,
-    generateSwarmPlan(projectRoot)
+    generateSwarmPlan(projectRoot, { branch: status.git.branch || undefined })
   ]);
 
   const gatekeeper = await evaluateGate(projectRoot, { status, drift, strict: false });
@@ -214,4 +214,3 @@ function selectDashboardNextAction(
 
 export { clearDashboardSnapshotCache, readDashboardSnapshot, selectDashboardNextAction };
 export type { AdapterDashboardItem, DashboardDoctorSummary, DashboardNextAction, DashboardSnapshot, DashboardSnapshotOptions };
-

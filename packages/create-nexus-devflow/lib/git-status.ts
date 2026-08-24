@@ -1,4 +1,5 @@
 import { execFile } from "node:child_process";
+import path from "node:path";
 import { promisify } from "node:util";
 
 interface GitStatusSummary {
@@ -17,40 +18,79 @@ interface GitStatusCacheEntry {
   value: GitStatusSummary;
 }
 
+type GitCommandRunner = (
+  projectRoot: string,
+  args: readonly string[]
+) => Promise<string>;
+
+interface ReadGitStatusOptions {
+  ttlMs?: number;
+  forceFresh?: boolean;
+  now?: () => number;
+  runGit?: GitCommandRunner;
+}
+
 const gitCache = new Map<string, GitStatusCacheEntry>();
+const gitInFlight = new Map<string, Promise<GitStatusSummary>>();
 const DEFAULT_GIT_CACHE_TTL_MS = 2000;
 
 const execFileAsync = promisify(execFile);
 
 function clearGitStatusCache(): void {
   gitCache.clear();
+  gitInFlight.clear();
 }
 
 async function readGitStatus(
   projectRoot: string,
-  options: { ttlMs?: number; forceFresh?: boolean; now?: () => number } = {}
+  options: ReadGitStatusOptions = {}
 ): Promise<GitStatusSummary> {
-  const now = (options.now || Date.now)();
+  const now = options.now || Date.now;
   const ttlMs = options.ttlMs ?? DEFAULT_GIT_CACHE_TTL_MS;
+  const cacheKey = path.resolve(projectRoot);
+  const gitRunner = options.runGit || runGit;
 
   if (!options.forceFresh) {
-    const cached = gitCache.get(projectRoot);
-    if (cached && cached.expiresAt > now) {
+    const cached = gitCache.get(cacheKey);
+    if (cached && cached.expiresAt > now()) {
       return cached.value;
     }
+
+    const pending = gitInFlight.get(cacheKey);
+    if (pending) return pending;
   }
 
-  if (!(await isGitRepository(projectRoot))) {
-    const unavail = unavailableSummary();
-    gitCache.set(projectRoot, { expiresAt: now + ttlMs, value: unavail });
-    return unavail;
+  const computeAndCache = async (): Promise<GitStatusSummary> => {
+    const value = await computeGitStatus(projectRoot, gitRunner);
+    gitCache.set(cacheKey, { expiresAt: now() + ttlMs, value });
+    return value;
+  };
+
+  if (options.forceFresh) {
+    return computeAndCache();
+  }
+
+  let pending: Promise<GitStatusSummary>;
+  pending = computeAndCache().finally(() => {
+    if (gitInFlight.get(cacheKey) === pending) gitInFlight.delete(cacheKey);
+  });
+  gitInFlight.set(cacheKey, pending);
+  return pending;
+}
+
+async function computeGitStatus(
+  projectRoot: string,
+  gitRunner: GitCommandRunner
+): Promise<GitStatusSummary> {
+  if (!(await isGitRepository(projectRoot, gitRunner))) {
+    return unavailableSummary();
   }
 
   const [porcelain, branch, lastCommit, upstream] = await Promise.all([
-    runGit(projectRoot, ["status", "--porcelain=v1", "--untracked-files=all"]),
-    readBranch(projectRoot),
-    runOptionalGit(projectRoot, ["log", "-1", "--format=%s"]),
-    runOptionalGit(projectRoot, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"])
+    gitRunner(projectRoot, ["status", "--porcelain=v1", "--untracked-files=all"]),
+    readBranch(projectRoot, gitRunner),
+    runOptionalGit(projectRoot, ["log", "-1", "--format=%s"], gitRunner),
+    runOptionalGit(projectRoot, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"], gitRunner)
   ]);
 
   const changedFiles = porcelain
@@ -59,7 +99,7 @@ async function readGitStatus(
     .length;
 
   const divergence = upstream
-    ? await readDivergence(projectRoot)
+    ? await readDivergence(projectRoot, gitRunner)
     : { ahead: null, behind: null };
 
   const value: GitStatusSummary = {
@@ -73,36 +113,42 @@ async function readGitStatus(
     behind: divergence.behind
   };
 
-  gitCache.set(projectRoot, { expiresAt: now + ttlMs, value });
   return value;
 }
 
-async function isGitRepository(projectRoot: string): Promise<boolean> {
+async function isGitRepository(
+  projectRoot: string,
+  gitRunner: GitCommandRunner
+): Promise<boolean> {
   return (await runOptionalGit(projectRoot, [
     "rev-parse",
     "--is-inside-work-tree"
-  ])) === "true";
+  ], gitRunner)) === "true";
 }
 
-async function readBranch(projectRoot: string): Promise<string> {
+async function readBranch(
+  projectRoot: string,
+  gitRunner: GitCommandRunner
+): Promise<string> {
   const branch = await runOptionalGit(projectRoot, [
     "symbolic-ref",
     "--quiet",
     "--short",
     "HEAD"
-  ]);
+  ], gitRunner);
   return branch || "(detached HEAD)";
 }
 
 async function readDivergence(
-  projectRoot: string
+  projectRoot: string,
+  gitRunner: GitCommandRunner
 ): Promise<Pick<GitStatusSummary, "ahead" | "behind">> {
   const counts = await runOptionalGit(projectRoot, [
     "rev-list",
     "--left-right",
     "--count",
     "HEAD...@{upstream}"
-  ]);
+  ], gitRunner);
   const match = counts?.match(/^(\d+)\s+(\d+)$/);
 
   return match
@@ -112,10 +158,11 @@ async function readDivergence(
 
 async function runOptionalGit(
   projectRoot: string,
-  args: readonly string[]
+  args: readonly string[],
+  gitRunner: GitCommandRunner
 ): Promise<string | null> {
   try {
-    return await runGit(projectRoot, args);
+    return await gitRunner(projectRoot, args);
   } catch {
     return null;
   }

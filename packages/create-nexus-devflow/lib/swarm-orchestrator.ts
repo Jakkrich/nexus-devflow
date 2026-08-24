@@ -32,6 +32,10 @@ export interface SwarmPlan {
   tasks: SwarmSubtask[];
 }
 
+export interface SwarmPlanOptions {
+  branch?: string;
+}
+
 export const SWARM_ROSTER: SwarmAgentDefinition[] = [
   {
     role: "architect",
@@ -66,8 +70,11 @@ export const SWARM_ROSTER: SwarmAgentDefinition[] = [
 /**
  * Generates an optimized Multi-Agent Swarm Execution Plan from the active living spec.
  */
-export async function generateSwarmPlan(projectRoot: string): Promise<SwarmPlan> {
-  const contextPaths = await resolveActiveContextPaths(projectRoot);
+export async function generateSwarmPlan(
+  projectRoot: string,
+  options: SwarmPlanOptions = {}
+): Promise<SwarmPlan> {
+  const contextPaths = await resolveActiveContextPaths(projectRoot, options.branch);
 
   let runId = "ACTIVE";
   let title = "Active Feature";
