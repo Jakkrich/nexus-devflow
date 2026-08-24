@@ -1,5 +1,7 @@
+import type { ProjectStatus } from "./status.js";
 import { readProjectStatus } from "./status.js";
 import { readFindings } from "./findings.js";
+import type { GitDriftReport } from "./drift-reconciler.js";
 import { detectGitDrift } from "./drift-reconciler.js";
 import { createStyle } from "./ui.js";
 
@@ -7,6 +9,8 @@ export interface GateOptions {
   strict?: boolean;
   allowUnverified?: boolean;
   color?: boolean;
+  status?: ProjectStatus;
+  drift?: GitDriftReport;
 }
 
 export interface GateReport {
@@ -29,7 +33,7 @@ export async function evaluateGate(
   projectRoot: string,
   options: GateOptions = {}
 ): Promise<GateReport> {
-  const status = await readProjectStatus(projectRoot);
+  const status = options.status || (await readProjectStatus(projectRoot));
   const violations: string[] = [];
   const warnings: string[] = [];
 
@@ -75,7 +79,7 @@ export async function evaluateGate(
 
   // Check 4: Git drift advisory check
   try {
-    const drift = await detectGitDrift(projectRoot);
+    const drift = options.drift || (await detectGitDrift(projectRoot));
     if (drift.hasDrift && drift.undocumentedFiles.length > 0) {
       warnings.push(`Warning (git_drift): ${drift.undocumentedFiles.length} file(s) modified in git without being listed in living spec.`);
     }

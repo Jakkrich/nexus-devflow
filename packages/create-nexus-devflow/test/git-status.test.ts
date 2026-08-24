@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { readGitStatus } from "../lib/git-status.js";
+import { readGitStatus, clearGitStatusCache } from "../lib/git-status.js";
 
 test("readGitStatus handles non-git directory gracefully", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-git-non-"));
@@ -19,8 +19,22 @@ test("readGitStatus handles non-git directory gracefully", async () => {
 });
 
 test("readGitStatus reads current repository git status", async () => {
+  clearGitStatusCache();
   const status = await readGitStatus(process.cwd());
   assert.equal(status.available, true);
   assert.ok(typeof status.branch === "string");
   assert.ok(typeof status.changedFiles === "number");
+});
+
+test("readGitStatus reuses TTL cache on repeated calls", async () => {
+  clearGitStatusCache();
+  const t0 = performance.now();
+  const first = await readGitStatus(process.cwd());
+  const t1 = performance.now();
+  const second = await readGitStatus(process.cwd());
+  const t2 = performance.now();
+
+  assert.deepEqual(first, second);
+  // Second call from cache should be practically instantaneous (< 20ms)
+  assert.ok((t2 - t1) < 50, `Cached call took ${t2 - t1}ms, expected < 50ms`);
 });
