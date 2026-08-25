@@ -1,78 +1,66 @@
 ---
-title: Report HTML Rendering Notes
+title: Standalone HTML Report Generation Notes
 status: active
-updated: 2026-06-24
+updated: 2026-08-25
 ---
 
-# Report HTML Rendering Notes
+# Standalone HTML Report Generation Notes
 
-`60-report.html` is rendered directly from `60-report.md`. The markdown report is the source of truth.
+Nexus-DevFlow provides a standalone HTML dashboard generator for sharing interactive delivery digests with stakeholders, product managers, or engineering leads.
 
-Renderer entry points:
+## Policy & Core Principles
 
+> [!IMPORTANT]
+> **No Auto-Generated HTML**: Mainline delivery flows (`/complete`) strictly output Markdown only (`current-feature.md`, `devflow/history/features/`, and `HISTORY.md`).
+> The standalone HTML dashboard is generated **on demand** via the dedicated companion command:
+> `/report-html` (or `npm run report:html -- {ID}`).
+
+---
+
+## 1. Renderer Entry Points
+
+```bash
+# Render report for active or completed work by ID:
+npm run report:html -- 001-user-authentication
+
+# Or invoke the companion skill in AI IDE:
+/report-html
+```
+
+Internal script boundary:
 ```text
 scripts/generate-report-html.mjs
-scripts/render-html.mjs --stage 60-report <workspace-path-or-running-id>
-npm run report:html -- <workspace-path-or-running-id>
+scripts/render-html.mjs
 ```
 
-Renderer boundary:
+---
 
-```text
-scripts/lib/render-html/stage-adapters/report-stage.mjs
-scripts/lib/render-html/md2html-report.mjs
-scripts/lib/render-html/markdown.mjs
-.agent/skills/md2html/template.html
-```
+## 2. Source of Truth Priority
 
-## Current Behavior
+1. `devflow/context/current-feature.md` (Active Living Spec)
+2. `devflow/history/features/{ID}.md` / `fixes/{ID}.md` (Archived Delivery Specs)
+3. Frontmatter metadata (`title`, `artifact_language`, `owner`, `created`, `status`)
+4. Markdown body sections (1. Define, 2. Spec, 3. Plan, 4. Logs, 5. Verification Matrix, 6. Release Digest)
 
-- `report-stage.mjs` resolves the workspace and reads `60-report.md`
-- `md2html-report.mjs` maps the stage report into the md2html template shell while preserving DevFlow workspace resolution and output paths
-- `markdown.mjs` provides the markdown parsing helpers used by the stage bridge
+---
 
-## Source Priority
-
-1. `60-report.md` frontmatter
-2. `60-report.md` body content
-3. renderer defaults
-
-## Frontmatter Used By The Renderer
+## 3. Frontmatter Used By The Renderer
 
 | Field | Purpose |
 | :--- | :--- |
-| `title` | HTML `<title>` and visible report heading fallback |
-| `artifact_language` | sets `<html lang="...">`; `th` and `en` are supported, framework and missing-value default is `th` |
+| `title` | HTML `<title>` and main dashboard header |
+| `artifact_language` | Sets `<html lang="...">` (`th` or `en`; default is `th`) |
+| `status` | Displayed status badge (e.g. `completed`, `in-progress`) |
+| `owner` | Displayed author / AI Lead badge |
+| `created` / `updated` | Timestamp metadata in report header |
 
-Other frontmatter can still exist for workflow contract purposes, but it is not required for HTML layout generation.
+---
 
-## Checklist Guidance
+## 4. Presentation Shell & Features
 
-Checklist artifacts are not injected into `60-report.html` by template placeholder mapping.
-
-If checklist completion, blockers, skipped items, or evidence snapshots matter to the final report, include that summary explicitly in `60-report.md`, typically under:
-
-- `### Checklist Summary`
-- `### Validation Outcome`
-- `### Next Actions`
-
-## Expected Workspace Inputs
-
-```text
-devflow/runs/{ID}-{slug}/
-  60-report.md
-  60-report.html
-```
-
-Optional checklist files may still exist beside the report, but the renderer does not pull them into HTML automatically.
-
-## Presentation Layer
-
-`60-report.html` now uses the md2html presentation shell, including:
-
-- TOC sidebar and mobile drawer
-- theme toggle
-- print action
-- md2html typography and layout
-
-The stage adapter still keeps `60-report.md` as the source of truth and does not turn `/60-Report` into a separate public workflow surface.
+The generated HTML dashboard includes:
+- 📱 Responsive layout with dark / light theme toggle
+- 📑 Interactive Table of Contents (TOC) with scroll-spy navigation
+- 🧪 Multi-Lane Verification status badges with expandable test logs
+- ⚡ Interactive Diff viewer and syntax-highlighted code blocks
+- 🖨️ Clean print layout for PDF generation and team sharing
