@@ -1,6 +1,6 @@
 # Quickstart Guide
 
-Getting started with **Nexus-DevFlow 2.5.0** — an enterprise agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Single Living Spec Model** for Google Antigravity, OpenAI Codex, Claude Code, Cursor, GitHub Copilot, and other AI IDEs.
+Getting started with **Nexus-DevFlow 2.6.0** — an enterprise agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Single Living Spec Model** for Google Antigravity, OpenAI Codex, Claude Code, Cursor, GitHub Copilot, and other AI IDEs.
 
 ---
 

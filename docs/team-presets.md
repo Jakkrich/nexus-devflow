@@ -1,8 +1,8 @@
 # Team Presets
 
-This guide is for engineering leads and maintainers adopting **Nexus-DevFlow 2.5.0** across different team structures.
+This guide is for engineering leads and maintainers adopting **Nexus-DevFlow 2.6.0** across different team structures.
 
-Presets are recommendation bundles on top of the same DevFlow 2.5.0 Single Living Spec Model and companion commands.
+Presets are recommendation bundles on top of the same DevFlow 2.6.0 Single Living Spec Model and companion commands.
 
 ---
 

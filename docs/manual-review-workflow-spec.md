@@ -1,15 +1,15 @@
 ---
-title: Nexus-DevFlow 2.5.0 Manual Review & Quality Gate Specification
+title: Nexus-DevFlow 2.6.0 Manual Review & Quality Gate Specification
 status: active
 updated: 2026-08-25
 owner: Nexus-DevFlow Core Team
 ---
 
-# Nexus-DevFlow 2.5.0 Manual Review & Quality Gate Specification
+# Nexus-DevFlow 2.6.0 Manual Review & Quality Gate Specification
 
 ## 1. Purpose & Overview
 
-This specification defines the **Manual Review, Verification Gates, and Audit Discipline** for **Nexus-DevFlow 2.5.0 (The 3-Pillars & Single Living Spec Model)**.
+This specification defines the **Manual Review, Verification Gates, and Audit Discipline** for **Nexus-DevFlow 2.6.0 (The 3-Pillars & Single Living Spec Model)**.
 
 In production-grade software development, AI coding assistants should not blindly write code without human alignment. Nexus-DevFlow treats human review as **explicit, non-bypassable gates** throughout the 4-stage delivery lifecycle:
 

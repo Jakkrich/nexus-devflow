@@ -1,6 +1,6 @@
-# Nexus-DevFlow 2.5.0 Comprehensive Usage Guide
+# Nexus-DevFlow 2.6.0 Comprehensive Usage Guide
 
-This guide provides full operating instructions for **Nexus-DevFlow 2.5.0 (The 3-Pillars & Single Living Spec Model)** across Google Antigravity, OpenAI Codex, Claude Code, Cursor, GitHub Copilot, and related AI development environments.
+This guide provides full operating instructions for **Nexus-DevFlow 2.6.0 (The 3-Pillars & Single Living Spec Model)** across Google Antigravity, OpenAI Codex, Claude Code, Cursor, GitHub Copilot, and related AI development environments.
 
 ---
 

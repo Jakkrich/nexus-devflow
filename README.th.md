@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/logo-nexus-devflow.png" alt="Nexus-DevFlow 2.5.0" width="120">
+  <img src="docs/logo-nexus-devflow.png" alt="Nexus-DevFlow" width="120">
 </p>
 
-<h1 align="center">Nexus-DevFlow 2.5.0</h1>
+<h1 align="center">Nexus-DevFlow</h1>
 
 <p align="center"><strong>สถาปัตยกรรม 3 เสาหลัก และ Single Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ระดับโปรดักชันร่วมกับ AI Coding Agents อย่างเป็นระบบและควบคุมได้จริง</strong></p>
 
@@ -604,7 +604,7 @@ npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
 |  nexus-devflow                                                                                     |
 |  D:\Projects\devtools\nexus-devflow                                                                |
 |                                                                                                    |
-|  [v2.5.0]  [HEALTH OK]  [✔ GATE PASSED]  [✔ IN SYNC]  [TRACK FAST]                                 |
+|  [v2.X.X]  [HEALTH OK]  [✔ GATE PASSED]  [✔ IN SYNC]  [TRACK FAST]                                 |
 +----------------------------------------------------------------------------------------------------+
 |  [🔮 Pre-Flight Discovery]   [⚡ Living Spec · 4 steps]   [🤖 Multi-Agent Swarm]   [🗺️ Code Graph]   |
 +----------------------------------------------------------------------------------------------------+

@@ -5,6 +5,17 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-08-25
+
+### Added
+- Canonical ordered inventory for 28 bundled Core Skills shared by validation and package generation.
+- Automated tests for manifest validation, adapter parity, local-extension classification, and documentation-count drift.
+
+### Changed
+- Package generation now includes only allowlisted Core Skills and excludes workspace-local extensions.
+- Public EN/TH guides now document the current Single Living Spec lifecycle, Dual-Axis `/check`, six-phase `/debug`, and Deep Modules guidance consistently.
+- Static and package smoke verification now prove exact Core Skill inventory integrity across `.agents` and `.claude` adapters.
+
 ## [2.2.1] - 2026-08-24
 
 ### 🔍 Unified Discovery Engine (`/discovery`) & Socratic Alignment (`/grill`)

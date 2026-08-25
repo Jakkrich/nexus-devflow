@@ -1,6 +1,6 @@
 # Workflow Surface Map (28 Core Skills)
 
-This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.5.0**.
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.6.0**.
 
 The canonical surface contains **28 Core Skills** from
 `agent-bundle.manifest.json#core_skills`. Additional Local or Personal Skills

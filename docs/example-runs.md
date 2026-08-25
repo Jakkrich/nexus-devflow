@@ -1,6 +1,6 @@
 # Example Runs & Lifecycle Walkthroughs
 
-This page demonstrates canonical **Nexus-DevFlow 2.5.0** delivery workflows across various real-world scenarios.
+This page demonstrates canonical **Nexus-DevFlow 2.6.0** delivery workflows across various real-world scenarios.
 
 ---
 
