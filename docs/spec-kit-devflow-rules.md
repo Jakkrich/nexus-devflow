@@ -1,12 +1,12 @@
-# Spec Kit For Developing Nexus-DevFlow 2.5.0
+# Spec Kit For Developing Nexus-DevFlow 2.6.0
 
-This document defines how `github/spec-kit` may be used as an internal drafting and quality aid for **Nexus-DevFlow 2.5.0** without polluting the public product surface.
+This document defines how `github/spec-kit` may be used as an internal drafting and quality aid for **Nexus-DevFlow 2.6.0** without polluting the public product surface.
 
 ---
 
 ## 1. Positioning & Product Identity
 
-`Nexus-DevFlow 2.5.0` is the single unified, user-facing workflow surface.
+`Nexus-DevFlow 2.6.0` is the single unified, user-facing workflow surface.
 
 Spec Kit concepts (e.g. constitution, specify, clarify, tasks) may be used behind the scenes to sharpen requirements, but end users only interact with Nexus-DevFlow's **3-Pillars Architecture** and **Single Living Spec Model**.
 
@@ -32,7 +32,7 @@ The source of truth remains:
 
 ## 4. Concept Mapping (Internal Translation)
 
-| Spec Kit Concept | DevFlow 2.5.0 Native Equivalent |
+| Spec Kit Concept | DevFlow 2.6.0 Native Equivalent |
 | :--- | :--- |
 | `constitution` | `devflow/context/coding-standards.md` & `ai-interaction.md` |
 | `specify` | Section 1 (Define & Boundaries) of the Living Spec (`current-feature.md`) |

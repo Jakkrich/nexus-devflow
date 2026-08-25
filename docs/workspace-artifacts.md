@@ -1,6 +1,6 @@
 # Workspace Artifacts Contract (The 3-Pillars Model)
 
-Nexus-DevFlow 2.5.0 structures all project artifacts according to **The 3-Pillars Workspace Architecture & Single Living Spec Model**.
+Nexus-DevFlow 2.6.0 structures all project artifacts according to **The 3-Pillars Workspace Architecture & Single Living Spec Model**.
 
 ---
 

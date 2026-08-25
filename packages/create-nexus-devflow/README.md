@@ -1,6 +1,6 @@
 # @jakkrichm/create-nexus-devflow
 
-Install and manage **Nexus-DevFlow 2.5.0** — an enterprise-grade agentic workflow layer supporting **The 3-Pillars Model & Single Living Spec Model** into any web app, backend, or existing codebase.
+Install and manage **Nexus-DevFlow** — an enterprise-grade agentic workflow layer supporting **The 3-Pillars Model & Single Living Spec Model** into any web app, backend, or existing codebase.
 
 [![npm version](https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef)](https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow)
 [![Validate DevFlow](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg)](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml)

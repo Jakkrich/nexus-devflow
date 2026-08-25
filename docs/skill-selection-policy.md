@@ -1,12 +1,12 @@
 # Skill Selection Policy
 
-Use this policy when deciding which skill or companion tool to activate for a given task in **Nexus-DevFlow 2.5.0**.
+Use this policy when deciding which skill or companion tool to activate for a given task in **Nexus-DevFlow 2.6.0**.
 
 ---
 
 ## 1. Lifecycle Selection Policy
 
-Nexus-DevFlow 2.5.0 uses the **Single Living Spec Lifecycle** for all development work:
+Nexus-DevFlow 2.6.0 uses the **Single Living Spec Lifecycle** for all development work:
 
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete

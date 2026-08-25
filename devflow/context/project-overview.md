@@ -4,7 +4,7 @@
 
 ## 1. Project Purpose & Target Users
 
-- **What this is**: **Nexus-DevFlow 2.5.0** คือระบบ **Agentic Workflow Layer & Pair Programming Operating System** ที่เชื่อมต่อระหว่างนักพัฒนา (Human Developer) และปัญญาประดิษฐ์ (AI Coding Agents เช่น Google Antigravity, Claude Code, OpenAI Codex, Cursor, GitHub Copilot) เพื่อยกระดับการพัฒนาซอฟต์แวร์สู่มาตรฐานระดับวิศวกรรมสากล
+- **What this is**: **Nexus-DevFlow 2.6.0** คือระบบ **Agentic Workflow Layer & Pair Programming Operating System** ที่เชื่อมต่อระหว่างนักพัฒนา (Human Developer) และปัญญาประดิษฐ์ (AI Coding Agents เช่น Google Antigravity, Claude Code, OpenAI Codex, Cursor, GitHub Copilot) เพื่อยกระดับการพัฒนาซอฟต์แวร์สู่มาตรฐานระดับวิศวกรรมสากล
 - **Target Audience**:
   - นักพัฒนาเดี่ยว (Solo Developers) ที่ต้องการความเร็วสูงแต่ยังคงมีระเบียบวินัยและหลักฐานการทดสอบที่ชัดเจน
   - ทีมพัฒนาและองค์กร (Engineering Teams & Tech Leads) ที่ต้องการมาตรฐานการส่งมอบโค้ดที่ตรวจสอบได้ (Traceable), ตรวจสอบย้อนหลังได้ (Auditable) และไม่มีปัญหาโค้ดตีกัน (Zero Merge Conflict)
