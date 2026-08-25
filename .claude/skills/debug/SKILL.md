@@ -1,9 +1,9 @@
 ---
 name: debug
-description: "[devflow][B] Diagnose a failing test, broken build, crash, error, regression, or unexpected behavior without editing source or Blueprint state. Reproduces the symptom with the smallest safe command, localizes the failing path, tests competing hypotheses, identifies the root cause when evidence supports one, and reports a repair handoff to /fix or /implement. Use when the user runs /debug, invokes $debug, asks why something is failing or broken, wants a root-cause investigation, or asks to diagnose before fixing."
+description: "[devflow][B] Diagnose a failing test, broken build, crash, error, regression, or unexpected behavior without editing source or DevFlow state. Follows a strict 6-Phase Scientific Debugging Loop: builds a red-capable tight feedback loop, reproduces & minimises, tests 3-5 falsifiable hypotheses, localizes the failure to a root cause, and reports a repair handoff to /fix or /implement. Use when the user runs /debug, invokes $debug, asks why something is failing or broken, wants a root-cause investigation, or asks to diagnose before fixing."
 ---
 
-# debug - find the cause before changing the code
+# debug - 6-Phase Scientific Debugging Protocol
 
 Where this sits in the workflow:
 
@@ -12,130 +12,112 @@ Where this sits in the workflow:
      crash, behavior)       isolate,       repair active work)
                             explain)
 
-`/debug` separates diagnosis from repair. It gathers evidence, narrows the
-failure to a specific cause when possible, and stops with a useful handoff. It
-does not make the code "temporarily work" while investigating.
+`/debug` separates diagnosis from repair. It gathers empirical evidence, narrows the failure to a specific root cause using scientific method, and stops with an actionable repair handoff. It does not guess, assume, or perform ad-hoc "vibe debugging".
+
+---
 
 ## Input
 
 Accept a symptom, failing command, error message, or unexpected behavior. Examples:
 
-    /debug npm test fails in cart-total.test.js
+    /debug npm test fails in cart-total.test.ts
     /debug the upload route returns 500 for PNG files
-    /debug why does the production build fail?
+    /debug why does the build fail on Windows?
 
-With no useful symptom, ask for the expected behavior, actual behavior, and
-smallest known reproduction. Do not guess which problem the user means.
+With no useful symptom, ask for expected behavior, actual behavior, and smallest known reproduction. Do not guess.
 
-## Step 1 - establish the boundary
+---
 
-Read the project instructions and the context relevant to the failure:
+## 🔬 The 6-Phase Scientific Debugging Loop
 
-- `AGENTS.md` and its real commands
-- `devflow/context/project-overview.md`
-- `devflow/context/coding-standards.md`
-- `devflow/context/current-feature.md`
-- the reported error, failing output, and affected files
-- git status, diff, and recent log when a regression is possible
+### Phase 1: Build a Red-Capable Feedback Loop (Golden Rule)
 
-State the symptom and what would count as reproducing it. Note whether the
-failure belongs to an active feature or is an unplanned bug.
+**This is the core discipline.** If you have a **tight** pass/fail command that actively goes RED on this bug, you will find the root cause. If you do not have one, staring at code will not save you.
 
-Do not treat a dirty working tree as permission to discard or rewrite anything.
-Use the diff as evidence and preserve it.
+**Spend disproportionate effort here. Ways to construct one (in order):**
+1. **Failing Unit / Integration Test** at the responsible module seam.
+2. **Curl / HTTP script** against the running local dev server.
+3. **CLI invocation** diffing stdout/stderr against expected output.
+4. **Headless browser script** (Playwright) asserting on DOM/network/console.
+5. **Replay captured trace**: Replay isolated payload/event log through the code path.
 
-## Step 2 - reproduce safely
+**Completion Criterion for Phase 1**:
+You must name **one single command** (a test invocation, a script, or curl) that you have **already run at least once** and proven:
+- [ ] **Red-capable**: It exercises the actual code path and catches the user's exact symptom (fails red now, will pass green once fixed).
+- [ ] **Deterministic**: Returns the same verdict every run.
+- [ ] **Fast & Agent-runnable**: Completes in seconds, executable without manual intervention.
 
-Run the smallest existing command or interaction that can reproduce the symptom.
+> [!CAUTION]
+> **No Red-Capable Command = No Phase 2.** If you catch yourself reading code to form theories before this command exists, **STOP**. Jumping straight to a hypothesis is the exact failure this protocol prevents.
 
-- Prefer one focused test, request, CLI command, or input over the entire suite.
-- Capture the exact exit code, error, stack trace, output, response, console
-  error, or failed request.
-- Reuse an already-running local app when available. If reproduction requires a
-  long-running server that is not running, ask the user to start it and provide
-  the documented command.
-- Do not install dependencies, change configuration, run migrations, mutate
-  production data, contact external users, or use destructive commands to force
-  a reproduction.
-- Do not edit code to add logs or probes. Use existing logs, debuggers,
-  read-only inspection, or one-off commands that do not change project files.
-- Compare git status after diagnostic commands. If one changes tracked or
-  untracked project files, stop and report those paths. Do not clean, restore,
-  or hide the changes.
+---
 
-If the symptom cannot be reproduced, say what was attempted and what evidence is
-missing. Continue with static investigation only when it can produce a clearly
-labeled hypothesis, not a claimed root cause.
+### Phase 2: Reproduce & Minimise
 
-## Step 3 - localize the failure
+Run the feedback loop and watch it go RED.
 
-Trace from the observed failure toward the smallest responsible area.
+1. **Confirm Symptom**: Ensure the failure mode matches what the user reported (not a nearby unrelated error).
+2. **Minimise the Repro**: Cut inputs, configs, dependencies, and steps **one at a time**, re-running the command after each cut. Keep only what is load-bearing for the failure.
+3. **Done when**: Every remaining parameter is load-bearing (removing any one makes the loop go green).
 
-Use the evidence that fits the project:
+---
 
-- the first relevant application frame in a stack trace
-- the smallest failing test and its inputs
-- request and response data at the failing boundary
-- console and network errors
-- callers, imports, data flow, and configuration reads
-- `git diff`, `git log`, and `git blame` for a suspected regression
-- comparison with a nearby working path or input
+### Phase 3: Form 3–5 Ranked Falsifiable Hypotheses
 
-Separate facts from hypotheses. Test the cheapest safe competing explanations
-first. Do not stop at the first plausible line, blame a dependency without
-evidence, or confuse the place an error surfaced with the place it originated.
+Generate **3 to 5 ranked hypotheses** before testing or inspecting deeply. Never anchor on the first plausible idea.
 
-## Step 4 - confirm or narrow
+Every hypothesis MUST be **falsifiable** using this exact format:
+> *"If `<X>` is the cause, then `<changing Y>` will make the bug disappear / `<changing Z>` will make it worse."*
 
-A root cause is confirmed only when the evidence connects all three:
+If you cannot state the prediction, it is a vibe: sharpen or discard it.
 
-1. the triggering input or state
-2. the responsible code, configuration, or contract
-3. the observed failure
+---
 
-When safe and read-only, vary one input or run a smaller focused command to
-confirm the connection. Do not change implementation or tests to prove the fix.
+### Phase 4: Targeted Instrumentation & Isolation
 
-Use one of these verdicts:
+Test hypotheses by changing **one variable at a time**:
+1. **Tool preference**: Read-only inspection > REPL/debugger > Targeted probe logs.
+2. **Debug Tag Rule**: If temporary diagnostic logs are necessary, tag every log line with a unique prefix, e.g. `[DEBUG-a4f2]`. This guarantees a single `grep` can find and remove all probes.
+3. **Redaction**: Redact all secrets, tokens, and credentials in terminal outputs (`<REDACTED>`).
 
-- **Confirmed** - evidence identifies the cause and explains the failure.
-- **Likely** - evidence narrows the cause, but one specific proof is unavailable.
-- **Blocked** - the failure cannot be reproduced or required evidence is
-  inaccessible.
+---
 
-## Step 5 - report and hand off
+### Phase 5: Confirm Root Cause at Real Seam
 
-Give a concise debug report:
+A root cause is **Confirmed** only when empirical evidence connects all three:
+1. The triggering input or state
+2. The responsible code / configuration boundary
+3. The observed failure
 
-- symptom and reproduction
-- verdict
-- root cause or leading hypothesis
-- evidence, including commands and relevant paths
-- affected behavior and likely repair boundary
-- what was not verified
-- exact next action
+**Seam Identification**: Identify the exact architectural seam (per `devflow/context/coding-standards.md` Deep Modules) where the regression test must live. If no clean seam exists, note that as an architectural finding.
 
-Choose the next action without writing files:
+---
 
-- Active feature or fix caused the failure -> return the diagnosis to `/implement` with instructions to write a failing reproduction test ([TDD-Red]) first.
-- No active work item and the bug is confirmed -> recommend `/fix "<concise bug and confirmed cause>"` (which will write a failing test first before fixing).
-- Cause is only likely or blocked -> recommend the next diagnostic evidence, not a speculative repair.
-- The issue is planned product work rather than a defect -> point to `/feature`.
+### Phase 6: Report & Hand-off
+
+Give a structured, concise debug report:
+
+```markdown
+### 🐞 Debug Report: <Concise Title>
+
+- **Symptom**: <Exact user symptom observed>
+- **Reproduction Command**: `<Single red-capable command>`
+- **Verdict**: Confirmed | Likely | Blocked
+- **Root Cause**: <Precise technical explanation of why it failed>
+- **Responsible Seam**: `<path/to/file.ts#line>`
+- **Evidence**:
+  - Test/Curl output confirming the red signal
+  - Trace connecting triggering state to failure
+- **Next Action**:
+  - For active feature -> Hand back to `/implement` with instructions to write failing test first.
+  - For standalone bug -> Recommend `/fix "<concise description>"` to create spec and implement regression test.
+```
+
+---
 
 ## Rules
 
-- Diagnose, do not repair. Never edit source, tests, configuration, lockfiles, or
-  Blueprint files.
-- Never create, switch, merge, or delete branches. Never commit or push.
-- Do not update the findings ledger. `/audit` owns recorded code-quality
-  findings; `/debug` reports one investigated failure in chat.
-- Evidence outranks confidence. Label uncertainty and failed reproduction
-  honestly.
-- Preserve the user's working tree and running processes.
-- Do not broaden one failure into a general audit or refactor.
-
-## Formatting
-
-Format the output to match the project's conventions in
-`devflow/context/ai-interaction.md`: concise, scannable markdown with a short
-evidence list and a clear next action.
+- **Diagnose, do not repair**: Never edit production source, package lockfiles, or DevFlow state inside `/debug`.
+- **Evidence outranks confidence**: Label uncertainty honestly (`Likely` vs `Confirmed`).
+- **Preserve git state**: Never switch branches, commit, reset, or clean the working tree.
+- **Clean up probes**: Ensure any temporary test scripts in scratch/ are cleanly referenced.

@@ -1,6 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  type CoreSkillInventory,
+  loadCoreSkillInventory,
+  shouldIncludeTemplatePath
+} from "../lib/core-skill-inventory.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
@@ -16,7 +21,7 @@ const entries = [
   "LICENSE"
 ];
 
-async function copyEntry(entry: string): Promise<void> {
+async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<void> {
   const source = path.join(repoRoot, entry);
   const target = path.join(templateRoot, entry);
   try {
@@ -24,6 +29,9 @@ async function copyEntry(entry: string): Promise<void> {
       recursive: true,
       filter: (src) => {
         const normalized = path.relative(repoRoot, src).replace(/\\/g, "/");
+        if (!shouldIncludeTemplatePath(normalized, inventory)) {
+          return false;
+        }
         if (
           normalized.startsWith("devflow/runs/") &&
           !normalized.endsWith(".gitkeep") &&
@@ -64,12 +72,6 @@ async function copyEntry(entry: string): Promise<void> {
           return false;
         }
         if (normalized.startsWith("devflow/research/")) {
-          return false;
-        }
-        if (
-          normalized.includes(".agents/skills/sync-upstream") ||
-          normalized.includes(".claude/skills/sync-upstream")
-        ) {
           return false;
         }
         return true;
@@ -218,11 +220,14 @@ _Nothing in progress. Run /feature, /fix, or /rollback to start._
 }
 
 async function main() {
+  const inventory = await loadCoreSkillInventory(
+    path.join(repoRoot, "agent-bundle.manifest.json")
+  );
   await fs.rm(templateRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   await fs.mkdir(templateRoot, { recursive: true });
 
   for (const entry of entries) {
-    await copyEntry(entry);
+    await copyEntry(entry, inventory);
   }
 
   await ensureEmptyDirectories();

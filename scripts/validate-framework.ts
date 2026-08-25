@@ -2,12 +2,24 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  findCoreSkillCountDrift,
+  inspectAdapterSkillInventory,
+  loadCoreSkillInventory
+} from "../packages/create-nexus-devflow/lib/core-skill-inventory.js";
 import { validateUpstreamMonitorContract } from "./lib/validate-upstream-monitor.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
 const args = new Set(process.argv.slice(2));
 const roadmapOnly = args.has("--roadmap-only");
+const coreSkillDocumentationPaths = [
+  "README.md",
+  "README.th.md",
+  "packages/create-nexus-devflow/README.md",
+  "docs/USAGE.md",
+  "docs/workflow-surface-map.md"
+];
 
 function fail(message: string, failures: string[]): void {
   failures.push(message);
@@ -120,6 +132,51 @@ function validateWorkflowNumbering(failures: string[]): void {
   }
 }
 
+async function validateCoreSkillContract(failures: string[]): Promise<void> {
+  try {
+    const inventory = await loadCoreSkillInventory(
+      path.join(projectRoot, "agent-bundle.manifest.json")
+    );
+    const inspection = await inspectAdapterSkillInventory(projectRoot, inventory);
+
+    for (const adapter of [".agents", ".claude"] as const) {
+      const state = inspection[adapter];
+      if (state.missingCore.length > 0) {
+        fail(
+          `${adapter}/skills is missing Core Skills: ${state.missingCore.join(", ")}`,
+          failures
+        );
+      } else {
+        ok(`${adapter}/skills contains all ${inventory.count} Core Skills`);
+      }
+
+      if (state.localExtensions.length > 0) {
+        ok(
+          `${adapter}/skills has ${state.localExtensions.length} local extension(s), excluded from the Core count`
+        );
+      }
+    }
+
+    const documentationDrift = await findCoreSkillCountDrift(
+      projectRoot,
+      coreSkillDocumentationPaths,
+      inventory.count
+    );
+    if (documentationDrift.length > 0) {
+      for (const drift of documentationDrift) {
+        fail(`Core Skill documentation drift: ${drift}`, failures);
+      }
+    } else {
+      ok(`Core Skill documentation count is synchronized (${inventory.count})`);
+    }
+  } catch (error: unknown) {
+    fail(
+      `Core Skill inventory contract failed: ${error instanceof Error ? error.message : String(error)}`,
+      failures
+    );
+  }
+}
+
 function validateUpstreamWorkflow(failures: string[]): void {
   const workflowPath = path.join(projectRoot, ".github", "workflows", "check-upstream.yml");
   if (!fs.existsSync(workflowPath)) {
@@ -165,7 +222,7 @@ function validateManifestSync(failures: string[]): void {
   }
 }
 
-function main() {
+async function main(): Promise<void> {
   const failures: string[] = [];
   const manifest = readJson<{ required_paths?: string[]; forbidden_legacy_paths?: string[] }>("agent-bundle.manifest.json", failures);
   const requiredPaths = [
@@ -202,6 +259,7 @@ function main() {
   scanForLegacyReferences(failures);
   validateRoadmap(failures);
   validateWorkflowNumbering(failures);
+  await validateCoreSkillContract(failures);
   validateUpstreamWorkflow(failures);
   validateManifestSync(failures);
 
@@ -213,4 +271,7 @@ function main() {
   console.log("\nNexus-DevFlow framework static validation completed successfully!");
 }
 
-main();
+main().catch((error: unknown) => {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+});

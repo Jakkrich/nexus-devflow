@@ -81,14 +81,14 @@ devflow/
 ## 4. Strict TDD & Two-Stage Review Interaction Rules
 
 ### 🔴🟢 Strict TDD Execution Discipline
-During implementation in `/implement` and `40-execute`:
+During implementation in `/implement`:
 - **Show Red Phase**: First execute tests to demonstrate expected failure *before* adding production code.
 - **Show Green Phase**: Add minimal production code, re-run tests, and report pass rate.
 - **Show Refactor Phase**: Polish and clean up with zero test regression.
 - **Forbidden**: Never present functional code changes without matching test execution evidence.
 
 ### 🛡️ Two-Stage Verification Reporting
-During `/check` and `50-verify`:
+During `/check`:
 - **Stage 1 (Spec Fidelity Gate)**: Report each Acceptance Criterion and "Done When" status.
 - **Stage 2 (Code Quality & Security Gate)**: Report Typecheck, Lint, Test Suites, Security checks, and Findings Ledger (0 blockers).
 
@@ -97,7 +97,7 @@ During `/check` and `50-verify`:
 ## 5. Standalone HTML Reporting Policy
 
 > [!IMPORTANT]
-> **No Auto-Generated HTML**: Mainline stages (`/complete` and `60-report`) strictly output Markdown only.
+> **No Auto-Generated HTML**: The mainline `/complete` stage strictly outputs Markdown only.
 > When an interactive web dashboard is desired for presentation or sharing, invoke the standalone companion command:
 > `/report:html` (or `npm run report:html -- {ID}`).
 
@@ -108,7 +108,6 @@ During `/check` and `50-verify`:
 Progress lives in persistent files, not in transient chat history:
 
 - In Fast-Track: `devflow/context/current-feature.md` maintains ticked checklist boxes `- [x]`.
-- In Deep-Track: `devflow/context/current-run/` maintains stage markdown files.
 - In Git: Commits, branches, and working tree maintain the code history.
 - When starting a fresh session after a context clear, run `devflow` or inspect `current-stage.md` to pick up immediately from the next pending step.
 
@@ -116,7 +115,7 @@ Progress lives in persistent files, not in transient chat history:
 
 ## 6. Single Active Run Guardrail (One Thing at a Time)
 
-- Only one active run is allowed at a time across both Fast-Track and Deep-Track.
+- Only one active Single Living Spec run is allowed at a time.
 - The AI will actively block opening a new feature or fix until the current one is completed with `/complete` (or explicitly rolled back/cancelled).
 
 ---

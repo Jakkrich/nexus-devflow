@@ -13,7 +13,7 @@
   - ทีมพัฒนาและองค์กร (Engineering Teams & Tech Leads) ที่ต้องการมาตรฐานการส่งมอบโค้ดที่ตรวจสอบได้ (Traceable), ตรวจสอบย้อนหลังได้ (Auditable) และไม่มีปัญหาโค้ดตีกัน (Zero Merge Conflict)
 - **Core Value Proposition**:
   - **The 3-Pillars Model**: จัดระเบียบบริบทเป็น 3 เสาหลักอย่างชัดเจน — *🔮 Future (Inbox `ideas.md`)* ➔ *⚡ Present (Living Context `devflow/context/`)* ➔ *📦 Past (Categorized History `devflow/history/`)*
-  - **Dual-Track Delivery Model**: เลือกความเร็วให้เหมาะกับขนาดงาน — *Fast-Track (4 ขั้นตอน)* สำหรับ 85% ของงานประจำวัน และ *Deep-Track (8 ขั้นตอน)* สำหรับ 15% ของงานสถาปัตยกรรม
+  - **Single Living Spec Delivery Model**: งานทุกขนาดใช้วงจรเดียว `/feature` (หรือ `/fix`) ➔ `/implement` ➔ `/check` ➔ `/complete` โดยเพิ่มความลึกของสเปกและหลักฐานตามความซับซ้อนของงาน
   - **Hard Quality Gates**: ระบบปฏิเสธการปล่อยงานเมื่อไม่ผ่านเกณฑ์การทดสอบ หรือมีข้อบกพร่องความปลอดภัยค้างอยู่
 
 ---
@@ -27,7 +27,7 @@
   - Local State Management & Backup Snapshots (`.nexus/`)
 - **Key Modules & Subsystems**:
   - **Distribution CLI & Package**: `packages/create-nexus-devflow` (Scaffolding, Doctor, Status, Update, Gatekeeper)
-  - **Interactive Web Dashboard**: Embedded Local Webview Dashboard (`/dashboard`) พร้อม Dual-Track Visualizer และ Real-time Snapshot
+  - **Interactive Web Dashboard**: Embedded Local Webview Dashboard (`/dashboard`) พร้อม Living Spec Visualizer และ Real-time Snapshot
   - **Gatekeeper Engine**: ระบบตรวจสอบคุณภาพโค้ดและ Finding Blockers (`nexus-devflow check-gate`)
   - **Model Context Protocol (MCP) Server**: JSON-RPC Hub สำหรับเชื่อมต่อ AI Agents แบบ Type-Safe
   - **Dynamic Context Slicer**: ระบบจัดสรรและตัดตอนบริบทแบบ Just-In-Time (JIT) เพื่อประหยัด Token
