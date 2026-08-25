@@ -1,368 +1,113 @@
 ---
-title: Manual Review Workflow Spec
+title: Nexus-DevFlow 2.5.0 Manual Review & Quality Gate Specification
 status: active
-updated: 2026-06-30
-owner: Codex
+updated: 2026-08-25
+owner: Nexus-DevFlow Core Team
 ---
 
-# Manual Review Workflow Spec
+# Nexus-DevFlow 2.5.0 Manual Review & Quality Gate Specification
 
-## Purpose
+## 1. Purpose & Overview
 
-This document defines the manual-first workflow profile for Nexus-DevFlow 2.0.
-It now reflects the active stage-template contract for the mainline workflow.
+This specification defines the **Manual Review, Verification Gates, and Audit Discipline** for **Nexus-DevFlow 2.5.0 (The 3-Pillars & Single Living Spec Model)**.
 
-The target use case is requirement-heavy work where people want to move one step at a time, inspect every artifact, and approve each stage before the next command is allowed.
-
-## Problem Statement
-
-The current DevFlow 2.0 mainline already provides stage artifacts, but it assumes a relatively smooth handoff from one stage to the next.
-For large or requirement-sensitive work, teams often need stronger answers to these questions:
-
-- What command should the human run next
-- Where should the output be stored
-- What exactly did AI do in this stage
-- What must a human reviewer verify before proceeding
-- How should broad project requirements be preserved while work is split into phases and subtasks
-
-## Scope Of This Spec
-
-This spec covers:
-
-- a manual-first operating model for the existing mainline
-- artifact placement rules in `devflow/`
-- a recommended naming scheme for project, phase, and running-id work
-- stage-level review gates for `discovery`, `10-Define`, `20-Spec`, and `30-Plan`
-- example template structure for those four stages
-
-This spec does not fully define:
-
-- runtime implementation changes
-- validator changes
-- command parser changes
-- migration of existing workspaces
-- future automation or command-routing behavior beyond the current template and validation surface
-
-## Expected Outcomes After Adoption
-
-With this workflow profile active, the expected results are:
-
-- people can run DevFlow one command at a time without losing track of the current state
-- each stage artifact shows its source inputs, AI actions, and required human review
-- broad project constraints stay visible across phase-level running ids
-- phase work is easier to audit because every stage declares the next allowed command
-- reviewers can see what to approve before implementation starts
-- AI is less likely to silently redefine requirements during planning
-
-The tradeoff is that the workflow becomes more explicit and slightly slower, because human review is treated as a real gate rather than an informal suggestion.
-
-## Anti-Bloat Rule
-
-This flow should stay lightweight.
-To avoid turning DevFlow into a form-heavy process:
-
-- do not add new public commands for manual review mode
-- prefer soft warnings over hard runtime blocks
-- use `Help` for routing rather than introducing a new review command
-- keep the same Timeline stages for both normal and manual review work
-- treat the extra fields as visibility and audit aids, not paperwork for its own sake
-
-## Operating Model
-
-### Primary Rule
-
-Use DevFlow mainline runs primarily at the phase or capability-slice level, not at the one-task level.
-
-### Context Model
-
-Store project-wide context outside individual running ids, then carry it forward into each phase artifact.
-
-Recommended levels:
-
-1. Project context
-2. Pre-delivery discovery decision
-3. Phase delivery run
-4. Task and subtask execution
-
-### Project Context Layer
-
-Project context should live in durable shared artifacts under `devflow/context/`:
-
-- `devflow/context/project-overview.md` (Source of Truth for tech stack & architecture)
-- `devflow/context/coding-standards.md` (Engineering standards, Deep Modules, TDD rules)
-- `devflow/context/ai-interaction.md` (Operational preferences & guidelines)
-- `devflow/context/findings.md` (Quality and security findings ledger)
-
-### Phase Delivery Layer
-
-Before the phase delivery layer, `/discovery` stores the request, selected support routes, evidence, and decision under:
+In production-grade software development, AI coding assistants should not blindly write code without human alignment. Nexus-DevFlow treats human review as **explicit, non-bypassable gates** throughout the 4-stage delivery lifecycle:
 
 ```text
-devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
+/feature (or /fix) ──▶ [Spec Gate] ──▶ /implement ──▶ [TDD Checkpoint] ──▶ /check ──▶ [QA Gate] ──▶ /complete ──▶ [Delivery Gate]
 ```
 
-This layer consumes no Running ID. An approved `Proceed` discovery can enter `/feature` or `/fix`.
+---
 
-Each delivery run executes inside:
+## 2. The 4 Essential Human Review Gates
 
-- **Single Living Spec (4 Steps)**: `devflow/context/current-feature.md`
+### 🚪 Gate 1: The Spec Review Gate (`/feature` / `/fix`)
+- **When**: Triggered immediately after the AI creates or updates `devflow/context/current-feature.md`.
+- **AI Action**: Defines problem statement, boundaries, data contracts, acceptance criteria (AC-1..AC-N), and TDD execution plan, then **pauses**.
+- **Human Verification Checklist**:
+  1. Are scope boundaries and non-goals explicitly defined?
+  2. Are invariants (what must not break) protected?
+  3. Are acceptance criteria testable and unambiguous?
+  4. Is the TDD execution plan granular (`[TDD-Red]`, `[TDD-Green]`, `[TDD-Refactor]`)?
+- **Approval Rule**: AI does not write application code until the developer reviews and approves the spec.
 
-Upon completion, completed work is permanently archived to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`.
+---
 
-### Task Execution Layer
+### 🚪 Gate 2: The TDD Implementation Checkpoint (`/implement`)
+- **When**: During task execution in `current-feature.md`.
+- **AI Action**: Implements tasks one by one under strict Red-Green-Refactor discipline, recording diffs and test logs into Section 4 (Implementation Log & Evidence).
+- **Human Verification Checklist**:
+  1. Did each behavior change start with a failing test (`[TDD-Red]`)?
+  2. Is the code diff minimal, clean, and adhering to `coding-standards.md`?
+  3. Were refactoring steps performed without changing public contracts?
+- **Approval Rule**: Optional commit checkpoints on the feature branch after each passing step.
 
-Tasks and subtasks stay inside `devflow/context/current-feature.md` (Section 3: Execution Plan & TDD Checklist).
+---
 
-Do not create a new delivery run for every small implementation task unless that task truly becomes a separate delivery phase.
+### 🚪 Gate 3: Senior QA Verification Gate (`/check`)
+- **When**: After all implementation tasks in the living spec are checked off.
+- **AI Action**: Assumes the role of an independent Senior QA engineer, running the multi-lane verification matrix (Typecheck, Lint, Test suites, and behavioral manual proof).
+- **Human Verification Checklist**:
+  1. Did all lanes in the matrix achieve `PASS`?
+  2. Are test assertions testing behavior rather than mock implementation details?
+  3. Has manual behavioral proof (browser/terminal/API) been recorded?
+- **Approval Rule**: Passing checks recorded as empirical evidence in Section 5 of `current-feature.md`.
 
-## Artifact Placement
+---
 
-### Recommended Layout (The 3-Pillars Model)
+### 🚪 Gate 4: The Findings & Git Delivery Gate (`/audit` + `/complete`)
+- **When**: Final step before closing the work item.
+- **AI Action**:
+  - `/audit current` inspects the complete feature branch delta and records findings in `devflow/context/findings.md`.
+  - `/complete` compiles the Release Digest, updates `HISTORY.md`, archives the living spec to `devflow/history/features/`, and asks for approval before merging.
+- **Human Verification Checklist**:
+  1. Are all P0 (Critical) and P1 (High) findings in `findings.md` resolved and verified (`closed`) or explicitly waived (`accepted`)?
+  2. Is the Release Digest accurate and complete?
+- **Approval Rule**: Mandatory human confirmation before squash-merging the feature branch into `main` and deleting the branch.
+
+---
+
+## 3. Artifact Placement & State Contracts (The 3-Pillars)
 
 ```text
 devflow/
-  ideas.md                    # 🔮 Future: Idea Inbox with AI scoring
-  context/                    # ⚡ Present: Living Spec & Active Context
-    project-overview.md
-    coding-standards.md
-    ai-interaction.md
-    findings.md
-    current-stage.md
-    current-feature.md        # Single Living Spec
-    glossary.md
-  decisions/                  # 🏛️ Decisions: ADRs
-  history/                    # 📦 Past: Categorized Archives
-    features/
-    fixes/
-    rollbacks/
-    HISTORY.md
-  discoveries/                # 🔍 Discoveries: Pre-delivery discovery records
-      50-verify.md
-      60-report.md
-      70-deliver.md
-  history/                    # 📦 Past: Categorized Delivery Archives
-    features/
-    fixes/
-    rollbacks/
-    HISTORY.md
-  discoveries/                # Pre-delivery discovery records
-    {DISCOVERY_ID}-{slug}/
-      discovery.md
+├── ideas.md                    # 🔮 Future: Idea Inbox with AI scoring
+├── context/                    # ⚡ Present: Active Context & Living Spec
+│   ├── current-feature.md      # The Single Living Spec (Active delivery spec / idle stub)
+│   ├── current-stage.md        # Active stage inspector & guardrail pointer
+│   ├── project-overview.md     # Single Source of Truth
+│   ├── coding-standards.md     # Engineering standards & conventions
+│   ├── ai-interaction.md       # AI interaction guidelines
+│   ├── findings.md             # Quality & security findings ledger (P0-P3)
+│   └── glossary.md             # Domain glossary & architecture terms
+├── decisions/                  # 🏛️ Decisions: Architecture Decision Records (ADR-xxx.md)
+├── history/                    # 📦 Past: Permanent Categorized Archives
+│   ├── features/               # Completed features ({xxx-slug}.md)
+│   ├── fixes/                  # Completed bug fixes ({xxx-slug}.md)
+│   ├── rollbacks/              # Reversal audit logs (YYYY-MM-DD-{xxx-slug}.md)
+│   └── HISTORY.md              # Master release ledger summary
+└── discoveries/                # 🔍 Discoveries: Pre-delivery discovery records (DISC-xxx.md)
 ```
 
-### Human Reading Model
+---
 
-Humans should know where to look:
+## 4. Single Living Spec Contract (`current-feature.md`)
 
-- Future ideas & backlog: `devflow/ideas.md`
-- Active specifications & system rules: `devflow/context/`
-- Pre-delivery route and decision: `devflow/discoveries/{DISCOVERY_ID}-{slug}/`
-- Past delivery archives & release notes: `devflow/history/`
-- live execution progress: `checklists/`
+Every delivery run operates on `current-feature.md`, structured into **6 standard sections**:
 
-For a quick read-only summary across active runs, use the internal helper:
+1. **🎯 1. Define & Boundaries**: Problem statement, proposed solution, scope boundaries, and non-breaking invariants.
+2. **📐 2. Technical Spec & Contracts**: Data contracts, API schemas, and testable Acceptance Criteria (AC-1..AC-N).
+3. **📋 3. Execution Plan & TDD Checklist**: Sequential task breakdown with granular `[TDD-Red]`, `[TDD-Green]`, and `[TDD-Refactor]` sub-tasks.
+4. **⚡ 4. Implementation Log & Evidence**: Live engineering log recording step-by-step implementation evidence and diffs.
+5. **🧪 5. Multi-Lane Verification Matrix**: Empirical test logs, benchmark data, and manual proof verification.
+6. **📦 6. Release Digest & Retrospective**: Release summary, key architectural decisions, and retrospective notes.
 
-```text
-node scripts/summarize-run-status.mjs
-```
+---
 
-This helper is intended to support `Help` and manual status reviews without adding a new public workflow command.
+## 5. Reference Examples
 
-## Naming Rules
-
-### Project Slug
-
-Use one stable project slug for the whole initiative.
-
-Example:
-
-```text
-activity-application-system
-```
-
-### Phase Slug
-
-Use a phase slug that states the delivery boundary clearly.
-
-Examples:
-
-```text
-001-activity-application-p1-requirements-boundary
-002-activity-application-p2-intake-tracking
-003-activity-application-p3-review-approval
-```
-
-### Why This Matters
-
-Stable names help people understand:
-
-- what phase they are in
-- whether a run is still active
-- how later phases relate to earlier ones
-- where to look for the source-of-truth artifact
-
-## Manual Review Rules
-
-Each stage must answer these audit questions:
-
-1. What inputs did AI use
-2. What actions did AI perform
-3. What must a human reviewer inspect
-4. What command is allowed next
-5. What optional branches could help before returning to the next Timeline step
-
-Checklist and report artifacts should carry the same soft-gate signals forward so reviewers can inspect downstream state without reopening every earlier stage file.
-
-### Required Review Fields
-
-Each manual-review-ready stage template should include:
-
-- `Source Inputs`
-- `Project Context To Preserve`
-- `AI Actions Performed`
-- `Human Review Required`
-- `Approval Status`
-- `Next Allowed Command`
-- `Nexus Event`
-- `Change Log`
-
-### Approval States
-
-Recommended values:
-
-- `Pending`
-- `Approved`
-- `Needs Revision`
-- `Rejected`
-
-### Gate Rule
-
-The next mainline command should not be considered the default path until the current stage has:
-
-- a completed artifact
-- explicit human review notes
-- an `Approval Status`
-- a `Next Allowed Command`
-- optional `Nexus Event` when side routes may help before the next Timeline step
-
-## Stage Responsibilities
-
-### `discovery`
-
-Purpose:
-
-- create or resume a Discovery ID, not a Running ID
-- restate the request and identify decision-blocking unknowns
-- select `Brainstorm`, `PRD`, `Research`, `Debug`, or direct decision
-- synthesize companion findings into `Proceed`, `Defer`, or `Reject`
-
-Human checks:
-
-- the selected route is proportionate
-- returned evidence supports the decision
-- approved Proceed is explicit before Define
-- no Running ID was consumed
-
-### `10-Define`
-
-Purpose:
-
-- turn an approved discovery into one or more delivery slices
-- allocate one Running ID per coherent slice
-- record in-scope and out-of-scope items
-- preserve global constraints
-
-Human checks:
-
-- scope is not drifting
-- sibling runs do not duplicate responsibility
-- small tasks were not incorrectly promoted into separate runs
-- confirmed requirements are carried forward
-- open questions are not hidden as assumptions
-
-### `20-Spec`
-
-Purpose:
-
-- create the delivery contract
-- define acceptance criteria
-- state role, workflow, data, and constraint rules clearly
-
-Human checks:
-
-- spec traces back to approved source inputs
-- acceptance criteria are testable
-- exclusions are explicit
-
-### `30-Plan`
-
-Purpose:
-
-- break the spec into executable work
-- identify file and component impact
-- define verification and test expectations
-
-Human checks:
-
-- subtasks stay inside the approved phase scope
-- sequence and dependencies make sense
-- every behavior change has a test decision
-
-## Command Guidance
-
-Recommended manual progression:
-
-```text
-Goal -> /discovery -> [Brainstorm | PRD | Research | Debug | Direct | Grill] -> /discovery -> /feature -> /implement -> /check -> /complete
-```
-
-Recommended prompt style for large work:
-
-```text
-/discovery {initiative or request}
-Use existing project documents as source of truth.
-Choose only the supporting route needed to make the delivery decision.
-Do not create a Running ID.
-Return companion findings to this Discovery ID.
-```
-
-## Template Extension Rules
-
-When extending the manual review mode further, preserve:
-
-- current frontmatter style
-- current stage filename contract
-- current mainline ordering
-- open-ended final section behavior
-
-Add the manual review fields without removing the existing core stage purpose.
-
-## Future Implementation Targets
-
-The likely follow-up work after this first implementation is:
-
-1. update schema templates for `discover`, `define`, `spec`, and `plan`
-2. add validation guidance for approval and next-command fields
-3. document the manual review mode in `quickstart.md` and `workspace-artifacts.md`
-4. consider `Help` routing guidance for large initiative manual-first work
-
-## Deliverables In This Draft
-
-This draft is paired with example template files under:
-
-```text
-docs/examples/manual-review-flow/
-```
-
-Those files remain examples only.
-The active schema templates live under `.agent/resources/schemas/`.
-
-## Decision Summary
-
-Recommendation:
-
-- keep DevFlow mainline phase-oriented by default
-- keep tasks inside `30-plan.md` and checklist files
-- add explicit human review fields to the early planning stages before changing runtime behavior
-
-This gives teams stronger control and auditability without changing the core DevFlow stage model.
+For complete markdown templates and living spec examples, refer to:
+- [`docs/examples/living-spec/current-feature.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/current-feature.example.md)
+- [`docs/examples/living-spec/discovery.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/discovery.example.md)
+- [`docs/examples/living-spec/adr.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/adr.example.md)
+- [`docs/examples/living-spec/ideas.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/ideas.example.md)
