@@ -1,6 +1,6 @@
 ---
 name: discovery
-description: "[devflow][D] Unified discovery and exploration stage in DevFlow 2.0 - conducts project-level roadmap discovery (project-plan.md/build-plan.md) or feature-level exploration (Stage 00) before delivery commitment."
+description: "[devflow][D] Unified discovery and exploration stage in DevFlow 2.5.0 - conducts project-level roadmap discovery (project-plan.md/build-plan.md) or feature-level pre-delivery exploration before the Single Living Spec lifecycle."
 argument-hint: "[{title, request, IDEA-xxx, or discovery-id}]"
 ---
 
@@ -10,7 +10,7 @@ $ARGUMENTS
 
 `/discovery` is the central discovery entry point in Nexus-DevFlow. It operates in two adaptive modes based on input scope:
 1. **🗺️ Macro Project Discovery**: Develops high-level product and build roadmap plans (`devflow/project-plan.md` & `devflow/build-plan.md`) through an adaptive conversation before `/overview`.
-2. **🔍 Micro Feature Exploration (Stage 00)**: Explores a specific feature, request, or idea before committing to delivery, routes through supporting lenses, and finishes with a visible `Proceed`, `Defer`, or `Reject` decision before `10-define`.
+2. **🔍 Micro Feature Exploration (Pre-Flight)**: Explores a specific feature, request, or idea before committing to delivery, routes through supporting lenses, and finishes with a visible `Proceed`, `Defer`, or `Reject` decision before `/feature` or `/fix`.
 
 ---
 
@@ -21,7 +21,7 @@ $ARGUMENTS
 /discovery
 /discovery --project
 
-# 2. Micro Feature Exploration Mode (Stage 00 of Deep-Track)
+# 2. Micro Feature Exploration Mode (Pre-Flight)
 /discovery {title or request}
 /discovery IDEA-xxx
 /discovery {discovery-id}
@@ -44,7 +44,7 @@ Use when:
 
 ---
 
-## Mode 2: Micro Feature Exploration (Stage 00 of Deep-Track)
+## Mode 2: Micro Feature Exploration (Pre-Flight)
 
 Use when:
 - Exploring a specific feature, complex architectural change, or pending idea (`/discovery IDEA-xxx`).
@@ -76,8 +76,7 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
 ### Decision & Approval Gate:
 Set one visible decision:
 - `Proceed`: Enough value and evidence exist to define delivery work:
-  - **🏎️ Fast-Track (Recommended for 85% of standard features/fixes)**: Handoff to `/feature {discovery_id}` or `/fix {discovery_id}` (writes `devflow/context/current-feature.md`).
-  - **🏗️ Deep-Track (For large architectural epics/migrations)**: Handoff to `10-define {discovery_id}` (writes `devflow/context/current-run/10-define.md`).
+  - Handoff to `/feature {discovery_id}` or `/fix {discovery_id}` to create the Single Living Spec in `devflow/context/current-feature.md`.
 - `Defer`: The idea remains relevant but timing or evidence is not ready.
 - `Reject`: The idea should not proceed under current framing.
 
@@ -86,6 +85,5 @@ Set one visible decision:
 ## Next Workflow Recommendations
 
 - **From Macro Project Mode**: Run `/overview` to compile context into `devflow/context/project-overview.md`.
-- **From Micro Stage 00 (Approved Proceed ➔ Fast-Track)**: Run `/feature {discovery_id}` to start lean living spec.
-- **From Micro Stage 00 (Approved Proceed ➔ Deep-Track)**: Run `10-define {discovery_id}` to allocate a Running ID.
-- **From Micro Stage 00 (Defer / Reject)**: No next command needed.
+- **From Micro Pre-Flight (Approved Proceed)**: Run `/feature {discovery_id}` or `/fix {discovery_id}` to start the Single Living Spec lifecycle.
+- **From Micro Pre-Flight (Defer / Reject)**: No next command needed.

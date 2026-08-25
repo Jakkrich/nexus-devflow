@@ -4,8 +4,8 @@
 - Active Running ID: `None`
 - Track: `idle`
 - Current Stage: `idle`
-- Active Branch: `2.5.0`
+- Active Branch: `main`
 - Living Spec: `devflow/context/current-feature.md`
-- Next Action: `Run /feature, /fix, or /discovery to start new work.`
-- Last Completed Run: `056-modernize-documentation-and-user-guides (2026-08-24)`
-- Last Updated: 2026-08-24
+- Next Action: `Run /discovery, /feature, /fix, or /rollback to start the next work item.`
+- Last Completed Run: `057-refresh-current-documentation (2026-08-25)`
+- Last Updated: 2026-08-25

@@ -1,108 +1,111 @@
 ---
 name: check
-description: "[devflow][F] Prove the current work actually does what its spec says by running the real app and observing behavior against the \"done when\" criteria in current-feature.md. Drives the app (browser, CLI, or server), captures evidence (screenshots, output, console/network errors), and reports pass/fail per criterion. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build. (Supersedes the built-in /verify with a spec-aware version inside blueprint projects.)"
+description: "[devflow][F] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review (Spec Fidelity + Standards & Architecture). Drives the app (browser, CLI, or server), captures empirical evidence (screenshots, output, console/network errors), checks against 12 Fowler smells and deep-module standards, and reports pass/fail. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build."
 ---
 
-# check - prove it works against the spec, with evidence
+# check - Dual-Axis Independent Verification Engine
 
 Where this sits in the workflow:
 
     /implement  ->  [check]  ->  /complete
-    (built a       (run the app,    (only once the
-     step or        prove each       done-whens are
-     the feature)   done-when)       proven)
+    (built a       (dual-axis       (only once both
+     step or        review with      axes pass with
+     the feature)   empirical proof) evidence)
 
-`/implement` builds and does a quick build-plus-screenshot check inline. `/check`
-is the deeper, repeatable gate for when a "done when" needs the *real running app*,
-not just a green build: a click that triggers a download, a route that returns a
-file, a flow across screens. Run it on a single step whose done-when is
-behavioral, or on the whole feature as the acceptance check before `/complete`.
+`/implement` builds and does a quick build-plus-screenshot check inline. `/check` is the rigorous, repeatable gate for when a feature or step needs **empirical proof** on the running app and **two-axis code review** before merging.
 
-The point is evidence. A passing build proves the code compiles; `/check` proves
-the thing the spec promised actually happens. It changes no source and commits
-nothing - it runs the app and reports what it saw.
+It changes no source and commits nothing — it executes, inspects, and reports observed facts.
+
+---
 
 ## Input
 
-Optional: a specific thing to check (a step, a flow, a URL). With no argument,
-verify the whole current feature against every "done when" in
-`devflow/context/current-feature.md`.
+Optional: a specific target to check (a step, a flow, a URL). With no argument, verify the whole current feature against `devflow/context/current-feature.md` and `devflow/context/coding-standards.md`.
 
-## Step 1 - build the checklist
+---
 
-Read `devflow/context/current-feature.md`. Pull the observable "done when"
-criteria from the build steps (and any acceptance notes in the Testing section).
-Turn them into a concrete checklist of claims to prove - each one a specific,
-observable behavior, not "it works". If the user named one thing, scope to that.
+## Step 1 - Build the Dual-Axis Review Matrix
 
-If there's no current feature spec, ask what to verify rather than guessing.
+Read `devflow/context/current-feature.md` and `devflow/context/coding-standards.md`. Prepare the inspection criteria across two independent axes:
 
-## Step 2 - get the app running
+1. **Axis 1 (Standards & Architecture Criteria)**:
+   - Coding conventions in `coding-standards.md`
+   - Deep Modules discipline (Small interface, deep implementation, clean seams, no leaky abstractions)
+   - Baseline 12 Fowler Code Smells (Primitive obsession, Feature envy, Shotgun surgery, Speculative generality, etc.)
+   - Multi-lane technical gates (Typecheck, test suites, zero secrets, zero P0/P1 findings)
+2. **Axis 2 (Spec Fidelity & Behavioral Observables)**:
+   - Line-by-line Acceptance Criteria (ACs) and "Done When" observables from `current-feature.md`
+   - Scope Creep detection (Unrequested behavior in the diff)
+   - Missing Requirements detection (Unimplemented edge cases)
 
-Use the project's real commands (see Commands in `AGENTS.md`). Match the project
-type:
+---
 
-- **Web app** - start (or reuse) the dev/preview server, then drive a real browser
-  to the relevant routes. Prefer reusing an already-running server over starting a
-  duplicate. If Playwright is already installed or declared in `AGENTS.md`, prefer
-  it for browser driving, screenshots, console errors, and failed request checks.
-  If it is not installed, do not add it from `/check`; use another real-browser
-  evidence path and report what you used.
-- **CLI** - run the actual command(s) with representative inputs.
-- **Server/API** - start it and hit the endpoints.
-- **Library** - exercise the public API through an example or the test command.
+## Step 2 - Get the App Running & Exercise Live Proof
 
-If a `test` command is declared in `AGENTS.md`, you may run it as *one* input, but
-`/check` is broader than unit tests: it checks real behavior, which is exactly the
-evidence UI and integration steps ride on instead of unit tests.
+Use the project's real commands (from `AGENTS.md`):
 
-## Step 3 - exercise each claim
+- **Web app**: Start (or reuse) the local dev server. Drive a real browser to relevant routes. Prefer Playwright when installed for screenshots, network errors, and console assertions.
+- **CLI**: Execute commands with representative input fixtures, asserting exit codes and output snapshots.
+- **Server / API**: Hit endpoints with real payloads and assert on HTTP response status and bodies.
+- **Library**: Exercise public interfaces through integration tests or sample scripts.
 
-Drive the app to each checklist item and capture evidence as you go:
+> [!IMPORTANT]
+> **Evidence or it didn't happen**: Every verdict must be backed by empirical evidence (screenshot, command output, status code, response time). Never assume a pass from reading source code alone.
 
-- Navigate and interact for real (click, type, submit, download) - don't assert
-  from the code what the running app would do.
-- Capture **screenshots** for visual/UI claims, **output** for CLI/API claims.
-- Watch for **console errors and failed network requests**; a clean-looking screen
-  with errors in the console is not a pass.
+---
 
-## Step 4 - report (Two-Stage Review Pattern)
+## Step 3 - Dual-Axis Independent Report
 
-Format the verification report into two explicit review stages:
+Format the report into two distinct, un-merged review axes:
 
-### Stage 1: Spec Fidelity & Acceptance Gate
-Give a line-by-line verdict for each Acceptance Criterion and "done when" item:
+```markdown
+# 🔍 Verification Report: [Feature Name]
 
-    [pass] AC-1: Download PDF saves certificate-<slug>.pdf - file downloaded, opened to cert
-    [pass] AC-2: Both buttons show a loading state - screenshot: loading-state.png
-    [fail] AC-3: PDF border missing - printBackground not set; screenshot: pdf-no-border.png
-    [skip] AC-4: Vercel deploy smoke test - can't verify locally (pending staging)
+## ⚖️ Axis 1: Standards, Architecture & Quality Gate
 
-### Stage 2: Code Quality, Security & Architecture Gate
-Report the multi-lane technical verification results:
-- **Type & Syntax**: `tsc --noEmit` (0 errors)
-- **Automated Tests**: Unit & integration tests (100% pass)
-- **Security & Hygiene**: Zero secrets, sanitized inputs
-- **Findings Ledger**: 0 blockers (P0/P1) in `devflow/context/findings.md`
+- **Technical Lanes**:
+  - [pass] Type Safety: `tsc --noEmit` (0 errors)
+  - [pass] Automated Tests: `npm test` (All tests green)
+  - [pass] Security & Hygiene: Zero secrets, sanitized inputs
+  - [pass] Findings Ledger: 0 blocking P0/P1 in `devflow/context/findings.md`
+- **Deep Modules & Architecture**:
+  - [pass] Seam Integrity: Public interfaces remain small, implementation details hidden.
+  - [pass] The Deletion Test: Complexity is concentrated inside the module, not scattered across callers.
+- **Code Smells Assessment**:
+  - [clean] 12 Fowler Code Smells evaluated across git diff: No critical smells detected.
 
-### Final Verdict & Route
-- **All Passed**: State that the feature is verified and ready for `/complete`.
-- **Any Failure**: Hand back to `/implement` with exact failure evidence and reproduction steps. Never fix issues inside `/check`.
-- **Unverifiable**: Clearly state reasons and residual risk. Never fabricate a pass.
+## 🎯 Axis 2: Spec Fidelity & Behavioral Acceptance Gate
+
+Line-by-line verification against `current-feature.md`:
+- [pass] **AC-1 (<title>)**: <Observed empirical evidence / screenshot path>
+- [pass] **AC-2 (<title>)**: <Observed empirical evidence / terminal output>
+- [fail] **AC-3 (<title>)**: <Exact observed failure with reproduction command>
+- [clean] **Scope Creep Check**: No unrequested features or unnecessary abstractions introduced.
+- [clean] **Completeness Check**: 100% of spec requirements addressed.
+
+---
+
+## 🚦 Final Routing & Verdict
+
+- **ALL PASSED**: Both axes green. Ready for `/complete`.
+- **ANY FAILURE**: Hand back to `/implement` with exact failure evidence and reproduction steps.
+- **UNVERIFIABLE**: Clearly document the gap and residual risk. Never fabricate a pass.
+```
+
+---
+
+## Why Two Independent Axes?
+
+A code change can pass one axis and fail the other:
+- **Standards Pass, Spec Fail**: Code is beautifully architected and tested, but implements the wrong business behavior.
+- **Spec Pass, Standards Fail**: Feature works end-to-end, but violates encapsulation, introduces shallow modules, or leaks secrets.
+
+Reporting both axes side-by-side stops elegance from masking functional bugs, and stops functional completeness from excusing architectural rot.
+
+---
 
 ## Rules
 
-- **Observe, don't change.** `/check` runs the app and reports. It never edits
-  source, never commits, never merges. Fixing is `/implement`'s job.
-- **Evidence or it didn't happen.** Every `pass` is backed by something observed -
-  a screenshot, output, a response. No assumed passes from reading the code.
-- **Honest over green.** "Couldn't verify" and "failed" are valid, useful results.
-  Faking a pass defeats the entire gate.
-- **Check the spec, not vibes.** Verify against the done-whens in
-  `current-feature.md`, so "works" means what the spec said it would do.
-
-## Formatting
-
-Format the output to match the project's conventions in
-`devflow/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+- **Observe, don't change**: `/check` runs the app and reports. It never edits source or commits. Fixing is `/implement`'s job.
+- **Honest over green**: "Failed" and "Could not verify" are valid, valuable outputs. Faking a pass destroys the gate.
+- **Check the spec, not vibes**: Verify against documented ACs, not subjective feelings.

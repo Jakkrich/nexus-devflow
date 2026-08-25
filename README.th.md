@@ -94,6 +94,7 @@ npx -y @jakkrichm/create-nexus-devflow@latest -y
 - [การเตรียมความพร้อมก่อน Deploy (Deployment readiness)](#การเตรียมความพร้อมก่อน-deploy-deployment-readiness)
 - [การสานต่องานเดิมอย่างต่อเนื่อง (Picking up where you left off)](#การสานต่องานเดิมอย่างต่อเนื่อง-picking-up-where-you-left-off)
 - [แผนผังโครงสร้างไฟล์ (File map)](#แผนผังโครงสร้างไฟล์-file-map)
+- [เอกสารอ้างอิงและกติกากำกับ (Documentation and governance)](#เอกสารอ้างอิงและกติกากำกับ-documentation-and-governance)
 - [การสนับสนุนและการมีส่วนร่วม (Support and contributing)](#การสนับสนุนและการมีส่วนร่วม-support-and-contributing)
 - [สัญญาอนุญาต (License)](#สัญญาอนุญาต-license)
 - [หมายเหตุและข้อควรทราบ (Notes)](#หมายเหตุและข้อควรทราบ-notes)
@@ -457,7 +458,10 @@ AI จะสร้าง Fix Spec พร้อมขั้นตอนการ�
 
 ## ตารางอ้างอิงคำสั่งทั้งหมด (Command reference)
 
-Nexus-DevFlow มาพร้อมกับ 28 Workflow Skills ครบวงจร:
+Nexus-DevFlow แจก **28 bundled Core Skills** ตาม canonical `core_skills`
+inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Personal Skills ที่เพิ่ม
+เฉพาะ workspace จะไม่ถูกนับรวมเป็น Core และไม่ติดไปกับ package ที่เผยแพร่
+จนกว่าจะได้รับการ promote อย่างชัดเจน
 
 | ทักษะ (Skill) | การเรียกใช้งาน (Invocation) | หมวดหมู่ | หน้าที่และคำอธิบาย |
 | :--- | :--- | :--- | :--- |
@@ -466,11 +470,11 @@ Nexus-DevFlow มาพร้อมกับ 28 Workflow Skills ครบวง�
 | **autopilot** | `/autopilot` / `$autopilot` | Delivery | โหมดส่งมอบงานแบบรอบเดียวจบ พร้อมตรวจสอบและแก้ปัญหาในตัว |
 | **brainstorm** | `/brainstorm` | Companion | ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม |
 | **brief** | `/brief` / `$brief` | Planning | สรุปข้อมูลฟีเจอร์ถัดไปแบบอ่านอย่างเดียวก่อนเริ่มเขียนสเปก |
-| **check** | `/check` / `$check` | QA | สวมบทบาท Senior QA ตรวจสอบการทำงานจริงและรัน Verification Matrix |
+| **check** | `/check` / `$check` | QA | ตรวจแบบ Dual-Axis: ความตรงตามสเปกจากหลักฐานจริง และมาตรฐาน/สถาปัตยกรรม/Quality Gates |
 | **ci** | `/ci` / `$ci` | DevOps | ตั้งค่าคำสั่ง Verify และสร้าง GitHub Actions Workflow สำหรับ CI |
 | **complete** | `/complete` / `$complete` | Delivery | ตรวจความปลอดภัยรอบสุดท้าย, บันทึก Release Digest, จัดเก็บประวัติ และ Squash-Merge |
 | **convert-any-to-md** | `/convert-any-to-md` | Utility | แปลงไฟล์ PDF, XLSX, DOCX, CSV, Logs ให้เป็น Markdown ใน `devflow/reference/` |
-| **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยและหาสาเหตุของปัญหาโดยไม่แตะต้องซอร์สโค้ด |
+| **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยเชิงวิทยาศาสตร์ 6 ระยะด้วย Red-capable feedback loop โดยไม่แก้ซอร์สโค้ด |
 | **devflow** | `/devflow` / `$devflow` | Router | ตัวตรวจสถานะหลัก, เราเตอร์นำทางขั้นตอน และคู่มือช่วยทำงาน |
 | **discovery** | `/discovery` / `$discovery` | Companion | สำรวจและค้นคว้าความต้องการของระบบเชิงลึกก่อนเริ่มพัฒนา |
 | **doctor** | `/doctor` / `$doctor` | Health | ตรวจสุขภาพของ Workspace, Adapters และความพร้อมของระบบ |
@@ -533,6 +537,10 @@ Nexus-DevFlow มาพร้อมกับ 28 Workflow Skills ครบวง�
 ```
 
 ระบบจะเลือก Test Runner ที่เหมาะสม (Vitest, Jest, pytest, go test), เพิ่มเคสตัวอย่างเริ่มต้น และอัปเดตคำสั่งใน `AGENTS.md` ให้ทันที
+
+การรีวิวสถาปัตยกรรมยึดหลัก **Deep Modules**: ทำ public interface ให้เล็ก,
+ซ่อนความซับซ้อนไว้หลัง seam ที่เสถียร และหลีกเลี่ยงการกระจายการแก้ไขหนึ่งเรื่องไปหลาย caller
+โดย `/check` จะตรวจแกนมาตรฐานนี้แยกจากแกนความตรงตาม Living Spec อย่างอิสระ
 
 ---
 
@@ -737,6 +745,18 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
         ├── rollbacks/         (ประวัติการย้อนคืนฟีเจอร์)
         └── HISTORY.md         (ตารางประวัติการส่งมอบงานทั้งหมด)
 ```
+
+---
+
+## เอกสารอ้างอิงและกติกากำกับ (Documentation and governance)
+
+- [คู่มือการใช้งานฉบับเต็ม](docs/USAGE.md) — วิธีปฏิบัติงานและ Core Skill inventory
+- [แผนผัง Workflow Surface](docs/workflow-surface-map.md) — คำสั่ง หมวดหมู่ และอาร์ติแฟกต์มาตรฐาน
+- [นโยบายเลือกใช้ Skill](docs/skill-selection-policy.md) — เลือก workflow หรือ companion skill ที่เล็กและตรงงาน
+- [กติกา Governance](docs/governance-rules.md) — ขอบเขต public surface และตำแหน่งเอกสารสำหรับ maintainer
+- [Markdown Metadata Contract](docs/markdown-metadata-contract.md) — ข้อกำหนด frontmatter และ semantic heading
+- [Manual Review Workflow](docs/manual-review-workflow-spec.md) — Human review gates ตั้งแต่สเปกถึงการส่งมอบ
+- [ตัวอย่าง Living Spec](docs/examples/living-spec/) — ตัวอย่าง spec, discovery, ADR และ idea artifacts
 
 ---
 

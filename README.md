@@ -94,6 +94,7 @@ The goal is not just writing code faster—it is staying firmly in control of a 
 - [Deployment readiness](#deployment-readiness)
 - [Picking up where you left off](#picking-up-where-you-left-off)
 - [File map](#file-map)
+- [Documentation and governance](#documentation-and-governance)
 - [Support and contributing](#support-and-contributing)
 - [License](#license)
 - [Notes](#notes)
@@ -457,7 +458,10 @@ Inspects the archived feature spec, identifies the exact commit, reviews later c
 
 ## Command reference
 
-Nexus-DevFlow provides 28 specialized workflow skills:
+Nexus-DevFlow ships **28 bundled Core Skills**, defined by the canonical
+`core_skills` inventory in `agent-bundle.manifest.json`. A workspace may also
+contain Local or Personal Skills, but those extensions are not part of the Core
+count and are excluded from the published package unless explicitly promoted.
 
 | Skill | Canonical Invocation | Category | Description |
 | :--- | :--- | :--- | :--- |
@@ -466,11 +470,11 @@ Nexus-DevFlow provides 28 specialized workflow skills:
 | **autopilot** | `/autopilot` / `$autopilot` | Delivery | Bounded single-pass spec/build/check with self-review and safe repair. |
 | **brainstorm** | `/brainstorm` | Companion | Structured divergent/convergent ideation with trade-off analysis. |
 | **brief** | `/brief` / `$brief` | Planning | Read-only briefing on an upcoming feature before writing spec. |
-| **check** | `/check` / `$check` | QA | Multi-lane QA verification against running application and tests. |
+| **check** | `/check` / `$check` | QA | Dual-Axis review: empirical spec fidelity plus standards, architecture, and quality gates. |
 | **ci** | `/ci` / `$ci` | DevOps | Configure Verify command and automated GitHub Actions workflow. |
 | **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and squash-merge gate. |
 | **convert-any-to-md** | `/convert-any-to-md` | Utility | Convert PDF, XLSX, DOCX, CSV, logs into clean Markdown in `devflow/reference/`. |
-| **debug** | `/debug` / `$debug` | Diagnostics | Reproduce and isolate failures without changing code state. |
+| **debug** | `/debug` / `$debug` | Diagnostics | Scientific six-phase diagnosis using a red-capable feedback loop without changing source. |
 | **devflow** | `/devflow` / `$devflow` | Router | Flagship state inspector, stage router, and workflow guide. |
 | **discovery** | `/discovery` / `$discovery` | Companion | Pre-delivery multi-turn exploration and domain research. |
 | **doctor** | `/doctor` / `$doctor` | Health | Read-only workspace health check for setup, adapters, and drift. |
@@ -533,6 +537,11 @@ To configure or normalize unit testing in your repository:
 ```
 
 Configures the stack-native runner (Vitest, Jest, pytest, go test), adds an initial example test, and updates `AGENTS.md` commands.
+
+Architecture review follows the **Deep Modules** principle: keep public
+interfaces small, hide complexity behind stable seams, and avoid spreading one
+change across many callers. `/check` evaluates this standards axis independently
+from whether the implementation satisfies the living spec.
 
 ---
 
@@ -737,6 +746,18 @@ When starting a new session or resuming after clearing context:
         ├── rollbacks/         (completed rollback records)
         └── HISTORY.md         (master release history ledger table)
 ```
+
+---
+
+## Documentation and governance
+
+- [Comprehensive usage guide](docs/USAGE.md) — full operating instructions and Core Skill inventory.
+- [Workflow surface map](docs/workflow-surface-map.md) — canonical commands, categories, and artifacts.
+- [Skill selection policy](docs/skill-selection-policy.md) — choose the smallest appropriate workflow or companion skill.
+- [Governance rules](docs/governance-rules.md) — public-surface and documentation placement rules for maintainers.
+- [Markdown metadata contract](docs/markdown-metadata-contract.md) — frontmatter and semantic heading requirements.
+- [Manual review workflow](docs/manual-review-workflow-spec.md) — human review gates from spec through delivery.
+- [Living Spec examples](docs/examples/living-spec/) — reference artifacts for specs, discoveries, ADRs, and ideas.
 
 ---
 
