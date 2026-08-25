@@ -32,6 +32,10 @@ The installer overlays the DevFlow workflow layer into your workspace:
 - `devflow/context/` (Living spec & active delivery context)
 - `devflow/history/` (Categorized delivery archives)
 
+The 28 names come from the canonical bundled inventory. Local or Personal Skills
+may coexist in a maintainer workspace, but the package builder excludes them
+unless they are explicitly promoted into that inventory.
+
 ---
 
 ## ⚡ The Unified 4-Stage Living Spec Lifecycle
@@ -44,7 +48,7 @@ All development tasks execute through the 4-stage single living spec lifecycle:
 
 1. **`feature` / `fix` (`/feature`, `/fix`)**: Combines Discover, Define, Spec, and Plan. Allocates sequential ID (`xxx-slug`) and initializes the **Single Living Spec (`devflow/context/current-feature.md`)**.
 2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with strict **TDD discipline (Red-Green-Refactor)**.
-3. **`check` (`/check`)**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof).
+3. **`check` (`/check`)**: Dual-Axis review combining empirical spec fidelity with independent standards, architecture, and quality gates.
 4. **`complete` (`/complete`)**: Final safety pass, records Release Digest, auto-archives living spec to `devflow/history/`, resets the stub, and manages the git delivery gate.
 
 ---
@@ -55,6 +59,17 @@ All development tasks execute through the 4-stage single living spec lifecycle:
 - **`/grill`** (or **`/align`**): Socratic alignment & domain modeling; records Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
 - **`/brainstorm`**: Structured divergent/convergent ideation with trade-off analysis.
 - **`/discovery`**: Deep inception and exploratory discovery (`devflow/discoveries/DISC-xxx.md`).
+
+For failures, `/debug` follows a scientific six-phase diagnosis built around a
+red-capable feedback loop and does not modify source. Architecture review follows
+Deep Modules principles: small public interfaces, hidden implementation
+complexity, and stable seams.
+
+Maintainer contracts and examples are available in the repository:
+[governance rules](https://github.com/Jakkrich/nexus-devflow/blob/main/docs/governance-rules.md),
+[Markdown metadata](https://github.com/Jakkrich/nexus-devflow/blob/main/docs/markdown-metadata-contract.md),
+[manual review workflow](https://github.com/Jakkrich/nexus-devflow/blob/main/docs/manual-review-workflow-spec.md), and
+[Living Spec examples](https://github.com/Jakkrich/nexus-devflow/tree/main/docs/examples/living-spec).
 
 ---
 

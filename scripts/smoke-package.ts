@@ -3,6 +3,10 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  inspectAdapterSkillInventory,
+  loadCoreSkillInventory
+} from "../packages/create-nexus-devflow/lib/core-skill-inventory.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -50,20 +54,20 @@ async function smokeTestPackage(): Promise<void> {
       await fs.stat(path.join(tempDir, rel));
     }
 
-    // Verify maintainer-only skills are NOT present in client template
-    let leakedMaintainer = false;
-    try {
-      await fs.stat(path.join(tempDir, ".agents", "skills", "sync-upstream"));
-      leakedMaintainer = true;
-    } catch {
-      // expected not to exist
+    const inventory = await loadCoreSkillInventory(
+      path.join(rootDir, "agent-bundle.manifest.json")
+    );
+    const installedSkills = await inspectAdapterSkillInventory(tempDir, inventory);
+    for (const adapter of [".agents", ".claude"] as const) {
+      const state = installedSkills[adapter];
+      if (state.missingCore.length > 0 || state.localExtensions.length > 0) {
+        throw new Error(
+          `${adapter}/skills package inventory mismatch: missing=[${state.missingCore.join(", ")}], local=[${state.localExtensions.join(", ")}]`
+        );
+      }
     }
 
-    if (leakedMaintainer) {
-      throw new Error("Maintainer skill 'sync-upstream' leaked into client installation!");
-    }
-
-    console.log("\n[SUCCESS] Package smoke test passed!");
+    console.log(`\n[SUCCESS] Package smoke test passed with ${inventory.count} Core Skills per adapter!`);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
     await fs.rm(tgzPath, { force: true });

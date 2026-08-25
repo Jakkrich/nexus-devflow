@@ -8,7 +8,7 @@ This guide provides full operating instructions for **Nexus-DevFlow 2.5.0 (The 3
 
 Nexus-DevFlow structures development history and active context into three distinct temporal pillars:
 
-1. **🔮 Future (Backlog)**: [`devflow/ideas.md`](file:///d:/Projects/devtools/nexus-devflow/devflow/ideas.md)
+1. **🔮 Future (Backlog)**: [`devflow/ideas.md`](../devflow/ideas.md)
    - Centralized Idea Inbox with AI feasibility, value scoring, and priority tagging (`[IDEA-xxx]`).
    - Quick idea capture via `/idea {description}`.
 2. **⚡ Present (Active Context)**: `devflow/context/`
@@ -34,7 +34,7 @@ All development tasks execute through the progressive 4-stage single living spec
 | :--- | :--- | :--- | :--- |
 | **1. Spec** | `/feature {title}`<br>`/fix {bug}` | `context/current-feature.md` | Allocates sequential ID (`xxx-slug`), writes living spec with 6 structured sections behind review gate. |
 | **2. Build** | `/implement` | `context/current-feature.md` | Executes tasks incrementally with strict TDD discipline (Red-Green-Refactor) and evidence recording. |
-| **3. Verify**| `/check` | `context/current-feature.md` | Senior QA verification matrix (Typecheck, Lint, Test suites, and behavioral manual proof). |
+| **3. Verify**| `/check` | `context/current-feature.md` | Dual-Axis review: empirical spec fidelity plus independent standards, architecture, and quality gates. |
 | **4. Deliver** | `/complete` | `history/{cat}/{xxx-slug}.md` | Final safety audit, records Release Digest, archives living spec, squash-merges branch, and resets stub. |
 
 ---
@@ -56,13 +56,17 @@ Before committing to delivery, use specialized companion skills:
 
 ## 4. Core Skills Inventory (28 Skills)
 
-DevFlow provides **28 Core Skills** synchronized 1:1 across `.agents/skills/` (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code):
+DevFlow ships **28 bundled Core Skills** from the ordered `core_skills` inventory
+in `agent-bundle.manifest.json`, synchronized 1:1 across `.agents/skills/`
+(Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code). Local or
+Personal Skills may coexist in a workspace, but are excluded from the Core count
+and package template until explicitly promoted.
 
 ### A. Lifecycle Delivery Skills
 - `feature`: Turn a build-plan item or new idea into a single living spec (`devflow/context/current-feature.md`).
 - `fix`: Document and spec an ad-hoc bug or issue into `current-feature.md`.
 - `implement`: Step-by-step TDD implementation behind review gates.
-- `check`: Senior QA verification matrix against the running app.
+- `check`: Dual-Axis verification of observable spec behavior and independent architecture/standards quality.
 - `complete`: Final safety audit, Conventional Commit, archiving, and branch delivery gate.
 - `rollback`: Plan a safe reversal of a completed feature preserving history.
 
@@ -86,13 +90,29 @@ DevFlow provides **28 Core Skills** synchronized 1:1 across `.agents/skills/` (C
 - `prototype`: Static HTML/CSS prototype mockups.
 - `status`: Progress summary and next action inspector.
 - `try`: Manual review testing guide.
-- `debug`: Non-intrusive defect isolation and root-cause analysis.
+- `debug`: Scientific six-phase diagnosis built around a deterministic red-capable feedback loop.
 - `report-html`: Generate interactive standalone HTML report dashboard.
 - `convert-any-to-md`: Document conversion utility into markdown.
 
 ---
 
-## 5. Web Dashboard & CLI Management
+## 5. Quality, Governance & Authoring Contracts
+
+- [Workflow surface map](workflow-surface-map.md): canonical command taxonomy and artifacts.
+- [Skill selection policy](skill-selection-policy.md): choose the smallest suitable workflow surface.
+- [Governance rules](governance-rules.md): public-surface and documentation placement rules.
+- [Markdown metadata contract](markdown-metadata-contract.md): frontmatter and semantic heading requirements.
+- [Manual review workflow](manual-review-workflow-spec.md): review gates from spec through delivery.
+- [Living Spec examples](examples/living-spec/): reference specs, discoveries, ADRs, and ideas.
+
+`/check` applies the Deep Modules standard independently from spec fidelity:
+small public interfaces, hidden complexity, stable seams, and no speculative
+abstraction. `/debug` diagnoses first and hands confirmed repairs to `/fix` or
+`/implement`; it does not edit source during diagnosis.
+
+---
+
+## 6. Web Dashboard & CLI Management
 
 ```bash
 # Launch interactive Local Dashboard (0ms SSR Hydration & Git Cache)

@@ -14,16 +14,40 @@
 
 ---
 
-## 2. CLI Architecture & Engineering Principles
+## 2. CLI Architecture & Deep Modules Philosophy
 
-- **Separation of Concerns (Deep Modules & Information Hiding)**:
+- **Deep Modules Principles (John Ousterhout Philosophy)**:
+  - **Module**: Anything with an interface and an implementation (function, class, package, or subsystem).
+  - **Interface**: Everything a caller must know to use the module correctly (types, invariants, ordering, error modes, configuration).
+  - **Implementation**: The hidden body of code inside the module.
+  - **Depth (High Leverage)**: A module is **Deep** when a large amount of complex behavior sits behind a small, simple interface. A module is **Shallow** (to be avoided) when its interface is nearly as complex as its implementation.
+  - **Seam**: The clean architectural location where an interface lives.
+  - **Adapter**: A concrete implementer satisfying the interface at a seam.
+  - **The Deletion Test**: Imagine deleting the module. If complexity concentrates across N callers, it was earning its keep (Deep). If complexity simply vanishes or moves, it was a pass-through (Shallow).
+  - **Designing for Testability**:
+    - *Accept dependencies, don't instantiate them inside.*
+    - *Return results, minimize unobservable side effects.*
+    - *Small surface area: fewer methods and simple parameter objects.*
+- **Separation of Concerns (Information Hiding)**:
   - Keep CLI entry points (`bin/create-nexus-devflow.ts`) thin: handle argument parsing, option normalization, and terminal formatting.
   - Encapsulate all core business logic, filesystem operations, and parsing inside modular libraries (`lib/current-work.ts`, `lib/findings.ts`, `lib/git.ts`, `lib/uninstall.ts`, `lib/update.ts`).
-  - **Deep Modules**: Strive for simple, narrow interfaces that hide extensive implementation complexity internally.
 - **Refactoring & Code Simplification (Simplify Discipline)**:
   - **Early Returns**: Guard conditions should exit early to eliminate deep nesting.
   - **Single Responsibility (SRP)**: Functions should do one cohesive thing and stay under 50 lines whenever possible.
   - **Pure Functions**: Favor deterministic functions without side effects for data transformation and parsing.
+- **Baseline 12 Fowler Code Smells (Continuous Refactoring)**:
+  - **Mysterious Name**: Names that don't reveal what they do -> Rename with clear intention.
+  - **Duplicated Code**: Identical or similar logic shapes -> Extract shared helper.
+  - **Feature Envy**: Method reaching into another object's data -> Move method onto that data.
+  - **Data Clumps**: Same 3+ fields traveling together -> Bundle into a cohesive type.
+  - **Primitive Obsession**: Raw string/number representing a domain concept -> Define a branded/domain type.
+  - **Repeated Switches**: Duplicate `switch`/`if` cascades -> Use polymorphism or lookup map.
+  - **Shotgun Surgery**: One change forcing scattered edits in many files -> Unify into one deep module.
+  - **Divergent Change**: One file edited for multiple unrelated reasons -> Split responsibilities.
+  - **Speculative Generality**: Hooks/params added for hypothetical needs -> Delete and inline until needed.
+  - **Message Chains**: Long `a.b().c().d()` navigation -> Hide behind a method on the root object.
+  - **Middle Man**: Class/function that only delegates -> Remove and call target directly.
+  - **Refused Bequest**: Subclass ignoring inherited methods -> Replace inheritance with composition.
 - **Safety Flags & Idempotency**:
   - Destructive or mutating operations (e.g. `uninstall`, `update`, `install`) must support safety flags:
     - `--dry-run`: Preview actions and affected files without modifying the disk.
@@ -109,7 +133,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
   - Never claim a task is "working", "tested", or "verified" without providing concrete empirical proof (exact command executed, terminal output, pass/fail counts, exit code).
 - **Two-Stage Review Pattern (Verification Gate)**:
   - **Stage 1: Spec Fidelity & Acceptance Gate**:
-    - Verify 100% conformance against the living spec (`current-feature.md` or `20-spec.md`).
+    - Verify 100% conformance against the Single Living Spec (`current-feature.md`).
     - Validate all Acceptance Criteria (ACs) and "Done When" observables without missing requirements or scope creep.
     - Test edge cases and boundary conditions defined in the specification.
   - **Stage 2: Code Quality, Security & Architecture Gate**:
