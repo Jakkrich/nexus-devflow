@@ -1,4 +1,4 @@
-# DevFlow 2.5.0 Running ID & 3-Pillars Workspace Contract
+# DevFlow 2.6.0 Running ID & 3-Pillars Multi-Run Context Contract
 
 ## The 3-Pillars Workspace Architecture
 
@@ -7,15 +7,23 @@ All DevFlow framework assets are organized into three clean pillars representing
 ```text
 devflow/
 ├── 🔮 ideas.md                 # [1. Future / Backlog] Centralized Idea Inbox with AI scoring
+├── 🗺️ project-plan.md          # [1. Future] Master product roadmap and system vision
+├── 📋 build-plan.md            # [1. Future] User-owned feature queue and sizing
 │
-├── ⚡ context/                  # [2. Present / Active] Living Source of Truth & Active Work
+├── ⚡ context/                  # [2. Present / Active] Living Source of Truth & Multi-Run Contexts
 │   ├── project-overview.md     # Primary source of truth for project architecture and tech stack
 │   ├── coding-standards.md     # Engineering, code quality, TDD, and testing standards
 │   ├── ai-interaction.md       # AI agent interaction rules, unified living spec flow, and Thai defaults
-│   ├── findings.md             # Open and resolved audit findings ledger (P0-P3)
 │   ├── glossary.md             # Domain glossary and architecture vocabulary
+│   ├── current-feature.md      # Active Living Spec pointer / legacy fallback
 │   ├── current-stage.md        # Active state pointer and run tracker
-│   └── current-feature.md      # Single Living Spec (Active work / stub when idle)
+│   ├── findings.md             # Shared/default audit findings ledger (P0-P3)
+│   │
+│   ├── {xxx-slug}/             # Active Run Workspace & Spec Queue (Multi-Run Active Task)
+│   │   ├── spec.md             # Living Spec + Checklist for this run
+│   │   ├── stage.md            # Runtime stage, track, and branch pointer
+│   │   └── findings.md         # Dedicated audit findings ledger for this run
+│   └── ...
 │
 ├── 📦 history/                  # [3. Past / Completed] Permanent Delivery & Release Archives
 │   ├── features/               # Completed features, architecture migrations, tooling (xxx-slug.md)
@@ -32,9 +40,9 @@ devflow/
 ## Running ID Naming Convention
 
 ### 1. Standard Running IDs
-- **Format**: `xxx-slug` (e.g. `001-setup-auth`, `053-unify-deep-and-fast-track-model`)
+- **Format**: `xxx-slug` (e.g. `001-setup-auth`, `058-multi-run-context-architecture`)
 - **Prefix Removal**: The legacy `RUN-` prefix is discontinued in favor of clean 3-digit sequential numbering.
-- **Git Branch Standard**: `feature/{xxx-slug}` or `fix/{xxx-slug}` (or specific release branches such as `2.5.0`).
+- **Git Branch Standard**: `feature/{xxx-slug}` or `fix/{xxx-slug}` (or specific release branches such as `2.6.0`).
 
 ### 2. Sub-Feature Running IDs (`xxx[a-z]-slug`)
 - **Format**: `xxx[a-z]-slug` (e.g. `038a-backend-schema-and-api`, `038b-frontend-ui-and-state`)
@@ -44,19 +52,15 @@ devflow/
 
 ---
 
-## Multi-Factor Sizing Heuristic & Splitting Engine
+## Multi-Run Spec Queue & Selective Execution Rule
 
-A feature is considered **Oversized (`L` or `XL`)** and recommended for sub-feature splitting when any of the following conditions are met:
-1. **Files Touched**: Predicted to modify or create $\ge 6$ files.
-2. **Architectural Layers**: Crosses $\ge 3$ distinct layers (e.g. Database Migrations + Backend APIs + Frontend UI + State Store).
-3. **Task Complexity**: Contains $\ge 6$ checklist tasks or involves heavy multi-service integrations.
+1. **Spec-Ahead & Non-blocking Drafting**:
+   - `/feature [id / title]` and `/fix [title]` create dedicated run folders at `devflow/context/{xxx-slug}/`.
+   - Creating a spec does **not block** drafting additional specs. Multiple specs can reside in `devflow/context/` simultaneously.
+2. **Selective Execution (`/implement [id]`)**:
+   - Spec execution can be invoked targeting a specific ID (e.g. `/implement 12`, `/implement 012`, or `/implement kanban`).
+   - The AI checks out the matching git branch `feature/{xxx-slug}`, loads only that run's `spec.md` and global context, and executes tasks with Strict TDD.
+3. **Dedicated Quality Ledger & Safe Archival (`/complete [id]`)**:
+   - Each run maintains its own `findings.md` within `devflow/context/{xxx-slug}/`.
+   - `/complete` compiles the living spec, archives it to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, removes `devflow/context/{xxx-slug}/`, updates `HISTORY.md` and `build-plan.md`, and prompts for squash-merge/PR.
 
-When detected during `/feature` or `/brief`, the AI triggers the **Interactive Split Gate**, proposing a clean `4a`, `4b` sub-feature breakdown before opening the first spec.
-
----
-
-## Single Active Run Rule (One Thing at a Time)
-
-1. Only **one active run** is permitted at any given time in `current-feature.md`.
-2. Before opening a new run (`/feature` or `/fix`), the AI checks `current-stage.md` and `current-feature.md`.
-3. If an active run is in progress, the AI **blocks** starting a new task and requires closing the active run via `/complete` (or explicitly cancelling/rolling back).

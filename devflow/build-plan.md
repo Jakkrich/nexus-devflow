@@ -84,6 +84,16 @@
   - *Dependencies*: ADR-001
   - *Scope*: รวมความสามารถเชิงสถาปัตยกรรมระดับลึกของ Deep-Track เข้าสู่ 4 ขั้นตอนหลักของ Fast-Track บนเอกสาร Single Living Spec (`current-feature.md`) จัดเก็บประวัติแบบ Single Archive (`.md`), ปลดระวาง stage skills 10-70 ที่ซ้ำซ้อน, และปรับปรุงเอกสาร & Schemas ทั้งหมด
 
+---
+
+## 🚀 Phase 11: Multi-Run Context Architecture & Spec Queue Engine
+
+- [x] **11. Multi-Run Context Architecture & Spec Queue Engine (`IDEA-026`, `DISC-20260826-001`)** `[Size: M]`
+  - *Dependencies*: Feature 10, Feature 3
+  - *Scope*: แยกจัดเก็บ Task-Specific Context เป็นโฟลเดอร์ย่อยใน `devflow/context/{xxx-slug}/`, พัฒนา Context Resolver สำหรับสลับและเรียกใช้งาน `/implement <id>`, `/check <id>`, `/complete <id>` แบบระบุ Running ID หรือ Fuzzy Match, และอัปเกรด CLI/Dashboard/Skills ให้รองรับ Spec Queue หลายรันพร้อมกัน
+
+
+
 
 
 

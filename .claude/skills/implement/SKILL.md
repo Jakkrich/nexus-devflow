@@ -1,9 +1,10 @@
 ---
 name: implement
-description: "[devflow][F] Build the feature, fix, or rollback spec'd in devflow/context/current-feature.md, one small reviewable step at a time. Creates the matching branch, implements each step, shows the diff and explains it in plain English, tests, and iterates until it works. Type: Rollback specs use a guarded reverse patch that preserves Blueprint history. After each approved step it offers an optional commit checkpoint on the branch; the work-level commit, merge, and logging are /complete's job. Use when the user runs /implement, or asks to build, implement, or start the current feature, fix, or rollback once its spec is ready."
+description: "[devflow][F] Build the feature, fix, or rollback spec, one small reviewable step at a time with Strict TDD. Supports Multi-Run: given an optional ID or name (/implement 12, /implement 012), targets that spec from devflow/context/{xxx-slug}/. Checks out matching branch, runs pre-flight drift revalidation, executes TDD steps with diffs, and offers commit checkpoints. Use when running /implement, or starting work on a spec."
+argument-hint: "[{run-id, number, or name}]"
 ---
 
-# implement - build the current spec, one reviewed step at a time
+# implement - build the target spec, one reviewed step at a time
 
 Where this sits in the workflow:
 
@@ -12,7 +13,7 @@ Where this sits in the workflow:
                                         reviewed)        merge + log)
 
 `/feature`, `/fix`, or `/rollback` wrote the spec to
-`devflow/context/current-feature.md` and stopped.
+`devflow/context/{xxx-slug}/spec.md` (or `devflow/context/current-feature.md`) and stopped.
 This skill turns that spec into code, following the build loop in
 `devflow/context/ai-interaction.md`, without vibe coding: small steps, a visible diff plus
 a plain-English explanation for each, testing, and iteration until it works, all
@@ -20,9 +21,14 @@ behind your approval. It builds on a branch and offers an optional commit
 checkpoint after each step; the work-level commit, merging, and logging are
 `/complete`'s job.
 
+## Multi-Run Target Resolution
+
+- **Given an ID or name** (e.g. `/implement 12`, `/implement 012`, `/implement kanban`) -> locates the matching run folder `devflow/context/{xxx-slug}/`, checks out `feature/{xxx-slug}`, and loads only that run's `spec.md`.
+- **With no argument** (`/implement`) -> checks current git branch, or auto-picks if only 1 spec is active, or prompts the user if multiple specs are queued.
+
 ## Before you start
 
-Read `devflow/context/current-feature.md`. If it has no real spec (still the stub, or its
+Read the target spec from `devflow/context/{xxx-slug}/spec.md` (or `devflow/context/current-feature.md`). If it has no real spec (still the stub, or its
 status is already complete), stop and tell the user to run `/feature` (for a
 planned feature), `/fix` (for an ad-hoc bug or change), or `/rollback` (for a
 completed feature reversal) first. Pull the

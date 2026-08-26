@@ -55,6 +55,19 @@
 
 ---
 
+### [IDEA-026] Multi-Run Context Architecture & Spec Queue Engine
+- **บันทึกเมื่อ**: 2026-08-26
+- **ไอเดียตั้งต้น**: รองรับการสร้าง/เขียน Spec ทิ้งไว้ล่วงหน้าแบบหลายงานพร้อมกัน (`devflow/contexts/{xxx-slug}/`) และสามารถเรียก `/implement <id>`, `/check <id>`, `/complete <id>` แบบระบุเลขรันได้
+- **AI Feasibility & Tech**: **ปานกลาง-สูง (High Feasibility)** — แยก Global Context ออกจาก Task-Specific Context พร้อมอัปเกรด Context Resolver และ CLI
+- **Value & Potential**: **สูงสุด (Architecture Evolution)** — ปลดล็อก Batch Spec Planning, Multi-Agent Swarm Concurrency และลด Friction ในการสลับงาน
+- **Quick Seed (กันลืม)**:
+  1. แยก `devflow/context/` (Global) และ `devflow/contexts/{xxx-slug}/` (Task-specific: `spec.md`, `stage.md`, `findings.md`)
+  2. อัปเกรดคำสั่ง `/implement 12`, `/implement 012` ให้ค้นหาและสลับไปยัง context ที่ถูกต้อง
+  3. เพิ่ม Pre-flight Spec Revalidation ป้องกัน Spec Drift
+- **สถานะ**: `In Discovery (DISC-20260826-001)` (หยิบไปทำได้ด้วย `/feature DISC-20260826-001`)
+
+---
+
 ## 📦 Archived / Shipped Ideas
 
 - [x] **[IDEA-025]** Unified Dual-Track Root Switch & Context Auto-Sync Engine — *Claimed in `041-unified-track-root-switch` (2026-08-22)*
