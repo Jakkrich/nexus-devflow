@@ -30,10 +30,10 @@ Gather these, then summarize. Do not dump file contents.
 1. **Required DevFlow files**
    - Confirm `AGENTS.md`, `devflow/project-plan.md`,
      `devflow/build-plan.md`, and `devflow/context/` exist.
-   - Confirm `devflow/context/coding-standards.md`,
-     `devflow/context/ai-interaction.md`,
-     `devflow/context/current-feature.md`, and
-     `devflow/context/project-overview.md` exist.
+   - Confirm `devflow/context/project-overview.md`,
+     `devflow/context/coding-standards.md`,
+     `devflow/context/ai-interaction.md`, and
+     `devflow/context/glossary.md` exist.
    - Confirm `devflow/history/features/` and `devflow/history/fixes/` exist.
      When the rollback skill is installed, also check
      `devflow/history/rollbacks/`. A missing rollback folder on a legacy
@@ -129,16 +129,12 @@ Gather these, then summarize. Do not dump file contents.
    - If either planning file appears newer than the overview by filesystem time,
      call the overview possibly stale and suggest `/overview` before feature work.
 7. **Current workflow state**
-   - Check whether `devflow/context/current-feature.md` is the reset stub or an
-     active feature, fix, or rollback spec.
+   - Scan `devflow/context/{xxx-slug}/` for active task directories and specs.
    - If a spec is active, report checked and unchecked implementation steps.
-   - If `current-feature.md` is the reset stub but git has source or workflow
+   - If no active task directory exists in `devflow/context/` but git has source or workflow
      changes, warn that work is happening without an active spec.
    - Flag active spec on `main`, all spec steps checked but no completion, or a
-     branch that does not match `feature/`, `fix/`, or `rollback/` for the spec
-     type. For a feature, also flag a mismatch with the next unchecked
-     build-plan item. For a rollback, confirm its target is a checked item and do
-     not compare it to the next unchecked item.
+     branch that does not match `feature/{xxx-slug}`, `fix/{xxx-slug}`, or `rollback/{xxx-slug}`.
 8. **Git**
    - Report current branch, clean vs dirty working tree, rough changed-file count,
      last commit subject, and whether the branch is ahead of upstream.

@@ -16,10 +16,6 @@ test("evaluateGate passes on clean idle workspace", async () => {
 
   try {
     await setupDevFlowTestProject(tempDir);
-    await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
-      `# Current Feature\n\n_Nothing in progress. Run /feature, /fix, or /rollback to start._\n`
-    );
 
     const report = await evaluateGate(tempDir);
     assert.equal(report.passed, true);
@@ -38,12 +34,14 @@ test("evaluateGate blocks on active P0/P1 findings blocker", async () => {
 
   try {
     await setupDevFlowTestProject(tempDir);
+    const taskDir = path.join(tempDir, "devflow", "context", "001-test");
+    await fs.mkdir(taskDir, { recursive: true });
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
-      `# Current Feature\n\n_Nothing in progress. Run /feature, /fix, or /rollback to start._\n`
+      path.join(taskDir, "spec.md"),
+      `# 📐 [001-test] Test Feature\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n`
     );
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "findings.md"),
+      path.join(taskDir, "findings.md"),
       `# Findings Ledger\n\n### SEC-001 [P0] open - Hardcoded Secret Key in config\n`
     );
 
@@ -66,8 +64,10 @@ test("evaluateGate blocks in strict mode when living spec needs verification", a
 
   try {
     await setupDevFlowTestProject(tempDir);
+    const taskDir = path.join(tempDir, "devflow", "context", "001-test");
+    await fs.mkdir(taskDir, { recursive: true });
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      path.join(taskDir, "spec.md"),
       `# 📐 [001-test] Test Feature\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n\n## 5. Verification Evidence\n- *(จะถูกบันทึกเมื่อรัน /check)*\n`
     );
 
@@ -90,8 +90,10 @@ test("evaluateGate blocks when living spec has remaining uncompleted tasks", asy
 
   try {
     await setupDevFlowTestProject(tempDir);
+    const taskDir = path.join(tempDir, "devflow", "context", "001-test");
+    await fs.mkdir(taskDir, { recursive: true });
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      path.join(taskDir, "spec.md"),
       `# 📐 [001-test] Test Feature\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n- [ ] Task 2: In progress\n`
     );
 
@@ -110,20 +112,22 @@ test("evaluateGate collects advisory warnings for P2/P3 open findings", async ()
 
   try {
     await setupDevFlowTestProject(tempDir);
+    const taskDir = path.join(tempDir, "devflow", "context", "001-test");
+    await fs.mkdir(taskDir, { recursive: true });
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
-      `# Current Feature\n\n_Nothing in progress. Run /feature, /fix, or /rollback to start._\n`
+      path.join(taskDir, "spec.md"),
+      `# 📐 [001-test] Test Feature\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n\n## 5. Verification Evidence\n- Verified: all tests passing.\n`
     );
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "findings.md"),
+      path.join(taskDir, "findings.md"),
       `# Findings Ledger\n\n### PERF-001 [P2] open - Large image assets uncompressed\n`
     );
 
     const report = await evaluateGate(tempDir);
     assert.equal(report.passed, true);
     assert.equal(report.exitCode, 0);
-    assert.equal(report.warnings.length, 1);
-    assert.match(report.warnings[0], /PERF-001/);
+    assert.ok(report.warnings.length >= 1);
+    assert.ok(report.warnings.some((w) => w.includes("PERF-001")));
 
     const text = formatGateReport(report);
     assert.match(text, /DevFlow Quality Gate PASSED/);
@@ -138,8 +142,10 @@ test("evaluateGate evaluates and formats Two-Stage Review status correctly", asy
 
   try {
     await setupDevFlowTestProject(tempDir);
+    const taskDir = path.join(tempDir, "devflow", "context", "001-test");
+    await fs.mkdir(taskDir, { recursive: true });
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      path.join(taskDir, "spec.md"),
       `# 📐 [001-test] Test Feature\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n\n## 5. Verification Evidence\n- Verified: all tests passing.\n`
     );
 

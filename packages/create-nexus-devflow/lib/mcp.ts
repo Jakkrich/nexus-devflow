@@ -197,11 +197,11 @@ export const DEVFLOW_MCP_TOOLS: McpToolDefinition[] = [
       properties: {
         autoAddUndocumented: {
           type: "boolean",
-          description: "When true, automatically adds undocumented files into current-feature.md (default: true)"
+          description: "When true, automatically adds undocumented files into active living spec (default: true)"
         },
         healStage: {
           type: "boolean",
-          description: "When true, heals current-stage.md to match active branch (default: true)"
+          description: "When true, heals stage pointer to match active branch (default: true)"
         }
       }
     }
@@ -384,7 +384,7 @@ export async function handleToolCall(
             fullPath = path.join(projectRoot, "devflow", "context", "coding-standards.md");
             break;
           case "findings":
-            fullPath = contextPaths.findingsPath;
+            fullPath = contextPaths.findingsPath || path.join(projectRoot, "devflow", "context", "findings.md");
             break;
           case "ideas":
             fullPath = path.join(projectRoot, "devflow", "ideas.md");

@@ -76,7 +76,7 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
 ### Decision & Approval Gate:
 Set one visible decision:
 - `Proceed`: Enough value and evidence exist to define delivery work:
-  - Handoff to `/feature {discovery_id}` or `/fix {discovery_id}` to create the Single Living Spec in `devflow/context/current-feature.md`.
+  - Handoff to `/feature {discovery_id}` or `/fix {discovery_id}` to create the Task-Isolated Living Spec in `devflow/context/{xxx-slug}/spec.md`.
 - `Defer`: The idea remains relevant but timing or evidence is not ready.
 - `Reject`: The idea should not proceed under current framing.
 
@@ -85,5 +85,5 @@ Set one visible decision:
 ## Next Workflow Recommendations
 
 - **From Macro Project Mode**: Run `/overview` to compile context into `devflow/context/project-overview.md`.
-- **From Micro Pre-Flight (Approved Proceed)**: Run `/feature {discovery_id}` or `/fix {discovery_id}` to start the Single Living Spec lifecycle.
+- **From Micro Pre-Flight (Approved Proceed)**: Run `/feature {discovery_id}` or `/fix {discovery_id}` to start the Task-Isolated Living Spec lifecycle.
 - **From Micro Pre-Flight (Defer / Reject)**: No next command needed.

@@ -23,10 +23,10 @@ merge, push, or run destructive commands.
 Optional scope:
 
 - no argument: use the active feature, fix, or rollback in
-  `devflow/context/current-feature.md`
+  `devflow/context/{xxx-slug}/spec.md`
 - `latest`: use the most recent archive under `devflow/history/features/`,
   `devflow/history/fixes/`, or `devflow/history/rollbacks/`
-- a step name or number: focus the guide on that current-feature step
+- a step name or number: focus the guide on that active step
 - a path, route, or command: include it as the main thing to try
 
 If there is no active feature and no useful archive, ask what change the user
@@ -37,16 +37,15 @@ wants to try instead of guessing.
 Read:
 
 - `AGENTS.md`
-- `devflow/context/current-feature.md`
+- `devflow/context/{xxx-slug}/spec.md` (or active task workspace)
 - `devflow/context/project-overview.md`
 - `devflow/context/coding-standards.md`
 - `devflow/build-plan.md`
 - latest files under `devflow/history/features/`,
-  `devflow/history/fixes/`, and `devflow/history/rollbacks/`, if the current
-  feature is reset
+  `devflow/history/fixes/`, and `devflow/history/rollbacks/`, if no task is active
 - git branch and working tree status
 
-Prefer the active spec. If `current-feature.md` is the reset stub, use the most
+Prefer the active task spec. If no active task directory exists, use the most
 recent archived feature, fix, or rollback by filename or modification time and
 say that is what you used.
 

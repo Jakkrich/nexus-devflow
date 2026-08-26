@@ -38,11 +38,11 @@ Common forms:
 - `resume`: continue the current feature on its existing branch.
 
 If the requested target conflicts with a feature already in progress, stop and
-ask which one should win. Do not overwrite `devflow/context/current-feature.md`
+ask which one should win. Do not overwrite task workspaces
 silently.
 
 Rollback is intentionally excluded from Autopilot. If the request is a rollback
-or `current-feature.md` is marked `Type: Rollback`, stop and direct the user to
+or active spec is marked `Type: Rollback`, stop and direct the user to
 the reviewed `/implement` path. Reversing completed work requires the explicit
 dependency and conflict gates in `/rollback` and `/implement`.
 
@@ -54,8 +54,8 @@ Read the same state `/status` reads:
 - `devflow/project-plan.md`
 - `devflow/build-plan.md`
 - `devflow/context/project-overview.md`
-- `devflow/context/current-feature.md`
-- `devflow/context/findings.md`
+- `devflow/context/{xxx-slug}/spec.md` (when present)
+- `devflow/context/{xxx-slug}/findings.md` (when present)
 - `devflow/context/coding-standards.md`
 - `devflow/context/ai-interaction.md`
 - git branch, status, and recent log
@@ -67,7 +67,7 @@ Stop before changing files when:
 - The repo is not a git repo.
 - The working tree is dirty and there is no current feature tying those changes
   to this run.
-- `current-feature.md` has real work and the user requested a different target.
+- Active task spec has real work and the user requested a different target.
 - `project-overview.md` is missing or stale and the planning docs are not clear
   enough to regenerate it.
 - The next feature is visual or replication-heavy and no design reference exists.
@@ -80,14 +80,14 @@ final packet.
 
 ## Step 2 - choose or write the spec
 
-If `devflow/context/current-feature.md` already contains an active spec,
+If `devflow/context/{xxx-slug}/spec.md` already contains an active spec,
 resume it. Read checked steps and continue from the first unchecked step.
 
 If there is no active spec:
 
 1. Use the `/feature` behavior for a planned feature, or `/fix` behavior for a
    requested fix.
-2. Write `devflow/context/current-feature.md`.
+2. Create workspace and write `devflow/context/{xxx-slug}/spec.md`.
 3. Red-team the spec before building:
    - missing unhappy paths
    - oversized steps
@@ -101,32 +101,22 @@ If there is no active spec:
 Autopilot may continue past this spec gate because the user explicitly invoked
 Autopilot. Still report what the critique changed in the final packet.
 
-## Step 3 - create or reuse the branch
+## Step 3 - branch
 
-Use the same branch rules as `/implement`:
+Create or check out the branch for the work:
 
-- Feature: `feature/<name>`
-- Fix: `fix/<name>`
+- `feature/{xxx-slug}` for a planned feature
+- `fix/{xxx-slug}` for an ad-hoc fix
 
-If the branch already exists, switch to it only if it matches the active spec.
-If switching branches would strand unrelated dirty work, stop and report the
-problem.
+If the branch already exists, check it out and verify it matches the spec.
 
-## Step 4 - implement in small steps
+## Step 4 - build in small steps with review gates
 
-Work through the spec's build steps in order. Each step must remain reviewable.
-Unlike `/implement`, do not pause for user approval after each passing step. The
-review happens at the final packet unless a hard stop is hit.
+Work through the spec's steps in order:
 
-For every step:
-
-1. Implement only that step.
-2. Run the relevant verification:
-   - the exact `Verify` command from `AGENTS.md`, when declared
-   - otherwise the build, relevant test, lint, and typecheck commands already
-     documented by the project
-   - browser, CLI, API, or app-level evidence for behavioral done-whens
-3. If UI is involved, inspect the running app when possible. Prefer Playwright if
+1. Keep each change small and focused on the current step.
+2. Run the declared `test` command when logic changed.
+3. If the step has visual or browser-visible behavior, drive the browser when
    it is already installed or declared. Capture screenshots when they add useful
    evidence. Check for console errors and failed requests.
 4. Self-review the diff for the step:
@@ -136,15 +126,15 @@ For every step:
    - did it follow `coding-standards.md`?
    - are tests present for new in-scope logic when the test gate is on?
 5. Fix obvious issues and rerun the failed checks.
-6. Mark the step checked in `current-feature.md` only after the step passes.
+6. Mark the step checked in `devflow/context/{xxx-slug}/spec.md` only after the step passes.
 7. Create a checkpoint commit on the feature or fix branch for the passing step.
-   Include the code, tests, and the updated `current-feature.md` checkbox. Use a
+   Include the code, tests, and the updated `spec.md` checkbox. Use a
    conventional message such as `feat: checkpoint mock snapshot route` or
    `fix: checkpoint stale service filter`. Keep the message about the step, not
    about Autopilot.
 
 Do not batch the whole feature into one large diff. If a step gets too large,
-split the step in `current-feature.md` and continue with the first smaller step.
+split the step in `devflow/context/{xxx-slug}/spec.md` and continue with the first smaller step.
 
 ## Step 5 - acceptance check
 
@@ -159,7 +149,7 @@ may be enough. Be explicit about the evidence used.
 After the acceptance check, apply the `/audit current` behavior to the active
 feature, its diff, and the nearby code affected by the change. This is a targeted
 feature audit, not a repository-wide cleanup pass. Findings are recorded in
-`devflow/context/findings.md` with durable IDs and statuses, as `/audit`
+`devflow/context/{xxx-slug}/findings.md` with durable IDs and statuses, as `/audit`
 defines; the ledger reports status and never scopes what the audit examines.
 
 For every finding:
@@ -173,35 +163,21 @@ For every finding:
 3. Report P2 and P3 findings in the final packet. Fix them only when the change
    is small, directly caused by the current feature, and clearly required by the
    project standards.
-4. If a confirmed P0 or P1 finding cannot be repaired safely within scope, stop
-   and report it. Do not present the feature as ready for `/complete`.
+4. If a finding cannot be resolved safely in-scope, leave it `open` and describe
+   it in the final packet. A finding that is wrong goes back to `/audit` to
+   invalidate with recorded evidence; Autopilot never marks findings `invalid`
+   or `accepted`.
 
-After any audit repair:
+Re-run the build, tests, and any affected checks after repairs. If a repair fails
+twice, stop and report the blocker.
 
-1. Rerun the documented `Verify` command when present; otherwise rerun the
-   affected build, lint, typecheck, and test commands.
-2. Rerun the acceptance evidence affected by the repair.
-3. Recheck the repaired area using the same targeted audit criteria. When that
-   recheck confirms the original defect is gone and the repair introduced no
-   new one, move the `fixed` finding to `closed` under the `/audit` close
-   conditions and name it in the packet. An unrelated new finding gets its own
-   ledger entry and does not keep the repaired one open.
-4. Create a checkpoint commit only after the repair and its checks pass.
+## Step 7 - compile the review packet
 
-Use the existing two-attempt hard stop for repeated repair failures. Do not widen
-the feature into a general refactor, silently suppress a finding, or turn this
-step into a full-project hardening pass. A broader cleanup remains a separate
-`/audit` followed by planned `/fix` work.
+Stop and produce a concise review packet:
 
-## Step 7 - final review packet
-
-Stop with a concise review packet. Keep it useful enough for `/complete` but not
-a full audit report:
-
-- branch name
 - target feature or fix
-- whether the spec was created or resumed
-- what the spec critique changed
+- branch name
+- what was built
 - changed files and why each changed
 - build/test/check commands run, with pass or fail
 - screenshots or output paths, when relevant
@@ -210,7 +186,7 @@ a full audit report:
 - self-review findings
 - targeted audit scope and findings
 - audit repairs made and checks rerun
-- P0/P1 findings still `open` or `fixed` in `devflow/context/findings.md`,
+- P0/P1 findings still `open` or `fixed` in `devflow/context/{xxx-slug}/findings.md`,
   which block `/complete`
 - unresolved risks or skipped checks
 - exact next action
@@ -240,11 +216,11 @@ Stop immediately and report instead of continuing when Autopilot would need to:
 - Autopilot creates checkpoint commits on the feature or fix branch after passing
   steps.
 - Autopilot audits the active feature and affected code, not the entire project.
-- A P0 or P1 finding left `open` or `fixed` in `devflow/context/findings.md`
+- A P0 or P1 finding left `open` or `fixed` in `devflow/context/{xxx-slug}/findings.md`
   blocks readiness for `/complete`. The ledger is what makes this enforceable.
 - Autopilot stops before `/complete`. It never merges.
 - The Blueprint files remain the state machine. Keep
-  `current-feature.md` accurate as steps complete.
+  `devflow/context/{xxx-slug}/spec.md` accurate as steps complete.
 - Follow `coding-standards.md`, `ai-interaction.md`, and `AGENTS.md`.
 - Prefer fewer, higher-quality changes over broad coverage.
 - Report uncertainty plainly. A blocked run is useful if it tells the truth.

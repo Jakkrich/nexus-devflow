@@ -108,3 +108,12 @@
   - *Dependencies*: Feature 12, DISC-20260826-003
   - *Scope*: นำระบบ Deterministic Project Configuration (`devflow/config.json`) และสคิล Autonomous Multi-Feature Loop (`/continuous`) เข้าสู่ Nexus-DevFlow พร้อมอัปเกรด `project-config.ts`, `doctor`, `status`, `dashboard` และอัปเดต upstream baseline tracking สู่ v0.14.0
 
+---
+
+## ⚡ Phase 14: Pure Multi-Run Task-Isolated Architecture
+
+- [x] **14. Pure Multi-Run Task-Isolated Architecture (`DISC-20260826-004`)** `[Size: M]`
+  - *Dependencies*: Feature 11, Feature 12, Feature 13
+  - *Scope*: ยกเลิกไฟล์ Single Living Spec ที่ Root (`current-feature.md`, `current-stage.md`, `findings.md`) อย่างสมบูรณ์ ปรับโครงสร้างสู่ Task-Isolated Subdirectories 100% (`devflow/context/{xxx-slug}/`), อัปเกรด Agent Directives, Core Context Resolver, Scaffolding Templates และ Workflow Skills ทั้งหมด
+
+

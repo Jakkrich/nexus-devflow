@@ -196,27 +196,6 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 - Upcoming priorities, refactoring targets, or known technical considerations.
 `;
   await fs.writeFile(path.join(templateRoot, "devflow", "context", "project-overview.md"), starterOverview, "utf8");
-
-  const starterStage = `# Current Stage
-
-- Active Discovery ID: \`None\`
-- Active Running ID: \`None\`
-- Track: \`idle\`
-- Current Stage: \`idle\`
-- Active Branch: \`main\`
-- Living Spec: \`devflow/context/current-feature.md\`
-- Next Action: \`Run /feature, /fix, or /discovery to start new work.\`
-- Last Completed Run: \`None\`
-- Last Updated: \`None\`
-`;
-  await fs.writeFile(path.join(templateRoot, "devflow", "context", "current-stage.md"), starterStage, "utf8");
-
-  // 6. Clean Starter current-feature.md
-  const starterFeature = `# Current Feature
-
-_Nothing in progress. Run /feature, /fix, or /rollback to start._
-`;
-  await fs.writeFile(path.join(templateRoot, "devflow", "context", "current-feature.md"), starterFeature, "utf8");
 }
 
 async function main() {

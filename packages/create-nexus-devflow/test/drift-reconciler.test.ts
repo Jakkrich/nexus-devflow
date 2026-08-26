@@ -12,12 +12,13 @@ import {
 import { handleToolCall } from "../lib/mcp.js";
 
 async function setupTestProject(dir: string): Promise<void> {
-  await fs.mkdir(path.join(dir, "devflow", "context"), { recursive: true });
+  const taskDir = path.join(dir, "devflow", "context", "046-drift-test");
+  await fs.mkdir(taskDir, { recursive: true });
   await fs.mkdir(path.join(dir, ".agents", "skills"), { recursive: true });
   await fs.writeFile(path.join(dir, "AGENTS.md"), "# DevFlow\n", "utf8");
 
   await fs.writeFile(
-    path.join(dir, "devflow", "context", "current-feature.md"),
+    path.join(taskDir, "spec.md"),
     `# 📐 [046-drift-test] Test Feature
 
 ## 2. Plan & Test Strategy
@@ -32,7 +33,7 @@ async function setupTestProject(dir: string): Promise<void> {
   );
 
   await fs.writeFile(
-    path.join(dir, "devflow", "context", "current-stage.md"),
+    path.join(taskDir, "stage.md"),
     "# Current Stage\n\n- Active Running ID: `046-drift-test`\n- Track: `fast`\n- Current Stage: `implement`\n",
     "utf8"
   );
@@ -72,7 +73,7 @@ test("detectGitDrift classifies phantom files correctly when no git changes exis
   }
 });
 
-test("reconcileState auto-adds undocumented files to current-feature.md", async () => {
+test("reconcileState auto-adds undocumented files to spec.md", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-reconcile-"));
 
   try {
@@ -80,7 +81,7 @@ test("reconcileState auto-adds undocumented files to current-feature.md", async 
 
     // Run reconcile with simulated mock drift or direct execution
     const specBefore = await fs.readFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      path.join(tempDir, "devflow", "context", "046-drift-test", "spec.md"),
       "utf8"
     );
     assert.match(specBefore, /planned-file\.ts/);

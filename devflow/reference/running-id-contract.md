@@ -15,9 +15,6 @@ devflow/
 │   ├── coding-standards.md     # Engineering, code quality, TDD, and testing standards
 │   ├── ai-interaction.md       # AI agent interaction rules, unified living spec flow, and Thai defaults
 │   ├── glossary.md             # Domain glossary and architecture vocabulary
-│   ├── current-feature.md      # Active Living Spec pointer / legacy fallback
-│   ├── current-stage.md        # Active state pointer and run tracker
-│   ├── findings.md             # Shared/default audit findings ledger (P0-P3)
 │   │
 │   ├── {xxx-slug}/             # Active Run Workspace & Spec Queue (Multi-Run Active Task)
 │   │   ├── spec.md             # Living Spec + Checklist for this run

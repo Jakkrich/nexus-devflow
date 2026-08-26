@@ -7,6 +7,7 @@ export interface ActiveContextPaths {
   isBranchScoped: boolean;
   branchName: string | null;
   sanitizedBranch: string | null;
+  runId?: string | null;
   branchDir: string | null;
   featureSpecPath: string;
   stagePath: string;
@@ -179,23 +180,29 @@ export function fuzzyMatchRunId(
   if (!targetInput || activeRuns.length === 0) return null;
 
   const normalized = targetInput.trim().toLowerCase();
+  const cleaned = normalized.replace(/^(feature|fix|chore|rollback)\//, "");
 
   // 1. Exact match on runId
-  const exact = activeRuns.find((r) => r.runId.toLowerCase() === normalized);
+  const exact = activeRuns.find(
+    (r) => r.runId.toLowerCase() === normalized || r.runId.toLowerCase() === cleaned
+  );
   if (exact) return exact;
 
   // 2. Numeric match (e.g. "12", "012", "1")
-  if (/^\d+$/.test(normalized)) {
-    const padded = normalized.padStart(3, "0");
+  if (/^\d+$/.test(cleaned)) {
+    const padded = cleaned.padStart(3, "0");
     const numMatch = activeRuns.find(
-      (r) => r.runId.startsWith(`${padded}-`) || r.runId.startsWith(`${normalized}-`) || r.runId === padded || r.runId === normalized
+      (r) => r.runId.startsWith(`${padded}-`) || r.runId.startsWith(`${cleaned}-`) || r.runId === padded || r.runId === cleaned
     );
     if (numMatch) return numMatch;
   }
 
   // 3. Substring keyword match
   const subMatch = activeRuns.find(
-    (r) => r.runId.toLowerCase().includes(normalized) || r.title.toLowerCase().includes(normalized)
+    (r) =>
+      r.runId.toLowerCase().includes(cleaned) ||
+      cleaned.includes(r.runId.toLowerCase()) ||
+      r.title.toLowerCase().includes(cleaned)
   );
   if (subMatch) return subMatch;
 
@@ -308,14 +315,14 @@ export async function resolveActiveRunContext(
     };
   }
 
-  // Fallback to root context
+  // Idle / no active task in Pure Multi-Run model
   return {
     isMultiRun: false,
     runId: null,
     runDir: null,
-    specPath: defaultFeaturePath,
-    stagePath: defaultStagePath,
-    findingsPath: defaultFindingsPath,
+    specPath: "",
+    stagePath: "",
+    findingsPath: "",
     globalOverviewPath,
     globalStandardsPath
   };
@@ -448,6 +455,7 @@ export async function resolveActiveContextPaths(
       isBranchScoped: true,
       branchName: explicitBranch || runContext.runId,
       sanitizedBranch: runContext.runId,
+      runId: runContext.runId,
       branchDir: runContext.runDir,
       featureSpecPath: runContext.specPath,
       stagePath: runContext.stagePath,
@@ -459,6 +467,7 @@ export async function resolveActiveContextPaths(
     isBranchScoped: false,
     branchName: explicitBranch || null,
     sanitizedBranch: null,
+    runId: null,
     branchDir: null,
     featureSpecPath: runContext.specPath,
     stagePath: runContext.stagePath,

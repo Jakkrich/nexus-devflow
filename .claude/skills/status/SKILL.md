@@ -34,14 +34,13 @@ state.
 1. **Build plan** - `devflow/build-plan.md`. Count checked vs unchecked leaf
    items. Name the next unchecked leaf, the same target `/feature` would pick,
    and note if a parent item was split into sub-items (`4a`, `4b`, ...).
-2. **Current work** - `devflow/context/current-feature.md`. Is something in
-   progress, or is it the reset stub? If a feature, fix, or rollback spec is
-   present, report its type and name, which build steps are checked, and the
-   first unchecked step where `/implement` resumes.
-3. **Findings** - `devflow/context/findings.md`. Count findings by status and
+2. **Current work & Spec Queue** - scan `devflow/context/{xxx-slug}/`. Is something in
+   progress? If a feature, fix, or rollback spec is
+   present, report its type, name, running ID, which build steps are checked, and the
+   first unchecked step where `/implement` resumes. If multiple tasks are queued, list the active spec queue.
+3. **Findings** - `devflow/context/{xxx-slug}/findings.md`. Count findings by status and
    report open and fixed counts next to build-plan progress. Call out any P0 or
-   P1 still `open` or `fixed` by ID, since those block `/complete`. A missing
-   file means no findings.
+   P1 still `open` or `fixed` by ID, since those block `/complete`.
 4. **Overview freshness** - if `devflow/context/project-overview.md` is missing,
    or if `project-plan.md` or `build-plan.md` appears newer than it by filesystem
    time, mention that `/overview` should run before new feature work.
@@ -49,38 +48,32 @@ state.
    changes, roughly how many files changed, last commit subject, and whether the
    branch is ahead of its remote. If the directory is not a git repo, say so and
    skip this part rather than failing.
-6. **Progress drift** - flag active spec on `main`, a spec in progress but no
-   matching `feature/`, `fix/`, or `rollback/` branch, all spec steps checked but
-   not completed, or disagreement between `build-plan.md` and
-   `current-feature.md`. A rollback legitimately targets a checked build-plan
-   item until `/complete` unchecks it, so do not compare it to the next unchecked
-   feature.
+6. **Progress drift** - flag active task on `main`, a spec in progress but no
+   matching `feature/{xxx-slug}`, `fix/{xxx-slug}`, or `rollback/{xxx-slug}` branch, all spec steps checked but
+   not completed, or disagreement between `build-plan.md` and active specs.
 
 ## Output
 
 A short, scannable summary, not a wall of text. Aim for something like:
 
-    Status: Building feature 4 - PDF export
-    Plans: Overview current. Build plan 3 of 9 complete.
-    Current work: Step 2 of 3 done. Next step: Download PDF button.
-    Findings: 1 open P2 (F-04), 1 fixed P1 awaiting re-review (F-02).
-    Git: branch feature/pdf-export, 3 uncommitted files, last commit "feat: widen export helper".
-    Watch: F-02 is fixed but not re-reviewed; it blocks /complete until /audit closes it.
+    Status: Building feature 061 - Pure Multi-Run Architecture
+    Plans: Overview current. Build plan 13 of 14 complete.
+    Current work: Step 2 of 4 done. Next step: Update Directives & Documentation.
+    Findings: 0 blockers in 061-pure-multi-run-task-isolated-architecture/findings.md.
+    Git: branch feature/061-pure-multi-run-task-isolated-architecture, 3 uncommitted files.
 
-    Next action: run /implement for Step 3.
+    Next action: run /implement 061 for Task 2.
 
 End with a single suggested next action, chosen in this order:
 
 - The overview is missing or stale and no feature is in progress -> `/overview`.
-- A spec is in progress with unchecked steps -> `/implement` and name the step.
-- A spec is in progress and all implementation steps are checked -> `/check` if
+- A spec is in progress with unchecked steps -> `/implement [id]` and name the step.
+- A spec is in progress and all implementation steps are checked -> `/check [id]` if
   proof is not recorded, `/try` if the user wants a manual review path,
-  `/implement` when a P0 or P1 finding is still `open` (the repair is an extra
+  `/implement [id]` when a P0 or P1 finding is still `open` (the repair is an extra
   reviewed step), `/audit` when one is `fixed` and awaiting re-review (both
-  block `/complete`), otherwise `/complete`.
-- `current-feature.md` is the reset stub and a P0 or P1 finding is `open` ->
-  `/fix <finding id>`; when one is `fixed`, `/audit` to re-review and close it.
-- `current-feature.md` is the reset stub and unchecked build-plan items remain ->
+  block `/complete`), otherwise `/complete [id]`.
+- No active tasks in `devflow/context/` and unchecked build-plan items remain ->
   `/feature` and name the next build-plan item.
 - All build-plan items are checked -> say the current milestone is complete;
   suggest hardening, release, or docs when appropriate, or

@@ -1,6 +1,6 @@
 {
   "name": "@jakkrichm/create-nexus-devflow",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Installer package for Nexus-DevFlow agentic workflow layer.",
   "license": "MIT",
   "author": "Jakkrich",

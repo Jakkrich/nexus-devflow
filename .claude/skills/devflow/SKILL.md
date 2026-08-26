@@ -9,14 +9,14 @@ Use this skill to guide the user on what to do next, inspect current workspace s
 
 ## Input
 
-- **No argument (`devflow`, `/devflow`, `$devflow`, or `status`)**: Inspect current workspace state (active run in `devflow/context/current-stage.md`, active living spec in `devflow/context/current-feature.md`, active discovery in `devflow/discoveries/`, pending ideas in `devflow/ideas.md`, open findings in `devflow/context/findings.md`, and project overview in `devflow/context/project-overview.md`) and recommend the exact next action.
+- **No argument (`devflow`, `/devflow`, `$devflow`, or `status`)**: Inspect current workspace state (active tasks in `devflow/context/{xxx-slug}/`, active discovery in `devflow/discoveries/`, pending ideas in `devflow/ideas.md`, and project overview in `devflow/context/project-overview.md`) and recommend the exact next action.
 - **With user request (`devflow "<request>"`)**: Classify the user's intent and guide them to the matching DevFlow workflow stage or companion command path.
 
-## The Unified Living Spec Architecture (DevFlow 2.5.0)
+## The Task-Isolated Living Spec Architecture
 
-Nexus-DevFlow uses a **Single Unified Living Spec Model**:
+Nexus-DevFlow uses a **Task-Isolated Living Spec Model**:
 - **The 4-Stage Lifecycle**: `/feature` (or `/fix`) ➔ `/implement` ➔ `/check` ➔ `/complete`
-- Driven by a **Single Living Spec (`devflow/context/current-feature.md`)** that integrates architectural depth (Define, Spec, Plan, Execution Log, Multi-Lane QA, and Release Digest) into one clear living document.
+- Driven by a **Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)** that integrates architectural depth (Define, Spec, Plan, Execution Log, Multi-Lane QA, and Release Digest) into dedicated task workspaces without root bottleneck.
 - **Pre-Flight Inception Engine**: Companion skills (`/discovery`, `/idea`, `/grill`, `/brainstorm`) feed directly into `/feature`.
 
 ---
@@ -26,13 +26,13 @@ Nexus-DevFlow uses a **Single Unified Living Spec Model**:
 When invoked without an argument (or when determining the next step), inspect:
 
 1. **Project Setup Baseline**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`. If empty or default placeholders, recommend `onboard` (for fresh projects) or `adopt` (for existing codebases).
-2. **Active Delivery Run**: Read `devflow/context/current-stage.md` and `devflow/context/current-feature.md`.
-   - If `current-feature.md` has incomplete checklist tasks (`- [ ]`) -> Recommend `/implement`.
-   - If all tasks are completed (`- [x]`) but no passing verification evidence in Section 5 -> Recommend `/check`.
-   - If verification evidence passed in Section 5 -> Recommend `/complete`.
+2. **Active Delivery Runs**: Scan `devflow/context/{xxx-slug}/` subdirectories.
+   - If active `spec.md` has incomplete checklist tasks (`- [ ]`) -> Recommend `/implement [id]`.
+   - If all tasks are completed (`- [x]`) but no passing verification evidence in Section 5 -> Recommend `/check [id]`.
+   - If verification evidence passed in Section 5 -> Recommend `/complete [id]`.
 3. **Active Discovery**: Check `devflow/discoveries/` for open discovery notes.
 4. **Pending Ideas Inbox**: Check `devflow/ideas.md`. If items exist under `## 📌 Pending Ideas`, summarize them in a **💡 Pending Ideas (Inbox)** list with their IDs (`[IDEA-xxx]`), feasibility, and mention that they can be started with `/feature IDEA-xxx` or `/discovery IDEA-xxx`.
-5. **Audit Findings Ledger**: Check `devflow/context/findings.md` for open high-severity findings.
+5. **Audit Findings Ledger**: Check `devflow/context/{xxx-slug}/findings.md` for open high-severity findings.
 
 ### Default State Recommendations
 - If no run is active and user wants to start a feature -> Recommend `/feature <name>`.
@@ -55,7 +55,7 @@ When invoked without an argument (or when determining the next step), inspect:
 | **"Execute implementation tasks"** | `implement` | `/implement` | **Core Loop**: `/implement` -> `/check` |
 | **"Run QA verification & check"** | `check` | `/check` | **Core Loop**: `/check` -> `/complete` |
 | **"Complete run & git merge"** | `complete` | `/complete` | **Core Loop**: `/complete` |
-| **"Generate HTML dashboard report"**| `report-html` | `/report:html` | **Standalone**: Converts `current-feature.md` or archive to HTML |
+| **"Generate HTML dashboard report"**| `report-html` | `/report:html` | **Standalone**: Converts living spec or archive to HTML |
 | "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `/feature` |
 | "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `/feature` |
 | "Check setup health & diagnostics" | `doctor` | `doctor` / `health` | `doctor` |
@@ -72,8 +72,8 @@ When invoked without an argument (or when determining the next step), inspect:
 ## Available Skills Sitemap
 
 ### 1. Mainline Living Spec Loop (4 Steps)
-- `feature` (`/feature`, `/spec`) - Define, spec, and plan in `current-feature.md`
-- `fix` (`/fix`) - Document an ad-hoc bug or change in `current-feature.md`
+- `feature` (`/feature`, `/spec`) - Define, spec, and plan in `devflow/context/{xxx-slug}/spec.md`
+- `fix` (`/fix`) - Document an ad-hoc bug or change in `devflow/context/{xxx-slug}/spec.md`
 - `implement` (`/implement`) - Execute planned checklist tasks with TDD
 - `check` (`/check`) - Senior QA review, multi-lane verification, record evidence
 - `complete` (`/complete`) - Safety pass, release digest, git merge, close run

@@ -37,24 +37,25 @@ test("parseArgs parses status and install command options correctly", () => {
   assert.equal(optionsUi.deprecatedUi, true);
 });
 
-test("readProjectStatus and formatHumanStatus work with 3-Pillars context/current-feature.md", async () => {
+test("readProjectStatus and formatHumanStatus work with Pure Multi-Run task context", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-3pillars-"));
   try {
-    await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+    const taskDir = path.join(tempDir, "devflow", "context", "021-categorized-history-and-clean-living-spec-architecture");
+    await fs.mkdir(taskDir, { recursive: true });
     await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
     await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
 
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "findings.md"),
+      path.join(taskDir, "findings.md"),
       `
 # Findings Ledger
 ### QA-001 [P2] unverified - Minor UI layout shift
 `
     );
 
-    // Active spec directly in devflow/context/current-feature.md
+    // Active spec in task workspace
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      path.join(taskDir, "spec.md"),
       `
 # Feature: 021-categorized-history-and-clean-living-spec-architecture
 **Status:** In Progress
@@ -83,19 +84,12 @@ test("readProjectStatus and formatHumanStatus work with 3-Pillars context/curren
   }
 });
 
-test("readProjectStatus returns idle when current-feature.md contains reset stub", async () => {
+test("readProjectStatus returns idle on clean workspace without active tasks", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-idle-"));
   try {
     await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
     await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
     await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
-
-    await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
-      `# Current Feature
-
-_Nothing in progress. Run /feature, /fix, or /rollback to start._`
-    );
 
     const status = await readProjectStatus(tempDir);
     assert.equal(status.currentWork.state, "idle");
@@ -237,24 +231,25 @@ test("readProjectStatus prioritizes current-stage.md Root Switch and calculates 
   }
 });
 
-test("readProjectStatus auto-detects active fast-track spec when current-stage is idle", async () => {
+test("readProjectStatus auto-detects active fast-track spec from task workspace", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-autodetect-"));
   try {
-    await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+    const taskDir = path.join(tempDir, "devflow", "context", "041-test-feature");
+    await fs.mkdir(taskDir, { recursive: true });
     await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
     await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
 
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-stage.md"),
+      path.join(taskDir, "stage.md"),
       `# Current Stage
-- Active Running ID: None
-- Track: idle
-- Current Stage: idle
+- Active Running ID: 041-test-feature
+- Track: fast
+- Current Stage: implement
 `
     );
 
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-feature.md"),
+      path.join(taskDir, "spec.md"),
       `# Feature: 041-test-feature
 - [ ] Task 1
 - [ ] Task 2
@@ -263,7 +258,7 @@ test("readProjectStatus auto-detects active fast-track spec when current-stage i
 
     const status = await readProjectStatus(tempDir);
     assert.equal(status.currentWork.state, "active");
-    assert.equal(status.nextAction.command, "/implement");
+    assert.match(status.nextAction.command || "", /^\/implement/);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

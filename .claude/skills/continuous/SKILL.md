@@ -1,6 +1,6 @@
 ---
 name: continuous
-description: "[devflow] Autonomous multi-feature delivery loop in Nexus-DevFlow: completes planned features serially from devflow/build-plan.md without review pauses. Maintains safety boundaries, Single Living Spec (current-feature.md), branch isolation, TDD verification, quality gates, and local squash-merges into main. Use when running /continuous, $continuous, or executing Continuous Mode."
+description: "[devflow] Autonomous multi-feature delivery loop in Nexus-DevFlow: completes planned features serially from devflow/build-plan.md without review pauses. Maintains safety boundaries, Task-Isolated Living Spec, branch isolation, TDD verification, quality gates, and local squash-merges into main. Use when running /continuous, $continuous, or executing Continuous Mode."
 argument-hint: "[{resume, max-features, or start-feature}]"
 ---
 
@@ -15,7 +15,7 @@ Where this sits in the workflow:
                Gates ➔ Merge)
 ```
 
-`/continuous` (หรือ `$continuous`) คือโหมดการทำงานแบบ Autonomous Multi-Feature Delivery Loop สำหรับจัดส่งฟีเจอร์ที่อยู่ใน `devflow/build-plan.md` ต่อเนื่องทีละฟีเจอร์ในเครื่อง Local โดยไม่ต้องหยุดรอ Manual Review Prompts ในแต่ละขั้นตอนย่อย แต่ยังคงรักษาความเข้มงวดของ **The 3-Pillars Model & Single Living Spec (`current-feature.md`)**, การทำ TDD, การตรวจ Quality Gates, การบันทึก Findings Ledger, และการ Squash-merge ลง Local Main Commit ทีละฟีเจอร์อย่างปลอดภัย 100%
+`/continuous` (หรือ `$continuous`) คือโหมดการทำงานแบบ Autonomous Multi-Feature Delivery Loop สำหรับจัดส่งฟีเจอร์ที่อยู่ใน `devflow/build-plan.md` ต่อเนื่องทีละฟีเจอร์ในเครื่อง Local โดยไม่ต้องหยุดรอ Manual Review Prompts ในแต่ละขั้นตอนย่อย แต่ยังคงรักษาความเข้มงวดของ **The 3-Pillars Model & Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)**, การทำ TDD, การตรวจ Quality Gates, การบันทึก Findings Ledger, และการ Squash-merge ลง Local Main Commit ทีละฟีเจอร์อย่างปลอดภัย 100%
 
 ### ขอบเขตสิทธิ์ที่ได้รับอนุญาตเฉพาะในเครื่อง Local:
 - สร้างและสลับ Feature Branch ในเครื่อง Local
@@ -36,7 +36,7 @@ Where this sits in the workflow:
 ## Input & Target Selection
 
 - **ไม่ระบุ Argument (`/continuous`)**:
-  1. หากมีฟีเจอร์ค้างอยู่ใน `devflow/context/current-feature.md` ให้ทำต่อจากขั้นตอนย่อยแรกที่ยังไม่ได้เช็ค (`- [ ]`)
+  1. หากมีฟีเจอร์ค้างอยู่ใน `devflow/context/{xxx-slug}/` ให้ทำต่อจากขั้นตอนย่อยแรกที่ยังไม่ได้เช็ค (`- [ ]`)
   2. หากไม่มี ให้เลือกฟีเจอร์แรกที่ยังไม่ได้เช็ค (`- [ ]`) ใน `devflow/build-plan.md`
   3. วนลูปทำต่อเนื่องตามลำดับใน `build-plan.md` จนกว่าจะหมด หรือครบตามจำนวน `continuous.maxFeatures` ใน `devflow/config.json`
 - **ระบุ `resume` (`/continuous resume`)**: ทำงานต่อจากฟีเจอร์และขั้นตอนย่อยที่ค้างอยู่ทันที
@@ -51,8 +51,7 @@ Where this sits in the workflow:
 - `devflow/config.json` (หากไม่มี ให้ใช้ค่า Defaults อย่างปลอดภัย; หาก Invalid ให้หยุดและชี้ไปที่ `/doctor`)
 - `devflow/project-plan.md` และ `devflow/build-plan.md`
 - `devflow/context/project-overview.md`
-- `devflow/context/current-feature.md` และ `devflow/context/current-stage.md`
-- `devflow/context/findings.md`
+- `devflow/context/{xxx-slug}/` (ถ้ามีงานค้างอยู่)
 - `devflow/context/coding-standards.md` และ `devflow/context/ai-interaction.md`
 - สถานะ Git (`git status`, `git branch`, recent log)
 
@@ -69,11 +68,11 @@ Where this sits in the workflow:
 ดำเนินงานวนลูปทีละ 1 ฟีเจอร์ตามลำดับ:
 
 ### 2.1 Select & Spec (เลือกและร่างสเปก)
-- หาก Resuming: ใช้ Spec เดิมใน `current-feature.md`
-- หากเป็นฟีเจอร์ใหม่: ถอดความต้องการจาก `build-plan.md` และสร้าง Single Living Spec ลงใน `devflow/context/current-feature.md` พร้อมวิเคราะห์ Red-team ก่อนเริ่มโค้ด
+- หาก Resuming: ใช้ Spec เดิมใน `devflow/context/{xxx-slug}/spec.md`
+- หากเป็นฟีเจอร์ใหม่: ถอดความต้องการจาก `build-plan.md` และสร้าง Task Workspace ที่ `devflow/context/{xxx-slug}/` พร้อมเขียน `spec.md`, `stage.md`, `findings.md` และวิเคราะห์ Red-team ก่อนเริ่มโค้ด
 
 ### 2.2 Create / Resume Feature Branch
-- สร้าง Branch ตาม Prefix ใน Config (เช่น `feature/060-slug`) จาก Default Branch
+- สร้าง Branch ตาม Prefix ใน Config (เช่น `feature/061-slug`) จาก Default Branch
 
 ### 2.3 Implement Small Steps with Strict TDD
 - ดำเนินการสร้างฟังก์ชันทีละ Task ตาม Checklist ใน Spec:
@@ -96,7 +95,7 @@ Where this sits in the workflow:
 - รัน Verification ขั้นสุดท้าย
 - ย้ายและ Archive เอกสารไปที่ `devflow/history/features/{xxx-slug}.md`
 - อัปเดตเช็คบ็อกซ์ใน `devflow/build-plan.md`
-- รีเซ็ต `devflow/context/current-feature.md` กลับสู่ Stub
+- ลบโฟลเดอร์รัน `devflow/context/{xxx-slug}/`
 - Squash-merge Feature Branch เข้าสู่ Local Main และลบ Feature Branch ใน Local
 - นับจำนวนฟีเจอร์ที่สำเร็จเพิ่มขึ้น 1
 

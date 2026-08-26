@@ -27,46 +27,60 @@ Format every response for fast scanning and readability:
 
 ---
 
-## 3. The 3-Pillars Unified Architecture (DevFlow 2.5.0)
+## 3. The 3-Pillars Unified Architecture
 
 ```text
 devflow/
-├── 🔮 ideas.md        # [Future] Idea Inbox with AI Feasibility Scoring
-├── ⚡ context/         # [Present] Single Living Spec (current-feature.md) & Active State
-└── 📦 history/         # [Past] features/, fixes/, rollbacks/, and HISTORY.md
+├── 🔮 ideas.md                     # [Future] Idea Inbox with AI Feasibility Scoring
+├── 🗺️ project-plan.md              # [Future] Master Roadmap
+├── 📋 build-plan.md                # [Future] Master Build Plan & Sizing
+│
+├── ⚡ context/                      # [Present] Living Source of Truth & Active Tasks
+│   ├── project-overview.md         # 🌐 Global Architecture & Stack
+│   ├── coding-standards.md         # 🌐 Global Coding & TDD Standards
+│   ├── ai-interaction.md           # 🌐 Global AI Interaction Rules
+│   ├── glossary.md                 # 🌐 Domain Terms & Glossary
+│   │
+│   └── {xxx-slug}/                 # ⚡ Active Task Workspace
+│       ├── spec.md                 # Living Spec + TDD Checklist
+│       ├── stage.md                # Runtime Stage & Branch Reference
+│       └── findings.md             # Dedicated Audit Ledger (P0-P3)
+│
+└── 📦 history/                     # [Past] features/, fixes/, rollbacks/, and HISTORY.md
 ```
 
-### ⚡ The Unified 4-Stage Living Spec Lifecycle
-*ขับเคลื่อนการพัฒนาทุกระดับ (ตั้งแต่ Fast Fix จนถึง Architectural Epic) ด้วยเอกสารฉบับเดียว **Single Living Spec (`devflow/context/current-feature.md`)** ที่รวมความลึกระดับ Architect Mode เข้ากับความคล่องตัวระดับ Lean Velocity:*
+### ⚡ The Unified 4-Stage Task-Isolated Living Spec Lifecycle
+*ขับเคลื่อนการพัฒนาทุกระดับด้วย **Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)** ที่รวมความลึกระดับ Architect Mode เข้ากับความคล่องตัวระดับ Lean Velocity โดยแยก Workspace ของแต่ละงานออกจากกัน 100%:*
 
 ```text
 /feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
 1. **Stage 1: Spec (`/feature` หรือ `/fix`)**:
-   - ตรวจสอบ **Single Active Run Guardrail** (บล็อกการเปิดงานซ้อนถ้ามีงานที่ยังไม่เสร็จ)
    - ดึงบริบทจาก `devflow/discoveries/`, `devflow/ideas.md`, หรือคำขอของผู้ใช้
-   - จัดสรร Running ID (`xxx-slug`) และสร้าง Branch `feature/{xxx-slug}` หรือ `fix/{xxx-slug}`
-   - เขียน **Single Living Spec (`current-feature.md`)** ครอบคลุม:
+   - จัดสรร Running ID (`xxx-slug`) และสร้างโฟลเดอร์ `devflow/context/{xxx-slug}/`
+   - เขียน **Task-Isolated Living Spec (`spec.md`)**, `stage.md`, และ `findings.md` ครอบคลุม:
      - `## 🎯 1. Define & Boundaries` (Problem, In/Out Scope, Risks, Success Criteria)
      - `## 📐 2. Technical Spec & Contracts` (Architecture, Models, Interface Contracts, Non-functional, ACs)
      - `## 📋 3. Execution Plan & TDD Checklist` (Atomic tasks, `[TDD-Red/Green/Refactor]` Triplets)
 
-2. **Stage 2: Implement (`/implement`)**:
+2. **Stage 2: Implement (`/implement [id]`)**:
+   - สลับไปยัง Branch `feature/{xxx-slug}` (หรือ Auto-detect จาก Current Branch / Task Queue)
    - ดำเนินการ Task-by-task ตาม Checklist อย่างเคร่งครัดด้วย **TDD (Red-Green-Refactor)**
-   - ติ๊กเครื่องหมาย `- [x]` และบันทึก `## ⚡ 4. Implementation Log & Evidence` (Diff summary, Checkpoints) ลงใน `current-feature.md`
+   - ติ๊กเครื่องหมาย `- [x]` และบันทึก `## ⚡ 4. Implementation Log & Evidence` (Diff summary, Checkpoints) ลงใน `devflow/context/{xxx-slug}/spec.md`
 
-3. **Stage 3: Check (`/check`)**:
+3. **Stage 3: Check (`/check [id]`)**:
    - Senior QA Multi-Lane Verification (Typecheck, Lint, Test Suites, Manual Proof)
-   - บันทึกผลการพิสูจน์เชิงประจักษ์ลงใน `## 🧪 5. Multi-Lane Verification Matrix` ใน `current-feature.md`
+   - บันทึกผลการพิสูจน์เชิงประจักษ์ลงใน `## 🧪 5. Multi-Lane Verification Matrix` ใน `spec.md` และบันทึก Finding ลงใน `findings.md` เฉพาะงาน
 
-4. **Stage 4: Complete (`/complete`)**:
+4. **Stage 4: Complete (`/complete [id]`)**:
    - สรุปผล `## 📦 6. Release Digest & Retrospective` (Changelog, Lessons Learned, ADRs)
-   - ทำการ Archive `current-feature.md` ไปเป็นไฟล์เดี่ยวที่ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`
+   - ทำการ Archive `spec.md` ไปเป็นไฟล์เดี่ยวที่ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`
+   - ลบโฟลเดอร์เฉพาะกิจ `devflow/context/{xxx-slug}/` ออกอย่างหมดจด
    - **Mandatory Delivery Gate**: บังคับถามผู้ใช้ก่อนเสมอว่าต้องการ Delivery รูปแบบใด:
      - **Option 1 (Team MR/PR Flow)**: Pull master/main ล่าสุดมารวมกับ Feature/Dev Branch แล้ว push branch ขึ้นไปเพื่อเปิด MR/PR (ไม่ merge เข้า main/master ในเครื่อง และไม่แตะ protected branch)
      - **Option 2 (Direct Squash-Merge)**: ทำการ Squash-merge เข้า main/master ในเครื่องเฉพาะเมื่อผู้ใช้สั่งโดยตรงเท่านั้น
-   - รีเซ็ต `current-feature.md` กลับเป็น Idle stub เมื่อปิดรอบงานเรียบร้อย
+   - อัปเดต `devflow/history/HISTORY.md` และ `devflow/build-plan.md` ให้เป็น `[x]` เรียบร้อย
 
 ---
 

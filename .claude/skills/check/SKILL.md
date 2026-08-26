@@ -28,7 +28,7 @@ It changes no source and commits nothing — it executes, inspects, and reports 
 
 ## Step 1 - Build the Dual-Axis Review Matrix
 
-Read the target spec from `devflow/context/{xxx-slug}/spec.md` (or `devflow/context/current-feature.md`) and `devflow/context/coding-standards.md`. Prepare the inspection criteria across two independent axes:
+Read the target spec from `devflow/context/{xxx-slug}/spec.md` and `devflow/context/coding-standards.md`. Prepare the inspection criteria across two independent axes:
 
 1. **Axis 1 (Standards & Architecture Criteria)**:
    - Coding conventions in `coding-standards.md`
@@ -36,7 +36,7 @@ Read the target spec from `devflow/context/{xxx-slug}/spec.md` (or `devflow/cont
    - Baseline 12 Fowler Code Smells (Primitive obsession, Feature envy, Shotgun surgery, Speculative generality, etc.)
    - Multi-lane technical gates (Typecheck, test suites, zero secrets, zero P0/P1 findings)
 2. **Axis 2 (Spec Fidelity & Behavioral Observables)**:
-   - Line-by-line Acceptance Criteria (ACs) and "Done When" observables from `current-feature.md`
+   - Line-by-line Acceptance Criteria (ACs) and "Done When" observables from `devflow/context/{xxx-slug}/spec.md`
    - Scope Creep detection (Unrequested behavior in the diff)
    - Missing Requirements detection (Unimplemented edge cases)
 
@@ -69,7 +69,7 @@ Format the report into two distinct, un-merged review axes:
   - [pass] Type Safety: `tsc --noEmit` (0 errors)
   - [pass] Automated Tests: `npm test` (All tests green)
   - [pass] Security & Hygiene: Zero secrets, sanitized inputs
-  - [pass] Findings Ledger: 0 blocking P0/P1 in `devflow/context/findings.md`
+  - [pass] Findings Ledger: 0 blocking P0/P1 in `devflow/context/{xxx-slug}/findings.md`
 - **Deep Modules & Architecture**:
   - [pass] Seam Integrity: Public interfaces remain small, implementation details hidden.
   - [pass] The Deletion Test: Complexity is concentrated inside the module, not scattered across callers.
@@ -78,7 +78,7 @@ Format the report into two distinct, un-merged review axes:
 
 ## 🎯 Axis 2: Spec Fidelity & Behavioral Acceptance Gate
 
-Line-by-line verification against `current-feature.md`:
+Line-by-line verification against `devflow/context/{xxx-slug}/spec.md`:
 - [pass] **AC-1 (<title>)**: <Observed empirical evidence / screenshot path>
 - [pass] **AC-2 (<title>)**: <Observed empirical evidence / terminal output>
 - [fail] **AC-3 (<title>)**: <Exact observed failure with reproduction command>

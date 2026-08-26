@@ -22,15 +22,19 @@ test("runDoctor reports failures on empty directory and repairs with fix: true",
     assert.ok(fixedReport.fixedCount > 0);
 
     // Verify created files
-    const hasStage = await fs.lstat(path.join(tempDir, "devflow", "context", "current-stage.md")).then(() => true).catch(() => false);
-    const hasFindings = await fs.lstat(path.join(tempDir, "devflow", "context", "findings.md")).then(() => true).catch(() => false);
+    const hasOverview = await fs.lstat(path.join(tempDir, "devflow", "context", "project-overview.md")).then(() => true).catch(() => false);
+    const hasStandards = await fs.lstat(path.join(tempDir, "devflow", "context", "coding-standards.md")).then(() => true).catch(() => false);
+    const hasAiRules = await fs.lstat(path.join(tempDir, "devflow", "context", "ai-interaction.md")).then(() => true).catch(() => false);
+    const hasGlossary = await fs.lstat(path.join(tempDir, "devflow", "context", "glossary.md")).then(() => true).catch(() => false);
     const hasIdeas = await fs.lstat(path.join(tempDir, "devflow", "ideas.md")).then(() => true).catch(() => false);
     const hasHistory = await fs.lstat(path.join(tempDir, "devflow", "history", "HISTORY.md")).then(() => true).catch(() => false);
     const hasProjectPlan = await fs.lstat(path.join(tempDir, "devflow", "project-plan.md")).then(() => true).catch(() => false);
     const hasBuildPlan = await fs.lstat(path.join(tempDir, "devflow", "build-plan.md")).then(() => true).catch(() => false);
 
-    assert.equal(hasStage, true);
-    assert.equal(hasFindings, true);
+    assert.equal(hasOverview, true);
+    assert.equal(hasStandards, true);
+    assert.equal(hasAiRules, true);
+    assert.equal(hasGlossary, true);
     assert.equal(hasIdeas, true);
     assert.equal(hasHistory, true);
     assert.equal(hasProjectPlan, true);

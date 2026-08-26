@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { resolveActiveContextPaths } from "./branch-context.js";
 import { createStyle } from "./ui.js";
 
 type FindingSeverity = "P0" | "P1" | "P2" | "P3";
@@ -42,19 +43,20 @@ const BLUEPRINT_FINDINGS_PATH = path.join("blueprint", "context", "findings.md")
 const FINDING_PATTERN = /^###\s+(\S+)\s+\[(P[0-3])\]\s+(unverified|open|fixed|closed|accepted|invalid)\s+-\s+(.+?)\s*$/i;
 
 async function getFindingsFilePath(projectRoot: string): Promise<string | null> {
-  const devflowPath = path.join(projectRoot, DEVFLOW_FINDINGS_PATH);
-  const blueprintPath = path.join(projectRoot, BLUEPRINT_FINDINGS_PATH);
+  const contextPaths = await resolveActiveContextPaths(projectRoot);
+  if (contextPaths.findingsPath) {
+    try {
+      const stats = await fs.lstat(contextPaths.findingsPath);
+      if (stats.isFile()) return contextPaths.findingsPath;
+    } catch {
+      // ignore
+    }
+  }
 
+  const devflowPath = path.join(projectRoot, DEVFLOW_FINDINGS_PATH);
   try {
     const stats = await fs.lstat(devflowPath);
     if (stats.isFile()) return devflowPath;
-  } catch {
-    // try fallback
-  }
-
-  try {
-    const stats = await fs.lstat(blueprintPath);
-    if (stats.isFile()) return blueprintPath;
   } catch {
     // not found
   }
@@ -63,7 +65,8 @@ async function getFindingsFilePath(projectRoot: string): Promise<string | null> 
 }
 
 async function readFindings(projectRoot: string): Promise<FindingsSummary> {
-  let findingsPath = path.join(projectRoot, DEVFLOW_FINDINGS_PATH);
+  const resolvedPath = await getFindingsFilePath(projectRoot);
+  let findingsPath = resolvedPath || path.join(projectRoot, DEVFLOW_FINDINGS_PATH);
 
   try {
     let stats = await fs.lstat(findingsPath);

@@ -12,12 +12,13 @@ import {
 import { handleToolCall } from "../lib/mcp.js";
 
 async function setupTestProject(dir: string): Promise<void> {
-  await fs.mkdir(path.join(dir, "devflow", "context"), { recursive: true });
+  const taskDir = path.join(dir, "devflow", "context", "045-test-feature");
+  await fs.mkdir(taskDir, { recursive: true });
   await fs.mkdir(path.join(dir, ".agents", "skills"), { recursive: true });
   await fs.writeFile(path.join(dir, "AGENTS.md"), "# DevFlow System\n", "utf8");
 
   await fs.writeFile(
-    path.join(dir, "devflow", "context", "current-feature.md"),
+    path.join(taskDir, "spec.md"),
     `# 📐 [045-test-feature] Sample Feature Title
 
 ## 1. Specification & Scope
