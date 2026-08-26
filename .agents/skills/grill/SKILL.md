@@ -1,6 +1,6 @@
 ---
 name: grill
-description: "[devflow][B] Interactive Socratic alignment & domain modeling - stress-test plans, extract domain glossary, and record architecture decision records (ADRs) before delivery."
+description: "[devflow] Interactive Socratic alignment & domain modeling - stress-test plans, extract domain glossary, and record architecture decision records (ADRs) before delivery."
 argument-hint: "{topic, plan, or question}"
 ---
 

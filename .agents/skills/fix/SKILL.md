@@ -1,6 +1,6 @@
 ---
 name: fix
-description: "[devflow][F] Document an ad-hoc bug fix or small change (one not in the build plan) into devflow/context/{xxx-slug}/spec.md so it runs through the same build loop. Supports Multi-Run: drafts dedicated fix context and allows selective /implement [id]. Writes a short fix spec and stops; then /implement builds it and /complete logs it to devflow/history/fixes/ and merges. Use when running /fix, reporting a bug, or fixing an ad-hoc issue."
+description: "[devflow] Document an ad-hoc bug fix or small change (one not in the build plan) into devflow/context/{xxx-slug}/spec.md so it runs through the same build loop. Supports Multi-Run: drafts dedicated fix context and allows selective /implement [id]. Writes a short fix spec and stops; then /implement builds it and /complete logs it to devflow/history/fixes/ and merges. Use when running /fix, reporting a bug, or fixing an ad-hoc issue."
 argument-hint: "[{title or issue-description}]"
 ---
 
