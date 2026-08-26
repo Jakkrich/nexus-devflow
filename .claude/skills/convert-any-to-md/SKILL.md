@@ -1,6 +1,6 @@
 ---
 name: convert-any-to-md
-description: "[devflow][B] Converts any document (.xlsx, .pdf, .docx, .txt, .csv, .log, .json, .yaml, etc.) or mixed folders into clean Markdown in devflow/reference. Use whenever documents need to be analyzed, summarized, searched, or extracted from."
+description: "[devflow] Converts any document (.xlsx, .pdf, .docx, .txt, .csv, .log, .json, .yaml, etc.) or mixed folders into clean Markdown in devflow/reference. Use whenever documents need to be analyzed, summarized, searched, or extracted from."
 ---
 
 # Convert Any Document to Markdown

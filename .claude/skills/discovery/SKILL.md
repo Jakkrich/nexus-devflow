@@ -1,6 +1,6 @@
 ---
 name: discovery
-description: "[devflow][D] Unified discovery and exploration stage in DevFlow 2.5.0 - conducts project-level roadmap discovery (project-plan.md/build-plan.md) or feature-level pre-delivery exploration before the Single Living Spec lifecycle."
+description: "[devflow] Unified discovery and exploration stage in DevFlow 2.5.0 - conducts project-level roadmap discovery (project-plan.md/build-plan.md) or feature-level pre-delivery exploration before the Single Living Spec lifecycle."
 argument-hint: "[{title, request, IDEA-xxx, or discovery-id}]"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: check
-description: "[devflow][F] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review. Supports Multi-Run: given an optional ID or name (/check 12), targets that spec and records proof to devflow/context/{xxx-slug}/findings.md. Drives the app, captures empirical evidence, checks Fowler smells, and reports pass/fail. Use when running /check, confirming work, or validating before /complete."
+description: "[devflow] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review. Supports Multi-Run: given an optional ID or name (/check 12), targets that spec and records proof to devflow/context/{xxx-slug}/findings.md. Drives the app, captures empirical evidence, checks Fowler smells, and reports pass/fail. Use when running /check, confirming work, or validating before /complete."
 argument-hint: "[{run-id, number, or name}]"
 ---
 

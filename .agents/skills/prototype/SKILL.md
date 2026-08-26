@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: "[devflow][B] Interactively prototype the look of a project. Asks about the desired look and feel and which pages to draft, proposes a plan, and only then writes throwaway static HTML/CSS mockups to prototypes/ that share one theme (a set of CSS theme variables). A plan-first, pre-build helper that sits outside the spec-driven feature loop, like scaffolding. Use when the user runs /prototype, names screens to mock up, or asks to prototype the layout, theme, or look and feel."
+description: "[devflow] Interactively prototype the look of a project. Asks about the desired look and feel and which pages to draft, proposes a plan, and only then writes throwaway static HTML/CSS mockups to prototypes/ that share one theme (a set of CSS theme variables). A plan-first, pre-build helper that sits outside the spec-driven feature loop, like scaffolding. Use when the user runs /prototype, names screens to mock up, or asks to prototype the layout, theme, or look and feel."
 ---
 
 # prototype - lock the look before you build

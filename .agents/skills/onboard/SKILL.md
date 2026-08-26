@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: "[devflow][B] Set up the Blueprint after overlaying it onto a freshly scaffolded or early project. Detects the stack, tunes project files and adapters, documents real commands and existing checks, points to the optional standalone CI setup, and tells the user what to fill in before /overview or $overview. Use when the user runs /onboard, invokes $onboard, just copied the Blueprint into a new project, or asks what to do after overlaying the Blueprint. For an existing app with meaningful shipped features, use adopt instead."
+description: "[devflow] Set up the Blueprint after overlaying it onto a freshly scaffolded or early project. Detects the stack, tunes project files and adapters, documents real commands and existing checks, points to the optional standalone CI setup, and tells the user what to fill in before /overview or $overview. Use when the user runs /onboard, invokes $onboard, just copied the Blueprint into a new project, or asks what to do after overlaying the Blueprint. For an existing app with meaningful shipped features, use adopt instead."
 ---
 
 # onboard - finish the Blueprint overlay setup

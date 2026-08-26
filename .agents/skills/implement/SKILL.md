@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "[devflow][F] Build the feature, fix, or rollback spec, one small reviewable step at a time with Strict TDD. Supports Multi-Run: given an optional ID or name (/implement 12, /implement 012), targets that spec from devflow/context/{xxx-slug}/. Checks out matching branch, runs pre-flight drift revalidation, executes TDD steps with diffs, and offers commit checkpoints. Use when running /implement, or starting work on a spec."
+description: "[devflow] Build the feature, fix, or rollback spec, one small reviewable step at a time with Strict TDD. Supports Multi-Run: given an optional ID or name (/implement 12, /implement 012), targets that spec from devflow/context/{xxx-slug}/. Checks out matching branch, runs pre-flight drift revalidation, executes TDD steps with diffs, and offers commit checkpoints. Use when running /implement, or starting work on a spec."
 argument-hint: "[{run-id, number, or name}]"
 ---
 

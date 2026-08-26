@@ -1,6 +1,6 @@
 ---
 name: audit
-description: "[devflow][B] Read-only code audit for a Blueprint project, except for the findings ledger it maintains at devflow/context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review."
+description: "[devflow] Read-only code audit for a Blueprint project, except for the findings ledger it maintains at devflow/context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review."
 ---
 
 # audit - review code quality against the project standards

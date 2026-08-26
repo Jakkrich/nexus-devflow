@@ -1,6 +1,6 @@
 ---
 name: devflow
-description: "[devflow][B] Flagship interactive guide, state inspector, and intent router for DevFlow workflows."
+description: "[devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows."
 ---
 
 # devflow - Interactive Workflow Guide & Intent Router for Nexus-DevFlow

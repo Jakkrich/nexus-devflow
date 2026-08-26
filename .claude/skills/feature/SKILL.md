@@ -1,6 +1,6 @@
 ---
 name: feature
-description: "[devflow][F] Turn a feature from build-plan.md into a buildable living spec. Supports Multi-Run Spec Queue: drafts dedicated context in devflow/context/{xxx-slug}/ without blocking additional specs. With no argument, specs the next unchecked item; given a number or name, specs that one. Sizes and splits large items (4a, 4b), generates TDD checklist steps, red-teams the draft, and stops at review gate. Use when running /feature, naming a feature, or drafting the next living spec."
+description: "[devflow] Turn a feature from build-plan.md into a buildable living spec. Supports Multi-Run Spec Queue: drafts dedicated context in devflow/context/{xxx-slug}/ without blocking additional specs. With no argument, specs the next unchecked item; given a number or name, specs that one. Sizes and splits large items (4a, 4b), generates TDD checklist steps, red-teams the draft, and stops at review gate. Use when running /feature, naming a feature, or drafting the next living spec."
 argument-hint: "[{number, name, DISC-id, or IDEA-id}]"
 ---
 

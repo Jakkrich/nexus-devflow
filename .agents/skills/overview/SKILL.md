@@ -1,6 +1,6 @@
 ---
 name: overview
-description: "[devflow][B] Distill user-owned planning docs into `devflow/context/project-overview.md` using a deterministic compiler. The overview is the living source of truth that agents read every session."
+description: "[devflow] Distill user-owned planning docs into `devflow/context/project-overview.md` using a deterministic compiler. The overview is the living source of truth that agents read every session."
 ---
 
 # overview - dynamic project overview compiler
