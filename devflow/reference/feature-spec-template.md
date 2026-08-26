@@ -1,7 +1,7 @@
 # [ID-slug] Feature Title
 
-> **Template Type**: Single Living Spec (DevFlow 2.5.0)
-> **Active Location**: `devflow/context/current-feature.md`
+> **Template Type**: Task-Isolated Living Spec
+> **Active Location**: `devflow/context/{xxx-slug}/spec.md`
 > **Archive Location**: `devflow/history/{features|fixes|rollbacks}/{ID-slug}.md`
 
 - **Feature ID**: `{xxx-slug}`

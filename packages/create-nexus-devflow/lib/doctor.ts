@@ -51,7 +51,7 @@ const DEFAULT_CURRENT_STAGE_STUB = `# Current Stage
 - Track: \`idle\`
 - Current Stage: \`idle\`
 - Active Branch: \`main\`
-- Living Spec: \`devflow/context/current-feature.md\`
+- Living Spec: \`devflow/context/{xxx-slug}/spec.md\`
 - Next Action: \`Run /feature, /fix, or /discovery to start new work.\`
 - Last Completed Run: \`None\`
 - Last Updated: ${new Date().toISOString().split("T")[0]}
@@ -266,14 +266,12 @@ export async function runDoctor(
     });
   }
 
-  // Check 4: Core Context Files
+  // Check 4: Global Shared Context Files (Pure Multi-Run Architecture)
   const contextFiles = [
-    { name: "current-stage.md", path: path.join("devflow", "context", "current-stage.md"), stub: DEFAULT_CURRENT_STAGE_STUB },
-    { name: "current-feature.md", path: path.join("devflow", "context", "current-feature.md"), stub: DEFAULT_CURRENT_FEATURE_STUB },
-    { name: "findings.md", path: path.join("devflow", "context", "findings.md"), stub: DEFAULT_FINDINGS_STUB },
     { name: "project-overview.md", path: path.join("devflow", "context", "project-overview.md"), stub: "# Project Overview\n\n_Source of truth for project architecture and domain rules._\n" },
     { name: "coding-standards.md", path: path.join("devflow", "context", "coding-standards.md"), stub: "# Coding Standards\n\n_Engineering conventions and quality standards._\n" },
-    { name: "ai-interaction.md", path: path.join("devflow", "context", "ai-interaction.md"), stub: "# AI Interaction Guidelines\n\n_Rules and guidelines for interacting with AI agents._\n" }
+    { name: "ai-interaction.md", path: path.join("devflow", "context", "ai-interaction.md"), stub: "# AI Interaction Guidelines\n\n_Rules and guidelines for interacting with AI agents._\n" },
+    { name: "glossary.md", path: path.join("devflow", "context", "glossary.md"), stub: "# Domain & Architecture Glossary\n\n_Ubiquitous language and architecture definitions._\n" }
   ];
 
   for (const cf of contextFiles) {

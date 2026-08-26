@@ -9,7 +9,8 @@ import { generateSwarmPlan } from "../lib/swarm-orchestrator.js";
 import { handleToolCall } from "../lib/mcp.js";
 
 async function setupTestCodebase(dir: string): Promise<void> {
-  await fs.mkdir(path.join(dir, "devflow", "context"), { recursive: true });
+  const taskDir = path.join(dir, "devflow", "context", "048-swarm-test");
+  await fs.mkdir(taskDir, { recursive: true });
   await fs.mkdir(path.join(dir, "src"), { recursive: true });
   await fs.writeFile(path.join(dir, "AGENTS.md"), "# DevFlow\n", "utf8");
 
@@ -33,7 +34,7 @@ async function setupTestCodebase(dir: string): Promise<void> {
   );
 
   await fs.writeFile(
-    path.join(dir, "devflow", "context", "current-feature.md"),
+    path.join(taskDir, "spec.md"),
     `# 📐 [048-swarm-test] Swarm Test Feature
 
 ## 3. Implementation Checklist
@@ -107,11 +108,11 @@ test("generateSwarmPlan uses a pre-resolved branch context without Git discovery
       tempDir,
       "devflow",
       "context",
-      "feature-055-cache"
+      "055-cache"
     );
     await fs.mkdir(branchContextDir, { recursive: true });
     await fs.writeFile(
-      path.join(branchContextDir, "current-feature.md"),
+      path.join(branchContextDir, "spec.md"),
       `# 📐 [055-branch-context] Branch Scoped Swarm
 
 ## 3. Implementation Checklist

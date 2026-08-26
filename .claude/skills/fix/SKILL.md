@@ -21,14 +21,14 @@ it creates a dedicated run folder at `devflow/context/{xxx-slug}/` (e.g. `059-fi
 A description of the bug or change, for example `/fix "password reset email never
 sends"`. If the user just reported the problem in chat, use that.
 
-The input may also be a finding ID from `devflow/context/findings.md`, alone
+The input may also be a finding ID from `devflow/context/{xxx-slug}/findings.md` (or previous findings), alone
 or with a description, for example `/fix F-03`.
 
 ## Step 1 - write the fix spec
 
 Pull context from `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`,
 calculate the next sequential running ID (e.g. `059-fix-slug`),
-then write a short spec to `devflow/context/{xxx-slug}/spec.md` (and update `devflow/context/current-feature.md`). Keep it lighter than a feature spec:
+then write a short spec to `devflow/context/{xxx-slug}/spec.md`. Also initialize `stage.md` and `findings.md` in that folder. Keep it lighter than a feature spec:
 
 - **Title** - the bug or change in a few words.
 - **Type:** Fix  (so `/complete` logs it to `devflow/history/fixes/`, not `devflow/history/features/`).

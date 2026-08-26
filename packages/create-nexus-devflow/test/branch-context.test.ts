@@ -43,27 +43,21 @@ test("sanitizeBranchName produces clean cross-platform directory names", () => {
   assert.equal(sanitizeBranchName("simple-branch"), "simple-branch");
 });
 
-test("resolveActiveContextPaths falls back to devflow/context on main or when no branch context exists", async () => {
+test("resolveActiveContextPaths returns empty paths when idle or no branch context exists", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-branch-fallback-"));
 
   try {
     await setupTestProject(tempDir);
 
-    // Explicit main branch
+    // Explicit main branch with no active runs
     const mainPaths = await resolveActiveContextPaths(tempDir, "main");
     assert.equal(mainPaths.isBranchScoped, false);
-    assert.equal(
-      mainPaths.featureSpecPath,
-      path.join(tempDir, "devflow", "context", "current-feature.md")
-    );
+    assert.equal(mainPaths.featureSpecPath, "");
 
     // Feature branch without branch isolation initialized
     const featPaths = await resolveActiveContextPaths(tempDir, "feature/044-auth");
     assert.equal(featPaths.isBranchScoped, false);
-    assert.equal(
-      featPaths.featureSpecPath,
-      path.join(tempDir, "devflow", "context", "current-feature.md")
-    );
+    assert.equal(featPaths.featureSpecPath, "");
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
@@ -100,13 +94,10 @@ test("initBranchContext supports devflow/context/<branch>/ and .nexus/branches/<
     const cleaned = await cleanupBranchContext(tempDir, branch);
     assert.equal(cleaned, true);
 
-    // 5. Post-cleanup resolution returns to default fallback
+    // 5. Post-cleanup resolution returns to idle
     const postCleanup = await resolveActiveContextPaths(tempDir, branch);
     assert.equal(postCleanup.isBranchScoped, false);
-    assert.equal(
-      postCleanup.featureSpecPath,
-      path.join(tempDir, "devflow", "context", "current-feature.md")
-    );
+    assert.equal(postCleanup.featureSpecPath, "");
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

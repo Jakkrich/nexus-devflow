@@ -13,7 +13,7 @@ Where this sits in the workflow:
                                         reviewed)        merge + log)
 
 `/feature`, `/fix`, or `/rollback` wrote the spec to
-`devflow/context/{xxx-slug}/spec.md` (or `devflow/context/current-feature.md`) and stopped.
+`devflow/context/{xxx-slug}/spec.md` and stopped.
 This skill turns that spec into code, following the build loop in
 `devflow/context/ai-interaction.md`, without vibe coding: small steps, a visible diff plus
 a plain-English explanation for each, testing, and iteration until it works, all
@@ -24,11 +24,11 @@ checkpoint after each step; the work-level commit, merging, and logging are
 ## Multi-Run Target Resolution
 
 - **Given an ID or name** (e.g. `/implement 12`, `/implement 012`, `/implement kanban`) -> locates the matching run folder `devflow/context/{xxx-slug}/`, checks out `feature/{xxx-slug}`, and loads only that run's `spec.md`.
-- **With no argument** (`/implement`) -> checks current git branch, or auto-picks if only 1 spec is active, or prompts the user if multiple specs are queued.
+- **With no argument** (`/implement`) -> checks current git branch matching `feature/{xxx-slug}`, or auto-picks if only 1 spec is active in `devflow/context/`, or prompts the user if multiple specs are queued.
 
 ## Before you start
 
-Read the target spec from `devflow/context/{xxx-slug}/spec.md` (or `devflow/context/current-feature.md`). If it has no real spec (still the stub, or its
+Read the target spec from `devflow/context/{xxx-slug}/spec.md`. If it has no real spec (missing or its
 status is already complete), stop and tell the user to run `/feature` (for a
 planned feature), `/fix` (for an ad-hoc bug or change), or `/rollback` (for a
 completed feature reversal) first. Pull the
@@ -45,13 +45,12 @@ feature was started earlier and interrupted (often a cleared context). The spec 
 its ticked steps are files, so pick up where it left off: read which steps are done,
 check the git branch and `git status`/log to see what is committed and what is still
 in the working tree, then continue from the **first unchecked step** instead of
-starting over. No separate save/load is needed - the project instructions load
-`current-feature.md` every session.
+starting over.
 
 ## Step 1 - branch
 
-Create and check out a branch named from the spec: `feature/<name>` for a feature,
-`fix/<name>` for a fix, or `rollback/<name>` for a Type: Rollback spec. If the
+Create and check out a branch named from the spec: `feature/{xxx-slug}` for a feature,
+`fix/{xxx-slug}` for a fix, or `rollback/{xxx-slug}` for a Type: Rollback spec. If the
 project isn't a git repo yet, say so and ask the user to run `git init` first;
 the loop needs branches. On resume, the branch already exists - check it out
 instead of creating a new one.
@@ -60,7 +59,7 @@ instead of creating a new one.
 
 For a rollback spec, do not hand-delete the old feature and do not run a whole
 commit `git revert`. Completed feature commits also contain Blueprint history and
-plan bookkeeping, while `current-feature.md` now contains the active rollback
+plan bookkeeping, while `devflow/context/{xxx-slug}/spec.md` now contains the active rollback
 spec. Reversing the whole commit would damage that state.
 
 Before the first rollback build step:
@@ -133,9 +132,9 @@ Work through the spec's build steps in order, one at a time. For each step:
    Repeat until it works and the user approves. Nothing is committed until the
    user is happy with the step.
 6. **Mark it done, then prompt to move on.** Once the step is approved, check that
-   step off (`- [x]`) in `devflow/context/current-feature.md` so progress survives a context
+   step off (`- [x]`) in `devflow/context/{xxx-slug}/spec.md` so progress survives a context
    clear. If the step repaired a finding tracked in
-   `devflow/context/findings.md`, set that finding's status to `fixed` now too
+   `devflow/context/{xxx-slug}/findings.md`, set that finding's status to `fixed` now too
    and note the repair in its **Resolution** line. Never set `closed`: a repair
    is re-reviewed by `/audit` before it clears, because a fix can introduce a
    worse defect than the one it removed. Then offer a short choice, noting that checkpoints are optional since
@@ -164,12 +163,12 @@ pass before any commit.
 
 ## Step 3 - hand off to /complete
 
-Before handing off, check `devflow/context/findings.md`. A P0 or P1 finding
+Before handing off, check `devflow/context/{xxx-slug}/findings.md`. A P0 or P1 finding
 still `open` or `fixed` there means `/complete` will refuse the merge, so close
 the loop now:
 
 - Repair each `open` P0 or P1 as an extra reviewed step. First append it to the
-  spec's build steps in `current-feature.md` (`- [ ] Repair F-03 - <title>`) so
+  spec's build steps in `devflow/context/{xxx-slug}/spec.md` (`- [ ] Repair F-03 - <title>`) so
   the repair is on the record and survives a context clear, then run the same
   loop as Step 2: smallest change, diff, plain-English explanation, evidence.
   Check the step off and mark the finding `fixed` together.

@@ -19,7 +19,7 @@ const REQUIRED_PATHS = [
   "devflow/context/project-overview.md",
   "devflow/context/coding-standards.md",
   "devflow/context/ai-interaction.md",
-  "devflow/context/findings.md",
+  "devflow/context/glossary.md",
   "devflow/reference/running-id-contract.md",
   "packages/create-nexus-devflow/package.json",
   "packages/create-nexus-devflow/bin/create-nexus-devflow.ts",

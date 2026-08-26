@@ -116,9 +116,8 @@ build plan starts high-level.
 
 ## Step 3 - write the spec
 
-For the one (sub-)feature being built now, write a full spec to
-`devflow/context/current-feature.md` (create `devflow/context/` if needed), following
-`reference/feature-spec-template.md`. Fill every section:
+For the one (sub-)feature being built now, allocate sequential ID (`xxx-slug`) and create a dedicated workspace at `devflow/context/{xxx-slug}/`. Write the full living spec to
+`devflow/context/{xxx-slug}/spec.md`, following `reference/feature-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. Fill every section:
 - Goal, Problem Statement, and In/Out of scope
 - Acceptance Criteria (AC-1, AC-2, ...)
 - Small build steps as atomic 2-5 min checklist items (`- [ ]`, supporting `[TDD-Red]`, `[TDD-Green]`, `[TDD-Refactor]` triplets for functional logic)
@@ -178,7 +177,7 @@ code exists. Run the draft against these questions:
   test when a `test` command is declared in `AGENTS.md`, UI/integration rides on
   screenshot + build?
 
-Apply the fixes to `current-feature.md`. Then stop and present the spec, leading
+Apply the fixes to `devflow/context/{xxx-slug}/spec.md`. Then stop and present the spec, leading
 with a short **"what the critique changed"** note - the splits, gaps, or scope
 cuts you made (or "nothing - the draft held up"). That note is the point: it shows
 the gate working before a line of code is written.
@@ -201,8 +200,8 @@ Tell the user to review and adjust. This skill plans; it never starts building.
 ## When a (sub-)feature is done
 
 Check its box in `build-plan.md` (and the parent item once all its sub-items are
-checked), archive the finished `devflow/context/current-feature.md` to
-`devflow/history/features/NN-name.md`, then run `/feature` again for the next one.
+checked), archive the finished `devflow/context/{xxx-slug}/spec.md` to
+`devflow/history/features/{xxx-slug}.md`, delete the run workspace `devflow/context/{xxx-slug}/`, then run `/feature` again for the next one.
 
 ## Formatting
 

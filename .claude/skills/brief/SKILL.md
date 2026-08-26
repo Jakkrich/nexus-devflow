@@ -82,7 +82,7 @@ plans aren't ready, `/prototype` if it's UI-facing and the look isn't locked, or
 ## Rules
 
 - **Read-only, always.** Never write a file, never edit `build-plan.md` or
-  `current-feature.md`, never branch, commit, install, or build. To act on the
+  specs in `devflow/context/`, never branch, commit, install, or build. To act on the
   briefing, the user runs `/feature` next.
 - **Explain, don't spec.** Size, dependencies, and a likely sub-split are the
   value here; the actual build steps are `/feature`'s job. Don't write step lists.

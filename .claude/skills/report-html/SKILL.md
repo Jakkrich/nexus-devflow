@@ -1,6 +1,6 @@
 ---
 name: report-html
-description: "[devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from current-feature.md or history archives on demand."
+description: "[devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from devflow/context/{xxx-slug}/spec.md or history archives on demand."
 argument-hint: "[{running-id or workspace path}]"
 ---
 
@@ -8,7 +8,7 @@ argument-hint: "[{running-id or workspace path}]"
 
 $ARGUMENTS
 
-Standalone companion command to generate an interactive, self-contained HTML report dashboard on demand from `current-feature.md`, task-specific context `devflow/context/{xxx-slug}/spec.md`, or archived history files in `devflow/history/`.
+Standalone companion command to generate an interactive, self-contained HTML report dashboard on demand from task-specific context `devflow/context/{xxx-slug}/spec.md`, or archived history files in `devflow/history/`.
 
 > [!NOTE]
 > HTML reports are **never automatically generated** during normal mainline stages (`/complete`). Use this command whenever you or stakeholders wish to view or share an interactive web report.
@@ -26,7 +26,7 @@ When invoked:
 
 ### 1. Identify Target Run
 1. Locate target markdown document:
-   - Active Living Spec: `devflow/context/current-feature.md` or `devflow/context/{xxx-slug}/spec.md`
+   - Active Living Spec: `devflow/context/{xxx-slug}/spec.md`
    - Archived History: `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`
 2. Parse spec sections, checklist steps, QA evidence, and verification logs.
 

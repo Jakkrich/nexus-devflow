@@ -46,7 +46,7 @@ Read:
 - `devflow/project-plan.md`
 - `devflow/build-plan.md`
 - `devflow/context/project-overview.md`
-- `devflow/context/current-feature.md`
+- `devflow/context/{xxx-slug}/spec.md` (when a task is active)
 - package or build files such as `package.json`, lockfiles, framework config,
   Dockerfile, `render.yaml`, `vercel.json`, `.env.example`, and README files
 - git branch and working tree status

@@ -46,10 +46,10 @@ All development tasks execute through the 4-stage single living spec lifecycle:
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`feature` / `fix` (`/feature`, `/fix`)**: Combines Discover, Define, Spec, and Plan. Allocates sequential ID (`xxx-slug`) and initializes the **Single Living Spec (`devflow/context/current-feature.md`)**.
+1. **`feature` / `fix` (`/feature`, `/fix`)**: Combines Discover, Define, Spec, and Plan. Allocates sequential ID (`xxx-slug`) and initializes the **Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)**.
 2. **`implement` (`/implement`)**: Incrementally executes checklist tasks with strict **TDD discipline (Red-Green-Refactor)**.
 3. **`check` (`/check`)**: Dual-Axis review combining empirical spec fidelity with independent standards, architecture, and quality gates.
-4. **`complete` (`/complete`)**: Final safety pass, records Release Digest, auto-archives living spec to `devflow/history/`, resets the stub, and manages the git delivery gate.
+4. **`complete` (`/complete`)**: Final safety pass, records Release Digest, auto-archives living spec to `devflow/history/`, cleans up the task workspace, and manages the git delivery gate.
 
 ---
 

@@ -24,7 +24,7 @@ passes.
 
 ## Before you start
 
-Confirm the target work is actually finished: `devflow/context/{xxx-slug}/spec.md` (or `current-feature.md`)
+Confirm the target work is actually finished: `devflow/context/{xxx-slug}/spec.md`
 holds a real spec, its steps are built on a branch, and `Verify`, or the fallback
 build and tests, passes. If any of the
 spec's done-whens are behavioral, `/check` should have proven them against the
@@ -36,9 +36,8 @@ the steps to be pre-committed.
 
 Before logging or committing, run a short safety pass and report blockers only:
 
-- active spec exists and the work is not being completed directly from `main` or `master`
-- changed files are tied to the active spec, with no unrelated dirty work mixed
-  in (a dirty `devflow/context/findings.md` is expected, since `/audit` writes it)
+- active spec exists in `devflow/context/{xxx-slug}/spec.md` and the work is not being completed directly from `main` or `master`
+- changed files are tied to the active spec, with no unrelated dirty work mixed in
 - the exact `Verify` command from `AGENTS.md` passed in this session, when one is
   declared; otherwise the build passed, and tests passed when the project has a
   declared test command and the change touched logic
@@ -46,7 +45,7 @@ Before logging or committing, run a short safety pass and report blockers only:
   a clear manual try path
 - if workflow files changed, `.agents` and `.claude` stayed in sync where both
   adapters exist
-- no P0 or P1 finding in `devflow/context/findings.md` is `open` or `fixed`.
+- no P0 or P1 finding in `devflow/context/{xxx-slug}/findings.md` is `open` or `fixed`.
   `fixed` still blocks on purpose: the repair exists but no review has looked at
   it - run `/audit` to close it. The only waivers are `accepted` (the user's
   explicit decision in the current chat, reason recorded; never set it for
@@ -64,48 +63,16 @@ Check whether the spec is a feature, fix, or rollback. A fix is marked
 `Type: Fix` and has no build-plan number. A rollback is marked `Type: Rollback`
 and records the exact target feature, archive, commit, and parent.
 
-- **Feature** - archive `devflow/context/current-feature.md` to `devflow/history/features/NN-name.md`
-  (NN is the build-plan number), and check it off in `devflow/build-plan.md`
-  (and its parent item once all sub-items are checked).
-- **Fix** - archive it to `devflow/history/fixes/name.md`. A fix isn't a build-plan item, so
-  there's nothing to check off.
-- **Rollback** - archive it to
-  `devflow/history/rollbacks/YYYY-MM-DD-NN-name.md`, preserving the original
-  completed feature archive. Create `devflow/history/rollbacks/` first if an
-  older Blueprint installation does not have it yet. Uncheck the exact target item in
-  `devflow/build-plan.md` and its parent when applicable, then append a concise
-  note to the target line with the rollback date and archive path. Keep the
-  feature number stable. If the user later decides the feature is permanently
-  abandoned rather than pending rebuild, that roadmap decision is a separate
-  plan edit.
+- **Feature** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/features/{xxx-slug}.md`, check it off in `devflow/build-plan.md` (and its parent item once all sub-items are checked), and record an entry into `devflow/history/HISTORY.md`.
+- **Fix** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/fixes/{xxx-slug}.md`, and record an entry into `devflow/history/HISTORY.md`.
+- **Rollback** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/rollbacks/YYYY-MM-DD-{xxx-slug}.md`, preserving the original completed feature archive. Uncheck the target item in `devflow/build-plan.md` and record in `devflow/history/HISTORY.md`.
 
-**Archive resolved findings.** If `devflow/context/findings.md` holds any
+**Archive resolved findings.** If `devflow/context/{xxx-slug}/findings.md` holds any
 findings, append a `## Findings` section to the archive file just written with
 every `closed`, `accepted`, or `invalid` entry at its final status (`accepted`
-entries keep their recorded reason). Prefix each ID with the archive name for
-global uniqueness: feature 12's `F-03` becomes `12/F-03`; fixes and rollbacks
-use their archive filename as the prefix. An entry carried forward from earlier
-work archives with the item that resolved it; its **Found** line preserves
-where it came from. Then remove the archived entries from the ledger. Unresolved entries (`open` or `fixed` P2/P3, and `unverified`
-leads) stay in the ledger with their IDs so they are never silently dropped.
-When nothing remains, reset the ledger to exactly this stub, and create it the
-same way if the file is missing (an older install):
+entries keep their recorded reason).
 
-    # Findings
-
-    > **Generated file.** The findings ledger: review findings raised by `/audit`
-    > against the work in progress, each with a durable ID, severity (P0-P3), and
-    > status. `/implement` marks repaired findings `fixed`, a later `/audit` pass
-    > moves them to `closed`, and `/complete` refuses to merge while any P0 or P1
-    > finding is `open` or `fixed`, then archives resolved findings with the work
-    > and resets this file.
-
-    _No findings recorded. `/audit` appends findings here when it finds them._
-
-Then reset `devflow/context/current-feature.md` to its current stub ("nothing
-in progress"), including `/rollback` alongside `/feature` and `/fix`. Don't
-commit yet; the next step makes one work commit covering the code and these doc
-changes. The archive is the build history.
+**Clean up run workspace.** Delete the task directory `devflow/context/{xxx-slug}/`. In Pure Multi-Run architecture, completed work leaves zero residual stubs in `devflow/context/`.
 
 **Discard consumed prototypes.** If this feature built the look from `prototypes/`
 - its Design reference pointed there and an early step ported `prototypes/theme.css`
@@ -159,7 +126,7 @@ Finish with a concise **How to try it** note for the completed work. For a
 rollback, explain how to confirm the removed behavior is gone and name one
 unaffected regression path. If the
 manual path is more than a couple of steps, tell the user to run `/try latest`;
-that command can read the archived feature after `current-feature.md` is reset.
+that command can read the archived feature from history.
 
 ## Rules
 

@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { resolveActiveRunContext } from "./branch-context.js";
 import type { StatusCurrentWork } from "./status.js";
 
 type WorkflowTrack = "fast" | "deep" | "idle";
@@ -31,7 +32,8 @@ async function readWorkflowState(
   projectRoot: string,
   currentWork: StatusCurrentWork
 ): Promise<WorkflowState> {
-  const stagePath = path.join(projectRoot, "devflow", "context", "current-stage.md");
+  const runContext = await resolveActiveRunContext(projectRoot);
+  const stagePath = runContext.stagePath || path.join(projectRoot, "devflow", "context", "current-stage.md");
   let markdown = "";
   try {
     markdown = await fs.readFile(stagePath, "utf8");

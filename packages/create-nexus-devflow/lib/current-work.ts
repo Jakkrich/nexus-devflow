@@ -38,9 +38,6 @@ interface CurrentWorkSummary {
   warnings: CurrentWorkWarning[];
 }
 
-const DEVFLOW_CURRENT_FEATURE_PATH = path.join("devflow", "context", "current-feature.md");
-const CURRENT_STAGE_PATH = path.join("devflow", "context", "current-stage.md");
-const LEGACY_FEATURE_PATH = path.join("blueprint", "context", "current-feature.md");
 const RESET_MARKER = "_Nothing in progress.";
 const CHECKBOX_PATTERN = /^\s*-\s+\[([ xX])\]\s+(.+?)\s*$/;
 
@@ -49,13 +46,18 @@ async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary>
   const currentStageFile = contextPaths.stagePath;
   const devflowFeatureFile = contextPaths.featureSpecPath;
 
-  // 1. Check active spec path from context resolver or default devflow/context/current-feature.md
+  if (!devflowFeatureFile) {
+    return idleSummary();
+  }
+
   try {
     let activeRunningId: string | null = null;
-    const stageStats = await fs.lstat(currentStageFile).catch(() => null);
-    if (stageStats?.isFile()) {
-      const stageContent = await fs.readFile(currentStageFile, "utf8");
-      activeRunningId = extractStageField(stageContent, "Active Running ID");
+    if (currentStageFile) {
+      const stageStats = await fs.lstat(currentStageFile).catch(() => null);
+      if (stageStats?.isFile()) {
+        const stageContent = await fs.readFile(currentStageFile, "utf8");
+        activeRunningId = extractStageField(stageContent, "Active Running ID");
+      }
     }
 
     const fastSummary = await readFastTrackWork(devflowFeatureFile);
@@ -66,19 +68,7 @@ async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary>
       return fastSummary;
     }
   } catch {
-    // Continue to fallback
-  }
-
-  // 2. Fallback to legacy blueprint/context/current-feature.md
-  const legacyPath = path.join(projectRoot, LEGACY_FEATURE_PATH);
-  try {
-    const stats = await fs.lstat(legacyPath).catch(() => null);
-    if (stats?.isFile()) {
-      const content = await fs.readFile(legacyPath, "utf8");
-      return parseCurrentWork(content);
-    }
-  } catch {
-    // Return idle
+    // Return idle on read error
   }
 
   return idleSummary();

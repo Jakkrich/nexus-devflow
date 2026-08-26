@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import fsSync from "node:fs";
+import path from "node:path";
 import { resolveActiveContextPaths } from "./branch-context.js";
 
 export type SwarmRole = "coder" | "qa" | "security" | "architect";
@@ -76,19 +77,23 @@ export async function generateSwarmPlan(
 ): Promise<SwarmPlan> {
   const contextPaths = await resolveActiveContextPaths(projectRoot, options.branch);
 
-  let runId = "ACTIVE";
+  let runId = contextPaths.runId || "ACTIVE";
   let title = "Active Feature";
   let track = "fast";
   const tasks: SwarmSubtask[] = [];
+
+  const relSpecPath = contextPaths.featureSpecPath
+    ? path.relative(projectRoot, contextPaths.featureSpecPath).replace(/\\/g, "/")
+    : "devflow/context/spec.md";
 
   if (fsSync.existsSync(contextPaths.featureSpecPath)) {
     const specContent = await fs.readFile(contextPaths.featureSpecPath, "utf8");
 
     // Extract title & ID
-    const titleMatch = specContent.match(/^#\s+📐\s+\[([^\]]+)\]\s+(.*)/m);
+    const titleMatch = specContent.match(/^#\s+(?:📐\s+)?(?:\[([^\]]+)\]\s+)?(.*)/m);
     if (titleMatch) {
-      runId = titleMatch[1];
-      title = titleMatch[2];
+      if (titleMatch[1]) runId = titleMatch[1];
+      if (titleMatch[2]) title = titleMatch[2].trim();
     }
 
     // Parse checklist tasks
@@ -120,7 +125,7 @@ export async function generateSwarmPlan(
           role,
           title: taskTitle,
           description: `Execute ${taskTitle} with role-specialized focus and rigorous verification.`,
-          requiredContext: ["devflow/context/current-feature.md", "devflow/context/coding-standards.md"],
+          requiredContext: [relSpecPath, "devflow/context/coding-standards.md"],
           verificationCriterion: `Pass multi-lane quality gate and done-when assertions for ${taskTitle}.`,
           parallelGroup: role === "qa" || role === "security" ? 2 : 1
         });
@@ -137,7 +142,7 @@ export async function generateSwarmPlan(
         role: "architect",
         title: "Specification & Alignment Verification",
         description: "Align living spec with project architectural invariants.",
-        requiredContext: ["devflow/context/current-feature.md"],
+        requiredContext: [relSpecPath],
         verificationCriterion: "Spec adheres to 3-Pillars contract.",
         parallelGroup: 1
       },
@@ -146,7 +151,7 @@ export async function generateSwarmPlan(
         role: "coder",
         title: "Core Logic Implementation",
         description: "Develop required functions and modules.",
-        requiredContext: ["devflow/context/current-feature.md", "devflow/context/coding-standards.md"],
+        requiredContext: [relSpecPath, "devflow/context/coding-standards.md"],
         verificationCriterion: "Code builds and passes typecheck.",
         parallelGroup: 2
       },
@@ -155,7 +160,7 @@ export async function generateSwarmPlan(
         role: "qa",
         title: "Automated Test & Edge Case Coverage",
         description: "Author comprehensive unit tests and run verification.",
-        requiredContext: ["devflow/context/current-feature.md"],
+        requiredContext: [relSpecPath],
         verificationCriterion: "100% test pass rate with zero regressions.",
         parallelGroup: 2
       },

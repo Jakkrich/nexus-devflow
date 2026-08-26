@@ -1,6 +1,6 @@
 ---
 name: audit
-description: "[devflow] Read-only code audit for a Blueprint project, except for the findings ledger it maintains at devflow/context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review."
+description: "[devflow] Read-only code audit for a Blueprint project, except for the findings ledger it maintains at devflow/context/{xxx-slug}/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review."
 ---
 
 # audit - review code quality against the project standards
@@ -17,7 +17,7 @@ or one focused lens: quality, security, performance, or tests.
 
 It reviews code without changing it: it never edits source files, installs
 dependencies, commits, merges, pushes, or starts product work. Its one write is
-the findings ledger at `devflow/context/findings.md` (Step 4), the durable
+the findings ledger at `devflow/context/{xxx-slug}/findings.md` (Step 4), the durable
 record of findings and their status.
 
 ## Input
@@ -29,7 +29,7 @@ Optional scope:
 
 - no scope argument: use `current` when an active feature exists, otherwise use
   `changed` when local changes exist, otherwise use `full`
-- `current`: audit the active `current-feature.md`, every committed feature-branch
+- `current`: audit the active `devflow/context/{xxx-slug}/spec.md`, every committed feature-branch
   change from its merge base through `HEAD`, staged and unstaged changes,
   untracked source files, and nearby code affected by the feature
 - `changed`: audit staged, unstaged, and untracked source files plus nearby code
@@ -65,8 +65,8 @@ Read:
 - `AGENTS.md`
 - `devflow/context/project-overview.md`
 - `devflow/context/coding-standards.md`
-- `devflow/context/current-feature.md`
-- `devflow/context/findings.md`, for existing IDs and statuses
+- `devflow/context/{xxx-slug}/spec.md` (when a task is active)
+- `devflow/context/{xxx-slug}/findings.md` (or existing ledger), for existing IDs and statuses
 - `devflow/context/ai-interaction.md`
 - `devflow/build-plan.md`, when feature order matters
 - git branch and working tree status
@@ -145,9 +145,9 @@ audit evidence before responding.
 
 ## Step 4 - update the findings ledger
 
-`devflow/context/findings.md` is the durable record of findings. Chat reports
+`devflow/context/{xxx-slug}/findings.md` is the durable record of findings for the active task. Chat reports
 do not survive a context clear; the ledger does. It is the only file this skill
-writes. If it is missing (an older install), create it with a `# Findings`
+writes. If it is missing, create it with a `# Findings`
 heading first.
 
 **The ledger never scopes the review.** Review the code fresh in Step 3, then

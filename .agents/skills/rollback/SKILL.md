@@ -1,6 +1,6 @@
 ---
 name: rollback
-description: "[devflow] Plan a safe reversal of a completed Blueprint feature using its archived spec and squashed git commit. Finds the exact feature commit, reviews later commits for dependency risk, writes a Type: Rollback spec to devflow/context/current-feature.md, and stops for review before /implement applies any code change. Use when the user runs /rollback, asks to remove or undo a completed feature, or wants to return the app to its pre-feature behavior without erasing Blueprint history."
+description: "[devflow] Plan a safe reversal of a completed Blueprint feature using its archived spec and squashed git commit. Finds the exact feature commit, reviews later commits for dependency risk, writes a Type: Rollback spec to devflow/context/{xxx-slug}/spec.md, and stops for review before /implement applies any code change. Use when the user runs /rollback, asks to remove or undo a completed feature, or wants to return the app to its pre-feature behavior without erasing Blueprint history."
 ---
 
 # rollback - safely reverse a completed feature
@@ -33,14 +33,12 @@ the feature was removed.
 
 ## Step 0 - preflight
 
-Read `AGENTS.md`, `devflow/build-plan.md`,
-`devflow/context/current-feature.md`, the completed feature archives, and git
+Read `AGENTS.md`, `devflow/build-plan.md`, the completed feature archives, and git
 state.
 
 Stop before writing when:
 
 - the directory is not a git repository
-- `current-feature.md` already holds active work
 - the working tree is dirty, including unrelated untracked work
 - the current branch is not the local main or default branch
 - the target is not a checked build-plan feature with a matching archive
@@ -107,8 +105,8 @@ remediation or explicitly plan the dependent rollbacks.
 
 ## Step 4 - write the rollback spec
 
-Write `devflow/context/current-feature.md` using
-`reference/rollback-spec-template.md`. Fill in:
+Allocate sequential ID (`xxx-slug`) and create `devflow/context/{xxx-slug}/`. Write `devflow/context/{xxx-slug}/spec.md` using
+`reference/rollback-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. Fill in:
 
 - target feature, archive, exact commit, and parent commit
 - user's reason

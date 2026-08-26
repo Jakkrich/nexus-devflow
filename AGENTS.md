@@ -1,12 +1,12 @@
-# Nexus-DevFlow 2.7.0 (The 3-Pillars & Single Living Spec Model)
+# Nexus-DevFlow (The 3-Pillars & Pure Task-Isolated Living Spec Model)
 
 Instructions for AI coding agents working in this project. This is the cross-tool entry point: Codex, Google Antigravity, Cursor, GitHub Copilot, Gemini CLI, Aider, Zed, Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports this file (`@AGENTS.md`), so there is a single source of truth.
 
 ## What this is
 
-This project uses **Nexus-DevFlow**, an agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Single Living Spec Model**:
-1. **🔮 Future (Backlog)**: `devflow/ideas.md` — Centralized Idea Inbox with AI scoring.
-2. **⚡ Present (Active Context)**: `devflow/context/` — Living Source of Truth & Active Work (`current-feature.md` Single Living Spec).
+This project uses **Nexus-DevFlow**, an agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Pure Task-Isolated Living Spec Model**:
+1. **🔮 Future (Backlog)**: `devflow/ideas.md`, `devflow/project-plan.md`, `devflow/build-plan.md` — Centralized Idea Inbox & Master Build Plan.
+2. **⚡ Present (Active Context)**: `devflow/context/` — Global Shared Source of Truth (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `glossary.md`) & Active Task Workspaces (`devflow/context/{xxx-slug}/`).
 3. **📦 Past (History Archive)**: `devflow/history/` — Categorized delivery archives (`features/`, `fixes/`, `rollbacks/`, and `HISTORY.md`).
 
 To start a new project, scaffold the application first in an empty folder, then run `npx @jakkrichm/create-nexus-devflow` to overlay DevFlow onto your codebase.
@@ -17,9 +17,8 @@ To start a new project, scaffold the application first in an empty folder, then 
 - `devflow/context/project-overview.md` - the project's source of truth
 - `devflow/context/coding-standards.md` - engineering conventions & rules to follow
 - `devflow/context/ai-interaction.md` - how to interact with the user on this project
-- `devflow/context/current-stage.md` - active discovery or running delivery state
-- `devflow/context/findings.md` - quality, security, and verification ledger
 - `devflow/context/glossary.md` - domain terms & architecture definitions
+- `devflow/context/{xxx-slug}/` - active task living spec, stage, and findings ledger
 
 ## Project configuration
 
@@ -45,28 +44,28 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
    - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$continuous`, `$devflow`, `$discovery`.
 2. **OpenAI Codex & Non-Native CLI Tools**: In environments without automatic background skill discovery (such as OpenAI Codex CLI, Aider, or generic terminals), **you MUST use your file reading tool to inspect `.agents/skills/<skill>/SKILL.md` before executing the stage** to strictly follow its schema, artifact contract, and quality gates.
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover and surface `.agents/skills/` and `.claude/skills/`.
-4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` to automatically inspect `devflow/context/current-stage.md` and active context in `devflow/context/`.
-5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`current-feature.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
+4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` to automatically inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md`.
+5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 
 ---
 
-## ⚡ The Unified 4-Stage Living Spec Lifecycle
+## ⚡ The Unified 4-Stage Task-Isolated Living Spec Lifecycle
 
-All development tasks (from lean UI fixes to deep architectural epics) execute through the 4-step progressive lifecycle:
+All development tasks execute through the 4-step progressive lifecycle:
 
 ```text
 /feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`feature` / `fix` (`/feature`, `/fix`, `/spec`)**:
-   - **Purpose**: Combines Discover, Define, Spec, and Plan into one unified step. Checks Single Active Run Guardrail, allocates sequential ID (`xxx-slug`), and creates the **Single Living Spec (`devflow/context/current-feature.md`)** with 6 structured sections.
-   - **Artifact**: `devflow/context/current-feature.md`
-2. **`implement` (`/implement`)**:
-   - **Purpose**: Incrementally executes checklist tasks with TDD discipline (Red-Green-Refactor) and appends diff evidence to `current-feature.md`.
-3. **`check` (`/check`)**:
-   - **Purpose**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof), and records empirical proof into `current-feature.md`.
-4. **`complete` (`/complete`)**:
-   - **Purpose**: Final safety pass, records Release Digest, automatically archives to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, resets the stub, and performs git squash-merge.
+1. **`feature` / `fix` (`/feature`, `/fix`)**:
+   - **Purpose**: Combines Discover, Define, Spec, and Plan into one unified step. Allocates sequential ID (`xxx-slug`) and initializes the **Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)**, stage pointer (`stage.md`), and dedicated audit ledger (`findings.md`).
+   - **Artifact**: `devflow/context/{xxx-slug}/spec.md`
+2. **`implement` (`/implement [id]`)**:
+   - **Purpose**: Checks out `feature/{xxx-slug}` (or auto-detects from branch), incrementally executes checklist tasks in `devflow/context/{xxx-slug}/spec.md` with TDD discipline (Red-Green-Refactor), and appends diff evidence.
+3. **`check` (`/check [id]`)**:
+   - **Purpose**: Senior QA review, multi-lane verification matrix (Typecheck, Lint, Test suites, manual proof), and records empirical proof into `devflow/context/{xxx-slug}/spec.md` and findings into `findings.md`.
+4. **`complete` (`/complete [id]`)**:
+   - **Purpose**: Final safety pass, records Release Digest, automatically archives to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, cleanly removes `devflow/context/{xxx-slug}/`, updates `HISTORY.md` and `build-plan.md`, and performs git squash-merge.
 
 ---
 
