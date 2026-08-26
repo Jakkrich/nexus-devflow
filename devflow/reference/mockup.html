@@ -221,22 +221,21 @@ footer a{color:var(--cyan);text-decoration:none}
         <span class="badge violet">Track: Idle</span>
       </div>
     </div>
-    <dl class="tb-table">
-      <dt>Package</dt><dd>@jakkrichm/create-nexus-devflow</dd>
-      <dt>Adapters</dt><dd>4 detected</dd>
-      <dt>Branch</dt><dd>main</dd>
-      <dt>Revision</dt><dd>2026-08-22</dd>
-    </dl>
+    <div class="meta">
+      <div class="meta-item"><span class="meta-label">Package</span><span class="meta-val">@jakkrichm/create-nexus-devflow</span></div>
+      <div class="meta-item"><span class="meta-label">Adapters</span><span class="meta-val">antigravity, claude, codex, copilot, opencode</span></div>
+      <div class="meta-item"><span class="meta-label">Branch</span><span class="meta-val">main</span></div>
+      <div class="meta-item"><span class="meta-label">Snapshot</span><span class="meta-val">2026-08-26 10:45</span></div>
+    </div>
   </header>
   <div class="live-wrap"><span class="live-dot"></span><span class="muted" style="font:11px var(--font-mono)">Status snapshot · health OK · npx @jakkrichm/create-nexus-devflow status</span></div>
 
-  <!-- Dual-Track Delivery Model -->
+  <!-- Unified Living Spec Model -->
   <section class="pipeline">
     <div class="pipeline-head">
-      <span class="pipeline-title">Dual-Track Delivery Model</span>
+      <span class="pipeline-title">Unified Living Spec Model (Nexus-DevFlow 2.6.x)</span>
       <div class="track-tabs" id="track-tabs">
-        <button class="tab on" data-t="fast">🏎️ Fast-Track · 4 steps</button>
-        <button class="tab" data-t="deep">🏗️ Deep-Track · 8 stages</button>
+        <button class="tab on" data-t="fast">⚡ Living Spec · 4 steps</button>
       </div>
     </div>
 
@@ -245,23 +244,9 @@ footer a{color:var(--cyan);text-decoration:none}
         <div class="step"><span class="step-conn"></span><span class="step-dot">1</span><div class="step-name">feature / fix</div><div class="step-cmd">/feature · /fix</div></div>
         <div class="step"><span class="step-conn"></span><span class="step-dot">2</span><div class="step-name">implement</div><div class="step-cmd">/implement</div></div>
         <div class="step"><span class="step-conn"></span><span class="step-dot">3</span><div class="step-name">check</div><div class="step-cmd">/check</div></div>
-        <div class="step"><span class="step-dot">4</span><div class="step-name">complete</div><div class="step-cmd">/complete</div></div>
+        <div class="step"><span class="step-conn"></span><span class="step-dot">4</span><div class="step-name">complete</div><div class="step-cmd">/complete</div></div>
       </div>
-      <div class="track-note"><b>Idle:</b> no active Fast-Track run. Use <code>/feature</code> or <code>/fix</code> to create the Single Living Spec in <code>devflow/context/current-feature.md</code>. Recommended for about 85% of daily engineering work.</div>
-    </div>
-
-    <div class="track-view" id="view-deep">
-      <div class="stepper">
-        <div class="step"><span class="step-conn"></span><span class="step-dot">00</span><div class="step-name">00-explore</div></div>
-        <div class="step"><span class="step-conn"></span><span class="step-dot">10</span><div class="step-name">10-define</div></div>
-        <div class="step"><span class="step-conn"></span><span class="step-dot">20</span><div class="step-name">20-spec</div></div>
-        <div class="step"><span class="step-conn"></span><span class="step-dot">30</span><div class="step-name">30-plan</div></div>
-        <div class="step"><span class="step-conn"></span><span class="step-dot">40</span><div class="step-name">40-execute</div></div>
-        <div class="step"><span class="step-conn"></span><span class="step-dot">50</span><div class="step-name">50-verify</div></div>
-        <div class="step"><span class="step-conn"></span><span class="step-dot">60</span><div class="step-name">60-report</div></div>
-        <div class="step"><span class="step-dot">70</span><div class="step-name">70-deliver</div></div>
-      </div>
-      <div class="track-note"><b>Reference model:</b> no active Deep-Track run. Recommended for architectural epics, database migrations, security audits, and multi-agent coordination. Progress lives in <code>devflow/context/current-run/</code> and is archived on <code>/70-deliver</code>.</div>
+      <div class="track-note"><b>Single Living Spec:</b> <code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code> with TDD Discipline, Multi-Lane QA, and Durably Categorized History.</div>
     </div>
   </section>
 
@@ -274,7 +259,7 @@ footer a{color:var(--cyan);text-decoration:none}
       </button>
     </div>
     <div class="command" id="next-command">/feature</div>
-    <div class="muted">Workspace is idle and ready for new work. Start a Fast-Track feature, or use <code>/00-explore</code> when the scope needs deeper discovery first.</div>
+    <div class="muted">Workspace is idle and ready for new work. Start a living feature, or use <code>/discovery</code> when the scope needs deeper exploration first.</div>
   </section>
 
   <section class="stats">
@@ -291,7 +276,7 @@ footer a{color:var(--cyan);text-decoration:none}
       <div class="facts">
         <div class="fact"><span>Installed / latest</span><span>v2.0.25 / v2.0.25</span></div>
         <div class="fact"><span>Adapters</span><span>antigravity, codex, claude, copilot</span></div>
-        <div class="fact"><span>Architecture</span><span>3-Pillars + Dual-Track</span></div>
+        <div class="fact"><span>Architecture</span><span>3-Pillars + Living Spec</span></div>
       </div>
     </article>
 
@@ -350,7 +335,7 @@ footer a{color:var(--cyan);text-decoration:none}
       <div class="card-head"><span class="label">Discoveries</span><span class="value">0</span></div>
       <div class="disc-item">
         <div class="disc-id">NO ACTIVE DISCOVERY</div>
-        <div class="disc-title">Use /00-explore to investigate a request before delivery commitment.</div>
+        <div class="disc-title">Use /discovery to investigate a request before delivery commitment.</div>
         <div class="disc-status" style="color:var(--mint)">workspace ready</div>
       </div>
     </article>
@@ -372,7 +357,7 @@ footer a{color:var(--cyan);text-decoration:none}
       <button class="cmdp" data-cmd="rollback" data-tip="Plan a safe reversal with dependency and regression risk analysis.">rollback</button>
       <button class="cmdp" data-cmd="ci" data-tip="Set up the GitHub Actions verification workflow for the project.">ci</button>
       <button class="cmdp" data-cmd="test" data-tip="Inspect test suites and verify the test runner configuration.">test</button>
-      <button class="cmdp" data-cmd="autopilot" data-tip="Run a bounded Fast-Track or Deep-Track execution loop with quality gates.">autopilot</button>
+      <button class="cmdp" data-cmd="autopilot" data-tip="Run a bounded spec/build/check execution loop with quality gates.">autopilot</button>
       <button class="cmdp" data-cmd="prototype" data-tip="Create a throwaway static HTML/CSS mockup to settle UI direction before build.">prototype</button>
       <button class="cmdp" data-cmd="report-html" data-tip="Generate the optional standalone interactive HTML delivery report.">report-html</button>
     </div>
@@ -412,7 +397,7 @@ footer a{color:var(--cyan);text-decoration:none}
       <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 039</span><span class="hist-title">Dynamic Project Overview Compiler (/overview) พร้อม Living Context Sync</span></div>
       <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 038</span><span class="hist-title">Sub-Feature Automatic Splitting Engine และ Sub-Feature ID Contract</span></div>
       <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 037</span><span class="hist-title">Feature Briefing &amp; Deep Scope Assessment Skill (/brief)</span></div>
-      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 036</span><span class="hist-title">Cloud Deployment Readiness Skill (/release) และ 70-deliver</span></div>
+      <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 036</span><span class="hist-title">Cloud Deployment Readiness Skill (/release)</span></div>
       <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 035</span><span class="hist-title">Guided Project Discovery Interview Skill (/discovery)</span></div>
       <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 034</span><span class="hist-title">Dedicated Code &amp; Security Audit Skill (/audit)</span></div>
       <div class="hist-item"><span class="hist-bar feature"></span><span class="hist-type">feature 033</span><span class="hist-title">User-Owned Planning Documents (project-plan.md &amp; build-plan.md)</span></div>

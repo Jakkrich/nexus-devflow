@@ -28,25 +28,23 @@ function writeFile(filePath, content = 'sample\n') {
 try {
   const projectRoot = path.join(scratchRoot, 'project');
   const legacyRoot = path.join(projectRoot, 'devflow', '001-sample-task');
-  writeFile(path.join(legacyRoot, '00-explore', 'discover.md'));
-  writeFile(path.join(legacyRoot, '10-define', 'define.md'));
-  writeFile(path.join(legacyRoot, '20-spec', 'spec.md'));
-  writeFile(path.join(legacyRoot, '60-report', 'report.md'));
-  writeFile(path.join(legacyRoot, '60-report', 'report.html'), '<html></html>\n');
+  writeFile(path.join(legacyRoot, 'explore', 'discover.md'));
+  writeFile(path.join(legacyRoot, 'spec', 'spec.md'));
+  writeFile(path.join(legacyRoot, 'report', 'report.md'));
+  writeFile(path.join(legacyRoot, 'report', 'report.html'), '<html></html>\n');
 
   const dryRun = run([projectRoot]);
   assert(dryRun.status === 0, `dry-run should pass:\n${dryRun.stdout}\n${dryRun.stderr}`);
-  assert(fs.existsSync(path.join(legacyRoot, '00-explore', 'discover.md')), 'dry-run should not move legacy files');
+  assert(fs.existsSync(path.join(legacyRoot, 'explore', 'discover.md')), 'dry-run should not move legacy files');
 
   const writeRun = run([projectRoot, '--write']);
   assert(writeRun.status === 0, `write migration should pass:\n${writeRun.stdout}\n${writeRun.stderr}`);
 
   const targetRoot = path.join(projectRoot, 'devflow', 'specs', '001-sample-task');
-  assert(fs.existsSync(path.join(targetRoot, '00-explore.md')), 'discover artifact should move to flat stage filename');
-  assert(fs.existsSync(path.join(targetRoot, '10-define.md')), 'define artifact should move to flat stage filename');
-  assert(fs.existsSync(path.join(targetRoot, '20-spec.md')), 'spec artifact should move to flat stage filename');
-  assert(fs.existsSync(path.join(targetRoot, '60-report.md')), 'report markdown should move to flat stage filename');
-  assert(fs.existsSync(path.join(targetRoot, '60-report.html')), 'report html should move to flat stage filename');
+  assert(fs.existsSync(path.join(targetRoot, 'discovery.md')), 'discover artifact should move to flat stage filename');
+  assert(fs.existsSync(path.join(targetRoot, 'spec.md')), 'spec artifact should move to flat stage filename');
+  assert(fs.existsSync(path.join(targetRoot, 'report.md')), 'report markdown should move to flat stage filename');
+  assert(fs.existsSync(path.join(targetRoot, 'report.html')), 'report html should move to flat stage filename');
   assert(!fs.existsSync(legacyRoot), 'legacy run directory should be removed when empty');
 
   console.log('[OK] migrate-stage-artifacts migrates legacy run folders to flat spec workspace layout.');

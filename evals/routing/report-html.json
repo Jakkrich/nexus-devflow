@@ -1,6 +1,6 @@
 {
   "skill": "report-html",
-  "description": "\"[Devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from current-feature.md or 60-report.md on demand.\"",
+  "description": "\"[Devflow] Standalone HTML Report Generator - render an interactive standalone HTML dashboard from current-feature.md or on-demand spec on demand.\"",
   "positive": [
     "run report-html skill",
     "invoke /report-html command",

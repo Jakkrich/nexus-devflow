@@ -3,15 +3,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const stageMappings = [
-  { legacyDir: '00-explore', legacyFile: 'discover.md', targetFile: '00-explore.md' },
-  { legacyDir: '10-define', legacyFile: 'define.md', targetFile: '10-define.md' },
-  { legacyDir: '20-spec', legacyFile: 'spec.md', targetFile: '20-spec.md' },
-  { legacyDir: '30-plan', legacyFile: 'plan.md', targetFile: '30-plan.md' },
-  { legacyDir: '40-execute', legacyFile: 'implement.md', targetFile: '40-execute.md' },
-  { legacyDir: '50-verify', legacyFile: 'verify.md', targetFile: '50-verify.md' },
-  { legacyDir: '70-deliver', legacyFile: 'release.md', targetFile: '70-deliver.md' },
-  { legacyDir: '60-report', legacyFile: 'report.md', targetFile: '60-report.md' },
-  { legacyDir: '60-report', legacyFile: 'report.html', targetFile: '60-report.html' }
+  { legacyDir: 'explore', legacyFile: 'discover.md', targetFile: 'discovery.md' },
+  { legacyDir: 'discovery', legacyFile: 'discovery.md', targetFile: 'discovery.md' },
+  { legacyDir: 'spec', legacyFile: 'spec.md', targetFile: 'spec.md' },
+  { legacyDir: 'implement', legacyFile: 'implement.md', targetFile: 'spec.md' },
+  { legacyDir: 'verify', legacyFile: 'verify.md', targetFile: 'findings.md' },
+  { legacyDir: 'report', legacyFile: 'report.md', targetFile: 'report.md' },
+  { legacyDir: 'report', legacyFile: 'report.html', targetFile: 'report.html' }
 ];
 
 function parseArgs(argv) {

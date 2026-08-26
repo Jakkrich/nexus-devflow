@@ -37,16 +37,12 @@ const CUSTOM_DESCRIPTIONS = {
   'brief': '[Devflow] Read-only scope, dependency, and risk pre-briefing before speccing a run.',
   'autopilot': '[Devflow] Optional explicit mode for one bounded spec/plan/implement/verify/report pass with checkpoint commits and review packet.',
   'devflow': '[Devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows.',
-  'discovery': '[Devflow] Unified discovery and exploration stage in DevFlow 2.0 - conducts project roadmap planning or feature exploration before delivery commitment.',
-  '10-define': '[Devflow] Define stage in DevFlow 2.0 - turn an approved discovery into one or more bounded delivery runs with stable scope.',
-  '20-spec': '[Devflow] Spec stage in DevFlow 2.0 - write the formal markdown-first specification from a stable definition.',
-  '30-plan': '[Devflow] Plan stage in DevFlow 2.0 - transform 20-spec.md into an executable task breakdown with test decisions.',
-  '40-execute': '[Devflow] Execute stage in DevFlow 2.0 - execute planned tasks incrementally with evidence and unit tests.',
-  '50-verify': '[Devflow] Verify stage in DevFlow 2.0 - perform senior QA review, record evidence, and decide pass or return-to-implement.',
-  '60-report': '[Devflow] Report stage in DevFlow 2.0 - produce standardized markdown and HTML summary report for the completed run.',
-  '70-deliver': '[Devflow] Release stage in DevFlow 2.0 - package verified work for delivery, git merge, PR, or deployment.',
-  'feature': '[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract for new features.',
-  'fix': '[Devflow] Fast-Track Fix stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract for bug fixes.'
+  'discovery': '[Devflow] Unified discovery and exploration stage in DevFlow 2.6.x - conducts project roadmap planning or feature exploration before delivery commitment.',
+  'feature': '[Devflow] Turn a feature from build-plan.md into a buildable living spec with TDD checklist and verification matrix.',
+  'fix': '[Devflow] Document an ad-hoc bug fix or small change into a living spec so it runs through the same build loop.',
+  'implement': '[Devflow] Build the feature, fix, or rollback spec, one small reviewable step at a time with Strict TDD.',
+  'check': '[Devflow] Prove the current work actually does what its spec says and adheres to architectural standards through Dual-Axis Review.',
+  'complete': '[Devflow] Wrap up a finished feature, fix, or rollback, archive spec to devflow/history/, and perform git merge.'
 };
 
 const entries = fs.readdirSync(skillsDir, { withFileTypes: true })

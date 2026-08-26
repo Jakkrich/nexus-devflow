@@ -12,14 +12,14 @@ test("parseDiscovery reads identity and approved decision", () => {
 > **Date**: 2026-08-22
 > **Status**: \`Proceed (Ready)\`
 > **Approval Status**: \`Approved\`
-### Final Decision: \`Proceed\``, "folder/00-explore.md", "fallback");
+### Final Decision: \`Proceed\``, "folder/discovery.md", "fallback");
   assert.equal(item.id, "DISC-20260822-008");
   assert.equal(item.title, "Dashboard Parity");
   assert.equal(item.decision, "Proceed");
   assert.equal(item.approvalStatus, "Approved");
 });
 
-test("readDiscoveries returns recent items and handles discovery.md or 00-explore.md", async () => {
+test("readDiscoveries returns recent items and handles discovery.md", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-discoveries-"));
   try {
     assert.equal((await readDiscoveries(tempDir)).total, 0);
@@ -29,7 +29,7 @@ test("readDiscoveries returns recent items and handles discovery.md or 00-explor
 
     const dir2 = path.join(tempDir, "devflow", "discoveries", "DISC-20260822-002-two");
     await fs.mkdir(dir2, { recursive: true });
-    await fs.writeFile(path.join(dir2, "00-explore.md"), "# Discovery Document: [DISC-20260822-002] Two\n> **Status**: `Proceed`");
+    await fs.writeFile(path.join(dir2, "discovery.md"), "# Discovery Document: [DISC-20260822-002] Two\n> **Status**: `Proceed`");
 
     const summary = await readDiscoveries(tempDir, "DISC-20260822-001");
     assert.equal(summary.total, 2);

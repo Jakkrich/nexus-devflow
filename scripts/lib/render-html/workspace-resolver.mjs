@@ -8,7 +8,7 @@ export function resolveWorkspaceDir({ argument, projectRoot }) {
     if (stats.isDirectory()) {
       return directPath;
     }
-    if (stats.isFile() && path.basename(directPath) === '60-report.md') {
+    if (stats.isFile() && (path.basename(directPath).endsWith('.md'))) {
       return path.dirname(directPath);
     }
   }

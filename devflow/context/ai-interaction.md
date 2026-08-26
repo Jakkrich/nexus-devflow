@@ -139,7 +139,7 @@ Progress lives in persistent files, not in transient chat history:
 
 ## 9. Socratic Alignment & Grilling Discipline (`/grill`)
 
-- **Align Before You Build**: When plans, domain language, or architectural boundaries are fuzzy, invoke `/grill` (or use the Grilling Lens in `00-explore`) to conduct a structured interview before creating specifications.
+- **Align Before You Build**: When plans, domain language, or architectural boundaries are fuzzy, invoke `/grill` (or use the Grilling Lens in `/discovery`) to conduct a structured interview before creating specifications.
 - **Codebase-Grounded Inquiry**: Inspect existing context and code before asking questions. Never ask questions the codebase already answers.
 - **Turn Discipline**: Ask only 1–2 high-leverage questions per turn with clear recommended defaults. Never dump a wall of questions.
 - **Lazy Inline Persistence**:

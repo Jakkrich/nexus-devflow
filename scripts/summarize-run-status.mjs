@@ -9,13 +9,12 @@ const defaultProjectRoot = path.resolve(__dirname, '..');
 
 const stageOrder = [
   'discovery',
-  '10-define',
-  '20-spec',
-  '30-plan',
-  '40-execute',
-  '50-verify',
-  '60-report',
-  '70-deliver'
+  'spec',
+  'current-feature',
+  'feature',
+  'implement',
+  'check',
+  'complete'
 ];
 
 function parseArgs(argv) {
@@ -94,9 +93,9 @@ function parseVerificationGate(runDir) {
 
   return {
     approvalStatus: parseLabeledValue(content, 'Approval Status'),
-    readyForRelease: parseLabeledValue(content, 'Ready For `/60-Report`'),
+    readyForRelease: parseLabeledValue(content, 'Ready For `/complete`'),
     why: parseLabeledValue(content, 'Why'),
-    returnToImplementNeeded: parseLabeledValue(content, 'Return To `/40-Execute` Needed'),
+    returnToImplementNeeded: parseLabeledValue(content, 'Return To `/implement` Needed'),
     humanReviewRequired: parseLabeledValue(content, 'Human Review Required'),
     nextAllowedCommand: parseLabeledValue(content, 'Next Allowed Command'),
     softGateWarning: parseLabeledValue(content, 'Soft-Gate Warning')

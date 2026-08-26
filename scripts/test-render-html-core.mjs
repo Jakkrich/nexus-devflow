@@ -111,7 +111,7 @@ try {
   const specsRoot = path.join(scratchRoot, 'devflow', 'runs');
   const specsWorkspace = path.join(specsRoot, '999-sample-report');
   fs.mkdirSync(specsWorkspace, { recursive: true });
-  const reportFilePath = path.join(specsWorkspace, '60-report.md');
+  const reportFilePath = path.join(specsWorkspace, 'report.md');
   fs.writeFileSync(reportFilePath, '# Report\n', 'utf8');
   assert(
     resolveWorkspaceDir({ argument: '999', projectRoot: scratchRoot }) === specsWorkspace,
@@ -119,7 +119,7 @@ try {
   );
   assert(
     resolveWorkspaceDir({ argument: reportFilePath, projectRoot: scratchRoot }) === specsWorkspace,
-    'resolver should support direct 60-report.md file paths'
+    'resolver should support direct report markdown file paths'
   );
 
   const flatWorkspace = path.join(scratchRoot, 'devflow', '888-sample-report');

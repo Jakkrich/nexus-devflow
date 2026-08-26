@@ -6,8 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const fixtureDir = path.join(rootDir, 'devflow', 'discoveries', 'DISC-SECTION-CONTENT-TEST');
-const fixturePath = path.join(fixtureDir, '00-explore.md');
+const fixturePath = path.join(fixtureDir, 'discovery.md');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
