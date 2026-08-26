@@ -7,6 +7,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-26 | `060` | Feature | ซิงก์ AI Blueprint Upstream v0.14.0 (Deterministic Config & Continuous Mode) | `3417b60` | `Released` | [`060-sync-upstream-v0140-config-and-continuous.md`](features/060-sync-upstream-v0140-config-and-continuous.md) |
 | 2026-08-26 | `059` | Feature | Purge Legacy Deep-Track & Numbered Stage Artifacts (`DISC-20260826-002`) | `11a702e` | `Released` | [`059-purge-deep-track-legacy-artifacts.md`](features/059-purge-deep-track-legacy-artifacts.md) |
 | 2026-08-26 | `058` | Feature | Multi-Run Context Architecture & Spec Queue Engine (`devflow/context/{xxx-slug}/`) | `HEAD` | `Released` | [`058-multi-run-context-architecture.md`](features/058-multi-run-context-architecture.md) |
 | 2026-08-25 | `057` | Feature | อัปเดตคู่มือปัจจุบันและบังคับ canonical Core Skill inventory สำหรับ validation และ package isolation | `HEAD` | `Released` | [`057-refresh-current-documentation.md`](features/057-refresh-current-documentation.md) |

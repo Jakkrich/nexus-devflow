@@ -99,3 +99,12 @@
 - [x] **12. Purge Legacy Deep-Track & Numbered Stage Artifacts (`DISC-20260826-002`)** `[Size: M]`
   - *Dependencies*: Feature 10, Feature 11
   - *Scope*: ล้างโค้ดตกค้างของ Deep-Track (สเตจ 00-70 เช่น `40-execute`, `50-verify`, `60-report`, `70-deliver`, `10-define`, `20-spec`, `30-plan`) ออกจาก package engine (`status.ts`, `current-work.ts`, `history.ts`), agent skills (`.agents/`, `.claude/`), automation scripts & tests ใน `scripts/`, และเอกสาร/mockup ให้เป็นปัจจุบันสมบูรณ์
+
+---
+
+## 🔄 Phase 13: Upstream AI Blueprint v0.14.0 Synchronization & Deterministic Config Engine
+
+- [x] **13. Sync Upstream v0.14.0 (Deterministic Config & Continuous Mode)** `[Size: M]`
+  - *Dependencies*: Feature 12, DISC-20260826-003
+  - *Scope*: นำระบบ Deterministic Project Configuration (`devflow/config.json`) และสคิล Autonomous Multi-Feature Loop (`/continuous`) เข้าสู่ Nexus-DevFlow พร้อมอัปเกรด `project-config.ts`, `doctor`, `status`, `dashboard` และอัปเดต upstream baseline tracking สู่ v0.14.0
+

@@ -458,7 +458,7 @@ Inspects the archived feature spec, identifies the exact commit, reviews later c
 
 ## Command reference
 
-Nexus-DevFlow ships **28 bundled Core Skills**, defined by the canonical
+Nexus-DevFlow ships **29 bundled Core Skills**, defined by the canonical
 `core_skills` inventory in `agent-bundle.manifest.json`. A workspace may also
 contain Local or Personal Skills, but those extensions are not part of the Core
 count and are excluded from the published package unless explicitly promoted.
@@ -473,6 +473,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **check** | `/check` / `$check` | QA | Dual-Axis review: empirical spec fidelity plus standards, architecture, and quality gates. |
 | **ci** | `/ci` / `$ci` | DevOps | Configure Verify command and automated GitHub Actions workflow. |
 | **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and squash-merge gate. |
+| **continuous** | `/continuous` / `$continuous` | Delivery | Autonomous serial multi-feature delivery loop with local branches, quality gates, and squash-merges. |
 | **convert-any-to-md** | `/convert-any-to-md` | Utility | Convert PDF, XLSX, DOCX, CSV, logs into clean Markdown in `devflow/reference/`. |
 | **debug** | `/debug` / `$debug` | Diagnostics | Scientific six-phase diagnosis using a red-capable feedback loop without changing source. |
 | **devflow** | `/devflow` / `$devflow` | Router | Flagship state inspector, stage router, and workflow guide. |

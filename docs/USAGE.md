@@ -54,9 +54,9 @@ Before committing to delivery, use specialized companion skills:
 
 ---
 
-## 4. Core Skills Inventory (28 Skills)
+## 4. Core Skills Inventory (29 Skills)
 
-DevFlow ships **28 bundled Core Skills** from the ordered `core_skills` inventory
+DevFlow ships **29 bundled Core Skills** from the ordered `core_skills` inventory
 in `agent-bundle.manifest.json`, synchronized 1:1 across `.agents/skills/`
 (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code). Local or
 Personal Skills may coexist in a workspace, but are excluded from the Core count
@@ -68,6 +68,7 @@ and package template until explicitly promoted.
 - `implement`: Step-by-step TDD implementation behind review gates.
 - `check`: Dual-Axis verification of observable spec behavior and independent architecture/standards quality.
 - `complete`: Final safety audit, Conventional Commit, archiving, and branch delivery gate.
+- `continuous`: Autonomous serial multi-feature delivery loop completing build-plan items with quality gates.
 - `rollback`: Plan a safe reversal of a completed feature preserving history.
 
 ### B. Pre-Flight Discovery & Alignment Skills

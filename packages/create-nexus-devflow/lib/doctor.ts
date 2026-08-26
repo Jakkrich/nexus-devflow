@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { isDevFlowProjectRoot } from "./project-root.js";
 import { createStyle } from "./ui.js";
+import { readProjectConfig } from "./project-config.js";
 
 export interface DoctorCheck {
   id: string;
@@ -452,6 +453,34 @@ export async function runDoctor(
       message: fixed ? "Created devflow/reference/ and devflow/discoveries/." : "Missing reference/ or discoveries/ folder.",
       fixable: true,
       fixed
+    });
+  }
+
+  // Check 9: Configuration (devflow/config.json)
+  const configResult = await readProjectConfig(projectRoot);
+  if (configResult.state === "project") {
+    checks.push({
+      id: "project_configuration",
+      name: "Project Configuration (devflow/config.json)",
+      status: "pass",
+      message: "Valid devflow/config.json configuration detected.",
+      fixable: false
+    });
+  } else if (configResult.state === "defaults") {
+    checks.push({
+      id: "project_configuration",
+      name: "Project Configuration (devflow/config.json)",
+      status: "pass",
+      message: "Built-in defaults active (devflow/config.json not present).",
+      fixable: false
+    });
+  } else {
+    checks.push({
+      id: "project_configuration",
+      name: "Project Configuration (devflow/config.json)",
+      status: "warn",
+      message: configResult.warnings.map((w) => w.message).join(" "),
+      fixable: false
     });
   }
 

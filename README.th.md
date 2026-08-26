@@ -458,7 +458,7 @@ AI จะสร้าง Fix Spec พร้อมขั้นตอนการ�
 
 ## ตารางอ้างอิงคำสั่งทั้งหมด (Command reference)
 
-Nexus-DevFlow แจก **28 bundled Core Skills** ตาม canonical `core_skills`
+Nexus-DevFlow แจก **29 bundled Core Skills** ตาม canonical `core_skills`
 inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Personal Skills ที่เพิ่ม
 เฉพาะ workspace จะไม่ถูกนับรวมเป็น Core และไม่ติดไปกับ package ที่เผยแพร่
 จนกว่าจะได้รับการ promote อย่างชัดเจน
@@ -473,6 +473,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **check** | `/check` / `$check` | QA | ตรวจแบบ Dual-Axis: ความตรงตามสเปกจากหลักฐานจริง และมาตรฐาน/สถาปัตยกรรม/Quality Gates |
 | **ci** | `/ci` / `$ci` | DevOps | ตั้งค่าคำสั่ง Verify และสร้าง GitHub Actions Workflow สำหรับ CI |
 | **complete** | `/complete` / `$complete` | Delivery | ตรวจความปลอดภัยรอบสุดท้าย, บันทึก Release Digest, จัดเก็บประวัติ และ Squash-Merge |
+| **continuous** | `/continuous` / `$continuous` | Delivery | โหมดวนลูปส่งมอบงานหลายฟีเจอร์อัตโนมัติในเครื่อง Local พร้อม Quality Gates |
 | **convert-any-to-md** | `/convert-any-to-md` | Utility | แปลงไฟล์ PDF, XLSX, DOCX, CSV, Logs ให้เป็น Markdown ใน `devflow/reference/` |
 | **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยเชิงวิทยาศาสตร์ 6 ระยะด้วย Red-capable feedback loop โดยไม่แก้ซอร์สโค้ด |
 | **devflow** | `/devflow` / `$devflow` | Router | ตัวตรวจสถานะหลัก, เราเตอร์นำทางขั้นตอน และคู่มือช่วยทำงาน |

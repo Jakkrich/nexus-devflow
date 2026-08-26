@@ -10,6 +10,7 @@
     "check",
     "ci",
     "complete",
+    "continuous",
     "convert-any-to-md",
     "debug",
     "devflow",
