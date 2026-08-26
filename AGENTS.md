@@ -1,4 +1,4 @@
-# Nexus-DevFlow 2.6.1 (The 3-Pillars & Single Living Spec Model)
+# Nexus-DevFlow 2.6.2 (The 3-Pillars & Single Living Spec Model)
 
 Instructions for AI coding agents working in this project. This is the cross-tool entry point: Codex, Google Antigravity, Cursor, GitHub Copilot, Gemini CLI, Aider, Zed, Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports this file (`@AGENTS.md`), so there is a single source of truth.
 
