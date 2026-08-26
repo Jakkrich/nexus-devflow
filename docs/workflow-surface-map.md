@@ -1,8 +1,8 @@
-# Workflow Surface Map (28 Core Skills)
+# Workflow Surface Map (29 Core Skills)
 
-This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.6.0**.
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.6.2**.
 
-The canonical surface contains **28 Core Skills** from
+The canonical surface contains **29 Core Skills** from
 `agent-bundle.manifest.json#core_skills`. Additional Local or Personal Skills
 may exist in a workspace, but are not bundled product commands until explicitly
 promoted into that inventory.
@@ -18,9 +18,9 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-## 2. Canonical Surface Taxonomy (28 Core Skills)
+## 2. Canonical Surface Taxonomy (29 Core Skills)
 
-### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (6 Skills)
+### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (7 Skills)
 | Command | Category | Purpose | Primary Artifact |
 | :--- | :--- | :--- | :--- |
 | `feature` | Spec & Plan | Combines discovery, specification, and task breakdown for planned work. | `devflow/context/current-feature.md` |
@@ -28,6 +28,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 | `implement` | Execution | Incrementally executes checklist tasks with strict TDD discipline. | `devflow/context/current-feature.md` |
 | `check` | Quality Gate | Dual-Axis review of empirical spec fidelity and independent standards/architecture quality. | `devflow/context/current-feature.md` |
 | `complete` | Delivery | Final safety audit, records Release Digest, branch merge, and archiving. | `devflow/history/{features\|fixes\|rollbacks}/` |
+| `continuous` | Delivery | Autonomous serial multi-feature delivery loop with local branches, quality gates, and squash-merges. | `devflow/history/features/` |
 | `rollback` | Delivery | Safe feature reversal with dependency risk analysis preserving history. | `devflow/history/rollbacks/` |
 
 ---

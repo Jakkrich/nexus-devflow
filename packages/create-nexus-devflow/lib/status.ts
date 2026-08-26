@@ -21,12 +21,24 @@ import type { ProjectAdapter } from "./project-metadata.js";
 
 import { readIdeas } from "./ideas.js";
 import type { IdeasSummary } from "./ideas.js";
+import { readProjectConfig } from "./project-config.js";
+import type {
+  ProjectConfig,
+  ProjectConfigState,
+  QualityGatePolicy
+} from "./project-config.js";
 
 type CompletionState = "blocked" | "needs_verification" | "ready";
 
 interface StatusWarning {
   code: string;
   message: string;
+}
+
+interface StatusConfiguration {
+  path: string;
+  state: ProjectConfigState;
+  values: ProjectConfig;
 }
 
 interface StatusCurrentWork {
@@ -83,6 +95,7 @@ interface ProjectStatus {
     version: string | null;
     adapters: ProjectAdapter[];
   };
+  configuration: StatusConfiguration;
   currentWork: StatusCurrentWork;
   activeRuns: ActiveRunSummary[];
   findings: StatusFindings;
@@ -97,8 +110,9 @@ async function readProjectStatus(
   startPath: string = process.cwd()
 ): Promise<ProjectStatus> {
   const metadata = await readProjectMetadata(startPath);
-  const [contextPaths, currentWork, activeRuns, findings, git, ideas] = await Promise.all([
+  const [contextPaths, config, currentWork, activeRuns, findings, git, ideas] = await Promise.all([
     resolveActiveContextPaths(metadata.project.root),
+    readProjectConfig(metadata.project.root),
     readCurrentWork(metadata.project.root),
     listActiveRunContexts(metadata.project.root),
     readFindings(metadata.project.root),
@@ -113,6 +127,7 @@ async function readProjectStatus(
 
   const warnings: StatusWarning[] = [
     ...metadata.warnings,
+    ...config.warnings,
     ...currentWork.warnings,
     ...findings.warnings,
     ...findDrift(currentWork, git)
@@ -127,6 +142,11 @@ async function readProjectStatus(
       : "ok",
     project: metadata.project,
     devflow: metadata.devflow,
+    configuration: {
+      path: config.path,
+      state: config.state,
+      values: config.values
+    },
     currentWork: formatCurrentWork(currentWork),
     activeRuns,
     findings: formatFindings(findings),
@@ -154,6 +174,8 @@ function formatHumanStatus(
     formatRow("Path", status.project.root, style),
     formatRow("Version", status.devflow.version || "unknown", style),
     formatRow("Adapters", adapters, style),
+    formatRow("Config", formatConfigValue(status.configuration.state), style),
+    formatRow("Quality gates", formatQualityGates(status.configuration.values.qualityGates.regular), style),
     "",
     formatSection("Progress", style),
     formatRow("Work", formatWorkValue(status.currentWork, style), style)
@@ -207,6 +229,22 @@ function formatHumanStatus(
 
   lines.push(`  ${status.nextAction.reason}`);
   return lines.join("\n");
+}
+
+function formatConfigValue(state: ProjectConfigState): string {
+  if (state === "project") {
+    return "project settings";
+  }
+
+  if (state === "invalid") {
+    return "invalid, using defaults";
+  }
+
+  return "built-in defaults";
+}
+
+function formatQualityGates(gates: QualityGatePolicy): string {
+  return `audit ${gates.audit}, check ${gates.check}, try guide ${gates.tryGuide}`;
 }
 
 function shouldUseColor(
