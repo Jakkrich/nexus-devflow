@@ -277,8 +277,12 @@ export async function resolveActiveRunContext(
         runId: gitMatched.runId,
         runDir: gitMatched.runDir,
         specPath: gitMatched.specPath,
-        stagePath: path.join(gitMatched.runDir, "stage.md"),
-        findingsPath: path.join(gitMatched.runDir, "findings.md"),
+        stagePath: fsSync.existsSync(path.join(gitMatched.runDir, "stage.md"))
+          ? path.join(gitMatched.runDir, "stage.md")
+          : defaultStagePath,
+        findingsPath: fsSync.existsSync(path.join(gitMatched.runDir, "findings.md"))
+          ? path.join(gitMatched.runDir, "findings.md")
+          : defaultFindingsPath,
         globalOverviewPath,
         globalStandardsPath
       };
@@ -293,8 +297,12 @@ export async function resolveActiveRunContext(
       runId: single.runId,
       runDir: single.runDir,
       specPath: single.specPath,
-      stagePath: path.join(single.runDir, "stage.md"),
-      findingsPath: path.join(single.runDir, "findings.md"),
+      stagePath: fsSync.existsSync(path.join(single.runDir, "stage.md"))
+        ? path.join(single.runDir, "stage.md")
+        : defaultStagePath,
+      findingsPath: fsSync.existsSync(path.join(single.runDir, "findings.md"))
+        ? path.join(single.runDir, "findings.md")
+        : defaultFindingsPath,
       globalOverviewPath,
       globalStandardsPath
     };

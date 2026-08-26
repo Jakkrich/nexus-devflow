@@ -55,16 +55,7 @@ async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary>
     const stageStats = await fs.lstat(currentStageFile).catch(() => null);
     if (stageStats?.isFile()) {
       const stageContent = await fs.readFile(currentStageFile, "utf8");
-      const track = extractStageField(stageContent, "Track")?.toLowerCase();
       activeRunningId = extractStageField(stageContent, "Active Running ID");
-      const currentStage = extractStageField(stageContent, "Current Stage");
-
-      const isExplicitIdle = track === "idle" ||
-        (!track && activeRunningId?.toLowerCase() === "none" && currentStage?.toLowerCase().startsWith("idle"));
-
-      if (isExplicitIdle) {
-        return idleSummary();
-      }
     }
 
     const fastSummary = await readFastTrackWork(devflowFeatureFile);
@@ -109,7 +100,11 @@ async function readFastTrackWork(featurePath: string): Promise<CurrentWorkSummar
     const stats = await fs.lstat(featurePath).catch(() => null);
     if (stats?.isFile()) {
       const content = await fs.readFile(featurePath, "utf8");
-      if (content.trim() !== "" && !content.includes(RESET_MARKER)) {
+      if (
+        content.trim() !== "" &&
+        !content.includes(RESET_MARKER) &&
+        !/Nothing in progress|None in progress|No active feature|No active work/i.test(content)
+      ) {
         return parseCurrentWork(content);
       }
     }
@@ -129,7 +124,7 @@ function parseCurrentWork(markdown: string): CurrentWorkSummary {
 
   if (
     markdown.includes(RESET_MARKER) ||
-    /Nothing in progress|None in progress/i.test(markdown)
+    /Nothing in progress|None in progress|No active feature|No active work/i.test(markdown)
   ) {
     return idleSummary();
   }
