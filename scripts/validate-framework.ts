@@ -7,7 +7,6 @@ import {
   inspectAdapterSkillInventory,
   loadCoreSkillInventory
 } from "../packages/create-nexus-devflow/lib/core-skill-inventory.js";
-import { validateUpstreamMonitorContract } from "./lib/validate-upstream-monitor.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
@@ -177,22 +176,6 @@ async function validateCoreSkillContract(failures: string[]): Promise<void> {
   }
 }
 
-function validateUpstreamWorkflow(failures: string[]): void {
-  const workflowPath = path.join(projectRoot, ".github", "workflows", "check-upstream.yml");
-  if (!fs.existsSync(workflowPath)) {
-    fail("Missing .github/workflows/check-upstream.yml", failures);
-    return;
-  }
-
-  const workflow = fs.readFileSync(workflowPath, "utf8").replace(/\r\n/g, "\n");
-  try {
-    validateUpstreamMonitorContract(workflow);
-    ok(".github/workflows/check-upstream.yml contract passed");
-  } catch (error: unknown) {
-    fail(`Upstream monitor contract failed: ${error instanceof Error ? error.message : String(error)}`, failures);
-  }
-}
-
 function validateManifestSync(failures: string[]): void {
   const pkg = readJson<{ version?: string }>("package.json", failures);
   const devflowManifest = readJson<{
@@ -233,8 +216,6 @@ async function main(): Promise<void> {
     ".agents/skills",
     ".claude/skills",
     ".nexus/nexus-devflow.json",
-    ".nexus/upstream-ai-blueprint.json",
-    ".github/workflows/check-upstream.yml",
     "devflow/context/project-overview.md",
     "devflow/context/coding-standards.md",
     "devflow/context/ai-interaction.md",
@@ -260,7 +241,6 @@ async function main(): Promise<void> {
   validateRoadmap(failures);
   validateWorkflowNumbering(failures);
   await validateCoreSkillContract(failures);
-  validateUpstreamWorkflow(failures);
   validateManifestSync(failures);
 
   if (failures.length > 0) {
