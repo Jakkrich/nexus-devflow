@@ -15,7 +15,7 @@
   1. แถบ Navigation ด้านบน: `[Status] [Tasks] [Findings] [Next Action]`
   2. หน้า Tasks แสดง Checkbox ที่กดติ๊ก Spacebar ได้จริงเพื่ออัปเดตไฟล์ Markdown
   3. ปรับแต่ง Theme ให้เข้ากับ Dark Mode และแสดงผลผ่าน ANSI 256 Colors
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-003` หรือ `/00-explore IDEA-003`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-003` หรือ `/discovery IDEA-003`)
 
 ---
 
@@ -28,7 +28,7 @@
   1. สร้าง Subcommand `nexus-devflow mcp` สำหรับรันเป็น MCP Server
   2. กำหนด MCP Tools: `get_status`, `add_idea`, `update_task`, `record_finding`
   3. เพิ่มไฟล์คอนฟิก `mcp_config.json` ให้ติดตั้งเข้า Antigravity/Claude ได้ในคลิกเดียว
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-004` หรือ `/00-explore IDEA-004`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-004` หรือ `/discovery IDEA-004`)
 
 ---
 
@@ -40,7 +40,7 @@
 - **Quick Seed (กันลืม)**:
   1. เพิ่มฟิลด์ `artifactLanguage` ใน schema
   2. สลับเทมเพลตภาษาตามคอนฟิก
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-015` หรือ `/00-explore IDEA-015`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-015` หรือ `/discovery IDEA-015`)
 
 ---
 

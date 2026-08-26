@@ -36,22 +36,13 @@ async function readDiscoveries(
     entries
       .filter((entry) => entry.isDirectory() && !entry.isSymbolicLink())
       .map(async (entry) => {
-        let file = path.join(entry.name, "discovery.md");
+        const file = path.join(entry.name, "discovery.md");
         let markdown = "";
         try {
           markdown = await fs.readFile(path.join(root, file), "utf8");
         } catch (error: unknown) {
-          if (getErrorCode(error) === "ENOENT") {
-            file = path.join(entry.name, "00-explore.md");
-            try {
-              markdown = await fs.readFile(path.join(root, file), "utf8");
-            } catch (fallbackError: unknown) {
-              if (getErrorCode(fallbackError) === "ENOENT") return null;
-              throw fallbackError;
-            }
-          } else {
-            throw error;
-          }
+          if (getErrorCode(error) === "ENOENT") return null;
+          throw error;
         }
         return parseDiscovery(markdown, file, entry.name);
       })

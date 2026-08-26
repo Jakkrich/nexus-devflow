@@ -10,13 +10,13 @@ test("readHistory includes file and directory-based archives", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-history-dirs-"));
   try {
     const features = path.join(tempDir, "devflow", "history", "features");
-    await fs.mkdir(path.join(features, "002-deep-run"), { recursive: true });
-    await fs.writeFile(path.join(features, "001-fast.md"), "# [001] Feature: Fast archive\n**Status:** Completed");
-    await fs.writeFile(path.join(features, "002-deep-run", "60-report.md"), "# [002] Feature: Deep archive\n**Status:** Released");
+    await fs.mkdir(path.join(features, "002-modular-run"), { recursive: true });
+    await fs.writeFile(path.join(features, "001-feature.md"), "# [001] Feature: Fast archive\n**Status:** Completed");
+    await fs.writeFile(path.join(features, "002-modular-run", "spec.md"), "# [002] Feature: Modular archive\n**Status:** Released");
     const summary = await readHistory(tempDir);
     assert.equal(summary.total, 2);
-    assert.deepEqual(summary.items.map((item) => item.title), ["Deep archive", "Fast archive"]);
-    assert.match(summary.items[0].file, /002-deep-run[\\/]60-report\.md$/);
+    assert.deepEqual(summary.items.map((item) => item.title), ["Modular archive", "Fast archive"]);
+    assert.match(summary.items[0].file, /002-modular-run[\\/]spec\.md$/);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

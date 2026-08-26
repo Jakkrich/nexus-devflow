@@ -33,7 +33,7 @@
 
 - [x] **4. Just-In-Time (JIT) Dynamic Context Slicing Engine** `[Size: M]`
   - *Dependencies*: Feature 3
-  - *Scope*: สร้างตัวตัดตอนบริบท (Context Slicer) สำหรับสคิล `/implement`, `/check`, `/00-explore` เพื่อส่งเฉพาะข้อมูลที่จำเป็นและควบคุม Token Budget ลดการใช้ Token 60–70%
+  - *Scope*: สร้างตัวตัดตอนบริบท (Context Slicer) สำหรับสคิล `/implement`, `/check`, `/discovery` เพื่อส่งเฉพาะข้อมูลที่จำเป็นและควบคุม Token Budget ลดการใช้ Token 60–70%
 
 ---
 
@@ -92,8 +92,10 @@
   - *Dependencies*: Feature 10, Feature 3
   - *Scope*: แยกจัดเก็บ Task-Specific Context เป็นโฟลเดอร์ย่อยใน `devflow/context/{xxx-slug}/`, พัฒนา Context Resolver สำหรับสลับและเรียกใช้งาน `/implement <id>`, `/check <id>`, `/complete <id>` แบบระบุ Running ID หรือ Fuzzy Match, และอัปเกรด CLI/Dashboard/Skills ให้รองรับ Spec Queue หลายรันพร้อมกัน
 
+---
 
+## 🧹 Phase 12: Purge Legacy Deep-Track & Numbered Stage Artifacts
 
-
-
-
+- [x] **12. Purge Legacy Deep-Track & Numbered Stage Artifacts (`DISC-20260826-002`)** `[Size: M]`
+  - *Dependencies*: Feature 10, Feature 11
+  - *Scope*: ล้างโค้ดตกค้างของ Deep-Track (สเตจ 00-70 เช่น `40-execute`, `50-verify`, `60-report`, `70-deliver`, `10-define`, `20-spec`, `30-plan`) ออกจาก package engine (`status.ts`, `current-work.ts`, `history.ts`), agent skills (`.agents/`, `.claude/`), automation scripts & tests ใน `scripts/`, และเอกสาร/mockup ให้เป็นปัจจุบันสมบูรณ์

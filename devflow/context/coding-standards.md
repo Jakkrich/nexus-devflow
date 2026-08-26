@@ -88,7 +88,7 @@ nexus-devflow/
 ├── devflow/                    # Framework workspace context, history, and discoveries
 │   ├── context/                # Living source-of-truth context files
 │   ├── decisions/              # Architecture Decision Records (ADRs)
-│   ├── discoveries/            # Pre-delivery discovery records (00-explore.md)
+│   ├── discoveries/            # Pre-delivery discovery records (discovery.md)
 │   ├── history/                # Master delivery archive (features/, fixes/, rollbacks/, HISTORY.md)
 │   └── ideas.md                # Idea Inbox and backlog
 ├── packages/
@@ -104,7 +104,7 @@ nexus-devflow/
 ## 6. Naming Conventions
 
 - **Files & Directories**:
-  - Skills and command directories: `kebab-case` (e.g. `00-explore`, `report-html`, `sync-upstream`).
+  - Skills and command directories: `kebab-case` (e.g. `discovery`, `report-html`, `convert-any-to-md`).
   - Source modules and scripts: `kebab-case.ts` / `kebab-case.mjs` (e.g. `current-work.ts`, `check-devflow.ts`).
   - Test files: `[module].test.ts` (e.g. `status.test.ts`, `uninstall.test.ts`).
 - **Identifiers**:

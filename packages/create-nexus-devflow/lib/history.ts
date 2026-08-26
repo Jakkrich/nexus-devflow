@@ -134,9 +134,7 @@ async function readHistoryEntry(
     return parseHistoryItem(markdown, group.type, relativeFile);
   }
 
-  const archivePath = path.join(directoryPath, entryName);
-  const entries = await fs.readdir(archivePath, { withFileTypes: true });
-  const preferred = ["60-report.md", "current-feature.md", "20-spec.md", "10-define.md"];
+  const preferred = ["current-feature.md", "spec.md", "discovery.md", "report.md"];
   const selected = preferred.find((name) =>
     entries.some((entry) => entry.isFile() && !entry.isSymbolicLink() && entry.name === name)
   ) || entries.find((entry) =>

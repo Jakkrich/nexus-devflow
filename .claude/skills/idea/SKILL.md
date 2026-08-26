@@ -44,7 +44,7 @@ Insert the new idea block directly under `## 📌 Pending Ideas` in `devflow/ide
 - **Quick Seed (กันลืม)**:
   1. {ประเด็นสำคัญที่ 1}
   2. {ประเด็นสำคัญที่ 2}
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/spec IDEA-001` หรือ `/00-explore IDEA-001`)
+- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-001` หรือ `/discovery IDEA-001`)
 ```
 
 *(หากมีข้อความ `*(ยังไม่มีไอเดียค้างอยู่...)*` ให้ลบออกเมื่อมีไอเดียแรก)*
@@ -54,4 +54,4 @@ Report to the user:
 - Allocated Idea ID: `[IDEA-xxx]`
 - Summary of Feasibility & Value analysis
 - Seed points saved
-- Instructions for promotion: "เมื่อพร้อมลงมือทำ สามารถพิมพ์ `/spec IDEA-xxx` หรือ `/00-explore IDEA-xxx` ได้ทันที"
+- Instructions for promotion: "เมื่อพร้อมลงมือทำ สามารถพิมพ์ `/feature IDEA-xxx` หรือ `/discovery IDEA-xxx` ได้ทันที"

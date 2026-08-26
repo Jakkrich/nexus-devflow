@@ -89,5 +89,5 @@ Allocate the next sequential ID (`ADR-001`, `ADR-002`, ...) and create `devflow/
 When all design branches are resolved:
 1. Summarize settled domain terms and created ADRs.
 2. Provide explicit next command recommendations:
-   - **Fast-Track (Standard Features/Fixes)**: Run `/feature {topic}` or `/fix {topic}` to immediately start the living spec.
-   - **Deep-Track (Large Architectural Epics)**: Run `10-define` or `/discovery` with the discovery context.
+   - **Living Spec (Standard Delivery)**: Run `/feature {topic}` or `/fix {topic}` to immediately start the living spec.
+   - **Pre-Flight Discovery**: Run `/discovery {topic}` to conduct comprehensive discovery exploration before specification.

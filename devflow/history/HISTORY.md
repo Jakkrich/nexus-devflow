@@ -7,6 +7,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 📜 Master Release Log
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
+| 2026-08-26 | `059` | Feature | Purge Legacy Deep-Track & Numbered Stage Artifacts (`DISC-20260826-002`) | `11a702e` | `Released` | [`059-purge-deep-track-legacy-artifacts.md`](features/059-purge-deep-track-legacy-artifacts.md) |
 | 2026-08-26 | `058` | Feature | Multi-Run Context Architecture & Spec Queue Engine (`devflow/context/{xxx-slug}/`) | `HEAD` | `Released` | [`058-multi-run-context-architecture.md`](features/058-multi-run-context-architecture.md) |
 | 2026-08-25 | `057` | Feature | อัปเดตคู่มือปัจจุบันและบังคับ canonical Core Skill inventory สำหรับ validation และ package isolation | `HEAD` | `Released` | [`057-refresh-current-documentation.md`](features/057-refresh-current-documentation.md) |
 | 2026-08-24 | `056` | Feature | ยกเครื่องคู่มือการใช้งานและเอกสารอ้างอิงสู่มาตรฐาน Nexus-DevFlow 2.5.0 (EN/TH/NPM) | `HEAD` | `Released` | [`056-modernize-documentation-and-user-guides.md`](features/056-modernize-documentation-and-user-guides.md) |

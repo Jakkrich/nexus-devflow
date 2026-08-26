@@ -464,23 +464,10 @@ function selectNextAction(
   }
 
   if (currentWork.state === "active") {
-    if (currentWork.type === "stage") {
-      const runSuffix = currentWork.runId ? ` ${currentWork.runId}` : "";
-      if (currentWork.nextStep) {
-        return {
-          command: `/40-execute${runSuffix}`,
-          reason: `Resume active stage task with ${currentWork.nextStep.title}.`
-        };
-      }
-      return {
-        command: `/50-verify${runSuffix}`,
-        reason: "Active stage tasks completed; run verification."
-      };
-    }
-
     if (currentWork.nextStep) {
+      const runSuffix = currentWork.runId ? ` ${currentWork.runId}` : "";
       return {
-        command: "/implement",
+        command: `/implement${runSuffix}`,
         reason: `Resume active work with ${currentWork.nextStep.title}.`
       };
     }

@@ -1,11 +1,11 @@
 # Current Stage
 
-- Active Discovery ID: `None`
-- Active Running ID: `None`
-- Track: `idle`
-- Current Stage: `idle`
-- Active Branch: `feature/058-multi-run-context-architecture`
-- Living Spec: `devflow/context/current-feature.md`
-- Next Action: `Run /discovery, /feature, /fix, or /rollback to start the next work item.`
-- Last Completed Run: `058-multi-run-context-architecture (2026-08-26)`
+- Active Discovery ID: none
+- Active Running ID: none
+- Track: none
+- Current Stage: idle (All tasks completed)
+- Active Branch: feature/059-purge-deep-track-legacy-artifacts
+- Living Spec: devflow/context/current-feature.md
+- Next Action: /feature or /discovery
+- Last Completed Run: 059-purge-deep-track-legacy-artifacts (2026-08-26)
 - Last Updated: 2026-08-26

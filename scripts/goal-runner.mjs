@@ -80,12 +80,12 @@ function classifyGoal(goal) {
       tasks: [
         'Reproduce failure state and record exact evidence',
         'Isolate root cause using Debug protocol before editing code',
-        'Route findings to Discover stage to own the delivery decision'
+        'Route findings to living spec /fix to own the delivery decision'
       ],
       commands: [
-        '/discovery {goal-id} (recommends Debug/Research support)',
-        '/10-define {discovery-id}',
-        '/20-spec {running-id}'
+        '/debug {target}',
+        '/fix {discovery-id or issue}',
+        '/implement {running-id}'
       ]
     };
   }
@@ -95,14 +95,14 @@ function classifyGoal(goal) {
       flowName: 'Security & Hardening Flow',
       reason: 'Goal involves security posture, risk assessment, or vulnerability remediation.',
       tasks: [
-        'Run Security-Review companion analysis',
+        'Run Audit companion analysis',
         'Identify risk surface and missing controls',
-        'Route actionable findings into Discover stage'
+        'Route actionable findings into discovery or feature stage'
       ],
       commands: [
-        '/discovery {goal-id} (recommends Security-Review support)',
-        '/10-define {discovery-id}',
-        '/20-spec {running-id}'
+        '/audit',
+        '/discovery {goal-id}',
+        '/feature {discovery-id}'
       ]
     };
   }
@@ -111,14 +111,14 @@ function classifyGoal(goal) {
     flowName: 'Standard Feature Delivery Flow',
     reason: 'Goal targets feature enhancement or new capability development.',
     tasks: [
-      'Framing problem, assumptions, and success criteria in Discover',
-      'Lock delivery boundary and assign running ID in Define',
+      'Framing problem, assumptions, and success criteria in Discovery',
+      'Lock delivery boundary and assign running ID in Living Spec',
       'Formalize markdown-first spec and plan execution'
     ],
     commands: [
       '/discovery {goal-id}',
-      '/10-define {discovery-id}',
-      '/20-spec {running-id}'
+      '/feature {discovery-id}',
+      '/implement {running-id}'
     ]
   };
 }

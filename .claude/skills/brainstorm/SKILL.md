@@ -58,5 +58,5 @@ Construct a structured evaluation table:
 
 ## Next Workflow Recommendation
 
-- **Primary**: `discovery {discovery_id}` (if resuming discovery) or `10-define` / `feature` (if ready to specify)
+- **Primary**: `discovery {discovery_id}` (if resuming discovery) or `feature` (if ready to specify)
 - **Inbox**: `idea` to record into `devflow/ideas.md`

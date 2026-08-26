@@ -72,8 +72,8 @@ export function resolveReportWorkspaceDir(argument, projectRoot) {
 }
 
 export function renderReportStageWorkspace({ workspaceDir }) {
-  let reportPath = path.join(workspaceDir, '60-report.md');
-  let outputPath = path.join(workspaceDir, '60-report.html');
+  let reportPath = path.join(workspaceDir, 'report.md');
+  let outputPath = path.join(workspaceDir, 'report.html');
 
   if (!fs.existsSync(reportPath)) {
     const featurePath = path.join(workspaceDir, 'current-feature.md');
@@ -95,7 +95,7 @@ export function renderReportStageWorkspace({ workspaceDir }) {
         reportPath = path.join(workspaceDir, mdFiles[0]);
         outputPath = path.join(workspaceDir, `${path.basename(mdFiles[0], '.md')}.html`);
       } else {
-        throw new Error(`Missing report markdown (60-report.md or current-feature.md) in ${workspaceDir}`);
+        throw new Error(`Missing report markdown (report.md or current-feature.md) in ${workspaceDir}`);
       }
     }
   }

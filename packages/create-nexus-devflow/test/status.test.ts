@@ -205,10 +205,10 @@ test("parseArgs parses idea, findings, doctor, and archive subcommands correctly
   assert.equal(hookUninstall.subcommandAction, "uninstall");
 });
 
-test("readProjectStatus prioritizes current-stage.md Root Switch and calculates Deep-Track nextAction", async () => {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-deep-"));
+test("readProjectStatus prioritizes current-stage.md Root Switch and calculates nextAction", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-switch-"));
   try {
-    await fs.mkdir(path.join(tempDir, "devflow", "context", "current-run"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "040-dashboard-parity"), { recursive: true });
     await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
     await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
 
@@ -216,22 +216,22 @@ test("readProjectStatus prioritizes current-stage.md Root Switch and calculates 
       path.join(tempDir, "devflow", "context", "current-stage.md"),
       `# Current Stage
 - Active Running ID: 040-dashboard-parity
-- Track: deep
-- Current Stage: 60-report (Ready for 70-deliver)
-- Next Action: /70-deliver 040-dashboard-parity
+- Track: feature
+- Current Stage: check (Ready for /complete)
+- Next Action: /complete 040-dashboard-parity
 `
     );
 
     await fs.writeFile(
-      path.join(tempDir, "devflow", "context", "current-run", "20-spec.md"),
-      `# 20 Spec: [040-dashboard-parity] Dashboard Parity
-**Status:** Implementation Ready
+      path.join(tempDir, "devflow", "context", "040-dashboard-parity", "spec.md"),
+      `# [040-dashboard-parity] Feature: Dashboard Parity
+**Status:** Ready
 `
     );
 
     const status = await readProjectStatus(tempDir);
-    assert.equal(status.nextAction.command, "/70-deliver 040-dashboard-parity");
-    assert.equal(status.currentWork.type, "stage");
+    assert.equal(status.nextAction.command, "/complete 040-dashboard-parity");
+    assert.equal(status.currentWork.type, "feature");
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

@@ -1,6 +1,6 @@
 # 🏛️ Architecture Decision Records (ADRs)
 
-This directory stores durable Architecture Decision Records (ADRs) produced during `/grill`, `00-explore`, or high-stakes architectural design sessions.
+This directory stores durable Architecture Decision Records (ADRs) produced during `/grill`, `/discovery`, or high-stakes architectural design sessions.
 
 ---
 

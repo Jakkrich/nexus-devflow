@@ -5,13 +5,11 @@ const skillsDir = path.resolve('.agents/skills');
 
 const mainlineStages = [
   'discovery',
-  '10-define',
-  '20-spec',
-  '30-plan',
-  '40-execute',
-  '50-verify',
-  '60-report',
-  '70-deliver'
+  'feature',
+  'fix',
+  'implement',
+  'check',
+  'complete'
 ];
 
 function standardizeMainlineSkills() {
@@ -32,63 +30,32 @@ function standardizeMainlineSkills() {
         /```text\s*\n\/discovery \{title or request\}\s*\n\/discovery \{discovery-id\}\s*\n```/g,
         '```text\ndiscovery {title or request}\ndiscovery {discovery-id}\n```'
       );
-    } else if (entry.name === '10-define') {
+    } else if (entry.name === 'feature') {
       content = content.replace(
-        /```text\s*\n\/10-Define \{discovery-id or discovery path\}\s*\n\/10-Define \{running-id or run path\}\s*\n```/g,
-        '```text\n10-define {discovery-id or discovery path}\n10-define {running-id or run path}\n```'
+        /```text\s*\n\/feature\s*\n```/g,
+        '```text\nfeature\n```'
       );
-    } else if (entry.name === '20-spec') {
+    } else if (entry.name === 'fix') {
       content = content.replace(
-        /```text\s*\n\/20-Spec \{running-id or workspace path\}\s*\n```/g,
-        '```text\n20-spec {running-id or workspace path}\n```'
+        /```text\s*\n\/fix\s*\n```/g,
+        '```text\nfix\n```'
       );
-    } else if (entry.name === '30-plan') {
+    } else if (entry.name === 'implement') {
       content = content.replace(
-        /```text\s*\n\/30-Plan \{running-id or workspace path\}\s*\n```/g,
-        '```text\n30-plan {running-id or workspace path}\n```'
+        /```text\s*\n\/implement\s*\n```/g,
+        '```text\nimplement\n```'
       );
-    } else if (entry.name === '40-execute') {
+    } else if (entry.name === 'check') {
       content = content.replace(
-        /```text\s*\n\/40-Execute \{running-id or workspace path\}\s*\n```/g,
-        '```text\n40-execute {running-id or workspace path}\n```'
+        /```text\s*\n\/check\s*\n```/g,
+        '```text\ncheck\n```'
       );
-    } else if (entry.name === '50-verify') {
+    } else if (entry.name === 'complete') {
       content = content.replace(
-        /```text\s*\n\/50-Verify \{running-id or workspace path\}\s*\n```/g,
-        '```text\n50-verify {running-id or workspace path}\n```'
-      );
-    } else if (entry.name === '60-report') {
-      content = content.replace(
-        /```text\s*\n\/60-Report \{running-id or workspace path\}\s*\n```/g,
-        '```text\n60-report {running-id or workspace path}\n```'
-      );
-    } else if (entry.name === '70-deliver') {
-      content = content.replace(
-        /```text\s*\n\/70-deliver \{running-id or workspace path\}\s*\n```/g,
-        '```text\n70-deliver {running-id or workspace path}\n```'
+        /```text\s*\n\/complete\s*\n```/g,
+        '```text\ncomplete\n```'
       );
     }
-
-    // Replace slash references with canonical names across all SKILL.md files
-    content = content
-      .replace(/\/00-explore/gi, '00-explore')
-      .replace(/\/10-define/gi, '10-define')
-      .replace(/\/20-spec/gi, '20-spec')
-      .replace(/\/30-plan/gi, '30-plan')
-      .replace(/\/40-execute/gi, '40-execute')
-      .replace(/\/40-execute/gi, '40-execute')
-      .replace(/\/50-verify/gi, '50-verify')
-      .replace(/\/60-report/gi, '60-report')
-      .replace(/\/70-deliver/gi, '70-deliver')
-      .replace(/\/devflow/gi, 'devflow')
-      .replace(/\/onboard/gi, 'onboard')
-      .replace(/\/adopt/gi, 'adopt')
-      .replace(/\/doctor/gi, 'doctor')
-      .replace(/\/try/gi, 'try')
-      .replace(/\/rollback/gi, 'rollback')
-      .replace(/\/ci/gi, 'ci')
-      .replace(/\/brief/gi, 'brief')
-      .replace(/\/autopilot/gi, 'autopilot');
 
     if (content !== original) {
       fs.writeFileSync(skillFile, content, 'utf8');
