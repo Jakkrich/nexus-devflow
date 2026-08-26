@@ -2,7 +2,7 @@
 
 > **Living Source of Truth**: Active Work Context (Single Living Spec Model)
 
-_No active feature in progress._
+_Nothing in progress._
 
 To start a new task:
 - For a new feature: `/feature <name>` (or `$feature <name>`)
