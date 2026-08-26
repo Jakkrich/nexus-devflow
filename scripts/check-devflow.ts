@@ -16,8 +16,6 @@ const REQUIRED_PATHS = [
   ".agents/skills",
   ".claude/skills",
   ".nexus/nexus-devflow.json",
-  ".nexus/upstream-ai-blueprint.json",
-  ".github/workflows/check-upstream.yml",
   "devflow/context/project-overview.md",
   "devflow/context/coding-standards.md",
   "devflow/context/ai-interaction.md",

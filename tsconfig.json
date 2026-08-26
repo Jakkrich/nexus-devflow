@@ -15,8 +15,7 @@
     "packages/create-nexus-devflow/bin/**/*.ts",
     "packages/create-nexus-devflow/lib/**/*.ts",
     "packages/create-nexus-devflow/scripts/**/*.ts",
-    "packages/create-nexus-devflow/test/**/*.ts",
-    ".agents/skills/sync-upstream/scripts/**/*.ts"
+    "packages/create-nexus-devflow/test/**/*.ts"
   ],
   "exclude": ["node_modules", "packages/create-nexus-devflow/dist", "packages/create-nexus-devflow/template"]
 }
