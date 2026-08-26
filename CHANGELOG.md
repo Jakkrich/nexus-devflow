@@ -5,6 +5,17 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 2026-08-26
+
+### Added
+- **Deterministic Project Configuration Engine (`devflow/config.json`)**: Machine-readable configuration controlling workflow review strictness, checkpoint commits, branch naming prefixes, verification logic, regular/continuous quality gates (audit, check, tryGuide), and continuous loop limits.
+- **Autonomous Continuous Mode (`/continuous`)**: 29th bundled Core Skill for autonomous serial multi-feature delivery loops with local branch isolation, quality gatekeeper enforcement, and safe squash-merges.
+- **29 Core Skills Architecture**: Expanded canonical core skill inventory from 28 to 29 across `.agents` and `.claude` adapters.
+
+### Changed
+- Integrated `readProjectConfig` into `status`, `doctor`, and `dashboard` to report active workflow configuration and quality gate rules.
+- Synchronized with AI Blueprint Upstream v0.14.0 baseline.
+
 ## [2.6.2] - 2026-08-26
 
 ### Changed
