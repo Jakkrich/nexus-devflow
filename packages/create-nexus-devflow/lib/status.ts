@@ -1,7 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { resolveActiveContextPaths } from "./branch-context.js";
+import { listActiveRunContexts, resolveActiveContextPaths } from "./branch-context.js";
+import type { ActiveRunSummary } from "./branch-context.js";
 import { readCurrentWork } from "./current-work.js";
 import type {
   CurrentWorkSummary,
@@ -83,6 +84,7 @@ interface ProjectStatus {
     adapters: ProjectAdapter[];
   };
   currentWork: StatusCurrentWork;
+  activeRuns: ActiveRunSummary[];
   findings: StatusFindings;
   ideas: IdeasSummary;
   git: GitStatusSummary;
@@ -95,9 +97,10 @@ async function readProjectStatus(
   startPath: string = process.cwd()
 ): Promise<ProjectStatus> {
   const metadata = await readProjectMetadata(startPath);
-  const [contextPaths, currentWork, findings, git, ideas] = await Promise.all([
+  const [contextPaths, currentWork, activeRuns, findings, git, ideas] = await Promise.all([
     resolveActiveContextPaths(metadata.project.root),
     readCurrentWork(metadata.project.root),
+    listActiveRunContexts(metadata.project.root),
     readFindings(metadata.project.root),
     readGitStatus(metadata.project.root),
     readIdeas(metadata.project.root)
@@ -125,6 +128,7 @@ async function readProjectStatus(
     project: metadata.project,
     devflow: metadata.devflow,
     currentWork: formatCurrentWork(currentWork),
+    activeRuns,
     findings: formatFindings(findings),
     ideas,
     git,
@@ -167,6 +171,16 @@ function formatHumanStatus(
     if (status.currentWork.nextStep) {
       lines.push(formatRow("Next step", status.currentWork.nextStep.title, style));
     }
+  }
+
+  if (status.activeRuns && status.activeRuns.length > 0) {
+    lines.push(
+      formatRow(
+        "Spec Queue",
+        `${status.activeRuns.length} active (${status.activeRuns.map((r) => r.runId).join(", ")})`,
+        style
+      )
+    );
   }
 
   lines.push(

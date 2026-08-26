@@ -1,6 +1,7 @@
 ---
 name: complete
-description: "[devflow][F] Wrap up a finished feature, fix, or rollback. Runs a final safety pass, archives its spec to devflow/history/features/, devflow/history/fixes/, or devflow/history/rollbacks/, updates the build plan for features and rollbacks, resets devflow/context/current-feature.md to its stub, and makes the work commit. Enforces a mandatory user gate: asks whether to squash-merge to main/master OR pull latest main/master into the feature/dev branch and push to remote for Merge Request (MR / PR) creation. Never merges into main/master without explicit user instruction."
+description: "[devflow][F] Wrap up a finished feature, fix, or rollback. Supports Multi-Run: given an optional ID (/complete 12), archives that run from devflow/context/{xxx-slug}/ to devflow/history/, cleans up the run workspace, updates build-plan and HISTORY.md, and makes the work commit. Enforces mandatory user gate (Squash-merge vs MR/PR)."
+argument-hint: "[{run-id, number, or name}]"
 ---
 
 # complete - log the finished work, make the work commit, and deliver
@@ -12,13 +13,18 @@ Where this sits in the workflow:
 
 `/implement` built the feature, fix, or rollback on its branch, with optional per-step commit
 checkpoints. This skill closes it out: it logs the work, makes the single
-work-level commit, and guides the delivery through a **Mandatory User Delivery Gate**. Run it only when the work is done,
+work-level commit, archives from `devflow/context/{xxx-slug}/`, cleans up the active run workspace, and guides the delivery through a **Mandatory User Delivery Gate**. Run it only when the work is done,
 reviewed, and the documented `Verify` command, or the fallback build and tests,
 passes.
 
+## Multi-Run Target Resolution
+
+- **Given an ID or name** (e.g. `/complete 12`, `/complete 058`) -> targets `devflow/context/{xxx-slug}/` for archiving and cleanup.
+- **With no argument** (`/complete`) -> targets the run matching the active branch or single active spec.
+
 ## Before you start
 
-Confirm the work is actually finished: `devflow/context/current-feature.md`
+Confirm the target work is actually finished: `devflow/context/{xxx-slug}/spec.md` (or `current-feature.md`)
 holds a real spec, its steps are built on a branch, and `Verify`, or the fallback
 build and tests, passes. If any of the
 spec's done-whens are behavioral, `/check` should have proven them against the

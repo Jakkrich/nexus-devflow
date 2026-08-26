@@ -1,6 +1,7 @@
 ---
 name: feature
-description: "[devflow][F] Turn a feature from build-plan.md into a buildable spec. With no argument, specs the next unchecked item in the build plan; given a number or name, specs that one. If a clearly new feature does not match the plan, proposes a reviewed plan addition, refreshes the overview after approval, then specs it. Sizes the feature and splits anything too big into smaller sub-features (4a, 4b, ...), writes small, reviewable build steps to devflow/context/current-feature.md, then red-teams its own draft for gaps, oversized steps, and scope creep before stopping at a review gate. Use when the user runs /feature, names or numbers a feature, asks to add and start a new feature, or asks to spec out, break down, or start the next feature."
+description: "[devflow][F] Turn a feature from build-plan.md into a buildable living spec. Supports Multi-Run Spec Queue: drafts dedicated context in devflow/context/{xxx-slug}/ without blocking additional specs. With no argument, specs the next unchecked item; given a number or name, specs that one. Sizes and splits large items (4a, 4b), generates TDD checklist steps, red-teams the draft, and stops at review gate. Use when running /feature, naming a feature, or drafting the next living spec."
+argument-hint: "[{number, name, DISC-id, or IDEA-id}]"
 ---
 
 # feature - turn a build-plan feature into a buildable spec
@@ -8,18 +9,22 @@ description: "[devflow][F] Turn a feature from build-plan.md into a buildable sp
 Where this sits in the workflow:
 
     project-overview.md  +  build-plan.md  ->  [this skill]  ->  build
-    (source of truth,        (which feature       (the spec for      (code,
-     from /overview)          to build)            one feature)        reviewed)
+    (source of truth,        (which feature       (the spec in       (code,
+     from /overview)          to build)            contexts/xxx/)      reviewed)
 
 `build-plan.md` is intentionally high-level - one line per feature, no detail,
 no ordering ceremony. All of that is this skill's job: take one listed feature,
 read the full context from `project-overview.md`, and turn it into something
-buildable.
+buildable in `devflow/context/{xxx-slug}/spec.md`.
+
+## Multi-Run Spec-Ahead Support
+
+`/feature` supports drafting multiple specs ahead of time. Creating a spec creates a dedicated workspace directory at `devflow/context/{xxx-slug}/` and does **not block** drafting subsequent features.
 
 ## Input
 
 A feature from `build-plan.md`, by number or name - e.g. `/feature 3` or
-`/feature "typing engine"`.
+`/feature "typing engine"` or `/feature DISC-20260826-001`.
 
 The request may also describe a genuinely new feature that is not in the build
 plan yet. That goes through the new-feature intake in Step 1. Never silently add

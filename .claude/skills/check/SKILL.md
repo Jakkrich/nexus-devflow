@@ -1,6 +1,7 @@
 ---
 name: check
-description: "[devflow][F] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review (Spec Fidelity + Standards & Architecture). Drives the app (browser, CLI, or server), captures empirical evidence (screenshots, output, console/network errors), checks against 12 Fowler smells and deep-module standards, and reports pass/fail. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build."
+description: "[devflow][F] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review. Supports Multi-Run: given an optional ID or name (/check 12), targets that spec and records proof to devflow/context/{xxx-slug}/findings.md. Drives the app, captures empirical evidence, checks Fowler smells, and reports pass/fail. Use when running /check, confirming work, or validating before /complete."
+argument-hint: "[{run-id, number, or name}]"
 ---
 
 # check - Dual-Axis Independent Verification Engine
@@ -20,13 +21,14 @@ It changes no source and commits nothing — it executes, inspects, and reports 
 
 ## Input
 
-Optional: a specific target to check (a step, a flow, a URL). With no argument, verify the whole current feature against `devflow/context/current-feature.md` and `devflow/context/coding-standards.md`.
+- **Given an ID or name** (e.g. `/check 12`, `/check 012`) -> targets `devflow/context/{xxx-slug}/` and records audit ledger to `{xxx-slug}/findings.md`.
+- **With no argument** (`/check`) -> verifies the active run matching current git branch or single active spec.
 
 ---
 
 ## Step 1 - Build the Dual-Axis Review Matrix
 
-Read `devflow/context/current-feature.md` and `devflow/context/coding-standards.md`. Prepare the inspection criteria across two independent axes:
+Read the target spec from `devflow/context/{xxx-slug}/spec.md` (or `devflow/context/current-feature.md`) and `devflow/context/coding-standards.md`. Prepare the inspection criteria across two independent axes:
 
 1. **Axis 1 (Standards & Architecture Criteria)**:
    - Coding conventions in `coding-standards.md`

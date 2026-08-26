@@ -5,10 +5,16 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  calculateNextRunningId,
   cleanupBranchContext,
+  cleanupRunContext,
+  fuzzyMatchRunId,
   initBranchContext,
+  initRunContext,
+  listActiveRunContexts,
   listBranchContexts,
   resolveActiveContextPaths,
+  resolveActiveRunContext,
   sanitizeBranchName
 } from "../lib/branch-context.js";
 
@@ -137,3 +143,93 @@ test("Multi-branch concurrency isolation in devflow/context/<branch>/ maintains 
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("Multi-Run Context Resolver: initRunContext, listActiveRunContexts, fuzzyMatchRunId, and cleanupRunContext", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-multirun-"));
+
+  try {
+    await setupTestProject(tempDir);
+
+    // 1. Create two run contexts
+    const run1 = await initRunContext(tempDir, "012-devflow-ide-core", "DevFlow IDE Core Extension", {
+      branch: "feature/012-devflow-ide-core",
+      track: "fast",
+      initialSpec: "# 📐 [012-devflow-ide-core] Core Extension\n\n## 3. Implementation Checklist\n- [ ] Task 1: Setup tree view\n- [ ] Task 2: Command palette\n"
+    });
+
+    const run2 = await initRunContext(tempDir, "013-kanban-board", "Kanban Board UI", {
+      branch: "feature/013-kanban-board",
+      track: "fast",
+      initialSpec: "# 📐 [013-kanban-board] Kanban UI\n\n## 3. Implementation Checklist\n- [x] Task 1: Render columns\n- [ ] Task 2: Drag and drop\n"
+    });
+
+    assert.equal(run1.isMultiRun, true);
+    assert.equal(run1.runId, "012-devflow-ide-core");
+    assert.ok(run1.specPath.endsWith(path.join("devflow", "context", "012-devflow-ide-core", "spec.md")));
+
+    // 2. List all active run contexts
+    const activeList = await listActiveRunContexts(tempDir);
+    assert.equal(activeList.length, 2);
+
+    const r1 = activeList.find((r) => r.runId === "012-devflow-ide-core");
+    const r2 = activeList.find((r) => r.runId === "013-kanban-board");
+    assert.ok(r1 && r2);
+    assert.equal(r1.totalTasks, 2);
+    assert.equal(r1.completedTasks, 0);
+    assert.equal(r2.totalTasks, 2);
+    assert.equal(r2.completedTasks, 1);
+
+    // 3. Fuzzy matching
+    assert.equal(fuzzyMatchRunId("12", activeList)?.runId, "012-devflow-ide-core");
+    assert.equal(fuzzyMatchRunId("012", activeList)?.runId, "012-devflow-ide-core");
+    assert.equal(fuzzyMatchRunId("core", activeList)?.runId, "012-devflow-ide-core");
+    assert.equal(fuzzyMatchRunId("13", activeList)?.runId, "013-kanban-board");
+    assert.equal(fuzzyMatchRunId("kanban", activeList)?.runId, "013-kanban-board");
+    assert.equal(fuzzyMatchRunId("999", activeList), null);
+
+    // 4. Resolve active run context by ID, fuzzy input, or branch
+    const resolvedByExact = await resolveActiveRunContext(tempDir, "012-devflow-ide-core");
+    assert.equal(resolvedByExact.isMultiRun, true);
+    assert.equal(resolvedByExact.runId, "012-devflow-ide-core");
+
+    const resolvedByFuzzy = await resolveActiveRunContext(tempDir, "13");
+    assert.equal(resolvedByFuzzy.isMultiRun, true);
+    assert.equal(resolvedByFuzzy.runId, "013-kanban-board");
+
+    // 5. Cleanup run context
+    const cleaned = await cleanupRunContext(tempDir, "012-devflow-ide-core");
+    assert.equal(cleaned, true);
+
+    const postList = await listActiveRunContexts(tempDir);
+    assert.equal(postList.length, 1);
+    assert.equal(postList[0].runId, "013-kanban-board");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("calculateNextRunningId accounts for history archives and active run contexts", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-nextid-"));
+
+  try {
+    await setupTestProject(tempDir);
+
+    // Create history archives
+    await fs.mkdir(path.join(tempDir, "devflow", "history", "features"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, "devflow", "history", "fixes"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "devflow", "history", "features", "055-dashboard-fix.md"), "# 055\n", "utf8");
+    await fs.writeFile(path.join(tempDir, "devflow", "history", "fixes", "056-auth-fix.md"), "# 056\n", "utf8");
+
+    // Without active runs: next is 057
+    const next1 = await calculateNextRunningId(tempDir);
+    assert.equal(next1, "057");
+
+    // Add active run 057-some-feature
+    await initRunContext(tempDir, "057-some-feature", "Some Feature");
+    const next2 = await calculateNextRunningId(tempDir);
+    assert.equal(next2, "058");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

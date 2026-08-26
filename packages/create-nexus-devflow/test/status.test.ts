@@ -269,3 +269,35 @@ test("readProjectStatus auto-detects active fast-track spec when current-stage i
   }
 });
 
+test("readProjectStatus identifies multi-run active spec queue in devflow/context/{xxx-slug}/", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-multirun-"));
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "012-core"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "013-kanban"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "012-core", "spec.md"),
+      "# 📐 [012-core] Core Module\n\n## 3. Implementation Checklist\n- [x] Step 1\n- [ ] Step 2\n"
+    );
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "013-kanban", "spec.md"),
+      "# 📐 [013-kanban] Kanban UI\n\n## 3. Implementation Checklist\n- [ ] Step 1\n"
+    );
+
+    const status = await readProjectStatus(tempDir);
+    assert.equal(status.activeRuns.length, 2);
+    assert.equal(status.activeRuns[0].runId, "012-core");
+    assert.equal(status.activeRuns[1].runId, "013-kanban");
+
+    const human = formatHumanStatus(status, { color: false });
+    assert.ok(human.includes("Spec Queue"));
+    assert.ok(human.includes("2 active"));
+    assert.ok(human.includes("012-core, 013-kanban"));
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+
