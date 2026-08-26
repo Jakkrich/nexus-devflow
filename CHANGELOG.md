@@ -5,6 +5,18 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.2] - 2026-08-26
+
+### Changed
+- Purged legacy Deep Track numbered stage artifacts (00-70) across all scripts, test suites, and documentation.
+- Enhanced idle status detection and gatekeeper fallback resolution in `@jakkrichm/create-nexus-devflow`.
+- Removed standalone upstream monitor flow and legacy upstream tracking contracts.
+
+## [2.6.1] - 2026-08-26
+
+### Added
+- Single Living Spec Model (DevFlow 2.6.x) with Multi-Run active context isolation.
+
 ## [2.6.0] - 2026-08-25
 
 ### Added
