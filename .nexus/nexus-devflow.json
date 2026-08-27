@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "nexus-devflow",
   "package": "@jakkrichm/create-nexus-devflow",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "repository": "https://github.com/Jakkrich/nexus-devflow",
   "artifactLanguage": "th",
   "adapters": [
@@ -61,5 +61,15 @@
       "convert-any-to-md"
     ]
   },
-  "installedAt": "2026-08-17T00:00:00.000Z"
+  "installedAt": "2026-08-17T00:00:00.000Z",
+  "thirdPartySkills": [
+    {
+      "name": "diagram-design",
+      "source": "https://github.com/cathrynlavery/diagram-design",
+      "version": "2.6",
+      "description": "Create branded architecture, IT current-state, flowchart, sequence, state machine, ER/data model, timeline, swimlane, quadrant, radar/spider, polar chart (polar/radial lollipop), loop/flywheel, nested, tree, org chart, layer stack, Venn, pyramid/funnel, treemap, bar, line, Gantt and scatter charts, high-level, process, medallion, data flow, DP integration, DP security matrix, Sankey, fishbone, Wardley map, kanban, user journey, deployment, dependency graph, UML class, story map, or database schema diagrams as standalone HTML/SVG/PNG. Redraw .drawio/.drawio.png/.drawio.svg or Mermaid .mmd sources at a chosen size/detail; onboard brand tokens from a website; add semantic patterns, callouts, accessible motion, or sketchy/hand-drawn styling.",
+      "installedAt": "2026-08-27T05:29:39.219Z",
+      "type": "git"
+    }
+  ]
 }

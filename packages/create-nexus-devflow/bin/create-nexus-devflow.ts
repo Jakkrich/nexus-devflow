@@ -79,6 +79,12 @@ import {
   prepareUninstall,
   type PreparedUninstall
 } from "../lib/uninstall.js";
+import {
+  installThirdPartySkill,
+  listInstalledSkills,
+  removeThirdPartySkill,
+  syncSkills
+} from "../lib/skill-manager.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = fsSync.existsSync(path.join(__dirname, "..", "package.json"))
@@ -110,8 +116,10 @@ interface CliOptions {
   | "reconcile"
   | "studio"
   | "swarm"
-  | "graph";
-  subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall";
+  | "graph"
+  | "skill"
+  | "skills";
+  subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall" | "remove" | "sync";
   subcommandArg?: string;
   graphFile?: string;
   sliceStage?: SliceStage;
@@ -347,6 +355,95 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
         console.error(`\n${style.red("✖")} ${style.bold(result.message)}`);
         process.exitCode = 1;
       }
+    }
+    return;
+  }
+
+  if (options.command === "skill" || options.command === "skills") {
+    const style = createStyle(shouldUseColor());
+    if (options.subcommandAction === "add" || options.subcommandAction === "install") {
+      const source = options.subcommandArg || "";
+      if (!source.trim()) {
+        throw new Error("Skill source (Git URL or local directory) is required. Example: nexus-devflow skill add https://github.com/cathrynlavery/diagram-design");
+      }
+      const spinner = createSpinner(`Installing skill from ${source}...`).start();
+      try {
+        const detail = await installThirdPartySkill(targetDir, source, {
+          force: options.force
+        });
+        spinner.succeed(`Successfully installed third-party skill: ${style.bold(style.cyan(detail.name))}`);
+        if (options.json) {
+          console.log(JSON.stringify(detail, null, 2));
+        } else {
+          console.log(`\n  ${style.dim("Name    :")} ${style.bold(detail.name)}`);
+          if (detail.version) console.log(`  ${style.dim("Version :")} ${detail.version}`);
+          if (detail.description) console.log(`  ${style.dim("Desc    :")} ${detail.description}`);
+          console.log(`  ${style.dim("Source  :")} ${detail.source}`);
+          console.log(`  ${style.dim("Adapters:")} ${detail.adapters.join(", ")}`);
+          console.log(`\n${style.green("✔")} Skill ready to use! Invocable as ${style.cyan(`/${detail.name}`)} or inside /discovery, /feature, /brainstorm.`);
+        }
+      } catch (err: unknown) {
+        spinner.fail(`Failed to install skill: ${err instanceof Error ? err.message : String(err)}`);
+        process.exitCode = 1;
+      }
+      return;
+    }
+
+    if (options.subcommandAction === "remove" || options.subcommandAction === "uninstall") {
+      const name = options.subcommandArg || "";
+      if (!name.trim()) {
+        throw new Error("Skill name is required. Example: nexus-devflow skill remove diagram-design");
+      }
+      const spinner = createSpinner(`Removing skill ${name}...`).start();
+      try {
+        const removed = await removeThirdPartySkill(targetDir, name);
+        if (removed) {
+          spinner.succeed(`Successfully removed third-party skill: ${style.bold(name)}`);
+        } else {
+          spinner.fail(`Skill "${name}" was not found or already removed.`);
+        }
+      } catch (err: unknown) {
+        spinner.fail(`Failed to remove skill: ${err instanceof Error ? err.message : String(err)}`);
+        process.exitCode = 1;
+      }
+      return;
+    }
+
+    if (options.subcommandAction === "sync") {
+      const spinner = createSpinner("Syncing skills between adapters (.agents -> .claude)...").start();
+      try {
+        const res = await syncSkills(targetDir);
+        spinner.succeed(`Successfully synced ${res.syncedCount} skills to .claude/skills.`);
+      } catch (err: unknown) {
+        spinner.fail(`Failed to sync skills: ${err instanceof Error ? err.message : String(err)}`);
+        process.exitCode = 1;
+      }
+      return;
+    }
+
+    // Default: list
+    const result = await listInstalledSkills(targetDir);
+    if (options.json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      console.log(style.bold(style.cyan("\n[Nexus-DevFlow Installed Skills Inventory]")));
+      console.log(style.dim(`Total Skills: ${result.totalCount} (Core: ${result.coreSkills.length}, Third-Party / Extensions: ${result.thirdPartySkills.length})\n`));
+
+      console.log(style.bold("📦 Core Skills (Framework Standard):"));
+      console.log(`  ${result.coreSkills.map((s) => s.name).join(", ")}`);
+
+      console.log(style.bold("\n🔌 Third-Party Skills & Local Extensions:"));
+      if (result.thirdPartySkills.length === 0) {
+        console.log(style.dim("  (No third-party skills installed. Install with: nexus-devflow skill add <repo-or-path>)"));
+      } else {
+        for (const s of result.thirdPartySkills) {
+          const syncIcon = s.synced ? style.green("✔") : style.yellow("⚠ (desynced)");
+          console.log(`  ${syncIcon} ${style.bold(style.cyan(s.name))} ${s.version ? `v${s.version}` : ""} [${s.category}]`);
+          if (s.source) console.log(`     ${style.dim("Source:")} ${s.source}`);
+          if (s.description) console.log(`     ${style.dim("Desc  :")} ${s.description}`);
+        }
+      }
+      console.log("");
     }
     return;
   }
@@ -1024,6 +1121,30 @@ function parseArgs(args: readonly string[]): CliOptions {
         subcommandAction = "list";
         target = positional[1] || target || ".";
       }
+    } else if (first === "skill" || first === "skills") {
+      command = "skill";
+      if (positional[1] === "add" || positional[1] === "install") {
+        subcommandAction = "add";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
+      } else if (positional[1] === "remove" || positional[1] === "uninstall" || positional[1] === "rm") {
+        subcommandAction = "remove";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
+      } else if (positional[1] === "sync") {
+        subcommandAction = "sync";
+        target = positional[2] || target || ".";
+      } else if (positional[1] === "list" || positional[1] === "ls") {
+        subcommandAction = "list";
+        target = positional[2] || target || ".";
+      } else if (positional[1] && !positional[1].startsWith("-")) {
+        subcommandAction = "add";
+        subcommandArg = positional[1];
+        target = positional[2] || target || ".";
+      } else {
+        subcommandAction = "list";
+        target = positional[1] || target || ".";
+      }
     } else if (first === "install") {
       command = "install";
       target = positional[1] || target || ".";
@@ -1111,6 +1232,10 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow findings")} [list] [--blockers] [--json]
   ${style.cyan("nexus-devflow findings resolve")} <ID> [--status <status>]
   ${style.cyan("nexus-devflow doctor")} [--fix] [--json]
+  ${style.cyan("nexus-devflow skill")} [list] [--json]
+  ${style.cyan("nexus-devflow skill add")} <git-url-or-path> [--force]
+  ${style.cyan("nexus-devflow skill remove")} <name>
+  ${style.cyan("nexus-devflow skill sync")}
   ${style.cyan("nexus-devflow archive")} [list|stats] [--json]
   ${style.cyan("nexus-devflow update")} [target-dir] [options]
   ${style.cyan("nexus-devflow uninstall")} [target-dir] [options]
@@ -1126,6 +1251,7 @@ ${style.bold("Commands:")}
   ${style.brightCyan("idea, ideas")}        Manage idea backlog: add new ideas or list pending ideas
   ${style.brightCyan("findings")}           Inspect findings ledger, record new findings, filter blockers, or resolve
   ${style.brightCyan("doctor")}             Inspect project workspace health and auto-heal missing files (--fix)
+  ${style.brightCyan("skill, skills")}      Manage third-party skills: add from Git/local, remove, sync, or list
   ${style.brightCyan("archive")}            Explore delivered runs and release statistics from devflow/history/
   ${style.brightCyan("update")}             Update existing DevFlow installation without overwriting user changes
   ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project

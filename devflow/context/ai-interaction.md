@@ -159,3 +159,28 @@ Progress lives in persistent files, not in transient chat history:
 - **Lazy Inline Persistence**:
   - Immediately append resolved terms to `devflow/context/glossary.md`.
   - Immediately record major, hard-to-reverse architectural decisions as Architecture Decision Records in `devflow/decisions/ADR-xxx-{slug}.md`.
+
+---
+
+## 10. Third-Party Skill Orchestration & Multi-Skill Delegation Protocol
+
+Nexus-DevFlow natively supports extending workflow capabilities with **Third-Party Skills** (installed via `nexus-devflow skill add <repo-or-path>`):
+
+### 🧩 1. Discovery & Inventory
+- Core workflow commands and AI agents automatically inspect `.agents/skills/` (and `.claude/skills/`) or run `nexus-devflow skill list` to discover installed third-party capabilities.
+- Installed third-party skills maintain their exact original directory structure, references, assets, scripts, and `SKILL.md`.
+
+### 🎯 2. Cross-Command Delegation & Genuine Execution
+- **Verbatim & Original Prompt Fidelity**: When a DevFlow stage requires specialized domain expertise (e.g., editorial diagramming, domain modeling, cloud provisioning, UI benchmarking), the AI agent must read the third-party skill's `SKILL.md` (e.g. `.agents/skills/diagram-design/SKILL.md`) and strictly follow its original instructions, philosophy, style guide gates, and complexity constraints.
+- **Workflow Command Integration Map**:
+  - **`/discovery`**: When macro roadmap planning or micro pre-flight exploration involves system architecture, IT landscape, data pipelines, sequence flows, or user journeys, check for `diagram-design` and generate editorial HTML/SVG diagrams.
+  - **`/feature` & `/fix`**: In Section 2 (`## 📐 2. Technical Spec & Contracts`), invoke `diagram-design` for component diagrams, database ER models, or sequence flows.
+  - **`/brainstorm` & `/grill`**: Leverage visual trade-off matrices (Quadrant, Radar spider) or domain models (UML class, ER).
+  - **`/prototype` & `/report-html`**: Embed standalone HTML/SVG assets seamlessly.
+  - **`/devflow`**: Intent router surfaces installed third-party skills (e.g. `/diagram-design`) directly to the user.
+
+### 📁 3. Generated Asset Storage Hierarchy
+- **Discovery Stage**: `devflow/discoveries/{id}/diagrams/` (referenced in `discovery.md`).
+- **Active Task Stage**: `devflow/context/{xxx-slug}/diagrams/` (referenced in `spec.md`).
+- **Global / Reference**: `devflow/reference/diagrams/` or `devflow/reference/assets/`.
+

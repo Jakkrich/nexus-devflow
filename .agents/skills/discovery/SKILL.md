@@ -57,7 +57,7 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
 ```
 *(A Discovery ID uses the namespace `DISC-YYYYMMDD-NNN`. It is not a Running ID and does not reserve a numeric delivery run.)*
 
-### 5 Supporting Routes & Built-in Lenses:
+### 6 Supporting Routes & Built-in Lenses:
 
 1. **Brainstorming Lens (Divergent & Convergent)**:
    - Formulate 2-3 viable options with trade-offs.
@@ -72,6 +72,11 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
 5. **Socratic Grilling & Domain Alignment Lens (`grill`)**:
    - Codebase-grounded interactive inquiry to clarify entity boundaries, data flows, and edge cases.
    - Record agreed terminology in `devflow/context/glossary.md` and major architecture decisions in `devflow/decisions/ADR-xxx-{slug}.md`.
+6. **🎨 Visual Architecture & Diagram Design Lens (`diagram-design`)**:
+   - When exploring system topologies, legacy IT modernizations, sequence flows, data platform pipelines, or user journeys, check if the third-party skill `diagram-design` is installed in `.agents/skills/diagram-design/`.
+   - If available: Read `.agents/skills/diagram-design/SKILL.md` and load the matching type reference (e.g. `references/type-architecture.md`, `references/type-data-flow.md`, `references/type-sequence.md`, `references/type-journey.md`).
+   - Strictly follow the genuine design rules: editorial palette, style guide gate, target density 4/10, and self-contained HTML/SVG output.
+   - Save diagram artifacts to `devflow/discoveries/{DISCOVERY_ID}-{slug}/diagrams/{name}.html` and reference them directly in `discovery.md`.
 
 ### Decision & Approval Gate:
 Set one visible decision:

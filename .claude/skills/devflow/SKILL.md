@@ -56,6 +56,7 @@ When invoked without an argument (or when determining the next step), inspect:
 | **"Run QA verification & check"** | `check` | `/check` | **Core Loop**: `/check` -> `/complete` |
 | **"Complete run & git merge"** | `complete` | `/complete` | **Core Loop**: `/complete` |
 | **"Generate HTML dashboard report"**| `report-html` | `/report:html` | **Standalone**: Converts living spec or archive to HTML |
+| **"Create editorial diagram / flowchart"**| `diagram-design`| `/diagram-design` | **Third-Party**: 39 visual diagrams (HTML/SVG) |
 | "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `/feature` |
 | "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `/feature` |
 | "Check setup health & diagnostics" | `doctor` | `doctor` / `health` | `doctor` |
@@ -95,3 +96,7 @@ When invoked without an argument (or when determining the next step), inspect:
 - `debug` - Root-cause investigation without editing code
 - `rollback` - Safe reversal of completed features
 - `release` - Deployment readiness check
+
+### 4. Installed Third-Party Skills & Extensions
+- `diagram-design` (`/diagram-design`) - 39 editorial visual diagram types (HTML/SVG) for system architecture, sequence flows, ER models, data platform pipelines, and journeys.
+- *Use `nexus-devflow skill add <url>` to install more third-party skills.*
