@@ -482,6 +482,45 @@ export async function runDoctor(
     });
   }
 
+  // Check 10: Third-Party Skills & Extensions
+  const agentsSkillsDir = path.join(projectRoot, ".agents", "skills");
+  if (await dirExists(agentsSkillsDir)) {
+    try {
+      const { listInstalledSkills, syncSkills } = await import("./skill-manager.js");
+      const inventory = await listInstalledSkills(projectRoot);
+      if (inventory.thirdPartySkills.length > 0) {
+        const desynced = inventory.thirdPartySkills.filter((s) => !s.synced);
+        if (desynced.length > 0) {
+          let fixed = false;
+          if (options.fix) {
+            await syncSkills(projectRoot);
+            fixed = true;
+          }
+          checks.push({
+            id: "third_party_skills",
+            name: "Third-Party Skills & Extensions",
+            status: fixed ? "pass" : "warn",
+            message: fixed
+              ? `Auto-synced ${inventory.thirdPartySkills.length} third-party skill(s) across adapters.`
+              : `${inventory.thirdPartySkills.length} third-party skill(s) detected (${desynced.map((d) => d.name).join(", ")} out of sync). Run 'nexus-devflow skill sync' or '--fix' to resolve.`,
+            fixable: true,
+            fixed
+          });
+        } else {
+          checks.push({
+            id: "third_party_skills",
+            name: "Third-Party Skills & Extensions",
+            status: "pass",
+            message: `${inventory.thirdPartySkills.length} third-party skill(s) installed and synchronized (${inventory.thirdPartySkills.map((s) => s.name).join(", ")}).`,
+            fixable: false
+          });
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   let passCount = 0;
   let warnCount = 0;
   let failCount = 0;
