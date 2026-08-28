@@ -9,7 +9,8 @@ import {
   listInstalledSkills,
   parseSkillFrontmatter,
   removeThirdPartySkill,
-  syncSkills
+  syncSkills,
+  updateThirdPartySkills
 } from "../lib/skill-manager.js";
 
 test("parseSkillFrontmatter extracts name, description, and version", () => {
@@ -249,4 +250,72 @@ test("nested multi-skill discovery and batch installation (--name and --all)", a
     await fs.rm(tempSource, { recursive: true, force: true });
   }
 });
+
+test("updateThirdPartySkills updates installed third-party skills from original sources", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-update-proj-"));
+  const tempSource = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-update-src-"));
+
+  try {
+    const debugDir = path.join(tempSource, "skills", "engineering", "debug-mantra");
+    await fs.mkdir(debugDir, { recursive: true });
+    await fs.writeFile(
+      path.join(debugDir, "SKILL.md"),
+      `---\nname: debug-mantra\ndescription: Debugging v1\nversion: 1.0.0\n---\n# Debug Mantra\n`,
+      "utf8"
+    );
+
+    // Initialize manifest
+    const manifestDir = path.join(tempProject, ".nexus");
+    await fs.mkdir(manifestDir, { recursive: true });
+    await fs.writeFile(
+      path.join(manifestDir, "nexus-devflow.json"),
+      JSON.stringify({ schemaVersion: 1, name: "test", version: "1.0.0" }, null, 2),
+      "utf8"
+    );
+
+    // 1. Initial install
+    await installThirdPartySkill(tempProject, tempSource, { name: "debug-mantra" });
+    let listing = await listInstalledSkills(tempProject);
+    assert.equal(listing.thirdPartySkills[0].version, "1.0.0");
+    assert.equal(listing.thirdPartySkills[0].description, "Debugging v1");
+
+    // 2. Source gets updated with v2
+    await fs.writeFile(
+      path.join(debugDir, "SKILL.md"),
+      `---\nname: debug-mantra\ndescription: Debugging v2 updated\nversion: 2.0.0\n---\n# Debug Mantra v2\n`,
+      "utf8"
+    );
+
+    // 3. Run updateThirdPartySkills for specific skill
+    const updateResult = await updateThirdPartySkills(tempProject, "debug-mantra");
+    assert.equal(updateResult.totalUpdated, 1);
+    assert.equal(updateResult.failedSkills.length, 0);
+    assert.equal(updateResult.updatedSkills[0].version, "2.0.0");
+    assert.equal(updateResult.updatedSkills[0].description, "Debugging v2 updated");
+
+    // Verify manifest has updated info
+    listing = await listInstalledSkills(tempProject);
+    assert.equal(listing.thirdPartySkills[0].version, "2.0.0");
+    assert.equal(listing.thirdPartySkills[0].description, "Debugging v2 updated");
+
+    // Verify file content in .agents and .claude
+    assert.match(
+      await fs.readFile(path.join(tempProject, ".agents", "skills", "debug-mantra", "SKILL.md"), "utf8"),
+      /Debugging v2 updated/
+    );
+    assert.match(
+      await fs.readFile(path.join(tempProject, ".claude", "skills", "debug-mantra", "SKILL.md"), "utf8"),
+      /Debugging v2 updated/
+    );
+
+    // 4. Test updating all
+    const updateAllResult = await updateThirdPartySkills(tempProject);
+    assert.equal(updateAllResult.totalUpdated, 1);
+    assert.equal(updateAllResult.failedSkills.length, 0);
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempSource, { recursive: true, force: true });
+  }
+});
+
 

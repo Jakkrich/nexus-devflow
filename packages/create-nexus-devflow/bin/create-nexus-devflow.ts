@@ -83,7 +83,8 @@ import {
   installThirdPartySkill,
   listInstalledSkills,
   removeThirdPartySkill,
-  syncSkills
+  syncSkills,
+  updateThirdPartySkills
 } from "../lib/skill-manager.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -117,7 +118,7 @@ interface CliOptions {
   | "graph"
   | "skill"
   | "skills";
-  subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall" | "remove" | "sync";
+  subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall" | "remove" | "sync" | "update" | "upgrade";
   subcommandArg?: string;
   graphFile?: string;
   sliceStage?: SliceStage;
@@ -433,6 +434,39 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
         spinner.succeed(`Successfully synced ${res.syncedCount} skills to .claude/skills.`);
       } catch (err: unknown) {
         spinner.fail(`Failed to sync skills: ${err instanceof Error ? err.message : String(err)}`);
+        process.exitCode = 1;
+      }
+      return;
+    }
+
+    if (options.subcommandAction === "update" || options.subcommandAction === "upgrade") {
+      const targetSkill = options.subcommandArg || (options.installAllSkills ? "--all" : undefined);
+      const spinner = createSpinner(targetSkill && targetSkill !== "--all" ? `Updating skill ${targetSkill}...` : "Updating third-party skills...").start();
+      try {
+        const result = await updateThirdPartySkills(targetDir, targetSkill);
+        if (result.totalUpdated === 0 && result.failedSkills.length === 0) {
+          spinner.succeed("No third-party skills installed to update.");
+        } else if (result.failedSkills.length > 0 && result.totalUpdated === 0) {
+          spinner.fail(`Failed to update skills: ${result.failedSkills.map((f) => `${f.name} (${f.reason})`).join(", ")}`);
+          process.exitCode = 1;
+        } else {
+          spinner.succeed(`Successfully updated ${result.totalUpdated} third-party skill(s): ${result.updatedSkills.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
+          if (options.json) {
+            console.log(JSON.stringify(result, null, 2));
+          } else {
+            for (const d of result.updatedSkills) {
+              console.log(`  ✔ ${style.bold(style.cyan(d.name))} ${d.version ? `v${d.version}` : ""}`);
+            }
+            if (result.failedSkills.length > 0) {
+              console.log(`\n${style.yellow("⚠")} Failed to update (${result.failedSkills.length}):`);
+              for (const f of result.failedSkills) {
+                console.log(`  ✖ ${style.red(f.name)}: ${f.reason}`);
+              }
+            }
+          }
+        }
+      } catch (err: unknown) {
+        spinner.fail(`Failed to update skills: ${err instanceof Error ? err.message : String(err)}`);
         process.exitCode = 1;
       }
       return;
@@ -1173,6 +1207,10 @@ function parseArgs(args: readonly string[]): CliOptions {
       } else if (positional[1] === "sync") {
         subcommandAction = "sync";
         target = positional[2] || target || ".";
+      } else if (positional[1] === "update" || positional[1] === "upgrade") {
+        subcommandAction = "update";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
       } else if (positional[1] === "list" || positional[1] === "ls") {
         subcommandAction = "list";
         target = positional[2] || target || ".";
@@ -1275,6 +1313,7 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow doctor")} [--fix] [--json]
   ${style.cyan("nexus-devflow skill")} [list] [--json]
   ${style.cyan("nexus-devflow skill add")} <git-url-or-path> [--name <name>] [--all] [--force]
+  ${style.cyan("nexus-devflow skill update")} [name|--all]
   ${style.cyan("nexus-devflow skill remove")} <name>
   ${style.cyan("nexus-devflow skill sync")}
   ${style.cyan("nexus-devflow archive")} [list|stats] [--json]
