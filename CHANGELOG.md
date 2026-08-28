@@ -5,6 +5,11 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.2] - 2026-08-28
+
+### Added
+- **Third-Party Skill Update Engine (`nexus-devflow skill update`)**: Added `updateThirdPartySkills` supporting `nexus-devflow skill update [name]` and `nexus-devflow skill update --all` to automatically re-fetch latest skill definitions from original Git / local sources, update manifest timestamps and metadata, and synchronize `.agents/` and `.claude/` adapters.
+
 ## [2.9.1] - 2026-08-28
 
 ### Added

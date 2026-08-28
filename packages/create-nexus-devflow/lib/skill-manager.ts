@@ -38,6 +38,7 @@ export interface InstallSkillOptions {
   name?: string;
   all?: boolean;
   force?: boolean;
+  overrideSource?: string;
 }
 
 const SKILL_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -334,6 +335,9 @@ export async function installThirdPartySkill(
       }
     }
 
+    const recordedSource = options?.overrideSource || source;
+    const recordedType = isGitUrl || options?.overrideSource ? "git" : "local";
+
     if (options?.all) {
       const discovered = await discoverSkillsInDirectory(sourceDirectory);
       if (discovered.length === 0) {
@@ -345,7 +349,7 @@ export async function installThirdPartySkill(
         schemaVersion: 1,
         name: "nexus-devflow",
         package: "@jakkrichm/create-nexus-devflow",
-        version: "2.9.1"
+        version: "2.9.2"
       };
 
       const existingThirdParty = Array.isArray(manifest.thirdPartySkills)
@@ -377,11 +381,11 @@ export async function installThirdPartySkill(
         updatedThirdParty = updatedThirdParty.filter((s) => s.name !== skillName);
         updatedThirdParty.push({
           name: skillName,
-          source,
+          source: recordedSource,
           version: skill.meta.version || "1.0.0",
           description: skill.meta.description || "",
           installedAt: new Date().toISOString(),
-          type: isGitUrl ? "git" : "local"
+          type: recordedType
         });
 
         installedList.push({
@@ -389,7 +393,7 @@ export async function installThirdPartySkill(
           category: "third-party",
           description: skill.meta.description || "",
           version: skill.meta.version || "1.0.0",
-          source,
+          source: recordedSource,
           adapters: [".agents", ".claude"],
           synced: true,
           path: `.agents/skills/${skillName}`
@@ -431,7 +435,7 @@ export async function installThirdPartySkill(
       schemaVersion: 1,
       name: "nexus-devflow",
       package: "@jakkrichm/create-nexus-devflow",
-      version: "2.9.1"
+      version: "2.9.2"
     };
 
     const existingThirdParty = Array.isArray(manifest.thirdPartySkills)
@@ -441,11 +445,11 @@ export async function installThirdPartySkill(
     const filtered = existingThirdParty.filter((s) => s.name !== skillName);
     filtered.push({
       name: skillName,
-      source,
+      source: recordedSource,
       version: meta.version || "1.0.0",
       description: meta.description || "",
       installedAt: new Date().toISOString(),
-      type: isGitUrl ? "git" : "local"
+      type: recordedType
     });
 
     manifest.thirdPartySkills = filtered;
@@ -456,7 +460,7 @@ export async function installThirdPartySkill(
       category: "third-party",
       description: meta.description || "",
       version: meta.version || "1.0.0",
-      source,
+      source: recordedSource,
       adapters: [".agents", ".claude"],
       synced: true,
       path: `.agents/skills/${skillName}`
@@ -542,3 +546,95 @@ export async function syncSkills(projectRoot: string): Promise<{ syncedCount: nu
     skills: syncedSkills
   };
 }
+
+export interface SkillUpdateResult {
+  updatedSkills: SkillDetail[];
+  failedSkills: Array<{ name: string; reason: string }>;
+  totalUpdated: number;
+}
+
+export async function updateThirdPartySkills(
+  projectRoot: string,
+  targetSkillName?: string,
+  options?: { force?: boolean }
+): Promise<SkillUpdateResult> {
+  const manifest = await readDevflowManifest(projectRoot);
+  const existingThirdParty = Array.isArray(manifest?.thirdPartySkills)
+    ? (manifest.thirdPartySkills as InstalledSkillRecord[])
+    : [];
+
+  if (existingThirdParty.length === 0) {
+    return { updatedSkills: [], failedSkills: [], totalUpdated: 0 };
+  }
+
+  let skillsToUpdate = existingThirdParty;
+  if (targetSkillName && targetSkillName !== "--all") {
+    skillsToUpdate = existingThirdParty.filter((s) => s.name === targetSkillName);
+    if (skillsToUpdate.length === 0) {
+      throw new Error(`Skill "${targetSkillName}" is not installed as a third-party skill.`);
+    }
+  }
+
+  // Group by source to avoid duplicate cloning
+  const sourceToSkillsMap = new Map<string, InstalledSkillRecord[]>();
+  for (const skill of skillsToUpdate) {
+    const list = sourceToSkillsMap.get(skill.source) || [];
+    list.push(skill);
+    sourceToSkillsMap.set(skill.source, list);
+  }
+
+  const updatedSkills: SkillDetail[] = [];
+  const failedSkills: Array<{ name: string; reason: string }> = [];
+
+  for (const [source, skills] of sourceToSkillsMap) {
+    const isGit = /^https?:\/\/|^git@|^ssh:\/\/|\.git$/.test(source);
+    let tempCloneDir: string | null = null;
+
+    try {
+      let sourceDir = source;
+      if (isGit) {
+        tempCloneDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-skill-update-"));
+        await execFileAsync("git", ["clone", "--depth", "1", source, tempCloneDir]);
+        sourceDir = tempCloneDir;
+      }
+
+      for (const skill of skills) {
+        try {
+          const detail = (await installThirdPartySkill(projectRoot, sourceDir, {
+            name: skill.name,
+            force: true,
+            overrideSource: isGit ? source : undefined
+          })) as SkillDetail;
+          updatedSkills.push(detail);
+        } catch (err: unknown) {
+          failedSkills.push({
+            name: skill.name,
+            reason: err instanceof Error ? err.message : String(err)
+          });
+        }
+      }
+    } catch (err: unknown) {
+      for (const skill of skills) {
+        failedSkills.push({
+          name: skill.name,
+          reason: err instanceof Error ? err.message : String(err)
+        });
+      }
+    } finally {
+      if (tempCloneDir) {
+        try {
+          await fs.rm(tempCloneDir, { recursive: true, force: true });
+        } catch {
+          // ignore
+        }
+      }
+    }
+  }
+
+  return {
+    updatedSkills,
+    failedSkills,
+    totalUpdated: updatedSkills.length
+  };
+}
+
