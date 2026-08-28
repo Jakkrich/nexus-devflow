@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.1] - 2026-08-28
+
+### Added
+- **Nested Multi-Skill Repository Discovery**: Recursive directory scanner (`discoverSkillsInDirectory`) up to depth 5 to discover all valid skills located inside arbitrary category folders (e.g. `skills/engineering/` and `skills/productivity/` in `thananon/9arm-skills`).
+- **Targeted Skill Installation (`--name <skill-name>`)**: Support installing a specific skill from a multi-skill repository or bundle.
+- **Batch Multi-Skill Installation (`--all`, `--all-skills`)**: One-command installation and registration of all discovered skills from a multi-skill bundle into both `.agents/skills/` and `.claude/skills/`.
+- **Friendly Multi-Skill Ambiguity Guidance**: When multiple skills are found in source without a target name, CLI lists all available skills and suggests `--name` or `--all`.
+
 ## [2.9.0] - 2026-08-28
 
 ### Added

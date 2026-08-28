@@ -36,6 +36,7 @@ export interface SkillListResult {
 
 export interface InstallSkillOptions {
   name?: string;
+  all?: boolean;
   force?: boolean;
 }
 
@@ -199,92 +200,116 @@ export async function listInstalledSkills(projectRoot: string): Promise<SkillLis
   };
 }
 
+export interface DiscoveredSkill {
+  sourceSkillPath: string;
+  skillName: string;
+  meta: { name?: string; description?: string; version?: string };
+}
+
+export async function discoverSkillsInDirectory(
+  rootDir: string,
+  maxDepth = 5,
+  currentDepth = 0
+): Promise<DiscoveredSkill[]> {
+  const results: DiscoveredSkill[] = [];
+  if (currentDepth > maxDepth) return results;
+
+  const skillMdPath = path.join(rootDir, "SKILL.md");
+  if (fsSync.existsSync(skillMdPath)) {
+    try {
+      const content = await fs.readFile(skillMdPath, "utf8");
+      const meta = parseSkillFrontmatter(content);
+      const skillName = meta.name || path.basename(rootDir);
+      results.push({
+        sourceSkillPath: rootDir,
+        skillName,
+        meta
+      });
+      return results;
+    } catch {
+      // ignore read error
+    }
+  }
+
+  let entries: fsSync.Dirent[];
+  try {
+    entries = await fs.readdir(rootDir, { withFileTypes: true });
+  } catch {
+    return results;
+  }
+
+  const IGNORED_DIRS = new Set([".git", "node_modules", "dist", ".nexus", "build", "coverage", ".turbo"]);
+
+  for (const entry of entries) {
+    if (entry.isDirectory() && !IGNORED_DIRS.has(entry.name)) {
+      const subDir = path.join(rootDir, entry.name);
+      const subResults = await discoverSkillsInDirectory(subDir, maxDepth, currentDepth + 1);
+      results.push(...subResults);
+    }
+  }
+
+  return results;
+}
+
 export async function findSkillSourceDirectory(
   sourceDir: string,
   requestedName?: string
 ): Promise<{ sourceSkillPath: string; skillName: string; meta: { name?: string; description?: string; version?: string } }> {
-  // Check 1: If sourceDir itself has SKILL.md
-  const rootSkillMd = path.join(sourceDir, "SKILL.md");
-  if (fsSync.existsSync(rootSkillMd)) {
-    const content = await fs.readFile(rootSkillMd, "utf8");
-    const meta = parseSkillFrontmatter(content);
-    const skillName = requestedName || meta.name || path.basename(sourceDir);
-    return { sourceSkillPath: sourceDir, skillName, meta };
+  const discovered = await discoverSkillsInDirectory(sourceDir);
+
+  if (discovered.length === 0) {
+    throw new Error(`Could not find any valid skill with SKILL.md in source: ${sourceDir}`);
   }
 
-  // Check 2: Check inside skills/ subfolder
-  const skillsSubDir = path.join(sourceDir, "skills");
-  if (fsSync.existsSync(skillsSubDir)) {
-    const entries = await fs.readdir(skillsSubDir, { withFileTypes: true });
-    const skillDirs = entries.filter((e) => e.isDirectory());
-
-    if (requestedName) {
-      const targetDir = path.join(skillsSubDir, requestedName);
-      if (fsSync.existsSync(path.join(targetDir, "SKILL.md"))) {
-        const content = await fs.readFile(path.join(targetDir, "SKILL.md"), "utf8");
-        const meta = parseSkillFrontmatter(content);
-        return { sourceSkillPath: targetDir, skillName: requestedName, meta };
-      }
+  if (requestedName) {
+    const match = discovered.find(
+      (s) => s.skillName === requestedName || path.basename(s.sourceSkillPath) === requestedName
+    );
+    if (match) {
+      return {
+        sourceSkillPath: match.sourceSkillPath,
+        skillName: requestedName,
+        meta: match.meta
+      };
     }
-
-    if (skillDirs.length === 1) {
-      const onlyDir = skillDirs[0].name;
-      const targetDir = path.join(skillsSubDir, onlyDir);
-      if (fsSync.existsSync(path.join(targetDir, "SKILL.md"))) {
-        const content = await fs.readFile(path.join(targetDir, "SKILL.md"), "utf8");
-        const meta = parseSkillFrontmatter(content);
-        return { sourceSkillPath: targetDir, skillName: requestedName || meta.name || onlyDir, meta };
-      }
-    }
-
-    if (skillDirs.length > 1) {
-      // If one matches the requested name or base name of source
-      const baseName = path.basename(sourceDir);
-      for (const dir of skillDirs) {
-        if (dir.name === requestedName || dir.name === baseName) {
-          const targetDir = path.join(skillsSubDir, dir.name);
-          if (fsSync.existsSync(path.join(targetDir, "SKILL.md"))) {
-            const content = await fs.readFile(path.join(targetDir, "SKILL.md"), "utf8");
-            const meta = parseSkillFrontmatter(content);
-            return { sourceSkillPath: targetDir, skillName: dir.name, meta };
-          }
-        }
-      }
-    }
+    const available = discovered.map((s) => s.skillName).join(", ");
+    throw new Error(
+      `Skill "${requestedName}" not found in source. Available skills (${discovered.length}): ${available}`
+    );
   }
 
-  // Check 3: Check .agents/skills subfolder
-  const dotAgentsSkills = path.join(sourceDir, ".agents", "skills");
-  if (fsSync.existsSync(dotAgentsSkills)) {
-    const entries = await fs.readdir(dotAgentsSkills, { withFileTypes: true });
-    const skillDirs = entries.filter((e) => e.isDirectory());
-    if (requestedName) {
-      const targetDir = path.join(dotAgentsSkills, requestedName);
-      if (fsSync.existsSync(path.join(targetDir, "SKILL.md"))) {
-        const content = await fs.readFile(path.join(targetDir, "SKILL.md"), "utf8");
-        const meta = parseSkillFrontmatter(content);
-        return { sourceSkillPath: targetDir, skillName: requestedName, meta };
-      }
-    }
-    if (skillDirs.length === 1) {
-      const onlyDir = skillDirs[0].name;
-      const targetDir = path.join(dotAgentsSkills, onlyDir);
-      if (fsSync.existsSync(path.join(targetDir, "SKILL.md"))) {
-        const content = await fs.readFile(path.join(targetDir, "SKILL.md"), "utf8");
-        const meta = parseSkillFrontmatter(content);
-        return { sourceSkillPath: targetDir, skillName: requestedName || meta.name || onlyDir, meta };
-      }
-    }
+  if (discovered.length === 1) {
+    return {
+      sourceSkillPath: discovered[0].sourceSkillPath,
+      skillName: discovered[0].skillName,
+      meta: discovered[0].meta
+    };
   }
 
-  throw new Error(`Could not find a valid skill with SKILL.md in source: ${sourceDir}`);
+  // Check if one matches the sourceDir basename
+  const baseName = path.basename(sourceDir);
+  const baseMatch = discovered.find(
+    (s) => s.skillName === baseName || path.basename(s.sourceSkillPath) === baseName
+  );
+  if (baseMatch) {
+    return {
+      sourceSkillPath: baseMatch.sourceSkillPath,
+      skillName: baseMatch.skillName,
+      meta: baseMatch.meta
+    };
+  }
+
+  const available = discovered.map((s) => s.skillName).join(", ");
+  throw new Error(
+    `Multiple skills found in source (${discovered.length} skills: ${available}). Please specify --name <skill-name> or use --all to install all skills.`
+  );
 }
 
 export async function installThirdPartySkill(
   projectRoot: string,
   source: string,
   options?: InstallSkillOptions
-): Promise<SkillDetail> {
+): Promise<SkillDetail | SkillDetail[]> {
   const isGitUrl = /^https?:\/\/|^git@|^ssh:\/\/|\.git$/.test(source);
   let tempCloneDir: string | null = null;
   let sourceDirectory = source;
@@ -307,6 +332,74 @@ export async function installThirdPartySkill(
       if (!fsSync.existsSync(sourceDirectory)) {
         throw new Error(`Source directory does not exist: ${source}`);
       }
+    }
+
+    if (options?.all) {
+      const discovered = await discoverSkillsInDirectory(sourceDirectory);
+      if (discovered.length === 0) {
+        throw new Error(`Could not find any valid skill with SKILL.md in source: ${source}`);
+      }
+
+      const installedList: SkillDetail[] = [];
+      const manifest = (await readDevflowManifest(projectRoot)) || {
+        schemaVersion: 1,
+        name: "nexus-devflow",
+        package: "@jakkrichm/create-nexus-devflow",
+        version: "2.9.1"
+      };
+
+      const existingThirdParty = Array.isArray(manifest.thirdPartySkills)
+        ? (manifest.thirdPartySkills as InstalledSkillRecord[])
+        : [];
+      let updatedThirdParty = [...existingThirdParty];
+
+      for (const skill of discovered) {
+        const skillName = skill.skillName;
+        if (!SKILL_NAME_PATTERN.test(skillName)) {
+          continue; // skip invalid names in batch mode
+        }
+        if (coreNameSet.has(skillName) && !options?.force) {
+          continue; // skip core collisions in batch mode
+        }
+
+        const targetAgentsSkillDir = path.join(projectRoot, ".agents", "skills", skillName);
+        const targetClaudeSkillDir = path.join(projectRoot, ".claude", "skills", skillName);
+
+        await fs.rm(targetAgentsSkillDir, { recursive: true, force: true });
+        await fs.rm(targetClaudeSkillDir, { recursive: true, force: true });
+
+        await fs.mkdir(path.dirname(targetAgentsSkillDir), { recursive: true });
+        await fs.mkdir(path.dirname(targetClaudeSkillDir), { recursive: true });
+
+        await fs.cp(skill.sourceSkillPath, targetAgentsSkillDir, { recursive: true });
+        await fs.cp(skill.sourceSkillPath, targetClaudeSkillDir, { recursive: true });
+
+        updatedThirdParty = updatedThirdParty.filter((s) => s.name !== skillName);
+        updatedThirdParty.push({
+          name: skillName,
+          source,
+          version: skill.meta.version || "1.0.0",
+          description: skill.meta.description || "",
+          installedAt: new Date().toISOString(),
+          type: isGitUrl ? "git" : "local"
+        });
+
+        installedList.push({
+          name: skillName,
+          category: "third-party",
+          description: skill.meta.description || "",
+          version: skill.meta.version || "1.0.0",
+          source,
+          adapters: [".agents", ".claude"],
+          synced: true,
+          path: `.agents/skills/${skillName}`
+        });
+      }
+
+      manifest.thirdPartySkills = updatedThirdParty;
+      await writeDevflowManifest(projectRoot, manifest);
+
+      return installedList;
     }
 
     const { sourceSkillPath, skillName, meta } = await findSkillSourceDirectory(sourceDirectory, options?.name);
@@ -338,7 +431,7 @@ export async function installThirdPartySkill(
       schemaVersion: 1,
       name: "nexus-devflow",
       package: "@jakkrichm/create-nexus-devflow",
-      version: "2.9.0"
+      version: "2.9.1"
     };
 
     const existingThirdParty = Array.isArray(manifest.thirdPartySkills)

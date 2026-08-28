@@ -130,6 +130,8 @@ interface CliOptions {
   findingLocation?: string;
   findingImpact?: string;
   findingRemediation?: string;
+  skillName?: string;
+  installAllSkills: boolean;
   blockersOnly: boolean;
   fix: boolean;
   statsOnly: boolean;
@@ -367,18 +369,35 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       const spinner = createSpinner(`Installing skill from ${source}...`).start();
       try {
         const detail = await installThirdPartySkill(targetDir, source, {
+          name: options.skillName,
+          all: options.installAllSkills,
           force: options.force
         });
-        spinner.succeed(`Successfully installed third-party skill: ${style.bold(style.cyan(detail.name))}`);
-        if (options.json) {
-          console.log(JSON.stringify(detail, null, 2));
+        if (Array.isArray(detail)) {
+          spinner.succeed(`Successfully installed ${detail.length} third-party skill(s): ${detail.map((d) => style.bold(style.cyan(d.name))).join(", ")}`);
+          if (options.json) {
+            console.log(JSON.stringify(detail, null, 2));
+          } else {
+            for (const d of detail) {
+              console.log(`\n  ${style.dim("Name    :")} ${style.bold(d.name)}`);
+              if (d.version) console.log(`  ${style.dim("Version :")} ${d.version}`);
+              if (d.description) console.log(`  ${style.dim("Desc    :")} ${d.description}`);
+              console.log(`  ${style.dim("Adapters:")} ${d.adapters.join(", ")}`);
+            }
+            console.log(`\n${style.green("✔")} All ${detail.length} skills ready to use! Invocable as /<skill-name> in workflows.`);
+          }
         } else {
-          console.log(`\n  ${style.dim("Name    :")} ${style.bold(detail.name)}`);
-          if (detail.version) console.log(`  ${style.dim("Version :")} ${detail.version}`);
-          if (detail.description) console.log(`  ${style.dim("Desc    :")} ${detail.description}`);
-          console.log(`  ${style.dim("Source  :")} ${detail.source}`);
-          console.log(`  ${style.dim("Adapters:")} ${detail.adapters.join(", ")}`);
-          console.log(`\n${style.green("✔")} Skill ready to use! Invocable as ${style.cyan(`/${detail.name}`)} or inside /discovery, /feature, /brainstorm.`);
+          spinner.succeed(`Successfully installed third-party skill: ${style.bold(style.cyan(detail.name))}`);
+          if (options.json) {
+            console.log(JSON.stringify(detail, null, 2));
+          } else {
+            console.log(`\n  ${style.dim("Name    :")} ${style.bold(detail.name)}`);
+            if (detail.version) console.log(`  ${style.dim("Version :")} ${detail.version}`);
+            if (detail.description) console.log(`  ${style.dim("Desc    :")} ${detail.description}`);
+            console.log(`  ${style.dim("Source  :")} ${detail.source}`);
+            console.log(`  ${style.dim("Adapters:")} ${detail.adapters.join(", ")}`);
+            console.log(`\n${style.green("✔")} Skill ready to use! Invocable as ${style.cyan(`/${detail.name}`)} or inside /discovery, /feature, /brainstorm.`);
+          }
         }
       } catch (err: unknown) {
         spinner.fail(`Failed to install skill: ${err instanceof Error ? err.message : String(err)}`);
@@ -713,6 +732,8 @@ function parseArgs(args: readonly string[]): CliOptions {
   let findingLocation: string | undefined;
   let findingImpact: string | undefined;
   let findingRemediation: string | undefined;
+  let skillName: string | undefined;
+  let installAllSkills = false;
   let blockersOnly = false;
   let fix = false;
   let statsOnly = false;
@@ -982,8 +1003,28 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--name" || arg === "-n") {
+      const next = args[++i];
+      if (!next) {
+        throw new Error(`${arg} requires a skill name`);
+      }
+      skillName = next;
+      continue;
+    }
+
+    if (arg.startsWith("--name=")) {
+      skillName = arg.slice("--name=".length);
+      continue;
+    }
+
+    if (arg === "--all-skills") {
+      installAllSkills = true;
+      continue;
+    }
+
     if (arg === "--all" || arg === "--both") {
       adapter = "all";
+      installAllSkills = true;
       continue;
     }
 
@@ -1166,6 +1207,8 @@ function parseArgs(args: readonly string[]): CliOptions {
     findingLocation,
     findingImpact,
     findingRemediation,
+    skillName,
+    installAllSkills,
     blockersOnly,
     fix,
     statsOnly,
@@ -1231,7 +1274,7 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow findings resolve")} <ID> [--status <status>]
   ${style.cyan("nexus-devflow doctor")} [--fix] [--json]
   ${style.cyan("nexus-devflow skill")} [list] [--json]
-  ${style.cyan("nexus-devflow skill add")} <git-url-or-path> [--force]
+  ${style.cyan("nexus-devflow skill add")} <git-url-or-path> [--name <name>] [--all] [--force]
   ${style.cyan("nexus-devflow skill remove")} <name>
   ${style.cyan("nexus-devflow skill sync")}
   ${style.cyan("nexus-devflow archive")} [list|stats] [--json]
@@ -1257,6 +1300,8 @@ ${style.bold("Commands:")}
 ${style.bold("Options:")}
   ${style.cyan("--strict")}           Strict mode for check-gate (blocks unverified runs)
   ${style.cyan("--title <text>")}     Custom title for idea add
+  ${style.cyan("--name <skill-name>")} Target specific skill in a multi-skill repository
+  ${style.cyan("--all, --all-skills")} Install all skills from a multi-skill repository
   ${style.cyan("--severity, -s")}     Finding severity: P0, P1, P2, P3 (default: P2)
   ${style.cyan("--status <name>")}    Status to set when resolving finding (default: closed)
   ${style.cyan("--location <path>")}  Finding source code file and line location
