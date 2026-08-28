@@ -91,6 +91,7 @@ npx -y @jakkrichm/create-nexus-devflow@latest -y
 - [คู่มือการทดสอบด้วยตนเอง (Manual try guides)](#คู่มือการทดสอบด้วยตนเอง-manual-try-guides)
 - [Enterprise Web Dashboard และ Real-Time Studio](#enterprise-web-dashboard-และ-real-time-studio)
 - [ชุดคำสั่งจัดการผ่าน CLI (CLI Management Commands)](#ชุดคำสั่งจัดการผ่าน-cli-cli-management-commands)
+- [สกิลเสริมและส่วนขยายแนะนำ (Recommended Extensions)](#สกิลเสริมและส่วนขยายแนะนำ-recommended-third-party-skills--extensions)
 - [การเตรียมความพร้อมก่อน Deploy (Deployment readiness)](#การเตรียมความพร้อมก่อน-deploy-deployment-readiness)
 - [การสานต่องานเดิมอย่างต่อเนื่อง (Picking up where you left off)](#การสานต่องานเดิมอย่างต่อเนื่อง-picking-up-where-you-left-off)
 - [แผนผังโครงสร้างไฟล์ (File map)](#แผนผังโครงสร้างไฟล์-file-map)
@@ -326,9 +327,12 @@ AI:   บันทึก Release Digest ลงใน Living Spec
 
 ---
 
-## แผนภาพกระบวนการทำงาน (Visual overview)
+## แผนภาพกระบวนการทำงานและผังสถาปัตยกรรม (Visual Overview & Interactive Maps)
 
-แผนภาพด้านล่างแสดงภาพรวมวงจรการทำงานทั้งหมดของ Nexus-DevFlow ตั้งแต่ต้นจนจบ:
+สำรวจแผนผังสถาปัตยกรรมระบบและวงจรชีวิต Living Spec แบบ Interactive ที่สร้างขึ้นด้วย **Archify**:
+
+- 🌐 **[แผนผังสถาปัตยกรรมระบบ Nexus-DevFlow (Interactive HTML)](docs/diagrams/nexus-devflow-architecture.html)** — ดูความเชื่อมโยงของ 3 เสาหลัก (3-Pillars), การผสาน Multi-Agent Adapters และ QA Gates
+- ⚡ **[วงจรชีวิตและ State Machine ของ Living Spec (Interactive HTML)](docs/diagrams/nexus-devflow-lifecycle.html)** — แสดงขั้นตอนการส่งมอบ 4 ขั้นตอน (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), จุดตรวจ Blocker และการย้อนคืนระบบ
 
 ![Nexus-DevFlow Workflow](assets/nexus-devflow-workflow.png)
 
@@ -660,6 +664,29 @@ npm run report:html -- 054-optimize-dashboard-snapshot-latency
 # ตรวจสอบและอัปเดตเวอร์ชัน DevFlow พร้อมระบบ Backup ปลอดภัย
 npx @jakkrichm/create-nexus-devflow update [--check]
 ```
+
+---
+
+## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
+
+Nexus-DevFlow ติดตั้งมาพร้อมกับ **29 Core Skills** มาตรฐาน คุณสามารถติดตั้งสกิลเฉพาะทางจาก Community เพิ่มเติมได้ง่ายๆ ด้วยคำสั่ง `nexus-devflow skill add`:
+
+| สกิล (Skill) | หมวดหมู่ | หน้าที่และความสามารถ | คำสั่งติดตั้ง |
+| :--- | :--- | :--- | :--- |
+| **archify** | Visual Architecture | แผนผังสถาปัตยกรรมระบบ Interactive HTML (สลับธีม Dark/Light, มี Animation, ตรวจสอบความถูกต้องได้) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
+| **diagram-design** | Editorial Diagram | ไดอะแกรมสาย Editorial 39 รูปแบบ (Business Quadrant, Timeline, Mindmap, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
+| **debug-mantra** | Diagnostics | วินัยการดีบักตามหลัก 4 มนต์ (Reproduce, Trace, Falsify, Cross-reference) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name debug-mantra` |
+| **post-mortem** | Quality / RCA | เขียนบันทึกวิศวกรรมการแก้บั๊ก (Root Cause Analysis & Post-mortem) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name post-mortem` |
+| **qwen-agent** | Cost Optimization | มอบหมายงานที่ไม่ซับซ้อนให้ Subagent ราคาประหยัดทำงานแทนผ่าน `claude-9arm` | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwen-agent` |
+| **scrutinize** | Code Review | รีวิว Plan, PR และ Diff เชิงลึกจากมุมมองบุคคลภายนอก | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
+| **management-talk** | Communication | แปลงเนื้อหาทางเทคนิคให้เป็นข้อความสื่อสารกับผู้บริหาร (Slack/Jira/Email/Meetings) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
+| **qwenchance** | Guardrails | ระบบเฝ้าระวัง Context Budget และตัดลูปการคิดวนของโมเดล | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwenchance` |
+
+> [!TIP]
+> **ติดตั้งชุด 9arm-skills ทั้งหมดในคำสั่งเดียว**:
+> ```bash
+> npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all
+> ```
 
 ---
 

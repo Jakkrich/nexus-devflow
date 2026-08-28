@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Nexus-DevFlow System Architecture",
+    "output": "docs/diagrams/nexus-devflow-architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "full-lifecycle",
+        "label": "Complete agent loop",
+        "focus": ["agents", "adapters", "p2_context", "qa_gates", "git_engine"],
+        "note": "Follow how AI coding agents drive the Task-Isolated Living Spec through QA gates into Git."
+      },
+      {
+        "id": "three-pillars",
+        "label": "3-Pillars workspace",
+        "focus": ["p1_future", "p2_context", "p3_history"],
+        "note": "Clean separation of Future backlog, Present active context, and Past permanent history."
+      },
+      {
+        "id": "observability",
+        "label": "Dashboard and real-time studio",
+        "focus": ["p2_context", "dashboard", "git_engine"],
+        "note": "Zero-drop local web dashboard monitoring active tasks, git status, and findings."
+      }
+    ]
+  },
+  "components": [
+    { "id": "agents", "type": "external", "label": "AI Coding Agents", "sublabel": "Antigravity / Claude / Codex", "pos": [40, 260], "size": [130, 60] },
+    { "id": "adapters", "type": "security", "label": "Tool Adapters", "sublabel": ".agents & .claude skills", "pos": [230, 260], "size": [130, 60] },
+    { "id": "p1_future", "type": "cloud", "label": "🔮 Pillar 1: Future", "sublabel": "ideas & build-plan.md", "pos": [440, 100], "size": [140, 60] },
+    { "id": "p2_context", "type": "backend", "label": "⚡ Pillar 2: Present", "sublabel": "Task-Isolated spec.md", "pos": [440, 260], "size": [140, 60] },
+    { "id": "p3_history", "type": "database", "label": "📦 Pillar 3: Past", "sublabel": "devflow/history/ & HISTORY", "pos": [440, 420], "size": [140, 60] },
+    { "id": "qa_gates", "type": "security", "label": "Senior QA Gates", "sublabel": "check / audit / findings", "pos": [670, 260], "size": [130, 60], "tag": "P0/P1 Blocker" },
+    { "id": "dashboard", "type": "frontend", "label": "Web Dashboard", "sublabel": "0ms Real-Time Studio", "pos": [670, 420], "size": [130, 60] },
+    { "id": "git_engine", "type": "backend", "label": "Git Repository", "sublabel": "Branch & Squash-Merge", "pos": [880, 260], "size": [130, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Nexus-DevFlow Workspace Layer", "wraps": ["p1_future", "p2_context", "p3_history", "qa_gates"] }
+  ],
+  "connections": [
+    { "id": "agents-to-adapters", "from": "agents", "to": "adapters", "variant": "emphasis" },
+    { "id": "adapters-to-p2", "from": "adapters", "to": "p2_context" },
+    { "id": "p1-to-p2", "from": "p1_future", "to": "p2_context", "label": "/feature", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 48 },
+    { "id": "p2-to-p3", "from": "p2_context", "to": "p3_history", "label": "/complete", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 48 },
+    { "id": "p2-to-qa", "from": "p2_context", "to": "qa_gates" },
+    { "id": "qa-to-git", "from": "qa_gates", "to": "git_engine", "label": "squash-merge", "variant": "emphasis" },
+    { "id": "dashboard-watch", "from": "dashboard", "to": "p2_context", "variant": "dashed", "fromSide": "left", "toSide": "right" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "3-Pillars Workspace",
+      "items": [
+        "Pillar 1 (Future): Idea Inbox and master build plan",
+        "Pillar 2 (Present): Task-isolated living spec and audit findings",
+        "Pillar 3 (Past): Permanent categorized delivery history archive"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Strict TDD & Quality Gates",
+      "items": [
+        "Every feature follows Red-Green-Refactor implementation steps",
+        "Dual-Axis verification matrix checks empirical and architecture rules",
+        "Unresolved P0/P1 findings strictly block /complete merge"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Zero-Drop Observability",
+      "items": [
+        "State persists in markdown files across AI context clear resets",
+        "0ms first paint local Web Dashboard visualizes tasks in real time",
+        "Full support for Antigravity, Claude Code, Codex, and Copilot"
+      ]
+    }
+  ]
+}

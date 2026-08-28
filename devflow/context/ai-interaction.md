@@ -171,13 +171,13 @@ Nexus-DevFlow natively supports extending workflow capabilities with **Third-Par
 - Installed third-party skills maintain their exact original directory structure, references, assets, scripts, and `SKILL.md`.
 
 ### 🎯 2. Cross-Command Delegation & Genuine Execution
-- **Verbatim & Original Prompt Fidelity**: When a DevFlow stage requires specialized domain expertise (e.g., editorial diagramming, domain modeling, cloud provisioning, UI benchmarking), the AI agent must read the third-party skill's `SKILL.md` (e.g. `.agents/skills/diagram-design/SKILL.md`) and strictly follow its original instructions, philosophy, style guide gates, and complexity constraints.
+- **Verbatim & Original Prompt Fidelity**: When a DevFlow stage requires specialized domain expertise (e.g., editorial diagramming, system mapping, domain modeling, cloud provisioning, UI benchmarking), the AI agent must read the third-party skill's `SKILL.md` (e.g. `.agents/skills/archify/SKILL.md` or `.agents/skills/diagram-design/SKILL.md`) and strictly follow its original instructions, philosophy, style guide gates, and complexity constraints.
 - **Workflow Command Integration Map**:
-  - **`/discovery`**: When macro roadmap planning or micro pre-flight exploration involves system architecture, IT landscape, data pipelines, sequence flows, or user journeys, check for `diagram-design` and generate editorial HTML/SVG diagrams.
-  - **`/feature` & `/fix`**: In Section 2 (`## 📐 2. Technical Spec & Contracts`), invoke `diagram-design` for component diagrams, database ER models, or sequence flows.
+  - **`/discovery`**: When macro roadmap planning or micro pre-flight exploration involves system architecture, IT landscape, data pipelines, sequence flows, or user journeys, check for `archify` (for interactive system maps, data flows, and sequence traces) or `diagram-design` (for editorial and business layouts).
+  - **`/feature` & `/fix`**: In Section 2 (`## 📐 2. Technical Spec & Contracts`), invoke `archify` for interactive component diagrams, state machines, and sequence traces, or `diagram-design` for database ER models.
   - **`/brainstorm` & `/grill`**: Leverage visual trade-off matrices (Quadrant, Radar spider) or domain models (UML class, ER).
   - **`/prototype` & `/report-html`**: Embed standalone HTML/SVG assets seamlessly.
-  - **`/devflow`**: Intent router surfaces installed third-party skills (e.g. `/diagram-design`) directly to the user.
+  - **`/devflow`**: Intent router surfaces installed third-party skills (e.g. `/archify`, `/diagram-design`) directly to the user.
 
 ### 📁 3. Generated Asset Storage Hierarchy
 - **Discovery Stage**: `devflow/discoveries/{id}/diagrams/` (referenced in `discovery.md`).

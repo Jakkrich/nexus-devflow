@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Nexus-DevFlow Living Spec Lifecycle",
+    "output": "docs/diagrams/nexus-devflow-lifecycle.html",
+    "viewBox": [980, 680],
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "delivery-rail",
+        "label": "Delivery rail",
+        "focus": ["queued", "implementing", "verifying", "completing", "shipped"],
+        "note": "Follow the 4-stage progressive lifecycle from spec creation to squash-merge."
+      },
+      {
+        "id": "quality-gates",
+        "label": "Quality and review gates",
+        "focus": ["verifying", "findings_blocked", "rejected", "completing", "review_pause"],
+        "note": "Safety gates where living spec review pauses and P0/P1 findings block release."
+      },
+      {
+        "id": "reversals",
+        "label": "Post-delivery rollback",
+        "focus": ["shipped", "reversal_plan", "rolled_back"],
+        "note": "Safe reversibility of completed features using categorized history and git commits."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "4-Stage Living Spec Phases" },
+    { "id": "waiting", "label": "Quality & Approval Gates" },
+    { "id": "terminal", "label": "Terminal Exits & Reversals" }
+  ],
+  "states": [
+    { "id": "queued", "type": "start", "label": "1. /feature (/fix)", "sublabel": "Task-Isolated spec.md", "lane": "main", "col": 0, "step": "01", "tag": "spec" },
+    { "id": "implementing", "type": "active", "label": "2. /implement", "sublabel": "Strict TDD build", "lane": "main", "col": 1, "step": "02", "tag": "build" },
+    { "id": "verifying", "type": "decision", "label": "3. /check & /audit", "sublabel": "Multi-Lane QA Matrix", "lane": "main", "col": 2, "step": "03", "tag": "gate" },
+    { "id": "completing", "type": "waiting", "label": "4. /complete", "sublabel": "Release & Merge Gate", "lane": "main", "col": 3, "step": "04", "tag": "ready" },
+    { "id": "shipped", "type": "success", "label": "Shipped & Merged", "sublabel": "devflow/history/ & Git", "lane": "main", "col": 4, "step": "05", "tag": "merged" },
+    { "id": "findings_blocked", "type": "waiting", "label": "Findings Ledger", "sublabel": "P0/P1 Blocker gate", "lane": "waiting", "col": 0, "tag": "blocked" },
+    { "id": "review_pause", "type": "waiting", "label": "Merge Approval Gate", "sublabel": "Human decision", "lane": "waiting", "col": 1, "tag": "pause" },
+    { "id": "reversal_plan", "type": "waiting", "label": "/rollback", "sublabel": "Safe Reversal Spec", "lane": "waiting", "col": 2, "tag": "reversal" },
+    { "id": "rejected", "type": "failure", "label": "Rejected / Waived", "sublabel": "Blocker unresolved", "lane": "terminal", "col": 0, "tag": "terminal" },
+    { "id": "cancelled", "type": "failure", "label": "Cancelled", "sublabel": "Merge aborted", "lane": "terminal", "col": 1, "tag": "terminal" },
+    { "id": "rolled_back", "type": "success", "label": "Rolled Back", "sublabel": "Safely reversed", "lane": "terminal", "col": 2, "tag": "terminal" }
+  ],
+  "transitions": [
+    { "from": "verifying", "to": "findings_blocked", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "findings_blocked", "to": "rejected", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "completing", "to": "review_pause", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "review_pause", "to": "cancelled", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "shipped", "to": "reversal_plan", "variant": "dashed", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "reversal_plan", "to": "rolled_back", "variant": "emphasis", "route": "straight", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "4-Stage Progressive Rail",
+      "items": [
+        "/feature drafts task-isolated spec (spec.md) and pauses for review",
+        "/implement progresses sequentially with strict Red-Green-Refactor TDD",
+        "/check evaluates dual-axis verification and records empirical proof",
+        "/complete archives to devflow/history/ and executes squash-merge"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Quality & Approval Gates",
+      "items": [
+        "Spec review pause ensures requirements are locked before code is written",
+        "Findings ledger (findings.md) tracks all audit issues with durable IDs",
+        "Unresolved P0/P1 blockers strictly prevent /complete merge"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Reversals & Exits",
+      "items": [
+        "Rejected specs exit cleanly without cluttering repository state",
+        "/rollback creates reversible spec using archived git commits",
+        "Zero regression debt through durable 3-Pillars history"
+      ]
+    }
+  ]
+}

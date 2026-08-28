@@ -88,6 +88,7 @@ test("installThirdPartySkill, listInstalledSkills, and removeThirdPartySkill lif
 
     // Install third party skill
     const installed = await installThirdPartySkill(tempProject, tempSource);
+    assert.ok(!Array.isArray(installed));
     assert.equal(installed.name, "sample-skill");
     assert.equal(installed.category, "third-party");
     assert.equal(installed.version, "1.5.0");

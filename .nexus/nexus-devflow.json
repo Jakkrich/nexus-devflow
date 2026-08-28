@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "nexus-devflow",
   "package": "@jakkrichm/create-nexus-devflow",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "repository": "https://github.com/Jakkrich/nexus-devflow",
   "artifactLanguage": "th",
   "adapters": [
@@ -117,6 +117,14 @@
       "version": "1.0.0",
       "description": "Keeps a long Claude Code task on-track — breaks out of looping/circular thinking, watches the context budget, bounds internal reasoning, and triggers a clean handoff before the window fills. Use when the model is repeating steps, re-reading the same files, second-guessing in circles, stuck or spinning, or running a long multi-step task at risk of exhausting context. Also use when the user says it is \"looping\", \"going in circles\", \"stuck\", \"repeating itself\", or asks for a handoff before running out of context.",
       "installedAt": "2026-08-28T08:30:47.930Z",
+      "type": "git"
+    },
+    {
+      "name": "archify",
+      "source": "https://github.com/tt-a1i/archify",
+      "version": "2.16",
+      "description": "Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable standalone HTML with inline SVG, dark/light themes, optional trace motion, and PNG/JPEG/WebP/SVG/WebM export. Accept plain-language requirements or pasted Mermaid flowchart, sequenceDiagram, and stateDiagram input; inspect repository evidence when the diagram must reflect real code. Use when the user asks to visualize system architecture, infrastructure, cloud/security/network topology, technical workflows, API call sequences, request lifecycles, data pipelines, ETL/ELT, data lineage, state machines, or to convert/beautify Mermaid.",
+      "installedAt": "2026-08-28T14:37:55.573Z",
       "type": "git"
     }
   ]
