@@ -87,9 +87,7 @@ import {
 } from "../lib/skill-manager.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const packageRoot = fsSync.existsSync(path.join(__dirname, "..", "package.json"))
-  ? path.resolve(__dirname, "..")
-  : path.resolve(__dirname, "..", "..");
+const packageRoot = findPackageRoot(__dirname);
 const templateRoot = path.join(packageRoot, "template");
 
 const adapterChoices = new Set(["codex", "antigravity", "claude", "copilot", "opencode", "both", "all"]);
@@ -1389,6 +1387,33 @@ function printUninstallSuccess(result: { deletedCount: number; deletedItems: str
   console.log(`  ${style.dim("Deleted")} ${style.bold(String(result.deletedCount))} item(s). No DevFlow traces remain.`);
 }
 
+function findPackageRoot(startDir: string): string {
+  let current = startDir;
+
+  for (;;) {
+    if (fsSync.existsSync(path.join(current, "package.json"))) {
+      return current;
+    }
+
+    const parent = path.dirname(current);
+
+    if (parent === current) {
+      throw new Error(
+        `Could not locate the installer package root above ${startDir}.`
+      );
+    }
+
+    current = parent;
+  }
+}
+
+function formatMissingTemplateMessage(templateRoot: string): string {
+  return `Installer template is missing.
+Looked in: ${templateRoot}
+This looks like a source checkout, where the template is a build artifact.
+Run \`npm run link:local\` from the repository root, or \`npm run prepare-template\` inside the installer package.`;
+}
+
 if (
   process.argv[1] &&
   fsSync.realpathSync(process.argv[1]) === fsSync.realpathSync(fileURLToPath(import.meta.url))
@@ -1399,4 +1424,4 @@ if (
   });
 }
 
-export { main, parseArgs };
+export { findPackageRoot, formatMissingTemplateMessage, main, parseArgs };

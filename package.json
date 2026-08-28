@@ -17,6 +17,8 @@
     "test:routing": "tsx ./scripts/evals/routing.ts",
     "test:package": "tsx ./scripts/smoke-package.ts",
     "test:overview": "tsx --test scripts/overview.test.ts",
+    "link:local": "tsx scripts/link-local.ts",
+    "unlink:local": "tsx scripts/link-local.ts --undo",
     "activate": "node ./scripts/activate-agent.mjs",
     "goal": "node ./scripts/goal-runner.mjs",
     "index": "node ./scripts/generate-project-index.mjs",

@@ -5,6 +5,10 @@ description: "[devflow] Set up or normalize automatic GitHub checks for a Bluepr
 
 # ci - set up automatic GitHub checks
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     /onboard or /adopt  ->  [ci]  ->  Verify locally  ->  GitHub runs Verify

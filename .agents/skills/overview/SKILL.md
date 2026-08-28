@@ -5,6 +5,10 @@ description: "[devflow] Distill user-owned planning docs into `devflow/context/p
 
 # overview - dynamic project overview compiler
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 ## Position in workflow
 
 ```text

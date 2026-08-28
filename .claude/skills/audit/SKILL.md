@@ -5,6 +5,10 @@ description: "[devflow] Read-only code audit for a Blueprint project, except for
 
 # audit - review code quality against the project standards
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     /implement or /autopilot  ->  [audit]  ->  fixes or /complete

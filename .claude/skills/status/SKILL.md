@@ -51,6 +51,13 @@ state.
 6. **Progress drift** - flag active task on `main`, a spec in progress but no
    matching `feature/{xxx-slug}`, `fix/{xxx-slug}`, or `rollback/{xxx-slug}` branch, all spec steps checked but
    not completed, or disagreement between `build-plan.md` and active specs.
+7. **Dashboard activity** - read `devflow/.state/run.json` when it exists.
+   Report the command, mode, status, progress, boundary, and safe resume command.
+   A missing file simply means no activity has been recorded. Invalid activity
+   state is a warning, not a blocker for the underlying workflow.
+8. **Onboarding check** - Before recommending `/overview`, check whether `AGENTS.md`
+   still contains the `<!-- devflow:onboarding-required -->` marker or standard template commands.
+   When it does, onboarding is incomplete and `/onboard` is the next action.
 
 ## Output
 

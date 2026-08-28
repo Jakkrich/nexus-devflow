@@ -6,6 +6,10 @@ argument-hint: "[{number, name, DISC-id, or IDEA-id}]"
 
 # feature - turn a build-plan feature into a buildable spec
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     project-overview.md  +  build-plan.md  ->  [this skill]  ->  build

@@ -5,6 +5,10 @@ description: "[devflow] Add or normalize unit testing for a Blueprint project. D
 
 # tests - add unit testing to the project
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     any time  ->  [tests]  ->  test command in AGENTS.md  ->  /feature + /implement use it

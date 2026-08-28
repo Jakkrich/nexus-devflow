@@ -5,6 +5,10 @@ description: "[devflow] Set up the Blueprint after overlaying it onto a freshly 
 
 # onboard - finish the Blueprint overlay setup
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     scaffold app  ->  overlay Blueprint  ->  [onboard]  ->  project-plan + build-plan  ->  /overview

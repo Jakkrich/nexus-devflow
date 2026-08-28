@@ -27,6 +27,8 @@ import type {
   ProjectConfigState,
   QualityGatePolicy
 } from "./project-config.js";
+import { readRunState } from "./run-state.js";
+import type { RunStateSummary } from "./run-state.js";
 
 type CompletionState = "blocked" | "needs_verification" | "ready";
 
@@ -40,6 +42,8 @@ interface StatusConfiguration {
   state: ProjectConfigState;
   values: ProjectConfig;
 }
+
+type StatusActivity = Omit<RunStateSummary, "warnings">;
 
 interface StatusCurrentWork {
   state: CurrentWorkSummary["state"];
@@ -96,6 +100,7 @@ interface ProjectStatus {
     adapters: ProjectAdapter[];
   };
   configuration: StatusConfiguration;
+  activity: StatusActivity;
   currentWork: StatusCurrentWork;
   activeRuns: ActiveRunSummary[];
   findings: StatusFindings;
@@ -110,14 +115,15 @@ async function readProjectStatus(
   startPath: string = process.cwd()
 ): Promise<ProjectStatus> {
   const metadata = await readProjectMetadata(startPath);
-  const [contextPaths, config, currentWork, activeRuns, findings, git, ideas] = await Promise.all([
+  const [contextPaths, config, currentWork, activeRuns, findings, git, ideas, runState] = await Promise.all([
     resolveActiveContextPaths(metadata.project.root),
     readProjectConfig(metadata.project.root),
     readCurrentWork(metadata.project.root),
     listActiveRunContexts(metadata.project.root),
     readFindings(metadata.project.root),
     readGitStatus(metadata.project.root),
-    readIdeas(metadata.project.root)
+    readIdeas(metadata.project.root),
+    readRunState(metadata.project.root)
   ]);
 
   let stageMarkdown = "";
@@ -130,6 +136,7 @@ async function readProjectStatus(
     ...config.warnings,
     ...currentWork.warnings,
     ...findings.warnings,
+    ...runState.warnings,
     ...findDrift(currentWork, git)
   ];
   const completion = selectCompletion(currentWork, findings, git, stageMarkdown);
@@ -146,6 +153,21 @@ async function readProjectStatus(
       path: config.path,
       state: config.state,
       values: config.values
+    },
+    activity: {
+      state: runState.state,
+      mode: runState.mode,
+      command: runState.command,
+      status: runState.status,
+      freshness: runState.freshness,
+      summary: runState.summary,
+      detail: runState.detail,
+      boundary: runState.boundary,
+      startedAt: runState.startedAt,
+      updatedAt: runState.updatedAt,
+      resumeCommand: runState.resumeCommand,
+      progress: runState.progress,
+      feature: runState.feature
     },
     currentWork: formatCurrentWork(currentWork),
     activeRuns,
@@ -178,8 +200,14 @@ function formatHumanStatus(
     formatRow("Quality gates", formatQualityGates(status.configuration.values.qualityGates.regular), style),
     "",
     formatSection("Progress", style),
-    formatRow("Work", formatWorkValue(status.currentWork, style), style)
+    formatRow("Progress", formatWorkValue(status.currentWork, style), style)
   ];
+
+  if (status.activity && status.activity.state === "recorded" && status.activity.command) {
+    lines.push(
+      formatRow("Activity", formatActivityValue(status.activity, style), style)
+    );
+  }
 
   if (status.currentWork.state === "active") {
     lines.push(
@@ -260,6 +288,41 @@ function formatSection(label: string, style: TextStyle): string {
 
 function formatRow(label: string, value: string, style: TextStyle): string {
   return `  ${style.cyan(label.padEnd(14))}${value}`;
+}
+
+function formatActivityValue(activity: StatusActivity, style: TextStyle): string {
+  if (activity.state !== "recorded" || !activity.command) {
+    return style.dim("none");
+  }
+
+  const parts = [`/${activity.command}`];
+  if (activity.status) {
+    parts.push(
+      activity.status === "running"
+        ? style.brightCyan(activity.status)
+        : activity.status === "ready"
+        ? style.green(activity.status)
+        : activity.status === "blocked"
+        ? style.red(activity.status)
+        : activity.status
+    );
+  }
+
+  if (activity.progress) {
+    parts.push(
+      `${activity.progress.current}/${activity.progress.total} ${activity.progress.label}`
+    );
+  }
+
+  if (activity.boundary) {
+    parts.push(`(${activity.boundary})`);
+  }
+
+  if (activity.freshness === "stale") {
+    parts.push(style.yellow("[stale]"));
+  }
+
+  return parts.join(" ");
 }
 
 function formatWorkValue(work: StatusCurrentWork, style: TextStyle): string {
@@ -585,6 +648,7 @@ export type {
   CompletionState,
   HumanStatusOptions,
   ProjectStatus,
+  StatusActivity,
   StatusCompletion,
   StatusCurrentWork,
   StatusFindings,

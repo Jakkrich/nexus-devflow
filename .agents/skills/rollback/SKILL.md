@@ -5,6 +5,10 @@ description: "[devflow] Plan a safe reversal of a completed Blueprint feature us
 
 # rollback - safely reverse a completed feature
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     completed feature + git history  ->  [rollback]  ->  /implement  ->  /check  ->  /complete
@@ -57,10 +61,16 @@ Use the archive path to locate the commit that added it:
     git log --diff-filter=A --format="%H %s" HEAD -- <archive-path>
 
 Use the newest matching commit reachable from the current branch. Confirm the
-archive was added by that commit, the commit has exactly one parent, and its
-subject and diff are consistent with the requested feature. A merge commit needs
-mainline selection, so stop rather than guessing. If the archive was never
-committed, explain that git cannot reconstruct a safe rollback from it.
+archive was added by that commit and its subject and diff are consistent with the
+requested feature. If the target is a merge commit, stop before Step 2 and before
+writing or changing `devflow/context/{xxx-slug}/spec.md`. Do not record a
+target parent or choose a mainline. Publish `blocked` to
+`devflow/.state/run.json`, explain that DevFlow cannot safely infer which
+merge parent represents the pre-feature state, and include the exact `/rollback`
+command the user can rerun after choosing a safe remediation or mainline
+strategy. `/implement` retains its merge-target stop as defense in depth. If the
+archive was never committed, explain that git cannot reconstruct a safe rollback
+from it.
 
 ## Step 2 - separate product changes from Blueprint history
 
@@ -108,7 +118,8 @@ remediation or explicitly plan the dependent rollbacks.
 Allocate sequential ID (`xxx-slug`) and create `devflow/context/{xxx-slug}/`. Write `devflow/context/{xxx-slug}/spec.md` using
 `reference/rollback-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. Fill in:
 
-- target feature, archive, exact commit, and parent commit
+- target feature and archive
+- target commit and parent commit as full 40-character SHA values
 - user's reason
 - product paths introduced or changed by the target
 - protected workflow paths
@@ -142,6 +153,8 @@ spec, then run `/implement` to create the rollback branch and apply it.
 - Preserve history. Never delete or rewrite the original feature archive.
 - Plan only. This skill writes the rollback spec and nothing else.
 - One completed feature per rollback.
+- Record both the target commit and its parent as full 40-character SHA values.
+  Each value must resolve to the recorded commit in the current repository.
 - Never use `git reset --hard`, force-push, history rewriting, or broad file
   restoration.
 - Never infer permission to cascade into later features or destroy stored data.

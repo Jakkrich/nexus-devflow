@@ -5,6 +5,10 @@ description: "[devflow] Optional explicit Blueprint mode for one bounded spec/bu
 
 # autopilot - optional Blueprint loop
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     /status  ->  [autopilot]  ->  review packet  ->  /complete

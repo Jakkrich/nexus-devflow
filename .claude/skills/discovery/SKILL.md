@@ -8,6 +8,10 @@ argument-hint: "[{title, request, IDEA-xxx, or discovery-id}]"
 
 $ARGUMENTS
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 `/discovery` is the central discovery entry point in Nexus-DevFlow. It operates in two adaptive modes based on input scope:
 1. **🗺️ Macro Project Discovery**: Develops high-level product and build roadmap plans (`devflow/project-plan.md` & `devflow/build-plan.md`) through an adaptive conversation before `/overview`.
 2. **🔍 Micro Feature Exploration (Pre-Flight)**: Explores a specific feature, request, or idea before committing to delivery, routes through supporting lenses, and finishes with a visible `Proceed`, `Defer`, or `Reject` decision before `/feature` or `/fix`.

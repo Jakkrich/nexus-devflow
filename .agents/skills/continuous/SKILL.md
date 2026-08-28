@@ -6,6 +6,10 @@ argument-hint: "[{resume, max-features, or start-feature}]"
 
 # continuous - Complete the Build Plan One Local Feature at a Time
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
 ```text
