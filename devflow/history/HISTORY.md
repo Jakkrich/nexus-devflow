@@ -8,7 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 2026-08-28 | `063` | Feature | Multi-Task Dashboard & Live Kanban Studio UI (`DISC-20260828-002`) | `HEAD` | `Released` | [`063-multi-task-dashboard-and-kanban-studio-ui.md`](features/063-multi-task-dashboard-and-kanban-studio-ui.md) |
+| 2026-08-28 | `063` | Feature | Multi-Task Dashboard & Live Kanban Studio UI (`DISC-20260828-002`) | `294e343` | `Released` | [`063-multi-task-dashboard-and-kanban-studio-ui.md`](features/063-multi-task-dashboard-and-kanban-studio-ui.md) |
 | 2026-08-28 | `062` | Feature | ซิงก์ AI Blueprint Upstream v1.0.0 / v1.0.1 (Activity Contract, Rollback Safeguards & Local Linking) | `d38c3df` | `Released` | [`062-sync-upstream-ai-blueprint-v100.md`](features/062-sync-upstream-ai-blueprint-v100.md) |
 | 2026-08-26 | `061` | Feature | Pure Multi-Run Task-Isolated Architecture (`DISC-20260826-004`) | `40c9950` | `Released` | [`061-pure-multi-run-task-isolated-architecture.md`](features/061-pure-multi-run-task-isolated-architecture.md) |
 | 2026-08-26 | `060` | Feature | ซิงก์ AI Blueprint Upstream v0.14.0 (Deterministic Config & Continuous Mode) | `3417b60` | `Released` | [`060-sync-upstream-v0140-config-and-continuous.md`](features/060-sync-upstream-v0140-config-and-continuous.md) |
