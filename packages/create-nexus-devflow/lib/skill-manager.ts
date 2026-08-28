@@ -349,7 +349,7 @@ export async function installThirdPartySkill(
         schemaVersion: 1,
         name: "nexus-devflow",
         package: "@jakkrichm/create-nexus-devflow",
-        version: "2.9.2"
+        version: "2.9.3"
       };
 
       const existingThirdParty = Array.isArray(manifest.thirdPartySkills)
@@ -435,7 +435,7 @@ export async function installThirdPartySkill(
       schemaVersion: 1,
       name: "nexus-devflow",
       package: "@jakkrichm/create-nexus-devflow",
-      version: "2.9.2"
+      version: "2.9.3"
     };
 
     const existingThirdParty = Array.isArray(manifest.thirdPartySkills)

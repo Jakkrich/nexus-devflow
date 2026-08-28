@@ -91,6 +91,7 @@ The goal is not just writing code faster—it is staying firmly in control of a 
 - [Manual try guides](#manual-try-guides)
 - [Enterprise Web Dashboard & Real-Time Studio](#enterprise-web-dashboard--real-time-studio)
 - [CLI Management Commands](#cli-management-commands)
+- [Recommended Third-Party Skills & Extensions](#recommended-third-party-skills--extensions)
 - [Deployment readiness](#deployment-readiness)
 - [Picking up where you left off](#picking-up-where-you-left-off)
 - [File map](#file-map)
@@ -326,9 +327,12 @@ AI:  Recorded Release Digest in living spec.
 
 ---
 
-## Visual overview
+## Visual overview & Interactive System Maps
 
-The diagram below illustrates the end-to-end Nexus-DevFlow lifecycle:
+Explore the interactive system architecture and living spec lifecycle generated with **Archify**:
+
+- 🌐 **[Nexus-DevFlow System Architecture Map (Interactive HTML)](docs/diagrams/nexus-devflow-architecture.html)** — Trace the 3-Pillars workspace, multi-agent adapters, and senior QA gates.
+- ⚡ **[Nexus-DevFlow Living Spec Lifecycle & State Machine (Interactive HTML)](docs/diagrams/nexus-devflow-lifecycle.html)** — Step through the 4-stage progressive rail (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), blocker gates, and reversals.
 
 ![Nexus-DevFlow Workflow](assets/nexus-devflow-workflow.png)
 
@@ -661,6 +665,29 @@ npm run report:html -- 054-optimize-dashboard-snapshot-latency
 # Check and Apply Framework Updates
 npx @jakkrichm/create-nexus-devflow update [--check]
 ```
+
+---
+
+## Recommended Third-Party Skills & Extensions
+
+Nexus-DevFlow ships with **29 Core Skills** out-of-the-box. You can easily extend your workflow with specialized community and third-party skills using `nexus-devflow skill add`:
+
+| Skill | Category | Description | Installation Command |
+| :--- | :--- | :--- | :--- |
+| **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
+| **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
+| **debug-mantra** | Diagnostics | 4-mantra scientific debugging discipline (Reproduce, Trace, Falsify, Cross-reference) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name debug-mantra` |
+| **post-mortem** | Quality / RCA | Canonical engineering record of fixed bugs (Root cause, fix mechanism, regression proof) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name post-mortem` |
+| **qwen-agent** | Cost Optimization | Delegate mechanical/boilerplate tasks cheaply to Qwen subagent via `claude-9arm` | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwen-agent` |
+| **scrutinize** | Code Review | Outsider-perspective deep plan, PR, and diff review | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
+| **management-talk** | Communication | Rewrite engineering updates for leadership across Slack/Jira/Email/Meetings | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
+| **qwenchance** | Guardrails | Context budget watchdog — breaks circular loops and handles context handoff | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwenchance` |
+
+> [!TIP]
+> **Batch Install 9arm-skills**: Install all 6 skills from 9arm-skills in a single command:
+> ```bash
+> npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all
+> ```
 
 ---
 

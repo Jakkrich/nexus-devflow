@@ -5,6 +5,13 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.3] - 2026-08-28
+
+### Added
+- **Archify Technical Diagramming Integration (`/archify`)**: Integrated `tt-a1i/archify` engine supporting interactive, verifiable technical architecture, workflow, dataflow, sequence, and lifecycle diagrams with responsive SVG rendering, dark/light theme switching, route probes, reach analysis, and trace motion.
+- **Interactive System & Lifecycle Maps (`docs/diagrams/`)**: Generated showcase-validated interactive maps for Nexus-DevFlow System Architecture and 4-Stage Task-Isolated Living Spec Lifecycle.
+- **Recommended Third-Party Skills Documentation**: Added comprehensive extension tables with direct CLI installation commands for all 8 supported community skills (`archify`, `diagram-design`, `debug-mantra`, `post-mortem`, `qwen-agent`, `scrutinize`, `management-talk`, `qwenchance`) to `README.md` and `README.th.md`.
+
 ## [2.9.2] - 2026-08-28
 
 ### Added
