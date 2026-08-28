@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "command": "complete",
-  "status": "running",
-  "summary": "Completing Feature 063",
-  "detail": "Archiving spec, updating build plan and history",
-  "boundary": "local-only",
-  "startedAt": "2026-08-28T12:26:50.000Z",
-  "updatedAt": "2026-08-28T12:26:50.000Z",
-  "resumeCommand": "/complete 063-multi-task-dashboard-and-kanban-studio-ui",
-  "progress": { "current": 1, "total": 3, "label": "steps" },
+  "command": "discovery",
+  "status": "ready",
+  "summary": "Discovery completed: 9arm-skills compatibility evaluation with Nexus-DevFlow",
+  "detail": "Artifact recorded to devflow/discoveries/DISC-20260828-004-evaluate-9arm-skills-compatibility/discovery.md",
+  "boundary": "read-only",
+  "startedAt": "2026-08-28T13:11:00.000Z",
+  "updatedAt": "2026-08-28T13:11:20.000Z",
+  "resumeCommand": "/discovery",
+  "progress": { "current": 3, "total": 3, "label": "steps" },
   "feature": {
-    "id": "063-multi-task-dashboard-and-kanban-studio-ui",
-    "title": "Multi-Task Dashboard & Live Kanban Studio UI"
+    "id": "DISC-20260828-004",
+    "title": "Evaluate 9arm-skills Compatibility"
   }
 }

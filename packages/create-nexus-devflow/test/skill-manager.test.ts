@@ -160,3 +160,93 @@ test("syncSkills duplicates all skills from .agents to .claude", async () => {
     await fs.rm(tempProject, { recursive: true, force: true });
   }
 });
+
+test("nested multi-skill discovery and batch installation (--name and --all)", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-multiskill-project-"));
+  const tempSource = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-multiskill-source-"));
+
+  try {
+    // Scaffold nested multi-skill repo like 9arm-skills
+    const debugDir = path.join(tempSource, "skills", "engineering", "debug-mantra");
+    const postmortemDir = path.join(tempSource, "skills", "engineering", "post-mortem");
+    const talkDir = path.join(tempSource, "skills", "productivity", "management-talk");
+
+    await fs.mkdir(debugDir, { recursive: true });
+    await fs.mkdir(postmortemDir, { recursive: true });
+    await fs.mkdir(talkDir, { recursive: true });
+
+    await fs.writeFile(
+      path.join(debugDir, "SKILL.md"),
+      `---\nname: debug-mantra\ndescription: Debugging discipline\nversion: 1.0.0\n---\n# Debug Mantra\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(postmortemDir, "SKILL.md"),
+      `---\nname: post-mortem\ndescription: Post-mortem RCA\nversion: 1.1.0\n---\n# Post-mortem\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(talkDir, "SKILL.md"),
+      `---\nname: management-talk\ndescription: Leadership translation\nversion: 1.2.0\n---\n# Management Talk\n`,
+      "utf8"
+    );
+
+    // Initialize minimal project manifest
+    const manifestDir = path.join(tempProject, ".nexus");
+    await fs.mkdir(manifestDir, { recursive: true });
+    await fs.writeFile(
+      path.join(manifestDir, "nexus-devflow.json"),
+      JSON.stringify({ schemaVersion: 1, name: "test", version: "1.0.0" }, null, 2),
+      "utf8"
+    );
+
+    // 1. Calling findSkillSourceDirectory without name on multi-skill source should throw listing available skills
+    await assert.rejects(
+      async () => {
+        await findSkillSourceDirectory(tempSource);
+      },
+      /Multiple skills found in source/
+    );
+
+    // 2. Install specific skill with name
+    const singleInstalled = (await installThirdPartySkill(tempProject, tempSource, {
+      name: "debug-mantra"
+    })) as import("../lib/skill-manager.js").SkillDetail;
+
+    assert.equal(singleInstalled.name, "debug-mantra");
+    assert.equal(singleInstalled.version, "1.0.0");
+    assert.equal(
+      await fs.readFile(path.join(tempProject, ".agents", "skills", "debug-mantra", "SKILL.md"), "utf8"),
+      `---\nname: debug-mantra\ndescription: Debugging discipline\nversion: 1.0.0\n---\n# Debug Mantra\n`
+    );
+
+    // 3. Install all skills with all: true
+    const allInstalled = (await installThirdPartySkill(tempProject, tempSource, {
+      all: true
+    })) as import("../lib/skill-manager.js").SkillDetail[];
+
+    assert.equal(allInstalled.length, 3);
+    const installedNames = allInstalled.map((s) => s.name).sort();
+    assert.deepEqual(installedNames, ["debug-mantra", "management-talk", "post-mortem"]);
+
+    // Verify all files copied to .agents and .claude
+    for (const name of installedNames) {
+      assert.equal(
+        await fs.lstat(path.join(tempProject, ".agents", "skills", name, "SKILL.md")).then(() => true).catch(() => false),
+        true
+      );
+      assert.equal(
+        await fs.lstat(path.join(tempProject, ".claude", "skills", name, "SKILL.md")).then(() => true).catch(() => false),
+        true
+      );
+    }
+
+    // Verify manifest was updated with all third-party skills
+    const listing = await listInstalledSkills(tempProject);
+    assert.equal(listing.thirdPartySkills.length, 3);
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempSource, { recursive: true, force: true });
+  }
+});
+
