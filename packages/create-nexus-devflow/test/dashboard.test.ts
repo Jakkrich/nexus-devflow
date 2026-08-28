@@ -65,6 +65,53 @@ test("startDashboardServer starts server and responds to / and /api/status", asy
   }
 });
 
+test("dashboard renders multi-task living spec workspaces from devflow/context/{xxx-slug}/", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-test-multitask-dash-"));
+  let server: Awaited<ReturnType<typeof startDashboardServer>> | undefined;
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "001-auth"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "002-billing"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Instructions\n");
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "001-auth", "spec.md"),
+      `# 📐 [001-auth] Authentication Module\n\n## 3. Implementation Checklist\n- [x] Task 1\n- [ ] Task 2\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "002-billing", "spec.md"),
+      `# 📐 [002-billing] Invoicing Module\n\n## 3. Implementation Checklist\n- [ ] Task 1\n`,
+      "utf8"
+    );
+
+    server = await startDashboardServer(tempDir, {
+      snapshotOptions: {
+        fetchImpl: async () => { throw new Error("offline"); }
+      }
+    });
+
+    const rootRes = await fetchUrl(`${server.url}/`);
+    assert.equal(rootRes.statusCode, 200);
+    assert.ok(rootRes.body.includes('id="active-workspaces-list"'));
+    assert.ok(rootRes.body.includes("renderActiveWorkspaces"));
+
+    const dashboardRes = await fetchUrl(`${server.url}/api/dashboard`);
+    assert.equal(dashboardRes.statusCode, 200);
+    const json = JSON.parse(dashboardRes.body) as {
+      status: { activeRuns: Array<{ runId: string; title: string }> };
+    };
+    assert.equal(json.status.activeRuns.length, 2);
+    assert.equal(json.status.activeRuns[0].runId, "001-auth");
+    assert.equal(json.status.activeRuns[1].runId, "002-billing");
+  } finally {
+    if (server) {
+      await server.close();
+    }
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+
 
 async function fetchUrl(url: string): Promise<{ statusCode: number; body: string }> {
   return new Promise((resolve, reject) => {

@@ -79,9 +79,84 @@ export async function renderStudioHtml(
     : `<div class="empty-state">No archived history records yet.</div>`;
 
 
-  const completedCount = currentWork.completed;
-  const totalTasks = currentWork.total;
-  const progressPercent = totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
+  const activeRuns = status.activeRuns || [];
+  let presentHtml = "";
+  let totalActiveTasks = 0;
+  let totalActiveCompleted = 0;
+
+  if (activeRuns.length > 0) {
+    totalActiveTasks = activeRuns.reduce((acc, r) => acc + r.totalTasks, 0);
+    totalActiveCompleted = activeRuns.reduce((acc, r) => acc + r.completedTasks, 0);
+    presentHtml = activeRuns.map((run) => {
+      const pct = run.totalTasks > 0 ? Math.round((run.completedTasks / run.totalTasks) * 100) : 0;
+      const stageBadgeClass = (run.status || "").includes("check") ? "badge-stage stage-check" : "badge-stage";
+      const findingTag = run.hasOpenFindings 
+        ? `<span class="tag tag-finding-warn">⚠ Open Findings</span>`
+        : `<span class="tag tag-finding-clean">✔ Clean</span>`;
+
+      return `
+        <div class="card-item active-item">
+          <div class="item-header">
+            <span class="badge-id">${escapeHtml(run.runId)}</span>
+            <span class="${stageBadgeClass}">${escapeHtml(run.status || "active")}</span>
+          </div>
+          <div class="item-title">${escapeHtml(run.title || "Living Spec")}</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+          </div>
+          <div class="item-meta">
+            <span>🌿 <code>${escapeHtml(run.branch || "main")}</code></span>
+            ${findingTag}
+          </div>
+          <div class="item-tags">
+            <span>Progress: <strong>${pct}%</strong> (${run.completedTasks}/${run.totalTasks})</span>
+            <span>Remaining: ${run.remainingTasks}</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn-card-action" onclick="dispatchCommand('/implement ${escapeHtml(run.runId)}')">▶ /implement ${escapeHtml(run.runId)}</button>
+            <button class="btn-card-action" onclick="dispatchCommand('/check ${escapeHtml(run.runId)}')">🧪 /check ${escapeHtml(run.runId)}</button>
+            <button class="btn-card-action" onclick="dispatchCommand('/complete ${escapeHtml(run.runId)}')">📦 /complete ${escapeHtml(run.runId)}</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  } else if (currentWork.state === "active") {
+    totalActiveTasks = currentWork.total;
+    totalActiveCompleted = currentWork.completed;
+    const progressPercent = totalActiveTasks > 0 ? Math.round((totalActiveCompleted / totalActiveTasks) * 100) : 0;
+    const runId = currentWork.runId || "ACTIVE";
+    presentHtml = `
+      <div class="card-item active-item">
+        <div class="item-header">
+          <span class="badge-id">${escapeHtml(runId)}</span>
+          <span class="badge-stage">${escapeHtml(currentWork.status || "active")}</span>
+        </div>
+        <div class="item-title">${escapeHtml(currentWork.title || "Active Spec")}</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+        <div class="item-meta">
+          <span>Progress: <strong>${progressPercent}%</strong> (${currentWork.completed}/${currentWork.total})</span>
+          <span>Remaining: ${currentWork.remaining}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-card-action" onclick="dispatchCommand('/implement ${escapeHtml(runId)}')">▶ /implement ${escapeHtml(runId)}</button>
+          <button class="btn-card-action" onclick="dispatchCommand('/check ${escapeHtml(runId)}')">🧪 /check ${escapeHtml(runId)}</button>
+          <button class="btn-card-action" onclick="dispatchCommand('/complete ${escapeHtml(runId)}')">📦 /complete ${escapeHtml(runId)}</button>
+        </div>
+      </div>
+    `;
+  } else {
+    presentHtml = `
+      <div class="empty-state">
+        Idle workspace.<br>Run <code>/feature</code> or <code>/fix</code> to start a run.
+      </div>
+    `;
+  }
+
+  const presentCountLabel = activeRuns.length > 0
+    ? `${activeRuns.length} Active Runs · ${totalActiveCompleted}/${totalActiveTasks} Tasks`
+    : `${totalActiveCompleted}/${totalActiveTasks} Tasks`;
 
   return `<!DOCTYPE html>
 <html lang="th" data-theme="${options.theme || "auto"}">
@@ -91,11 +166,11 @@ export async function renderStudioHtml(
   <title>Nexus-DevFlow Studio: ${escapeHtml(projectName)}</title>
   <style>
     :root {
-      --bg: var(--vscode-editor-background, #090d16);
-      --bg-panel: var(--vscode-sideBar-background, rgba(17, 24, 39, 0.75));
-      --bg-card: rgba(30, 41, 59, 0.6);
+      --bg: var(--vscode-editor-background, #070d18);
+      --bg-panel: var(--vscode-sideBar-background, rgba(15, 23, 42, 0.75));
+      --bg-card: rgba(30, 41, 59, 0.65);
       --border: var(--vscode-panel-border, rgba(255, 255, 255, 0.08));
-      --border-accent: rgba(56, 189, 248, 0.3);
+      --border-accent: rgba(56, 189, 248, 0.35);
       --fg: var(--vscode-editor-foreground, #f8fafc);
       --fg-muted: var(--vscode-descriptionForeground, #94a3b8);
       --accent: #38bdf8;
@@ -103,8 +178,9 @@ export async function renderStudioHtml(
       --green: #4ade80;
       --yellow: #facc15;
       --red: #f87171;
-      --font-mono: var(--vscode-editor-font-family, 'Fira Code', Consolas, monospace);
-      --font-sans: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+      --violet: #a78bfa;
+      --font-mono: var(--vscode-editor-font-family, 'IBM Plex Mono', 'Fira Code', Consolas, monospace);
+      --font-sans: var(--vscode-font-family, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -119,7 +195,7 @@ export async function renderStudioHtml(
     }
 
     .studio-container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -143,9 +219,10 @@ export async function renderStudioHtml(
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
     .project-badge {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 16px;
       background: var(--accent-gradient);
       -webkit-background-clip: text;
@@ -154,12 +231,22 @@ export async function renderStudioHtml(
     }
     .branch-pill {
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       background: rgba(56, 189, 248, 0.12);
       color: var(--accent);
       padding: 3px 10px;
       border-radius: 20px;
       border: 1px solid var(--border-accent);
+    }
+    .multitask-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(167, 139, 250, 0.15);
+      color: var(--violet);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      font-weight: 700;
     }
     .header-right {
       display: flex;
@@ -173,6 +260,7 @@ export async function renderStudioHtml(
       padding: 4px 12px;
       border-radius: 20px;
       font-weight: 600;
+      font-size: 11px;
     }
     .badge-blocked {
       background: rgba(248, 113, 113, 0.15);
@@ -181,6 +269,7 @@ export async function renderStudioHtml(
       padding: 4px 12px;
       border-radius: 20px;
       font-weight: 600;
+      font-size: 11px;
     }
 
     /* Quick Action Dispatcher */
@@ -188,17 +277,18 @@ export async function renderStudioHtml(
       background: var(--bg-panel);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 12px 16px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       gap: 8px;
       overflow-x: auto;
     }
     .action-label {
-      font-weight: 600;
+      font-weight: 700;
       color: var(--fg-muted);
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-right: 4px;
       white-space: nowrap;
     }
@@ -210,7 +300,7 @@ export async function renderStudioHtml(
       border-radius: 6px;
       cursor: pointer;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       transition: all 0.2s ease;
       white-space: nowrap;
     }
@@ -256,18 +346,21 @@ export async function renderStudioHtml(
       gap: 6px;
     }
     .col-count {
-      font-size: 11px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 600;
       background: var(--bg-card);
       padding: 2px 8px;
       border-radius: 10px;
       color: var(--fg-muted);
+      border: 1px solid var(--border);
     }
 
     .col-content {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      max-height: 480px;
+      max-height: 520px;
       overflow-y: auto;
     }
 
@@ -287,13 +380,14 @@ export async function renderStudioHtml(
       transform: translateY(-1px);
     }
     .card-item.active-item {
-      border-color: var(--accent);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+      border-color: var(--border-accent);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.12);
     }
 
     .item-header {
       display: flex;
       align-items: flex-start;
+      justify-content: space-between;
       gap: 8px;
     }
     .badge-id {
@@ -309,6 +403,22 @@ export async function renderStudioHtml(
     .badge-history {
       background: rgba(129, 140, 248, 0.2);
       color: #818cf8;
+    }
+    .badge-stage {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(250, 204, 21, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+    }
+    .badge-stage.stage-check {
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--green);
+      border-color: rgba(74, 222, 128, 0.3);
     }
     .item-title {
       font-weight: 600;
@@ -333,19 +443,50 @@ export async function renderStudioHtml(
     .item-tags, .item-meta {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 6px;
       font-size: 11px;
       color: var(--fg-muted);
+      flex-wrap: wrap;
     }
     .tag {
       font-size: 10px;
       padding: 1px 6px;
       border-radius: 4px;
       background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
     }
     .tag-feasibility { color: var(--green); }
     .tag-value { color: var(--accent); }
     .tag-cat { color: var(--yellow); }
+    .tag-finding-clean { color: var(--green); }
+    .tag-finding-warn { color: var(--red); background: rgba(248, 113, 113, 0.15); border-color: rgba(248, 113, 113, 0.3); }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+      flex-wrap: wrap;
+    }
+    .btn-card-action {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-card-action:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
 
     .empty-state {
       text-align: center;
@@ -364,6 +505,8 @@ export async function renderStudioHtml(
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
   </style>
 </head>
@@ -375,7 +518,7 @@ export async function renderStudioHtml(
       <div class="header-left">
         <span class="project-badge">⚡ ${escapeHtml(projectName)}</span>
         <span class="branch-pill">🌿 ${escapeHtml(branch)}</span>
-        <span class="badge-track">Track: ${escapeHtml(track)}</span>
+        ${activeRuns.length > 0 ? `<span class="multitask-pill">🗂️ ${activeRuns.length} Active Workspaces</span>` : ""}
       </div>
       <div class="header-right">
         <span class="${gatePillClass}">${gatePillText}</span>
@@ -385,7 +528,6 @@ export async function renderStudioHtml(
       </div>
     </header>
 
-
     <!-- Quick Action Bar -->
     <div class="action-bar">
       <span class="action-label">Quick Actions:</span>
@@ -393,9 +535,9 @@ export async function renderStudioHtml(
       <button class="btn-action" onclick="dispatchCommand('/implement')">/implement</button>
       <button class="btn-action" onclick="dispatchCommand('/check')">/check</button>
       <button class="btn-action" onclick="dispatchCommand('/complete')">/complete</button>
-      <button class="btn-action" onclick="dispatchCommand('nexus-devflow slice --stage implement')">slice</button>
+      <button class="btn-action" onclick="dispatchCommand('/continuous')">/continuous</button>
+      <button class="btn-action" onclick="dispatchCommand('nexus-devflow check-gate')">check-gate</button>
       <button class="btn-action" onclick="dispatchCommand('nexus-devflow drift')">drift</button>
-      <button class="btn-action" onclick="dispatchCommand('nexus-devflow reconcile --fix')">reconcile</button>
       <button class="btn-action" onclick="dispatchCommand('nexus-devflow doctor')">doctor</button>
     </div>
 
@@ -413,33 +555,14 @@ export async function renderStudioHtml(
         </div>
       </section>
 
-
       <!-- ⚡ 2. Present (Active Living Context) -->
       <section class="kanban-col">
         <div class="col-header">
           <span class="col-title">⚡ Present (Active Living Spec)</span>
-          <span class="col-count">${completedCount}/${totalTasks} Tasks</span>
+          <span class="col-count">${presentCountLabel}</span>
         </div>
         <div class="col-content">
-          ${currentWork.state === "active" ? `
-            <div class="card-item active-item">
-              <div class="item-header">
-                <span class="badge-id">${escapeHtml(currentWork.runId || "ACTIVE")}</span>
-                <span class="item-title">${escapeHtml(currentWork.title || "Active Spec")}</span>
-              </div>
-              <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
-              </div>
-              <div class="item-meta">
-                <span>Progress: ${progressPercent}%</span>
-                <span>Remaining: ${currentWork.remaining} task(s)</span>
-              </div>
-            </div>
-          ` : `
-            <div class="empty-state">
-              Idle workspace.<br>Run <code>/feature</code> or <code>/fix</code> to start a run.
-            </div>
-          `}
+          ${presentHtml}
         </div>
       </section>
 
@@ -458,8 +581,8 @@ export async function renderStudioHtml(
 
     <!-- Bottom Pulse -->
     <footer class="pulse-panel">
-      <div>Findings Blockers: <strong>${gateReport.findingsBlockers}</strong> | Total Findings: <strong>${status.findings.total}</strong></div>
-      <div>Git Drift: <strong>${driftReport.hasDrift ? "⚠ Drift Detected" : "✔ In Sync"}</strong></div>
+      <div>Findings Blockers: <strong>${gateReport.findingsBlockers}</strong> | Active Findings: <strong>${status.findings.total}</strong></div>
+      <div>Git Drift: <strong>${driftReport.hasDrift ? "⚠ Drift Detected" : "✔ In Sync"}</strong> | Workspaces: <strong>${activeRuns.length || (currentWork.state === "active" ? 1 : 0)} Active</strong></div>
     </footer>
 
   </div>
@@ -478,3 +601,4 @@ export async function renderStudioHtml(
 </body>
 </html>`;
 }
+

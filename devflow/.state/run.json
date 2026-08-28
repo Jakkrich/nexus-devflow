@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "command": "complete",
+  "status": "running",
+  "summary": "Completing Feature 063",
+  "detail": "Archiving spec, updating build plan and history",
+  "boundary": "local-only",
+  "startedAt": "2026-08-28T12:26:50.000Z",
+  "updatedAt": "2026-08-28T12:26:50.000Z",
+  "resumeCommand": "/complete 063-multi-task-dashboard-and-kanban-studio-ui",
+  "progress": { "current": 1, "total": 3, "label": "steps" },
+  "feature": {
+    "id": "063-multi-task-dashboard-and-kanban-studio-ui",
+    "title": "Multi-Task Dashboard & Live Kanban Studio UI"
+  }
+}

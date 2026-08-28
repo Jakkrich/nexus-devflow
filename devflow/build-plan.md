@@ -124,5 +124,12 @@
   - *Dependencies*: Feature 14, DISC-20260828-001-sync-upstream-ai-blueprint-v100
   - *Scope*: ผสาน Activity State Contract (`devflow/.state/run.json`) และ Live Dashboard Activity, เสริม Rollback 40-char SHA & Merge Commit Protection, Complete Fixed Finding Persistence, คำสั่ง `npm run link:local` / `unlink:local` พร้อม `findPackageRoot()`, Onboarding Markers และ Windows Smoke/Path Fixes
 
+---
+
+## 🖥️ Phase 16: Multi-Task Dashboard & Live Kanban Studio UI
+
+- [x] **16. Multi-Task Dashboard & Live Kanban Studio UI (`DISC-20260828-002`)** `[Size: M]`
+  - *Dependencies*: Feature 14, Feature 15
+  - *Scope*: ปรับปรุง Full Web Dashboard (`dashboard-page.ts`) และ Live Kanban Studio (`webview-studio.ts`) ให้อ่านและวนลูปแสดงผลรายการ Task ทั้งหมดใน `status.activeRuns` จาก `devflow/context/{xxx-slug}/` พร้อม Task Progress Bar, Branch Pill, Findings Indicator และปุ่ม Quick Actions แบบเจาะจง Target Run ID
 
 

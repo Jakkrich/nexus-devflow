@@ -87,3 +87,47 @@ test("MCP devflow_get_studio_html returns full studio HTML payload", async () =>
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("renderStudioHtml renders all active runs when multi-task context directories exist", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-studio-multitask-"));
+
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "001-auth"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, "devflow", "context", "002-billing"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow\n", "utf8");
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "001-auth", "spec.md"),
+      `# 📐 [001-auth] Authentication Module\n\n## 3. Implementation Checklist\n- [x] Task 1: JWT\n- [ ] Task 2: Login UI\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "001-auth", "stage.md"),
+      "# Current Stage\n\n- Active Running ID: `001-auth`\n- Status: `implementing`\n",
+      "utf8"
+    );
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "002-billing", "spec.md"),
+      `# 📐 [002-billing] Stripe Invoicing\n\n## 3. Implementation Checklist\n- [ ] Task 1: Webhook\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "002-billing", "stage.md"),
+      "# Current Stage\n\n- Active Running ID: `002-billing`\n- Status: `spec_ready`\n",
+      "utf8"
+    );
+
+    const html = await renderStudioHtml(tempDir);
+    assert.ok(html.includes("001-auth"));
+    assert.ok(html.includes("Authentication Module"));
+    assert.ok(html.includes("002-billing"));
+    assert.ok(html.includes("Stripe Invoicing"));
+    assert.ok(html.includes("/implement 001-auth"));
+    assert.ok(html.includes("/implement 002-billing"));
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
