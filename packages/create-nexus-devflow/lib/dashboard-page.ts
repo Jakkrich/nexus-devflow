@@ -57,6 +57,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
     .search-row{display:flex;gap:10px;margin-bottom:16px}.search-input{flex:1;padding:10px 14px;background:var(--bg-deep);border:1px solid var(--line-strong);border-radius:4px;color:var(--ink);font-family:var(--font-mono);font-size:12px}.search-btn{padding:10px 18px;border:1px solid var(--cyan);border-radius:4px;background:var(--cyan);color:var(--bg-deep);font-weight:700;cursor:pointer}
     .blast-result{padding:16px;border:1px solid var(--line-strong);border-radius:4px;background:var(--bg-deep);margin-top:12px;display:none}
     .section-note{margin:-2px 0 14px;color:var(--muted);font:10px/1.5 var(--font-mono)}.record-list{display:grid;gap:8px}.record-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:13px;align-items:center;padding:13px 15px;border:1px solid var(--line);border-left:3px solid var(--record-color,var(--cyan));border-radius:3px;background:rgba(255,255,255,.02)}.record-icon{display:grid;place-items:center;width:31px;height:31px;border-radius:8px;background:color-mix(in srgb,var(--record-color,var(--cyan)) 14%,transparent)}.record-body{min-width:0}.record-meta{color:var(--record-color,var(--cyan));font:700 10px var(--font-mono);letter-spacing:.06em;text-transform:uppercase}.record-title{margin-top:3px;color:var(--ink);font-weight:650}.record-desc{margin-top:3px;color:var(--soft);font-size:12px}.record-desc:empty{display:none}.record-title strong,.record-desc strong{color:var(--record-color,var(--cyan));font-weight:750}.record-title em,.record-desc em{color:var(--gold)}.record-title code,.record-desc code{padding:1px 4px;border:1px solid var(--line);border-radius:3px;color:var(--cyan);font:10px var(--font-mono)}.record-title a,.record-desc a{color:var(--cyan);text-decoration:underline}.record-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.record-action{border:1px solid var(--record-color,var(--cyan));border-radius:3px;padding:8px 11px;background:transparent;color:var(--record-color,var(--cyan));font:700 10px var(--font-mono);cursor:pointer}.record-action:hover,.record-action:focus-visible{background:var(--record-color,var(--cyan));color:var(--bg)}.record-badge{align-self:start;border:1px solid rgba(111,227,180,.36);border-radius:99px;padding:4px 8px;background:var(--mint-soft);color:var(--mint);font:700 9px var(--font-mono);letter-spacing:.04em;text-transform:uppercase}.record-item.tone-cyan{--record-color:var(--cyan)}.record-item.tone-mint{--record-color:var(--mint)}.record-item.tone-gold{--record-color:var(--gold)}.record-item.tone-red{--record-color:var(--red)}.record-item.tone-violet{--record-color:var(--violet)}.stepper{gap:0;justify-content:center}.step{padding-right:0;overflow:visible}.step-line{left:calc(50% + 10px);right:calc(-50% + 10px);width:auto}#sev-p0{color:var(--red)}#sev-p1{color:var(--gold)}#sev-p2{color:var(--violet)}#sev-p3{color:var(--cyan)}#stat-runs.tone{color:var(--mint)}#stat-findings.tone-ok{color:var(--mint)}#stat-findings.tone-alert{color:var(--red)}#stat-ideas.tone-ok{color:var(--mint)}#stat-ideas.tone-pending{color:var(--gold)}#stat-adapters.tone-ok{color:var(--mint)}#stat-adapters.tone-partial{color:var(--gold)}#stat-state.tone-idle{color:var(--cyan)}#stat-state.tone-active{color:var(--violet)}#stat-state.tone-blocked{color:var(--red)}
+    .multitask-panel{border-color:rgba(56,189,248,.35)}.workspace-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-top:10px}.workspace-card{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:all .2s ease}.workspace-card:hover{border-color:var(--cyan);background:rgba(255,255,255,.04)}.ws-header{display:flex;align-items:center;justify-content:space-between;gap:8px}.ws-id{font-family:var(--font-mono);font-weight:700;font-size:11px;color:var(--cyan);background:var(--cyan-soft);padding:2px 8px;border-radius:3px}.ws-stage{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--gold-soft);color:var(--gold);border:1px solid rgba(242,193,78,.3)}.ws-stage.stage-check{background:var(--mint-soft);color:var(--mint);border-color:rgba(111,227,180,.3)}.ws-title{font-weight:650;font-size:13px;color:var(--ink);line-height:1.4}.ws-progress-bar{height:6px;background:rgba(0,0,0,.3);border-radius:99px;overflow:hidden;margin:4px 0}.ws-progress-fill{height:100%;background:linear-gradient(135deg,var(--cyan),var(--violet));transition:width .3s}.ws-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}.ws-actions{display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px dashed var(--line);flex-wrap:wrap}.btn-ws{padding:4px 9px;border-radius:3px;font-family:var(--font-mono);font-size:10px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--soft);cursor:pointer;transition:all .15s}.btn-ws:hover{background:var(--cyan-soft);border-color:var(--cyan);color:var(--cyan)}
     footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:26px;padding-top:17px;border-top:1px solid var(--line);color:var(--muted);font:10px var(--font-mono)}
     @media(max-width:920px){.grid .card,.grid .card.wide{grid-column:1/-1}.stats{grid-template-columns:repeat(2,1fr)}.adapters,.roster-grid,.mcp-grid{grid-template-columns:repeat(2,1fr)}.titleblock{align-items:flex-start;flex-direction:column}.meta dd{text-align:left}.stepper{gap:0}.cmd:after{position:fixed;left:12px;right:12px;bottom:16px;width:auto;max-width:none;transform:translateY(5px)}.cmd:hover:after,.cmd:focus-visible:after,.cmd:focus:after{transform:none}}
     @media(max-width:560px){.sheet{width:calc(100% - 24px);padding-top:22px}.panel,.card{padding:18px}.grid{gap:14px;margin-bottom:14px}.stats{margin-bottom:14px}.adapters,.roster-grid,.mcp-grid{grid-template-columns:1fr}.cmd:after{position:fixed;left:12px;right:12px;bottom:16px;width:auto;max-width:none;transform:translateY(5px)}.cmd:hover:after,.cmd:focus-visible:after,.cmd:focus:after{transform:none}.meta{grid-template-columns:1fr}.track-tabs{width:100%}.tab{flex:1}.fact{align-items:flex-start}.record-item{grid-template-columns:34px minmax(0,1fr)}.record-action{grid-column:2;justify-self:start}}
@@ -133,6 +134,18 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       <div class="stat"><div class="stat-value" id="stat-state">-</div><div class="stat-label">Current state</div></div>
     </section>
 
+    <!-- Multi-Task Living Spec Workspaces Grid -->
+    <section class="card full panel multitask-panel" id="active-workspaces-panel">
+      <div class="panel-head">
+        <div>
+          <span class="label">Active Living Specs (Pure Task-Isolated Workspaces)</span>
+          <div class="muted" id="active-workspaces-summary" style="margin-top:3px;font-size:11px;">Scanned from devflow/context/{xxx-slug}/</div>
+        </div>
+        <span class="pill active" id="active-workspaces-pill">0 Active</span>
+      </div>
+      <div class="workspace-grid" id="active-workspaces-list"></div>
+    </section>
+
     <section class="grid">
       <article class="card"><div class="card-head"><span class="label">Nexus-DevFlow</span><span class="pill" id="update-pill">checking</span></div><div class="facts"><div class="fact"><span>Installed / latest</span><span id="installed-latest">-</span></div><div class="fact"><span>Health</span><span id="system-health">-</span></div><div class="fact"><span>Architecture</span><span>3-Pillars + Swarm RAG</span></div></div></article>
       <article class="card wide"><div class="card-head"><span class="label">Current Work</span><span class="pill" id="work-pill">loading</span></div><div class="value" id="work-title">Loading...</div><div class="progress"><span id="work-progress"></span></div><div class="muted" id="work-meta"></div></article>
@@ -152,6 +165,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
   </main>
   <script>
     const byId = (id) => document.getElementById(id);
+    const escapeHtml = (str) => String(str == null ? '' : str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     const text = (id, value) => { const node = byId(id); if (node) node.textContent = value == null ? '-' : String(value); };
     const pill = (id, state, label) => { const node = byId(id); if (!node) return; node.className = 'pill ' + (state || 'configured'); node.textContent = label || state || '-'; };
     const list = (id, values, empty) => { const node = byId(id); if (!node) return; node.replaceChildren(); const rows = values.length ? values : [empty]; rows.forEach((value) => { const li = document.createElement('li'); li.textContent = value; if (!values.length) li.className = 'empty'; node.append(li); }); };
@@ -253,6 +267,67 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       }
     });
 
+    function renderActiveWorkspaces(activeRuns, work) {
+      const root = byId('active-workspaces-list');
+      if (!root) return;
+      root.replaceChildren();
+      const runs = (activeRuns && activeRuns.length > 0) ? activeRuns : (work && work.state === 'active' ? [{
+        runId: work.runId || 'ACTIVE',
+        title: work.title || 'Active Spec',
+        status: work.status || 'implementing',
+        branch: 'current',
+        totalTasks: work.total || 0,
+        completedTasks: work.completed || 0,
+        remainingTasks: work.remaining || 0,
+        hasOpenFindings: false
+      }] : []);
+
+      pill('active-workspaces-pill', runs.length > 0 ? 'active' : 'idle', runs.length + ' Active');
+      text('active-workspaces-summary', runs.length > 0 ? 'Found ' + runs.length + ' active workspace(s) in devflow/context/' : 'No active workspace folders. Run /feature or /fix to start.');
+
+      if (runs.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.style.padding = '18px';
+        empty.textContent = 'No active delivery runs in progress. Use /feature or /fix to create a living spec.';
+        root.append(empty);
+        return;
+      }
+
+      runs.forEach((run) => {
+        const card = document.createElement('article');
+        card.className = 'workspace-card';
+        const pct = run.totalTasks > 0 ? Math.round((run.completedTasks / run.totalTasks) * 100) : 0;
+        const stageClass = (run.status || '').includes('check') ? 'ws-stage stage-check' : 'ws-stage';
+        const findingTag = run.hasOpenFindings ? '<span style="color:var(--red);font-size:10px;font-weight:700;">⚠ Open Findings</span>' : '<span style="color:var(--mint);font-size:10px;font-weight:700;">✔ 0 Blockers</span>';
+
+        card.innerHTML = '<div class="ws-header">' +
+          '<span class="ws-id">' + escapeHtml(run.runId) + '</span>' +
+          '<span class="' + stageClass + '">Stage: ' + escapeHtml(run.status || 'active') + '</span>' +
+          '</div>' +
+          '<div class="ws-title">' + escapeHtml(run.title || 'Living Spec') + '</div>' +
+          '<div class="ws-progress-bar"><div class="ws-progress-fill" style="width:' + pct + '%;"></div></div>' +
+          '<div class="ws-meta">' +
+          '<span>🌿 <code>' + escapeHtml(run.branch || 'main') + '</code></span>' +
+          '<span><strong>' + pct + '%</strong> (' + run.completedTasks + '/' + run.totalTasks + ' Tasks)</span>' +
+          '</div>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px;">' +
+          findingTag +
+          '<span style="font-size:10px;color:var(--muted);">' + run.remainingTasks + ' remaining</span>' +
+          '</div>' +
+          '<div class="ws-actions">' +
+          '<button class="btn-ws" type="button" data-cmd="/implement ' + escapeHtml(run.runId) + '">▶ /implement</button>' +
+          '<button class="btn-ws" type="button" data-cmd="/check ' + escapeHtml(run.runId) + '">🧪 /check</button>' +
+          '<button class="btn-ws" type="button" data-cmd="/complete ' + escapeHtml(run.runId) + '">📦 /complete</button>' +
+          '</div>';
+
+        card.querySelectorAll('.btn-ws').forEach(btn => {
+          wireCopy(btn, () => btn.getAttribute('data-cmd'));
+        });
+        root.append(card);
+      });
+    }
+
     function renderSnapshot(data) {
       const status = data.status || {}; const project = status.project || {}; const devflow = status.devflow || {}; const work = status.currentWork || {}; const git = status.git || {}; const findings = status.findings || { active: [], blockers: [] }; const workflow = data.workflow || {}; const update = data.update || {}; const doctor = data.doctor || { checks: [] }; const discoveries = data.discoveries || { recent: [] }; const history = data.history || { items: [], total: 0 }; const ideas = status.ideas || { pending: [], totalPending: 0 }; const gate = data.gatekeeper || { passed: true }; const drift = data.drift || { hasDrift: false };
 
@@ -272,6 +347,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
         }
       }
       renderSwarm(data.swarm); renderMcp(data.mcpTools); text('stat-mcp', (data.mcpTools || []).length + ' Ready');
+      renderActiveWorkspaces(status.activeRuns, work);
 
       const nextCommand = data.nextAction?.command || status.nextAction?.command || '/feature'; text('next-command', nextCommand); text('next-reason', data.nextAction?.reason || 'Ready for new work.');
       text('stat-runs', history.total || 0); text('stat-findings', (findings.active || []).length); text('stat-ideas', ideas.totalPending || 0); text('stat-state', titleCase(work.state || 'idle'));
