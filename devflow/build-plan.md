@@ -116,4 +116,13 @@
   - *Dependencies*: Feature 11, Feature 12, Feature 13
   - *Scope*: ยกเลิกไฟล์ Single Living Spec ที่ Root (`current-feature.md`, `current-stage.md`, `findings.md`) อย่างสมบูรณ์ ปรับโครงสร้างสู่ Task-Isolated Subdirectories 100% (`devflow/context/{xxx-slug}/`), อัปเกรด Agent Directives, Core Context Resolver, Scaffolding Templates และ Workflow Skills ทั้งหมด
 
+---
+
+## 🔄 Phase 15: Upstream AI Blueprint v1.0.0 / v1.0.1 Synchronization
+
+- [x] **15. Sync Upstream v1.0.0 (Activity Contract, Rollback & Complete Safeguards, Local Linking)** `[Size: M]`
+  - *Dependencies*: Feature 14, DISC-20260828-001-sync-upstream-ai-blueprint-v100
+  - *Scope*: ผสาน Activity State Contract (`devflow/.state/run.json`) และ Live Dashboard Activity, เสริม Rollback 40-char SHA & Merge Commit Protection, Complete Fixed Finding Persistence, คำสั่ง `npm run link:local` / `unlink:local` พร้อม `findPackageRoot()`, Onboarding Markers และ Windows Smoke/Path Fixes
+
+
 

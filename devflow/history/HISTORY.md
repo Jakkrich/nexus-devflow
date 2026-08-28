@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-08-28 | `062` | Feature | ซิงก์ AI Blueprint Upstream v1.0.0 / v1.0.1 (Activity Contract, Rollback Safeguards & Local Linking) | `d38c3df` | `Released` | [`062-sync-upstream-ai-blueprint-v100.md`](features/062-sync-upstream-ai-blueprint-v100.md) |
 | 2026-08-26 | `061` | Feature | Pure Multi-Run Task-Isolated Architecture (`DISC-20260826-004`) | `40c9950` | `Released` | [`061-pure-multi-run-task-isolated-architecture.md`](features/061-pure-multi-run-task-isolated-architecture.md) |
 | 2026-08-26 | `060` | Feature | ซิงก์ AI Blueprint Upstream v0.14.0 (Deterministic Config & Continuous Mode) | `3417b60` | `Released` | [`060-sync-upstream-v0140-config-and-continuous.md`](features/060-sync-upstream-v0140-config-and-continuous.md) |
 | 2026-08-26 | `059` | Feature | Purge Legacy Deep-Track & Numbered Stage Artifacts (`DISC-20260826-002`) | `11a702e` | `Released` | [`059-purge-deep-track-legacy-artifacts.md`](features/059-purge-deep-track-legacy-artifacts.md) |

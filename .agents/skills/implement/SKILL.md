@@ -6,6 +6,10 @@ argument-hint: "[{run-id, number, or name}]"
 
 # implement - build the target spec, one reviewed step at a time
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     /feature, /fix, or /rollback  ->  [implement]  ->  /complete  ->  next

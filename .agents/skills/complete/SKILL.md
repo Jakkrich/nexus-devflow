@@ -6,6 +6,10 @@ argument-hint: "[{run-id, number, or name}]"
 
 # complete - log the finished work, make the work commit, and deliver
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     /feature, /fix, or /rollback  ->  /implement  ->  [complete]  ->  next
@@ -70,7 +74,9 @@ and records the exact target feature, archive, commit, and parent.
 **Archive resolved findings.** If `devflow/context/{xxx-slug}/findings.md` holds any
 findings, append a `## Findings` section to the archive file just written with
 every `closed`, `accepted`, or `invalid` entry at its final status (`accepted`
-entries keep their recorded reason).
+entries keep their recorded reason). Do not archive or remove a `fixed` finding
+at any severity; repaired findings must remain in the ledger until an `/audit`
+re-review closes them.
 
 **Clean up run workspace.** Delete the task directory `devflow/context/{xxx-slug}/`. In Pure Multi-Run architecture, completed work leaves zero residual stubs in `devflow/context/`.
 

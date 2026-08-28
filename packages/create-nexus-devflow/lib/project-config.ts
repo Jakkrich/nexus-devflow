@@ -1,7 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const PROJECT_CONFIG_PATH = path.join("devflow", "config.json");
+// Stable repo-relative identifier for warnings and status output. path.join
+// normalizes the separator for filesystem reads, so this must not be built with
+// path.join or Windows would surface "devflow\config.json" to users.
+const PROJECT_CONFIG_PATH = "devflow/config.json";
 const PROJECT_CONFIG_SCHEMA_VERSION = 1 as const;
 
 type StepReviewPolicy = "every" | "feature";

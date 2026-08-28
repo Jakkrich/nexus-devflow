@@ -6,6 +6,10 @@ argument-hint: "[{run-id, number, or name}]"
 
 # check - Dual-Axis Independent Verification Engine
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     /implement  ->  [check]  ->  /complete

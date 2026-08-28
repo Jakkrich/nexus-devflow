@@ -6,6 +6,10 @@ argument-hint: "[{title or issue-description}]"
 
 # fix - document an ad-hoc fix, then build it like anything else
 
+**First action:** Before project inspection, preflight, or any other tool call,
+publish `running` to `devflow/.state/run.json` using the dashboard activity
+contract in `AGENTS.md`.
+
 Where this sits in the workflow:
 
     /fix  ->  /implement  ->  /complete  ->  back to your features

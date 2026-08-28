@@ -5,6 +5,20 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2026-08-28
+
+### Added
+- **Dashboard Activity State Contract (`devflow/.state/run.json`)**: Real-time activity state engine tracking running commands, boundary modes, progression status, and automatic stale-activity calculations (> 1h).
+- **First-Action Activity Protocol**: Standardized first-action activity reporting across tracked skills before project inspection or tool execution.
+- **Local Checkout Linking (`scripts/link-local.ts`)**: Built-in `npm run link:local` and `unlink:local` scripts allowing local repository linking and global CLI testing without publishing.
+- **Dynamic Package Root Resolution (`findPackageRoot`)**: Robust parent search for `package.json` ensuring CLI works seamlessly from source checkouts.
+- **Onboarding Marker Sentinel**: Added `<!-- devflow:onboarding-required -->` sentinel in `AGENTS.md` and automated status check directing fresh scaffolds to `/onboard`.
+
+### Changed
+- **Rollback & Implementation Safeguards**: Hardened `/rollback` and `/implement` with full 40-character SHA verification, ancestor check against `HEAD`, and strict merge-commit blocking to prevent history corruption.
+- **Findings Persistence Safety**: Guarded `/complete` from archiving or deleting `fixed` findings until explicitly audited and closed by `/audit`.
+- **Synchronized with Upstream AI Blueprint v1.0.0 & v1.0.1 baseline**.
+
 ## [2.7.0] - 2026-08-26
 
 ### Added
