@@ -5,11 +5,14 @@ import path from "node:path";
 import test from "node:test";
 import {
   findSkillSourceDirectory,
+  installRecommendedSkills,
   installThirdPartySkill,
   listInstalledSkills,
   parseSkillFrontmatter,
+  RECOMMENDED_THIRD_PARTY_SKILLS,
   removeThirdPartySkill,
   syncSkills,
+  updateRecommendedSkills,
   updateThirdPartySkills
 } from "../lib/skill-manager.js";
 
@@ -316,6 +319,111 @@ test("updateThirdPartySkills updates installed third-party skills from original 
   } finally {
     await fs.rm(tempProject, { recursive: true, force: true });
     await fs.rm(tempSource, { recursive: true, force: true });
+  }
+});
+
+test("RECOMMENDED_THIRD_PARTY_SKILLS defines archify, diagram-design, and 9arm-skills", () => {
+  assert.ok(Array.isArray(RECOMMENDED_THIRD_PARTY_SKILLS));
+  assert.equal(RECOMMENDED_THIRD_PARTY_SKILLS.length, 3);
+
+  const sources = RECOMMENDED_THIRD_PARTY_SKILLS.map((p) => p.source);
+  assert.ok(sources.some((s) => s.includes("archify")));
+  assert.ok(sources.some((s) => s.includes("diagram-design")));
+  assert.ok(sources.some((s) => s.includes("9arm-skills")));
+
+  const nineArm = RECOMMENDED_THIRD_PARTY_SKILLS.find((p) => p.source.includes("9arm-skills"));
+  assert.equal(nineArm?.all, true);
+});
+
+test("installRecommendedSkills and updateRecommendedSkills batch-install and refresh preset skills", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-rec-project-"));
+  const tempSourceA = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-rec-source-a-"));
+  const tempSourceB = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-rec-source-b-"));
+
+  try {
+    // 1. Scaffold source A (single skill)
+    await fs.writeFile(
+      path.join(tempSourceA, "SKILL.md"),
+      `---\nname: skill-alpha\ndescription: Alpha skill\nversion: 1.0.0\n---\n# Alpha\n`,
+      "utf8"
+    );
+
+    // 2. Scaffold source B (multi-skill repo)
+    const betaDir = path.join(tempSourceB, "skills", "skill-beta");
+    const gammaDir = path.join(tempSourceB, "skills", "skill-gamma");
+    await fs.mkdir(betaDir, { recursive: true });
+    await fs.mkdir(gammaDir, { recursive: true });
+
+    await fs.writeFile(
+      path.join(betaDir, "SKILL.md"),
+      `---\nname: skill-beta\ndescription: Beta skill\nversion: 1.0.0\n---\n# Beta\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(gammaDir, "SKILL.md"),
+      `---\nname: skill-gamma\ndescription: Gamma skill\nversion: 1.0.0\n---\n# Gamma\n`,
+      "utf8"
+    );
+
+    // Custom preset pointing to local directories for offline deterministic testing
+    const customPresets = [
+      { source: tempSourceA, description: "Alpha" },
+      { source: tempSourceB, all: true, description: "Beta and Gamma" }
+    ];
+
+    // Install recommended skills
+    const installed = await installRecommendedSkills(tempProject, {
+      presets: customPresets
+    });
+
+    assert.equal(installed.length, 3);
+    const names = installed.map((s) => s.name).sort();
+    assert.deepEqual(names, ["skill-alpha", "skill-beta", "skill-gamma"]);
+
+    // Verify all 3 skills are synced across .agents and .claude
+    for (const name of names) {
+      assert.equal(
+        await fs.lstat(path.join(tempProject, ".agents", "skills", name, "SKILL.md")).then(() => true).catch(() => false),
+        true
+      );
+      assert.equal(
+        await fs.lstat(path.join(tempProject, ".claude", "skills", name, "SKILL.md")).then(() => true).catch(() => false),
+        true
+      );
+    }
+
+    // Verify manifest
+    const listing = await listInstalledSkills(tempProject);
+    assert.equal(listing.thirdPartySkills.length, 3);
+
+    // 3. Update source A with new version
+    await fs.writeFile(
+      path.join(tempSourceA, "SKILL.md"),
+      `---\nname: skill-alpha\ndescription: Alpha skill updated\nversion: 2.0.0\n---\n# Alpha v2\n`,
+      "utf8"
+    );
+
+    // Run updateRecommendedSkills
+    const updateResult = await updateRecommendedSkills(tempProject, {
+      presets: customPresets
+    });
+
+    assert.equal(updateResult.totalUpdated, 3);
+    assert.equal(updateResult.failedSkills.length, 0);
+
+    const alphaUpdated = updateResult.updatedSkills.find((s) => s.name === "skill-alpha");
+    assert.equal(alphaUpdated?.version, "2.0.0");
+    assert.equal(alphaUpdated?.description, "Alpha skill updated");
+
+    // Verify file content updated
+    assert.match(
+      await fs.readFile(path.join(tempProject, ".agents", "skills", "skill-alpha", "SKILL.md"), "utf8"),
+      /Alpha skill updated/
+    );
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempSourceA, { recursive: true, force: true });
+    await fs.rm(tempSourceB, { recursive: true, force: true });
   }
 });
 

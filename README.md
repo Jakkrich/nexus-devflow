@@ -672,6 +672,16 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 Nexus-DevFlow ships with **29 Core Skills** out-of-the-box. You can easily extend your workflow with specialized community and third-party skills using `nexus-devflow skill add`:
 
+> [!TIP]
+> **🚀 Install All 8 Recommended Skills in One Command**:
+> ```bash
+> npx @jakkrichm/create-nexus-devflow skill add --recommended
+> ```
+> **🔄 Update All Recommended Skills to Latest Version**:
+> ```bash
+> npx @jakkrichm/create-nexus-devflow skill update --recommended
+> ```
+
 | Skill | Category | Description | Installation Command |
 | :--- | :--- | :--- | :--- |
 | **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
@@ -683,7 +693,7 @@ Nexus-DevFlow ships with **29 Core Skills** out-of-the-box. You can easily exten
 | **management-talk** | Communication | Rewrite engineering updates for leadership across Slack/Jira/Email/Meetings | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
 | **qwenchance** | Guardrails | Context budget watchdog — breaks circular loops and handles context handoff | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwenchance` |
 
-> [!TIP]
+> [!NOTE]
 > **Batch Install 9arm-skills**: Install all 6 skills from 9arm-skills in a single command:
 > ```bash
 > npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all

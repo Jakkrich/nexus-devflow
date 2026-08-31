@@ -132,4 +132,12 @@
   - *Dependencies*: Feature 14, Feature 15
   - *Scope*: ปรับปรุง Full Web Dashboard (`dashboard-page.ts`) และ Live Kanban Studio (`webview-studio.ts`) ให้อ่านและวนลูปแสดงผลรายการ Task ทั้งหมดใน `status.activeRuns` จาก `devflow/context/{xxx-slug}/` พร้อม Task Progress Bar, Branch Pill, Findings Indicator และปุ่ม Quick Actions แบบเจาะจง Target Run ID
 
+---
+
+## 🔌 Phase 17: Unified Third-Party Skills Installer & Updater
+
+- [x] **17. Unified Third-Party Skills Installation & Update Command (`DISC-20260831-001`, `055-unified-third-party-skills-installer`)** `[Size: S]`
+  - *Dependencies*: None
+  - *Scope*: เพิ่มฟังก์ชัน `installRecommendedSkills` และ `updateRecommendedSkills` ใน `skill-manager.ts`, รองรับสวิตช์ `--recommended` ในคำสั่ง `nexus-devflow skill add` และ `nexus-devflow skill update`, พร้อมอัปเดตเอกสาร `README.md`, `README.th.md` และ Automated Tests
+
 
