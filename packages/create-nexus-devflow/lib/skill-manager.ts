@@ -41,6 +41,38 @@ export interface InstallSkillOptions {
   overrideSource?: string;
 }
 
+export interface RecommendedSkillPreset {
+  source: string;
+  name?: string;
+  all?: boolean;
+  description?: string;
+}
+
+export const RECOMMENDED_THIRD_PARTY_SKILLS: readonly RecommendedSkillPreset[] = Object.freeze([
+  {
+    source: "https://github.com/tt-a1i/archify",
+    description: "Interactive technical system architecture, dataflow, and sequence trace diagrams"
+  },
+  {
+    source: "https://github.com/cathrynlavery/diagram-design",
+    description: "39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar)"
+  },
+  {
+    source: "https://github.com/thananon/9arm-skills",
+    all: true,
+    description: "6 specialized skills (debug-mantra, post-mortem, qwen-agent, scrutinize, management-talk, qwenchance)"
+  }
+]);
+
+export interface InstallRecommendedOptions {
+  presets?: readonly RecommendedSkillPreset[];
+  force?: boolean;
+}
+
+export interface UpdateRecommendedOptions {
+  presets?: readonly RecommendedSkillPreset[];
+}
+
 const SKILL_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const MANIFEST_PATH = path.join(".nexus", "nexus-devflow.json");
 const AGENT_MANIFEST_PATH = "agent-bundle.manifest.json";
@@ -628,6 +660,66 @@ export async function updateThirdPartySkills(
           // ignore
         }
       }
+    }
+  }
+
+  return {
+    updatedSkills,
+    failedSkills,
+    totalUpdated: updatedSkills.length
+  };
+}
+
+export async function installRecommendedSkills(
+  projectRoot: string,
+  options?: InstallRecommendedOptions
+): Promise<SkillDetail[]> {
+  const presets = options?.presets || RECOMMENDED_THIRD_PARTY_SKILLS;
+  const installedList: SkillDetail[] = [];
+
+  for (const preset of presets) {
+    const result = await installThirdPartySkill(projectRoot, preset.source, {
+      name: preset.name,
+      all: preset.all,
+      force: options?.force ?? true
+    });
+
+    if (Array.isArray(result)) {
+      installedList.push(...result);
+    } else {
+      installedList.push(result);
+    }
+  }
+
+  return installedList;
+}
+
+export async function updateRecommendedSkills(
+  projectRoot: string,
+  options?: UpdateRecommendedOptions
+): Promise<SkillUpdateResult> {
+  const presets = options?.presets || RECOMMENDED_THIRD_PARTY_SKILLS;
+  const updatedSkills: SkillDetail[] = [];
+  const failedSkills: Array<{ name: string; reason: string }> = [];
+
+  for (const preset of presets) {
+    try {
+      const result = await installThirdPartySkill(projectRoot, preset.source, {
+        name: preset.name,
+        all: preset.all,
+        force: true
+      });
+
+      if (Array.isArray(result)) {
+        updatedSkills.push(...result);
+      } else {
+        updatedSkills.push(result);
+      }
+    } catch (err: unknown) {
+      failedSkills.push({
+        name: preset.name || preset.source,
+        reason: err instanceof Error ? err.message : String(err)
+      });
     }
   }
 

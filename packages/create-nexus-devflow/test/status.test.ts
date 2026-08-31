@@ -197,6 +197,16 @@ test("parseArgs parses idea, findings, doctor, and archive subcommands correctly
   const hookUninstall = parseArgs(["hook", "uninstall"]);
   assert.equal(hookUninstall.command, "hook");
   assert.equal(hookUninstall.subcommandAction, "uninstall");
+
+  const skillAddRec = parseArgs(["skill", "add", "--recommended"]);
+  assert.equal(skillAddRec.command, "skill");
+  assert.equal(skillAddRec.subcommandAction, "add");
+  assert.equal(skillAddRec.recommended, true);
+
+  const skillUpdateRec = parseArgs(["skill", "update", "--recommended"]);
+  assert.equal(skillUpdateRec.command, "skill");
+  assert.equal(skillUpdateRec.subcommandAction, "update");
+  assert.equal(skillUpdateRec.recommended, true);
 });
 
 test("readProjectStatus prioritizes current-stage.md Root Switch and calculates nextAction", async () => {

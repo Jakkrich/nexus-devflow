@@ -80,10 +80,12 @@ import {
   type PreparedUninstall
 } from "../lib/uninstall.js";
 import {
+  installRecommendedSkills,
   installThirdPartySkill,
   listInstalledSkills,
   removeThirdPartySkill,
   syncSkills,
+  updateRecommendedSkills,
   updateThirdPartySkills
 } from "../lib/skill-manager.js";
 
@@ -133,6 +135,7 @@ interface CliOptions {
   findingRemediation?: string;
   skillName?: string;
   installAllSkills: boolean;
+  recommended: boolean;
   blockersOnly: boolean;
   fix: boolean;
   statsOnly: boolean;
@@ -363,9 +366,32 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   if (options.command === "skill" || options.command === "skills") {
     const style = createStyle(shouldUseColor());
     if (options.subcommandAction === "add" || options.subcommandAction === "install") {
+      if (options.recommended || options.subcommandArg === "recommended" || options.subcommandArg === "--recommended") {
+        const spinner = createSpinner("Installing recommended third-party skills (8 skills from 3 repositories)...").start();
+        try {
+          const detail = await installRecommendedSkills(targetDir, { force: options.force });
+          spinner.succeed(`Successfully installed ${detail.length} recommended third-party skill(s): ${detail.map((d) => style.bold(style.cyan(d.name))).join(", ")}`);
+          if (options.json) {
+            console.log(JSON.stringify(detail, null, 2));
+          } else {
+            for (const d of detail) {
+              console.log(`\n  ${style.dim("Name    :")} ${style.bold(d.name)}`);
+              if (d.version) console.log(`  ${style.dim("Version :")} ${d.version}`);
+              if (d.description) console.log(`  ${style.dim("Desc    :")} ${d.description}`);
+              console.log(`  ${style.dim("Adapters:")} ${d.adapters.join(", ")}`);
+            }
+            console.log(`\n${style.green("✔")} All ${detail.length} recommended skills ready to use! Invocable as /<skill-name> in workflows.`);
+          }
+        } catch (err: unknown) {
+          spinner.fail(`Failed to install recommended skills: ${err instanceof Error ? err.message : String(err)}`);
+          process.exitCode = 1;
+        }
+        return;
+      }
+
       const source = options.subcommandArg || "";
       if (!source.trim()) {
-        throw new Error("Skill source (Git URL or local directory) is required. Example: nexus-devflow skill add https://github.com/cathrynlavery/diagram-design");
+        throw new Error("Skill source (Git URL or local directory) is required. Example: nexus-devflow skill add https://github.com/cathrynlavery/diagram-design or nexus-devflow skill add --recommended");
       }
       const spinner = createSpinner(`Installing skill from ${source}...`).start();
       try {
@@ -440,6 +466,38 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
 
     if (options.subcommandAction === "update" || options.subcommandAction === "upgrade") {
+      if (options.recommended || options.subcommandArg === "recommended" || options.subcommandArg === "--recommended") {
+        const spinner = createSpinner("Updating recommended third-party skills from latest upstream repositories...").start();
+        try {
+          const result = await updateRecommendedSkills(targetDir);
+          if (result.totalUpdated === 0 && result.failedSkills.length === 0) {
+            spinner.succeed("No recommended third-party skills installed to update.");
+          } else if (result.failedSkills.length > 0 && result.totalUpdated === 0) {
+            spinner.fail(`Failed to update recommended skills: ${result.failedSkills.map((f) => `${f.name} (${f.reason})`).join(", ")}`);
+            process.exitCode = 1;
+          } else {
+            spinner.succeed(`Successfully updated ${result.totalUpdated} recommended third-party skill(s): ${result.updatedSkills.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
+            if (options.json) {
+              console.log(JSON.stringify(result, null, 2));
+            } else {
+              for (const d of result.updatedSkills) {
+                console.log(`  ✔ ${style.bold(style.cyan(d.name))} ${d.version ? `v${d.version}` : ""}`);
+              }
+              if (result.failedSkills.length > 0) {
+                console.log(`\n${style.yellow("⚠")} Failed to update (${result.failedSkills.length}):`);
+                for (const f of result.failedSkills) {
+                  console.log(`  ✖ ${style.red(f.name)}: ${f.reason}`);
+                }
+              }
+            }
+          }
+        } catch (err: unknown) {
+          spinner.fail(`Failed to update recommended skills: ${err instanceof Error ? err.message : String(err)}`);
+          process.exitCode = 1;
+        }
+        return;
+      }
+
       const targetSkill = options.subcommandArg || (options.installAllSkills ? "--all" : undefined);
       const spinner = createSpinner(targetSkill && targetSkill !== "--all" ? `Updating skill ${targetSkill}...` : "Updating third-party skills...").start();
       try {
@@ -768,6 +826,7 @@ function parseArgs(args: readonly string[]): CliOptions {
   let findingRemediation: string | undefined;
   let skillName: string | undefined;
   let installAllSkills = false;
+  let recommended = false;
   let blockersOnly = false;
   let fix = false;
   let statsOnly = false;
@@ -1056,6 +1115,22 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--recommended") {
+      recommended = true;
+      continue;
+    }
+
+    if (arg === "--preset=recommended") {
+      recommended = true;
+      continue;
+    }
+
+    if (arg === "--preset" && args[i + 1] === "recommended") {
+      recommended = true;
+      i++;
+      continue;
+    }
+
     if (arg === "--all" || arg === "--both") {
       adapter = "all";
       installAllSkills = true;
@@ -1198,8 +1273,17 @@ function parseArgs(args: readonly string[]): CliOptions {
       command = "skill";
       if (positional[1] === "add" || positional[1] === "install") {
         subcommandAction = "add";
-        subcommandArg = positional[2];
-        target = positional[3] || target || ".";
+        if (positional[2] === "--recommended" || positional[2] === "recommended") {
+          recommended = true;
+          target = positional[3] || target || ".";
+        } else {
+          subcommandArg = positional[2];
+          target = positional[3] || target || ".";
+        }
+      } else if (positional[1] === "add-recommended" || positional[1] === "install-recommended") {
+        subcommandAction = "add";
+        recommended = true;
+        target = positional[2] || target || ".";
       } else if (positional[1] === "remove" || positional[1] === "uninstall" || positional[1] === "rm") {
         subcommandAction = "remove";
         subcommandArg = positional[2];
@@ -1209,15 +1293,29 @@ function parseArgs(args: readonly string[]): CliOptions {
         target = positional[2] || target || ".";
       } else if (positional[1] === "update" || positional[1] === "upgrade") {
         subcommandAction = "update";
-        subcommandArg = positional[2];
-        target = positional[3] || target || ".";
+        if (positional[2] === "--recommended" || positional[2] === "recommended") {
+          recommended = true;
+          target = positional[3] || target || ".";
+        } else {
+          subcommandArg = positional[2];
+          target = positional[3] || target || ".";
+        }
+      } else if (positional[1] === "update-recommended" || positional[1] === "upgrade-recommended") {
+        subcommandAction = "update";
+        recommended = true;
+        target = positional[2] || target || ".";
       } else if (positional[1] === "list" || positional[1] === "ls") {
         subcommandAction = "list";
         target = positional[2] || target || ".";
       } else if (positional[1] && !positional[1].startsWith("-")) {
         subcommandAction = "add";
-        subcommandArg = positional[1];
-        target = positional[2] || target || ".";
+        if (positional[1] === "recommended") {
+          recommended = true;
+          target = positional[2] || target || ".";
+        } else {
+          subcommandArg = positional[1];
+          target = positional[2] || target || ".";
+        }
       } else {
         subcommandAction = "list";
         target = positional[1] || target || ".";
@@ -1247,6 +1345,7 @@ function parseArgs(args: readonly string[]): CliOptions {
     findingRemediation,
     skillName,
     installAllSkills,
+    recommended,
     blockersOnly,
     fix,
     statsOnly,
@@ -1312,8 +1411,8 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow findings resolve")} <ID> [--status <status>]
   ${style.cyan("nexus-devflow doctor")} [--fix] [--json]
   ${style.cyan("nexus-devflow skill")} [list] [--json]
-  ${style.cyan("nexus-devflow skill add")} <git-url-or-path> [--name <name>] [--all] [--force]
-  ${style.cyan("nexus-devflow skill update")} [name|--all]
+  ${style.cyan("nexus-devflow skill add")} <git-url-or-path|--recommended> [--name <name>] [--all] [--force]
+  ${style.cyan("nexus-devflow skill update")} [name|--all|--recommended]
   ${style.cyan("nexus-devflow skill remove")} <name>
   ${style.cyan("nexus-devflow skill sync")}
   ${style.cyan("nexus-devflow archive")} [list|stats] [--json]
@@ -1331,12 +1430,13 @@ ${style.bold("Commands:")}
   ${style.brightCyan("idea, ideas")}        Manage idea backlog: add new ideas or list pending ideas
   ${style.brightCyan("findings")}           Inspect findings ledger, record new findings, filter blockers, or resolve
   ${style.brightCyan("doctor")}             Inspect project workspace health and auto-heal missing files (--fix)
-  ${style.brightCyan("skill, skills")}      Manage third-party skills: add from Git/local, remove, sync, or list
+  ${style.brightCyan("skill, skills")}      Manage third-party skills: add from Git/local/preset, update, remove, sync, or list
   ${style.brightCyan("archive")}            Explore delivered runs and release statistics from devflow/history/
   ${style.brightCyan("update")}             Update existing DevFlow installation without overwriting user changes
   ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project
 
 ${style.bold("Options:")}
+  ${style.cyan("--recommended")}      Install or update all recommended community skills (archify, diagram-design, 9arm-skills)
   ${style.cyan("--strict")}           Strict mode for check-gate (blocks unverified runs)
   ${style.cyan("--title <text>")}     Custom title for idea add
   ${style.cyan("--name <skill-name>")} Target specific skill in a multi-skill repository

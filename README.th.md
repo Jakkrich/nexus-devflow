@@ -671,6 +671,16 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 Nexus-DevFlow ติดตั้งมาพร้อมกับ **29 Core Skills** มาตรฐาน คุณสามารถติดตั้งสกิลเฉพาะทางจาก Community เพิ่มเติมได้ง่ายๆ ด้วยคำสั่ง `nexus-devflow skill add`:
 
+> [!TIP]
+> **🚀 ติดตั้ง Recommended Skills ทั้ง 8 สกิลในคำสั่งเดียว**:
+> ```bash
+> npx @jakkrichm/create-nexus-devflow skill add --recommended
+> ```
+> **🔄 อัปเดต Recommended Skills ทั้งหมดให้เป็นเวอร์ชันล่าสุดจาก Upstream Git**:
+> ```bash
+> npx @jakkrichm/create-nexus-devflow skill update --recommended
+> ```
+
 | สกิล (Skill) | หมวดหมู่ | หน้าที่และความสามารถ | คำสั่งติดตั้ง |
 | :--- | :--- | :--- | :--- |
 | **archify** | Visual Architecture | แผนผังสถาปัตยกรรมระบบ Interactive HTML (สลับธีม Dark/Light, มี Animation, ตรวจสอบความถูกต้องได้) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
@@ -682,7 +692,7 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **29 Core Skil
 | **management-talk** | Communication | แปลงเนื้อหาทางเทคนิคให้เป็นข้อความสื่อสารกับผู้บริหาร (Slack/Jira/Email/Meetings) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
 | **qwenchance** | Guardrails | ระบบเฝ้าระวัง Context Budget และตัดลูปการคิดวนของโมเดล | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwenchance` |
 
-> [!TIP]
+> [!NOTE]
 > **ติดตั้งชุด 9arm-skills ทั้งหมดในคำสั่งเดียว**:
 > ```bash
 > npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all
