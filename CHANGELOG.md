@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.4] - 2026-08-31
+
+### Added
+- **Unified Third-Party Skills Installation (`skill add --recommended`)**: One-shot batch installation of all 8 recommended community skills across 3 repositories (`archify`, `diagram-design`, `9arm-skills`) into `.agents/` and `.claude/` adapters.
+- **Recommended Skills Upstream Updater (`skill update --recommended`)**: Pulls latest upstream git changes for all recommended community skills, refreshes adapter files, updates timestamps and versions in `.nexus/nexus-devflow.json`, and outputs structured status summary.
+- **CLI Subcommand Aliases**: Added friendly aliases `nexus-devflow skill add-recommended` and `nexus-devflow skill update-recommended` alongside `--preset recommended`.
+- **Documentation & Guides**: Updated `README.md` and `README.th.md` with one-shot command callouts and usage recommendations.
+
 ## [2.9.3] - 2026-08-28
 
 ### Added
