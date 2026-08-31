@@ -5,6 +5,11 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.5] - 2026-08-31
+
+### Changed
+- Release v2.9.5: Maintainer release workflow and refreshed recommended skills
+
 ## [2.9.4] - 2026-08-31
 
 ### Added
