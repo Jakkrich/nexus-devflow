@@ -12,12 +12,14 @@ type CheckpointCommitPolicy = "disabled" | "enabled";
 type LogicTestPolicy = "required" | "when-configured";
 type UiEvidencePolicy = "required" | "when-available";
 type AuditGatePolicy = "always" | "manual" | "when-sensitive";
+type IndependentReviewGatePolicy = "always" | "manual" | "when-sensitive";
 type CheckGatePolicy = "always" | "manual" | "when-behavioral";
 type TryGuideGatePolicy = "always" | "manual" | "when-user-facing";
 type ProjectConfigState = "defaults" | "invalid" | "project";
 
 interface QualityGatePolicy {
   audit: AuditGatePolicy;
+  independentReview: IndependentReviewGatePolicy;
   check: CheckGatePolicy;
   tryGuide: TryGuideGatePolicy;
 }
@@ -79,11 +81,13 @@ function createDefaultProjectConfig(): ProjectConfig {
     qualityGates: {
       regular: {
         audit: "manual",
+        independentReview: "manual",
         check: "manual",
         tryGuide: "manual"
       },
       continuous: {
         audit: "manual",
+        independentReview: "manual",
         check: "manual",
         tryGuide: "manual"
       }
@@ -204,12 +208,12 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   assertKnownKeys(qualityGates, ["regular", "continuous"], "qualityGates");
   assertKnownKeys(
     regularGates,
-    ["audit", "check", "tryGuide"],
+    ["audit", "independentReview", "check", "tryGuide"],
     "qualityGates.regular"
   );
   assertKnownKeys(
     continuousGates,
-    ["audit", "check", "tryGuide"],
+    ["audit", "independentReview", "check", "tryGuide"],
     "qualityGates.continuous"
   );
   assertKnownKeys(
@@ -310,6 +314,12 @@ function parseQualityGatePolicy(
       ["always", "manual", "when-sensitive"],
       defaults.audit,
       `${label}.audit`
+    ),
+    independentReview: optionalEnum(
+      value.independentReview,
+      ["always", "manual", "when-sensitive"],
+      defaults.independentReview,
+      `${label}.independentReview`
     ),
     check: optionalEnum(
       value.check,

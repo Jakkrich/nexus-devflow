@@ -140,4 +140,10 @@
   - *Dependencies*: None
   - *Scope*: เพิ่มฟังก์ชัน `installRecommendedSkills` และ `updateRecommendedSkills` ใน `skill-manager.ts`, รองรับสวิตช์ `--recommended` ในคำสั่ง `nexus-devflow skill add` และ `nexus-devflow skill update`, พร้อมอัปเดตเอกสาร `README.md`, `README.th.md` และ Automated Tests
 
+---
 
+## 🔄 Phase 18: Upstream AI Blueprint v1.1.0 & v1.2.0 Synchronization
+
+- [x] **18. Sync Upstream v1.1.0 & v1.2.0 (Browser Tests & Independent Review System) (`DISC-20260901-001`)** `[Size: M]`
+  - *Dependencies*: None
+  - *Scope*: ผสานสคิล `/browser-tests` สำหรับ Playwright/E2E testing, ระบบตรวจทานอิสระ Independent Audit Review (`audit independent current` พร้อม `review.ts` และ `review.md`), อัปเกรด Config Quality Gates (`independentReview`), อัปเดต CLI Engine/Dashboard และปรับปรุงคู่มือ Scaffolding

@@ -15,6 +15,7 @@ test("default config keeps every quality gate manual", () => {
   const defaults = createDefaultProjectConfig();
   const manualGates = {
     audit: "manual",
+    independentReview: "manual",
     check: "manual",
     tryGuide: "manual"
   };

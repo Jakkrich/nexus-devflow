@@ -462,7 +462,7 @@ Inspects the archived feature spec, identifies the exact commit, reviews later c
 
 ## Command reference
 
-Nexus-DevFlow ships **29 bundled Core Skills**, defined by the canonical
+Nexus-DevFlow ships **30 bundled Core Skills**, defined by the canonical
 `core_skills` inventory in `agent-bundle.manifest.json`. A workspace may also
 contain Local or Personal Skills, but those extensions are not part of the Core
 count and are excluded from the published package unless explicitly promoted.
@@ -474,6 +474,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **autopilot** | `/autopilot` / `$autopilot` | Delivery | Bounded single-pass spec/build/check with self-review and safe repair. |
 | **brainstorm** | `/brainstorm` | Companion | Structured divergent/convergent ideation with trade-off analysis. |
 | **brief** | `/brief` / `$brief` | Planning | Read-only briefing on an upcoming feature before writing spec. |
+| **browser-tests** | `/browser-tests` / `$browser-tests` | Setup | Add or normalize Playwright browser test harness & connect with MCP browseros-neo. |
 | **check** | `/check` / `$check` | QA | Dual-Axis review: empirical spec fidelity plus standards, architecture, and quality gates. |
 | **ci** | `/ci` / `$ci` | DevOps | Configure Verify command and automated GitHub Actions workflow. |
 | **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and squash-merge gate. |
@@ -670,7 +671,7 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 ## Recommended Third-Party Skills & Extensions
 
-Nexus-DevFlow ships with **29 Core Skills** out-of-the-box. You can easily extend your workflow with specialized community and third-party skills using `nexus-devflow skill add`:
+Nexus-DevFlow ships with **30 Core Skills** out-of-the-box. You can easily extend your workflow with specialized community and third-party skills using `nexus-devflow skill add`:
 
 > [!TIP]
 > **🚀 Install All 8 Recommended Skills in One Command**:

@@ -1,11 +1,17 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
+import test, { type TestContext } from "node:test";
+import { promisify } from "node:util";
 import { parseArgs } from "../bin/create-nexus-devflow.js";
+import { startDashboardServer } from "../lib/dashboard.js";
 import { formatHumanStatus, readProjectStatus } from "../lib/status.js";
 import { parseIdeasContent } from "../lib/ideas.js";
+
+const execFileAsync = promisify(execFile);
 
 test("parseArgs parses status and install command options correctly", () => {
   const options1 = parseArgs(["status"]);
@@ -305,4 +311,169 @@ test("readProjectStatus identifies multi-run active spec queue in devflow/contex
   }
 });
 
+test("readProjectStatus propagates review verdict and freshness into the completion gate and dashboard API", async (t) => {
+  const fixture = await createReviewedProject(t, "001-reviewed-status");
 
+  const status = await readProjectStatus(fixture.root);
+  assert.equal(status.review.state, "passed");
+  assert.equal(status.review.verdict, "passed");
+  assert.equal(status.review.checkResult, "passed");
+  assert.equal(status.review.freshness, "current");
+  assert.deepEqual(status.review.warnings, []);
+  assert.equal(status.completion.state, "ready");
+
+  const human = formatHumanStatus(status, { color: false });
+  assert.match(human, /Review\s+passed, verdict passed, check passed, freshness current/);
+
+  const server = await startDashboardServer(fixture.root, {
+    snapshotOptions: { fetchImpl: async () => { throw new Error("offline"); } }
+  });
+  t.after(async () => server.close());
+
+  const dashboardResponse = await fetch(`${server.url}/api/dashboard`);
+  assert.equal(dashboardResponse.status, 200);
+  const dashboard = await dashboardResponse.json() as {
+    status: { review: { verdict: string; freshness: string } };
+  };
+  assert.equal(dashboard.status.review.verdict, "passed");
+  assert.equal(dashboard.status.review.freshness, "current");
+
+  const pageResponse = await fetch(`${server.url}/`);
+  const page = await pageResponse.text();
+  assert.match(page, /id="review-verdict"/);
+  assert.match(page, /status\.review/);
+
+  await fs.appendFile(fixture.specPath, "\n- drift after review\n", "utf8");
+  const staleStatus = await readProjectStatus(fixture.root);
+  assert.equal(staleStatus.review.freshness, "stale");
+  assert.equal(staleStatus.completion.state, "blocked");
+  assert.ok(staleStatus.completion.blockers.includes("independent review receipt is stale"));
+});
+
+test("readProjectStatus associates an independent review summary with every active run", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-run-reviews-"));
+  t.after(async () => fs.rm(root, { recursive: true, force: true }));
+  await fs.mkdir(path.join(root, ".agents", "skills"), { recursive: true });
+  await fs.writeFile(path.join(root, "AGENTS.md"), "# DevFlow Instructions\n", "utf8");
+
+  const runs = [
+    { id: "011-changes", state: "changes-requested" as const, check: "failed" as const },
+    { id: "012-passed", state: "passed" as const, check: "passed" as const }
+  ];
+  for (const run of runs) {
+    const runDir = path.join(root, "devflow", "context", run.id);
+    const spec = `# [${run.id}] Review association\n\n- [x] Complete\n`;
+    await fs.mkdir(runDir, { recursive: true });
+    await fs.writeFile(path.join(runDir, "spec.md"), spec, "utf8");
+    await fs.writeFile(path.join(runDir, "findings.md"), "# Findings\n", "utf8");
+    await fs.writeFile(
+      path.join(runDir, "review.md"),
+      reviewRecord(run.state, run.check, "a".repeat(40), "b".repeat(40), createHash("sha256").update(spec).digest("hex")),
+      "utf8"
+    );
+  }
+
+  const status = await readProjectStatus(root);
+  assert.equal(status.activeRuns.length, 2);
+  assert.equal(status.activeRuns[0]?.review.state, "changes-requested");
+  assert.equal(status.activeRuns[0]?.review.verdict, "changes-requested");
+  assert.equal(status.activeRuns[0]?.review.checkResult, "failed");
+  assert.equal(status.activeRuns[1]?.review.state, "passed");
+  assert.equal(status.activeRuns[1]?.review.verdict, "passed");
+});
+
+async function createReviewedProject(
+  t: TestContext,
+  runId: string
+): Promise<{ root: string; specPath: string }> {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-reviewed-"));
+  t.after(async () => fs.rm(root, { recursive: true, force: true }));
+  const runDir = path.join(root, "devflow", "context", runId);
+  const specPath = path.join(runDir, "spec.md");
+  const spec = `# [${runId}] Reviewed status\n\n**Status:** Ready\n\n- [x] Complete\n`;
+
+  await fs.mkdir(path.join(root, ".agents", "skills"), { recursive: true });
+  await fs.mkdir(runDir, { recursive: true });
+  await fs.writeFile(path.join(root, "AGENTS.md"), "# DevFlow Instructions\n", "utf8");
+  await fs.writeFile(
+    path.join(root, "devflow", "config.json"),
+    JSON.stringify({ schemaVersion: 1, qualityGates: { regular: { independentReview: "always" } } }),
+    "utf8"
+  );
+
+  await runGit(root, ["init", "-b", "main"]);
+  await runGit(root, ["config", "user.name", "DevFlow Test"]);
+  await runGit(root, ["config", "user.email", "test@nexus-devflow.local"]);
+  await runGit(root, ["add", "."]);
+  await runGit(root, ["commit", "-m", "chore: initialize project"]);
+  const base = await runGit(root, ["rev-parse", "HEAD"]);
+
+  await runGit(root, ["checkout", "-b", `feature/${runId}`]);
+  await fs.writeFile(specPath, spec, "utf8");
+  await fs.writeFile(path.join(runDir, "findings.md"), "# Findings\n", "utf8");
+  await fs.writeFile(
+    path.join(runDir, "stage.md"),
+    `# Current Stage\n- Active Running ID: ${runId}\n- Track: fast\n- Current Stage: check (Passed - Ready for /complete)\n- Next Action: /complete ${runId}\n`,
+    "utf8"
+  );
+  await runGit(root, ["add", "."]);
+  await runGit(root, ["commit", "-m", "feat: add reviewed work"]);
+  const target = await runGit(root, ["rev-parse", "HEAD"]);
+  const specHash = createHash("sha256").update(spec).digest("hex");
+  await fs.writeFile(
+    path.join(runDir, "review.md"),
+    reviewRecord("passed", "passed", target, base, specHash),
+    "utf8"
+  );
+
+  return { root, specPath };
+}
+
+function reviewRecord(
+  state: "changes-requested" | "passed",
+  checkResult: "failed" | "passed",
+  target: string,
+  base: string,
+  specHash: string
+): string {
+  return `# Independent Review
+
+**Status:** ${state}
+**Target commit:** ${target}
+**Base commit:** ${base}
+**Base ref:** main
+**Spec hash:** ${specHash}
+**Prepared by:** codex
+**Builder model:** builder-model
+**Requested reviewer:** claude
+**Requested model:** claude-opus
+**Requested at:** 2026-09-01T00:00:00.000Z
+**Workflow:** regular
+**Check required:** yes
+**Reviewer adapter:** claude
+**Reviewer model:** claude-opus
+**Reviewer context:** fresh session
+**Reviewed at:** 2026-09-01T00:10:00.000Z
+**Scope:** current
+**Lenses:** quality, security, performance, tests
+**Verdict:** ${state}
+**Check result:** ${checkResult}
+
+## Commands
+Command evidence.
+
+## Evidence
+Review evidence.
+
+## Findings
+Finding evidence.
+
+## Remaining risk
+No remaining risk.
+`;
+}
+
+async function runGit(root: string, args: string[]): Promise<string> {
+  const result = await execFileAsync("git", ["-C", root, ...args], { encoding: "utf8" });
+  return result.stdout.trim();
+}

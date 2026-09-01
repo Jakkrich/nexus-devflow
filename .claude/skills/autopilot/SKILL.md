@@ -82,6 +82,27 @@ If the only issue is that `project-overview.md` is stale and the plans are clear
 regenerate it using the `/overview` behavior and continue. Include that in the
 final packet.
 
+### Quality-gate and browser preflight
+
+Read `qualityGates.regular.independentReview` from `devflow/config.json`.
+`manual` is opt-in, `always` activates the gate, and `when-sensitive` activates
+when the task touches authentication, authorization, secrets, payments,
+personal data, destructive operations, dependencies, deployment, or another
+security boundary. Reuse the target spec's recorded sensitivity decision; if it
+is missing, record the evidence-backed decision before implementation.
+
+Any product or living-spec edit invalidates an earlier receipt. After the final
+Verify and targeted audit repairs, an active gate requires the
+`audit independent current` handoff in a fresh reviewer context. Autopilot must
+stop rather than self-approve when it cannot obtain a receipt with `passed`
+verdict and `current` freshness; it never continues toward `/complete` on a
+pending, malformed, changes-requested, stale, or missing receipt.
+
+For browser-visible behavior, run `npm run test:browser` when `test:browser` is
+declared and capture interactive evidence with `browseros-neo` when available.
+If either path is unavailable, record the limitation in the review packet and do
+not install a runner or claim browser proof implicitly.
+
 ## Step 2 - choose or write the spec
 
 If `devflow/context/{xxx-slug}/spec.md` already contains an active spec,

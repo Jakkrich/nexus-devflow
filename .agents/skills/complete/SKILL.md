@@ -1,10 +1,12 @@
 ---
 name: complete
-description: "[devflow] Wrap up a finished feature, fix, or rollback. Supports Multi-Run: given an optional ID (/complete 12), archives that run from devflow/context/{xxx-slug}/ to devflow/history/, cleans up the run workspace, updates build-plan and HISTORY.md, and makes the work commit. Enforces mandatory user gate (Squash-merge vs MR/PR)."
+description: "[devflow] Wrap up a finished feature, fix, or rollback. Supports Multi-Run: given an optional ID (/complete 12), archives that run from devflow/context/{xxx-slug}/ to devflow/history/, verifies independent review receipt and findings ledger, cleans up the run workspace, updates build-plan and HISTORY.md, and makes the work commit. Enforces mandatory user gate (Squash-merge vs MR/PR)."
 argument-hint: "[{run-id, number, or name}]"
 ---
 
 # complete - log the finished work, make the work commit, and deliver
+
+$ARGUMENTS
 
 **First action:** Before project inspection, preflight, or any other tool call,
 publish `running` to `devflow/.state/run.json` using the dashboard activity
@@ -28,6 +30,9 @@ passes.
 
 ## Before you start
 
+Read `devflow/config.json`. A missing file means the built-in defaults apply.
+If the file exists but is invalid, stop and point the user to `/doctor`.
+
 Confirm the target work is actually finished: `devflow/context/{xxx-slug}/spec.md`
 holds a real spec, its steps are built on a branch, and `Verify`, or the fallback
 build and tests, passes. If any of the
@@ -35,6 +40,19 @@ spec's done-whens are behavioral, `/check` should have proven them against the
 running app first - don't merge or complete on an unverified claim. Uncommitted step work is
 expected (per-step checkpoints are optional); this skill commits it. Don't require
 the steps to be pre-committed.
+
+Read `devflow/context/{xxx-slug}/review.md` (or `devflow/context/review.md`) when present. A pending,
+changes-requested, malformed, or stale record is always a blocker because the
+user already initiated that gate, even when its configured policy is `manual`.
+
+## Configured regular quality gates
+
+Use `qualityGates.regular` for this work item:
+
+- **Audit:** `manual` runs only when the user explicitly requests `/audit`; `when-sensitive` runs for sensitive categories; `always` runs for every work item.
+- **Independent review:** `manual` runs only when explicitly requested (`/audit independent current`); `when-sensitive` requires it for sensitive domains; `always` requires it for every work item.
+- **Check:** `manual` runs only when explicitly requested; `when-behavioral` runs when done-whens need observed runtime behavior; `always` runs for every work item.
+- **Try guide:** `manual` runs only when explicitly requested; `when-user-facing` generates guide when change affects UI/UX; `always` generates one for every work item.
 
 ## Step 0 - final safety pass
 
@@ -47,15 +65,12 @@ Before logging or committing, run a short safety pass and report blockers only:
   declared test command and the change touched logic
 - behavioral done-whens have `/check` evidence or equivalent proof, and there is
   a clear manual try path
-- if workflow files changed, `.agents` and `.claude` stayed in sync where both
-  adapters exist
+- any check required by `qualityGates.regular` has evidence, and there is a clear manual try path
+- a selected independent-review gate has a `passed` receipt in `review.md` whose target equals `HEAD`, whose spec hash matches, and whose receipt is current. Any mismatch is stale and blocks completion.
+- if workflow files changed, `.agents` and `.claude` stayed in sync where both adapters exist
 - no P0 or P1 finding in `devflow/context/{xxx-slug}/findings.md` is `open` or `fixed`.
   `fixed` still blocks on purpose: the repair exists but no review has looked at
-  it - run `/audit` to close it. The only waivers are `accepted` (the user's
-  explicit decision in the current chat, reason recorded; never set it for
-  them) or `invalid` (an `/audit` re-examination verdict with recorded
-  evidence, or the user's explicit call). A missing ledger file means no
-  findings.
+  it - run `/audit` to close it. The only waivers are `accepted` or `invalid`.
 
 Do not claim "passed", "verified", or "working" without naming the command,
 route, screenshot, or output that proves it. Stop before Step 1 if required
@@ -71,20 +86,14 @@ and records the exact target feature, archive, commit, and parent.
 - **Fix** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/fixes/{xxx-slug}.md`, and record an entry into `devflow/history/HISTORY.md`.
 - **Rollback** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/rollbacks/YYYY-MM-DD-{xxx-slug}.md`, preserving the original completed feature archive. Uncheck the target item in `devflow/build-plan.md` and record in `devflow/history/HISTORY.md`.
 
-**Archive resolved findings.** If `devflow/context/{xxx-slug}/findings.md` holds any
-findings, append a `## Findings` section to the archive file just written with
-every `closed`, `accepted`, or `invalid` entry at its final status (`accepted`
-entries keep their recorded reason). Do not archive or remove a `fixed` finding
-at any severity; repaired findings must remain in the ledger until an `/audit`
-re-review closes them.
+**Archive resolved findings & review receipts.**
+- If `devflow/context/{xxx-slug}/findings.md` holds findings, append `## Findings` to the archive file with resolved entries.
+- If `devflow/context/{xxx-slug}/review.md` holds a completed passing receipt, append `## Independent Review` to the archive file with the receipt summary.
 
 **Clean up run workspace.** Delete the task directory `devflow/context/{xxx-slug}/`. In Pure Multi-Run architecture, completed work leaves zero residual stubs in `devflow/context/`.
 
 **Discard consumed prototypes.** If this feature built the look from `prototypes/`
-- its Design reference pointed there and an early step ported `prototypes/theme.css`
-into the app - delete the `prototypes/` folder now. The tokens live in the real
-stylesheet and the HTML mockups were always throwaway; fold the deletion into this
-feature's commit. Skip this if the feature didn't consume prototypes.
+delete the `prototypes/` folder now.
 
 ## Step 2 - make the work commit on feature branch
 
@@ -127,24 +136,4 @@ Present the user with two clear delivery options:
 ## Step 4 - Finish & Try Path
 
 Point the user at `/feature`, `/fix`, or `/rollback` for the next task.
-
-Finish with a concise **How to try it** note for the completed work. For a
-rollback, explain how to confirm the removed behavior is gone and name one
-unaffected regression path. If the
-manual path is more than a couple of steps, tell the user to run `/try latest`;
-that command can read the archived feature from history.
-
-## Rules
-
-- **Mandatory User Confirmation Gate**: Always ask before choosing between Team MR/PR Push vs Direct Squash-Merge.
-- **Never auto-merge into main/master**: The decision to merge into `main` or `master` belongs strictly to the user.
-- The work item is the unit of history: one squashed feature, fix, or rollback
-  commit, even if the branch carried several checkpoint commits.
-- A rollback preserves the original feature archive and adds a separate rollback
-  archive. Never rewrite history to make the feature look as if it never existed.
-- Don't merge or push unfinished or failing work. The documented `Verify` command, or
-  the fallback build and tests, must pass first.
-- Never merge or push while a P0 or P1 finding is `open` or `fixed` in the ledger.
-- Pushing to remote is always explicit: confirm before running `git push`.
-- One item per completion. If a parent feature still has unchecked sub-features,
-  leave the parent unchecked.
+Finish with a concise **How to try it** note for the completed work.

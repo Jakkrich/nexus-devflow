@@ -205,9 +205,42 @@ function validateManifestSync(failures: string[]): void {
   }
 }
 
+function validateSkillContracts(
+  contracts: Record<string, string[]>,
+  failures: string[]
+): void {
+  const initialFailureCount = failures.length;
+  for (const [skill, requiredText] of Object.entries(contracts)) {
+    const adapterContents: string[] = [];
+    for (const adapter of [".agents", ".claude"]) {
+      const relativePath = `${adapter}/skills/${skill}/SKILL.md`;
+      const content = readText(relativePath, failures);
+      if (!content) continue;
+      adapterContents.push(content);
+      for (const text of requiredText) {
+        if (!content.includes(text)) {
+          fail(`${relativePath} is missing lifecycle contract text: ${text}`, failures);
+        }
+      }
+    }
+
+    if (adapterContents.length === 2 && adapterContents[0] !== adapterContents[1]) {
+      fail(`${skill} lifecycle contract differs between .agents and .claude adapters`, failures);
+    }
+  }
+
+  if (Object.keys(contracts).length > 0 && failures.length === initialFailureCount) {
+    ok(`Lifecycle contracts validated for ${Object.keys(contracts).length} skills across both adapters`);
+  }
+}
+
 async function main(): Promise<void> {
   const failures: string[] = [];
-  const manifest = readJson<{ required_paths?: string[]; forbidden_legacy_paths?: string[] }>("agent-bundle.manifest.json", failures);
+  const manifest = readJson<{
+    required_paths?: string[];
+    forbidden_legacy_paths?: string[];
+    skill_contracts?: Record<string, string[]>;
+  }>("agent-bundle.manifest.json", failures);
   const requiredPaths = [
     "agent-bundle.manifest.json",
     "package.json",
@@ -242,6 +275,7 @@ async function main(): Promise<void> {
   validateWorkflowNumbering(failures);
   await validateCoreSkillContract(failures);
   validateManifestSync(failures);
+  validateSkillContracts(manifest?.skill_contracts || {}, failures);
 
   if (failures.length > 0) {
     console.error(`\nValidation failed with ${failures.length} issue(s).`);

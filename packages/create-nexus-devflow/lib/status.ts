@@ -29,6 +29,13 @@ import type {
 } from "./project-config.js";
 import { readRunState } from "./run-state.js";
 import type { RunStateSummary } from "./run-state.js";
+import { readIndependentReview } from "./review.js";
+import type {
+  IndependentReviewSummary,
+  ReviewCheckResult,
+  ReviewFreshness,
+  ReviewState
+} from "./review.js";
 
 type CompletionState = "blocked" | "needs_verification" | "ready";
 
@@ -62,6 +69,23 @@ interface StatusFindings {
   byStatus: Record<FindingStatus, number>;
   active: Array<Pick<Finding, "id" | "severity" | "status" | "title">>;
   blockers: Array<Pick<Finding, "id" | "severity" | "status" | "title">>;
+}
+
+interface StatusReview {
+  state: ReviewState;
+  freshness: ReviewFreshness;
+  verdict: "changes-requested" | "passed" | null;
+  checkResult: ReviewCheckResult | null;
+  targetCommit: string | null;
+  requestedReviewer: string | null;
+  requestedModel: string | null;
+  reviewerAdapter: string | null;
+  reviewerModel: string | null;
+  warnings: StatusWarning[];
+}
+
+interface StatusActiveRun extends ActiveRunSummary {
+  review: StatusReview;
 }
 
 interface StatusNextAction {
@@ -102,8 +126,9 @@ interface ProjectStatus {
   configuration: StatusConfiguration;
   activity: StatusActivity;
   currentWork: StatusCurrentWork;
-  activeRuns: ActiveRunSummary[];
+  activeRuns: StatusActiveRun[];
   findings: StatusFindings;
+  review: StatusReview;
   ideas: IdeasSummary;
   git: GitStatusSummary;
   completion: StatusCompletion;
@@ -126,6 +151,17 @@ async function readProjectStatus(
     readRunState(metadata.project.root)
   ]);
 
+  const primaryRunId = currentWork.runId || (activeRuns.length === 1 ? activeRuns[0]?.runId : undefined);
+  const [review, activeRunReviews] = await Promise.all([
+    readIndependentReview(metadata.project.root, primaryRunId || undefined),
+    Promise.all(activeRuns.map((run) => readIndependentReview(metadata.project.root, run.runId)))
+  ]);
+  const statusReview = formatReview(review);
+  const statusActiveRuns = activeRuns.map((run, index) => ({
+    ...run,
+    review: formatReview(activeRunReviews[index] || review)
+  }));
+
   let stageMarkdown = "";
   try {
     stageMarkdown = await fs.readFile(contextPaths.stagePath, "utf8");
@@ -137,9 +173,10 @@ async function readProjectStatus(
     ...currentWork.warnings,
     ...findings.warnings,
     ...runState.warnings,
+    ...review.warnings,
     ...findDrift(currentWork, git)
   ];
-  const completion = selectCompletion(currentWork, findings, git, stageMarkdown);
+  const completion = selectCompletion(currentWork, findings, git, stageMarkdown, review, config.values);
   const nextAction = selectNextAction(currentWork, findings, stageMarkdown);
 
   return {
@@ -170,8 +207,9 @@ async function readProjectStatus(
       feature: runState.feature
     },
     currentWork: formatCurrentWork(currentWork),
-    activeRuns,
+    activeRuns: statusActiveRuns,
     findings: formatFindings(findings),
+    review: statusReview,
     ideas,
     git,
     completion,
@@ -234,7 +272,16 @@ function formatHumanStatus(
   }
 
   lines.push(
-    formatRow("Findings", formatFindingsValue(status.findings, style), style),
+    formatRow("Findings", formatFindingsValue(status.findings, style), style)
+  );
+
+  if (status.review && status.review.state !== "none") {
+    lines.push(
+      formatRow("Review", formatReviewValue(status.review, style), style)
+    );
+  }
+
+  lines.push(
     formatRow("Completion", formatCompletionValue(status.completion, style), style),
     "",
     formatSection("Git", style)
@@ -272,7 +319,7 @@ function formatConfigValue(state: ProjectConfigState): string {
 }
 
 function formatQualityGates(gates: QualityGatePolicy): string {
-  return `audit ${gates.audit}, check ${gates.check}, try guide ${gates.tryGuide}`;
+  return `audit ${gates.audit}, review ${gates.independentReview}, check ${gates.check}, try guide ${gates.tryGuide}`;
 }
 
 function shouldUseColor(
@@ -288,6 +335,41 @@ function formatSection(label: string, style: TextStyle): string {
 
 function formatRow(label: string, value: string, style: TextStyle): string {
   return `  ${style.cyan(label.padEnd(14))}${value}`;
+}
+
+function formatReviewValue(review: StatusReview, style: TextStyle): string {
+  const parts: string[] = [review.state];
+  if (review.verdict) {
+    parts.push(`verdict ${review.verdict}`);
+  }
+  if (review.checkResult) {
+    parts.push(`check ${review.checkResult}`);
+  }
+  parts.push(`freshness ${review.freshness}`);
+  if (review.reviewerModel) {
+    parts.push(`(${review.reviewerModel})`);
+  }
+  return review.freshness === "stale"
+    ? style.yellow(parts.join(", "))
+    : parts.join(", ");
+}
+
+function formatReview(review: IndependentReviewSummary): StatusReview {
+  return {
+    state: review.state,
+    freshness: review.freshness,
+    verdict: review.verdict,
+    checkResult: review.checkResult,
+    targetCommit: review.targetCommit,
+    requestedReviewer: review.requestedReviewer,
+    requestedModel: review.requestedModel,
+    reviewerAdapter: review.reviewerAdapter,
+    reviewerModel: review.reviewerModel,
+    warnings: review.warnings.map((warning) => ({
+      code: warning.code,
+      message: warning.message
+    }))
+  };
 }
 
 function formatActivityValue(activity: StatusActivity, style: TextStyle): string {
@@ -358,15 +440,14 @@ function formatFindingsValue(
     ([label, ids]) => `${ids.length} ${label} (${ids.join(", ")})`
   );
   const resolvedCounts = (["closed", "accepted", "invalid"] as const)
-    .filter((status) => findings.byStatus[status] > 0)
-    .map((status) => `${findings.byStatus[status]} ${status}`);
-  const value = [...activeCounts, ...resolvedCounts].join(", ");
+    .map((status) => {
+      const count = findings.byStatus[status] || 0;
+      return count > 0 ? `${count} ${status}` : null;
+    })
+    .filter(Boolean);
 
-  if (findings.blockers.length > 0) {
-    return style.red(value);
-  }
-
-  return findings.active.length > 0 ? style.yellow(value) : style.green(value);
+  const parts = [...activeCounts, ...resolvedCounts];
+  return parts.join(", ");
 }
 
 function formatCompletionValue(
@@ -374,14 +455,16 @@ function formatCompletionValue(
   style: TextStyle
 ): string {
   if (completion.state === "ready") {
-    return style.green("ready");
+    return style.green("ready to complete");
   }
 
   if (completion.state === "needs_verification") {
-    return style.yellow("needs verification");
+    return style.yellow(
+      `needs verification (${completion.blockers.join("; ")})`
+    );
   }
 
-  return style.red(`blocked: ${completion.blockers.join("; ")}`);
+  return style.red(`blocked (${completion.blockers.join("; ")})`);
 }
 
 function appendGitLines(
@@ -476,7 +559,9 @@ function selectCompletion(
   currentWork: CurrentWorkSummary,
   findings: FindingsSummary,
   git: GitStatusSummary,
-  stageMarkdown?: string
+  stageMarkdown?: string,
+  review?: IndependentReviewSummary,
+  config?: ProjectConfig
 ): StatusCompletion {
   const blockers: string[] = [];
 
@@ -494,6 +579,21 @@ function selectCompletion(
 
   if (!git.available) {
     blockers.push("Git repository is unavailable");
+  }
+
+  if (review && config) {
+    const isGateActive = config.qualityGates.regular.independentReview !== "manual";
+    if (review.state === "malformed") {
+      blockers.push("independent review record is malformed");
+    } else if (review.state === "changes-requested") {
+      blockers.push("independent review requested changes");
+    } else if (review.state === "pending") {
+      blockers.push("independent review is pending");
+    } else if (isGateActive && review.state === "none") {
+      blockers.push("independent review is required");
+    } else if (review.state === "passed" && review.freshness !== "current") {
+      blockers.push("independent review receipt is stale");
+    }
   }
 
   if (blockers.length > 0) {
@@ -649,6 +749,7 @@ export type {
   HumanStatusOptions,
   ProjectStatus,
   StatusActivity,
+  StatusActiveRun,
   StatusCompletion,
   StatusCurrentWork,
   StatusFindings,

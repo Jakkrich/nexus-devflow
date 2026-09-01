@@ -131,6 +131,10 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
   - Use isolated temporary directories (`fs.mkdtemp` in `os.tmpdir()`) and ensure cleanup in `finally` blocks.
 - **Empirical Proof Contract**:
   - Never claim a task is "working", "tested", or "verified" without providing concrete empirical proof (exact command executed, terminal output, pass/fail counts, exit code).
+- **Hybrid Browser Verification Protocol**:
+  - **Dual-Layer Hierarchy**:
+    1. *Code-Driven Automation (CI/Repeatable)*: Headless Playwright (`@playwright/test`) assertions executed via `npm run test:browser`.
+    2. *Interactive AI Visual QA (MCP)*: Live DOM and styling inspection via MCP `browseros-neo` (`http://127.0.0.1:9010/mcp`) during `/check` and `/try`.
 - **Two-Stage Review Pattern (Verification Gate)**:
   - **Stage 1: Spec Fidelity & Acceptance Gate**:
     - Verify 100% conformance against the Single Living Spec (`current-feature.md`).
@@ -145,7 +149,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
 ---
 
-## 8. Findings Ledger & Quality Gates (`findings.md`)
+## 8. Findings Ledger & Quality Gates (`findings.md`, `review.md`)
 
 - All quality defects, security findings, or regression issues identified during review must be logged in `devflow/context/findings.md`.
 - **Finding State Machine**:
@@ -155,6 +159,9 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
   - `accepted`: Formally waived with recorded user justification.
 - **P0/P1 Blockers**: Any P0 or P1 finding in `open` or `fixed` status unconditionally blocks `/complete`.
 - **Allowed Waivers**: A P0 or P1 finding may only be bypassed if marked `accepted` (with explicit user justification recorded) or `invalid` (with evidence recorded by `/audit`).
+- **Independent Review Gate (`review.md`)**:
+  - Holds immutable review request and receipt records bound to target commit SHA, merge base, and spec SHA-256 hash.
+  - When `qualityGates.regular.independentReview` is active, completion is blocked until a fresh session completes the 4-lens audit and records a valid, non-stale `passed` receipt.
 
 ---
 

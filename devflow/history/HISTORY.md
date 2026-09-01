@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-01 | `064` | Feature | ซิงก์ AI Blueprint Upstream v1.1.0 & v1.2.0 (Browser Tests & Independent Review System) (`DISC-20260901-001`) | `20da556` | `Released` | [`064-sync-upstream-ai-blueprint-v120.md`](features/064-sync-upstream-ai-blueprint-v120.md) |
 | 2026-08-31 | `055` | Feature | Unified Third-Party Skills Installation & Update Command (`DISC-20260831-001`) | `3a885b5` | `Released` | [`055-unified-third-party-skills-installer.md`](features/055-unified-third-party-skills-installer.md) |
 | 2026-08-28 | `063` | Feature | Multi-Task Dashboard & Live Kanban Studio UI (`DISC-20260828-002`) | `294e343` | `Released` | [`063-multi-task-dashboard-and-kanban-studio-ui.md`](features/063-multi-task-dashboard-and-kanban-studio-ui.md) |
 | 2026-08-28 | `062` | Feature | ซิงก์ AI Blueprint Upstream v1.0.0 / v1.0.1 (Activity Contract, Rollback Safeguards & Local Linking) | `d38c3df` | `Released` | [`062-sync-upstream-ai-blueprint-v100.md`](features/062-sync-upstream-ai-blueprint-v100.md) |

@@ -58,6 +58,17 @@ state.
 8. **Onboarding check** - Before recommending `/overview`, check whether `AGENTS.md`
    still contains the `<!-- devflow:onboarding-required -->` marker or standard template commands.
    When it does, onboarding is incomplete and `/onboard` is the next action.
+9. **Independent review and browser evidence** - read
+   `qualityGates.regular.independentReview` from `devflow/config.json` and the
+   recorded sensitivity decision for `when-sensitive`. For every active run,
+   report the `review.md` state, verdict, freshness, check result, warnings, and
+   whether the effective gate is satisfied. An active gate with a missing,
+   pending, malformed, changes-requested, or stale receipt routes to
+   `audit independent current`, never `/complete`. Also report whether the spec
+   requires browser proof, whether `npm run test:browser` is declared and has
+   recorded evidence, and whether an interactive `browseros-neo` handoff is
+   available or explicitly unavailable. This remains read-only: do not execute
+   either browser path from `/status`.
 
 ## Output
 

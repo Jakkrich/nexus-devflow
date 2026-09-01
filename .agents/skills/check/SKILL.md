@@ -1,10 +1,12 @@
 ---
 name: check
-description: "[devflow] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review. Supports Multi-Run: given an optional ID or name (/check 12), targets that spec and records proof to devflow/context/{xxx-slug}/findings.md. Drives the app, captures empirical evidence, checks Fowler smells, and reports pass/fail. Use when running /check, confirming work, or validating before /complete."
+description: "[devflow] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review. Supports Multi-Run: given an optional ID or name (/check 12), targets that spec and records proof to devflow/context/{xxx-slug}/findings.md. Drives the app, captures empirical evidence using Playwright and MCP browseros-neo, checks Fowler smells, and reports pass/fail. Use when running /check, confirming work, or validating before /complete."
 argument-hint: "[{run-id, number, or name}]"
 ---
 
 # check - Dual-Axis Independent Verification Engine
+
+$ARGUMENTS
 
 **First action:** Before project inspection, preflight, or any other tool call,
 publish `running` to `devflow/.state/run.json` using the dashboard activity
@@ -30,6 +32,29 @@ It changes no source and commits nothing — it executes, inspects, and reports 
 
 ---
 
+## Hybrid Browser Verification Engine
+
+Nexus-DevFlow uses a **Dual-Layer Browser Verification Hierarchy**:
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    🌐 Hybrid Browser Verification Engine                    │
+├──────────────────────────────────────┬──────────────────────────────────────┤
+│ 1. Code-Driven Test Automation (CI)  │ 2. Interactive AI Visual QA (MCP)    │
+│    • Framework: Playwright           │    • Server: MCP browseros-neo       │
+│    • Command: npm run test:browser   │    • URL: http://127.0.0.1:9010/mcp  │
+│    • Purpose: Assertions, Headless,  │    • Purpose: Live DOM Inspection,   │
+│      Regression Suite & Pre-commit   │      Real Screenshot Proofs, /try    │
+└──────────────────────────────────────┴──────────────────────────────────────┘
+```
+
+1. **Layer 1: Code-Driven Repeatable Tests (Playwright)**:
+   - If `AGENTS.md` declares `Browser tests: <command>`, run that exact command as repeatable automated evidence.
+2. **Layer 2: Interactive AI Visual QA (MCP browseros-neo)**:
+   - When the `browseros-neo` MCP server (`http://127.0.0.1:9010/mcp`) is active, use it to inspect the live running app, verify rendered CSS/layout, test click flows, and capture actual screenshot proofs.
+
+---
+
 ## Step 1 - Build the Dual-Axis Review Matrix
 
 Read the target spec from `devflow/context/{xxx-slug}/spec.md` and `devflow/context/coding-standards.md`. Prepare the inspection criteria across two independent axes:
@@ -50,7 +75,7 @@ Read the target spec from `devflow/context/{xxx-slug}/spec.md` and `devflow/cont
 
 Use the project's real commands (from `AGENTS.md`):
 
-- **Web app**: Start (or reuse) the local dev server. Drive a real browser to relevant routes. Prefer Playwright when installed for screenshots, network errors, and console assertions.
+- **Web app**: Start (or reuse) the local dev server. Drive a real browser to relevant routes. If `Browser tests: <command>` is declared, run it. When MCP `browseros-neo` is active, connect to inspect live visual state.
 - **CLI**: Execute commands with representative input fixtures, asserting exit codes and output snapshots.
 - **Server / API**: Hit endpoints with real payloads and assert on HTTP response status and bodies.
 - **Library**: Exercise public interfaces through integration tests or sample scripts.
@@ -60,7 +85,7 @@ Use the project's real commands (from `AGENTS.md`):
 
 ---
 
-## Step 3 - Dual-Axis Independent Report
+## Step 3 - Dual-Axis Independent Report & State Update
 
 Format the report into two distinct, un-merged review axes:
 
@@ -72,6 +97,8 @@ Format the report into two distinct, un-merged review axes:
 - **Technical Lanes**:
   - [pass] Type Safety: `tsc --noEmit` (0 errors)
   - [pass] Automated Tests: `npm test` (All tests green)
+  - [pass] Browser Tests: `npm run test:browser` (Playwright passed)
+  - [pass] Visual Inspection: MCP browseros-neo verified UI layout & zero console errors
   - [pass] Security & Hygiene: Zero secrets, sanitized inputs
   - [pass] Findings Ledger: 0 blocking P0/P1 in `devflow/context/{xxx-slug}/findings.md`
 - **Deep Modules & Architecture**:
@@ -93,25 +120,7 @@ Line-by-line verification against `devflow/context/{xxx-slug}/spec.md`:
 
 ## 🚦 Final Routing & Verdict
 
-- **ALL PASSED**: Both axes green. Ready for `/complete`.
+- **ALL PASSED**: Both axes green. Update `stage.md` (Passed -> Ready for `/complete`).
 - **ANY FAILURE**: Hand back to `/implement` with exact failure evidence and reproduction steps.
 - **UNVERIFIABLE**: Clearly document the gap and residual risk. Never fabricate a pass.
 ```
-
----
-
-## Why Two Independent Axes?
-
-A code change can pass one axis and fail the other:
-- **Standards Pass, Spec Fail**: Code is beautifully architected and tested, but implements the wrong business behavior.
-- **Spec Pass, Standards Fail**: Feature works end-to-end, but violates encapsulation, introduces shallow modules, or leaks secrets.
-
-Reporting both axes side-by-side stops elegance from masking functional bugs, and stops functional completeness from excusing architectural rot.
-
----
-
-## Rules
-
-- **Observe, don't change**: `/check` runs the app and reports. It never edits source or commits. Fixing is `/implement`'s job.
-- **Honest over green**: "Failed" and "Could not verify" are valid, valuable outputs. Faking a pass destroys the gate.
-- **Check the spec, not vibes**: Verify against documented ACs, not subjective feelings.

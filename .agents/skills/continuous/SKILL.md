@@ -88,8 +88,20 @@ Where this sits in the workflow:
 ### 2.4 Apply Continuous Quality Gates
 ตรวจสอบตามการตั้งค่า `qualityGates.continuous` ใน `devflow/config.json`:
 - **Audit**: `manual` (ข้ามอัตโนมัติ), `when-sensitive` (รันเมื่อแตะ Auth/Security/Database/Secrets), `always` (รันทุกฟีเจอร์)
+- **Independent Review**: อ่าน `qualityGates.continuous.independentReview`; `manual` คือ opt-in, `always` บังคับทุกฟีเจอร์, และ `when-sensitive` บังคับเมื่อฟีเจอร์แตะ authentication, authorization, secrets, payments, personal data, destructive operations, dependencies, deployment หรือ security boundary อื่น บันทึกคำตัดสินและหลักฐานต่อฟีเจอร์ใน spec
 - **Check**: `manual` (ข้ามอัตโนมัติ), `when-behavioral` (รันเมื่อมี Runtime Behavior เช่น UI/CLI/API), `always` (รันทุกฟีเจอร์)
 - **Try Guide**: `manual` (ข้ามอัตโนมัติ), `when-user-facing` (สร้าง Try Guide เมื่อเป็น UI/CLI), `always` (สร้างทุกฟีเจอร์)
+
+ทุก product/spec edit ทำให้ receipt เดิมหมดอายุ เมื่อ Independent Review gate
+ทำงาน ให้รัน Verify และซ่อม audit findings ให้เสร็จก่อนส่ง
+`audit independent current` ไปยัง fresh reviewer context หากไม่สามารถรับ
+receipt ที่ verdict เป็น `passed` และ freshness เป็น `current` ให้หยุด Continuous
+Mode โดยคง workspace/branch ไว้ ห้ามข้ามไป archive หรือ local squash-merge
+
+สำหรับฟีเจอร์ browser-facing ให้รัน `npm run test:browser` เมื่อมี
+`test:browser` script และเก็บ interactive evidence ผ่าน `browseros-neo` เมื่อ
+พร้อมใช้งาน หาก script หรือ MCP ไม่มี ให้บันทึก limitation และหยุดเมื่อ evidence
+นั้นเป็น gate ที่จำเป็น ห้ามติดตั้งหรืออ้างผลโดยปริยาย
 
 ### 2.5 Repair Findings
 - ซ่อมแซม Finding ระดับ P0/P1 ที่เกิดขึ้นจากฟีเจอร์นี้โดยอัตโนมัติ (ไม่เกิน `continuous.maxRepairAttempts` ครั้ง)

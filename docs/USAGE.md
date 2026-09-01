@@ -54,9 +54,9 @@ Before committing to delivery, use specialized companion skills:
 
 ---
 
-## 4. Core Skills Inventory (29 Skills)
+## 4. Core Skills Inventory (30 Skills)
 
-DevFlow ships **29 bundled Core Skills** from the ordered `core_skills` inventory
+DevFlow ships **30 bundled Core Skills** from the ordered `core_skills` inventory
 in `agent-bundle.manifest.json`, synchronized 1:1 across `.agents/skills/`
 (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code). Local or
 Personal Skills may coexist in a workspace, but are excluded from the Core count
@@ -68,6 +68,7 @@ and package template until explicitly promoted.
 - `implement`: Step-by-step TDD implementation behind review gates.
 - `check`: Dual-Axis verification of observable spec behavior and independent architecture/standards quality.
 - `complete`: Final safety audit, Conventional Commit, archiving, and branch delivery gate.
+- `autopilot`: Bounded single-pass delivery loop with self-review and safe repair.
 - `continuous`: Autonomous serial multi-feature delivery loop completing build-plan items with quality gates.
 - `rollback`: Plan a safe reversal of a completed feature preserving history.
 
@@ -86,7 +87,9 @@ and package template until explicitly promoted.
 - `brief`: Feature scope and dependency briefing before speccing.
 - `audit`: Branch-aware or full-project code and security audit.
 - `ci`: Set up single Verify command and GitHub Actions.
+- `test`: Test suite runner and coverage analyzer.
 - `tests`: Add or normalize unit test suite.
+- `browser-tests`: Add or normalize Playwright browser test harness & connect with MCP browseros-neo.
 - `release`: Cloud deployment readiness check (Render / Vercel).
 - `prototype`: Static HTML/CSS prototype mockups.
 - `status`: Progress summary and next action inspector.
