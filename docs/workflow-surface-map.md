@@ -1,8 +1,8 @@
-# Workflow Surface Map (30 Core Skills)
+# Workflow Surface Map (31 Core Skills)
 
-This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.10.0**.
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.10.1**.
 
-The canonical surface contains **30 Core Skills** from
+The canonical surface contains **31 Core Skills** from
 `agent-bundle.manifest.json#core_skills`. Additional Local or Personal Skills
 may exist in a workspace, but are not bundled product commands until explicitly
 promoted into that inventory.
@@ -18,7 +18,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-## 2. Canonical Surface Taxonomy (30 Core Skills)
+## 2. Canonical Surface Taxonomy (31 Core Skills)
 
 ### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (7 Skills)
 | Command | Category | Purpose | Primary Artifact |
@@ -43,7 +43,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-### 🧰 3. Workspace Governance & Operations (19 Skills)
+### 🧰 3. Workspace Governance & Operations (20 Skills)
 | Command | Category | Purpose |
 | :--- | :--- | :--- |
 | `devflow` | Navigation | Flagship interactive guide, state inspector, and intent router. |
@@ -55,6 +55,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 | `adopt` | Onboarding | Survey existing codebase and bootstrap DevFlow context into brownfield apps. |
 | `try` | Quality Gate | Generate step-by-step human manual QA review guide. |
 | `audit` | Quality Gate | Branch-aware or full-project code and security audit. |
+| `bughunter` | Security | Offensive security orchestrator, 83 vulnerability patterns & CVE payloads. |
 | `ci` | Automation | Configure GitHub Actions verify workflow (`.github/workflows/verify.yml`). |
 | `test` | Quality Gate | Test runner, missing test generation, and coverage check. |
 | `setup-tests` | Quality Gate | Add or normalize unit test suite. |

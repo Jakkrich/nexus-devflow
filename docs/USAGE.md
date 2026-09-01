@@ -54,9 +54,9 @@ Before committing to delivery, use specialized companion skills:
 
 ---
 
-## 4. Core Skills Inventory (30 Skills)
+## 4. Core Skills Inventory (31 Skills)
 
-DevFlow ships **30 bundled Core Skills** from the ordered `core_skills` inventory
+DevFlow ships **31 bundled Core Skills** from the ordered `core_skills` inventory
 in `agent-bundle.manifest.json`, synchronized 1:1 across `.agents/skills/`
 (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code). Local or
 Personal Skills may coexist in a workspace, but are excluded from the Core count
@@ -86,6 +86,7 @@ and package template until explicitly promoted.
 - `overview`: Compile living source of truth from planning docs.
 - `brief`: Feature scope and dependency briefing before speccing.
 - `audit`: Branch-aware or full-project code and security audit.
+- `bughunter`: Offensive security orchestrator, 83 vulnerability patterns & CVE payloads.
 - `ci`: Set up single Verify command and GitHub Actions.
 - `test`: Test suite runner and coverage analyzer.
 - `setup-tests`: Add or normalize unit test suite.

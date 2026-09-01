@@ -10,7 +10,29 @@ $ARGUMENTS
 
 `bughunter` is the master security testing orchestrator in Nexus-DevFlow, bringing the complete power of **Claude-BugHunter** into your development lifecycle with **Zero Token Bloat**.
 
-### 📦 Full Upstream Arsenal Available in `devflow/.vendor/bughunter/`:
+---
+
+## ⚠️ Pre-Flight Check (Knowledge Base Availability)
+
+Before executing any BugHunter analysis or security test:
+1. **Check if `devflow/.vendor/bughunter/` exists in this project using your file inspection tool**.
+2. **If `devflow/.vendor/bughunter/` is MISSING / NOT INSTALLED**:
+   - **DO NOT hallucinate payloads or fake security reports**.
+   - Respond immediately to the user in Thai:
+     > 💡 **คลังความรู้ BugHunter (83 Vulnerability Classes, Payloads & 681 Disclosed Reports) ยังไม่ได้ถูกดาวน์โหลดในโปรเจกต์นี้**
+     > 
+     > 👉 กรุณารันคำสั่งนี้ใน Terminal เพื่อดาวน์โหลดคลังความรู้และ CVE Payloads:
+     > ```bash
+     > npx @jakkrichm/create-nexus-devflow skill add bughunter
+     > ```
+     > *(หรือพิมพ์บอกให้ผมช่วยรันคำสั่งติดตั้งให้ได้เลยครับ)*
+   - Stop and wait for the user to install or give permission.
+3. **If `devflow/.vendor/bughunter/` is PRESENT**:
+   - Proceed with the JIT Knowledge Map and 5-phase testing methodology below.
+
+---
+
+### 📦 Full Upstream Arsenal in `devflow/.vendor/bughunter/`:
 - **83 Full Skills** (`devflow/.vendor/bughunter/skills/<skill-name>/SKILL.md`): Detailed detection patterns, bypass tables, and payloads for all 83 classes.
 - **15 Slash Commands** (`devflow/.vendor/bughunter/commands/<command>.md`): `hunt`, `recon`, `triage`, `validate`, `chain`, `report`, `scope`, `token-scan`, `surface`, `autopilot`, ฯลฯ
 - **681 Disclosed HackerOne Reports** (`devflow/.vendor/bughunter/disclosed-reports/<class>.md`): Real-world vulnerability citations across 24 core classes.
