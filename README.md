@@ -689,12 +689,11 @@ Nexus-DevFlow ships with **30 Core Skills** out-of-the-box. You can easily exten
 | **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
 | **debug-mantra** | Diagnostics | 4-mantra scientific debugging discipline (Reproduce, Trace, Falsify, Cross-reference) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name debug-mantra` |
 | **post-mortem** | Quality / RCA | Canonical engineering record of fixed bugs (Root cause, fix mechanism, regression proof) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name post-mortem` |
-| **qwen-agent** | Cost Optimization | Delegate mechanical/boilerplate tasks cheaply to Qwen subagent via `claude-9arm` | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwen-agent` |
 | **scrutinize** | Code Review | Outsider-perspective deep plan, PR, and diff review | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
 | **management-talk** | Communication | Rewrite engineering updates for leadership across Slack/Jira/Email/Meetings | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
 
 > [!NOTE]
-> **Batch Install 9arm-skills**: Install all 5 skills from 9arm-skills in a single command:
+> **Batch Install 9arm-skills**: Install all 4 skills from 9arm-skills in a single command:
 > ```bash
 > npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all
 > ```
