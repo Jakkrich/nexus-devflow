@@ -5,6 +5,11 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.3] - 2026-09-01
+
+### Changed
+- Release v2.10.3: Standardize BugHunter skill instructions to English with [devflow] prefix and central config artifact integration
+
 ## [2.10.2] - 2026-09-01
 
 ### Changed
