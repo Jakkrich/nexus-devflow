@@ -147,3 +147,11 @@
 - [x] **18. Sync Upstream v1.1.0 & v1.2.0 (Browser Tests & Independent Review System) (`DISC-20260901-001`)** `[Size: M]`
   - *Dependencies*: None
   - *Scope*: ผสานสคิล `/browser-tests` สำหรับ Playwright/E2E testing, ระบบตรวจทานอิสระ Independent Audit Review (`audit independent current` พร้อม `review.ts` และ `review.md`), อัปเกรด Config Quality Gates (`independentReview`), อัปเดต CLI Engine/Dashboard และปรับปรุงคู่มือ Scaffolding
+
+---
+
+## 🛡️ Phase 19: BugHunter Master Skill & Upstream Knowledge Sync Engine
+
+- [x] **19. BugHunter Master Skill & Upstream Knowledge Sync Engine (`DISC-20260901-002`, `065-bughunter-master-skill-and-sync-engine`)** `[Size: M]`
+  - *Dependencies*: Feature 17, Feature 18
+  - *Scope*: พัฒนา Master Orchestrator Skill `bughunter` พร้อมระบบ Sync ดึงคลังความรู้ 83 skills และ report patterns จาก `elementalsouls/Claude-BugHunter` เก็บใน `devflow/.vendor/bughunter/`, รองรับคำสั่ง `nexus-devflow skill add/update bughunter`, อัปเดต Manifest และผสานเข้ากับ Multi-Adapter (`.agents/`, `.claude/`)

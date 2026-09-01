@@ -48,7 +48,7 @@
       "idea",
       "ci",
       "test",
-      "tests",
+      "setup-tests",
       "autopilot",
       "prototype",
       "report-html",
@@ -127,6 +127,15 @@
       "description": "Keeps a long Claude Code task on-track — breaks out of looping/circular thinking, watches the context budget, bounds internal reasoning, and triggers a clean handoff before the window fills. Use when the model is repeating steps, re-reading the same files, second-guessing in circles, stuck or spinning, or running a long multi-step task at risk of exhausting context. Also use when the user says it is \"looping\", \"going in circles\", \"stuck\", \"repeating itself\", or asks for a handoff before running out of context.",
       "installedAt": "2026-08-31T02:16:45.619Z",
       "type": "git"
+    },
+    {
+      "name": "bughunter",
+      "source": "https://github.com/elementalsouls/Claude-BugHunter",
+      "version": "2.0.0",
+      "description": "Offensive security orchestrator & bug hunting guide. Indexes 83 vulnerability classes, 5-phase methodology (Think, Hunt, Perimeter, Ship), 681 disclosed HackerOne patterns, and JIT reference guides in devflow/.vendor/bughunter/. Use when running /bughunter, performing security reviews, verifying auth/injection risks in /check or /audit, or testing API endpoints for vulnerabilities.",
+      "installedAt": "2026-09-01T15:50:48.514Z",
+      "type": "compound-knowledge",
+      "referencePath": "devflow/.vendor/bughunter"
     }
   ]
 }

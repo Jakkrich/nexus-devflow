@@ -7,6 +7,7 @@ import {
   findSkillSourceDirectory,
   installRecommendedSkills,
   installThirdPartySkill,
+  KNOWN_SKILL_ALIASES,
   listInstalledSkills,
   parseSkillFrontmatter,
   RECOMMENDED_THIRD_PARTY_SKILLS,
@@ -427,4 +428,174 @@ test("installRecommendedSkills and updateRecommendedSkills batch-install and ref
   }
 });
 
+test("updateThirdPartySkills updates compound-knowledge skill and syncs reference directory", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-compound-project-"));
+  const tempSource = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-compound-source-"));
 
+  try {
+    // 1. Setup mock upstream source
+    const sourceSkillDir = path.join(tempSource, "skills", "bughunter");
+    const sourceDocsDir = path.join(tempSource, "docs");
+    await fs.mkdir(sourceSkillDir, { recursive: true });
+    await fs.mkdir(sourceDocsDir, { recursive: true });
+
+    await fs.writeFile(
+      path.join(sourceSkillDir, "SKILL.md"),
+      `---\nname: bughunter\ndescription: Bug hunter updated\nversion: 2.1.0\n---\n# BugHunter v2.1\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(sourceDocsDir, "skills.md"),
+      `# Upstream Skill Catalog\n- hunt-auth: Updated auth patterns\n`,
+      "utf8"
+    );
+
+    // 2. Setup project with compound-knowledge manifest
+    const manifestDir = path.join(tempProject, ".nexus");
+    const refDir = path.join(tempProject, "devflow", ".vendor", "bughunter");
+    const agentsSkillDir = path.join(tempProject, ".agents", "skills", "bughunter");
+    const claudeSkillDir = path.join(tempProject, ".claude", "skills", "bughunter");
+
+    await fs.mkdir(manifestDir, { recursive: true });
+    await fs.mkdir(refDir, { recursive: true });
+    await fs.mkdir(agentsSkillDir, { recursive: true });
+    await fs.mkdir(claudeSkillDir, { recursive: true });
+
+    await fs.writeFile(
+      path.join(agentsSkillDir, "SKILL.md"),
+      `---\nname: bughunter\ndescription: Bug hunter v1\nversion: 1.0.0\n---\n# BugHunter\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(claudeSkillDir, "SKILL.md"),
+      `---\nname: bughunter\ndescription: Bug hunter v1\nversion: 1.0.0\n---\n# BugHunter\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(refDir, "INDEX.md"),
+      `# Initial Index\n`,
+      "utf8"
+    );
+
+    await fs.writeFile(
+      path.join(manifestDir, "nexus-devflow.json"),
+      JSON.stringify(
+        {
+          schemaVersion: 1,
+          name: "test-compound",
+          version: "1.0.0",
+          thirdPartySkills: [
+            {
+              name: "bughunter",
+              source: tempSource,
+              version: "1.0.0",
+              description: "Bug hunter v1",
+              installedAt: "2026-09-01T00:00:00.000Z",
+              type: "compound-knowledge",
+              referencePath: "devflow/.vendor/bughunter"
+            }
+          ]
+        },
+        null,
+        2
+      ),
+      "utf8"
+    );
+
+    // 3. Update compound skill
+    const updateResult = await updateThirdPartySkills(tempProject, "bughunter");
+
+    assert.equal(updateResult.totalUpdated, 1);
+    assert.equal(updateResult.failedSkills.length, 0);
+
+    const updated = updateResult.updatedSkills[0];
+    assert.equal(updated.name, "bughunter");
+    assert.equal(updated.version, "2.1.0");
+    assert.equal(updated.synced, true);
+
+    // Verify manifest preserved type and updated version
+    const listing = await listInstalledSkills(tempProject);
+    assert.equal(listing.thirdPartySkills.length, 1);
+    assert.equal(listing.thirdPartySkills[0].version, "2.1.0");
+
+    // Verify files updated across .agents and .claude
+    assert.match(
+      await fs.readFile(path.join(tempProject, ".agents", "skills", "bughunter", "SKILL.md"), "utf8"),
+      /BugHunter v2.1/
+    );
+    assert.match(
+      await fs.readFile(path.join(tempProject, ".claude", "skills", "bughunter", "SKILL.md"), "utf8"),
+      /BugHunter v2.1/
+    );
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempSource, { recursive: true, force: true });
+  }
+});
+
+test("updateThirdPartySkills compound fallback extracts package.json version and preserves master skill", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-compound-multi-"));
+  const tempSource = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-compound-multi-source-"));
+
+  try {
+    // Upstream has package.json and multiple hunt-* skills (no bughunter folder)
+    await fs.writeFile(
+      path.join(tempSource, "package.json"),
+      JSON.stringify({ name: "claude-bughunter", version: "3.5.0" }, null, 2),
+      "utf8"
+    );
+    const skillA = path.join(tempSource, "skills", "hunt-oauth");
+    await fs.mkdir(skillA, { recursive: true });
+    await fs.writeFile(path.join(skillA, "SKILL.md"), "---\nname: hunt-oauth\n---\n", "utf8");
+
+    // Project setup
+    const manifestDir = path.join(tempProject, ".nexus");
+    const agentsSkillDir = path.join(tempProject, ".agents", "skills", "bughunter");
+    const claudeSkillDir = path.join(tempProject, ".claude", "skills", "bughunter");
+    await fs.mkdir(manifestDir, { recursive: true });
+    await fs.mkdir(agentsSkillDir, { recursive: true });
+    await fs.mkdir(claudeSkillDir, { recursive: true });
+
+    await fs.writeFile(
+      path.join(manifestDir, "nexus-devflow.json"),
+      JSON.stringify(
+        {
+          schemaVersion: 1,
+          name: "test-compound",
+          version: "1.0.0",
+          thirdPartySkills: [
+            {
+              name: "bughunter",
+              source: tempSource,
+              version: "1.0.0",
+              description: "Bug hunter master skill",
+              installedAt: "2026-09-01T00:00:00.000Z",
+              type: "compound-knowledge",
+              referencePath: "devflow/.vendor/bughunter"
+            }
+          ]
+        },
+        null,
+        2
+      ),
+      "utf8"
+    );
+
+    const updateResult = await updateThirdPartySkills(tempProject, "bughunter");
+    assert.equal(updateResult.totalUpdated, 1);
+    assert.equal(updateResult.updatedSkills[0].version, "3.5.0");
+
+    const listing = await listInstalledSkills(tempProject);
+    assert.equal(listing.thirdPartySkills[0].version, "3.5.0");
+    assert.equal(listing.thirdPartySkills[0].name, "bughunter");
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempSource, { recursive: true, force: true });
+  }
+});
+
+test("KNOWN_SKILL_ALIASES defines bughunter with compound-knowledge type", () => {
+  assert.equal(KNOWN_SKILL_ALIASES.bughunter.type, "compound-knowledge");
+  assert.equal(KNOWN_SKILL_ALIASES.bughunter.referencePath, "devflow/.vendor/bughunter");
+  assert.equal(KNOWN_SKILL_ALIASES.archify.source, "https://github.com/tt-a1i/archify");
+});

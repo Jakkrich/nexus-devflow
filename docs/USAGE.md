@@ -88,7 +88,7 @@ and package template until explicitly promoted.
 - `audit`: Branch-aware or full-project code and security audit.
 - `ci`: Set up single Verify command and GitHub Actions.
 - `test`: Test suite runner and coverage analyzer.
-- `tests`: Add or normalize unit test suite.
+- `setup-tests`: Add or normalize unit test suite.
 - `browser-tests`: Add or normalize Playwright browser test harness & connect with MCP browseros-neo.
 - `release`: Cloud deployment readiness check (Render / Vercel).
 - `prototype`: Static HTML/CSS prototype mockups.

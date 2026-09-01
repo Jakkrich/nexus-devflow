@@ -1,9 +1,0 @@
-{
-  "skill": "tests",
-  "positive": [
-    "run tests skill",
-    "invoke /tests command",
-    "use tests to add or normalize unit testing framework",
-    "apply tests guidance"
-  ]
-}

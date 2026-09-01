@@ -47,7 +47,7 @@ Use pre-flight skills before committing to delivery when exploring new ideas or 
 | **Code & Security Audit** | `/audit` | Branch-aware or full-project code and security audit. |
 | **Feature Reversal** | `/rollback` | Analyzes dependency risks and drafts safe rollback spec. |
 | **CI Setup** | `/ci` | Configures `.github/workflows/verify.yml` with detected package manager. |
-| **Unit Test Setup** | `/tests` / `/test` | Runs test suites or scaffolds missing unit tests. |
+| **Unit Test Setup** | `/setup-tests` / `/test` | Runs test suites or scaffolds missing unit tests. |
 | **Autonomous Pass** | `/autopilot` | Bounded Single Living Spec execution loop (`feature`/`fix` -> `implement` -> `check`) stopping before merge. |
 | **Visual Mockup** | `/prototype` | Throwaway HTML/CSS mockups sharing design tokens. |
 | **Cloud Readiness** | `/release` | Deployment readiness check (Render / Vercel). |

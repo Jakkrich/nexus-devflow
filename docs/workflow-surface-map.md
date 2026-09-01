@@ -57,7 +57,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 | `audit` | Quality Gate | Branch-aware or full-project code and security audit. |
 | `ci` | Automation | Configure GitHub Actions verify workflow (`.github/workflows/verify.yml`). |
 | `test` | Quality Gate | Test runner, missing test generation, and coverage check. |
-| `tests` | Quality Gate | Add or normalize unit test suite. |
+| `setup-tests` | Quality Gate | Add or normalize unit test suite. |
 | `browser-tests` | Quality Gate | Add or normalize Playwright browser test harness & connect with MCP browseros-neo. |
 | `autopilot` | Autonomous | Bounded Living Spec execution loop (`feature`/`fix` -> `implement` -> `check`) stopping before merge. |
 | `prototype` | Ideation | Throwaway pre-build static HTML/CSS mockups sharing design tokens. |

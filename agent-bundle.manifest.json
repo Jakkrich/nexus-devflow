@@ -28,9 +28,9 @@
     "release",
     "report-html",
     "rollback",
+    "setup-tests",
     "status",
     "test",
-    "tests",
     "try"
   ],
   "required_paths": [

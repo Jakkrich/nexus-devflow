@@ -68,6 +68,7 @@ devflow/backups/*
 # DevFlow Internal State, Branches & Backups
 .devflow/
 devflow/.state/
+devflow/.vendor/
 .nexus/branches/*
 .nexus/backups/*
 .nexus/cache/*

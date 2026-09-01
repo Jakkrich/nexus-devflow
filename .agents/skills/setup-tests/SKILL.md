@@ -1,9 +1,9 @@
 ---
-name: tests
-description: "[devflow] Add or normalize unit testing for a Blueprint project. Detects the stack, reuses an existing test runner when present, or installs the stack-native unit test runner when missing, then adds one small example test, updates AGENTS.md commands, runs build and tests, and reports the diff. Use when the user runs /tests, invokes $tests, asks to add unit tests, set up unit testing, configure tests, or make tests part of the Blueprint workflow."
+name: setup-tests
+description: "[devflow] Add or normalize unit testing for a Blueprint project. Detects the stack, reuses an existing test runner when present, or installs the stack-native unit test runner when missing, then adds one small example test, updates AGENTS.md commands, runs build and tests, and reports the diff. Use when the user runs /setup-tests, invokes $setup-tests, asks to add unit tests, set up unit testing, configure tests, or make tests part of the Blueprint workflow."
 ---
 
-# tests - add unit testing to the project
+# setup-tests - add unit testing to the project
 
 **First action:** Before project inspection, preflight, or any other tool call,
 publish `running` to `devflow/.state/run.json` using the dashboard activity
@@ -11,8 +11,8 @@ contract in `AGENTS.md`.
 
 Where this sits in the workflow:
 
-    any time  ->  [tests]  ->  test command in AGENTS.md  ->  /feature + /implement use it
-                  (setup)     (the opt-in testing gate)      (logic steps get tests)
+    any time  ->  [setup-tests]  ->  test command in AGENTS.md  ->  /feature + /implement use it
+                  (setup)            (the opt-in testing gate)      (logic steps get tests)
 
 Testing is optional in the Blueprint until the project declares a real test
 command in `AGENTS.md`. This skill is the explicit setup path. It adds or
@@ -71,7 +71,7 @@ Apply the smallest practical diff:
    when available, the test watch command.
 5. If a `Verify` command already exists, add the real test command to it between
    typecheck and build while preserving any established project checks. Do not
-   create verification or CI only because `/tests` was invoked.
+   create verification or CI only because `/setup-tests` was invoked.
 6. Update `devflow/context/coding-standards.md` only if the project needs a
    stack-specific testing note different from the default.
 

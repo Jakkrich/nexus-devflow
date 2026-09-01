@@ -14,7 +14,8 @@ export interface InstalledSkillRecord {
   version?: string;
   description?: string;
   installedAt: string;
-  type?: "git" | "local" | "npm";
+  type?: "git" | "local" | "npm" | "compound-knowledge";
+  referencePath?: string;
 }
 
 export interface SkillDetail {
@@ -47,6 +48,43 @@ export interface RecommendedSkillPreset {
   all?: boolean;
   description?: string;
 }
+
+export const KNOWN_SKILL_ALIASES: Record<
+  string,
+  {
+    source: string;
+    name?: string;
+    all?: boolean;
+    type?: "git" | "local" | "compound-knowledge";
+    referencePath?: string;
+    description?: string;
+  }
+> = {
+  archify: {
+    source: "https://github.com/tt-a1i/archify",
+    description: "Interactive technical system architecture, dataflow, and sequence trace diagrams"
+  },
+  "diagram-design": {
+    source: "https://github.com/cathrynlavery/diagram-design",
+    description: "39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar)"
+  },
+  "9arm-skills": {
+    source: "https://github.com/thananon/9arm-skills",
+    all: true,
+    description: "6 specialized skills (debug-mantra, post-mortem, qwen-agent, scrutinize, management-talk, qwenchance)"
+  },
+  "9arm": {
+    source: "https://github.com/thananon/9arm-skills",
+    all: true,
+    description: "6 specialized skills (debug-mantra, post-mortem, qwen-agent, scrutinize, management-talk, qwenchance)"
+  },
+  bughunter: {
+    source: "https://github.com/elementalsouls/Claude-BugHunter",
+    type: "compound-knowledge",
+    referencePath: "devflow/.vendor/bughunter",
+    description: "Offensive security orchestrator & bug hunting guide"
+  }
+};
 
 export const RECOMMENDED_THIRD_PARTY_SKILLS: readonly RecommendedSkillPreset[] = Object.freeze([
   {
@@ -343,9 +381,34 @@ export async function installThirdPartySkill(
   source: string,
   options?: InstallSkillOptions
 ): Promise<SkillDetail | SkillDetail[]> {
-  const isGitUrl = /^https?:\/\/|^git@|^ssh:\/\/|\.git$/.test(source);
+  const alias = KNOWN_SKILL_ALIASES[source.toLowerCase()];
+  let effectiveSource = source;
+  let isCompound = false;
+  let compoundName = "bughunter";
+  let compoundRefPath = "devflow/.vendor/bughunter";
+
+  if (alias) {
+    effectiveSource = alias.source;
+    if (alias.type === "compound-knowledge") {
+      isCompound = true;
+      compoundName = source.toLowerCase();
+      compoundRefPath = alias.referencePath || path.join("devflow", ".vendor", compoundName);
+    }
+    if (alias.all && options?.all === undefined) {
+      options = { ...options, all: true };
+    }
+    if (alias.name && !options?.name) {
+      options = { ...options, name: alias.name };
+    }
+  } else if (source.includes("Claude-BugHunter")) {
+    isCompound = true;
+    compoundName = "bughunter";
+    compoundRefPath = "devflow/.vendor/bughunter";
+  }
+
+  const isGitUrl = /^https?:\/\/|^git@|^ssh:\/\/|\.git$/.test(effectiveSource);
   let tempCloneDir: string | null = null;
-  let sourceDirectory = source;
+  let sourceDirectory = effectiveSource;
 
   let coreNameSet: ReadonlySet<string> = new Set<string>();
   try {
@@ -358,17 +421,104 @@ export async function installThirdPartySkill(
   try {
     if (isGitUrl) {
       tempCloneDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-skill-"));
-      await execFileAsync("git", ["clone", "--depth", "1", source, tempCloneDir]);
+      await execFileAsync("git", ["clone", "--depth", "1", effectiveSource, tempCloneDir]);
       sourceDirectory = tempCloneDir;
     } else {
-      sourceDirectory = path.isAbsolute(source) ? source : path.resolve(projectRoot, source);
+      sourceDirectory = path.isAbsolute(effectiveSource) ? effectiveSource : path.resolve(projectRoot, effectiveSource);
       if (!fsSync.existsSync(sourceDirectory)) {
-        throw new Error(`Source directory does not exist: ${source}`);
+        throw new Error(`Source directory does not exist: ${effectiveSource}`);
       }
     }
 
-    const recordedSource = options?.overrideSource || source;
-    const recordedType = isGitUrl || options?.overrideSource ? "git" : "local";
+    const recordedSource = options?.overrideSource || effectiveSource;
+    const recordedType = isCompound ? "compound-knowledge" : isGitUrl || options?.overrideSource ? "git" : "local";
+
+    if (isCompound) {
+      const targetRefDir = path.join(projectRoot, compoundRefPath);
+      await fs.mkdir(targetRefDir, { recursive: true });
+
+      const srcSkills = path.join(sourceDirectory, "skills");
+      if (fsSync.existsSync(srcSkills)) {
+        await fs.cp(srcSkills, path.join(targetRefDir, "skills"), { recursive: true });
+      }
+
+      const srcCommands = path.join(sourceDirectory, "commands");
+      if (fsSync.existsSync(srcCommands)) {
+        await fs.cp(srcCommands, path.join(targetRefDir, "commands"), { recursive: true });
+      }
+
+      const srcReports = path.join(sourceDirectory, "docs", "disclosed-reports");
+      if (fsSync.existsSync(srcReports)) {
+        await fs.cp(srcReports, path.join(targetRefDir, "disclosed-reports"), { recursive: true });
+      }
+
+      for (const guideFile of ["ENGAGEMENTS.md", "USAGE.md", "README.md", "INSTALL.md"]) {
+        const srcFile = path.join(sourceDirectory, guideFile);
+        if (fsSync.existsSync(srcFile)) {
+          await fs.copyFile(srcFile, path.join(targetRefDir, guideFile));
+        }
+      }
+
+      // Ensure Master Skill is written in .agents and .claude
+      const masterContent = `---
+name: ${compoundName}
+description: "Offensive security orchestrator & bug hunting guide. Indexes 83 vulnerability classes, 5-phase methodology (Think, Hunt, Perimeter, Ship), 681 disclosed HackerOne patterns, and JIT reference guides in ${compoundRefPath}/. Use when running /bughunter, performing security reviews, verifying auth/injection risks in /check or /audit, or testing API endpoints for vulnerabilities."
+argument-hint: "[{target, vuln-class, or topic}]"
+---
+
+# 🛡️ ${compoundName} - Offensive Security & Vulnerability Assessment Orchestrator
+
+$ARGUMENTS
+
+\`${compoundName}\` is the master security testing orchestrator in Nexus-DevFlow, bringing the complete power of Claude-BugHunter into your development lifecycle with Zero Token Bloat.
+
+Read reference docs in \`${compoundRefPath}/\` using your file reading tool for specific vulnerability detection patterns, bypass tables, and payloads.
+`;
+      const agentTarget = path.join(projectRoot, ".agents", "skills", compoundName, "SKILL.md");
+      const claudeTarget = path.join(projectRoot, ".claude", "skills", compoundName, "SKILL.md");
+      await fs.mkdir(path.dirname(agentTarget), { recursive: true });
+      await fs.mkdir(path.dirname(claudeTarget), { recursive: true });
+      if (!fsSync.existsSync(agentTarget) || options?.force) {
+        await fs.writeFile(agentTarget, masterContent, "utf8");
+      }
+      if (!fsSync.existsSync(claudeTarget) || options?.force) {
+        await fs.writeFile(claudeTarget, masterContent, "utf8");
+      }
+
+      // Update manifest
+      const manifest = (await readDevflowManifest(projectRoot)) || {
+        schemaVersion: 1,
+        name: "nexus-devflow",
+        package: "@jakkrichm/create-nexus-devflow",
+        version: "2.9.5"
+      };
+      const existingThirdParty = Array.isArray(manifest.thirdPartySkills)
+        ? (manifest.thirdPartySkills as InstalledSkillRecord[])
+        : [];
+      const filtered = existingThirdParty.filter((s) => s.name !== compoundName);
+      filtered.push({
+        name: compoundName,
+        source: recordedSource,
+        version: "2.0.0",
+        description: "Offensive security orchestrator & bug hunting guide",
+        installedAt: new Date().toISOString(),
+        type: "compound-knowledge",
+        referencePath: compoundRefPath
+      });
+      manifest.thirdPartySkills = filtered;
+      await writeDevflowManifest(projectRoot, manifest);
+
+      return {
+        name: compoundName,
+        category: "third-party",
+        description: "Offensive security orchestrator & bug hunting guide",
+        version: "2.0.0",
+        source: recordedSource,
+        adapters: [".agents", ".claude"],
+        synced: true,
+        path: `.agents/skills/${compoundName}`
+      };
+    }
 
     if (options?.all) {
       const discovered = await discoverSkillsInDirectory(sourceDirectory);
@@ -474,14 +624,16 @@ export async function installThirdPartySkill(
       ? (manifest.thirdPartySkills as InstalledSkillRecord[])
       : [];
 
+    const existingRecord = existingThirdParty.find((s) => s.name === skillName);
     const filtered = existingThirdParty.filter((s) => s.name !== skillName);
     filtered.push({
       name: skillName,
       source: recordedSource,
-      version: meta.version || "1.0.0",
-      description: meta.description || "",
+      version: meta.version || existingRecord?.version || "1.0.0",
+      description: meta.description || existingRecord?.description || "",
       installedAt: new Date().toISOString(),
-      type: recordedType
+      type: existingRecord?.type || recordedType,
+      referencePath: existingRecord?.referencePath
     });
 
     manifest.thirdPartySkills = filtered;
@@ -490,8 +642,8 @@ export async function installThirdPartySkill(
     return {
       name: skillName,
       category: "third-party",
-      description: meta.description || "",
-      version: meta.version || "1.0.0",
+      description: meta.description || existingRecord?.description || "",
+      version: meta.version || existingRecord?.version || "1.0.0",
       source: recordedSource,
       adapters: [".agents", ".claude"],
       synced: true,
@@ -632,12 +784,108 @@ export async function updateThirdPartySkills(
 
       for (const skill of skills) {
         try {
-          const detail = (await installThirdPartySkill(projectRoot, sourceDir, {
-            name: skill.name,
-            force: true,
-            overrideSource: isGit ? source : undefined
-          })) as SkillDetail;
-          updatedSkills.push(detail);
+          if (skill.type === "compound-knowledge") {
+            let directSkillFound = false;
+            try {
+              const detail = (await installThirdPartySkill(projectRoot, sourceDir, {
+                name: skill.name,
+                force: true,
+                overrideSource: isGit ? source : undefined
+              })) as SkillDetail;
+              updatedSkills.push(detail);
+              directSkillFound = true;
+            } catch {
+              directSkillFound = false;
+            }
+
+            if (!directSkillFound) {
+              const refRelPath = skill.referencePath || path.join("devflow", ".vendor", skill.name);
+              const targetRefDir = path.join(projectRoot, refRelPath);
+              await fs.mkdir(targetRefDir, { recursive: true });
+
+              // 1. Sync source skills directory to reference/skills
+              const srcSkills = path.join(sourceDir, "skills");
+              if (fsSync.existsSync(srcSkills)) {
+                await fs.cp(srcSkills, path.join(targetRefDir, "skills"), { recursive: true });
+              }
+
+              // 2. Sync source commands directory to reference/commands
+              const srcCommands = path.join(sourceDir, "commands");
+              if (fsSync.existsSync(srcCommands)) {
+                await fs.cp(srcCommands, path.join(targetRefDir, "commands"), { recursive: true });
+              }
+
+              // 3. Sync source disclosed-reports directory
+              const srcReports = path.join(sourceDir, "docs", "disclosed-reports");
+              if (fsSync.existsSync(srcReports)) {
+                await fs.cp(srcReports, path.join(targetRefDir, "disclosed-reports"), { recursive: true });
+              }
+
+              // 4. Sync source docs directory
+              const srcDocs = path.join(sourceDir, "docs");
+              if (fsSync.existsSync(srcDocs)) {
+                await fs.cp(srcDocs, path.join(targetRefDir, "docs"), { recursive: true });
+              }
+
+              // 5. Copy notable guide files
+              for (const guideFile of ["ENGAGEMENTS.md", "USAGE.md", "README.md", "INSTALL.md"]) {
+                const srcFile = path.join(sourceDir, guideFile);
+                if (fsSync.existsSync(srcFile)) {
+                  await fs.copyFile(srcFile, path.join(targetRefDir, guideFile));
+                }
+              }
+
+              let newVersion = skill.version || "1.0.0";
+              try {
+                const pkgPath = path.join(sourceDir, "package.json");
+                if (fsSync.existsSync(pkgPath)) {
+                  const pkgRaw = await fs.readFile(pkgPath, "utf8");
+                  const pkg = JSON.parse(pkgRaw) as { version?: string };
+                  if (pkg.version) newVersion = pkg.version;
+                }
+              } catch {
+                // ignore
+              }
+
+              // Update manifest
+              const currentManifest = (await readDevflowManifest(projectRoot)) || {};
+              const existingList = Array.isArray(currentManifest.thirdPartySkills)
+                ? (currentManifest.thirdPartySkills as InstalledSkillRecord[])
+                : [];
+              const updatedList = existingList.map((s) => {
+                if (s.name === skill.name) {
+                  return {
+                    ...s,
+                    version: newVersion,
+                    installedAt: new Date().toISOString(),
+                    type: "compound-knowledge",
+                    referencePath: refRelPath
+                  };
+                }
+                return s;
+              });
+              currentManifest.thirdPartySkills = updatedList;
+              await writeDevflowManifest(projectRoot, currentManifest);
+
+              updatedSkills.push({
+                name: skill.name,
+                category: "third-party",
+                description: skill.description || "Compound Knowledge Skill",
+                version: newVersion,
+                source: skill.source,
+                adapters: [".agents", ".claude"],
+                synced: true,
+                path: `.agents/skills/${skill.name}`
+              });
+            }
+          } else {
+            const detail = (await installThirdPartySkill(projectRoot, sourceDir, {
+              name: skill.name,
+              force: true,
+              overrideSource: isGit ? source : undefined
+            })) as SkillDetail;
+            updatedSkills.push(detail);
+          }
         } catch (err: unknown) {
           failedSkills.push({
             name: skill.name,

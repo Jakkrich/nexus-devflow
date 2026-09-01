@@ -1,0 +1,9 @@
+{
+  "skill": "setup-tests",
+  "positive": [
+    "run setup-tests skill",
+    "invoke /setup-tests command",
+    "use setup-tests to add or normalize unit testing framework",
+    "apply setup-tests guidance"
+  ]
+}
