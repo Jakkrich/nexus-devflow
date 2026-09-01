@@ -121,14 +121,6 @@
       "type": "git"
     },
     {
-      "name": "qwenchance",
-      "source": "https://github.com/thananon/9arm-skills",
-      "version": "1.0.0",
-      "description": "Keeps a long Claude Code task on-track — breaks out of looping/circular thinking, watches the context budget, bounds internal reasoning, and triggers a clean handoff before the window fills. Use when the model is repeating steps, re-reading the same files, second-guessing in circles, stuck or spinning, or running a long multi-step task at risk of exhausting context. Also use when the user says it is \"looping\", \"going in circles\", \"stuck\", \"repeating itself\", or asks for a handoff before running out of context.",
-      "installedAt": "2026-08-31T02:16:45.619Z",
-      "type": "git"
-    },
-    {
       "name": "bughunter",
       "source": "https://github.com/elementalsouls/Claude-BugHunter",
       "version": "2.0.0",
