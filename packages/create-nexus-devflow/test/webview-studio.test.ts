@@ -5,7 +5,6 @@ import path from "node:path";
 import test from "node:test";
 
 import { renderStudioHtml } from "../lib/webview-studio.js";
-import { generateIdeExtensionManifest } from "../lib/ide-extension.js";
 import { handleToolCall } from "../lib/mcp.js";
 
 async function setupTestProject(dir: string): Promise<void> {
@@ -61,15 +60,6 @@ test("renderStudioHtml renders self-contained 3-Pillars Webview Studio HTML", as
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
-});
-
-test("generateIdeExtensionManifest returns valid VS Code extension package definition", () => {
-  const manifest = generateIdeExtensionManifest();
-  assert.equal(manifest.name, "nexus-devflow-studio");
-  assert.ok(manifest.contributes.viewsContainers.activitybar.length > 0);
-  assert.ok(manifest.contributes.views["nexus-devflow-container"]);
-  assert.ok(manifest.contributes.commands.some((c) => c.command === "nexusDevFlow.openStudio"));
-  assert.ok(manifest.contributes.commands.some((c) => c.command === "nexusDevFlow.checkGate"));
 });
 
 test("MCP devflow_get_studio_html returns full studio HTML payload", async () => {

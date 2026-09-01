@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-02 | `066` | Fix | Remove Unused Extensions Artifacts & Refactor Studio Tests (`DISC-20260902-001`) | `1215909` | `Released` | [`066-remove-unused-extensions-artifacts.md`](fixes/066-remove-unused-extensions-artifacts.md) |
 | 2026-09-01 | `065` | Feature | BugHunter Master Skill & Upstream Knowledge Sync Engine (`DISC-20260901-002`) | `ec67a0b` | `Released` | [`065-bughunter-master-skill-and-sync-engine.md`](features/065-bughunter-master-skill-and-sync-engine.md) |
 | 2026-09-01 | `064` | Feature | ซิงก์ AI Blueprint Upstream v1.1.0 & v1.2.0 (Browser Tests & Independent Review System) (`DISC-20260901-001`) | `20da556` | `Released` | [`064-sync-upstream-ai-blueprint-v120.md`](features/064-sync-upstream-ai-blueprint-v120.md) |
 | 2026-08-31 | `055` | Feature | Unified Third-Party Skills Installation & Update Command (`DISC-20260831-001`) | `3a885b5` | `Released` | [`055-unified-third-party-skills-installer.md`](features/055-unified-third-party-skills-installer.md) |
