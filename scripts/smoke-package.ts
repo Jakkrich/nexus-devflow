@@ -12,6 +12,34 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const pkgDir = path.join(rootDir, "packages", "create-nexus-devflow");
 
+interface BundleManifest {
+  skill_contracts?: Record<string, string[]>;
+}
+
+async function validateInstalledSkillContracts(
+  installRoot: string,
+  contracts: Record<string, string[]>
+): Promise<void> {
+  for (const [skill, requiredText] of Object.entries(contracts)) {
+    const contents = await Promise.all(
+      [".agents", ".claude"].map((adapter) =>
+        fs.readFile(path.join(installRoot, adapter, "skills", skill, "SKILL.md"), "utf8")
+      )
+    );
+    for (const [index, content] of contents.entries()) {
+      for (const text of requiredText) {
+        if (!content.includes(text)) {
+          const adapter = index === 0 ? ".agents" : ".claude";
+          throw new Error(`${adapter}/skills/${skill}/SKILL.md is missing lifecycle contract text: ${text}`);
+        }
+      }
+    }
+    if (contents[0] !== contents[1]) {
+      throw new Error(`${skill} lifecycle contract differs between installed adapters`);
+    }
+  }
+}
+
 async function smokeTestPackage(): Promise<void> {
   console.log("Running smoke test for create-nexus-devflow package...\n");
 
@@ -57,6 +85,9 @@ async function smokeTestPackage(): Promise<void> {
     const inventory = await loadCoreSkillInventory(
       path.join(rootDir, "agent-bundle.manifest.json")
     );
+    const manifest = JSON.parse(
+      await fs.readFile(path.join(rootDir, "agent-bundle.manifest.json"), "utf8")
+    ) as BundleManifest;
     const installedSkills = await inspectAdapterSkillInventory(tempDir, inventory);
     for (const adapter of [".agents", ".claude"] as const) {
       const state = installedSkills[adapter];
@@ -66,6 +97,7 @@ async function smokeTestPackage(): Promise<void> {
         );
       }
     }
+    await validateInstalledSkillContracts(tempDir, manifest.skill_contracts || {});
 
     console.log(`\n[SUCCESS] Package smoke test passed with ${inventory.count} Core Skills per adapter!`);
   } finally {

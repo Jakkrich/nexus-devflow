@@ -151,6 +151,27 @@ discarded at `/complete`.
 
 This is a draft. Don't present it yet - critique it first.
 
+### Quality-gate and browser-evidence plan
+
+Before finishing the draft, read `devflow/config.json` and record the effective
+`qualityGates.regular.independentReview` policy in the spec. `manual` does not
+activate an automatic gate, `always` does, and `when-sensitive` activates it
+only when the feature touches authentication, authorization, secrets, payments,
+personal data, destructive operations, dependencies, deployment, or another
+security-sensitive boundary. Record the sensitivity decision and its evidence;
+do not silently choose the conditional result later.
+
+When the gate is active, add an explicit post-implementation handoff to
+`audit independent current`. The receipt must be produced from a fresh reviewer
+context after the final product/spec change; `/feature` only plans this handoff
+and never fabricates or pre-approves a receipt.
+
+Also inspect the repository's declared scripts and the feature behavior. If the
+feature is browser-facing and `test:browser` exists, put `npm run test:browser`
+in the verification matrix. Record an interactive `browseros-neo` handoff for
+observable UI behavior when that MCP is available. If either capability is
+absent, record it as unavailable instead of installing or claiming evidence.
+
 ## Step 4 - red-team the draft, then tighten
 
 Before the user reads it, turn on the spec yourself and try to break it. The

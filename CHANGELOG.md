@@ -5,6 +5,16 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-09-01
+
+### Added
+- **Synchronized with Upstream AI Blueprint v1.1.0 & v1.2.0**:
+  - **30th Core Skill: Browser Tests (`/browser-tests`)**: Added repository-owned browser test harness configuration preferring Playwright (`@playwright/test`) and seamless hybrid integration with MCP `browseros-neo` (`http://127.0.0.1:9010/mcp`) for live interactive visual QA and screenshot capture.
+  - **Independent Review Engine (`lib/review.ts`)**: Cryptographically bound 2-session independent audit handoffs (`/audit independent current`), checking target commit SHA, merge base, SHA-256 spec hash, reviewer adapter/model, and 4-lens audit receipts.
+  - **Independent Review Quality Gate**: Added `"independentReview": "manual" | "when-sensitive" | "always"` policy under `qualityGates.regular` and `qualityGates.continuous` in `devflow/config.json` and `project-config.ts`.
+  - **Task-Isolated Review Receipts (`devflow/context/{xxx-slug}/review.md`)**: Fully adapted independent review tracking into Nexus-DevFlow's Pure Task-Isolated Living Spec architecture.
+  - **Enhanced Verification Engine (`/check`, `/try`, `/complete`, `/doctor`, `/audit`, `/status`)**: Updated all core delivery skills to enforce independent review receipts and leverage dual-layer browser testing.
+
 ## [2.9.5] - 2026-08-31
 
 ### Changed

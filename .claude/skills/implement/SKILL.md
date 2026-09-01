@@ -44,6 +44,26 @@ the visual target - build components to match them, and treat `prototypes/theme.
 as the token source (the spec's first step ports it into the app's global
 stylesheet before the components are built).
 
+### Quality-gate and browser preflight
+
+Read `devflow/config.json` and the target spec's recorded decision for
+`qualityGates.regular.independentReview`. `manual` does not activate an
+automatic gate, `always` does, and `when-sensitive` follows the sensitivity
+decision and evidence captured by `/feature` or `/fix`. Stop for a spec repair
+instead of guessing when a conditional decision is missing.
+
+Treat any product or living-spec edit in this build as invalidating an earlier
+receipt. After the final Verify pass, an active gate routes to
+`audit independent current`; only a fresh receipt with `passed` verdict and
+`current` freshness may proceed toward `/complete`. This skill never approves
+its own work or rewrites receipt evidence.
+
+For a browser-facing step, run `npm run test:browser` when the script exists and
+record the result in the step evidence. Use `browseros-neo` for the interactive
+handoff when it is available and the done-when is visual or behavioral. When the
+script or MCP is absent, report that exact limitation; do not silently install a
+runner or claim browser evidence.
+
 **Resuming?** If the spec already has some build steps checked off (`- [x]`), this
 feature was started earlier and interrupted (often a cleared context). The spec and
 its ticked steps are files, so pick up where it left off: read which steps are done,

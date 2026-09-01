@@ -1,8 +1,8 @@
-# Workflow Surface Map (29 Core Skills)
+# Workflow Surface Map (30 Core Skills)
 
-This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.7.0**.
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.10.0**.
 
-The canonical surface contains **29 Core Skills** from
+The canonical surface contains **30 Core Skills** from
 `agent-bundle.manifest.json#core_skills`. Additional Local or Personal Skills
 may exist in a workspace, but are not bundled product commands until explicitly
 promoted into that inventory.
@@ -18,7 +18,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-## 2. Canonical Surface Taxonomy (29 Core Skills)
+## 2. Canonical Surface Taxonomy (30 Core Skills)
 
 ### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (7 Skills)
 | Command | Category | Purpose | Primary Artifact |
@@ -43,7 +43,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-### 🧰 3. Workspace Governance & Operations (18 Skills)
+### 🧰 3. Workspace Governance & Operations (19 Skills)
 | Command | Category | Purpose |
 | :--- | :--- | :--- |
 | `devflow` | Navigation | Flagship interactive guide, state inspector, and intent router. |
@@ -58,6 +58,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 | `ci` | Automation | Configure GitHub Actions verify workflow (`.github/workflows/verify.yml`). |
 | `test` | Quality Gate | Test runner, missing test generation, and coverage check. |
 | `tests` | Quality Gate | Add or normalize unit test suite. |
+| `browser-tests` | Quality Gate | Add or normalize Playwright browser test harness & connect with MCP browseros-neo. |
 | `autopilot` | Autonomous | Bounded Living Spec execution loop (`feature`/`fix` -> `implement` -> `check`) stopping before merge. |
 | `prototype` | Ideation | Throwaway pre-build static HTML/CSS mockups sharing design tokens. |
 | `release` | Deployment | Cloud deployment readiness check (Render / Vercel). |

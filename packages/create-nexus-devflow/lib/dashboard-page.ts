@@ -152,6 +152,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       <article class="card"><div class="card-head"><span class="label">Git & Drift</span><span class="pill" id="git-pill">loading</span></div><div class="facts"><div class="fact"><span>Branch</span><span id="git-branch">-</span></div><div class="fact"><span>Working tree</span><span id="git-changed">-</span></div><div class="fact"><span>Drift Status</span><span id="git-drift">-</span></div><div class="fact"><span>Last commit</span><span id="git-commit">-</span></div></div></article>
       <article class="card"><div class="card-head"><span class="label">Findings Ledger</span><span class="value" id="findings-count">-</span></div><div class="severity"><div class="sev"><b id="sev-p0">0</b><small>P0</small></div><div class="sev"><b id="sev-p1">0</b><small>P1</small></div><div class="sev"><b id="sev-p2">0</b><small>P2</small></div><div class="sev"><b id="sev-p3">0</b><small>P3</small></div></div><ul id="findings-list"></ul></article>
       <article class="card"><div class="card-head"><span class="label">Completion & Gate</span><span class="pill" id="completion-pill">-</span></div><ul id="completion-list"></ul></article>
+      <article class="card"><div class="card-head"><span class="label">Independent Review</span><span class="pill" id="review-state">none</span></div><div class="facts"><div class="fact"><span>Verdict</span><span id="review-verdict">-</span></div><div class="fact"><span>Freshness</span><span id="review-freshness">-</span></div><div class="fact"><span>Check</span><span id="review-check">-</span></div></div><ul id="review-warnings"></ul></article>
       <article class="card"><div class="card-head"><span class="label">Warnings</span><span class="value" id="warnings-count">-</span></div><ul id="warnings-list"></ul></article>
     </section>
 
@@ -297,6 +298,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       runs.forEach((run) => {
         const card = document.createElement('article');
         card.className = 'workspace-card';
+        const review = run.review || { state: 'none', freshness: 'not-applicable', verdict: null, checkResult: null };
         const pct = run.totalTasks > 0 ? Math.round((run.completedTasks / run.totalTasks) * 100) : 0;
         const stageClass = (run.status || '').includes('check') ? 'ws-stage stage-check' : 'ws-stage';
         const findingTag = run.hasOpenFindings ? '<span style="color:var(--red);font-size:10px;font-weight:700;">⚠ Open Findings</span>' : '<span style="color:var(--mint);font-size:10px;font-weight:700;">✔ 0 Blockers</span>';
@@ -315,6 +317,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
           findingTag +
           '<span style="font-size:10px;color:var(--muted);">' + run.remainingTasks + ' remaining</span>' +
           '</div>' +
+          '<div style="font-size:10px;color:var(--muted);margin-top:6px;">Review: <strong>' + escapeHtml(review.verdict || review.state) + '</strong> · ' + escapeHtml(review.freshness) + '</div>' +
           '<div class="ws-actions">' +
           '<button class="btn-ws" type="button" data-cmd="/implement ' + escapeHtml(run.runId) + '">▶ /implement</button>' +
           '<button class="btn-ws" type="button" data-cmd="/check ' + escapeHtml(run.runId) + '">🧪 /check</button>' +
@@ -329,7 +332,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
     }
 
     function renderSnapshot(data) {
-      const status = data.status || {}; const project = status.project || {}; const devflow = status.devflow || {}; const work = status.currentWork || {}; const git = status.git || {}; const findings = status.findings || { active: [], blockers: [] }; const workflow = data.workflow || {}; const update = data.update || {}; const doctor = data.doctor || { checks: [] }; const discoveries = data.discoveries || { recent: [] }; const history = data.history || { items: [], total: 0 }; const ideas = status.ideas || { pending: [], totalPending: 0 }; const gate = data.gatekeeper || { passed: true }; const drift = data.drift || { hasDrift: false };
+      const status = data.status || {}; const project = status.project || {}; const devflow = status.devflow || {}; const work = status.currentWork || {}; const git = status.git || {}; const findings = status.findings || { active: [], blockers: [] }; const review = status.review || { state: 'none', freshness: 'not-applicable', verdict: null, checkResult: null, warnings: [] }; const workflow = data.workflow || {}; const update = data.update || {}; const doctor = data.doctor || { checks: [] }; const discoveries = data.discoveries || { recent: [] }; const history = data.history || { items: [], total: 0 }; const ideas = status.ideas || { pending: [], totalPending: 0 }; const gate = data.gatekeeper || { passed: true }; const drift = data.drift || { hasDrift: false };
 
       text('project-name', project.name || 'Nexus-DevFlow'); text('project-path', project.root || ''); text('version-badge', 'v' + (devflow.version || '2.5.0'));
       pill('health-badge', status.health, status.health === 'ok' ? 'Health OK' : 'Health warning');
@@ -356,6 +359,7 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
       pill('git-pill', git.clean ? 'ok' : 'warning', git.clean ? 'clean' : (git.changedFiles || 0) + ' changed'); text('git-branch', git.branch || 'unknown'); text('git-changed', git.clean ? 'clean' : (git.changedFiles || 0) + ' changed files'); text('git-drift', drift.clean ? 'In Sync' : 'Drift detected'); text('git-commit', git.lastCommit || '-');
       text('findings-count', findings.total || 0); ['P0','P1','P2','P3'].forEach((severity) => text('sev-' + severity.toLowerCase(), (findings.active || []).filter((item) => item.severity === severity).length)); list('findings-list', (findings.active || []).map((item) => item.id + ' · ' + item.title), 'No active findings');
       pill('completion-pill', status.completion?.state, status.completion?.state || 'unknown'); list('completion-list', status.completion?.blockers || [], work.state === 'idle' ? 'No active run to complete' : 'All readiness checks passed'); text('warnings-count', (status.warnings || []).length); list('warnings-list', (status.warnings || []).map((item) => item.message), 'No active warnings or drift');
+      pill('review-state', review.state, review.state); text('review-verdict', review.verdict || '-'); text('review-freshness', review.freshness); text('review-check', review.checkResult || '-'); list('review-warnings', (review.warnings || []).map((item) => item.message), 'No review warnings');
       pill('doctor-pill', doctor.failCount ? 'fail' : doctor.warnCount ? 'warning' : 'ok', doctor.passCount + '/' + doctor.totalChecks + ' pass'); renderDoctor(doctor.checks || []);
       text('discovery-count', discoveries.total || 0); renderDiscoveries(discoveries.recent || []); renderCommands(data.commands);
       text('ideas-count', (ideas.totalPending || 0) + ' pending'); renderIdeas(ideas.pending || []); text('history-count', (history.total || 0) + ' released'); renderHistory(history.items || []);

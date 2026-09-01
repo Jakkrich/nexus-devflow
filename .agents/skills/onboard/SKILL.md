@@ -133,6 +133,22 @@ If no changes are needed, say so.
 
 ## Step 5 - point to optional CI setup
 
+Before the CI handoff, read `devflow/config.json` and report the effective
+`qualityGates.regular.independentReview` onboarding default. Preserve an
+existing valid user choice. Explain that `manual` is opt-in, `always` requires a
+fresh receipt for every regular run, and `when-sensitive` activates for work
+touching authentication, authorization, secrets, payments, personal data,
+destructive operations, dependencies, deployment, or another security boundary.
+Onboarding has no active task to review, so it must not create `review.md` or
+claim a verdict; when the future gate activates, the handoff is
+`audit independent current` after final implementation and verification.
+
+Detect browser capability without installing anything. If the project already
+declares `test:browser`, record `npm run test:browser` in the onboarding report.
+Also report whether `browseros-neo` is available for interactive UI evidence.
+When a browser-facing project lacks either capability, point to `/browser-tests`
+as an optional setup route and describe the gap honestly.
+
 Do not create or change Verify commands or GitHub workflows during onboarding.
 Report any verification command or CI already present. When equivalent automatic
 pull-request checks are absent, mention the optional standalone setup:

@@ -7,6 +7,7 @@
     "autopilot",
     "brainstorm",
     "brief",
+    "browser-tests",
     "check",
     "ci",
     "complete",
@@ -47,6 +48,50 @@
     ".cursor",
     ".windsurf"
   ],
+  "skill_contracts": {
+    "feature": [
+      "qualityGates.regular.independentReview",
+      "when-sensitive",
+      "audit independent current",
+      "npm run test:browser",
+      "browseros-neo"
+    ],
+    "implement": [
+      "qualityGates.regular.independentReview",
+      "when-sensitive",
+      "audit independent current",
+      "npm run test:browser",
+      "browseros-neo"
+    ],
+    "status": [
+      "qualityGates.regular.independentReview",
+      "when-sensitive",
+      "audit independent current",
+      "npm run test:browser",
+      "browseros-neo"
+    ],
+    "onboard": [
+      "qualityGates.regular.independentReview",
+      "when-sensitive",
+      "audit independent current",
+      "npm run test:browser",
+      "browseros-neo"
+    ],
+    "autopilot": [
+      "qualityGates.regular.independentReview",
+      "when-sensitive",
+      "audit independent current",
+      "npm run test:browser",
+      "browseros-neo"
+    ],
+    "continuous": [
+      "qualityGates.continuous.independentReview",
+      "when-sensitive",
+      "audit independent current",
+      "npm run test:browser",
+      "browseros-neo"
+    ]
+  },
   "commands": {
     "check": "npm run check",
     "validate": "npm run check:static",

@@ -17,7 +17,7 @@ Where this sits in the workflow:
 Testing is optional in the Blueprint until the project declares a real test
 command in `AGENTS.md`. This skill is the explicit setup path. It adds or
 normalizes **unit testing** only; browser automation and end-to-end testing are
-separate setup work.
+separate optional setup through `/browser-tests`.
 
 ## Input
 

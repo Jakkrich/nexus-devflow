@@ -1,9 +1,12 @@
 ---
 name: try
-description: "[devflow] Generate a human manual try guide for the current or most recently completed Blueprint feature, fix, or rollback. Reads the spec, project commands, and available app context, then tells the user exactly what to start, where to go, what to click or run, what to expect, and what would count as wrong. Read-only. Use when the user runs /try, invokes $try, asks how to test manually, asks where to click, asks how to see the change, or wants a manual review path after /implement, /autopilot, /check, or /complete."
+description: "[devflow] Generate a human manual try guide for the current or most recently completed Blueprint feature, fix, or rollback. Reads the spec, project commands, and available app context, connects with MCP browseros-neo when available for interactive previews, then tells the user exactly what to start, where to go, what to click or run, what to expect, and what would count as wrong. Read-only. Use when the user runs /try, invokes $try, asks how to test manually, asks where to click, asks how to see the change, or wants a manual review path after /implement, /autopilot, /check, or /complete."
+argument-hint: "[{latest|step-id|path}]"
 ---
 
 # try - manual review guide
+
+$ARGUMENTS
 
 Where this sits in the workflow:
 
@@ -58,7 +61,7 @@ include one unaffected regression path from the rollback spec.
 
 Use the Commands section in `AGENTS.md`. Match the project type:
 
-- **Web app** - dev server command, URL, and the route or screen to open.
+- **Web app** - dev server command, URL, and the route or screen to open. If `browseros-neo` MCP server is active (`http://127.0.0.1:9010/mcp`), you can also offer to inspect or navigate in the live browser.
 - **Server/API** - server command, base URL, endpoint, method, and expected
   response shape.
 - **CLI** - exact command(s), arguments, and expected output.
@@ -77,9 +80,9 @@ Produce a short guide with these sections:
 2. **Open** - URLs, screens, tabs, API endpoints, or CLI commands.
 3. **Do** - clicks, inputs, selections, or command arguments.
 4. **Expect** - visible result, output, response, state change, file, or lack of
-   error.
+    error.
 5. **Watch For** - common wrong outcomes, console or network errors, stale data,
-   missing fields, bad empty states, layout issues, or safety warnings.
+    missing fields, bad empty states, layout issues, or safety warnings.
 
 Keep it concrete. Prefer:
 
@@ -97,23 +100,5 @@ End with:
 
 - **Best signal** - the one thing the user should try first.
 - **Optional deeper checks** - only if useful.
-- **Gaps** - anything the guide cannot know from the docs, such as missing route
-  names, seed data, credentials, or external services.
-
-If the feature is not user-visible, say so and provide the closest manual signal,
-such as an API response, CLI output, log line, or unit test command.
-
-## Rules
-
-- Read-only only. Do not edit, commit, merge, push, install, or delete.
-- Do not run the app unless the user explicitly asks you to try it for them.
-- Do not pretend a path is known when the spec does not say it. Give the best
-  likely path and label uncertainty.
-- Keep the guide short enough to follow while the app is open.
-- Match the project's commands from `AGENTS.md`.
-
-## Formatting
-
-Format the output to match the project's conventions in
-`devflow/context/ai-interaction.md`: concise, scannable markdown, with numbered
-steps for the manual path and short bullets for warnings.
+- **MCP Visual Preview** - mention live browser inspection via MCP `browseros-neo` if active.
+- **Gaps** - anything the guide cannot know from the docs, such as missing route or seed data.
