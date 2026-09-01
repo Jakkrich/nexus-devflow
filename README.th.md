@@ -462,7 +462,7 @@ AI จะสร้าง Fix Spec พร้อมขั้นตอนการ�
 
 ## ตารางอ้างอิงคำสั่งทั้งหมด (Command reference)
 
-Nexus-DevFlow แจก **30 bundled Core Skills** ตาม canonical `core_skills`
+Nexus-DevFlow แจก **31 bundled Core Skills** ตาม canonical `core_skills`
 inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Personal Skills ที่เพิ่ม
 เฉพาะ workspace จะไม่ถูกนับรวมเป็น Core และไม่ติดไปกับ package ที่เผยแพร่
 จนกว่าจะได้รับการ promote อย่างชัดเจน
@@ -475,6 +475,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **brainstorm** | `/brainstorm` | Companion | ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม |
 | **brief** | `/brief` / `$brief` | Planning | สรุปข้อมูลฟีเจอร์ถัดไปแบบอ่านอย่างเดียวก่อนเริ่มเขียนสเปก |
 | **browser-tests** | `/browser-tests` / `$browser-tests` | Setup | ติดตั้งและกำหนดค่า Playwright สำหรับ browser testing พร้อมเชื่อมต่อ MCP browseros-neo |
+| **bughunter** | `/bughunter` / `$bughunter` | Security | ค้นหาช่องโหว่ความปลอดภัยเชิงรุก 83 รูปแบบ พร้อม CVE Payloads และรายงานตัวอย่าง |
 | **check** | `/check` / `$check` | QA | ตรวจแบบ Dual-Axis: ความตรงตามสเปกจากหลักฐานจริง และมาตรฐาน/สถาปัตยกรรม/Quality Gates |
 | **ci** | `/ci` / `$ci` | DevOps | ตั้งค่าคำสั่ง Verify และสร้าง GitHub Actions Workflow สำหรับ CI |
 | **complete** | `/complete` / `$complete` | Delivery | ตรวจความปลอดภัยรอบสุดท้าย, บันทึก Release Digest, จัดเก็บประวัติ และ Squash-Merge |
@@ -670,7 +671,7 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 ## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
 
-Nexus-DevFlow ติดตั้งมาพร้อมกับ **30 Core Skills** มาตรฐาน คุณสามารถติดตั้งสกิลเฉพาะทางจาก Community เพิ่มเติมได้ง่ายๆ ด้วยคำสั่ง `nexus-devflow skill add`:
+Nexus-DevFlow ติดตั้งมาพร้อมกับ **31 Core Skills** มาตรฐาน คุณสามารถติดตั้งสกิลเฉพาะทางจาก Community เพิ่มเติมได้ง่ายๆ ด้วยคำสั่ง `nexus-devflow skill add`:
 
 > [!TIP]
 > **🚀 ติดตั้ง Recommended Skills ทั้ง 8 สกิลในคำสั่งเดียว**:
