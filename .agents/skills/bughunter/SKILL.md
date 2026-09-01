@@ -18,15 +18,14 @@ Before executing any BugHunter analysis or security test:
 1. **Check if `devflow/.vendor/bughunter/` exists in this project using your file inspection tool**.
 2. **If `devflow/.vendor/bughunter/` is MISSING / NOT INSTALLED**:
    - **DO NOT hallucinate payloads or fake security reports**.
-   - Respond immediately to the user in Thai:
-     > 💡 **คลังความรู้ BugHunter (83 Vulnerability Classes, Payloads & 681 Disclosed Reports) ยังไม่ได้ถูกดาวน์โหลดในโปรเจกต์นี้**
-     > 
-     > 👉 กรุณารันคำสั่งนี้ใน Terminal เพื่อดาวน์โหลดคลังความรู้และ CVE Payloads:
-     > ```bash
-     > npx @jakkrichm/create-nexus-devflow skill add bughunter
-     > ```
-     > *(หรือพิมพ์บอกให้ผมช่วยรันคำสั่งติดตั้งให้ได้เลยครับ)*
-   - Stop and wait for the user to install or give permission.
+   - Inform the user in their configured communication language (per `devflow/config.json` and `AGENTS.md`):
+     - State clearly that the BugHunter knowledge base (83 Vulnerability Classes, Payloads & 681 Disclosed Reports) is not yet downloaded in this project.
+     - Provide the exact installation command:
+       ```bash
+       npx @jakkrichm/create-nexus-devflow skill add bughunter
+       ```
+     - Offer to run the installation command on their behalf.
+   - Stop and wait for installation before proceeding.
 3. **If `devflow/.vendor/bughunter/` is PRESENT**:
    - Proceed with the JIT Knowledge Map and 5-phase testing methodology below.
 
@@ -34,7 +33,7 @@ Before executing any BugHunter analysis or security test:
 
 ### 📦 Full Upstream Arsenal in `devflow/.vendor/bughunter/`:
 - **83 Full Skills** (`devflow/.vendor/bughunter/skills/<skill-name>/SKILL.md`): Detailed detection patterns, bypass tables, and payloads for all 83 classes.
-- **15 Slash Commands** (`devflow/.vendor/bughunter/commands/<command>.md`): `hunt`, `recon`, `triage`, `validate`, `chain`, `report`, `scope`, `token-scan`, `surface`, `autopilot`, ฯลฯ
+- **15 Slash Commands** (`devflow/.vendor/bughunter/commands/<command>.md`): `hunt`, `recon`, `triage`, `validate`, `chain`, `report`, `scope`, `token-scan`, `surface`, `autopilot`, etc.
 - **681 Disclosed HackerOne Reports** (`devflow/.vendor/bughunter/disclosed-reports/<class>.md`): Real-world vulnerability citations across 24 core classes.
 - **Engagement Scaffolding** (`devflow/.vendor/bughunter/ENGAGEMENTS.md`): Comprehensive directory and methodology scaffolding for security assessments.
 
@@ -88,11 +87,17 @@ Before analyzing or probing any security concern, **ALWAYS read the relevant ref
 
 1. **During `/check` (Security & QA Verification)**:
    - When verifying a feature dealing with Auth, Multi-tenancy, or Data Exports, run a BugHunter self-assessment:
-     `"เปิดอ่าน devflow/.vendor/bughunter/skills/hunt-idor/SKILL.md เพื่อทดสอบหาช่องโหว่ IDOR และ Token Tampering ใน Endpoint นี้"`
+     *Read `devflow/.vendor/bughunter/skills/hunt-idor/SKILL.md` to test for IDOR and token tampering vulnerabilities on the affected endpoint.*
 2. **During `/audit` (Code Audit)**:
-   - Review code against Fowler smells AND offensive attack vectors simultaneously.
+   - Review code against Fowler smells AND offensive attack vectors simultaneously, logging findings into `devflow/context/{xxx-slug}/findings.md`.
 3. **During `/debug` (Security Incident Investigation)**:
    - Trace vulnerability root causes using the 681 disclosed report patterns in `disclosed-reports/`.
+
+---
+
+## 🌐 Artifact & Communication Language
+
+All generated reports, findings recorded in `devflow/context/{xxx-slug}/findings.md`, and user communication MUST follow the project's central configuration in `devflow/config.json` (and `AGENTS.md` directive #5 / `ai-interaction.md`, defaulting to Thai `th`), while code snippets, CVE IDs, HTTP payloads, and technical identifiers remain in English.
 
 ---
 
