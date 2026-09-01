@@ -76,7 +76,7 @@ export const KNOWN_SKILL_ALIASES: Record<
   "9arm": {
     source: "https://github.com/thananon/9arm-skills",
     all: true,
-    description: "5 specialized skills (debug-mantra, post-mortem, qwen-agent, scrutinize, management-talk)"
+    description: "4 specialized skills (debug-mantra, post-mortem, scrutinize, management-talk)"
   },
   bughunter: {
     source: "https://github.com/elementalsouls/Claude-BugHunter",
@@ -98,7 +98,7 @@ export const RECOMMENDED_THIRD_PARTY_SKILLS: readonly RecommendedSkillPreset[] =
   {
     source: "https://github.com/thananon/9arm-skills",
     all: true,
-    description: "5 specialized skills (debug-mantra, post-mortem, qwen-agent, scrutinize, management-talk)"
+    description: "4 specialized skills (debug-mantra, post-mortem, scrutinize, management-talk)"
   }
 ]);
 

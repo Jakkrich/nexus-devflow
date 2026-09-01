@@ -97,14 +97,6 @@
       "type": "git"
     },
     {
-      "name": "qwen-agent",
-      "source": "https://github.com/thananon/9arm-skills",
-      "version": "1.0.0",
-      "description": "Delegate menial, well-scoped coding tasks to a cheap Qwen-backed subagent via the `claude-9arm` command instead of burning Claude tokens/quota. Use when the work is mechanical and low-risk — bulk renames, formatting, boilerplate, find-replace, grep-style search & summarization, reading/condensing logs or files, test/docstring/comment scaffolding, or running builds/linters/tests and reporting pass-fail. Also use when the user says \"use qwen\", \"delegate this\", \"send it to 9arm/qwen\", or \"do this cheaply\". Do NOT use for architecture, design, debugging judgment, security-sensitive edits, or anything needing this conversation's context.",
-      "installedAt": "2026-08-31T02:16:45.606Z",
-      "type": "git"
-    },
-    {
       "name": "scrutinize",
       "source": "https://github.com/thananon/9arm-skills",
       "version": "1.0.0",

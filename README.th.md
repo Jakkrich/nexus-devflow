@@ -688,7 +688,6 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **30 Core Skil
 | **diagram-design** | Editorial Diagram | ไดอะแกรมสาย Editorial 39 รูปแบบ (Business Quadrant, Timeline, Mindmap, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
 | **debug-mantra** | Diagnostics | วินัยการดีบักตามหลัก 4 มนต์ (Reproduce, Trace, Falsify, Cross-reference) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name debug-mantra` |
 | **post-mortem** | Quality / RCA | เขียนบันทึกวิศวกรรมการแก้บั๊ก (Root Cause Analysis & Post-mortem) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name post-mortem` |
-| **qwen-agent** | Cost Optimization | มอบหมายงานที่ไม่ซับซ้อนให้ Subagent ราคาประหยัดทำงานแทนผ่าน `claude-9arm` | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwen-agent` |
 | **scrutinize** | Code Review | รีวิว Plan, PR และ Diff เชิงลึกจากมุมมองบุคคลภายนอก | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
 | **management-talk** | Communication | แปลงเนื้อหาทางเทคนิคให้เป็นข้อความสื่อสารกับผู้บริหาร (Slack/Jira/Email/Meetings) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
 
