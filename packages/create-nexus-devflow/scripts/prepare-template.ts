@@ -74,6 +74,15 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
         if (normalized.startsWith("devflow/research/")) {
           return false;
         }
+        if (
+          normalized.startsWith("devflow/.vendor/") ||
+          normalized.startsWith("devflow/reference/bughunter/skills/") ||
+          normalized.startsWith("devflow/reference/bughunter/commands/") ||
+          normalized.startsWith("devflow/reference/bughunter/disclosed-reports/") ||
+          normalized.startsWith("devflow/reference/bughunter/docs/")
+        ) {
+          return false;
+        }
         return true;
       }
     });

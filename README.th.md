@@ -495,9 +495,9 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **release** | `/release` / `$release` | DevOps | ตรวจสอบความพร้อมและสร้างไฟล์คอนฟิกสำหรับ Render หรือ Vercel |
 | **report-html** | `/report-html` | Reporting | สร้างรายงานสรุปผลงานแบบ Standalone HTML Dashboard ตามสั่ง |
 | **rollback** | `/rollback` / `$rollback` | Delivery | วางแผนและย้อนคืนฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัย |
+| **setup-tests** | `/setup-tests` / `$setup-tests` | Setup | ติดตั้งและตั้งค่า Unit Test Runner ให้ตรงกับ Stack ของโปรเจกต์ |
 | **status** | `/status` / `$status` | Monitoring | แสดงสรุปความคืบหน้าของงานปัจจุบัน และข้อแนะนำขั้นตอนถัดไป |
 | **test** | `/test` | Testing | รันชุดทดสอบ, สร้างเคสทดสอบที่ขาดหาย และวิเคราะห์ Coverage |
-| **tests** | `/tests` / `$tests` | Setup | ติดตั้งและตั้งค่า Unit Test Runner ให้ตรงกับ Stack ของโปรเจกต์ |
 | **try** | `/try` / `$try` | QA | สร้างคู่มือสำหรับมนุษย์ในการทดสอบระบบด้วยตนเองแบบ Step-by-step |
 
 ---
@@ -539,7 +539,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 ตั้งค่าระบบ Unit Testing ให้ตรงกับ Tech Stack ของโปรเจกต์:
 
 ```text
-/tests
+/setup-tests
 ```
 
 ระบบจะเลือก Test Runner ที่เหมาะสม (Vitest, Jest, pytest, go test), เพิ่มเคสตัวอย่างเริ่มต้น และอัปเดตคำสั่งใน `AGENTS.md` ให้ทันที
@@ -761,9 +761,9 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 │       ├── release/           ($release: เตรียมความพร้อม Render & Vercel)
 │       ├── report-html/       ($report-html: สร้างรายงาน Standalone HTML)
 │       ├── rollback/          ($rollback: ย้อนคืนฟีเจอร์อย่างปลอดภัย)
+│       ├── setup-tests/       ($setup-tests: ติดตั้ง Stack-native Test Runner)
 │       ├── status/            ($status: ตรวจสอบความคืบหน้าของงาน)
 │       ├── test/              ($test: รันและสร้างเคสทดสอบ)
-│       ├── tests/             ($tests: ติดตั้ง Stack-native Test Runner)
 │       └── try/               ($try: คู่มือการทดสอบด้วยตนเองสำหรับมนุษย์)
 ├── .claude/
 │   └── skills/                (โฟลเดอร์ Skill สำหรับ Claude Code)

@@ -495,9 +495,9 @@ count and are excluded from the published package unless explicitly promoted.
 | **release** | `/release` / `$release` | DevOps | Prepare deployment config and readiness checks for Render or Vercel. |
 | **report-html** | `/report-html` | Reporting | Render interactive standalone HTML delivery dashboard on demand. |
 | **rollback** | `/rollback` / `$rollback` | Delivery | Plan and safely execute reversal of a completed feature. |
+| **setup-tests** | `/setup-tests` / `$setup-tests` | Setup | Add or normalize stack-native unit test runner. |
 | **status** | `/status` / `$status` | Monitoring | Read-only progress summary, active work, and next suggested action. |
 | **test** | `/test` | Testing | Test execution, missing test generation, and coverage analysis. |
-| **tests** | `/tests` / `$tests` | Setup | Add or normalize stack-native unit test runner. |
 | **try** | `/try` / `$try` | QA | Generate step-by-step human manual review and QA walkthrough. |
 
 ---
@@ -539,7 +539,7 @@ Testing in DevFlow is built on **Strict TDD Discipline**:
 To configure or normalize unit testing in your repository:
 
 ```text
-/tests
+/setup-tests
 ```
 
 Configures the stack-native runner (Vitest, Jest, pytest, go test), adds an initial example test, and updates `AGENTS.md` commands.
@@ -762,9 +762,9 @@ When starting a new session or resuming after clearing context:
 │       ├── release/           ($release: Render & Vercel deployment prep)
 │       ├── report-html/       ($report-html: standalone HTML dashboard)
 │       ├── rollback/          ($rollback: safe feature reversal)
+│       ├── setup-tests/       ($setup-tests: setup stack-native test runner)
 │       ├── status/            ($status: progress and drift summary)
 │       ├── test/              ($test: test execution & missing test gen)
-│       ├── tests/             ($tests: setup stack-native test runner)
 │       └── try/               ($try: manual human QA guide)
 ├── .claude/
 │   └── skills/                (Claude Code skill mirrors)
