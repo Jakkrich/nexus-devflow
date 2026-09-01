@@ -691,7 +691,6 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **30 Core Skil
 | **qwen-agent** | Cost Optimization | มอบหมายงานที่ไม่ซับซ้อนให้ Subagent ราคาประหยัดทำงานแทนผ่าน `claude-9arm` | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwen-agent` |
 | **scrutinize** | Code Review | รีวิว Plan, PR และ Diff เชิงลึกจากมุมมองบุคคลภายนอก | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
 | **management-talk** | Communication | แปลงเนื้อหาทางเทคนิคให้เป็นข้อความสื่อสารกับผู้บริหาร (Slack/Jira/Email/Meetings) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
-| **qwenchance** | Guardrails | ระบบเฝ้าระวัง Context Budget และตัดลูปการคิดวนของโมเดล | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwenchance` |
 
 > [!NOTE]
 > **ติดตั้งชุด 9arm-skills ทั้งหมดในคำสั่งเดียว**:

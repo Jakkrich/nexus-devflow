@@ -692,10 +692,9 @@ Nexus-DevFlow ships with **30 Core Skills** out-of-the-box. You can easily exten
 | **qwen-agent** | Cost Optimization | Delegate mechanical/boilerplate tasks cheaply to Qwen subagent via `claude-9arm` | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwen-agent` |
 | **scrutinize** | Code Review | Outsider-perspective deep plan, PR, and diff review | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
 | **management-talk** | Communication | Rewrite engineering updates for leadership across Slack/Jira/Email/Meetings | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
-| **qwenchance** | Guardrails | Context budget watchdog — breaks circular loops and handles context handoff | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name qwenchance` |
 
 > [!NOTE]
-> **Batch Install 9arm-skills**: Install all 6 skills from 9arm-skills in a single command:
+> **Batch Install 9arm-skills**: Install all 5 skills from 9arm-skills in a single command:
 > ```bash
 > npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all
 > ```
