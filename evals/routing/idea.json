@@ -1,6 +1,6 @@
 {
   "skill": "idea",
-  "description": "\"[Devflow] Quick idea capture and AI enrichment - analyze feasibility, value, key points, and record into devflow/ideas.md inbox.\"",
+  "description": "\"[devflow] Quick idea capture and AI enrichment - analyze feasibility, value, key points, and record into devflow/ideas.md inbox.\"",
   "positive": [
     "run idea skill",
     "invoke /idea command",

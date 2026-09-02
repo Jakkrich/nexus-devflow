@@ -1,0 +1,14 @@
+{
+  "skill": "publish-devflow",
+  "description": "\"[maintainer] Release, bump version, create git tag, and push to remote for Nexus-DevFlow framework repository. Automates semver versioning across package.json, manifest, CHANGELOG.md, runs full test suites, commits, creates annotated git tag, and pushes to origin/main with tags to trigger GitHub Actions CI/CD NPM publishing. Use when releasing a new version of Nexus-DevFlow after /complete.\"",
+  "positive": [
+    "run publish-devflow skill",
+    "invoke /publish-devflow command",
+    "use publish-devflow for maintainer release bump version create push remote nexus",
+    "apply publish-devflow guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

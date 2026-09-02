@@ -1,10 +1,10 @@
 {
   "skill": "ci",
-  "description": "\"[Devflow] Set up automated GitHub Actions CI workflow (.github/workflows/verify.yml) aligned with project verify command.\"",
+  "description": "\"[devflow] Set up or normalize one project Verify command and matching GitHub Actions checks while preserving existing CI. Use for /ci, GitHub Actions setup, pull-request checks, automatic checks, or aligning verification.\"",
   "positive": [
     "run ci skill",
     "invoke /ci command",
-    "use ci for devflow automated github actions workflow github workflows verify",
+    "use ci for devflow normalize project verify command matching github actions",
     "apply ci guidance"
   ],
   "negative": [

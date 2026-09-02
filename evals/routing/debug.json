@@ -1,10 +1,10 @@
 {
   "skill": "debug",
-  "description": "\"[Devflow] Root cause investigation and diagnostic loop before or during implementation without editing code. Use when encountering broken behavior, test failures, or bugs.\"",
+  "description": "\"[devflow] Diagnose a failing test, build, crash, regression, or unexpected behavior without editing source. Reproduce the symptom, test hypotheses, identify the supported root cause, and hand off a repair. Use for /debug or root-cause investigation.\"",
   "positive": [
     "run debug skill",
     "invoke /debug command",
-    "use debug for devflow root cause investigation diagnostic loop before during",
+    "use debug for devflow diagnose failing test build crash regression unexpected",
     "apply debug guidance"
   ],
   "negative": [

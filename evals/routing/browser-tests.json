@@ -1,0 +1,14 @@
+{
+  "skill": "browser-tests",
+  "description": "\"[devflow] Add or normalize an optional repository-owned browser test harness (preferring Playwright) and connect with MCP browserOS neo (http://127.0.0.1:9010/mcp) when available for live visual inspection and repeatable E2E automation.\"",
+  "positive": [
+    "run browser-tests skill",
+    "invoke /browser-tests command",
+    "use browser-tests for devflow normalize optional repository owned browser test harness",
+    "apply browser-tests guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

@@ -1,10 +1,10 @@
 {
   "skill": "brief",
-  "description": "\"[Devflow] Read-only scope, dependency, and risk pre-briefing before speccing a run.\"",
+  "description": "\"[devflow] Brief an upcoming build-plan feature without writing files. Explain scope, dependencies, affected areas, size, and likely splits for the next item or a named item. Use for /brief, feature previews, or build-order decisions.\"",
   "positive": [
     "run brief skill",
     "invoke /brief command",
-    "use brief for devflow read only scope dependency risk briefing before",
+    "use brief for devflow brief upcoming build plan feature without writing",
     "apply brief guidance"
   ],
   "negative": [

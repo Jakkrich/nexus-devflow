@@ -1,6 +1,6 @@
 {
   "skill": "devflow",
-  "description": "\"[Devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows.\"",
+  "description": "\"[devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows.\"",
   "positive": [
     "run devflow skill",
     "invoke /devflow command",

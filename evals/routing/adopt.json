@@ -1,10 +1,10 @@
 {
   "skill": "adopt",
-  "description": "\"[Devflow] Survey existing brownfield codebase and bootstrap DevFlow context files.\"",
+  "description": "\"[devflow] Adopt DevFlow into an existing brownfield codebase by surveying shipped behavior and generating plans, standards, commands, adapter choices, and visibility setup. Use for /adopt or bootstrapping DevFlow into an established app.\"",
   "positive": [
     "run adopt skill",
     "invoke /adopt command",
-    "use adopt for devflow survey existing brownfield codebase bootstrap devflow context",
+    "use adopt for devflow adopt devflow into existing brownfield codebase surveying",
     "apply adopt guidance"
   ],
   "negative": [

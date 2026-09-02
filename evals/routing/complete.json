@@ -1,10 +1,10 @@
 {
   "skill": "complete",
-  "description": "\"[Devflow] Fast-Track Complete stage in DevFlow (Blueprint Mode) - final safety pass, archive living spec into categorized history, reset stub, git merge, and close run.\"",
+  "description": "\"[devflow] Wrap up a finished feature, fix, or rollback. Supports Multi-Run: given an optional ID (/complete 12), archives that run from devflow/context/{xxx-slug}/ to devflow/history/, verifies independent review receipt and findings ledger, cleans up the run workspace, updates build-plan and HISTORY.md, and makes the work commit. Enforces mandatory user gate (Squash-merge vs MR/PR).\"",
   "positive": [
     "run complete skill",
     "invoke /complete command",
-    "use complete for devflow fast track complete stage devflow blueprint mode",
+    "use complete for devflow wrap finished feature rollback supports multi given",
     "apply complete guidance"
   ],
   "negative": [

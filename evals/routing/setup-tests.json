@@ -1,9 +1,14 @@
 {
   "skill": "setup-tests",
+  "description": "\"[devflow] Add or normalize unit testing for a DevFlow project. Reuses an existing runner or installs stack-native unit tests, adds an example test, updates commands, and verifies the setup. Use for /setup-tests or adding unit tests.\"",
   "positive": [
     "run setup-tests skill",
     "invoke /setup-tests command",
-    "use setup-tests to add or normalize unit testing framework",
+    "use setup-tests for devflow normalize unit testing devflow project reuses existing",
     "apply setup-tests guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
   ]
 }

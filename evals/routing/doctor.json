@@ -1,10 +1,10 @@
 {
   "skill": "doctor",
-  "description": "\"[Devflow] Read-only DevFlow health check and diagnostics for context files, adapters, commands, and workflow drift.\"",
+  "description": "\"[devflow] Run a read-only DevFlow health and context check covering setup, adapters, commands, visibility, plans, overview freshness, configuration, and workflow drift. Use for /doctor, setup problems, context overhead, or health checks.\"",
   "positive": [
     "run doctor skill",
     "invoke /doctor command",
-    "use doctor for devflow read only devflow health check diagnostics context",
+    "use doctor for devflow read only devflow health context check covering",
     "apply doctor guidance"
   ],
   "negative": [
