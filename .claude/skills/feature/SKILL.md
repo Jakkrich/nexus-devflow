@@ -1,6 +1,6 @@
 ---
 name: feature
-description: "[devflow] Turn a feature from build-plan.md into a buildable living spec. Supports Multi-Run Spec Queue: drafts dedicated context in devflow/context/{xxx-slug}/ without blocking additional specs. With no argument, specs the next unchecked item; given a number or name, specs that one. Sizes and splits large items (4a, 4b), generates TDD checklist steps, red-teams the draft, and stops at review gate. Use when running /feature, naming a feature, or drafting the next living spec."
+description: "[devflow] Turn a build-plan item into a task-isolated living spec (devflow/context/{xxx-slug}/spec.md), splitting oversized work and checking contracts and tests before review. Use for /feature, starting the next feature, or drafting a spec."
 argument-hint: "[{number, name, DISC-id, or IDEA-id}]"
 ---
 
@@ -85,9 +85,13 @@ State which feature you're building before going further.
 
 ## Step 2 - size it, and split if too big
 
-Read the target line from `build-plan.md`, then pull full context from
-`devflow/context/project-overview.md` (the data model, stack, and conventions). Decide
-how big the feature is:
+Read the target line from `build-plan.md`, then check the byte size of
+`devflow/context/project-overview.md` before reading it.
+At or above 20,000 bytes, stop and tell the user to run `/overview` to regenerate a compact consolidation.
+Do not pull the oversized file into the conversation again. If
+the overview is already present in project instructions or the current session,
+use that copy and do not read it again with a tool. Otherwise, read it once for
+the data model, stack, and conventions. Decide how big the feature is:
 
 - **Small enough to build and review as one unit** -> one spec. Continue to
   Step 3.

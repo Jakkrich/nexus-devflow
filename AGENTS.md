@@ -26,6 +26,8 @@ To start a new project, scaffold the application first in an empty folder, then 
 
 `qualityGates.regular` controls automatic audit, independent-review, check, and try-guide behavior for the normal workflow and Autopilot. `qualityGates.continuous` controls the same per-feature gates for Continuous Mode. Every gate defaults to `manual`. The conditional modes are `when-sensitive` for audit and independent review, `when-behavioral` for check, and `when-user-facing` for try guides. `always` runs the gate for every work item in that workflow.
 
+New projects default to one review packet after all small implementation steps (`workflow.stepReview: "feature"`) with step checkpoint commits disabled (`workflow.checkpointCommits: "disabled"`). This keeps the normal loop reviewable without repeating the full session context after every step. Set `stepReview` to `every` when teaching, pairing closely, or working on a high-risk change. That restores the per-step approval pauses. To fully restore the previous workflow, including optional checkpoint prompts after an approved step, also set `checkpointCommits` to `enabled`. Onboarding presents these pairs as Efficient and Guided choices, but stores only the two low-level settings. They can be changed at any time.
+
 ## Tool-Specific Adapters & Execution Rules
 
 The workflow and skills are exposed through tool-specific adapters:

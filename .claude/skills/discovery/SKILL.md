@@ -77,9 +77,9 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
    - Codebase-grounded interactive inquiry to clarify entity boundaries, data flows, and edge cases.
    - Record agreed terminology in `devflow/context/glossary.md` and major architecture decisions in `devflow/decisions/ADR-xxx-{slug}.md`.
 6. **🎨 Visual Architecture & Diagram Design Lens (`archify` / `diagram-design`)**:
-   - When exploring system topologies, legacy IT modernizations, sequence flows, data platform pipelines, state machines, or user journeys, check for `archify` or `diagram-design` in `.claude/skills/`.
-   - **For interactive system architecture, dataflows, state transitions, and sequence traces**: Use `archify` (`.claude/skills/archify/SKILL.md`) to compile validated interactive HTML artifacts with dark/light themes, motion, and route probes.
-   - **For editorial, business, quadrant, or broad diagram types**: Use `diagram-design` (`.claude/skills/diagram-design/SKILL.md`).
+   - When exploring system topologies, legacy IT modernizations, sequence flows, data platform pipelines, state machines, or user journeys, check for `archify` or `diagram-design` in `.agents/skills/`.
+   - **For interactive system architecture, dataflows, state transitions, and sequence traces**: Use `archify` (`.agents/skills/archify/SKILL.md`) to compile validated interactive HTML artifacts with dark/light themes, motion, and route probes.
+   - **For editorial, business, quadrant, or broad diagram types**: Use `diagram-design` (`.agents/skills/diagram-design/SKILL.md`).
    - Save diagram artifacts to `devflow/discoveries/{DISCOVERY_ID}-{slug}/diagrams/{name}.html` and reference them directly in `discovery.md`.
 
 ### Decision & Approval Gate:

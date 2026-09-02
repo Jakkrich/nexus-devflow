@@ -1,6 +1,6 @@
 ---
 name: setup-tests
-description: "[devflow] Add or normalize unit testing for a Blueprint project. Detects the stack, reuses an existing test runner when present, or installs the stack-native unit test runner when missing, then adds one small example test, updates AGENTS.md commands, runs build and tests, and reports the diff. Use when the user runs /setup-tests, invokes $setup-tests, asks to add unit tests, set up unit testing, configure tests, or make tests part of the Blueprint workflow."
+description: "[devflow] Add or normalize unit testing for a DevFlow project. Reuses an existing runner or installs stack-native unit tests, adds an example test, updates commands, and verifies the setup. Use for /setup-tests or adding unit tests."
 ---
 
 # setup-tests - add unit testing to the project

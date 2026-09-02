@@ -69,11 +69,78 @@ After compilation:
 
 - report what changed in structure and which sections are now `TODO`
 - list conflicts or unresolved questions between the two plans
-- suggest `/feature` as the next action when the queue is ready
+- apply the initial planning baseline handoff in Step 4 before suggesting `/feature`
+
+## Step 4 - offer the initial planning baseline commit
+
+During the initial pre-feature overview phase, offer to commit the approved
+DevFlow setup and plans before Feature 1 starts. This keeps installation,
+onboarding, planning, and the generated overview out of the first feature
+commit. Never create this commit silently.
+
+Treat this as the initial pre-feature state only when all of these are true:
+
+- the project is a Git repository with an existing `HEAD` commit
+- the current branch is the default branch, resolving the remote default when
+  available and otherwise accepting `main` or `master`
+- the version of `devflow/context/project-overview.md` in `HEAD` does not
+  already contain a generated overview baseline
+- `devflow/context/` has no active task-isolated workspace directories (`devflow/context/{xxx-slug}/`)
+- `devflow/history/features/`, `fixes/`, and `rollbacks/` contain no archived
+  work beyond their shipped `README.md` placeholders
+- `devflow/build-plan.md` contains no checked feature items
+- the DevFlow workflow is meant to be committed, not kept local-only
+
+If there is no `HEAD` yet, stop and ask the user to commit the app scaffold by
+itself before rerunning `/overview`; never create a root commit that mixes the
+app and DevFlow. If the initial run is on a non-default branch, stop and ask
+the user to return to the default branch first. These are recoverable initial
+handoffs, not permission to offer another baseline after one is committed.
+
+Detect local-only mode with Git, not memory. Use `git check-ignore` on the
+present workflow paths. If `.agents/`, `.claude/`, `devflow/`, or `CLAUDE.md`
+are ignored as part of the onboarding local-only choice, skip the offer and
+continue to the normal `/feature` guidance. `AGENTS.md` remaining public does not
+make a local-only setup eligible.
+
+Before asking:
+
+1. Read `git status`, the staged diff, the unstaged diff, and untracked paths.
+2. Build a candidate containing only DevFlow installation, adapter,
+   configuration, planning, context, and onboarding changes under `AGENTS.md`,
+   `CLAUDE.md`, `.agents/`, `.claude/`, and `devflow/`. Include `.gitignore`
+   only when every changed hunk is clearly an onboarding or DevFlow ignore
+   entry.
+3. Exclude generated local state such as `devflow/.state/`, secrets, logs,
+   caches, dependencies, build output, and application source.
+4. Stop if any staged change or dirty path falls outside the candidate, or if an
+   allowed file contains an unrelated hunk. Do not mix app scaffolding or other
+   user work into this commit. Tell the user exactly what must be committed,
+   moved, or restored first, then leave the repository unchanged.
+5. If the candidate is empty, skip the offer.
+6. Show the exact candidate paths and their diff before asking:
+   `Create the initial planning baseline commit now? (Recommended)`
+   State that accepting creates one local commit and never pushes it.
+
+If the user accepts, stage only the reviewed candidate, show the staged paths
+and diff summary, verify no other path is staged, and commit with this exact
+message:
+
+```text
+chore: establish DevFlow project baseline
+```
+
+Then confirm the working tree state and recommend `/feature`. If the user
+declines, leave the repository untouched and explain that these setup and
+planning changes will remain uncommitted until they create the baseline later.
+Do not offer this baseline on later overview reruns once `HEAD` already contains
+a generated overview or feature work has begun.
 
 ## Rules
 
 - `project-overview.md` is generated, not authored manually.
+- **Keep the overview compact.** Never copy long plan passages. The generated overview must remain below 20,000 bytes. Measure it before the final handoff. If a draft is larger, compact narrative and repeated lists while preserving concrete contracts, build order, and constraints.
+- **One reviewed baseline.** Offer the initial planning commit once, immediately before Feature 1, and only after showing its exact scope. Never create this commit silently or treat an overview rerun as permission to commit.
 - Do not invent features, data models, or stack claims not sourced from inputs.
 - Keep user-owned plans intact unless the user explicitly approved normalization.
 - Re-run `/overview` whenever plan docs or shipped-history change materially.
@@ -82,3 +149,4 @@ After compilation:
 
 - Use concise lists and tables for matrices.
 - Follow `devflow/context/ai-interaction.md` language and tone conventions.
+

@@ -106,6 +106,11 @@ During `/check`:
 - **Stage 1 (Spec Fidelity Gate)**: Report each Acceptance Criterion and "Done When" status.
 - **Stage 2 (Code Quality & Security Gate)**: Report Typecheck, Lint, Test Suites, Security checks, and Findings Ledger (0 blockers).
 
+### ⚡ Review Cadence & Implementation Loop
+- **Efficient Default (`stepReview: "feature"`)**: Presents one comprehensive review packet after all implementation steps of the feature complete, with step checkpoint commits disabled (`checkpointCommits: "disabled"`). This minimizes review fatigue and saves context window tokens.
+- **Guided Review (`stepReview: "every"`)**: Available for high-risk changes, pair programming, or instructional sessions. Pauses for user approval after each small step and offers checkpoint commits (`checkpointCommits: "enabled"`).
+- **Configuration**: Managed directly in `devflow/config.json`.
+
 ---
 
 ## 5. Standalone HTML Reporting Policy

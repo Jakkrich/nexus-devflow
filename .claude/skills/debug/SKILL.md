@@ -1,6 +1,6 @@
 ---
 name: debug
-description: "[devflow] Diagnose a failing test, broken build, crash, error, regression, or unexpected behavior without editing source or DevFlow state. Follows a strict 6-Phase Scientific Debugging Loop: builds a red-capable tight feedback loop, reproduces & minimises, tests 3-5 falsifiable hypotheses, localizes the failure to a root cause, and reports a repair handoff to /fix or /implement. Use when the user runs /debug, invokes $debug, asks why something is failing or broken, wants a root-cause investigation, or asks to diagnose before fixing."
+description: "[devflow] Diagnose a failing test, build, crash, regression, or unexpected behavior without editing source. Reproduce the symptom, test hypotheses, identify the supported root cause, and hand off a repair. Use for /debug or root-cause investigation."
 ---
 
 # debug - 6-Phase Scientific Debugging Protocol

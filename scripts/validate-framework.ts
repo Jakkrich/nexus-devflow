@@ -234,6 +234,60 @@ function validateSkillContracts(
   }
 }
 
+async function validateSkillMetadata(failures: string[]): Promise<void> {
+  try {
+    const inventory = await loadCoreSkillInventory(
+      path.join(projectRoot, "agent-bundle.manifest.json")
+    );
+    let totalDescriptionCharacters = 0;
+
+    for (const skill of inventory.names) {
+      for (const adapter of [".agents", ".claude"] as const) {
+        const skillFile = path.join(projectRoot, adapter, "skills", skill, "SKILL.md");
+        if (!fs.existsSync(skillFile)) {
+          fail(`Skill file missing for metadata validation: ${skillFile}`, failures);
+          continue;
+        }
+        const content = fs.readFileSync(skillFile, "utf8");
+        const match = content.match(/^description:\s*(?:"([^"]+)"|([^\r\n]+))/m);
+        const description = match ? (match[1] || match[2]).trim() : "";
+
+        if (!description) {
+          fail(`Skill description is missing in ${skillFile}`, failures);
+          continue;
+        }
+
+        if (description.length > 400) {
+          fail(
+            `Skill description exceeds the 400-character budget: ${skill} in ${adapter} (${description.length} chars)`,
+            failures
+          );
+        }
+
+        if (adapter === ".agents") {
+          totalDescriptionCharacters += description.length;
+        }
+      }
+    }
+
+    if (totalDescriptionCharacters > 8000) {
+      fail(
+        `Core skill descriptions exceed the 8,000-character context budget: ${totalDescriptionCharacters}`,
+        failures
+      );
+    } else {
+      ok(
+        `Core skill descriptions validated (${inventory.count} skills, ${totalDescriptionCharacters} total chars <= 8,000)`
+      );
+    }
+  } catch (error: unknown) {
+    fail(
+      `Skill metadata validation failed: ${error instanceof Error ? error.message : String(error)}`,
+      failures
+    );
+  }
+}
+
 async function main(): Promise<void> {
   const failures: string[] = [];
   const manifest = readJson<{
@@ -274,6 +328,7 @@ async function main(): Promise<void> {
   validateRoadmap(failures);
   validateWorkflowNumbering(failures);
   await validateCoreSkillContract(failures);
+  await validateSkillMetadata(failures);
   validateManifestSync(failures);
   validateSkillContracts(manifest?.skill_contracts || {}, failures);
 
