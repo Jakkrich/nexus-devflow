@@ -172,4 +172,12 @@
   - *Dependencies*: Feature 20, DISC-20260902-001
   - *Scope*: ขยายชุดทดสอบ Evals Routing ให้ครอบคลุมทุกสคิล (`browser-tests.json`, `continuous.json`, `bughunter.json`, `publish-devflow.json`), นำเข้าและปรับใช้ Live-Agent E2E Test Harness (`scripts/e2e/`), สคริปต์จำลองติดตั้ง Sandbox Scaffolding (`scripts/scaffold-sandbox.ts`), สคริปต์ตรวจจับ Upstream Drift (`scripts/check-upstream-drift.ts`), และเอกสารวิเคราะห์ Token Efficiency (`benchmarks/context-efficiency.md`)
 
+---
+
+## 🎨 Phase 22: Visual Dashboard & Diagram Integration
+
+- [x] **22. Standalone HTML Report Diagram Integration (`DISC-20260902-003`, `069-report-html-diagram-integration`)** `[Size: S]`
+  - *Dependencies*: Feature 17 (`055`), DISC-20260902-003
+  - *Scope*: ปรับปรุง `md2html-report.mjs` รองรับการเรนเดอร์ native Mermaid block (`.mermaid`), เพิ่มการสแกนและ embed ไฟล์ไดอะแกรมจาก `devflow/context/{xxx-slug}/diagrams/` (`.svg` และ `.html`), อัปเดต `report-html` skill ให้ตรวจจับและ auto-install `archify` / `diagram-design` ผ่าน `nexus-devflow skill add` และเขียนชุดทดสอบครอบคลุม
+
 

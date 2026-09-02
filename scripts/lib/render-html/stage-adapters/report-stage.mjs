@@ -9,8 +9,18 @@ function readFileSafe(filePath) {
 }
 
 export function resolveReportWorkspaceDir(argument, projectRoot) {
-  // If no argument, check context/current-feature.md or context/current-run
+  // If no argument, check context task directories first, then current-feature.md or current-run
   if (!argument) {
+    const contextRoot = path.join(projectRoot, 'devflow', 'context');
+    if (fs.existsSync(contextRoot) && fs.statSync(contextRoot).isDirectory()) {
+      const activeTasks = fs.readdirSync(contextRoot, { withFileTypes: true })
+        .filter((e) => e.isDirectory() && fs.existsSync(path.join(contextRoot, e.name, 'spec.md')))
+        .sort((a, b) => b.name.localeCompare(a.name));
+      if (activeTasks.length > 0) {
+        return path.join(contextRoot, activeTasks[0].name);
+      }
+    }
+
     const currentFeature = path.join(projectRoot, 'devflow', 'context', 'current-feature.md');
     if (fs.existsSync(currentFeature)) {
       const content = fs.readFileSync(currentFeature, 'utf8');
@@ -40,6 +50,16 @@ export function resolveReportWorkspaceDir(argument, projectRoot) {
       const stats = fs.statSync(directPath);
       if (stats.isDirectory()) return directPath;
       if (stats.isFile()) return path.dirname(directPath);
+    }
+
+    // Search in task-isolated active context
+    const contextRoot = path.join(projectRoot, 'devflow', 'context');
+    if (fs.existsSync(contextRoot) && fs.statSync(contextRoot).isDirectory()) {
+      const contextCandidates = fs.readdirSync(contextRoot, { withFileTypes: true })
+        .filter((e) => e.isDirectory() && e.name.startsWith(argument));
+      if (contextCandidates.length === 1) {
+        return path.join(contextRoot, contextCandidates[0].name);
+      }
     }
 
     // Search in history folders

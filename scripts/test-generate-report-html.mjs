@@ -161,7 +161,48 @@ related_run: "998"
   assert(thaiHtml.includes('เปลี่ยนธีม'), 'thai html should localize the md2html theme tooltip');
   assert(thaiHtml.includes('id="toc-nav"'), 'thai html should include the md2html toc shell');
 
+  const contextWorkspaceDir = path.join(scratchRoot, 'devflow', 'context', '068-mermaid-feature');
+  writeFile(path.join(contextWorkspaceDir, 'spec.md'), `---
+id: "068-mermaid-feature"
+title: "Mermaid Integration Spec"
+artifact_language: "th"
+doc_type: "feature"
+stage: "spec"
+created: "2026-09-02"
+---
+
+# Mermaid Integration Spec
+
+## 1. Architecture Flow
+
+\`\`\`mermaid
+flowchart TD
+  Client --> API[Gateway API]
+  API --> DB[(Database)]
+\`\`\`
+`);
+
+  const contextResult = run([contextWorkspaceDir]);
+  assert(contextResult.status === 0, `context report html generation should pass:\n${contextResult.stdout}\n${contextResult.stderr}`);
+  const contextHtml = fs.readFileSync(path.join(contextWorkspaceDir, 'report.html'), 'utf8');
+  assert(contextHtml.includes('<pre class="mermaid">'), 'html should render mermaid code fence as <pre class="mermaid">');
+  assert(!contextHtml.includes('<pre><code>flowchart TD'), 'html should not render raw code block for mermaid');
+
+  // Task 2: Task Diagrams Showcase with SVG and Interactive HTML
+  const diagramsDir = path.join(contextWorkspaceDir, 'diagrams');
+  writeFile(path.join(diagramsDir, 'architecture.svg'), '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="coral" /></svg>');
+  writeFile(path.join(diagramsDir, 'interactive-flow.html'), '<!DOCTYPE html><html><body>Interactive Diagram Content</body></html>');
+
+  const diagramRunResult = run([contextWorkspaceDir]);
+  assert(diagramRunResult.status === 0, `diagram run should pass:\n${diagramRunResult.stdout}\n${diagramRunResult.stderr}`);
+  const diagramHtml = fs.readFileSync(path.join(contextWorkspaceDir, 'report.html'), 'utf8');
+  assert(diagramHtml.includes('class="diagrams-showcase"'), 'html should render diagrams showcase section when diagrams/ exist');
+  assert(diagramHtml.includes('<svg viewBox="0 0 100 100">'), 'html should embed svg diagram');
+  assert(diagramHtml.includes('src="./diagrams/interactive-flow.html"'), 'html should embed iframe for html diagram');
+
   console.log('[OK] generate-report-html renders report markdown directly into html output.');
 } finally {
   fs.rmSync(scratchRoot, { recursive: true, force: true });
 }
+
+
