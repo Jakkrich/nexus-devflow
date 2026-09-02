@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: "[devflow] Set up the Blueprint after overlaying it onto a freshly scaffolded or early project. Detects the stack, tunes project files and adapters, documents real commands and existing checks, points to the optional standalone CI setup, and tells the user what to fill in before /overview or $overview. Use when the user runs /onboard, invokes $onboard, just copied the Blueprint into a new project, or asks what to do after overlaying the Blueprint. For an existing app with meaningful shipped features, use adopt instead."
+description: "[devflow] Onboard a fresh or early scaffold after DevFlow is overlaid by tuning commands, standards, adapters, visibility, review cadence, and context loading. Use for /onboard or fresh installation setup."
 ---
 
 # onboard - finish the Blueprint overlay setup
@@ -119,13 +119,40 @@ Cover the practical conventions the build loop needs:
 If the project is too new to reveal a convention, leave a concise `> TODO` rather
 than pretending a pattern exists.
 
-## Step 4 - check AI interaction rules
+## Step 4 - check AI interaction rules and workflow configuration
+
+`devflow/config.json` is the user-owned workflow policy for this project. Keep
+it lean and machine-readable: never write stack choices, conventions, custom
+commands, product requirements, communication prose, secrets, or permission for
+commits, merges, pushes, deployments, publication, destructive actions, failed
+checks, or finding waivers into config.
+
+Unless the user already chose these values, ask one short **Implementation
+style** question using the current tool's selectable prompt when available:
+
+1. **Efficient (Recommended)** - one feature-level review packet and no step
+   checkpoint prompts. Write `workflow.stepReview: "feature"` and
+   `workflow.checkpointCommits: "disabled"`.
+2. **Guided** - pause for approval after every step and offer optional checkpoint
+   commits. Write `workflow.stepReview: "every"` and
+   `workflow.checkpointCommits: "enabled"`.
+3. **Custom** - ask separately when review should happen and whether checkpoint
+   commits should be offered, then write the selected low-level values.
+
+These are onboarding presets, not a third configuration field.
+Never write an `implementationStyle` key. Show the current two values before asking, preserve
+them if the user chooses not to change them, and explain that either value can be
+edited later. A later `/implement` run reads the current configuration.
 
 Read `devflow/context/ai-interaction.md` and update only obvious mismatches.
 Usually the default review loop should stay intact. Flag preferences for the user
 instead of guessing, such as:
 
-- whether commits should be offered after every step
+- whether review should happen once per feature (the lower-context default) or
+  after every step for teaching, close pairing, or high-risk work
+- whether optional step checkpoint commits should be enabled. Explain that the
+  previous workflow requires per-step review and enabled checkpoints together;
+  changing only `stepReview` restores the approval pauses, not checkpoint prompts
 - whether branches should use a different naming pattern
 - whether `/check` should require browser evidence for UI work
 

@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: "[devflow] Optional explicit Blueprint mode for one bounded spec/build/check/audit pass. It can pick or resume the current feature, write the spec when needed, create or reuse the branch, implement small steps, run build/tests/checks, create checkpoint commits after passing steps, audit changed code, repair confirmed high-severity findings, and stop with a review packet. It never completes, merges, pushes, deploys, publishes, sends, or performs destructive actions without explicit approval. Use only when the user explicitly runs /autopilot, invokes $autopilot, or directly asks for Autopilot."
+description: "[devflow] Run one explicit bounded DevFlow spec and implementation pass through configured quality gates, then stop before completion or external actions. Use only when the user directly invokes /autopilot, $autopilot, or asks for Autopilot."
 ---
 
 # autopilot - optional Blueprint loop

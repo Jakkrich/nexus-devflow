@@ -1,6 +1,6 @@
 ---
 name: doctor
-description: "[devflow] Run a read-only Blueprint health check for setup, onboarding, required files, tool adapters, commands, optional verification and CI, Blueprint visibility, ignore rules, planning readiness, overview freshness, and workflow drift. Use when the user runs /doctor, asks whether the Blueprint is installed correctly, wants a health check, setup check, doctor pass, or says something feels off before starting or resuming work."
+description: "[devflow] Run a read-only DevFlow health and context check covering setup, adapters, commands, visibility, plans, overview freshness, configuration, and workflow drift. Use for /doctor, setup problems, context overhead, or health checks."
 ---
 
 # doctor - Blueprint health check
@@ -66,7 +66,6 @@ Gather these, then summarize. Do not dump file contents.
      logical adapters: Codex, Claude Code, GitHub Copilot, Antigravity, and OpenCode.
    - Confirm at least one compatible skill tree exists. Codex, Antigravity, and
      GitHub Copilot use `.agents/skills/`. Claude Code uses `.claude/skills/`.
-   - OpenCode can use either tree.
    - If both skill trees are present, say that is healthy when the selected
      tools require both. Compare their skill folder names and warn about missing
      skills on either side.
@@ -131,6 +130,9 @@ Gather these, then summarize. Do not dump file contents.
 6. **Overview freshness**
    - Check whether `devflow/context/project-overview.md` exists and looks
      generated from the current plans.
+   - Report its byte size. At or above 20,000 bytes, call it oversized and say
+     `/feature` should stop until `/overview` regenerates a compact
+     consolidation.
    - If either planning file appears newer than the overview by filesystem time,
      call the overview possibly stale and suggest `/overview` before feature work.
 7. **Current workflow state**

@@ -1,6 +1,6 @@
 ---
 name: rollback
-description: "[devflow] Plan a safe reversal of a completed Blueprint feature using its archived spec and squashed git commit. Finds the exact feature commit, reviews later commits for dependency risk, writes a Type: Rollback spec to devflow/context/{xxx-slug}/spec.md, and stops for review before /implement applies any code change. Use when the user runs /rollback, asks to remove or undo a completed feature, or wants to return the app to its pre-feature behavior without erasing Blueprint history."
+description: "[devflow] Plan a safe history-preserving reversal of a completed feature from its archive and exact commit, including later-dependency risk, then stop before implementation. Use for /rollback or requests to undo a completed feature."
 ---
 
 # rollback - safely reverse a completed feature

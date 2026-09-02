@@ -1,6 +1,6 @@
 ---
 name: try
-description: "[devflow] Generate a human manual try guide for the current or most recently completed Blueprint feature, fix, or rollback. Reads the spec, project commands, and available app context, connects with MCP browseros-neo when available for interactive previews, then tells the user exactly what to start, where to go, what to click or run, what to expect, and what would count as wrong. Read-only. Use when the user runs /try, invokes $try, asks how to test manually, asks where to click, asks how to see the change, or wants a manual review path after /implement, /autopilot, /check, or /complete."
+description: "[devflow] Generate a read-only manual try guide for current or recent work with commands, locations, actions, expected results, and failure signs. Use for /try, how to test manually, where to click, or a human review path."
 argument-hint: "[{latest|step-id|path}]"
 ---
 

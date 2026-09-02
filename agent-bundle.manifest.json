@@ -55,7 +55,16 @@
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo"
+      "browseros-neo",
+      "At or above 20,000 bytes, stop and tell the user to run `/overview`"
+    ],
+    "overview": [
+      "chore: establish DevFlow project baseline",
+      "Create the initial planning baseline commit now? (Recommended)",
+      "overview must remain below 20,000 bytes"
+    ],
+    "doctor": [
+      "At or above 20,000 bytes, call it oversized"
     ],
     "implement": [
       "qualityGates.regular.independentReview",
@@ -76,7 +85,11 @@
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo"
+      "browseros-neo",
+      "Efficient (Recommended)",
+      "Guided",
+      "Custom",
+      "Never write an `implementationStyle` key"
     ],
     "autopilot": [
       "qualityGates.regular.independentReview",

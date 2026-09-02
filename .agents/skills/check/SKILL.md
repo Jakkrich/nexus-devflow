@@ -1,6 +1,6 @@
 ---
 name: check
-description: "[devflow] Prove the current work actually does what its spec says and adheres to architectural standards through a Dual-Axis Independent Review. Supports Multi-Run: given an optional ID or name (/check 12), targets that spec and records proof to devflow/context/{xxx-slug}/findings.md. Drives the app, captures empirical evidence using Playwright and MCP browseros-neo, checks Fowler smells, and reports pass/fail. Use when running /check, confirming work, or validating before /complete."
+description: "[devflow] Check the running app, CLI, or server against the active spec's done-when criteria and capture observable pass or fail evidence without editing code. Use for /check, proving behavior before completion beyond builds and tests."
 argument-hint: "[{run-id, number, or name}]"
 ---
 

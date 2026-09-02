@@ -155,3 +155,11 @@
 - [x] **19. BugHunter Master Skill & Upstream Knowledge Sync Engine (`DISC-20260901-002`, `065-bughunter-master-skill-and-sync-engine`)** `[Size: M]`
   - *Dependencies*: Feature 17, Feature 18
   - *Scope*: พัฒนา Master Orchestrator Skill `bughunter` พร้อมระบบ Sync ดึงคลังความรู้ 83 skills และ report patterns จาก `elementalsouls/Claude-BugHunter` เก็บใน `devflow/.vendor/bughunter/`, รองรับคำสั่ง `nexus-devflow skill add/update bughunter`, อัปเดต Manifest และผสานเข้ากับ Multi-Adapter (`.agents/`, `.claude/`)
+
+---
+
+## 🔄 Phase 20: Upstream AI Blueprint v1.3.0 – v1.4.1 Synchronization
+
+- [x] **20. Sync Upstream v1.3.0 – v1.4.1 (Planning Baseline Commit & Context Overhead Reduction) (`DISC-20260902-002`, `067-sync-upstream-ai-blueprint-v130-v141`)** `[Size: M]`
+  - *Dependencies*: Feature 18, DISC-20260902-002
+  - *Scope*: ผสานสคิล Planning Baseline Commit ใน `/overview` (`chore: establish DevFlow project baseline`), กฎ Overview Compactness Budget (20KB) พร้อม Hard-stop ใน `/feature` และคำเตือนใน `/doctor`, ปรับ Workflow Defaults เป็น `stepReview: "feature"` และ `checkpointCommits: "disabled"` พร้อม Onboarding Presets (Efficient/Guided/Custom), ย่อ Skill Descriptions 31 สคิลให้ <= 400 chars, ปรับ Claude Code Startup Context ใน `CLAUDE.md`, และอัปเดต Framework Validation/Tests ผ่าน 100%

@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-02 | `067` | Feature | ซิงก์ AI Blueprint Upstream v1.3.0 – v1.4.1 (Planning Baseline Commit, Overview 20KB Compactness & Efficient Workflow) (`DISC-20260902-002`) | `d8c46d9` | `Released` | [`067-sync-upstream-ai-blueprint-v130-v141.md`](features/067-sync-upstream-ai-blueprint-v130-v141.md) |
 | 2026-09-02 | `066` | Fix | Remove Unused Extensions Artifacts & Refactor Studio Tests (`DISC-20260902-001`) | `3e0eb89` | `Released` | [`066-remove-unused-extensions-artifacts.md`](fixes/066-remove-unused-extensions-artifacts.md) |
 | 2026-09-01 | `065` | Feature | BugHunter Master Skill & Upstream Knowledge Sync Engine (`DISC-20260901-002`) | `ec67a0b` | `Released` | [`065-bughunter-master-skill-and-sync-engine.md`](features/065-bughunter-master-skill-and-sync-engine.md) |
 | 2026-09-01 | `064` | Feature | ซิงก์ AI Blueprint Upstream v1.1.0 & v1.2.0 (Browser Tests & Independent Review System) (`DISC-20260901-001`) | `20da556` | `Released` | [`064-sync-upstream-ai-blueprint-v120.md`](features/064-sync-upstream-ai-blueprint-v120.md) |

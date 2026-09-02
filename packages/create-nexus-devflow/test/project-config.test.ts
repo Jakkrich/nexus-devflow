@@ -11,7 +11,7 @@ import {
   readProjectConfig
 } from "../lib/project-config.js";
 
-test("default config keeps every quality gate manual", () => {
+test("default config keeps every quality gate manual and workflow efficient", () => {
   const defaults = createDefaultProjectConfig();
   const manualGates = {
     audit: "manual",
@@ -20,6 +20,8 @@ test("default config keeps every quality gate manual", () => {
     tryGuide: "manual"
   };
 
+  assert.equal(defaults.workflow.stepReview, "feature");
+  assert.equal(defaults.workflow.checkpointCommits, "disabled");
   assert.deepEqual(defaults.qualityGates.regular, manualGates);
   assert.deepEqual(defaults.qualityGates.continuous, manualGates);
   assert.equal(defaults.continuous.finalIntegrationAudit, false);

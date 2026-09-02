@@ -1,6 +1,6 @@
 ---
 name: brief
-description: "[devflow] Read-only briefing on an upcoming build-plan feature before you spec it. With no argument, briefs the next unchecked item; given a number or name, briefs that one. Reads build-plan.md and project-overview.md and explains what the feature is, what it depends on, what it will touch, how big it is, and whether it will split - without writing anything. Use when the user runs /brief, asks what the next feature involves, wants to understand or preview a feature before /feature, or is deciding what to build or reorder next."
+description: "[devflow] Brief an upcoming build-plan feature without writing files. Explain scope, dependencies, affected areas, size, and likely splits for the next item or a named item. Use for /brief, feature previews, or build-order decisions."
 ---
 
 # brief - understand a feature before you spec it

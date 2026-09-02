@@ -66,8 +66,8 @@ function createDefaultProjectConfig(): ProjectConfig {
   return {
     schemaVersion: PROJECT_CONFIG_SCHEMA_VERSION,
     workflow: {
-      stepReview: "every",
-      checkpointCommits: "enabled"
+      stepReview: "feature",
+      checkpointCommits: "disabled"
     },
     git: {
       featureBranchPrefix: "feature/",
