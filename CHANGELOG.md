@@ -5,6 +5,20 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2026-09-02
+
+### Added
+- **Full Upstream AI Blueprint v1.3.0 – v1.4.1 Synchronization**:
+  - **Planning Baseline Commit (`/overview`)**: Automatic initial planning checkpoint commit (`chore: establish DevFlow project baseline`) after overview approval before starting Feature 1.
+  - **Overview Compactness Guard (20KB)**: Enforces `project-overview.md` to remain under 20,000 bytes with doctor health warnings and hard-stop in `/feature`.
+  - **Lean Workflow Defaults & Onboarding Presets**: Defaults to `stepReview: "feature"` and `checkpointCommits: "disabled"` with Efficient / Guided / Custom selection during onboarding.
+  - **Skill Description Budget (<= 400 chars)**: Compacted frontmatter descriptions across all 31 Core Skills to minimize AI prompt overhead.
+  - **Complete Intent Routing Evals Suite (`evals/routing/`)**: Expanded routing test cases to all 38 skills (152 test cases with 100% Rank 1 match accuracy).
+  - **Live-Agent E2E Test Harness (`scripts/e2e/`)**: Autonomous headless AI test runner with 8 boundary and safety scenarios.
+  - **Upstream Drift Monitor (`scripts/check-upstream-drift.ts`)**: Automated radar tracking Upstream AI Blueprint release tags, commits, and skill parity.
+  - **Sandbox Scaffolding Automation (`scripts/scaffold-sandbox.ts`, `scripts/clear-sandbox.ts`)**: Isolated test harness for validating `@jakkrichm/create-nexus-devflow` overlay installations.
+  - **Context Efficiency Benchmark (`benchmarks/context-efficiency.md`)**: Empirical documentation of 36%–55% token reductions and context window optimization.
+
 ## [2.10.3] - 2026-09-01
 
 ### Changed
