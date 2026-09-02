@@ -122,13 +122,18 @@ function renderBodyWithToc(markdownBody) {
 
     if (trimmed.startsWith('```')) {
       const codeLines = [];
+      const isMermaid = trimmed.startsWith('```mermaid');
       index++;
       while (index < lines.length && !lines[index].trim().startsWith('```')) {
         codeLines.push(lines[index]);
         index++;
       }
       if (index < lines.length) index++;
-      html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+      if (isMermaid) {
+        html.push(`<pre class="mermaid">${escapeHtml(codeLines.join('\n'))}</pre>`);
+      } else {
+        html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+      }
       continue;
     }
 
@@ -190,6 +195,72 @@ function replaceAll(template, values) {
   return output;
 }
 
+function scanAndRenderTaskDiagrams(workspaceDir, locale = 'th') {
+  const diagramsDir = path.join(workspaceDir, 'diagrams');
+  if (!fs.existsSync(diagramsDir) || !fs.statSync(diagramsDir).isDirectory()) {
+    return '';
+  }
+
+  const entries = fs.readdirSync(diagramsDir, { withFileTypes: true })
+    .filter((e) => e.isFile() && /\.(svg|html|png|jpe?g|webp)$/i.test(e.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  if (entries.length === 0) return '';
+
+  const headingText = locale === 'th' ? 'สถาปัตยกรรมและไดอะแกรมของระบบ (System Diagrams)' : 'System & Architecture Diagrams';
+  const openTabLabel = locale === 'th' ? 'เปิดเต็มจอ ↗' : 'Open in new tab ↗';
+
+  const cards = entries.map((entry) => {
+    const ext = path.extname(entry.name).toLowerCase();
+    const basename = path.basename(entry.name, ext);
+    const title = basename.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const filePath = path.join(diagramsDir, entry.name);
+
+    if (ext === '.svg') {
+      const svgContent = fs.readFileSync(filePath, 'utf8').trim();
+      return `        <div class="diagram-card" data-type="svg">
+          <div class="diagram-header">
+            <span class="diagram-title">${escapeHtml(title)}</span>
+            <span class="diagram-badge">SVG</span>
+          </div>
+          <div class="diagram-body svg-container">
+            ${svgContent}
+          </div>
+        </div>`;
+    }
+
+    if (ext === '.html') {
+      return `        <div class="diagram-card" data-type="html">
+          <div class="diagram-header">
+            <span class="diagram-title">${escapeHtml(title)}</span>
+            <span class="diagram-badge">Interactive HTML</span>
+            <a href="./diagrams/${escapeHtml(entry.name)}" target="_blank" class="diagram-link">${escapeHtml(openTabLabel)}</a>
+          </div>
+          <div class="diagram-body frame-container">
+            <iframe src="./diagrams/${escapeHtml(entry.name)}" loading="lazy" sandbox="allow-scripts allow-same-origin" title="${escapeHtml(title)}"></iframe>
+          </div>
+        </div>`;
+    }
+
+    return `        <div class="diagram-card" data-type="image">
+          <div class="diagram-header">
+            <span class="diagram-title">${escapeHtml(title)}</span>
+            <span class="diagram-badge">Image</span>
+          </div>
+          <div class="diagram-body image-container">
+            <img src="./diagrams/${escapeHtml(entry.name)}" alt="${escapeHtml(title)}" loading="lazy" />
+          </div>
+        </div>`;
+  });
+
+  return `<section class="diagrams-showcase" id="diagrams-showcase">
+        <h2 id="system-diagrams">${escapeHtml(headingText)}</h2>
+        <div class="diagrams-grid">
+${cards.join('\n')}
+        </div>
+      </section>`;
+}
+
 export function renderReportWithMd2HtmlTemplate({ sourcePath, markdown, outputPath }) {
   const template = fs.readFileSync(templatePath, 'utf8');
   const { frontmatter, title, body } = splitTitleAndBody(markdown, path.basename(sourcePath));
@@ -200,7 +271,20 @@ export function renderReportWithMd2HtmlTemplate({ sourcePath, markdown, outputPa
   const { html: renderedBody, tocEntries } = renderBodyWithToc(body);
   const date = frontmatter.updated || frontmatter.created || new Date().toISOString().slice(0, 10);
 
-  const contentHtml = renderedBody || `<div class="highlight"><span class="highlight-label">${escapeHtml(labels.keyPoint)}</span><p>${escapeHtml(subtitle)}</p></div>`;
+  const workspaceDir = path.dirname(sourcePath);
+  const diagramsHtml = scanAndRenderTaskDiagrams(workspaceDir, locale);
+  if (diagramsHtml) {
+    tocEntries.push({
+      level: 2,
+      id: 'system-diagrams',
+      text: locale === 'th' ? 'สถาปัตยกรรมและไดอะแกรมของระบบ' : 'System & Architecture Diagrams'
+    });
+  }
+
+  let contentHtml = renderedBody || `<div class="highlight"><span class="highlight-label">${escapeHtml(labels.keyPoint)}</span><p>${escapeHtml(subtitle)}</p></div>`;
+  if (diagramsHtml) {
+    contentHtml += `\n\n      ${diagramsHtml}`;
+  }
   const values = {
     LANG: escapeHtml(locale),
     REC_LABEL: escapeHtml(labels.recLabel),

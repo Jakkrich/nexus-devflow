@@ -118,6 +118,7 @@ export function renderMarkdownBody(markdown) {
 
     if (line.startsWith('```')) {
       const codeLines = [];
+      const isMermaid = line.trim().startsWith('```mermaid');
       index++;
       while (index < lines.length && !lines[index].startsWith('```')) {
         codeLines.push(lines[index]);
@@ -126,7 +127,11 @@ export function renderMarkdownBody(markdown) {
       if (index < lines.length) {
         index++;
       }
-      html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+      if (isMermaid) {
+        html.push(`<pre class="mermaid">${escapeHtml(codeLines.join('\n'))}</pre>`);
+      } else {
+        html.push(`<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+      }
       continue;
     }
 
