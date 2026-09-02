@@ -116,8 +116,8 @@
       "name": "bughunter",
       "source": "https://github.com/elementalsouls/Claude-BugHunter",
       "version": "2.0.0",
-      "description": "Offensive security orchestrator & bug hunting guide. Indexes 83 vulnerability classes, 5-phase methodology (Think, Hunt, Perimeter, Ship), 681 disclosed HackerOne patterns, and JIT reference guides in devflow/.vendor/bughunter/. Use when running /bughunter, performing security reviews, verifying auth/injection risks in /check or /audit, or testing API endpoints for vulnerabilities.",
-      "installedAt": "2026-09-01T15:50:48.514Z",
+      "description": "Offensive security orchestrator & bug hunting guide",
+      "installedAt": "2026-09-02T09:26:44.979Z",
       "type": "compound-knowledge",
       "referencePath": "devflow/.vendor/bughunter"
     }
