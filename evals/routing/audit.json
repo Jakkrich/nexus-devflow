@@ -1,9 +1,14 @@
 {
   "skill": "audit",
+  "description": "\"[devflow] Audit current changes, a path, or the full project for quality, security, performance, or test problems and record durable findings. Independent mode prepares or completes a fresh-reviewer checkpoint handoff in review.md.\"",
   "positive": [
     "run audit skill",
     "invoke /audit command",
-    "use audit for code quality review and security audit",
+    "use audit for devflow audit current changes path full project quality",
     "apply audit guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
   ]
 }

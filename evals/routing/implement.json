@@ -1,10 +1,10 @@
 {
   "skill": "implement",
-  "description": "\"[Devflow] Fast-Track Implement stage in DevFlow (Blueprint Mode) - execute checklist tasks incrementally with TDD and update current-feature.md in context.\"",
+  "description": "\"[devflow] Implement or start coding the active task-isolated spec on its branch in small steps, running tests after each step and presenting the configured review handoff. Use for /implement or requests to build or resume an approved spec.\"",
   "positive": [
     "run implement skill",
     "invoke /implement command",
-    "use implement for devflow fast track implement stage devflow blueprint mode",
+    "use implement for devflow implement start coding active task isolated spec",
     "apply implement guidance"
   ],
   "negative": [

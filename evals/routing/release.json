@@ -1,9 +1,14 @@
 {
   "skill": "release",
+  "description": "\"[devflow] Prepare local Render or Vercel deployment configuration and verify build, start, output, environment, and health-check readiness without deploying. Use for /release, deploy readiness, render.yaml, or vercel.json.\"",
   "positive": [
     "run release skill",
     "invoke /release command",
-    "use release for deployment readiness and vercel render check",
+    "use release for devflow prepare local render vercel deployment configuration verify",
     "apply release guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
   ]
 }

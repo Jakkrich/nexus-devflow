@@ -1,10 +1,10 @@
 {
   "skill": "prototype",
-  "description": "\"[Devflow] Build a throwaway prototype to answer a design question during Discover, Define, Spec, Research, or Plan.\"",
+  "description": "\"[devflow] Plan and create throwaway static HTML and CSS mockups with shared design tokens before feature implementation. Use for /prototype, screen mockups, layout exploration, themes, or deciding a project's look and feel.\"",
   "positive": [
     "run prototype skill",
     "invoke /prototype command",
-    "use prototype for devflow build throwaway prototype answer design question during",
+    "use prototype for devflow plan create throwaway static html mockups with",
     "apply prototype guidance"
   ],
   "negative": [

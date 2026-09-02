@@ -1,9 +1,14 @@
 {
   "skill": "discovery",
+  "description": "\"[devflow] Unified discovery and exploration stage in DevFlow 2.5.0 - conducts project-level roadmap discovery (project-plan.md/build-plan.md) or feature-level pre-delivery exploration before the Single Living Spec lifecycle.\"",
   "positive": [
     "run discovery skill",
     "invoke /discovery command",
-    "use discovery for pre-delivery exploration and deep planning",
+    "use discovery for devflow unified discovery exploration stage devflow conducts project",
     "apply discovery guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
   ]
 }

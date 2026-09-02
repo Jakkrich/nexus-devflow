@@ -1,10 +1,10 @@
 {
   "skill": "try",
-  "description": "\"[Devflow] Generate human manual QA review walkthrough guide (where to go, what to click, what to expect).\"",
+  "description": "\"[devflow] Generate a read-only manual try guide for current or recent work with commands, locations, actions, expected results, and failure signs. Use for /try, how to test manually, where to click, or a human review path.\"",
   "positive": [
     "run try skill",
     "invoke /try command",
-    "use try for devflow generate human manual review walkthrough guide where",
+    "use try for devflow generate read only manual guide current recent",
     "apply try guidance"
   ],
   "negative": [

@@ -1,10 +1,10 @@
 {
   "skill": "feature",
-  "description": "\"[Devflow] Fast-Track Feature stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract in context for new features.\"",
+  "description": "\"[devflow] Turn a build-plan item into a task-isolated living spec (devflow/context/{xxx-slug}/spec.md), splitting oversized work and checking contracts and tests before review. Use for /feature, starting the next feature, or drafting a spec.\"",
   "positive": [
     "run feature skill",
     "invoke /feature command",
-    "use feature for devflow fast track feature stage devflow blueprint mode",
+    "use feature for devflow turn build plan item into task isolated",
     "apply feature guidance"
   ],
   "negative": [

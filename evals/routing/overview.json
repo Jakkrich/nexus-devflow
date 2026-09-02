@@ -1,10 +1,10 @@
 {
   "skill": "overview",
-  "description": "\"[Devflow] Scan codebase architecture, data models, and shipped history to synthesize or refresh devflow/context/project-overview.md as the living source of truth.\"",
+  "description": "\"[devflow] Distill user-owned planning docs into `devflow/context/project-overview.md` using a deterministic compiler. The overview is the living source of truth that agents read every session.\"",
   "positive": [
     "run overview skill",
     "invoke /overview command",
-    "use overview for devflow scan codebase architecture data models shipped history",
+    "use overview for devflow distill user owned planning docs into devflow",
     "apply overview guidance"
   ],
   "negative": [

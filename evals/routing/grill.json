@@ -1,9 +1,14 @@
 {
   "skill": "grill",
+  "description": "\"[devflow] Interactive Socratic alignment & domain modeling - stress-test plans, extract domain glossary, and record architecture decision records (ADRs) before delivery.\"",
   "positive": [
     "run grill skill",
     "invoke /grill command",
-    "use grill for socratic alignment and domain modeling",
+    "use grill for devflow interactive socratic alignment domain modeling stress test",
     "apply grill guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
   ]
 }

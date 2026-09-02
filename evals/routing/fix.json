@@ -1,10 +1,10 @@
 {
   "skill": "fix",
-  "description": "\"[Devflow] Fast-Track Fix stage in DevFlow (Blueprint Mode) - define, spec, plan, and create the living current-feature.md contract in context for bug fixes.\"",
+  "description": "\"[devflow] Write a task-isolated spec (devflow/context/{xxx-slug}/spec.md) for an ad-hoc bug fix or small unplanned change, then stop before implementation. Use for /fix, confirmed bugs, or small changes outside the build plan.\"",
   "positive": [
     "run fix skill",
     "invoke /fix command",
-    "use fix for devflow fast track stage devflow blueprint mode define",
+    "use fix for devflow write task isolated spec devflow context slug",
     "apply fix guidance"
   ],
   "negative": [

@@ -1,0 +1,14 @@
+{
+  "skill": "continuous",
+  "description": "\"[devflow] Autonomous multi-feature delivery loop in Nexus-DevFlow: completes planned features serially from devflow/build-plan.md without review pauses. Maintains safety boundaries, Task-Isolated Living Spec, branch isolation, TDD verification, quality gates, and local squash-merges into main. Use when running /continuous, $continuous, or executing Continuous Mode.\"",
+  "positive": [
+    "run continuous skill",
+    "invoke /continuous command",
+    "use continuous for devflow autonomous multi feature delivery loop nexus devflow",
+    "apply continuous guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

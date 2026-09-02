@@ -1,10 +1,10 @@
 {
   "skill": "rollback",
-  "description": "\"[Devflow] Plan safe feature or run reversal with dependency and commit risk analysis.\"",
+  "description": "\"[devflow] Plan a safe history-preserving reversal of a completed feature from its archive and exact commit, including later-dependency risk, then stop before implementation. Use for /rollback or requests to undo a completed feature.\"",
   "positive": [
     "run rollback skill",
     "invoke /rollback command",
-    "use rollback for devflow plan safe feature reversal with dependency commit",
+    "use rollback for devflow plan safe history preserving reversal completed feature",
     "apply rollback guidance"
   ],
   "negative": [

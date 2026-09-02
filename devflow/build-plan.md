@@ -163,3 +163,13 @@
 - [x] **20. Sync Upstream v1.3.0 – v1.4.1 (Planning Baseline Commit & Context Overhead Reduction) (`DISC-20260902-002`, `067-sync-upstream-ai-blueprint-v130-v141`)** `[Size: M]`
   - *Dependencies*: Feature 18, DISC-20260902-002
   - *Scope*: ผสานสคิล Planning Baseline Commit ใน `/overview` (`chore: establish DevFlow project baseline`), กฎ Overview Compactness Budget (20KB) พร้อม Hard-stop ใน `/feature` และคำเตือนใน `/doctor`, ปรับ Workflow Defaults เป็น `stepReview: "feature"` และ `checkpointCommits: "disabled"` พร้อม Onboarding Presets (Efficient/Guided/Custom), ย่อ Skill Descriptions 31 สคิลให้ <= 400 chars, ปรับ Claude Code Startup Context ใน `CLAUDE.md`, และอัปเดต Framework Validation/Tests ผ่าน 100%
+
+---
+
+## 🛠️ Phase 21: Upstream Tooling Parity & Comprehensive Evals Suite
+
+- [x] **21. Upstream Tooling Parity & Comprehensive Evals Suite (E2E Agent Harness, Complete Routing Fixtures, Sandbox Automation & Upstream Drift Monitor) (`DISC-20260902-001`, `068-sync-upstream-ai-blueprint-tooling-and-evals`)** `[Size: M]`
+  - *Dependencies*: Feature 20, DISC-20260902-001
+  - *Scope*: ขยายชุดทดสอบ Evals Routing ให้ครอบคลุมทุกสคิล (`browser-tests.json`, `continuous.json`, `bughunter.json`, `publish-devflow.json`), นำเข้าและปรับใช้ Live-Agent E2E Test Harness (`scripts/e2e/`), สคริปต์จำลองติดตั้ง Sandbox Scaffolding (`scripts/scaffold-sandbox.ts`), สคริปต์ตรวจจับ Upstream Drift (`scripts/check-upstream-drift.ts`), และเอกสารวิเคราะห์ Token Efficiency (`benchmarks/context-efficiency.md`)
+
+

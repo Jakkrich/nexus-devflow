@@ -1,6 +1,6 @@
 {
   "skill": "test",
-  "description": "\"[Devflow] Test execution, missing test generation, and coverage analysis across unit, integration, and smoke test suites.\"",
+  "description": "\"[devflow] Test execution, missing test generation, and coverage analysis across unit, integration, and smoke test suites.\"",
   "positive": [
     "run test skill",
     "invoke /test command",

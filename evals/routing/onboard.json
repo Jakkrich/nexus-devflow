@@ -1,10 +1,10 @@
 {
   "skill": "onboard",
-  "description": "\"[Devflow] Set up Nexus-DevFlow after overlaying it onto a freshly scaffolded or early-stage project.\"",
+  "description": "\"[devflow] Onboard a fresh or early scaffold after DevFlow is overlaid by tuning commands, standards, adapters, visibility, review cadence, and context loading. Use for /onboard or fresh installation setup.\"",
   "positive": [
     "run onboard skill",
     "invoke /onboard command",
-    "use onboard for devflow nexus devflow after overlaying onto freshly scaffolded",
+    "use onboard for devflow onboard fresh early scaffold after devflow overlaid",
     "apply onboard guidance"
   ],
   "negative": [

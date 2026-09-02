@@ -1,10 +1,10 @@
 {
   "skill": "check",
-  "description": "\"[Devflow] Fast-Track Check stage in DevFlow (Blueprint Mode) - perform senior QA review, run multi-lane verification, and record evidence in current-feature.md in context.\"",
+  "description": "\"[devflow] Check the running app, CLI, or server against the active spec's done-when criteria and capture observable pass or fail evidence without editing code. Use for /check, proving behavior before completion beyond builds and tests.\"",
   "positive": [
     "run check skill",
     "invoke /check command",
-    "use check for devflow fast track check stage devflow blueprint mode",
+    "use check for devflow check running server against active spec done",
     "apply check guidance"
   ],
   "negative": [

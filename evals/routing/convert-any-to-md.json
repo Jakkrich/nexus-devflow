@@ -1,9 +1,14 @@
 {
   "skill": "convert-any-to-md",
+  "description": "\"[devflow] Converts any document (.xlsx, .pdf, .docx, .txt, .csv, .log, .json, .yaml, etc.) or mixed folders into clean Markdown in devflow/reference. Use whenever documents need to be analyzed, summarized, searched, or extracted from.\"",
   "positive": [
     "run convert-any-to-md skill",
     "invoke /convert-any-to-md command",
-    "use convert-any-to-md to convert document into markdown",
+    "use convert-any-to-md for devflow converts document xlsx docx json yaml mixed",
     "apply convert-any-to-md guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
   ]
 }
