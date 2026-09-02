@@ -410,10 +410,10 @@ devflow/
 
 | ไฟล์ / ตำแหน่ง | สร้างโดยคำสั่ง | หน้าที่และคำอธิบาย |
 | :--- | :--- | :--- |
-| `devflow/context/project-overview.md` | `/overview` | ข้อมูลแกนกลางของระบบ (Source of Truth) ครอบคลุมสถาปัตยกรรม, Stack และ Roadmap |
-| `devflow/context/current-feature.md` | `/feature`, `/fix`, `/rollback` | Single Living Spec ของงานที่กำลังดำเนินการอยู่ในปัจจุบัน |
-| `devflow/context/findings.md` | `/audit` | สมุดบันทึกคุณภาพ, ความปลอดภัย และผลการตรวจโค้ดพร้อมรหัสถาวร (`F-01`) |
-| `devflow/context/current-stage.md` | Stage Skills | ตัวชี้สถานะบอกว่างานปัจจุบันอยู่ในขั้นตอนใดและความคืบหน้าเป็นอย่างไร |
+| `devflow/context/project-overview.md` | `/overview` | ข้อมูลแกนกลางของระบบ (Source of Truth) ควบคุมขนาดไม่เกิน 20,000 bytes |
+| `devflow/context/{xxx-slug}/spec.md` | `/feature`, `/fix`, `/rollback` | Task-Isolated Living Spec สำหรับงานที่กำลังดำเนินการอยู่ในปัจจุบัน |
+| `devflow/context/{xxx-slug}/findings.md` | `/audit` | สมุดบันทึกคุณภาพ, ความปลอดภัย และผลการตรวจโค้ดของ Task ปัจจุบัน |
+| `devflow/context/{xxx-slug}/stage.md` | Stage Skills | ตัวชี้สถานะบอกว่างานปัจจุบันอยู่ในขั้นตอนใด (`implement`, `check`, `complete`) |
 | `devflow/decisions/ADR-xxx.md` | `/grill` | บันทึกการตัดสินใจสถาปัตยกรรม (ADR) ระบุบริบท, ทางเลือก และผลกระทบ |
 | `devflow/discoveries/DISC-xxx.md` | `/discovery` | เอกสารผลการสำรวจและศึกษาความเป็นไปได้ก่อนเปิดงานจริง |
 | `devflow/history/features/xxx.md` | `/complete` | สเปกฟีเจอร์ที่ทำเสร็จแล้ว พร้อมบันทึกการทำงานและหลักฐานผลการทดสอบ |
@@ -426,13 +426,46 @@ devflow/
 ## คู่มือการใช้งานเวิร์กโฟลว์ (Using the workflow)
 
 ### ขั้นตอนการส่งมอบงานมาตรฐาน
-1. **ดูสรุปและสร้างสเปก**: สั่ง `/brief` เพื่อดูสรุปฟีเจอร์ถัดไป หรือสั่ง `/feature "ชื่อฟีเจอร์"` เพื่อสร้าง Living Spec ใน `current-feature.md`
+1. **ดูสรุปและสร้างสเปก**: สั่ง `/brief` เพื่อดูสรุปฟีเจอร์ถัดไป หรือสั่ง `/feature "ชื่อฟีเจอร์"` เพื่อสร้าง Task-Isolated Living Spec ใน `devflow/context/{xxx-slug}/spec.md`
 2. **รีวิวสเปก**: ตรวจสอบขอบเขต, Acceptance Criteria และขั้นตอนงาน TDD ก่อนอนุมัติให้เขียนโค้ด
-3. **ลงมือเขียนโค้ดทีละขั้น**: สั่ง `/implement` โดย AI จะทำทีละข้อภายใต้วินัย Strict TDD และส่ง Diff ให้ตรวจ
+3. **ลงมือเขียนโค้ดตามสเปก**: สั่ง `/implement` โดย AI จะทำทีละข้อภายใต้วินัย Strict TDD พร้อมจังหวะการรีวิวตามโหมดที่กำหนดใน config (เช่น Efficient หรือ Guided)
 4. **ตรวจสอบผลงาน**: สั่ง `/check` เพื่อให้ Senior QA รัน Verification Matrix บนระบบจริง
 5. **คู่มือทดสอบด้วยตนเอง**: สั่ง `/try` เพื่อดูขั้นตอนการทดสอบด้วยมือ (URL, การคลิก, ผลลัพธ์ที่ถูกต้อง)
 6. **Audit คุณภาพโค้ด**: สั่ง `/audit current` เพื่อตรวจสอบความปลอดภัย, Performance และมาตรฐานโค้ดบน Branch
 7. **ส่งมอบและปิดงาน**: สั่ง `/complete` เพื่อตรวจความปลอดภัย, บันทึก Release Digest, เก็บสเปกเข้าประวัติ และทำ Squash-Merge
+
+---
+
+### สไตล์การทำงานและจังหวะการรีวิว (Implementation Style & Review Cadence)
+
+Nexus-DevFlow ช่วยให้คุณกำหนดจังหวะการทำงานและการรีวิวโค้ดของ AI ได้อย่างยืดหยุ่นใน `devflow/config.json`:
+
+```json
+{
+  "workflow": {
+    "stepReview": "feature",
+    "checkpointCommits": "disabled"
+  }
+}
+```
+
+คำสั่ง `/onboard` มีตัวเลือกสำเร็จรูป (Presets) 3 รูปแบบ:
+- ⚡ **Efficient (Recommended - ค่าเริ่มต้น)**: AI ดำเนินการตามสเปกอย่างต่อเนื่องจนเสร็จครบทั้งฟีเจอร์ แล้วสรุป Review Packet ให้ตรวจทีเดียว และไม่มี Checkpoint commit ย่อยๆ กวนใจ ช่วยลดความล้าในการรีวิว (Review Fatigue) และประหยัด Token สูงสุด
+- 🧭 **Guided**: AI หยุดขอการอนุมัติหลังจบทุกๆ สเต็ปย่อย (`stepReview: "every"`) และเสนอทำ Git Checkpoint Commit (`checkpointCommits: "enabled"`) เหมาะสำหรับการสอนงาน, การจับคู่เขียนโค้ด (Close Pairing), หรืองานสถาปัตยกรรมที่มีความเสี่ยงสูง
+- 🛠️ **Custom**: แยกปรับแต่งความถี่การรีวิวและการสร้าง Checkpoint commit ได้อย่างอิสระ
+
+#### 🛡️ การควบคุมขนาด Overview ไม่เกิน 20KB (Overview Compactness Guard)
+เอกสารสรุปโครงการ `devflow/context/project-overview.md` จะถูกควบคุมขนาดให้อยู่ต่ำกว่า 20,000 bytes (~4,000–5,000 tokens) เสมอ เพื่อไม่ให้สิ้นเปลือง Token Window:
+- คำสั่ง `/doctor` จะรายงานขนาดไบต์จริง และแจ้งเตือนสถานะ `oversized` หากมีขนาดเกิน
+- คำสั่ง `/feature` มีระบบ Hard-Stop ป้องกันการดึง Overview ที่มีขนาดเกิน 20KB และมี Directive สั่งให้ AI Reuse Context เดิมที่มีอยู่แล้วในเซสชันโดยไม่อ่านซ้ำผ่าน Tool
+
+#### 📌 Planning Baseline Commit
+เมื่อรันคำสั่ง `/overview` ในโปรเจกต์ใหม่ ระบบจะมี Step 4 แนะนำให้สร้าง Git Commit เริ่มต้น:
+```bash
+git commit -m "chore: establish DevFlow project baseline"
+```
+เพื่อแยกไฟล์ Setup, Adapters, และ Planning Documents ออกจาก Feature Commit แรก ช่วยให้ประวัติ Git สะอาดและตรวจสอบย้อนหลังได้ง่าย
+
 
 ---
 
@@ -484,14 +517,14 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยเชิงวิทยาศาสตร์ 6 ระยะด้วย Red-capable feedback loop โดยไม่แก้ซอร์สโค้ด |
 | **devflow** | `/devflow` / `$devflow` | Router | ตัวตรวจสถานะหลัก, เราเตอร์นำทางขั้นตอน และคู่มือช่วยทำงาน |
 | **discovery** | `/discovery` / `$discovery` | Companion | สำรวจและค้นคว้าความต้องการของระบบเชิงลึกก่อนเริ่มพัฒนา |
-| **doctor** | `/doctor` / `$doctor` | Health | ตรวจสุขภาพของ Workspace, Adapters และความพร้อมของระบบ |
-| **feature** | `/feature` / `$feature` | Delivery | เปลี่ยนความต้องการฟีเจอร์ให้เป็น Single Living Spec ใน `current-feature.md` |
+| **doctor** | `/doctor` / `$doctor` | Health | ตรวจสุขภาพ Workspace, Adapters, และรายงานขนาดไบต์ Overview (เตือนเมื่อ >= 20KB) |
+| **feature** | `/feature` / `$feature` | Delivery | สร้าง Living Spec ใน `devflow/context/{xxx-slug}/spec.md` พร้อม 20KB Overview Guard |
 | **fix** | `/fix` / `$fix` | Delivery | กำหนดสเปกและขั้นตอนการแก้บั๊กหรือ Patch ขนาดเล็ก |
 | **grill** | `/grill` / `/align` | Companion | Socratic Alignment, สกัดคำศัพท์เฉพาะ และสร้างเอกสาร ADR |
 | **idea** | `/idea` | Companion | บันทึกไอเดียลงใน `devflow/ideas.md` พร้อม AI Scoring |
-| **implement** | `/implement` / `$implement` | Delivery | ลงมือเขียนโค้ดตามสเปกทีละขั้นตอนด้วยวินัย Strict TDD |
-| **onboard** | `/onboard` / `$onboard` | Setup | ตั้งค่าเริ่มต้นสำหรับโปรเจกต์ที่เพิ่งสร้างใหม่ |
-| **overview** | `/overview` / `$overview` | Planning | สังเคราะห์ `project-overview.md` จากไอเดียและแผนงาน |
+| **implement** | `/implement` / `$implement` | Delivery | ลงมือเขียนโค้ดตามสเปกทีละขั้นตอนด้วยวินัย Strict TDD ตาม Review Cadence |
+| **onboard** | `/onboard` / `$onboard` | Setup | ตั้งค่าเริ่มต้นโปรเจกต์ใหม่ พร้อมเลือกสไตล์การพัฒนา (Efficient / Guided / Custom) |
+| **overview** | `/overview` / `$overview` | Planning | สังเคราะห์ `project-overview.md` ไม่เกิน 20KB พร้อมเสนอทำ Planning Baseline Commit |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | สร้าง Mockup แบบ Static HTML/CSS ในโฟลเดอร์ `prototypes/` |
 | **release** | `/release` / `$release` | DevOps | ตรวจสอบความพร้อมและสร้างไฟล์คอนฟิกสำหรับ Render หรือ Vercel |
 | **report-html** | `/report-html` | Reporting | สร้างรายงานสรุปผลงานแบบ Standalone HTML Dashboard ตามสั่ง |
