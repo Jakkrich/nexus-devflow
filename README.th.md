@@ -495,7 +495,7 @@ AI จะสร้าง Fix Spec พร้อมขั้นตอนการ�
 
 ## ตารางอ้างอิงคำสั่งทั้งหมด (Command reference)
 
-Nexus-DevFlow แจก **31 bundled Core Skills** ตาม canonical `core_skills`
+Nexus-DevFlow แจก **32 bundled Core Skills** ตาม canonical `core_skills`
 inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Personal Skills ที่เพิ่ม
 เฉพาะ workspace จะไม่ถูกนับรวมเป็น Core และไม่ติดไปกับ package ที่เผยแพร่
 จนกว่าจะได้รับการ promote อย่างชัดเจน
@@ -503,6 +503,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | ทักษะ (Skill) | การเรียกใช้งาน (Invocation) | หมวดหมู่ | หน้าที่และคำอธิบาย |
 | :--- | :--- | :--- | :--- |
 | **adopt** | `/adopt` / `$adopt` | Setup | นำ DevFlow ไปติดตั้งในโปรเจกต์เดิมที่มีโค้ดอยู่แล้ว |
+| **analyze** | `/analyze` / `$analyze` | SA & Ingest | สกัดเอกสารความต้องการหลายรูปแบบ (PDF, Word, Excel, รูปภาพ, ข้อความ), สแกนผลกระทบต่อ Codebase และออก Checklist คำถาม |
 | **audit** | `/audit` / `$audit` | Quality | ตรวจสอบคุณภาพโค้ด, ความปลอดภัย, ประสิทธิภาพ และชุดทดสอบ |
 | **autopilot** | `/autopilot` / `$autopilot` | Delivery | โหมดส่งมอบงานแบบรอบเดียวจบ พร้อมตรวจสอบและแก้ปัญหาในตัว |
 | **brainstorm** | `/brainstorm` | Companion | ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม |
@@ -704,7 +705,7 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 ## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
 
-Nexus-DevFlow ติดตั้งมาพร้อมกับ **31 Core Skills** มาตรฐาน คุณสามารถติดตั้งสกิลเฉพาะทางจาก Community เพิ่มเติมได้ง่ายๆ ด้วยคำสั่ง `nexus-devflow skill add`:
+Nexus-DevFlow ติดตั้งมาพร้อมกับ **32 Core Skills** มาตรฐาน คุณสามารถติดตั้งสกิลเฉพาะทางจาก Community เพิ่มเติมได้ง่ายๆ ด้วยคำสั่ง `nexus-devflow skill add`:
 
 > [!TIP]
 > **🚀 ติดตั้ง Recommended Skills ทั้ง 8 สกิลในคำสั่งเดียว**:

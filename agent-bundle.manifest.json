@@ -3,6 +3,7 @@
   "description": "Single-source manifest for the active Nexus-DevFlow agent adapters.",
   "core_skills": [
     "adopt",
+    "analyze",
     "audit",
     "autopilot",
     "brainstorm",

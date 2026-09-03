@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { type DevFlowRole, getSkillsForRole } from "./skill-manager.js";
 
 export const CONTROL_DIR = ".nexus";
 export const MANIFEST_PATH = `${CONTROL_DIR}/nexus-devflow.json`;
@@ -154,17 +155,19 @@ export function createManifest(
 
 export async function collectManagedTemplateFiles(
   templateRoot: string,
-  adapters: string[]
+  adapters: string[],
+  role?: DevFlowRole
 ): Promise<Map<string, TemplateFile>> {
   const files = new Map<string, TemplateFile>();
   const roots = [
     ...MANAGED_ROOTS.common,
     ...adapters.flatMap((adapter) => MANAGED_ROOTS[adapter] || [])
   ];
+  const allowedSkills = role ? new Set(getSkillsForRole(role)) : undefined;
 
   for (const relativeRoot of roots) {
     const sourceRoot = path.join(templateRoot, ...relativeRoot.split("/"));
-    await collectSourceFiles(sourceRoot, relativeRoot, files);
+    await collectSourceFiles(sourceRoot, relativeRoot, files, allowedSkills);
   }
 
   return files;
@@ -173,7 +176,8 @@ export async function collectManagedTemplateFiles(
 async function collectSourceFiles(
   sourcePath: string,
   relativePath: string,
-  files: Map<string, TemplateFile>
+  files: Map<string, TemplateFile>,
+  allowedSkills?: Set<string>
 ): Promise<void> {
   try {
     const stats = await fs.lstat(sourcePath);
@@ -183,13 +187,19 @@ async function collectSourceFiles(
     }
 
     if (stats.isDirectory()) {
+      const match = relativePath.match(/^\.(?:agents|claude)\/skills\/([^/]+)$/);
+      if (match && allowedSkills && !allowedSkills.has(match[1])) {
+        return;
+      }
+
       const children = (await fs.readdir(sourcePath)).sort();
 
       for (const child of children) {
         await collectSourceFiles(
           path.join(sourcePath, child),
           `${relativePath}/${child}`,
-          files
+          files,
+          allowedSkills
         );
       }
 
@@ -237,12 +247,14 @@ export async function prepareUpdate({
   targetDir,
   templateRoot,
   version,
-  adapter
+  adapter,
+  role
 }: {
   targetDir: string;
   templateRoot: string;
   version: string;
   adapter?: string;
+  role?: DevFlowRole;
 }): Promise<PreparedUpdate> {
   const requestedAdapters = new Set(adapterListFromMode(adapter));
   const previousManifest = await readManifest(targetDir);
@@ -254,7 +266,8 @@ export async function prepareUpdate({
 
   const templateFiles = await collectManagedTemplateFiles(
     templateRoot,
-    [...activeAdapters]
+    [...activeAdapters],
+    role
   );
   const nextManifest = createManifest(version, activeAdapters, templateFiles);
 

@@ -40,10 +40,10 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### Universal Invocation & Agent Directives:
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `continuous`, `discovery`, `idea`, `grill`, `brainstorm`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `setup-tests`, `browser-tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `convert-any-to-md`, `publish-devflow`). The way you invoke commands depends on your AI Provider / Tool:
-   - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `implement`, `continuous`, `devflow`, `discovery`).
-   - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/continuous`, `/devflow`, `/discovery`.
-   - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$continuous`, `$devflow`, `$discovery`.
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `continuous`, `analyze`, `discovery`, `idea`, `grill`, `brainstorm`, `bughunter`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `setup-tests`, `browser-tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `convert-any-to-md`, `publish-devflow`). The way you invoke commands depends on your AI Provider / Tool:
+   - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `implement`, `continuous`, `devflow`, `discovery`, `analyze`).
+   - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/continuous`, `/devflow`, `/discovery`, `/analyze`.
+   - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$continuous`, `$devflow`, `$discovery`, `$analyze`.
 2. **OpenAI Codex & Non-Native CLI Tools**: In environments without automatic background skill discovery (such as OpenAI Codex CLI, Aider, or generic terminals), **you MUST use your file reading tool to inspect `.agents/skills/<skill>/SKILL.md` before executing the stage** to strictly follow its schema, artifact contract, and quality gates.
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover and surface `.agents/skills/` and `.claude/skills/`.
 4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` to automatically inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md`.
@@ -71,8 +71,9 @@ All development tasks execute through the 4-step progressive lifecycle:
 
 ---
 
-## 🔮 Pre-Flight Discovery & Architectural Alignment (Companions)
+## 🔮 Pre-Flight Discovery, SA & Architectural Alignment (Companions)
 
+- `analyze`: Unified SA requirement ingestion, multi-format doc parsing (PDF, Word, Excel, images, text), codebase impact scan (`devflow/inbox/`, `devflow/analysis/`).
 - `discovery`: Unified pre-delivery discovery & exploration (`devflow/discoveries/{DISC-ID}/discovery.md`).
 - `idea`: Quick idea capture and AI feasibility scoring (`devflow/ideas.md`).
 - `grill` (or `align`): Socratic alignment, domain modeling, and ADR recording (`devflow/decisions/`).
@@ -84,7 +85,7 @@ All development tasks execute through the 4-step progressive lifecycle:
 
 The dashboard and status reporting can show the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit.
 
-Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `setup-tests`, `browser-tests`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `status`, and `doctor` do not need activity state. Doctor's optional approved reset removes malformed activity instead of recording another run.
+Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `analyze`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `bughunter`, `setup-tests`, `browser-tests`, `test`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `status`, and `doctor` do not need activity state. Doctor's optional approved reset removes malformed activity instead of recording another run.
 
 Writing the initial activity record is the first action of a tracked command, before project inspection, preflight, or other tool calls. This one generated state write does not authorize product changes or bypass any safety check.
 
