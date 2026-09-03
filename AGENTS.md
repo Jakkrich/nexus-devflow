@@ -84,11 +84,7 @@ All development tasks execute through the 4-step progressive lifecycle:
 
 The dashboard and status reporting can show the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit.
 
-<<<<<<< HEAD
-Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `tests`, `browser-tests`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `status`, and `doctor` do not need activity state.
-=======
-Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `setup-tests`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `status`, and `doctor` do not need activity state.
->>>>>>> feature/064-bughunter-master-skill-and-sync-engine
+Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `analyze`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `bughunter`, `setup-tests`, `browser-tests`, `test`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `status`, and `doctor` do not need activity state.
 
 Writing the initial activity record is the first action of a tracked command, before project inspection, preflight, or other tool calls. This one generated state write does not authorize product changes or bypass any safety check. Set status to `running`, use the command name and a truthful initial summary, then replace the record at meaningful milestones. On a preflight stop or another blocker, set it to `blocked` with the exact recovery command. Leave the final state in place for the next session; the next tracked command replaces it. Use this schema:
 
