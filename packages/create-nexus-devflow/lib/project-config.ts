@@ -7,6 +7,7 @@ import path from "node:path";
 const PROJECT_CONFIG_PATH = "devflow/config.json";
 const PROJECT_CONFIG_SCHEMA_VERSION = 1 as const;
 
+type RolePolicy = "dev" | "sa" | "full";
 type StepReviewPolicy = "every" | "feature";
 type CheckpointCommitPolicy = "disabled" | "enabled";
 type LogicTestPolicy = "required" | "when-configured";
@@ -27,6 +28,7 @@ interface QualityGatePolicy {
 interface ProjectConfig {
   schemaVersion: typeof PROJECT_CONFIG_SCHEMA_VERSION;
   workflow: {
+    role: RolePolicy;
     stepReview: StepReviewPolicy;
     checkpointCommits: CheckpointCommitPolicy;
   };
@@ -66,6 +68,7 @@ function createDefaultProjectConfig(): ProjectConfig {
   return {
     schemaVersion: PROJECT_CONFIG_SCHEMA_VERSION,
     workflow: {
+      role: "dev",
       stepReview: "feature",
       checkpointCommits: "disabled"
     },
@@ -198,7 +201,7 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   );
   const continuous = optionalRecord(root.continuous, "continuous");
 
-  assertKnownKeys(workflow, ["stepReview", "checkpointCommits"], "workflow");
+  assertKnownKeys(workflow, ["role", "stepReview", "checkpointCommits"], "workflow");
   assertKnownKeys(
     git,
     ["featureBranchPrefix", "fixBranchPrefix", "rollbackBranchPrefix"],
@@ -225,6 +228,12 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   return {
     schemaVersion: PROJECT_CONFIG_SCHEMA_VERSION,
     workflow: {
+      role: optionalEnum(
+        workflow.role,
+        ["dev", "sa", "full"],
+        defaults.workflow.role,
+        "workflow.role"
+      ),
       stepReview: optionalEnum(
         workflow.stepReview,
         ["every", "feature"],
@@ -478,6 +487,7 @@ export type {
   ProjectConfigState,
   ProjectConfigWarning,
   QualityGatePolicy,
+  RolePolicy,
   StepReviewPolicy,
   TryGuideGatePolicy,
   UiEvidencePolicy

@@ -180,5 +180,14 @@
   - *Dependencies*: None
   - *Scope*: ลบไฟล์ Static HTML Snapshot ตกค้าง `devflow/reference/studio.html` และสคริปต์ `scripts/export-studio.ts` โดยยังคงรักษา Webview Studio Engine (`webview-studio.ts`), MCP tool (`devflow_get_studio_html`), CLI Command (`nexus-devflow studio`) และชุดทดสอบทั้งหมดให้ทำงานได้สมบูรณ์ 100%
 
+---
+
+## 📐 Phase 23: Role-Based Profiles & SA Command Suite Engine
+
+- [x] **23. Role-Based Profiles & SA Analyze Command Engine (`DISC-20260903-001`, `070-role-based-profile-and-sa-analyze-engine`)** `[Size: M]`
+  - *Dependencies*: None
+  - *Scope*: เพิ่มตัวเลือก `--role [sa|dev|full]` ใน CLI Installer (`create-nexus-devflow`), ระบบจำแนกชุด Skill Profiles ใน `skill-manager.ts`, โฟลเดอร์ Template สำหรับ SA (`devflow/inbox/`, `devflow/analysis/`, `devflow/blueprints/`), พัฒนาสคิล `/analyze` สำหรับสกัดเอกสารหลายรูปแบบ (PDF, Word, Excel, รูปภาพ, ข้อความ) และวิเคราะห์ Codebase Impact พร้อมชุดทดสอบ Automated Tests
+
+
 
 

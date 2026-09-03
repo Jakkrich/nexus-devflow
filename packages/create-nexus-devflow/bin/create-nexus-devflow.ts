@@ -80,6 +80,7 @@ import {
   type PreparedUninstall
 } from "../lib/uninstall.js";
 import {
+  type DevFlowRole,
   installRecommendedSkills,
   installThirdPartySkill,
   listInstalledSkills,
@@ -94,6 +95,7 @@ const packageRoot = findPackageRoot(__dirname);
 const templateRoot = path.join(packageRoot, "template");
 
 const adapterChoices = new Set(["codex", "antigravity", "claude", "copilot", "opencode", "both", "all"]);
+const roleChoices = new Set(["dev", "sa", "full"]);
 
 interface CliOptions {
   command:
@@ -143,6 +145,7 @@ interface CliOptions {
   deprecatedUi: boolean;
   target: string | null;
   adapter: string;
+  role: DevFlowRole;
   force: boolean;
   dryRun: boolean;
   help: boolean;
@@ -757,7 +760,8 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       targetDir,
       templateRoot,
       version,
-      adapter: options.adapter
+      adapter: options.adapter,
+      role: options.role
     });
     spinner.stop();
 
@@ -772,6 +776,27 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
     spinner.start("Applying DevFlow updates...");
     const result = await applyPreparedUpdate(prepared, { replaceConflicts });
+
+    if (options.role === "sa" || options.role === "full") {
+      await fs.mkdir(path.join(targetDir, "devflow", "inbox"), { recursive: true });
+      await fs.mkdir(path.join(targetDir, "devflow", "analysis"), { recursive: true });
+      await fs.mkdir(path.join(targetDir, "devflow", "blueprints"), { recursive: true });
+    }
+
+    try {
+      const configPath = path.join(targetDir, "devflow", "config.json");
+      if (fsSync.existsSync(configPath)) {
+        const raw = await fs.readFile(configPath, "utf8");
+        const cfg = JSON.parse(raw);
+        if (cfg && cfg.workflow && cfg.workflow.role !== options.role) {
+          cfg.workflow.role = options.role;
+          await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`, "utf8");
+        }
+      }
+    } catch {
+      // ignore
+    }
+
     spinner.succeed("Nexus-DevFlow update successfully applied!");
     printUpdateSuccess(prepared, result);
     return;
@@ -782,7 +807,8 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     targetDir,
     templateRoot,
     version,
-    adapter: options.adapter
+    adapter: options.adapter,
+    role: options.role
   });
   spinner.stop();
 
@@ -804,6 +830,27 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   const result = await applyPreparedUpdate(prepared, {
     replaceConflicts: options.force || prepared.conflictList.length > 0
   });
+
+  if (options.role === "sa" || options.role === "full") {
+    await fs.mkdir(path.join(targetDir, "devflow", "inbox"), { recursive: true });
+    await fs.mkdir(path.join(targetDir, "devflow", "analysis"), { recursive: true });
+    await fs.mkdir(path.join(targetDir, "devflow", "blueprints"), { recursive: true });
+  }
+
+  try {
+    const configPath = path.join(targetDir, "devflow", "config.json");
+    if (fsSync.existsSync(configPath)) {
+      const raw = await fs.readFile(configPath, "utf8");
+      const cfg = JSON.parse(raw);
+      if (cfg && cfg.workflow && cfg.workflow.role !== options.role) {
+        cfg.workflow.role = options.role;
+        await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`, "utf8");
+      }
+    }
+  } catch {
+    // ignore
+  }
+
   spinner.succeed("Nexus-DevFlow overlay successfully installed!");
 
   printInstallSuccess(targetDir, result);
@@ -834,6 +881,7 @@ function parseArgs(args: readonly string[]): CliOptions {
   let deprecatedUi = false;
   let target: string | null = null;
   let adapter = "both";
+  let role: DevFlowRole = "dev";
   let force = false;
   let dryRun = false;
   let help = false;
@@ -1096,6 +1144,28 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--role") {
+      const value = args[++i];
+      if (!value || !roleChoices.has(value.toLowerCase())) {
+        throw new Error(
+          `Invalid --role value "${value}". Expected one of: dev, sa, full`
+        );
+      }
+      role = value.toLowerCase() as DevFlowRole;
+      continue;
+    }
+
+    if (arg.startsWith("--role=")) {
+      const value = arg.slice("--role=".length);
+      if (!roleChoices.has(value.toLowerCase())) {
+        throw new Error(
+          `Invalid --role value "${value}". Expected one of: dev, sa, full`
+        );
+      }
+      role = value.toLowerCase() as DevFlowRole;
+      continue;
+    }
+
     if (arg === "--name" || arg === "-n") {
       const next = args[++i];
       if (!next) {
@@ -1353,6 +1423,7 @@ function parseArgs(args: readonly string[]): CliOptions {
     deprecatedUi,
     target,
     adapter,
+    role,
     force,
     dryRun,
     help,
@@ -1448,6 +1519,7 @@ ${style.bold("Options:")}
   ${style.cyan("--fix")}              Automatically repair/create missing context files in doctor
   ${style.cyan("--stats")}            Display history summary statistics only
   ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, opencode, both, all
+  ${style.cyan("--role <role>")}       Workspace role profile: dev (default), sa, full
   ${style.cyan("--no-open")}          Start local dashboard without opening a browser
   ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
   ${style.cyan("--json")}             Print output as structured JSON object

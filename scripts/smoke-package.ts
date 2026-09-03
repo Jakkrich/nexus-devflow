@@ -65,7 +65,7 @@ async function smokeTestPackage(): Promise<void> {
 
   try {
     const binPath = path.join(pkgDir, "dist", "bin", "create-nexus-devflow.js");
-    execSync(`node "${binPath}" "${tempDir}" --yes`, { stdio: "inherit" });
+    execSync(`node "${binPath}" "${tempDir}" --yes --role full`, { stdio: "inherit" });
 
     // Verify key files exist in temp directory
     const expected = [

@@ -495,7 +495,7 @@ Inspects the archived feature spec, identifies the exact commit, reviews later c
 
 ## Command reference
 
-Nexus-DevFlow ships **31 bundled Core Skills**, defined by the canonical
+Nexus-DevFlow ships **32 bundled Core Skills**, defined by the canonical
 `core_skills` inventory in `agent-bundle.manifest.json`. A workspace may also
 contain Local or Personal Skills, but those extensions are not part of the Core
 count and are excluded from the published package unless explicitly promoted.
@@ -503,6 +503,7 @@ count and are excluded from the published package unless explicitly promoted.
 | Skill | Canonical Invocation | Category | Description |
 | :--- | :--- | :--- | :--- |
 | **adopt** | `/adopt` / `$adopt` | Setup | Bootstrap DevFlow into an existing codebase with shipped features. |
+| **analyze** | `/analyze` / `$analyze` | SA & Ingest | Ingest multi-format requirements (PDF, Word, Excel, Images), scan codebase impact, and generate Socratic clarification checklist. |
 | **audit** | `/audit` / `$audit` | Quality | Branch-aware or full-project code audit (Quality, Security, Perf, Tests). |
 | **autopilot** | `/autopilot` / `$autopilot` | Delivery | Bounded single-pass spec/build/check with self-review and safe repair. |
 | **brainstorm** | `/brainstorm` | Companion | Structured divergent/convergent ideation with trade-off analysis. |
@@ -705,7 +706,7 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 ## Recommended Third-Party Skills & Extensions
 
-Nexus-DevFlow ships with **31 Core Skills** out-of-the-box. You can easily extend your workflow with specialized community and third-party skills using `nexus-devflow skill add`:
+Nexus-DevFlow ships with **32 Core Skills** out-of-the-box. You can easily extend your workflow with specialized community and third-party skills using `nexus-devflow skill add`:
 
 > [!TIP]
 > **🚀 Install All 8 Recommended Skills in One Command**:

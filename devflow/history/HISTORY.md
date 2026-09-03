@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-03 | `070` | Feature | Role-Based Profiles & SA Analyze Command Engine (`DISC-20260903-001`) | `49d8cbe` | `Released` | [`070-role-based-profile-and-sa-analyze-engine.md`](features/070-role-based-profile-and-sa-analyze-engine.md) |
 | 2026-09-03 | `069` | Feature | Prune Studio Reference Artifacts (`069-prune-studio-reference-artifacts`) | `4875b72` | `Released` | [`069-prune-studio-reference-artifacts.md`](features/069-prune-studio-reference-artifacts.md) |
 | 2026-09-02 | `068` | Feature | ซิงก์ส่วนขยาย Tooling & Evals Parity จาก Upstream AI Blueprint (E2E Agent Harness, Complete Evals Suite, Sandbox Automation, Upstream Drift Monitor) (`DISC-20260902-001`) | `62b4182` | `Released` | [`068-sync-upstream-ai-blueprint-tooling-and-evals.md`](features/068-sync-upstream-ai-blueprint-tooling-and-evals.md) |
 | 2026-09-02 | `067` | Feature | ซิงก์ AI Blueprint Upstream v1.3.0 – v1.4.1 (Planning Baseline Commit, Overview 20KB Compactness & Efficient Workflow) (`DISC-20260902-002`) | `d8c46d9` | `Released` | [`067-sync-upstream-ai-blueprint-v130-v141.md`](features/067-sync-upstream-ai-blueprint-v130-v141.md) |
