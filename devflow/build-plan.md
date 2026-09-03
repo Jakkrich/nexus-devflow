@@ -172,4 +172,13 @@
   - *Dependencies*: Feature 20, DISC-20260902-001
   - *Scope*: ขยายชุดทดสอบ Evals Routing ให้ครอบคลุมทุกสคิล (`browser-tests.json`, `continuous.json`, `bughunter.json`, `publish-devflow.json`), นำเข้าและปรับใช้ Live-Agent E2E Test Harness (`scripts/e2e/`), สคริปต์จำลองติดตั้ง Sandbox Scaffolding (`scripts/scaffold-sandbox.ts`), สคริปต์ตรวจจับ Upstream Drift (`scripts/check-upstream-drift.ts`), และเอกสารวิเคราะห์ Token Efficiency (`benchmarks/context-efficiency.md`)
 
+---
+
+## 🧹 Phase 22: Reference Artifacts Housekeeping
+
+- [x] **22. Prune Studio Reference Artifacts (`069-prune-studio-reference-artifacts`)** `[Size: S]`
+  - *Dependencies*: None
+  - *Scope*: ลบไฟล์ Static HTML Snapshot ตกค้าง `devflow/reference/studio.html` และสคริปต์ `scripts/export-studio.ts` โดยยังคงรักษา Webview Studio Engine (`webview-studio.ts`), MCP tool (`devflow_get_studio_html`), CLI Command (`nexus-devflow studio`) และชุดทดสอบทั้งหมดให้ทำงานได้สมบูรณ์ 100%
+
+
 
