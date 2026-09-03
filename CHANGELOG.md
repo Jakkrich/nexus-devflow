@@ -5,6 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.1] - 2026-09-03
+
+### Added
+- **Upstream AI Blueprint v1.5.2 Synchronization (071)**:
+  - **Unborn Repository Onboarding (`/onboard`)**: Pre-flight inspection (`git rev-parse --verify HEAD`) to detect uncommitted repositories, automatically building safe application scaffold candidate and prompting for initial commit (`chore: scaffold application`) to establish default branch (`main`).
+  - **Setup-Branch Baseline Finalization (`/overview`)**: Support for finalizing DevFlow baseline directly from a dedicated setup branch (e.g. `feature/devflow-plans`), fast-forward merging into `main` (`git merge --ff-only`), and automatically deleting setup branch locally with zero remote push exposure.
+  - **9th E2E Autonomous Agent Scenario (`scripts/e2e/scenarios/unborn-onboarding.ts`)**: Full-flow agentic scenario testing unborn repo initialization, onboarding, and baseline finalization.
+  - **Static Contracts & Verification Parity**: Synchronized verification contracts in `agent-bundle.manifest.json` and `scripts/validate-framework.ts`.
+
 ## [2.12.0] - 2026-09-03
 
 ### Added
