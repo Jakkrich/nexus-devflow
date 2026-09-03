@@ -5,6 +5,18 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.0] - 2026-09-03
+
+### Added
+- **32nd Core Skill: SA Analyze Command Engine (`/analyze`)**:
+  - Unified System Analyst requirement ingestion, multi-format doc parsing (PDF, Word, Excel, text, images), codebase impact scan, and Socratic clarification checklist.
+  - Requirement analysis artifacts saved in `devflow/analysis/{ANA-ID}/analysis.md`.
+- **Role-Based Profiles & Dynamic Activation**:
+  - Support for SA (System Analyst), QA, Dev, and Lead roles with contextual skill recommendations and persona framing.
+- **Upstream AI Blueprint v1.5.0 – v1.5.1 Synchronization**:
+  - Hardened Run-State Engine (`run-state.mjs`) with atomic state updates, symlink guard, and schema v1 validation.
+  - On-Demand context loading conventions to optimize token efficiency.
+
 ## [2.11.1] - 2026-09-03
 
 ### Changed
