@@ -1,8 +1,8 @@
-# Workflow Surface Map (31 Core Skills)
+# Workflow Surface Map (32 Core Skills)
 
-This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.10.1**.
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.11.1**.
 
-The canonical surface contains **31 Core Skills** from
+The canonical surface contains **32 Core Skills** from
 `agent-bundle.manifest.json#core_skills`. Additional Local or Personal Skills
 may exist in a workspace, but are not bundled product commands until explicitly
 promoted into that inventory.
@@ -18,7 +18,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-## 2. Canonical Surface Taxonomy (31 Core Skills)
+## 2. Canonical Surface Taxonomy (32 Core Skills)
 
 ### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (7 Skills)
 | Command | Category | Purpose | Primary Artifact |
@@ -33,9 +33,10 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-### 🔮 2. Pre-Flight Discovery & Alignment Suite (4 Skills)
+### 🔮 2. Pre-Flight Discovery, SA & Alignment Suite (5 Skills)
 | Command | Category | Purpose | Primary Artifact |
 | :--- | :--- | :--- | :--- |
+| `analyze` | SA Ingestion | Multi-format requirement ingestion (PDF, Word, Excel, Images), Codebase Impact scan & Socratic Gap checklist. | `devflow/inbox/` & `devflow/analysis/` |
 | `idea` | Backlog | Idea inbox capture and AI feasibility scoring. | `devflow/ideas.md` |
 | `grill` / `align` | Alignment | Socratic alignment interview, domain glossary extraction, and ADR generation. | `devflow/decisions/` & `glossary.md` |
 | `brainstorm` | Ideation | Structured divergent & convergent ideation with trade-off matrices. | Interactive session |
