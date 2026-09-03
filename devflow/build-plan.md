@@ -180,4 +180,10 @@
   - *Dependencies*: Feature 17 (`055`), DISC-20260902-003
   - *Scope*: ปรับปรุง `md2html-report.mjs` รองรับการเรนเดอร์ native Mermaid block (`.mermaid`), เพิ่มการสแกนและ embed ไฟล์ไดอะแกรมจาก `devflow/context/{xxx-slug}/diagrams/` (`.svg` และ `.html`), อัปเดต `report-html` skill ให้ตรวจจับและ auto-install `archify` / `diagram-design` ผ่าน `nexus-devflow skill add` และเขียนชุดทดสอบครอบคลุม
 
+---
 
+## 🔄 Phase 23: Upstream AI Blueprint v1.5.0 – v1.5.1 Synchronization
+
+- [x] **23. Sync Upstream v1.5.0 & v1.5.1 (Hardened Run-State Engine & On-Demand Context Loading) (`DISC-20260903-001`, `070-sync-upstream-ai-blueprint-v150-v151`)** `[Size: M]`
+  - *Dependencies*: Feature 20, Feature 21, DISC-20260903-001
+  - *Scope*: พอร์ตและปรับแต่ง Hardened Dashboard Activity State Helper (`.agents/skills/doctor/scripts/run-state.mjs` และ `.claude/`), บังคับใช้ Zero-Manual Writes กับ `devflow/.state/run.json`, ปรับใช้ On-Demand Context Loading Protocol พร้อมแยก Reference Templates ย่อย (`reference/`), เพิ่ม Unit Tests `run-state-helper.test.ts`, อัปเดต `scripts/validate-framework.ts`, `AGENTS.md`, `CLAUDE.md` และยืนยันการผ่าน 100%
