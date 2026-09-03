@@ -52,6 +52,8 @@ devflow/
 ### ⚡ The Unified 4-Stage Task-Isolated Living Spec Lifecycle
 *ขับเคลื่อนการพัฒนาทุกระดับด้วย **Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)** ที่รวมความลึกระดับ Architect Mode เข้ากับความคล่องตัวระดับ Lean Velocity โดยแยก Workspace ของแต่ละงานออกจากกัน 100%:*
 
+After the first successful `/overview`, DevFlow offers a reviewed local commit for the initial workflow setup and plans before Feature 1. It shows the exact candidate diff and asks first. It skips local-only installations and stops rather than mixing app source or unrelated work into the baseline. When setup work is on a dedicated branch, the same approval can finalize the local baseline and fast-forward it into the unchanged default branch. It never pushes.
+
 ```text
 /feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```

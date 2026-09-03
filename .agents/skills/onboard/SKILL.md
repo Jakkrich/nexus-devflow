@@ -29,7 +29,48 @@ and project behavior already exist and need to be reflected into the plans.
 No argument is required. If the user provides context about the stack, hosting,
 database, auth, or preferred tool, use it as a hint and verify against files.
 
-## Step 0 - confirm this is onboarding, not adoption
+## Step 0 - confirm Git and make an unborn repository usable
+
+Before reading application code or changing setup files, confirm both Git states:
+
+```bash
+git rev-parse --is-inside-work-tree
+git rev-parse --verify HEAD
+```
+
+If this is not a Git repository, stop and ask the user to initialize one, then
+rerun `/onboard`.
+
+An existing first commit may contain only the scaffold or may already contain
+DevFlow. Both are valid. Do not ask the user to rewrite either history shape.
+
+If Git reports an unborn `HEAD`, handle it here instead of sending the user away
+to run Git commands:
+
+1. Inspect status and build a safe scaffold-only candidate from paths outside
+   `AGENTS.md`, `CLAUDE.md`, `.agents/`, `.claude/`, and `devflow/`. Exclude
+   secrets, dependencies, caches, build output, generated state, and anything
+   else that should not enter source control. Include the existing `.gitignore`
+   when it is safe.
+2. Resolve the intended default branch from a remote default when available,
+   then an existing `main` or `master`, then Git's configured initial branch,
+   and otherwise `main`. Preserve the current unborn branch name as the setup
+   branch when it is not the intended default. If the intended name is genuinely
+   ambiguous, ask only that one question.
+3. Show the exact candidate and the branch result, then ask once:
+   `Create the initial scaffold commit and continue Onboard? (Recommended)`
+   State that this creates one local commit and never pushes.
+4. On approval, stage only the reviewed candidate, verify the staged diff, and
+   commit it as `chore: scaffold application`. If needed, rename the unborn
+   branch before committing so the root commit establishes the intended default
+   branch. Then create or return to the named setup branch at that same commit
+   and continue Onboard in the same run.
+
+If there is no safe scaffold candidate, stop with the exact blocker rather than
+creating an empty or mixed root commit. Never create the commit without explicit
+approval.
+
+Then confirm this is onboarding, not adoption.
 
 Inspect the repository and the two planning docs:
 
@@ -41,7 +82,7 @@ Inspect the repository and the two planning docs:
   Continue only with setup files such as `AGENTS.md`, `coding-standards.md`,
   `.gitignore`, and optional notes.
 
-Never run a framework scaffolder. The Blueprint is already overlaid.
+Never run a framework scaffolder. DevFlow is already overlaid.
 
 ## Step 1 - survey the project facts
 

@@ -204,3 +204,11 @@
   - *Dependencies*: Feature 20, Feature 21, DISC-20260903-001
   - *Scope*: พอร์ตและปรับแต่ง Hardened Dashboard Activity State Helper (`.agents/skills/doctor/scripts/run-state.mjs` และ `.claude/`), บังคับใช้ Zero-Manual Writes กับ `devflow/.state/run.json`, ปรับใช้ On-Demand Context Loading Protocol พร้อมแยก Reference Templates ย่อย (`reference/`), เพิ่ม Unit Tests `run-state-helper.test.ts`, อัปเดต `scripts/validate-framework.ts`, `AGENTS.md`, `CLAUDE.md` และยืนยันการผ่าน 100%
 
+---
+
+## 🔄 Phase 26: Upstream AI Blueprint v1.5.2 Synchronization
+
+- [x] **26. Sync Upstream v1.5.2 (Unborn Repository Onboarding & Branch Baseline Finalization) (`REQ-20260903-001`, `071-sync-upstream-ai-blueprint-v152`)** `[Size: S]`
+  - *Dependencies*: Feature 25, REQ-20260903-001
+  - *Scope*: เพิ่มการตรวจจับและกู้คืน Unborn Git repository ใน `/onboard` ด้วย Scaffold Initial Commit (`chore: scaffold application`), รองรับการ Finalize DevFlow Baseline บน Dedicated Setup Branch ด้วย `git merge --ff-only` ใน `/overview`, เพิ่มชุดทดสอบ E2E Scenario `scripts/e2e/scenarios/unborn-onboarding.ts`, อัปเดต `devflow/context/ai-interaction.md` และอัปเดต Framework Static Contracts ผ่าน 100%
+
