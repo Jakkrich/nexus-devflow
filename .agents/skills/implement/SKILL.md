@@ -6,6 +6,8 @@ argument-hint: "[{run-id, number, or name}]"
 
 # implement - build the target spec, one reviewed step at a time
 
+**Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
+
 **First action:** Before project inspection, preflight, or any other tool call,
 publish `running` to `devflow/.state/run.json` using the dashboard activity
 contract in `AGENTS.md`.
@@ -81,41 +83,7 @@ instead of creating a new one.
 
 ### Type: Rollback safeguard
 
-For a rollback spec, do not hand-delete the old feature and do not run a whole
-commit `git revert`. Completed feature commits also contain Blueprint history and
-plan bookkeeping, while `devflow/context/{xxx-slug}/spec.md` now contains the active rollback
-spec. Reversing the whole commit would damage that state.
-
-Before the first rollback build step:
-
-1. Re-resolve the target archive's introducing commit and confirm it matches the
-   full Target commit SHA recorded in the approved spec.
-2. Confirm the target is an ancestor of `HEAD`, has the recorded single parent,
-   and the only dirty path before applying the patch is the approved rollback
-   spec. Stop on drift.
-3. Preview the target's product diff while excluding `.agents/**`, `.claude/**`,
-   `devflow/**`, `AGENTS.md`, `CLAUDE.md`, and
-   `prototypes/**`. Confirm the preview is non-empty and matches the Product
-   paths in the spec.
-4. Apply that product diff in reverse with three-way conflict detection and
-   stage it. Substitute the two approved full SHAs before running:
-
-       git diff --binary <target-parent> <target-commit> -- . \
-         ':(exclude).agents/**' \
-         ':(exclude).claude/**' ':(exclude)devflow/**' \
-         ':(exclude)AGENTS.md' ':(exclude)CLAUDE.md' \
-         ':(exclude)prototypes/**' |
-         git apply --reverse --3way --index
-
-   Never omit the protected pathspec exclusions for convenience.
-5. Show both `git diff --cached` and `git status`. Confirm no protected path is
-   staged or modified before presenting the step for review.
-
-If the reverse patch conflicts, stop and report the exact paths and later commit
-that appears involved. Do not auto-resolve, discard, stash, reset, or switch to a
-broad checkout. Ask whether to resolve only the conflict allowed by the approved
-spec or abandon the attempt. A cascade into another completed feature needs a
-new rollback plan.
+When implementing a rollback task, follow the exact safety procedure in `reference/rollback-implementation.md`.
 
 ## Step 2 - build one step, review, iterate, checkpoint (Strict TDD)
 

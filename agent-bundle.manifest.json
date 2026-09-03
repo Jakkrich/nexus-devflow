@@ -38,6 +38,12 @@
     ".agents/skills",
     ".claude/skills",
     ".nexus/nexus-devflow.json",
+    ".agents/skills/doctor/scripts/run-state.mjs",
+    ".claude/skills/doctor/scripts/run-state.mjs",
+    ".agents/skills/feature/reference/feature-spec-template.md",
+    ".claude/skills/feature/reference/feature-spec-template.md",
+    ".agents/skills/implement/reference/rollback-implementation.md",
+    ".claude/skills/implement/reference/rollback-implementation.md",
     "devflow/context/project-overview.md",
     "devflow/context/coding-standards.md",
     "devflow/context/ai-interaction.md",
@@ -64,7 +70,9 @@
       "overview must remain below 20,000 bytes"
     ],
     "doctor": [
-      "At or above 20,000 bytes, call it oversized"
+      "At or above 20,000 bytes, call it oversized",
+      "doctor/scripts/run-state.mjs",
+      "Reset the malformed dashboard state now?"
     ],
     "implement": [
       "qualityGates.regular.independentReview",

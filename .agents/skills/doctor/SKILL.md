@@ -1,20 +1,23 @@
 ---
 name: doctor
-description: "[devflow] Run a read-only DevFlow health and context check covering setup, adapters, commands, visibility, plans, overview freshness, configuration, and workflow drift. Use for /doctor, setup problems, context overhead, or health checks."
+description: "[devflow] Run a DevFlow health and context check covering setup, adapters, commands, visibility, plans, overview freshness, configuration, dashboard state, and workflow drift. May offer to reset malformed generated dashboard state after approval. Use for /doctor, setup problems, context overhead, or health checks."
 ---
 
-# doctor - Blueprint health check
+# doctor - DevFlow health check
+
+**Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
 Where this sits in the workflow:
 
     any time  ->  [doctor]  ->  reads setup + plans + workflow state + git
-                  (read-only)   prints health, warnings, and repair order
+                  (diagnostic)  prints health, warnings, and repair order
 
-This skill answers one question: *is this Blueprint project ready to use?* It is
+This skill answers one question: *is this DevFlow project ready to use?* It is
 the diagnostic pass for setup drift, incomplete onboarding, missing files,
-placeholder plans, stale generated context, Blueprint visibility, and confusing
+placeholder plans, stale generated context, DevFlow visibility, and confusing
 workflow state. It never changes anything: no edits, no commits, no installs, no
-builds, no branch changes.
+builds, no branch changes. Its only repair is an approved reset of a malformed
+generated `devflow/.state/run.json` file.
 
 Use `/status` when the user mainly wants progress and the next build action. Use
 `/doctor` when the user wants to know whether the workflow itself is healthy.
@@ -66,6 +69,10 @@ Gather these, then summarize. Do not dump file contents.
      logical adapters: Codex, Claude Code, GitHub Copilot, Antigravity, and OpenCode.
    - Confirm at least one compatible skill tree exists. Codex, Antigravity, and
      GitHub Copilot use `.agents/skills/`. Claude Code uses `.claude/skills/`.
+   - Confirm each installed adapter tree contains
+     `doctor/scripts/run-state.mjs`. This managed helper validates and atomically
+     writes dashboard activity. A missing helper needs a DevFlow update before
+     tracked commands can record activity safely.
    - If both skill trees are present, say that is healthy when the selected
      tools require both. Compare their skill folder names and warn about missing
      skills on either side.
@@ -105,39 +112,41 @@ Gather these, then summarize. Do not dump file contents.
    - A missing `Verify` command or GitHub workflow is informational. It means the
      optional automatic-check setup was not selected, not that DevFlow is
      unhealthy.
-4. **Ignore rules**
-   - Check obvious ignore patterns for the detected stack. For Node or Astro,
-     look for `node_modules`, `.env`, `dist`, and framework cache folders such as
-     `.astro` or `.next` when relevant.
-   - Detect local-only DevFlow mode if `.gitignore` ignores `.agents/`,
-     `.claude/`, `devflow/`, or `CLAUDE.md`. Report it as a visibility choice,
-     not a failure, when the local files exist.
-   - In local-only mode, check whether tracked `AGENTS.md` still describes the
-     Blueprint workflow, lists hidden adapter paths, or exposes the core skill
-     list. If so, warn that `/onboard` should make `AGENTS.md` public-safe.
-   - If local-only mode is active but those paths are already tracked by git,
-     warn that `.gitignore` does not hide tracked files and the user must approve
-     any `git rm --cached` cleanup separately.
-   - Keep this conservative. If uncertain, report "review" instead of failure.
-5. **Planning readiness**
-   - Check whether `devflow/project-plan.md` and `devflow/build-plan.md` look
-     filled in or still template-like. Treat obvious TODO, TBD, example-only text,
-     or empty required sections as not ready.
-   - Check whether `devflow/build-plan.md` is a numbered checkbox list. Raw
-     bullets are allowed as a first draft, but they should be normalized by
-     `/overview` before the build loop starts.
-   - Count checked and unchecked leaf items in `devflow/build-plan.md`.
-6. **Overview freshness**
-   - Check whether `devflow/context/project-overview.md` exists and looks
-     generated from the current plans.
+4. **Visibility and context loading**
+   - Confirm whether DevFlow files are public in git or listed in `.gitignore`
+     as local-only.
+   - When Claude Code is installed, report its startup-context shape. Confirm
+     `CLAUDE.md` imports `AGENTS.md` and lets skills load planning context on demand.
+5. **Project and build plans**
+   - Read `devflow/project-plan.md` and `devflow/build-plan.md`.
+   - Report total features in the build plan, how many are checked off (`- [x]`),
+     and which feature is next.
+   - Flag placeholder text (e.g. `[Your project name]`, `Feature 1 description`).
+6. **Project overview freshness**
+   - Read `devflow/context/project-overview.md` if it exists.
    - Report its byte size. At or above 20,000 bytes, call it oversized and say
      `/feature` should stop until `/overview` regenerates a compact
      consolidation.
    - If either planning file appears newer than the overview by filesystem time,
      call the overview possibly stale and suggest `/overview` before feature work.
 7. **Current workflow state**
-   - Scan `devflow/context/{xxx-slug}/` for active task directories and specs.
-   - If a spec is active, report checked and unchecked implementation steps.
+   - Inspect `devflow/.state/run.json` when it exists. Missing means no recorded
+     activity and is healthy. Require a regular non-symbolic-link JSON file that
+     matches dashboard schema version 1 from `AGENTS.md`.
+   - If the path is a symbolic link or not a regular file, do not read, replace,
+     or remove it. Report the exact path for manual review.
+   - If the regular file is invalid JSON or does not match the schema, report it
+     as malformed generated state. Explain that resetting it removes only the
+     dashboard's last-command record, not project work, and that the next tracked
+     DevFlow command recreates it.
+   - Offer this exact repair question: `Reset the malformed dashboard state now?`
+     On approval, use the installed dashboard activity helper's `reset` action.
+     It confirms the exact path is a regular non-symbolic-link file and removes
+     only `devflow/.state/run.json`. Verify the file is absent and report the
+     dashboard state as reset. Never remove `devflow/.state/`, its manifest,
+     backups, or any project file. Without approval, leave it unchanged and
+     include the reset in `Repair order:`.
+   - If a spec is active in `devflow/context/{xxx-slug}/`, report checked and unchecked implementation steps.
    - If no active task directory exists in `devflow/context/` but git has source or workflow
      changes, warn that work is happening without an active spec.
    - Flag active spec on `main`, all spec steps checked but no completion, or a
@@ -168,28 +177,20 @@ steps, in order. Keep it short and practical.
 
 Choose the repair order in this priority:
 
-- Required Blueprint files missing -> overlay the Blueprint again, or use
-  `/adopt` for a brownfield app.
+- Required DevFlow files missing -> overlay DevFlow again, or use `/adopt` for a brownfield app.
 - No git repo -> initialize git before using the build loop.
 - No tool adapter -> restore `.agents/skills/` or `.claude/skills/` for the
   selected tool. OpenCode can use either compatible tree.
+- Installed adapter is missing `doctor/scripts/run-state.mjs` -> update
+  DevFlow before relying on dashboard activity.
 - Onboarding incomplete -> run `/onboard`.
-- Root README is still the Blueprint workflow doc -> run `/onboard` to replace
+- Root README is still the DevFlow workflow doc -> run `/onboard` to replace
   it with a project README before publishing.
-- Local-only visibility selected but ignored Blueprint files are missing ->
-  reinstall or restore the Blueprint files locally.
-- Local-only visibility selected but Blueprint paths are tracked -> ask whether
-  to untrack them with `git rm --cached` while keeping local files.
-- Local-only visibility selected but `AGENTS.md` still exposes the workflow ->
-  run `/onboard` to make `AGENTS.md` a lightweight public project guide.
-- A documented `Verify` command, project script, and GitHub workflow disagree ->
-  run `/ci` to review and align them. Missing optional CI alone does not need
-  repair.
-- Commands or ignore rules need review -> update the files or run `/onboard` if
-  this is an early project.
 - Plans are placeholders -> fill `devflow/project-plan.md` and
   `devflow/build-plan.md`.
 - Overview missing or stale -> run `/overview`.
+- Malformed regular `devflow/.state/run.json` -> offer to reset that exact
+  generated file, then rerun `/doctor` or refresh the dashboard.
 - Active spec has unchecked steps -> run `/status` or `/implement`, depending on
   whether the user wants orientation or action.
 - A P0 or P1 finding is `open` -> repair it through `/implement` while a spec
@@ -201,8 +202,10 @@ Choose the repair order in this priority:
 
 ## Rules
 
-- **Read-only, always.** This skill never writes files, never commits, never runs
-  installs, never runs builds or tests, and never switches branches.
+- **Diagnostic by default.** This skill never edits project files, commits, runs
+  installs, runs builds or tests, or switches branches. It may remove only a
+  malformed regular `devflow/.state/run.json` through the installed helper
+  after the user approves the exact reset described above.
 - **Diagnose, then order repairs.** Do not just list problems. End with the
   smallest ordered sequence that gets the project back to a healthy state.
 - **Do not over-police adapters.** Extra adapters are optional clutter, not a

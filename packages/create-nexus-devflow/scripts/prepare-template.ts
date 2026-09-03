@@ -32,6 +32,19 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
         if (!shouldIncludeTemplatePath(normalized, inventory)) {
           return false;
         }
+        if (normalized.startsWith("devflow/.state/")) {
+          return false;
+        }
+        if (
+          normalized.startsWith("devflow/context/") &&
+          normalized !== "devflow/context" &&
+          normalized !== "devflow/context/project-overview.md" &&
+          normalized !== "devflow/context/coding-standards.md" &&
+          normalized !== "devflow/context/ai-interaction.md" &&
+          normalized !== "devflow/context/glossary.md"
+        ) {
+          return false;
+        }
         if (
           normalized.startsWith("devflow/runs/") &&
           !normalized.endsWith(".gitkeep") &&

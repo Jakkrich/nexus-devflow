@@ -5,38 +5,32 @@ description: "[devflow] Show where the project stands: build-plan progress, the 
 
 # status - where the project stands right now
 
+**Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
+
 Where this sits in the workflow:
 
     any time  ->  [status]  ->  reads build-plan + current-feature + git
                   (read-only)   prints a short "you are here"
 
-This skill answers one question: *where am I?* It reads the files that already
-track progress and prints a short orientation. It is the fast way back in after a
-break, a context clear, or a day away. It never changes anything: no edits, no
-commits, no installs, no builds, no branch changes.
+`/status` is orientation: where the project stands right now, what's done,
+what's in flight, whether there's drift between plans and reality, and what
+single action makes the most sense next. It is purely read-only: it reads files
+and git, prints a summary, and exits.
 
-Progress in this workflow lives in files, not the chat, so everything this skill
-reports comes from disk and git. That is the point: a fresh session can run
-`/status` and know exactly as much as the last one did.
-
-For setup problems, missing files, placeholder plans, adapter drift, or questions
-about whether the Blueprint is installed correctly, run `/doctor` instead.
+Use `/doctor` instead when the user wants a full setup-and-health check.
 
 ## Input
 
 None. `/status` takes no argument.
 
-## What it reads
+## What it gathers
 
-Gather these, then summarize. Don't dump file contents; report the distilled
-state.
+Read these, distill them into a few lines, then stop. Do not dump file contents.
 
-1. **Build plan** - `devflow/build-plan.md`. Count checked vs unchecked leaf
-   items. Name the next unchecked leaf, the same target `/feature` would pick,
-   and note if a parent item was split into sub-items (`4a`, `4b`, ...).
-2. **Current work & Spec Queue** - scan `devflow/context/{xxx-slug}/`. Is something in
-   progress? If a feature, fix, or rollback spec is
-   present, report its type, name, running ID, which build steps are checked, and the
+1. **Build plan progress** - `devflow/build-plan.md`. How many features total, how
+   many are checked off (`- [x]`), what's the next unchecked item.
+2. **Current work** - `devflow/context/{xxx-slug}/spec.md` (Pure Multi-Run support). If active, how
+   many build steps total, how many are checked off, what is the description of the
    first unchecked step where `/implement` resumes. If multiple tasks are queued, list the active spec queue.
 3. **Findings** - `devflow/context/{xxx-slug}/findings.md`. Count findings by status and
    report open and fixed counts next to build-plan progress. Call out any P0 or
@@ -54,7 +48,8 @@ state.
 7. **Dashboard activity** - read `devflow/.state/run.json` when it exists.
    Report the command, mode, status, progress, boundary, and safe resume command.
    A missing file simply means no activity has been recorded. Invalid activity
-   state is a warning, not a blocker for the underlying workflow.
+   state is a warning, not a blocker for the underlying workflow; point to
+   `/doctor` to inspect and offer the approved generated-state reset.
 8. **Onboarding check** - Before recommending `/overview`, check whether `AGENTS.md`
    still contains the `<!-- devflow:onboarding-required -->` marker or standard template commands.
    When it does, onboarding is incomplete and `/onboard` is the next action.
@@ -84,6 +79,8 @@ A short, scannable summary, not a wall of text. Aim for something like:
 
 End with a single suggested next action, chosen in this order:
 
+- The project configuration is invalid -> `/doctor`.
+- Dashboard activity is malformed -> `/doctor`.
 - The overview is missing or stale and no feature is in progress -> `/overview`.
 - A spec is in progress with unchecked steps -> `/implement [id]` and name the step.
 - A spec is in progress and all implementation steps are checked -> `/check [id]` if
