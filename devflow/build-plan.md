@@ -182,8 +182,25 @@
 
 ---
 
-## 🔄 Phase 23: Upstream AI Blueprint v1.5.0 – v1.5.1 Synchronization
+## 🧹 Phase 23: Reference Artifacts Housekeeping
 
-- [x] **23. Sync Upstream v1.5.0 & v1.5.1 (Hardened Run-State Engine & On-Demand Context Loading) (`DISC-20260903-001`, `070-sync-upstream-ai-blueprint-v150-v151`)** `[Size: M]`
+- [x] **23. Prune Studio Reference Artifacts (`069-prune-studio-reference-artifacts`)** `[Size: S]`
+  - *Dependencies*: None
+  - *Scope*: ลบไฟล์ Static HTML Snapshot ตกค้าง `devflow/reference/studio.html` และสคริปต์ `scripts/export-studio.ts` โดยยังคงรักษา Webview Studio Engine (`webview-studio.ts`), MCP tool (`devflow_get_studio_html`), CLI Command (`nexus-devflow studio`) และชุดทดสอบทั้งหมดให้ทำงานได้สมบูรณ์ 100%
+
+---
+
+## 📐 Phase 24: Role-Based Profiles & SA Command Suite Engine
+
+- [x] **24. Role-Based Profiles & SA Analyze Command Engine (`DISC-20260903-001`, `070-role-based-profile-and-sa-analyze-engine`)** `[Size: M]`
+  - *Dependencies*: None
+  - *Scope*: เพิ่มตัวเลือก `--role [sa|dev|full]` ใน CLI Installer (`create-nexus-devflow`), ระบบจำแนกชุด Skill Profiles ใน `skill-manager.ts`, โฟลเดอร์ Template สำหรับ SA (`devflow/inbox/`, `devflow/analysis/`, `devflow/blueprints/`), พัฒนาสคิล `/analyze` สำหรับสกัดเอกสารหลายรูปแบบ (PDF, Word, Excel, รูปภาพ, ข้อความ) และวิเคราะห์ Codebase Impact พร้อมชุดทดสอบ Automated Tests
+
+---
+
+## 🔄 Phase 25: Upstream AI Blueprint v1.5.0 – v1.5.1 Synchronization
+
+- [x] **25. Sync Upstream v1.5.0 & v1.5.1 (Hardened Run-State Engine & On-Demand Context Loading) (`DISC-20260903-001`, `070-sync-upstream-ai-blueprint-v150-v151`)** `[Size: M]`
   - *Dependencies*: Feature 20, Feature 21, DISC-20260903-001
   - *Scope*: พอร์ตและปรับแต่ง Hardened Dashboard Activity State Helper (`.agents/skills/doctor/scripts/run-state.mjs` และ `.claude/`), บังคับใช้ Zero-Manual Writes กับ `devflow/.state/run.json`, ปรับใช้ On-Demand Context Loading Protocol พร้อมแยก Reference Templates ย่อย (`reference/`), เพิ่ม Unit Tests `run-state-helper.test.ts`, อัปเดต `scripts/validate-framework.ts`, `AGENTS.md`, `CLAUDE.md` และยืนยันการผ่าน 100%
+
