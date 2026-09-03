@@ -67,7 +67,8 @@
     ],
     "overview": [
       "chore: establish DevFlow project baseline",
-      "Create the initial planning baseline commit now? (Recommended)",
+      "Finalize the DevFlow baseline locally? (Recommended)",
+      "git merge --ff-only",
       "overview must remain below 20,000 bytes"
     ],
     "doctor": [
@@ -98,7 +99,9 @@
       "Efficient (Recommended)",
       "Guided",
       "Custom",
-      "Never write an `implementationStyle` key"
+      "Never write an `implementationStyle` key",
+      "git rev-parse --verify HEAD",
+      "Create the initial scaffold commit and continue Onboard? (Recommended)"
     ],
     "autopilot": [
       "qualityGates.regular.independentReview",

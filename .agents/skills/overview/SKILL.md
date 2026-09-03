@@ -81,8 +81,8 @@ commit. Never create this commit silently.
 Treat this as the initial pre-feature state only when all of these are true:
 
 - the project is a Git repository with an existing `HEAD` commit
-- the current branch is the default branch, resolving the remote default when
-  available and otherwise accepting `main` or `master`
+- the current branch is the default branch, or it is a dedicated setup branch
+  whose starting commit exactly matches the current default-branch tip
 - the version of `devflow/context/project-overview.md` in `HEAD` does not
   already contain a generated overview baseline
 - `devflow/context/` has no active task-isolated workspace directories (`devflow/context/{xxx-slug}/`)
@@ -91,11 +91,11 @@ Treat this as the initial pre-feature state only when all of these are true:
 - `devflow/build-plan.md` contains no checked feature items
 - the DevFlow workflow is meant to be committed, not kept local-only
 
-If there is no `HEAD` yet, stop and ask the user to commit the app scaffold by
-itself before rerunning `/overview`; never create a root commit that mixes the
-app and DevFlow. If the initial run is on a non-default branch, stop and ask
-the user to return to the default branch first. These are recoverable initial
-handoffs, not permission to offer another baseline after one is committed.
+If there is no `HEAD` yet, stop and send the user back to `/onboard`, which owns
+the initial scaffold commit recovery. Overview never creates a root commit. If a
+dedicated setup branch did not start at the current default tip, stop with that
+exact mismatch. These are recoverable initial handoffs, not permission to offer
+another baseline after one is committed.
 
 Detect local-only mode with Git, not memory. Use `git check-ignore` on the
 present workflow paths. If `.agents/`, `.claude/`, `devflow/`, or `CLAUDE.md`
@@ -103,7 +103,7 @@ are ignored as part of the onboarding local-only choice, skip the offer and
 continue to the normal `/feature` guidance. `AGENTS.md` remaining public does not
 make a local-only setup eligible.
 
-Before asking:
+Before asking, record the resolved default branch and its exact tip:
 
 1. Read `git status`, the staged diff, the unstaged diff, and untracked paths.
 2. Build a candidate containing only DevFlow installation, adapter,
@@ -111,16 +111,21 @@ Before asking:
    `CLAUDE.md`, `.agents/`, `.claude/`, and `devflow/`. Include `.gitignore`
    only when every changed hunk is clearly an onboarding or DevFlow ignore
    entry.
-3. Exclude generated local state such as `devflow/.state/`, secrets, logs,
-   caches, dependencies, build output, and application source.
+3. Include the installer-owned `devflow/.state/manifest.json` and
+   `devflow/.state/.gitignore` when present. Exclude transient state such as
+   `run.json`, backups, and staging, plus secrets, logs, caches, dependencies,
+   build output, and application source.
 4. Stop if any staged change or dirty path falls outside the candidate, or if an
    allowed file contains an unrelated hunk. Do not mix app scaffolding or other
    user work into this commit. Tell the user exactly what must be committed,
    moved, or restored first, then leave the repository unchanged.
 5. If the candidate is empty, skip the offer.
 6. Show the exact candidate paths and their diff before asking:
-   `Create the initial planning baseline commit now? (Recommended)`
-   State that accepting creates one local commit and never pushes it.
+   `Finalize the DevFlow baseline locally? (Recommended)`
+   State that accepting creates one local commit. When running on a dedicated
+   setup branch, it also fast-forwards the unchanged default branch to that
+   commit, returns to the default branch, and deletes the setup branch. It never
+   pushes.
 
 If the user accepts, stage only the reviewed candidate, show the staged paths
 and diff summary, verify no other path is staged, and commit with this exact
@@ -129,6 +134,14 @@ message:
 ```text
 chore: establish DevFlow project baseline
 ```
+
+For a dedicated setup branch, verify before committing that the default tip is
+still the one shown in the prompt. After the commit, require a clean working
+tree, switch to the default branch, run `git merge --ff-only <setup-branch>`, and
+delete the setup branch locally. The single approval above covers only these
+named local actions. If the default moved or any check fails, stop without
+merging or deleting. Then confirm the final branch and working tree and recommend
+`/feature`.
 
 Then confirm the working tree state and recommend `/feature`. If the user
 declines, leave the repository untouched and explain that these setup and
