@@ -96,7 +96,8 @@ Read only enough to identify the setup:
   `tailwind.config.*`, database config, test config)
 - source layout, route layout, and app/package directories
 - existing `.gitignore`
-- whether `.agents/` and `.claude/` are both needed
+- `devflow/.state/manifest.json` or `.nexus/nexus-devflow.json`, when present, and its selected adapter list
+- which selected tools need `.agents/`, `.claude/`, or both
 - whether Blueprint workflow paths are already tracked by git
 - existing verification commands and `.github/workflows/`
 - project name, from `package.json`, the folder name, existing docs, or the user
@@ -278,14 +279,26 @@ Recommend option 1 by default. If the user chooses option 2:
   `git rm --cached -r .agents .claude devflow CLAUDE.md`, and
   only run it if the user explicitly approves. Never delete the local files.
 
-Then report which adapter folders are needed:
+Then report which selected tools and adapter folders are needed:
 
-- Codex, Antigravity, and GitHub Copilot: keep `AGENTS.md`, `.agents/`, and `devflow/`; `CLAUDE.md` and
+- When a valid `devflow/.state/manifest.json` or `.nexus/nexus-devflow.json` exists, its `adapters` list is
+  the authoritative installer selection. The presence of `.agents/` means its
+  files are compatible with Codex, Antigravity, GitHub Copilot, and OpenCode;
+  it does not mean all four tools were selected.
+- Do not ask the user to select adapters again when that valid manifest exists.
+  Keep and report the exact selection. If a required adapter tree is missing,
+  report the mismatch and point to `/doctor` instead of guessing or deleting
+  another tree.
+- Without a valid manifest, explain that folder detection cannot distinguish
+  Codex, Antigravity, GitHub Copilot, and OpenCode, then ask which tools the user actually
+  uses instead of assuming all of them are selected.
+- Codex and Antigravity: keep `AGENTS.md`, `.agents/`, and `devflow/`; `CLAUDE.md` and
   `.claude/` can be deleted.
 - Claude Code only: keep `AGENTS.md`, `CLAUDE.md`, `.claude/`, and `devflow/`;
   `.agents/` can be deleted.
+- GitHub Copilot only: keep `AGENTS.md`, `.agents/`, and `devflow/`.
 - OpenCode: shares either `.agents/` or `.claude/` compatible skill tree without duplicate folders.
-- Mixed tools: keep both `.agents/` and `.claude/` adapters.
+- Mixed tools: keep only the compatible adapter trees required by the selected tools.
 
 Do not delete adapters unless the user explicitly asks.
 

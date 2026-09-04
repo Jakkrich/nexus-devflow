@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.2] - 2026-09-04
+
+### Added
+- **Upstream AI Blueprint v1.5.3 Synchronization (072)**:
+  - **Manifest-Aware Adapter Selection in Onboard (`/onboard`)**: Preflight inspection (`devflow/.state/manifest.json` / `.nexus/nexus-devflow.json`) to read user's chosen `adapters` list as authoritative source of truth. Prevents AI from assuming all tools sharing `.agents/` (Codex, Antigravity, GitHub Copilot, OpenCode) were selected and eliminates repeated adapter confirmation prompts.
+  - **10th E2E Autonomous Agent Scenario (`scripts/e2e/scenarios/adapter-selection.ts`)**: Full-flow autonomous agent test scenario validating that Onboard preserves Claude and Codex manifest selection without relabeling shared tree as all adapters.
+  - **Static Contracts & Framework Verification**: Added `authoritative installer selection`, `does not mean all four tools were selected`, and `point to /doctor instead of guessing` contracts in `agent-bundle.manifest.json` and synchronized across `.agents/` and `.claude/` adapters.
+
 ## [2.12.1] - 2026-09-03
 
 ### Added

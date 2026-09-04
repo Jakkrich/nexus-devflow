@@ -101,7 +101,11 @@
       "Custom",
       "Never write an `implementationStyle` key",
       "git rev-parse --verify HEAD",
-      "Create the initial scaffold commit and continue Onboard? (Recommended)"
+      "Create the initial scaffold commit and continue Onboard? (Recommended)",
+      "authoritative installer selection",
+      "does not mean all four tools were selected",
+      "Do not ask the user to select adapters again",
+      "point to `/doctor` instead of guessing"
     ],
     "autopilot": [
       "qualityGates.regular.independentReview",
