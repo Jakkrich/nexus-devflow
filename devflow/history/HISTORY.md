@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-04 | `072` | Feature | ซิงก์ส่วนขยาย Upstream AI Blueprint (v1.5.3) — Manifest-Aware Adapter Selection in Onboard & E2E Scenario Parity (`REQ-20260904-001`) | `HEAD` | `Released` | [`072-sync-upstream-ai-blueprint-v153.md`](features/072-sync-upstream-ai-blueprint-v153.md) |
 | 2026-09-03 | `071` | Feature | ซิงก์ส่วนขยาย Upstream AI Blueprint (v1.5.2) — Unborn Repository Onboarding & Branch Baseline Finalization (`REQ-20260903-001`) | `HEAD` | `Released` | [`071-sync-upstream-ai-blueprint-v152.md`](features/071-sync-upstream-ai-blueprint-v152.md) |
 | 2026-09-03 | `070` | Feature | ซิงก์ส่วนขยาย Upstream AI Blueprint (v1.5.0 – v1.5.1) — Hardened Run-State Engine & On-Demand Context Loading (`DISC-20260903-001`) | `98e9b1e` | `Released` | [`070-sync-upstream-ai-blueprint-v150-v151.md`](features/070-sync-upstream-ai-blueprint-v150-v151.md) |
 | 2026-09-03 | `070` | Feature | Role-Based Profiles & SA Analyze Command Engine (`DISC-20260903-001`) | `49d8cbe` | `Released` | [`070-role-based-profile-and-sa-analyze-engine.md`](features/070-role-based-profile-and-sa-analyze-engine.md) |

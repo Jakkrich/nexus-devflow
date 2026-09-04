@@ -1,0 +1,23 @@
+# Upstream AI Blueprint Synchronization Request (v1.5.2 -> v1.5.3 / HEAD)
+
+## Raw Upstream Commits
+- 2b5f334 docs: refresh workflow diagram asset
+- a231195 docs: simplify workflow diagram
+- ed9c19c docs: position AI Blueprint as a workflow framework
+- b4eb32e fix: honor selected adapters
+- 5b46859 fix: handle repositories without an initial commit (synced in 071)
+
+## Core Upstream Changes Diff Stat
+ .agents/skills/onboard/SKILL.md                    |  23 ++++----
+ .claude/skills/onboard/SKILL.md                    |  23 ++++----
+ CHANGELOG.md                                       |  12 +++++
+ README.md                                          |  20 +++----
+ assets/ai-blueprint-workflow-v2.png                | Bin 0 -> 107098 bytes
+ assets/ai-blueprint-workflow.png                   | Bin 216758 -> 0 bytes
+ packages/create-ai-blueprint/README.md             |   5 +-
+ packages/create-ai-blueprint/bin/create-ai-blueprint.ts |   4 +-
+ packages/create-ai-blueprint/package.json          |   2 +-
+ packages/create-ai-blueprint/test/update.test.ts   |   6 +--
+ scripts/e2e/scenarios/adapter-selection.ts         |  59 +++++++++++++++++++++
+ scripts/validate-blueprint.ts                      |   9 +++-
+ 12 files changed, 126 insertions(+), 37 deletions(-)

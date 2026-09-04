@@ -212,3 +212,12 @@
   - *Dependencies*: Feature 25, REQ-20260903-001
   - *Scope*: เพิ่มการตรวจจับและกู้คืน Unborn Git repository ใน `/onboard` ด้วย Scaffold Initial Commit (`chore: scaffold application`), รองรับการ Finalize DevFlow Baseline บน Dedicated Setup Branch ด้วย `git merge --ff-only` ใน `/overview`, เพิ่มชุดทดสอบ E2E Scenario `scripts/e2e/scenarios/unborn-onboarding.ts`, อัปเดต `devflow/context/ai-interaction.md` และอัปเดต Framework Static Contracts ผ่าน 100%
 
+---
+
+## 🔄 Phase 27: Upstream AI Blueprint v1.5.3 Synchronization
+
+- [x] **27. Sync Upstream v1.5.3 (Manifest-Aware Adapter Selection in Onboard & E2E Scenario Parity) (`REQ-20260904-001`, `072-sync-upstream-ai-blueprint-v153`)** `[Size: S]`
+  - *Dependencies*: Feature 26, REQ-20260904-001
+  - *Scope*: ปรับปรุง `/onboard` (ทั้ง `.agents/` และ `.claude/`) ให้อ่านและยึดถือรายการ `adapters` จาก Manifest (`.nexus/nexus-devflow.json` / `devflow/.state/manifest.json`) เป็นความจริงหลัก (Authoritative Selection) โดยไม่ถามซ้ำและไม่อนุมานผิดพลาด, เพิ่มชุดทดสอบ E2E Scenario ตัวที่ 10 `scripts/e2e/scenarios/adapter-selection.ts`, อัปเดต `agent-bundle.manifest.json` และ `scripts/validate-framework.ts` ให้ครอบคลุม Verification Contracts ใหม่ 100%
+
+
