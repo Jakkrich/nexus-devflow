@@ -19,3 +19,11 @@ _Avoid_: PRD, design document, static specification
 **Quality Gate**:
 A hard programmatic verification checkpoint that blocks completion or commit when tests fail, spec tasks remain incomplete, or unresolved findings persist.
 _Avoid_: Lint check, completion check, pre-commit barrier
+
+**Dashboard State Engine**:
+The deep state computation engine that aggregates project status, snapshots, code graphs, and blast radius reports behind a protocol-agnostic in-memory seam.
+_Avoid_: Dashboard server, dashboard backend, snapshot handler
+
+**Dashboard Transport Adapter**:
+A concrete presentation or network adapter (HTTP server, IDE Webview) that translates external requests into calls against the Dashboard State Engine.
+_Avoid_: Dashboard controller, route handler

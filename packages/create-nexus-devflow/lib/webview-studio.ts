@@ -1,11 +1,10 @@
-import { readDashboardSnapshot, type DashboardSnapshot } from "./dashboard-snapshot.js";
-import { evaluateGate, type GateReport } from "./gatekeeper.js";
-import { detectGitDrift, type GitDriftReport } from "./drift-reconciler.js";
+import { DashboardStateEngine } from "./dashboard-engine.js";
 import { readIdeas } from "./ideas.js";
 
 export interface StudioRenderOptions {
   theme?: "auto" | "dark" | "light";
   includeScripts?: boolean;
+  engine?: DashboardStateEngine;
 }
 
 /**
@@ -29,9 +28,10 @@ export async function renderStudioHtml(
   projectRoot: string,
   options: StudioRenderOptions = {}
 ): Promise<string> {
-  const snapshot = await readDashboardSnapshot(projectRoot);
-  const gateReport = await evaluateGate(projectRoot, { strict: false });
-  const driftReport = await detectGitDrift(projectRoot);
+  const engine = options.engine ?? new DashboardStateEngine(projectRoot);
+  const snapshot = await engine.getSnapshot();
+  const gateReport = snapshot.gatekeeper;
+  const driftReport = snapshot.drift;
   const ideas = await readIdeas(projectRoot);
 
   const status = snapshot.status;
