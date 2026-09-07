@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo-nexus-devflow.png" alt="Nexus-DevFlow" width="120">
+  <img src="assets/logo-nexus-devflow.png" alt="Nexus-DevFlow" width="120">
 </p>
 
 <h1 align="center">Nexus-DevFlow</h1>

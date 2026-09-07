@@ -1,15 +1,15 @@
 ---
-title: Nexus-DevFlow 2.6.0 Manual Review & Quality Gate Specification
+title: Nexus-DevFlow 2.13.0 Manual Review & Quality Gate Specification
 status: active
-updated: 2026-08-25
+updated: 2026-09-07
 owner: Nexus-DevFlow Core Team
 ---
 
-# Nexus-DevFlow 2.6.0 Manual Review & Quality Gate Specification
+# Nexus-DevFlow 2.13.0 Manual Review & Quality Gate Specification
 
 ## 1. Purpose & Overview
 
-This specification defines the **Manual Review, Verification Gates, and Audit Discipline** for **Nexus-DevFlow 2.6.0 (The 3-Pillars & Single Living Spec Model)**.
+This specification defines the **Manual Review, Verification Gates, and Audit Discipline** for **Nexus-DevFlow 2.13.0 (The 3-Pillars & Pure Task-Isolated Living Spec Model)**.
 
 In production-grade software development, AI coding assistants should not blindly write code without human alignment. Nexus-DevFlow treats human review as **explicit, non-bypassable gates** throughout the 4-stage delivery lifecycle:
 
@@ -22,7 +22,7 @@ In production-grade software development, AI coding assistants should not blindl
 ## 2. The 4 Essential Human Review Gates
 
 ### 🚪 Gate 1: The Spec Review Gate (`/feature` / `/fix`)
-- **When**: Triggered immediately after the AI creates or updates `devflow/context/current-feature.md`.
+- **When**: Triggered immediately after the AI creates or updates `devflow/context/{xxx-slug}/spec.md`.
 - **AI Action**: Defines problem statement, boundaries, data contracts, acceptance criteria (AC-1..AC-N), and TDD execution plan, then **pauses**.
 - **Human Verification Checklist**:
   1. Are scope boundaries and non-goals explicitly defined?
@@ -34,8 +34,8 @@ In production-grade software development, AI coding assistants should not blindl
 ---
 
 ### 🚪 Gate 2: The TDD Implementation Checkpoint (`/implement`)
-- **When**: During task execution in `current-feature.md`.
-- **AI Action**: Implements tasks one by one under strict Red-Green-Refactor discipline, recording diffs and test logs into Section 4 (Implementation Log & Evidence).
+- **When**: During task execution in `devflow/context/{xxx-slug}/spec.md`.
+- **AI Action**: Implements tasks one by one under strict Red-Green-Refactor discipline, recording diffs and test logs into the implementation checklist and evidence sections.
 - **Human Verification Checklist**:
   1. Did each behavior change start with a failing test (`[TDD-Red]`)?
   2. Is the code diff minimal, clean, and adhering to `coding-standards.md`?
@@ -51,15 +51,15 @@ In production-grade software development, AI coding assistants should not blindl
   1. Did all lanes in the matrix achieve `PASS`?
   2. Are test assertions testing behavior rather than mock implementation details?
   3. Has manual behavioral proof (browser/terminal/API) been recorded?
-- **Approval Rule**: Passing checks recorded as empirical evidence in Section 5 of `current-feature.md`.
+- **Approval Rule**: Passing checks recorded as empirical evidence in `devflow/context/{xxx-slug}/spec.md` and any findings logged in `findings.md`.
 
 ---
 
 ### 🚪 Gate 4: The Findings & Git Delivery Gate (`/audit` + `/complete`)
 - **When**: Final step before closing the work item.
 - **AI Action**:
-  - `/audit current` inspects the complete feature branch delta and records findings in `devflow/context/findings.md`.
-  - `/complete` compiles the Release Digest, updates `HISTORY.md`, archives the living spec to `devflow/history/features/`, and asks for approval before merging.
+  - `/audit current` inspects the complete feature branch delta and records findings in `devflow/context/{xxx-slug}/findings.md`.
+  - `/complete` compiles the Release Digest, updates `HISTORY.md` and `build-plan.md`, archives the living spec to `devflow/history/features/`, cleanly tears down the active task directory, and asks for approval before merging.
 - **Human Verification Checklist**:
   1. Are all P0 (Critical) and P1 (High) findings in `findings.md` resolved and verified (`closed`) or explicitly waived (`accepted`)?
   2. Is the Release Digest accurate and complete?
@@ -71,29 +71,32 @@ In production-grade software development, AI coding assistants should not blindl
 
 ```text
 devflow/
-├── ideas.md                    # 🔮 Future: Idea Inbox with AI scoring
-├── context/                    # ⚡ Present: Active Context & Living Spec
-│   ├── current-feature.md      # The Single Living Spec (Active delivery spec / idle stub)
-│   ├── current-stage.md        # Active stage inspector & guardrail pointer
+├── ideas.md                    # 🔮 Future (Backlog): Idea Inbox with AI scoring
+├── project-plan.md             # 🔮 Future (Backlog): Product Vision & Architectural Roadmap
+├── build-plan.md               # 🔮 Future (Backlog): Master Feature Delivery Sequence
+├── context/                    # ⚡ Present (Active Context): Global Truth & Task Workspaces
 │   ├── project-overview.md     # Single Source of Truth
 │   ├── coding-standards.md     # Engineering standards & conventions
 │   ├── ai-interaction.md       # AI interaction guidelines
-│   ├── findings.md             # Quality & security findings ledger (P0-P3)
-│   └── glossary.md             # Domain glossary & architecture terms
+│   ├── glossary.md             # Domain glossary & architecture terms
+│   └── {xxx-slug}/             # Active Task-Isolated Workspace
+│       ├── spec.md             # Living Spec & Task Breakdown
+│       ├── stage.md            # Stage pointer & status
+│       └── findings.md         # Dedicated audit & quality ledger
 ├── decisions/                  # 🏛️ Decisions: Architecture Decision Records (ADR-xxx.md)
-├── history/                    # 📦 Past: Permanent Categorized Archives
-│   ├── features/               # Completed features ({xxx-slug}.md)
-│   ├── fixes/                  # Completed bug fixes ({xxx-slug}.md)
+├── history/                    # 📦 Past (History Archive): Categorized delivery archives
+│   ├── features/               # Shipped features ({xxx-slug}.md)
+│   ├── fixes/                  # Resolved bug fixes ({xxx-slug}.md)
 │   ├── rollbacks/              # Reversal audit logs (YYYY-MM-DD-{xxx-slug}.md)
-│   └── HISTORY.md              # Master release ledger summary
+│   └── HISTORY.md              # Master release ledger
 └── discoveries/                # 🔍 Discoveries: Pre-delivery discovery records (DISC-xxx.md)
 ```
 
 ---
 
-## 4. Single Living Spec Contract (`current-feature.md`)
+## 4. Task-Isolated Living Spec Contract (`spec.md`)
 
-Every delivery run operates on `current-feature.md`, structured into **6 standard sections**:
+Every delivery run operates on `devflow/context/{xxx-slug}/spec.md`, structured into **6 standard sections**:
 
 1. **🎯 1. Define & Boundaries**: Problem statement, proposed solution, scope boundaries, and non-breaking invariants.
 2. **📐 2. Technical Spec & Contracts**: Data contracts, API schemas, and testable Acceptance Criteria (AC-1..AC-N).
@@ -107,7 +110,7 @@ Every delivery run operates on `current-feature.md`, structured into **6 standar
 ## 5. Reference Examples
 
 For complete markdown templates and living spec examples, refer to:
-- [`docs/examples/living-spec/current-feature.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/current-feature.example.md)
-- [`docs/examples/living-spec/discovery.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/discovery.example.md)
-- [`docs/examples/living-spec/adr.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/adr.example.md)
-- [`docs/examples/living-spec/ideas.example.md`](file:///d:/Projects/devtools/nexus-devflow/docs/examples/living-spec/ideas.example.md)
+- [`docs/examples/living-spec/current-feature.example.md`](examples/living-spec/current-feature.example.md)
+- [`docs/examples/living-spec/discovery.example.md`](examples/living-spec/discovery.example.md)
+- [`docs/examples/living-spec/adr.example.md`](examples/living-spec/adr.example.md)
+- [`docs/examples/living-spec/ideas.example.md`](examples/living-spec/ideas.example.md)

@@ -122,7 +122,7 @@ interface CliOptions {
   | "graph"
   | "skill"
   | "skills";
-  subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall" | "remove" | "sync" | "update" | "upgrade";
+  subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall" | "remove" | "sync" | "update" | "upgrade" | "restore";
   subcommandArg?: string;
   graphFile?: string;
   sliceStage?: SliceStage;
@@ -468,7 +468,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       return;
     }
 
-    if (options.subcommandAction === "update" || options.subcommandAction === "upgrade") {
+    if (options.subcommandAction === "update" || options.subcommandAction === "upgrade" || options.subcommandAction === "restore") {
       if (options.recommended || options.subcommandArg === "recommended" || options.subcommandArg === "--recommended") {
         const spinner = createSpinner("Updating recommended third-party skills from latest upstream repositories...").start();
         try {
@@ -1361,8 +1361,8 @@ function parseArgs(args: readonly string[]): CliOptions {
       } else if (positional[1] === "sync") {
         subcommandAction = "sync";
         target = positional[2] || target || ".";
-      } else if (positional[1] === "update" || positional[1] === "upgrade") {
-        subcommandAction = "update";
+      } else if (positional[1] === "update" || positional[1] === "upgrade" || positional[1] === "restore") {
+        subcommandAction = positional[1] === "restore" ? "restore" : "update";
         if (positional[2] === "--recommended" || positional[2] === "recommended") {
           recommended = true;
           target = positional[3] || target || ".";
@@ -1484,6 +1484,7 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow skill")} [list] [--json]
   ${style.cyan("nexus-devflow skill add")} <git-url-or-path|--recommended> [--name <name>] [--all] [--force]
   ${style.cyan("nexus-devflow skill update")} [name|--all|--recommended]
+  ${style.cyan("nexus-devflow skill restore")} [target-dir]
   ${style.cyan("nexus-devflow skill remove")} <name>
   ${style.cyan("nexus-devflow skill sync")}
   ${style.cyan("nexus-devflow archive")} [list|stats] [--json]

@@ -1,6 +1,6 @@
 # Quickstart Guide
 
-Getting started with **Nexus-DevFlow 2.6.0** — an enterprise agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Single Living Spec Model** for Google Antigravity, OpenAI Codex, Claude Code, Cursor, GitHub Copilot, and other AI IDEs.
+Getting started with **Nexus-DevFlow 2.13.0** — an enterprise agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Pure Task-Isolated Living Spec Model** for Google Antigravity, OpenAI Codex, Claude Code, Cursor, GitHub Copilot, and other AI IDEs.
 
 ---
 
@@ -33,29 +33,30 @@ Open your AI IDE (Antigravity, Claude Code, Codex, or Cursor) and run the approp
 
 ---
 
-## 3. The Unified 4-Stage Living Spec Lifecycle
+## 3. The Unified 4-Stage Task-Isolated Living Spec Lifecycle
 
-All development tasks (from small UI fixes to deep architectural features) execute through the 4-stage single living spec lifecycle:
+All development tasks (from small UI fixes to deep architectural features) execute through the 4-stage task-isolated living spec lifecycle:
 
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
 ```
 
-1. **`/feature {title}`** (or **`/fix {bug}`**): Allocates sequential ID (`xxx-slug`) and initializes the Single Living Spec in `devflow/context/current-feature.md` with 6 structured sections.
-2. **`/implement`**: Incrementally executes checklist tasks with strict TDD discipline (Red-Green-Refactor).
-3. **`/check`**: Senior QA multi-lane verification (Typecheck, Lint, Test suites, and behavioral manual proof).
-4. **`/complete`**: Final safety audit, records Release Digest, auto-archives to `devflow/history/{features|fixes|rollbacks}/`, manages the git delivery gate, and resets workspace to Idle.
+1. **`/feature {title}`** (or **`/fix {bug}`**): Allocates sequential ID (`xxx-slug`) and initializes the Task-Isolated Living Spec in `devflow/context/{xxx-slug}/spec.md`, stage pointer (`stage.md`), and dedicated audit ledger (`findings.md`).
+2. **`/implement [id]`**: Incrementally executes checklist tasks in `devflow/context/{xxx-slug}/spec.md` with strict TDD discipline (Red-Green-Refactor).
+3. **`/check [id]`**: Senior QA multi-lane verification (Typecheck, Lint, Test suites, and behavioral manual proof), records empirical proof into `spec.md` and findings into `findings.md`.
+4. **`/complete [id]`**: Final safety audit, records Release Digest, auto-archives to `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`, cleanly removes `devflow/context/{xxx-slug}/`, updates `HISTORY.md` and `build-plan.md`, and manages git squash-merge.
 
 ---
 
-## 4. Pre-Flight Discovery & Architectural Alignment
+## 4. Pre-Flight Discovery, SA & Architectural Alignment
 
 Before committing to delivery, use specialized companion skills to refine complex requirements:
 
 ```text
-/idea (Inbox) ──▶ /grill (Socratic ADR) ──▶ /discovery (Explore) ──▶ /feature (Deliver)
+/analyze ──▶ /idea (Inbox) ──▶ /grill (Socratic ADR) ──▶ /discovery (Explore) ──▶ /feature (Deliver)
 ```
 
+- **`/analyze`**: Multi-format requirement ingestion (PDF, Word, Excel, Images) and codebase impact scan.
 - **`/idea`**: Quick idea capture in `devflow/ideas.md` with instant AI feasibility scoring.
 - **`/grill`** (or **`/align`**): Socratic alignment & domain modeling; records Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
 - **`/brainstorm`**: Structured ideation with trade-off analysis.
@@ -68,14 +69,17 @@ Before committing to delivery, use specialized companion skills to refine comple
 ```text
 devflow/
 ├── ideas.md                    # 🔮 Future (Backlog): Idea Inbox with AI scoring
-├── context/                    # ⚡ Present (Active Context): Single Living Spec & Active State
-│   ├── current-feature.md      # The Single Living Spec (Active delivery spec / idle stub)
-│   ├── current-stage.md        # Active stage inspector & guardrail pointer
+├── project-plan.md             # 🔮 Future (Backlog): Product Vision & Architectural Roadmap
+├── build-plan.md               # 🔮 Future (Backlog): Master Feature Delivery Sequence
+├── context/                    # ⚡ Present (Active Context): Global Truth & Task Workspaces
 │   ├── project-overview.md     # Single Source of Truth
 │   ├── coding-standards.md     # Engineering standards & conventions
 │   ├── ai-interaction.md       # AI interaction guidelines
-│   ├── findings.md             # Quality & security findings ledger
-│   └── glossary.md             # Domain glossary & architecture terms
+│   ├── glossary.md             # Domain glossary & architecture terms
+│   └── {xxx-slug}/             # Active Task-Isolated Workspace
+│       ├── spec.md             # Living Spec & Task Breakdown
+│       ├── stage.md            # Stage pointer & status
+│       └── findings.md         # Dedicated audit & quality ledger
 ├── decisions/                  # 🏛️ Decisions: Architecture Decision Records (ADR-xxx.md)
 ├── history/                    # 📦 Past (History Archive): Categorized delivery archives
 │   ├── features/               # Shipped features ({xxx-slug}.md)
@@ -93,9 +97,11 @@ devflow/
 # Launch interactive Real-Time Local Dashboard (0ms SSR Hydration & Git Cache)
 npx @jakkrichm/create-nexus-devflow dashboard
 
-# Automated Quality Gatekeeper & Pre-commit Hooks
-npx @jakkrichm/create-nexus-devflow check-gate [--strict]
-npx @jakkrichm/create-nexus-devflow hook install pre-commit
+# Check active project status across 3-Pillars
+npx @jakkrichm/create-nexus-devflow status
+
+# Automated Quality Gatekeeper
+npx @jakkrichm/create-nexus-devflow gate [--strict]
 
 # Model Context Protocol (MCP) Server Hub
 npx @jakkrichm/create-nexus-devflow mcp
@@ -106,4 +112,8 @@ npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
 # JIT Context Slicing Engine
 npx @jakkrichm/create-nexus-devflow slice --stage implement
+
+# Manage vendor skills (e.g. bughunter, matt-pocock)
+npx @jakkrichm/create-nexus-devflow skill list
+npx @jakkrichm/create-nexus-devflow skill restore
 ```

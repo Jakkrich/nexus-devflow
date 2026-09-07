@@ -17,7 +17,7 @@ Example:
 
 ## 2. Placement Rules
 
-- **Workflow Stage**: Add or modify a lifecycle stage when the behavior owns a public lifecycle state, required stage artifact, or next-step contract in `current-feature.md`.
+- **Workflow Stage**: Add or modify a lifecycle stage when the behavior owns a public lifecycle state, required stage artifact, or next-step contract in the active living spec (`devflow/context/{xxx-slug}/spec.md`).
 - **Skill**: Add a skill under `.agents/skills/` and `.claude/skills/` when the behavior is a reusable method that can support multiple workflows or AI agents.
 - **Script**: Add a script under `scripts/` when the change reduces repetition, performs workspace setup, or supports validation without changing the public workflow model.
 - **Validation**: Add validation to `scripts/validate-framework.ts` when the rule is stable, repeated, and important enough that drift should fail fast in CI.

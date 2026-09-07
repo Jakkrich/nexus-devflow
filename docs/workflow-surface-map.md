@@ -1,6 +1,6 @@
 # Workflow Surface Map (32 Core Skills)
 
-This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.11.1**.
+This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.13.0**.
 
 The canonical surface contains **32 Core Skills** from
 `agent-bundle.manifest.json#core_skills`. Additional Local or Personal Skills
@@ -23,10 +23,10 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 ### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (7 Skills)
 | Command | Category | Purpose | Primary Artifact |
 | :--- | :--- | :--- | :--- |
-| `feature` | Spec & Plan | Combines discovery, specification, and task breakdown for planned work. | `devflow/context/current-feature.md` |
-| `fix` | Spec & Plan | Documents and specs ad-hoc bug repairs or small changes. | `devflow/context/current-feature.md` |
-| `implement` | Execution | Incrementally executes checklist tasks with strict TDD discipline. | `devflow/context/current-feature.md` |
-| `check` | Quality Gate | Dual-Axis review of empirical spec fidelity and independent standards/architecture quality. | `devflow/context/current-feature.md` |
+| `feature` | Spec & Plan | Combines discovery, specification, and task breakdown for planned work. | `devflow/context/{xxx-slug}/spec.md` |
+| `fix` | Spec & Plan | Documents and specs ad-hoc bug repairs or small changes. | `devflow/context/{xxx-slug}/spec.md` |
+| `implement` | Execution | Incrementally executes checklist tasks with strict TDD discipline. | `devflow/context/{xxx-slug}/spec.md` |
+| `check` | Quality Gate | Dual-Axis review of empirical spec fidelity and independent standards/architecture quality. | `devflow/context/{xxx-slug}/spec.md` |
 | `complete` | Delivery | Final safety audit, records Release Digest, branch merge, and archiving. | `devflow/history/{features\|fixes\|rollbacks}/` |
 | `continuous` | Delivery | Autonomous serial multi-feature delivery loop with local branches, quality gates, and squash-merges. | `devflow/history/features/` |
 | `rollback` | Delivery | Safe feature reversal with dependency risk analysis preserving history. | `devflow/history/rollbacks/` |

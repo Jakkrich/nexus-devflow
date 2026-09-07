@@ -1,12 +1,12 @@
 # Skill Selection Policy
 
-Use this policy when deciding which skill or companion tool to activate for a given task in **Nexus-DevFlow 2.6.0**.
+Use this policy when deciding which skill or companion tool to activate for a given task in **Nexus-DevFlow 2.13.0**.
 
 ---
 
 ## 1. Lifecycle Selection Policy
 
-Nexus-DevFlow 2.6.0 uses the **Single Living Spec Lifecycle** for all development work:
+Nexus-DevFlow 2.13.0 uses the **Task-Isolated Living Spec Lifecycle** for all development work:
 
 ```text
 /feature (or /fix) ──▶ /implement ──▶ /check ──▶ /complete
@@ -57,7 +57,7 @@ Use pre-flight skills before committing to delivery when exploring new ideas or 
 
 ## 4. Selection Boundaries & References
 
-- The **28 bundled Core Skills** are the names in `agent-bundle.manifest.json#core_skills`; Local or Personal Skills are workspace extensions, not automatic public commands.
+- The **32 bundled Core Skills** are the names in `agent-bundle.manifest.json#core_skills`; Local or Personal Skills are workspace extensions, not automatic public commands.
 - Prefer an existing Core Skill before adding a new public surface. Follow [governance rules](governance-rules.md) for promotion and placement decisions.
 - Generated artifacts follow the [Markdown metadata contract](markdown-metadata-contract.md).
 - Human review responsibilities are defined in the [manual review workflow](manual-review-workflow-spec.md).
