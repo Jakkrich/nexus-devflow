@@ -153,6 +153,29 @@ Never batch the whole thing into one diff. If a step's diff is too big to read,
 split it. The documented `Verify` command, or the fallback build and tests, must
 pass before any commit.
 
+After final Verify and required Check pass, set the active spec to `verified`
+with every completed box checked. Then resolve independent review before the
+final packet:
+
+1. If `qualityGates.regular.independentReview` does not select review and no
+   request already exists, proceed directly to the final review packet.
+2. Otherwise show the exact product, test, and verified-spec candidate for the
+   immutable review checkpoint. Obtain explicit commit approval when the exact
+   checkpoint does not already exist, then create or use it. Configuration,
+   including `review.independentExecution: "automatic"`, never grants commit
+   permission, even when normal checkpoint commits are disabled.
+3. Follow `/audit independent current` to prepare or reuse the request and record
+   `Requested execution`. For requested `automatic`, start and wait for the
+   generic isolated current-runtime child instructed from the project-local
+   Audit skill, then validate the receipt. For requested `manual`, or when
+   automatic capability is unavailable, preserve the request and stop with the
+   manual fresh-session handoff. Treat an existing request without `Requested
+   execution` as legacy manual-only: never add execution fields or run a
+   subagent against it.
+4. Continue to the final packet only with a current passing receipt whose
+   requested execution, actual execution, and reviewer context form an allowed
+   pairing. Never self-review or silently skip a selected gate.
+
 ## Step 3 - hand off to /complete
 
 Before handing off, check `devflow/context/{xxx-slug}/findings.md`. A P0 or P1 finding
@@ -182,9 +205,30 @@ When every step is built and `Verify`, or the fallback build and tests, passes
 - known risks, skipped checks, or follow-up notes
 - next action, usually `/complete`
 
-Then tell the user `/complete` makes the one work-level commit, logs it (archive,
-update the build plan for a feature or rollback, reset), and merges with
-approval. This skill does not touch main.
+After the final packet, always offer these choices:
+
+1. Walk me through the implementation.
+2. Request changes.
+3. Continue to the exact next workflow command.
+
+The final walkthrough is available with either `workflow.stepReview` value and
+regardless of `workflow.checkpointCommits`. It is a read-only code tour, not the
+manual product-review path produced by `/try`, and it is not verification.
+
+When the user chooses the walkthrough, begin with a short map of the completed
+feature, then follow the spec's build steps. For each step, explain its purpose,
+key files and symbols, important data or control flow, and non-obvious decisions.
+Use file and line links when the client supports them. Do not narrate every line
+or reload broad project context. End by offering a focused deep dive into one
+named area. If the feature spans too many distinct areas for one useful pass,
+name the sections first and let the user choose where to begin. Remain read-only
+unless the user separately requests changes.
+
+Never create an ordinary step, product, or work-level commit from this skill.
+The sole exception is exactly one immutable independent-review checkpoint after
+showing its exact candidate and receiving current explicit commit approval.
+Configuration never supplies that approval. Never merge, push, deploy, publish,
+or start unrelated work from this skill.
 
 ## Rules
 

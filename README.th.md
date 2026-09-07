@@ -612,6 +612,18 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 > [!IMPORTANT]
 > **Blocker Gate**: คำสั่ง `/complete` จะ **ปฏิเสธการ Merge** ทันที หากยังมีปัญหา P0 หรือ P1 อยู่ในสถานะ `open` หรือ `fixed`
 
+### การรีวิวอิสระและการตั้งค่า Quality Gates (`devflow/config.json`)
+
+DevFlow รองรับระบบ Quality Gates และการทำ Independent Code Review ที่กำหนดค่าได้ทั้งในโหมดปกติ, Autopilot และ Continuous Mode:
+
+- **การกำหนดค่า Quality Gates (`qualityGates.regular` / `qualityGates.continuous`)**:
+  - `independentReview`: ค่าเริ่มต้นคือ `when-sensitive` (เปิดใช้งานอัตโนมัติเมื่อแตะส่วนสำคัญ เช่น Auth, Payments, Encryption, Permissions, การลบข้อมูล หรือการเปลี่ยนแปลงที่มี Scope กว้าง) หรือเลือกตั้งเป็น `always` / `manual` ได้
+  - `audit`, `check`, `tryGuide`: ค่าเริ่มต้นคือ `manual` สามารถตั้งเป็น `when-sensitive`, `when-behavioral`, `when-user-facing`, หรือ `always` ได้
+- **รูปแบบการทำงานของ Independent Review (`review.independentExecution`)**:
+  - `automatic` (ค่าเริ่มต้น): AI ตัวหลักจะสั่งสร้าง Isolated Subagent แยกบริบทขึ้นมาตรวจสอบ Clean Checkpoint โดยอัตโนมัติ พร้อมบันทึกหลักฐาน `Reviewer context: fresh subagent` ในสมุด `review.md`
+  - `manual`: AI ตัวหลักจะหยุดชั่วคราวและสร้าง Review Checkpoint พร้อมแสดงคำสั่งส่งต่อให้ผู้พัฒนาเปิด Session ใหม่แล้วรัน `/audit independent complete` เพื่อตรวจรับรอง บันทึก `Reviewer context: fresh session`
+
+
 ---
 
 ## คู่มือการทดสอบด้วยตนเอง (Manual try guides)

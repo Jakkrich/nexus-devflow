@@ -29,6 +29,7 @@ interface CurrentWorkSummary {
   type: CurrentWorkType | null;
   title: string | null;
   status: string | null;
+  buildPlanItem: string | null;
   runId: string | null;
   steps: CurrentWorkStep[];
   completed: number;
@@ -40,6 +41,7 @@ interface CurrentWorkSummary {
 
 const RESET_MARKER = "_Nothing in progress.";
 const CHECKBOX_PATTERN = /^\s*-\s+\[([ xX])\]\s+(.+?)\s*$/;
+const COMPATIBILITY_FEATURE_PATTERN = /^\*\*Feature ([0-9]+[a-zA-Z]?): ([^*\r\n]+)\*\*\s*$/m;
 
 async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary> {
   const contextPaths = await resolveActiveContextPaths(projectRoot);
@@ -121,14 +123,38 @@ function parseCurrentWork(markdown: string): CurrentWorkSummary {
 
   const heading = markdown.match(/^#\s+(.+)$/m)?.[1]?.trim() || null;
   const headingIdentity = heading?.match(/^(?:(?:\d{2}|[0-9]+)\s+)?(Feature|Fix|Rollback|Stage|Spec):\s*(.+)$/i);
+  const fieldIdentity = markdown.match(
+    /^\*\*(Feature|Fix|Rollback|Stage|Spec):\*\*\s*(.+)$/im
+  );
   const explicitType = markdown.match(
     /^\*\*Type:\*\*\s*(Feature|Fix|Rollback|Stage|Spec)\s*$/im
   )?.[1];
-  const typeLabel = explicitType || headingIdentity?.[1] || null;
+  const canonicalType = normalizeWorkType(
+    explicitType || headingIdentity?.[1] || fieldIdentity?.[1] || null
+  );
+  const compatibilityFeature = !canonicalType || canonicalType === "feature"
+    ? parseCompatibilityFeature(markdown, heading)
+    : null;
+  const typeLabel = canonicalType || (compatibilityFeature ? "Feature" : null);
   const type = normalizeWorkType(typeLabel);
-  const title = headingIdentity?.[2]?.trim() || heading;
+  const fieldValue = fieldIdentity?.[2]?.trim() || null;
+  const fieldFeatureIdentity = type === "feature"
+    ? fieldValue?.match(/^([0-9]+[a-z]?)\.?(?:\s+|$)(.*)$/i)
+    : null;
+  const title = headingIdentity?.[2]?.trim() ||
+    fieldFeatureIdentity?.[2]?.trim() ||
+    fieldValue ||
+    compatibilityFeature?.title ||
+    heading;
   const status = markdown.match(/^\*\*Status:\*\*\s*(.+)$/im)?.[1]?.trim() || null;
   const runId = markdown.match(/^\*\*Running ID:\*\*\s*`?([A-Za-z0-9-_]+)`?/im)?.[1] || null;
+  const explicitBuildPlanItem = markdown.match(
+    /^\*\*From build-plan:\*\*\s*feature\s+([0-9]+[a-z]?)\b/im
+  )?.[1]?.toLowerCase() || null;
+  const buildPlanItem = explicitBuildPlanItem ||
+    fieldFeatureIdentity?.[1]?.toLowerCase() ||
+    compatibilityFeature?.id ||
+    null;
   const steps = parseChecklistSteps(markdown);
   const warnings: CurrentWorkWarning[] = [];
 
@@ -147,6 +173,7 @@ function parseCurrentWork(markdown: string): CurrentWorkSummary {
     type: type || "feature",
     title,
     status,
+    buildPlanItem,
     runId,
     steps: normalizedSteps,
     completed,
@@ -155,6 +182,20 @@ function parseCurrentWork(markdown: string): CurrentWorkSummary {
     nextStep: normalizedSteps.find((step) => !step.checked) || null,
     warnings
   };
+}
+
+function parseCompatibilityFeature(
+  markdown: string,
+  heading: string | null
+): { id: string; title: string } | null {
+  if (heading?.toLowerCase() !== "current feature") {
+    return null;
+  }
+
+  const match = markdown.match(COMPATIBILITY_FEATURE_PATTERN);
+  const id = match?.[1]?.toLowerCase() || null;
+  const title = match?.[2]?.trim() || null;
+  return id && title ? { id, title } : null;
 }
 
 function parseChecklistWork(markdown: string, runId: string): CurrentWorkSummary {
@@ -167,6 +208,7 @@ function parseChecklistWork(markdown: string, runId: string): CurrentWorkSummary
     type: "stage",
     title: heading,
     status: "in_progress",
+    buildPlanItem: null,
     runId,
     steps,
     completed,
@@ -187,12 +229,18 @@ function parseChecklistSteps(markdown: string): CurrentWorkStep[] {
       steps.push({
         checked: match[1].toLowerCase() === "x",
         line: index + 1,
-        title: match[2].trim()
+        title: parseStepTitle(match[2].trim())
       });
     }
   }
 
   return steps;
+}
+
+function parseStepTitle(content: string): string {
+  const boldTitle = content.match(/^(?:\d+\.\s*)?\*\*(.+?)\*\*/)?.[1];
+  const label = boldTitle || content.split(/\s+-\s+/, 1)[0] || content;
+  return label.replace(/^Step\s+\d+\s*[-:]\s*/i, "").trim();
 }
 
 function normalizeWorkType(label: string | null): CurrentWorkType | null {
@@ -210,6 +258,7 @@ function idleSummary(): CurrentWorkSummary {
     type: null,
     title: null,
     status: null,
+    buildPlanItem: null,
     runId: null,
     steps: [],
     completed: 0,
@@ -226,6 +275,7 @@ function malformedSummary(warning: CurrentWorkWarning): CurrentWorkSummary {
     type: null,
     title: null,
     status: null,
+    buildPlanItem: null,
     runId: null,
     steps: [],
     completed: 0,
@@ -238,7 +288,8 @@ function malformedSummary(warning: CurrentWorkWarning): CurrentWorkSummary {
 
 export {
   readCurrentWork,
-  parseCurrentWork
+  parseCurrentWork,
+  parseCompatibilityFeature
 };
 
 export type {

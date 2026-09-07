@@ -6,6 +6,7 @@ import { promisify } from "node:util";
 
 type ReviewAdapter = "antigravity" | "claude" | "codex" | "copilot" | "opencode";
 type ReviewCheckResult = "failed" | "not-required" | "passed" | "unavailable";
+type ReviewExecution = "automatic" | "manual";
 type ReviewState = "changes-requested" | "malformed" | "none" | "passed" | "pending";
 type ReviewFreshness = "current" | "not-applicable" | "stale" | "unknown";
 
@@ -30,12 +31,14 @@ interface IndependentReviewSummary {
   builderModel: string | null;
   requestedReviewer: ReviewAdapter | null;
   requestedModel: string | null;
+  requestedExecution: ReviewExecution | null;
   requestedAt: string | null;
   workflow: "continuous" | "regular" | null;
   checkRequired: boolean | null;
   reviewerAdapter: ReviewAdapter | null;
   reviewerModel: string | null;
   reviewerContext: string | null;
+  actualExecution: ReviewExecution | null;
   reviewedAt: string | null;
   scope: string | null;
   lenses: string[];
@@ -150,12 +153,16 @@ function parseIndependentReview(markdown: string): IndependentReviewSummary {
   const builderModel = normalizeText(fields.get("builder model"));
   const requestedReviewer = normalizeAdapter(fields.get("requested reviewer"));
   const requestedModel = normalizeText(fields.get("requested model"));
+  const requestedExecutionValue = fields.get("requested execution");
+  const requestedExecution = normalizeExecution(requestedExecutionValue);
   const requestedAt = normalizeTimestamp(fields.get("requested at"));
   const workflow = normalizeWorkflow(fields.get("workflow"));
   const checkRequired = normalizeBoolean(fields.get("check required"));
   const reviewerAdapter = normalizeAdapter(fields.get("reviewer adapter"));
   const reviewerModel = normalizeReviewerModel(fields.get("reviewer model"));
   const reviewerContext = normalizeText(fields.get("reviewer context"));
+  const actualExecutionValue = fields.get("actual execution");
+  const actualExecution = normalizeExecution(actualExecutionValue);
   const reviewedAt = normalizeText(fields.get("reviewed at"));
   const scope = normalizeText(fields.get("scope"));
   const lenses = normalizeLenses(fields.get("lenses"));
@@ -179,11 +186,18 @@ function parseIndependentReview(markdown: string): IndependentReviewSummary {
     requestedModel !== null &&
     requestedAt !== null &&
     workflow !== null &&
-    checkRequired !== null;
+    checkRequired !== null &&
+    (requestedExecutionValue === undefined || requestedExecution !== null) &&
+    (actualExecutionValue === undefined || actualExecution !== null) &&
+    (state !== "pending" || actualExecutionValue === undefined);
   const completedFieldsValid =
     reviewerAdapter !== null &&
     reviewerModel !== null &&
-    reviewerContext?.toLowerCase() === "fresh session" &&
+    isValidExecutionPair(
+      requestedExecution,
+      actualExecution,
+      reviewerContext
+    ) &&
     normalizeTimestamp(reviewedAt || undefined) !== null &&
     (scope?.toLowerCase() === "current" || scope?.toLowerCase() === "current-feature") &&
     ["quality", "security", "performance", "tests"].every((lens) =>
@@ -201,13 +215,13 @@ function parseIndependentReview(markdown: string): IndependentReviewSummary {
   ) {
     return malformedSummary({
       code: "malformed_review",
-      message: "Independent review record is missing or has invalid required fields."
+      message: "Independent review record is missing required fields or has invalid values."
     });
   }
 
   return {
     state,
-    freshness: "unknown",
+    freshness: "not-applicable",
     targetCommit,
     baseCommit,
     baseRef,
@@ -216,12 +230,14 @@ function parseIndependentReview(markdown: string): IndependentReviewSummary {
     builderModel,
     requestedReviewer,
     requestedModel,
+    requestedExecution,
     requestedAt,
     workflow,
     checkRequired,
     reviewerAdapter,
     reviewerModel,
     reviewerContext,
+    actualExecution,
     reviewedAt,
     scope,
     lenses,
@@ -487,6 +503,36 @@ function normalizeCheckResult(value: string | undefined): ReviewCheckResult | nu
     : null;
 }
 
+function normalizeExecution(value: string | undefined): ReviewExecution | null {
+  const normalized = value?.trim().toLowerCase();
+  return normalized === "automatic" || normalized === "manual"
+    ? normalized
+    : null;
+}
+
+function isValidExecutionPair(
+  requested: ReviewExecution | null,
+  actual: ReviewExecution | null,
+  context: string | null
+): boolean {
+  const normalizedContext = context?.toLowerCase();
+
+  if (requested === null && actual === null) {
+    return normalizedContext === "fresh session";
+  }
+
+  if (requested === "manual") {
+    return actual === "manual" && normalizedContext === "fresh session";
+  }
+
+  if (requested === "automatic") {
+    return (actual === "automatic" && normalizedContext === "fresh subagent") ||
+      (actual === "manual" && normalizedContext === "fresh session");
+  }
+
+  return false;
+}
+
 function readSection(markdown: string, heading: string): string | null {
   const lines = markdown.split(/\r?\n/);
   const start = lines.findIndex(
@@ -522,12 +568,14 @@ function emptySummary(): IndependentReviewSummary {
     builderModel: null,
     requestedReviewer: null,
     requestedModel: null,
+    requestedExecution: null,
     requestedAt: null,
     workflow: null,
     checkRequired: null,
     reviewerAdapter: null,
     reviewerModel: null,
     reviewerContext: null,
+    actualExecution: null,
     reviewedAt: null,
     scope: null,
     lenses: [],
@@ -565,6 +613,7 @@ export type {
   IndependentReviewSummary,
   ReviewAdapter,
   ReviewCheckResult,
+  ReviewExecution,
   ReviewFreshness,
   ReviewState,
   ReviewWarning,

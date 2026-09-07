@@ -164,7 +164,14 @@ than pretending a pattern exists.
 ## Step 4 - check AI interaction rules and workflow configuration
 
 `devflow/config.json` is the user-owned workflow policy for this project. Keep
-it lean and machine-readable: never write stack choices, conventions, custom
+it lean and machine-readable: edit only supported keys, such as branch prefixes,
+logic-test strictness, regular or Continuous quality gates, review execution, or
+Continuous Mode limits. Independent review defaults to `when-sensitive` for
+regular and Continuous work, and its execution defaults to `automatic`. Audit,
+check, and try guide default to `manual`. Preserve these defaults unless the user
+chooses different policies. A `manual` independent-review gate disables
+automatic selection for that workflow without disabling explicit independent
+audits. Never put stack choices, conventions, custom
 commands, product requirements, communication prose, secrets, or permission for
 commits, merges, pushes, deployments, publication, destructive actions, failed
 checks, or finding waivers into config.
@@ -172,12 +179,12 @@ checks, or finding waivers into config.
 Unless the user already chose these values, ask one short **Implementation
 style** question using the current tool's selectable prompt when available:
 
-1. **Efficient (Recommended)** - one feature-level review packet and no step
-   checkpoint prompts. Write `workflow.stepReview: "feature"` and
-   `workflow.checkpointCommits: "disabled"`.
+1. **Efficient (Recommended)** - one feature-level review packet, a final code
+   walkthrough option, and no step checkpoint prompts. Write
+   `workflow.stepReview: "feature"` and `workflow.checkpointCommits: "disabled"`.
 2. **Guided** - pause for approval after every step and offer optional checkpoint
-   commits. Write `workflow.stepReview: "every"` and
-   `workflow.checkpointCommits: "enabled"`.
+   commits, followed by the same final code walkthrough option. Write
+   `workflow.stepReview: "every"` and `workflow.checkpointCommits: "enabled"`.
 3. **Custom** - ask separately when review should happen and whether checkpoint
    commits should be offered, then write the selected low-level values.
 
@@ -185,6 +192,8 @@ These are onboarding presets, not a third configuration field.
 Never write an `implementationStyle` key. Show the current two values before asking, preserve
 them if the user chooses not to change them, and explain that either value can be
 edited later. A later `/implement` run reads the current configuration.
+The final code walkthrough is not a configuration setting and remains available
+with every implementation style.
 
 Read `devflow/context/ai-interaction.md` and update only obvious mismatches.
 Usually the default review loop should stay intact. Flag preferences for the user
@@ -197,6 +206,13 @@ instead of guessing, such as:
   changing only `stepReview` restores the approval pauses, not checkpoint prompts
 - whether branches should use a different naming pattern
 - whether `/check` should require browser evidence for UI work
+- whether audit, independent review, check, or try guides should stay manual, run only for their
+  documented conditional case, or run for every regular or Continuous work item
+- whether a selected independent review should use the default automatic
+  isolated reviewer or `review.independentExecution: "manual"` for a
+  fresh-session handoff. Explain that automatic execution uses a fresh isolated
+  reviewer only when the active adapter can expose its exact identity and model,
+  and otherwise stops with the manual handoff
 
 If no changes are needed, say so.
 

@@ -40,7 +40,10 @@ test("parseRunState marks interrupted running activity as stale", () => {
   }), new Date("2026-08-26T12:00:01.000Z"));
 
   assert.equal(run.freshness, "stale");
-  assert.equal(run.warnings[0]?.code, "stale_run_state");
+  assert.equal(run.state, "recorded");
+  assert.equal(run.status, "running");
+  assert.equal(run.resumeCommand, "/continuous resume");
+  assert.deepEqual(run.warnings, []);
 });
 
 test("parseRunState treats other commands as manual mode", () => {

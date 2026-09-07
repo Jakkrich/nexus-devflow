@@ -54,6 +54,31 @@ Use `qualityGates.regular` for this work item:
 - **Check:** `manual` runs only when explicitly requested; `when-behavioral` runs when done-whens need observed runtime behavior; `always` runs for every work item.
 - **Try guide:** `manual` runs only when explicitly requested; `when-user-facing` generates guide when change affects UI/UX; `always` generates one for every work item.
 
+### Independent review execution
+
+After final Verify and required Check pass, set the active spec to `verified`.
+If a selected or previously initiated independent review does not already have a
+current passing receipt:
+
+1. Use an existing current pending request and its immutable target when one is
+   present. Otherwise show the exact product, test, and verified-spec candidate
+   for the immutable review checkpoint. Obtain explicit commit approval under
+   the normal Git rules, then create or use that clean checkpoint. Configuration,
+   including `review.independentExecution: "automatic"`, never grants permission
+   to commit. A pending request without `Requested execution` is legacy and
+   manual-only; never add execution fields or run a subagent against it.
+2. Prepare Phase A of `/audit independent current` when no current request
+   exists. Record `Requested execution` from `review.independentExecution`.
+3. For requested `automatic`, start the generic isolated current-runtime child
+   from the installed project-local Audit skill, wait, and validate the normal
+   receipt. Freeze parent product, test, spec, and config changes while it runs.
+4. For requested `manual`, or when automatic isolation, identity, model, or
+   completion is unavailable, preserve the pending request, set activity to
+   `ready`, and stop with the manual fresh-session handoff.
+5. Continue Complete only with a current passing receipt whose requested and
+   actual execution fields match the allowed review contract. Never self-review
+   or silently skip the gate.
+
 ## Step 0 - final safety pass
 
 Before logging or committing, run a short safety pass and report blockers only:
@@ -82,13 +107,13 @@ Check whether the spec is a feature, fix, or rollback. A fix is marked
 `Type: Fix` and has no build-plan number. A rollback is marked `Type: Rollback`
 and records the exact target feature, archive, commit, and parent.
 
-- **Feature** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/features/{xxx-slug}.md`, check it off in `devflow/build-plan.md` (and its parent item once all sub-items are checked), and record an entry into `devflow/history/HISTORY.md`.
+- **Feature** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/features/{xxx-slug}.md`, check it off in `devflow/build-plan.md` (and its parent item once all sub-items are checked), recompute the overview fingerprint using `/overview`'s checkbox-normalized hash contract and update `devflow:source-hash` in `devflow/context/project-overview.md`, and record an entry into `devflow/history/HISTORY.md`.
 - **Fix** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/fixes/{xxx-slug}.md`, and record an entry into `devflow/history/HISTORY.md`.
 - **Rollback** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/rollbacks/YYYY-MM-DD-{xxx-slug}.md`, preserving the original completed feature archive. Uncheck the target item in `devflow/build-plan.md` and record in `devflow/history/HISTORY.md`.
 
 **Archive resolved findings & review receipts.**
 - If `devflow/context/{xxx-slug}/findings.md` holds findings, append `## Findings` to the archive file with resolved entries.
-- If `devflow/context/{xxx-slug}/review.md` holds a completed passing receipt, append `## Independent Review` to the archive file with the receipt summary.
+- If `devflow/context/{xxx-slug}/review.md` holds a completed passing receipt, append a `## Independent review` section to the archive file with the receipt fields, commands, safe evidence references, findings, and remaining risk from `review.md`. Preserve the full target and base SHAs, spec hash, base ref, builder adapter and model, requested reviewer, model, and execution, actual reviewer adapter, model, and execution, Check result, fresh-context declaration, and review time. Do not archive a stale, pending, changes-requested, or malformed record.
 
 **Clean up run workspace.** Delete the task directory `devflow/context/{xxx-slug}/`. In Pure Multi-Run architecture, completed work leaves zero residual stubs in `devflow/context/`.
 

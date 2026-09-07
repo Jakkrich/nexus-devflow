@@ -11,19 +11,20 @@ import {
   readProjectConfig
 } from "../lib/project-config.js";
 
-test("default config keeps every quality gate manual and workflow efficient", () => {
+test("default config configures independent review execution and quality gates", () => {
   const defaults = createDefaultProjectConfig();
-  const manualGates = {
+  const defaultGates = {
     audit: "manual",
-    independentReview: "manual",
+    independentReview: "when-sensitive",
     check: "manual",
     tryGuide: "manual"
   };
 
   assert.equal(defaults.workflow.stepReview, "feature");
   assert.equal(defaults.workflow.checkpointCommits, "disabled");
-  assert.deepEqual(defaults.qualityGates.regular, manualGates);
-  assert.deepEqual(defaults.qualityGates.continuous, manualGates);
+  assert.equal(defaults.review.independentExecution, "automatic");
+  assert.deepEqual(defaults.qualityGates.regular, defaultGates);
+  assert.deepEqual(defaults.qualityGates.continuous, defaultGates);
   assert.equal(defaults.continuous.finalIntegrationAudit, false);
 });
 
@@ -48,6 +49,7 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
     qualityGates: {
       regular: {
         audit: "when-sensitive",
+        independentReview: "always",
         check: "always"
       },
       continuous: {
@@ -64,12 +66,18 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
   assert.equal(result.state, "project");
   assert.equal(result.values.git.featureBranchPrefix, "feat/");
   assert.equal(result.values.git.fixBranchPrefix, "fix/");
+  assert.equal(result.values.review.independentExecution, "automatic");
   assert.equal(result.values.qualityGates.regular.audit, "when-sensitive");
+  assert.equal(result.values.qualityGates.regular.independentReview, "always");
   assert.equal(result.values.qualityGates.regular.check, "always");
   assert.equal(result.values.qualityGates.regular.tryGuide, "manual");
   assert.equal(
     result.values.qualityGates.continuous.tryGuide,
     "when-user-facing"
+  );
+  assert.equal(
+    result.values.qualityGates.continuous.independentReview,
+    "when-sensitive"
   );
   assert.equal(result.values.continuous.maxFeatures, 4);
   assert.equal(result.values.continuous.maxRepairAttempts, 2);
@@ -133,6 +141,22 @@ test("readProjectConfig rejects unknown and invalid values", async (t) => {
       }
     }),
     /qualityGates\.continuous\.check must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      qualityGates: {
+        regular: { independentReview: "off" }
+      }
+    }),
+    /qualityGates\.regular\.independentReview must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      review: { independentExecution: "background" }
+    }),
+    /review\.independentExecution must be one of/
   );
 });
 

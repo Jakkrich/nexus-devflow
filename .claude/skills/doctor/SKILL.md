@@ -58,10 +58,14 @@ Gather these, then summarize. Do not dump file contents.
    - Read `devflow/config.json` when present. Missing is healthy and means
      built-in defaults. When present, require a regular non-symbolic-link JSON
      file with `schemaVersion: 1`. Reject unknown keys and unsupported values.
-     Report the effective workflow, git, verification, regular quality-gate,
-     Continuous quality-gate, and Continuous Mode settings. Confirm each audit,
-     independent-review, check, and try-guide gate uses its supported values and
-     defaults to `manual`.
+     Report the effective workflow, git, verification, review execution, regular
+     quality-gate, Continuous quality-gate, and Continuous Mode settings. Confirm each audit,
+     independent-review, check, and try-guide gate uses its supported values.
+     Independent review defaults to `when-sensitive` for both workflows; audit,
+     check, and try guide default to `manual`. Confirm
+     `review.independentExecution` is `manual` or `automatic` and defaults to
+     `automatic`. Do not claim automatic capability is available from installed
+     project files alone.
      An invalid config is a setup blocker for mutating workflow skills because
      they must not guess which policy to follow.
 2. **Tool adapters**

@@ -24,6 +24,7 @@ Where this sits in the workflow:
 ### ขอบเขตสิทธิ์ที่ได้รับอนุญาตเฉพาะในเครื่อง Local:
 - สร้างและสลับ Feature Branch ในเครื่อง Local
 - บันทึก Checkpoint Commits ย่อยบน Branch
+- สร้าง required immutable independent-review checkpoints
 - บันทึก Feature Commit สุดท้าย
 - Squash-merge ฟีเจอร์ที่เสร็จสมบูรณ์ลง Default Branch ของ Local
 - ลบ Feature Branch เฉพาะใน Local หลังรวมโค้ดสำเร็จ
@@ -93,10 +94,14 @@ Where this sits in the workflow:
 - **Try Guide**: `manual` (ข้ามอัตโนมัติ), `when-user-facing` (สร้าง Try Guide เมื่อเป็น UI/CLI), `always` (สร้างทุกฟีเจอร์)
 
 ทุก product/spec edit ทำให้ receipt เดิมหมดอายุ เมื่อ Independent Review gate
-ทำงาน ให้รัน Verify และซ่อม audit findings ให้เสร็จก่อนส่ง
-`audit independent current` ไปยัง fresh reviewer context หากไม่สามารถรับ
-receipt ที่ verdict เป็น `passed` และ freshness เป็น `current` ให้หยุด Continuous
-Mode โดยคง workspace/branch ไว้ ห้ามข้ามไป archive หรือ local squash-merge
+ทำงาน ให้รัน Verify และสร้าง immutable checkpoint (ได้รับอนุญาตภายใต้ Continuous Mode authority แม้ checkpointCommits จะ disabled) จากนั้นปฏิบัติตาม `/audit independent current`
+หาก `review.independentExecution` เป็น `automatic` ให้ spawn และรอ isolated reviewer child พร้อมตรวจสอบ receipt ให้ผ่านก่อนดำเนินการต่อ
+หากเป็น `manual` หรือ runtime ไม่สามารถพิสูจน์ isolation, identity, model ได้ ให้ตั้งสถานะเป็น `ready` และหยุดด้วย manual handoff
+Continuous Mode จะไม่ทำการ audit งานของตัวเองโดยเด็ดขาด
+
+คำขอจะบันทึก `Requested execution` และ receipt จะบันทึก `Actual execution`
+การจับคู่ของ execution และ reviewer context จะต้องถูกต้องตามสัญญา review
+หากเป็น legacy request ที่ไม่มี `Requested execution` ให้ถือว่าเป็น legacy manual-only ห้ามเติมฟิลด์หรือรัน subagent กับมัน
 
 สำหรับฟีเจอร์ browser-facing ให้รัน `npm run test:browser` เมื่อมี
 `test:browser` script และเก็บ interactive evidence ผ่าน `browseros-neo` เมื่อ

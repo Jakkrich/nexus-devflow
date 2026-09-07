@@ -116,7 +116,9 @@ remediation or explicitly plan the dependent rollbacks.
 ## Step 4 - write the rollback spec
 
 Allocate sequential ID (`xxx-slug`) and create `devflow/context/{xxx-slug}/`. Write `devflow/context/{xxx-slug}/spec.md` using
-`reference/rollback-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. Fill in:
+`reference/rollback-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. Its first heading must be exactly
+`# Rollback: Feature <id> - <title>`, and it must retain the existing
+`**Type:** Rollback` contract. Fill in:
 
 - target feature and archive
 - target commit and parent commit as full 40-character SHA values

@@ -35,9 +35,14 @@ Read these, distill them into a few lines, then stop. Do not dump file contents.
 3. **Findings** - `devflow/context/{xxx-slug}/findings.md`. Count findings by status and
    report open and fixed counts next to build-plan progress. Call out any P0 or
    P1 still `open` or `fixed` by ID, since those block `/complete`.
-4. **Overview freshness** - if `devflow/context/project-overview.md` is missing,
-   or if `project-plan.md` or `build-plan.md` appears newer than it by filesystem
-   time, mention that `/overview` should run before new feature work.
+4. **Overview freshness** - if `devflow/context/project-overview.md` is missing
+   or has no `devflow:source-hash`, mention that `/overview` should run before
+   new feature work. Otherwise use `/overview`'s hash contract: exact project-plan
+   bytes, one zero byte, then build-plan bytes with line-start `- [x]` and
+   `- [X]` markers normalized to `- [ ]`. Treat a matching legacy exact-byte hash
+   as current for backward compatibility. Recommend `/overview` only when the
+   recorded hash matches neither value. Do not use filesystem timestamps;
+   `/complete` legitimately makes `build-plan.md` newer when it checks off work.
 5. **Git** - current branch, whether the working tree is clean or has uncommitted
    changes, roughly how many files changed, last commit subject, and whether the
    branch is ahead of its remote. If the directory is not a git repo, say so and
@@ -50,7 +55,12 @@ Read these, distill them into a few lines, then stop. Do not dump file contents.
    A missing file simply means no activity has been recorded. Invalid activity
    state is a warning, not a blocker for the underlying workflow; point to
    `/doctor` to inspect and offer the approved generated-state reset.
-8. **Onboarding check** - Before recommending `/overview`, check whether `AGENTS.md`
+8. **Onboarding & Configuration check** - Read `devflow/config.json` when present.
+   Report effective regular and Continuous quality gates, plus `review.independentExecution`.
+   Explain that independent review defaults to `when-sensitive` for both workflows and
+   execution defaults to `automatic`, which uses an isolated reviewer only when
+   the current adapter supports it. Audit, check, and try guide default to `manual`.
+   Before recommending `/overview`, check whether `AGENTS.md`
    still contains the `<!-- devflow:onboarding-required -->` marker or standard template commands.
    When it does, onboarding is incomplete and `/onboard` is the next action.
 9. **Independent review and browser evidence** - read

@@ -32,7 +32,8 @@ or with a description, for example `/fix F-03`.
 
 Pull context from `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`,
 calculate the next sequential running ID (e.g. `059-fix-slug`),
-then write a short spec to `devflow/context/{xxx-slug}/spec.md`. Also initialize `stage.md` and `findings.md` in that folder. Keep it lighter than a feature spec:
+then write a short spec to `devflow/context/{xxx-slug}/spec.md`. Also initialize `stage.md` and `findings.md` in that folder. Its first heading must be exactly
+`# Fix: <title>`, and it must retain the `**Type:** Fix` contract below. Keep it lighter than a feature spec:
 
 - **Title** - the bug or change in a few words.
 - **Type:** Fix  (so `/complete` logs it to `devflow/history/fixes/`, not `devflow/history/features/`).

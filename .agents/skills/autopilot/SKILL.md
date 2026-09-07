@@ -20,6 +20,11 @@ same quality gates, but it does not stop after every normal review point. A
 single user request is permission to run one bounded loop until the feature is
 ready for review, blocked, or unsafe to continue.
 
+It combines `/feature` or `/fix` with `/implement` and continues through the
+spec-review stop retained by the normal workflow. That human spec approval is
+the main control Autopilot intentionally removes. It does not remove the final
+review packet or the option to walk through the completed code.
+
 It does **not** replace the normal workflow. `/feature`, `/implement`, `/check`,
 and `/complete` remain the conservative default.
 
@@ -103,28 +108,26 @@ declared and capture interactive evidence with `browseros-neo` when available.
 If either path is unavailable, record the limitation in the review packet and do
 not install a runner or claim browser proof implicitly.
 
-## Step 2 - choose or write the spec
+## Step 2 - spec or fix definition
 
-If `devflow/context/{xxx-slug}/spec.md` already contains an active spec,
-resume it. Read checked steps and continue from the first unchecked step.
+If starting a planned feature:
 
-If there is no active spec:
+1. Read `devflow/context/project-overview.md` and `devflow/build-plan.md`.
+2. Follow `/feature`'s sizing logic. If the feature is too large for one spec,
+   split it in `devflow/build-plan.md` into `Na`, `Nb`, `Nc` and target only
+   the first sub-feature.
+3. Write the spec to `devflow/context/{xxx-slug}/spec.md` and set its status to
+   `specified`. Fill all required sections, including the small build steps and
+   acceptance criteria.
 
-1. Use the `/feature` behavior for a planned feature, or `/fix` behavior for a
-   requested fix.
-2. Create workspace and write `devflow/context/{xxx-slug}/spec.md`.
-3. Red-team the spec before building:
-   - missing unhappy paths
-   - oversized steps
-   - undefined contracts
-   - missing design reference
-   - scope creep
-   - vague done-whens
-   - missing testing plan when `AGENTS.md` declares a test command
-4. Apply the spec fixes.
+If starting an ad-hoc fix:
 
-Autopilot may continue past this spec gate because the user explicitly invoked
-Autopilot. Still report what the critique changed in the final packet.
+1. Pull the bug description or failure context.
+2. Follow `/fix`'s definition rules and write `devflow/context/{xxx-slug}/spec.md`.
+3. Set `Type: Fix` and write a short, focused task list.
+
+If resuming an existing feature, verify `devflow/context/{xxx-slug}/spec.md` is
+usable and resume from the first unchecked step.
 
 ## Step 3 - branch
 
@@ -161,6 +164,10 @@ Work through the spec's steps in order:
 Do not batch the whole feature into one large diff. If a step gets too large,
 split the step in `devflow/context/{xxx-slug}/spec.md` and continue with the first smaller step.
 
+Do not pause for user approval after each passing step, regardless of the
+configured `workflow.stepReview` value. The review happens at the final packet
+unless a hard stop is hit.
+
 ## Step 5 - acceptance check
 
 After all implementation steps are checked, run the `/check` behavior for the
@@ -176,6 +183,38 @@ feature, its diff, and the nearby code affected by the change. This is a targete
 feature audit, not a repository-wide cleanup pass. Findings are recorded in
 `devflow/context/{xxx-slug}/findings.md` with durable IDs and statuses, as `/audit`
 defines; the ledger reports status and never scopes what the audit examines.
+
+Apply `qualityGates.regular.independentReview` before a same-session audit:
+
+- `manual` does not activate the gate.
+- `when-sensitive` requires it only when the work touches authentication,
+  authorization, secrets, payments, personal data, destructive actions, dependencies,
+  deployment, or another sensitive boundary.
+- `always` requires it for every work item.
+
+The selected review runs after all implementation steps, final Verify, required
+Check, and the verified spec, before the final review packet and `/complete`.
+`review.independentExecution` chooses the manual fresh-session handoff or an
+automatic isolated reviewer; it does not change when the gate is selected.
+
+When selected, do not review the builder's work in this session. Ensure all work
+is in an approved clean checkpoint, then follow Phase A of
+`/audit independent current`. With automatic execution, spawn and wait for the
+isolated reviewer, then validate its normal receipt. With manual execution, stop
+with the handoff. Autopilot may use its existing configured checkpoint authority
+when checkpoint commits are enabled; otherwise show the exact review-checkpoint
+candidate and ask before committing. On resume, continue only when a fresh
+reviewer wrote a current `passed` receipt. Repair `changes-requested` P0/P1
+findings within the normal scope and attempt limit, then obtain a new checkpoint
+and prepare a new review. A passing independent receipt satisfies the configured
+Audit gate.
+
+The request records `Requested execution`; the receipt records `Actual
+execution`. Require the execution and reviewer-context pairing defined by the
+project-local review contract, including actual manual plus `fresh session` when
+an automatic request explicitly falls back.
+On resume, a pending request without `Requested execution` is legacy manual-only.
+Never add execution fields or run a subagent against it.
 
 For every finding:
 
@@ -215,6 +254,11 @@ Stop and produce a concise review packet:
   which block `/complete`
 - unresolved risks or skipped checks
 - exact next action
+
+Always offer a read-only walkthrough of the completed code after the packet.
+Follow the spec's build steps, explain the key files, symbols, flow, and
+non-obvious decisions, then offer a focused deep dive. Keep `/try` distinct as
+the manual product-review path.
 
 If everything is green, the next action is usually: review the diff, then run
 `/try` if you want a manual walkthrough, then `/complete`.

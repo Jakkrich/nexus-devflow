@@ -111,6 +111,8 @@ During `/check`:
 ### ⚡ Review Cadence & Implementation Loop
 - **Efficient Default (`stepReview: "feature"`)**: Presents one comprehensive review packet after all implementation steps of the feature complete, with step checkpoint commits disabled (`checkpointCommits: "disabled"`). This minimizes review fatigue and saves context window tokens.
 - **Guided Review (`stepReview: "every"`)**: Available for high-risk changes, pair programming, or instructional sessions. Pauses for user approval after each small step and offers checkpoint commits (`checkpointCommits: "enabled"`).
+- **Post-Implementation Walkthrough**: After the final review packet, `/implement` always offers an optional read-only walkthrough of the finished code, regardless of review cadence or checkpoint settings.
+- **Independent Review Execution**: Regular and Continuous independent review default to `when-sensitive`, while `review.independentExecution` defaults to `automatic` (spawning an isolated reviewer child when the active adapter supports it). Setting `review.independentExecution: "manual"` produces the fresh-session handoff.
 - **Configuration**: Managed directly in `devflow/config.json`.
 
 ---
