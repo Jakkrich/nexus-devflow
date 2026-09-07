@@ -1,7 +1,7 @@
 ---
 name: implement
 description: "[devflow] Implement or start coding the active task-isolated spec on its branch in small steps, running tests after each step and presenting the configured review handoff. Use for /implement or requests to build or resume an approved spec."
-argument-hint: "[{run-id, number, or name}]"
+argument-hint: "[{run-id, number, or name}] [--ticket <NN | path>]"
 ---
 
 # implement - build the target spec, one reviewed step at a time
@@ -27,10 +27,30 @@ behind your approval. It builds on a branch and offers an optional commit
 checkpoint after each step; the work-level commit, merging, and logging are
 `/complete`'s job.
 
-## Multi-Run Target Resolution
+## Multi-Run Target & Ticket-Driven Target Resolution
 
 - **Given an ID or name** (e.g. `/implement 12`, `/implement 012`, `/implement kanban`) -> locates the matching run folder `devflow/context/{xxx-slug}/`, checks out `feature/{xxx-slug}`, and loads only that run's `spec.md`.
 - **With no argument** (`/implement`) -> checks current git branch matching `feature/{xxx-slug}`, or auto-picks if only 1 spec is active in `devflow/context/`, or prompts the user if multiple specs are queued.
+- **Ticket Input (`--ticket <NN | path>`)**: Targets a specific tracer-bullet ticket directly (e.g. `/implement 12 --ticket 01`, `/implement --ticket 02`, `/implement --ticket issues/01-auth.md`, or `/implement 01` when run-id is not ambiguous).
+
+### Ticket Discovery Hierarchy
+
+When `/implement` runs, it checks for tracer-bullet tickets in the following priority order:
+1. `devflow/context/{xxx-slug}/tickets/<NN>-<slug>.md` (Recommended Task-Isolated Living Spec location)
+2. `devflow/context/{xxx-slug}/issues/<NN>-<slug>.md`
+3. `.scratch/{xxx-slug}/issues/` or `.scratch/<feature-slug>/issues/`
+4. Section `## 🎫 Tracer-Bullet Tickets (from to-tickets)` inside `spec.md`
+
+**Backward Compatibility**: If no tickets are found in any of the above locations, `/implement` executes using the standard Checklist under `## 📋 3. Execution Plan & TDD Checklist` in `spec.md`. Existing tasks and projects experience zero breaking changes.
+
+### Frontier Dependency Resolution
+
+When tickets are detected:
+1. **Dependency Analysis**: Inspect `**Blocked by:**` across all discovered tickets in the set.
+   - An unblocked ticket has `Blocked by: None` or all referenced blocker tickets are marked `done` (or have all checkboxes `- [x]`).
+   - The set of currently unblocked, incomplete tickets forms the **Unblocked Frontier**.
+2. **Auto-Frontier Selection**: If no `--ticket` flag is provided, automatically select the earliest unblocked ticket on the Frontier (sorted by ticket number `<NN>`).
+3. **Blocker Guardrail**: If the user explicitly requests a ticket (e.g. `--ticket 03`) that has unfinished dependencies (blockers), warn the user immediately, display the pending blocker tickets, and offer to switch to the earliest unblocked blocker instead.
 
 ## Before you start
 
@@ -148,6 +168,20 @@ Work through the spec's build steps in order, one at a time. For each step:
    explanation is long, so a modal would cover it). On **Stop here**, stop and say
    where things stand: the branch is intact; run `/implement` again to resume, or
    `/complete` to wrap up what's built so far.
+
+### Ticket-Driven TDD Execution (when working from a Ticket)
+
+When executing a tracer-bullet ticket (via `--ticket` or auto-frontier):
+1. **Extract Scope**: Read *What to build* and *Acceptance criteria* checklist (`- [ ]`) from the active ticket file.
+2. **Strict TDD Cycle per Criterion**:
+   - **🔴 RED**: Write the unit/integration test for the criterion first at the agreed seam. Execute the test command and verify the expected failing assertion.
+   - **🟢 GREEN**: Implement only the minimal code in the source file necessary to make the test pass. Re-run test and show passing output.
+   - **🔵 REFACTOR**: Refactor and format cleanly, verifying that 100% of tests remain green.
+3. **Verify Gate**: Run the project's Verify command (`npm run check` or documented test suite) to ensure whole-system health before concluding the ticket.
+4. **Bidirectional State Sync**:
+   - Mark each completed criterion `- [x]` in the ticket file.
+   - Once all criteria in the ticket pass, update the ticket status to `**Status:** done` (or `Status: done`).
+   - Mirror the completed work, status, and diff evidence into `devflow/context/{xxx-slug}/spec.md` (under `## 📋 3. Execution Plan & TDD Checklist` and `## ⚡ 4. Implementation Log & Evidence`) so the Living Spec remains the authoritative single source of truth for `/check`, `/audit`, and `/complete`.
 
 Never batch the whole thing into one diff. If a step's diff is too big to read,
 split it. The documented `Verify` command, or the fallback build and tests, must
