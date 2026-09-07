@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { parseCompatibilityFeature } from "./current-work.js";
 import { createStyle } from "./ui.js";
+import { DeliveryLifecycleEngine, HistoryLedger } from "./delivery-lifecycle-engine.js";
 
 type HistoryItemType = "feature" | "fix" | "rollback";
 
@@ -309,6 +310,15 @@ function getErrorCode(error: unknown): string | undefined {
     : undefined;
 }
 
-export { HISTORY_PATH, formatHistoryHuman, parseHistoryItem, parseHistoryLedger, readHistory };
+export {
+  HISTORY_PATH,
+  formatHistoryHuman,
+  parseHistoryItem,
+  parseHistoryLedger,
+  readHistory,
+  readHistoryLedger,
+  DeliveryLifecycleEngine,
+  HistoryLedger,
+};
 
 export type { HistoryItem, HistoryItemType, HistorySummary };
