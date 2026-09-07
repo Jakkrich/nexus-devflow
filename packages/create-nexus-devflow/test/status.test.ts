@@ -213,6 +213,10 @@ test("parseArgs parses idea, findings, doctor, and archive subcommands correctly
   assert.equal(skillUpdateRec.command, "skill");
   assert.equal(skillUpdateRec.subcommandAction, "update");
   assert.equal(skillUpdateRec.recommended, true);
+
+  const skillRestore = parseArgs(["skill", "restore"]);
+  assert.equal(skillRestore.command, "skill");
+  assert.equal(skillRestore.subcommandAction, "restore");
 });
 
 test("readProjectStatus prioritizes current-stage.md Root Switch and calculates nextAction", async () => {

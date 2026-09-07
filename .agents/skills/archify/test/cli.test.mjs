@@ -243,9 +243,33 @@ test('cli: visual-check returns a skipped receipt with exit 2 when Chrome is una
   assert.equal(result.status, 2, result.stderr);
   const receipt = JSON.parse(result.stdout);
   assert.equal(receipt.status, 'skipped');
+  assert.equal(receipt.evidenceKind, 'automated-browser');
   assert.equal(receipt.visualReview, 'pending');
   assert.equal(receipt.chrome.status, 'unavailable');
   assert.equal(fs.existsSync(out.replace(/\.html$/, '.visual-check.json')), true);
+});
+
+test('cli: visual-check describes human output as automated browser evidence, not visual approval', () => {
+  const out = path.join(tmp, 'visual-check-browser-evidence.html');
+  fs.writeFileSync(out, '<!doctype html><html><body>delivered</body></html>');
+  const missingChrome = path.join(tmp, 'missing-browser-evidence-chrome');
+  const result = run(['visual-check', out], {
+    env: { ...process.env, ARCHIFY_CHROME: missingChrome },
+  });
+
+  assert.equal(result.status, 2, result.stderr);
+  assert.match(result.stdout, /automated browser evidence skipped:/i);
+  assert.match(result.stdout, /perceptual visual review pending/i);
+  assert.doesNotMatch(result.stdout, /^visual-check skipped:/m);
+});
+
+test('cli: visual-check keeps automated and perceptual claims separate on input failure', () => {
+  const result = run(['visual-check', path.join(tmp, 'missing-browser-evidence.html')]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /automated browser evidence failed:/i);
+  assert.match(result.stderr, /perceptual visual review pending/i);
+  assert.doesNotMatch(result.stderr, /^visual-check failed:/m);
 });
 
 test('cli: deliver atomically writes a checked artifact and structured receipt', () => {
@@ -560,7 +584,7 @@ test('cli: invalid source output metadata still fails inside the renderer', () =
 
 test('cli: deliver reports commit failure without a false success receipt', () => {
   const input = path.join(skillRoot, 'examples/web-app.architecture.json');
-  const outputDirectory = path.join(tmp, 'commit-target-is-a-directory');
+  const outputDirectory = path.join(tmp, 'commit-target-is-a-directory.html');
   fs.mkdirSync(outputDirectory, { recursive: true });
 
   const result = run(['deliver', 'architecture', input, outputDirectory, '--json']);
@@ -783,3 +807,28 @@ test('cli: validate rejects an unknown type without leaking a temp directory', (
 });
 
 process.on('exit', () => fs.rmSync(tmp, { recursive: true, force: true }));
+
+test('render rejects a mistyped option instead of writing a file named after it', () => {
+  const dir = fs.mkdtempSync(path.join(tmp, 'render-guard-'));
+  const spec = path.join(dir, 'spec.json');
+  fs.copyFileSync(path.join(skillRoot, '../examples/archify-repo.architecture.json'), spec);
+
+  // Without the guard this wrote a 600KB file literally named `--json` and
+  // never wrote out.html, exiting 0.
+  const result = run(['render', 'architecture', spec, '--json', 'out.html'], { cwd: dir });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Unknown render option/);
+  assert.deepEqual(fs.readdirSync(dir), ['spec.json']);
+});
+
+test('render rejects an extra positional argument', () => {
+  const dir = fs.mkdtempSync(path.join(tmp, 'render-arity-'));
+  const spec = path.join(dir, 'spec.json');
+  fs.copyFileSync(path.join(skillRoot, '../examples/archify-repo.architecture.json'), spec);
+
+  const result = run(['render', 'architecture', spec, 'out.html', 'extra.html'], { cwd: dir });
+
+  assert.notEqual(result.status, 0);
+  assert.deepEqual(fs.readdirSync(dir), ['spec.json']);
+});

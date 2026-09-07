@@ -11,7 +11,7 @@ export const MANAGED_ROOTS: Record<string, string[]> = {
   common: ["AGENTS.md", "CLAUDE.md", "devflow", "LICENSE"],
   codex: [".agents/skills"],
   copilot: [".agents/skills"],
-  antigravity: [".agents/skills", ".agent/workflows"],
+  antigravity: [".agents/skills"],
   opencode: [".agents/skills"],
   claude: [".claude/skills"]
 };

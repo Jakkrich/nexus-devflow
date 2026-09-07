@@ -114,6 +114,9 @@ __pycache__/
 venv/
 env/
 
-# Matt Pocock Workflow (Local agent tools, tracking & scratchpad)
-.agent/
+# Matt Pocock Workflow (Local scratchpad & issue tracking)
 .scratch/
+docs/agents/
+
+# Internal Architecture & Development Docs
+docs/adr/
