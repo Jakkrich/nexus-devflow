@@ -80,8 +80,8 @@ After the first successful `/overview`, DevFlow offers a reviewed local commit f
    - ทำการ Archive `spec.md` ไปเป็นไฟล์เดี่ยวที่ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`
    - ลบโฟลเดอร์เฉพาะกิจ `devflow/context/{xxx-slug}/` ออกอย่างหมดจด
    - **Mandatory Delivery Gate**: บังคับถามผู้ใช้ก่อนเสมอว่าต้องการ Delivery รูปแบบใด:
-     - **Option 1 (Team MR/PR Flow)**: Pull master/main ล่าสุดมารวมกับ Feature/Dev Branch แล้ว push branch ขึ้นไปเพื่อเปิด MR/PR (ไม่ merge เข้า main/master ในเครื่อง และไม่แตะ protected branch)
-     - **Option 2 (Direct Squash-Merge)**: ทำการ Squash-merge เข้า main/master ในเครื่องเฉพาะเมื่อผู้ใช้สั่งโดยตรงเท่านั้น
+     - **Option 1 (Direct Squash-Merge / Direct Commit - Solo Mode)**: สำหรับทำงานคนเดียว ทำการ Squash-merge หรือ commit เข้า main/master ในเครื่องโดยตรง (และถามแยกต่างหากก่อน push ขึ้น remote)
+     - **Option 2 (Team MR/PR Flow - Team Mode)**: สำหรับทำงานเป็นทีมมากกว่า 1 คน ดึง master/main ล่าสุดมารวมกับ Feature/Dev Branch แล้ว push branch ขึ้นไปเพื่อเปิด MR/PR (ไม่ merge เข้า main/master ในเครื่อง)
    - อัปเดต `devflow/history/HISTORY.md` และ `devflow/build-plan.md` ให้เป็น `[x]` เรียบร้อย
 
 ---
