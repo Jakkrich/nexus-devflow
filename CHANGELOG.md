@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.14.0] - 2026-09-07
+
+### Added
+- **Archify & Diagram-Design Skill Suites**: Integrated visual architecture, state machine, and interactive sequence diagram generators with automated testing suites and renderer pipelines.
+- **Repository Documentation Architecture Restructuring**: Consolidated all framework specifications, contracts, and guides into `devflow/docs/` (`USAGE.md`, `quickstart.md`, `governance-rules.md`, `manual-review-workflow-spec.md`, `markdown-metadata-contract.md`, `skill-selection-policy.md`, `release-process.md`, `diagrams/`, `examples/`).
+- **Enhanced Documentation Contract Scanner**: Added `devflow/docs/` target scanning to `scan-doc-contract` tooling command and updated framework static validation suite.
+- **Documentation Hygiene & Cleanup**: Removed obsolete v2.6.0 documents and relocated project branding to `assets/logo-nexus-devflow.png`.
+
 ## [2.13.0] - 2026-09-07
 
 ### Changed
