@@ -1,4 +1,4 @@
-import type { DashboardSnapshot } from "./dashboard-snapshot.js";
+import type { DashboardSnapshot, RecommendedSkillItem, DashboardActiveTicket } from "./dashboard-snapshot.js";
 import type { IdeasSummary } from "./ideas.js";
 
 export interface StudioViewRendererOptions {
@@ -457,6 +457,37 @@ const DASHBOARD_BASE_HTML = `<!doctype html>
     .blast-result{padding:16px;border:1px solid var(--line-strong);border-radius:4px;background:var(--bg-deep);margin-top:12px;display:none}
     .section-note{margin:-2px 0 14px;color:var(--muted);font:10px/1.5 var(--font-mono)}.record-list{display:grid;gap:8px}.record-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:13px;align-items:center;padding:13px 15px;border:1px solid var(--line);border-left:3px solid var(--record-color,var(--cyan));border-radius:3px;background:rgba(255,255,255,.02)}.record-icon{display:grid;place-items:center;width:31px;height:31px;border-radius:8px;background:color-mix(in srgb,var(--record-color,var(--cyan)) 14%,transparent)}.record-body{min-width:0}.record-meta{color:var(--record-color,var(--cyan));font:700 10px var(--font-mono);letter-spacing:.06em;text-transform:uppercase}.record-title{margin-top:3px;color:var(--ink);font-weight:650}.record-desc{margin-top:3px;color:var(--soft);font-size:12px}.record-desc:empty{display:none}.record-title strong,.record-desc strong{color:var(--record-color,var(--cyan));font-weight:750}.record-title em,.record-desc em{color:var(--gold)}.record-title code,.record-desc code{padding:1px 4px;border:1px solid var(--line);border-radius:3px;color:var(--cyan);font:10px var(--font-mono)}.record-title a,.record-desc a{color:var(--cyan);text-decoration:underline}.record-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.record-action{border:1px solid var(--record-color,var(--cyan));border-radius:3px;padding:8px 11px;background:transparent;color:var(--record-color,var(--cyan));font:700 10px var(--font-mono);cursor:pointer}.record-action:hover,.record-action:focus-visible{background:var(--record-color,var(--cyan));color:var(--bg)}.record-badge{align-self:start;border:1px solid rgba(111,227,180,.36);border-radius:99px;padding:4px 8px;background:var(--mint-soft);color:var(--mint);font:700 9px var(--font-mono);letter-spacing:.04em;text-transform:uppercase}.record-item.tone-cyan{--record-color:var(--cyan)}.record-item.tone-mint{--record-color:var(--mint)}.record-item.tone-gold{--record-color:var(--gold)}.record-item.tone-red{--record-color:var(--red)}.record-item.tone-violet{--record-color:var(--violet)}.stepper{gap:0;justify-content:center}.step{padding-right:0;overflow:visible}.step-line{left:calc(50% + 10px);right:calc(-50% + 10px);width:auto}#sev-p0{color:var(--red)}#sev-p1{color:var(--gold)}#sev-p2{color:var(--violet)}#sev-p3{color:var(--cyan)}#stat-runs.tone{color:var(--mint)}#stat-findings.tone-ok{color:var(--mint)}#stat-findings.tone-alert{color:var(--red)}#stat-ideas.tone-ok{color:var(--mint)}#stat-ideas.tone-pending{color:var(--gold)}#stat-adapters.tone-ok{color:var(--mint)}#stat-adapters.tone-partial{color:var(--gold)}#stat-state.tone-idle{color:var(--cyan)}#stat-state.tone-active{color:var(--violet)}#stat-state.tone-blocked{color:var(--red)}
     .multitask-panel{border-color:rgba(56,189,248,.35)}.workspace-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-top:10px}.workspace-card{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:all .2s ease}.workspace-card:hover{border-color:var(--cyan);background:rgba(255,255,255,.04)}.ws-header{display:flex;align-items:center;justify-content:space-between;gap:8px}.ws-id{font-family:var(--font-mono);font-weight:700;font-size:11px;color:var(--cyan);background:var(--cyan-soft);padding:2px 8px;border-radius:3px}.ws-stage{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--gold-soft);color:var(--gold);border:1px solid rgba(242,193,78,.3)}.ws-stage.stage-check{background:var(--mint-soft);color:var(--mint);border-color:rgba(111,227,180,.3)}.ws-title{font-weight:650;font-size:13px;color:var(--ink);line-height:1.4}.ws-progress-bar{height:6px;background:rgba(0,0,0,.3);border-radius:99px;overflow:hidden;margin:4px 0}.ws-progress-fill{height:100%;background:linear-gradient(135deg,var(--cyan),var(--violet));transition:width .3s}.ws-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}.ws-actions{display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px dashed var(--line);flex-wrap:wrap}.btn-ws{padding:4px 9px;border-radius:3px;font-family:var(--font-mono);font-size:10px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--soft);cursor:pointer;transition:all .15s}.btn-ws:hover{background:var(--cyan-soft);border-color:var(--cyan);color:var(--cyan)}
+    .archify-visualizer-panel{border-color:rgba(125,216,255,.3);background:var(--bg-deep);overflow:hidden;margin-bottom:20px}
+    .viz-controls{display:flex;gap:8px}
+    .viz-tab{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--line-strong);border-radius:99px;background:transparent;color:var(--muted);font:600 10px var(--font-mono);cursor:pointer}
+    .viz-tab:hover,.viz-tab:focus-visible{border-color:var(--cyan);color:var(--cyan)}
+    .viz-tab.on{background:var(--cyan);border-color:var(--cyan);color:var(--bg-deep)}
+    .visualizer-canvas-container{width:100%;overflow-x:auto;padding:12px 0;display:flex;justify-content:center}
+    .visualizer-canvas-container svg{max-width:100%;height:auto}
+    @keyframes archify-trace-motion{0%{stroke-dashoffset:48}100%{stroke-dashoffset:0}}
+    @keyframes archify-pulse{0%{transform:scale(1);opacity:.8}50%{transform:scale(1.15);opacity:.2}100%{transform:scale(1);opacity:.8}}
+    .viz-active-trace{stroke-dasharray:6 6;animation:archify-trace-motion 1.2s linear infinite}
+    .viz-pulse-circle{transform-origin:center;animation:archify-pulse 2s ease-in-out infinite}
+    .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:10px}
+    .skill-card{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;transition:all .2s ease}
+    .skill-card:hover{border-color:var(--line-strong);background:rgba(255,255,255,.04)}
+    .skill-card.skill-installed{border-left:3px solid var(--mint)}
+    .skill-card.skill-missing{border-left:3px solid var(--muted)}
+    .skill-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+    .skill-title-block{display:flex;flex-direction:column;gap:2px}
+    .skill-title{font-size:13px;color:var(--ink);font-weight:650}
+    .skill-name code{font-size:10px}
+    .skill-cat{font-family:var(--font-mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.05em}
+    .skill-cat.vendor{background:var(--violet-soft);color:var(--violet);border:1px solid rgba(184,164,255,.3)}
+    .skill-cat.skill{background:var(--cyan-soft);color:var(--cyan);border:1px solid rgba(125,216,255,.3)}
+    .skill-desc{font-size:11px;color:var(--muted);line-height:1.45;margin:0}
+    .skill-footer{display:flex;justify-content:flex-end;align-items:center;padding-top:8px;border-top:1px dashed var(--line)}
+    .badge-installed{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--mint);background:var(--mint-soft);border:1px solid rgba(111,227,180,.3);padding:3px 8px;border-radius:99px;display:inline-flex;align-items:center;gap:4px}
+    .btn-install-cmd{font-family:var(--font-mono);font-size:10px;font-weight:600;padding:4px 10px;border-radius:4px;background:var(--cyan-soft);color:var(--cyan);border:1px solid rgba(125,216,255,.3);cursor:pointer;transition:all .15s ease}
+    .btn-install-cmd:hover{background:var(--cyan);color:var(--bg-deep)}
+    .doctor-compact-summary{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:6px;gap:12px;flex-wrap:wrap}
+    .btn-doctor-toggle{padding:4px 10px;border-radius:4px;font-family:var(--font-mono);font-size:10px;font-weight:700;background:var(--panel);border:1px solid var(--line);color:var(--soft);cursor:pointer;transition:all .15s}
+    .btn-doctor-toggle:hover{border-color:var(--cyan);color:var(--cyan)}
     footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:26px;padding-top:17px;border-top:1px solid var(--line);color:var(--muted);font:10px var(--font-mono)}
     @media(max-width:920px){.grid .card,.grid .card.wide{grid-column:1/-1}.stats{grid-template-columns:repeat(2,1fr)}.adapters,.roster-grid,.mcp-grid{grid-template-columns:repeat(2,1fr)}.titleblock{align-items:flex-start;flex-direction:column}.meta dd{text-align:left}.stepper{gap:0}.cmd:after{position:fixed;left:12px;right:12px;bottom:16px;width:auto;max-width:none;transform:translateY(5px)}.cmd:hover:after,.cmd:focus-visible:after,.cmd:focus:after{transform:none}}
     @media(max-width:560px){.sheet{width:calc(100% - 24px);padding-top:22px}.panel,.card{padding:18px}.grid{gap:14px;margin-bottom:14px}.stats{margin-bottom:14px}.adapters,.roster-grid,.mcp-grid{grid-template-columns:1fr}.cmd:after{position:fixed;left:12px;right:12px;bottom:16px;width:auto;max-width:none;transform:translateY(5px)}.cmd:hover:after,.cmd:focus-visible:after,.cmd:focus:after{transform:none}.meta{grid-template-columns:1fr}.track-tabs{width:100%}.tab{flex:1}.fact{align-items:flex-start}.record-item{grid-template-columns:34px minmax(0,1fr)}.record-action{grid-column:2;justify-self:start}}
@@ -487,35 +518,27 @@ const DASHBOARD_BASE_HTML = `<!doctype html>
     </header>
     <div class="live"><span class="live-dot" id="live-dot"></span><span id="live-label">Connecting to local dashboard...</span></div>
 
-    <section class="panel" id="dual-track">
+    <!-- Dynamic Archify Workflow Visualizer -->
+    <section class="panel archify-visualizer-panel" id="workflow-visualizer-panel">
       <div class="panel-head">
-        <span class="label">Unified Living Spec Model (DevFlow 2.5.0)</span>
-        <div class="track-tabs" role="tablist" aria-label="Delivery tracks">
-          <button class="tab on" id="tab-preflight" role="tab" aria-selected="true" aria-controls="view-preflight" data-track="preflight"><span>🔮 Pre-Flight Discovery</span><span class="tab-active-dot">● ACTIVE</span></button>
-          <button class="tab" id="tab-fast" role="tab" aria-selected="false" aria-controls="view-fast" data-track="fast"><span>⚡ Living Spec · 4 steps</span><span class="tab-active-dot">● ACTIVE</span></button>
-          <button class="tab" id="tab-swarm" role="tab" aria-selected="false" aria-controls="view-swarm" data-track="swarm"><span>🤖 Multi-Agent Swarm</span></button>
-          <button class="tab" id="tab-graph" role="tab" aria-selected="false" aria-controls="view-graph" data-track="graph"><span>🗺️ Code Graph</span></button>
+        <div>
+          <span class="label">🎨 Archify Dynamic Workflow Visualizer</span>
+          <div class="muted" style="margin-top:3px;font-size:11px;">Real-time SVG Trace-Motion Architecture &amp; Dependency DAG</div>
+        </div>
+        <div class="viz-controls">
+          <button class="viz-tab on" id="viz-btn-macro" type="button">⚡ Macro: Lifecycle Pulse</button>
+          <button class="viz-tab" id="viz-btn-micro" type="button">🎫 Micro: Tickets DAG</button>
+          <button class="viz-tab" id="viz-btn-graph" type="button">🗺️ Code Graph</button>
         </div>
       </div>
-      <div class="track-view on" id="view-preflight" role="tabpanel" aria-labelledby="tab-preflight">
-        <div class="stepper" id="pipeline-preflight"></div>
-        <div class="track-note" id="note-preflight">Pre-Flight Discovery & Architectural Alignment (/idea, /grill, /brainstorm, /discovery).</div>
-      </div>
-      <div class="track-view" id="view-fast" role="tabpanel" aria-labelledby="tab-fast">
-        <div class="stepper" id="pipeline-fast"></div>
-        <div class="track-note" id="note-fast">Single Living Spec (/feature, /implement, /check, /complete) with TDD Discipline & QA Matrix.</div>
-      </div>
-      <div class="track-view" id="view-swarm" role="tabpanel" aria-labelledby="tab-swarm">
-        <div class="section-note">Role-based specialized AI Subagents roster & execution matrix</div>
-        <div class="roster-grid" id="swarm-roster"></div>
-      </div>
-      <div class="track-view" id="view-graph" role="tabpanel" aria-labelledby="tab-graph">
-        <div class="section-note">Semantic dependency graph & instant Blast Radius analyzer</div>
-        <div class="search-row">
-          <input class="search-input" id="graph-file-input" placeholder="Type file path (e.g. packages/create-nexus-devflow/lib/code-graph.ts)..." />
-          <button class="search-btn" id="graph-search-btn" type="button">Analyze Impact</button>
+      <div class="visualizer-canvas-container" id="visualizer-container"></div>
+      <div class="visualizer-graph-container" id="visualizer-graph-container" style="display:none;padding:16px 20px;">
+        <div class="section-note" style="color:var(--muted);font-size:12px;margin-bottom:10px;">Semantic dependency graph &amp; instant Blast Radius analyzer</div>
+        <div class="search-row" style="display:flex;gap:10px;">
+          <input class="search-input" id="graph-file-input" style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(191,224,255,0.15);color:var(--text);padding:8px 12px;border-radius:6px;font-family:var(--font-mono);font-size:12px;" placeholder="Type file path (e.g. packages/create-nexus-devflow/lib/code-graph.ts)..." />
+          <button class="search-btn" id="graph-search-btn" type="button" style="background:var(--card);border:1px solid rgba(191,224,255,0.2);color:var(--text);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">Analyze Impact</button>
         </div>
-        <div class="blast-result" id="blast-result"></div>
+        <div class="blast-result" id="blast-result" style="display:none;margin-top:14px;padding:12px;background:rgba(0,0,0,0.2);border-radius:6px;font-size:12px;font-family:var(--font-mono);"></div>
       </div>
     </section>
 
@@ -545,8 +568,20 @@ const DASHBOARD_BASE_HTML = `<!doctype html>
       <div class="workspace-grid" id="active-workspaces-list"></div>
     </section>
 
+    <!-- Recommended Skills & Vendor Ecosystem Hub -->
+    <section class="card full panel" id="recommended-skills-panel">
+      <div class="card-head">
+        <div>
+          <span class="label">🌟 Recommended Skills & Vendor Ecosystem</span>
+          <div class="muted" style="margin-top:3px;font-size:11px;">Curated companion packages & JIT capabilities for modern AI development</div>
+        </div>
+        <span class="pill" id="skills-count-pill">-</span>
+      </div>
+      <div class="skills-grid" id="recommended-skills-list"></div>
+    </section>
+
     <section class="grid">
-      <article class="card"><div class="card-head"><span class="label">Nexus-DevFlow</span><span class="pill" id="update-pill">checking</span></div><div class="facts"><div class="fact"><span>Installed / latest</span><span id="installed-latest">-</span></div><div class="fact"><span>Health</span><span id="system-health">-</span></div><div class="fact"><span>Architecture</span><span>3-Pillars + Swarm RAG</span></div></div></article>
+      <article class="card"><div class="card-head"><span class="label">Nexus-DevFlow</span><span class="pill" id="update-pill">checking</span></div><div class="facts"><div class="fact"><span>Installed / latest</span><span id="installed-latest">-</span></div><div class="fact"><span>Health</span><span id="system-health">-</span></div><div class="fact"><span>Architecture</span><span>3-Pillars & Task-Isolated Spec</span></div></div></article>
       <article class="card wide"><div class="card-head"><span class="label">Current Work</span><span class="pill" id="work-pill">loading</span></div><div class="value" id="work-title">Loading...</div><div class="progress"><span id="work-progress"></span></div><div class="muted" id="work-meta"></div></article>
       <article class="card"><div class="card-head"><span class="label">Git & Drift</span><span class="pill" id="git-pill">loading</span></div><div class="facts"><div class="fact"><span>Branch</span><span id="git-branch">-</span></div><div class="fact"><span>Working tree</span><span id="git-changed">-</span></div><div class="fact"><span>Drift Status</span><span id="git-drift">-</span></div><div class="fact"><span>Last commit</span><span id="git-commit">-</span></div></div></article>
       <article class="card"><div class="card-head"><span class="label">Findings Ledger</span><span class="value" id="findings-count">-</span></div><div class="severity"><div class="sev"><b id="sev-p0">0</b><small>P0</small></div><div class="sev"><b id="sev-p1">0</b><small>P1</small></div><div class="sev"><b id="sev-p2">0</b><small>P2</small></div><div class="sev"><b id="sev-p3">0</b><small>P3</small></div></div><ul id="findings-list"></ul></article>
@@ -579,7 +614,49 @@ const DASHBOARD_BASE_HTML = `<!doctype html>
     function renderRecords(id,items,empty,mapper) { const root = byId(id); root.replaceChildren(); if (!items?.length) { const node = document.createElement('div'); node.className = 'empty'; node.textContent = empty; root.append(node); return; } items.forEach((item,index) => root.append(recordCard(mapper(item,index)))); }
     function renderIdeas(items) { renderRecords('ideas-list',items,'No pending ideas',(item) => ({ icon:'bulb',tone:'gold',meta:item.id,title:item.title,description:(item.description || '⚡') + ' · ' + (item.feasibility || 'Not scored') })); }
     function renderHistory(items) { const map = { feature:{icon:'package',tone:'cyan'},fix:{icon:'wrench',tone:'gold'},rollback:{icon:'rollback',tone:'red'} }; renderRecords('history-list',(items || []).slice(0,10),'No completed work in history archive',(item) => { const type = String(item.type || 'other').toLowerCase(); const style = map[type] || {icon:'report',tone:'violet'}; return { ...style,meta:type + ' ' + (item.buildPlanItem || ''),title:item.title,description:'',badge:'Released' }; }); }
-    function renderDoctor(items) { renderRecords('doctor-list',items,'No doctor checks available',(item) => ({ icon:item.status === 'pass' ? 'check' : 'alert',tone:item.status === 'pass' ? 'mint' : item.status === 'warn' ? 'gold' : 'red',meta:item.status,title:item.name,description:item.message })); }
+    function renderDoctor(items) {
+      const root = byId('doctor-list');
+      if (!root) return;
+      root.replaceChildren();
+      if (!items?.length) {
+        const node = document.createElement('div');
+        node.className = 'empty';
+        node.textContent = 'No doctor checks available';
+        root.append(node);
+        return;
+      }
+      const hasIssues = items.some(i => i.status === 'fail' || i.status === 'warn');
+      if (!hasIssues) {
+        const summary = document.createElement('div');
+        summary.className = 'doctor-compact-summary';
+        summary.innerHTML = '<span style="color:var(--mint);font-size:12px;font-weight:700;">✔ All ' + items.length + ' System Integrity Checks Passed (Environment, Config, Adapters, Living Specs)</span>' +
+          '<button class="btn-doctor-toggle" type="button" id="doctor-toggle-btn">Show Details (' + items.length + ')</button>';
+        const detailsContainer = document.createElement('div');
+        detailsContainer.className = 'record-list';
+        detailsContainer.style.display = 'none';
+        detailsContainer.style.marginTop = '10px';
+        items.forEach((item) => {
+          detailsContainer.append(recordCard({ icon: 'check', tone: 'mint', meta: item.status, title: item.name, description: item.message }));
+        });
+        const toggleBtn = summary.querySelector('#doctor-toggle-btn');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            const isHidden = detailsContainer.style.display === 'none';
+            detailsContainer.style.display = isHidden ? 'grid' : 'none';
+            toggleBtn.textContent = isHidden ? 'Hide Details' : 'Show Details (' + items.length + ')';
+          });
+        }
+        root.append(summary, detailsContainer);
+      } else {
+        items.forEach((item) => root.append(recordCard({
+          icon: item.status === 'pass' ? 'check' : 'alert',
+          tone: item.status === 'pass' ? 'mint' : item.status === 'warn' ? 'gold' : 'red',
+          meta: item.status,
+          title: item.name,
+          description: item.message
+        })));
+      }
+    }
     function renderDiscoveries(items) { renderRecords('discovery-list',items,'No discoveries recorded',(item) => ({ icon:'search',tone:'mint',meta:item.id,title:item.title,description:'',badge:'Decision: ' + (item.decision || 'Pending') })); }
 
     function renderPipeline(id, nodes) {
@@ -626,11 +703,205 @@ const DASHBOARD_BASE_HTML = `<!doctype html>
       });
     }
 
-    function renderSwarm(swarm) {
-      const root = byId('swarm-roster'); if (!root) return; root.replaceChildren();
-      (swarm?.agentRoster || []).forEach(agent => {
-        const card = document.createElement('div'); card.className = 'roster-card';
-        card.innerHTML = '<strong>' + agent.avatar + ' ' + agent.name + '</strong><div class="roster-desc">' + agent.responsibility + '</div>';
+    let currentVizMode = 'macro';
+    let currentSnapshotData = null;
+
+    function resolveClientStage(data) {
+      if (data?.workflow?.currentStage) return data.workflow.currentStage;
+      const activeRun = data?.status?.activeRuns?.[0];
+      if (activeRun?.stage) return activeRun.stage;
+      if (activeRun?.status) return activeRun.status;
+      if (data?.status?.currentWork?.status) return data.status.currentWork.status;
+      const nextCmd = data?.nextAction?.command || data?.status?.nextAction?.command;
+      if (nextCmd) {
+        if (nextCmd.includes('complete') || nextCmd.includes('merge')) return 'complete';
+        if (nextCmd.includes('check') || nextCmd.includes('verif') || nextCmd.includes('test')) return 'check';
+        if (nextCmd.includes('implement') || nextCmd.includes('build')) return 'implement';
+        if (nextCmd.includes('feature') || nextCmd.includes('spec')) return 'feature';
+      }
+      return 'feature';
+    }
+
+    function renderMacroSvg(activeStage) {
+      const stageOrder = ['feature', 'implement', 'check', 'complete'];
+      function normalize(raw) {
+        const s = String(raw || '').toLowerCase().trim();
+        if (s.includes('complete') || s.includes('archive') || s.includes('merge') || s.includes('done')) return 'complete';
+        if (s.includes('check') || s.includes('verif') || s.includes('qa') || s.includes('test')) return 'check';
+        if (s.includes('implement') || s.includes('progress') || s.includes('build') || s.includes('code') || s.includes('dev')) return 'implement';
+        return 'feature';
+      }
+      const activeId = normalize(activeStage);
+      const activeIdx = stageOrder.indexOf(activeId);
+
+      const stages = [
+        { id: 'feature', label: '/feature', desc: 'Discover & Spec', icon: '🎯', x: 60 },
+        { id: 'implement', label: '/implement', desc: 'TDD Build', icon: '⚙️', x: 270 },
+        { id: 'check', label: '/check', desc: 'QA Proof', icon: '🧪', x: 480 },
+        { id: 'complete', label: '/complete', desc: 'Archive & Merge', icon: '📦', x: 690 },
+      ];
+      let connectors = '';
+      for (let i = 0; i < stages.length - 1; i++) {
+        const from = stages[i]; const to = stages[i + 1];
+        const x1 = from.x + 130; const x2 = to.x; const y = 60;
+        const isPastOrActive = i < activeIdx;
+        const stroke = isPastOrActive ? '#7dd8ff' : 'rgba(191, 224, 255, 0.25)';
+        const traceClass = isPastOrActive ? 'viz-active-trace' : '';
+        connectors += '<line x1="' + x1 + '" y1="' + y + '" x2="' + x2 + '" y2="' + y + '" stroke="' + stroke + '" stroke-width="' + (isPastOrActive ? 3 : 2) + '" class="' + traceClass + '" />' +
+          '<polygon points="' + (x2-6) + ',' + (y-4) + ' ' + x2 + ',' + y + ' ' + (x2-6) + ',' + (y+4) + '" fill="' + stroke + '" />';
+      }
+      const nodes = stages.map((s, idx) => {
+        const isDone = idx < activeIdx;
+        const isActive = idx === activeIdx;
+        let stroke = 'rgba(191, 224, 255, 0.2)';
+        let fill = 'rgba(255, 255, 255, 0.02)';
+        let labelFill = '#7598ba';
+        let statusBadge = '<text x="' + (s.x + 120) + '" y="42" text-anchor="end" fill="#7598ba" font-family="var(--font-mono)" font-size="9">⏳ Next</text>';
+        let glowFilter = '';
+        let activeClass = '';
+        let pulseRing = '';
+
+        if (isDone) {
+          stroke = '#6fe3b4';
+          fill = 'rgba(111, 227, 180, 0.08)';
+          labelFill = '#6fe3b4';
+          statusBadge = '<text x="' + (s.x + 120) + '" y="42" text-anchor="end" fill="#6fe3b4" font-family="var(--font-mono)" font-size="9" font-weight="700">✔ Done</text>';
+        } else if (isActive) {
+          stroke = '#7dd8ff';
+          fill = 'rgba(125, 216, 255, 0.16)';
+          labelFill = '#edf6ff';
+          statusBadge = '<text x="' + (s.x + 120) + '" y="42" text-anchor="end" fill="#7dd8ff" font-family="var(--font-mono)" font-size="9" font-weight="700">● Active</text>';
+          glowFilter = 'filter="url(#archify-glow)"';
+          activeClass = 'is-active';
+          pulseRing = '<circle cx="' + (s.x + 24) + '" cy="60" r="18" fill="none" stroke="#7dd8ff" stroke-width="2" class="viz-pulse-circle" opacity="0.8"/>';
+        }
+
+        return '<g class="viz-stage-node ' + activeClass + '">' +
+          '<rect x="' + s.x + '" y="25" width="130" height="70" rx="8" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + (isActive ? 2 : 1) + '" ' + glowFilter + ' />' +
+          pulseRing +
+          '<text x="' + (s.x + 16) + '" y="65" font-size="18">' + s.icon + '</text>' +
+          '<text x="' + (s.x + 44) + '" y="52" fill="' + labelFill + '" font-family="var(--font-mono)" font-size="12" font-weight="700">' + s.label + '</text>' +
+          '<text x="' + (s.x + 44) + '" y="72" fill="#7598ba" font-family="var(--font-sans)" font-size="10">' + s.desc + '</text>' +
+          statusBadge +
+          '</g>';
+      }).join('');
+      return '<svg viewBox="0 0 880 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><filter id="archify-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter></defs>' +
+        connectors + nodes + '</svg>';
+    }
+
+    function renderTicketsDagSvg(tickets) {
+      if (!tickets || tickets.length === 0) {
+        return '<svg viewBox="0 0 880 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">' +
+          '<rect x="20" y="20" width="840" height="80" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(191,224,255,0.15)" stroke-dasharray="4 4" />' +
+          '<text x="440" y="66" text-anchor="middle" fill="#7598ba" font-family="var(--font-mono)" font-size="12">No active tracer-bullet tickets found in devflow/context/{xxx-slug}/tickets/.</text>' +
+          '</svg>';
+      }
+      const cardWidth = 170; const cardHeight = 65; const gapX = 50; const startX = 40; const startY = 30;
+      const positions = new Map();
+      tickets.forEach((t, i) => { positions.set(t.id, { x: startX + i * (cardWidth + gapX), y: startY }); });
+      const totalWidth = Math.max(880, startX * 2 + tickets.length * (cardWidth + gapX));
+      let connectors = '';
+      tickets.forEach((ticket) => {
+        const toPos = positions.get(ticket.id); if (!toPos) return;
+        (ticket.blockedBy || []).forEach((blockerId) => {
+          const fromPos = positions.get(blockerId); if (!fromPos) return;
+          const x1 = fromPos.x + cardWidth; const y1 = fromPos.y + cardHeight / 2;
+          const x2 = toPos.x; const y2 = toPos.y + cardHeight / 2;
+          connectors += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#7dd8ff" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)" />';
+        });
+      });
+      const cards = tickets.map(t => {
+        const pos = positions.get(t.id) || { x: 0, y: 0 };
+        const statusColor = t.status === 'done' ? '#6fe3b4' : t.status === 'in_progress' ? '#7dd8ff' : '#ff7061';
+        const statusBg = t.status === 'done' ? 'rgba(111, 227, 180, 0.12)' : t.status === 'in_progress' ? 'rgba(125, 216, 255, 0.15)' : 'rgba(255, 112, 97, 0.12)';
+        const statusLabel = t.status === 'done' ? '✔ Done' : t.status === 'in_progress' ? '▶ Active' : '⏳ Blocked';
+        const titleEsc = escapeHtml(t.title.length > 20 ? t.title.slice(0, 19) + '…' : t.title);
+        return '<g class="viz-ticket-node ticket-' + t.status + '">' +
+          '<rect x="' + pos.x + '" y="' + pos.y + '" width="' + cardWidth + '" height="' + cardHeight + '" rx="6" fill="' + statusBg + '" stroke="' + statusColor + '" stroke-width="1.5" />' +
+          '<text x="' + (pos.x + 12) + '" y="' + (pos.y + 22) + '" fill="' + statusColor + '" font-family="var(--font-mono)" font-size="11" font-weight="700">' + escapeHtml(t.id) + '</text>' +
+          '<text x="' + (pos.x + cardWidth - 12) + '" y="' + (pos.y + 22) + '" text-anchor="end" fill="' + statusColor + '" font-family="var(--font-mono)" font-size="9" font-weight="600">' + statusLabel + '</text>' +
+          '<text x="' + (pos.x + 12) + '" y="' + (pos.y + 44) + '" fill="#edf6ff" font-family="var(--font-sans)" font-size="11" font-weight="500">' + titleEsc + '</text>' +
+          '</g>';
+      }).join('');
+      return '<svg viewBox="0 0 ' + totalWidth + ' 130" width="100%" height="130" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs><marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 8 5 L 0 9 z" fill="#7dd8ff"/></marker></defs>' +
+        connectors + cards + '</svg>';
+    }
+
+    function updateVisualizer(data) {
+      const container = byId('visualizer-container');
+      if (!container) return;
+      if (currentVizMode === 'macro') {
+        const stage = resolveClientStage(data);
+        container.innerHTML = renderMacroSvg(stage);
+      } else if (currentVizMode === 'micro') {
+        container.innerHTML = renderTicketsDagSvg(data?.activeTickets || []);
+      }
+    }
+
+    byId('viz-btn-macro')?.addEventListener('click', () => {
+      currentVizMode = 'macro';
+      byId('viz-btn-macro').classList.add('on');
+      byId('viz-btn-micro').classList.remove('on');
+      byId('viz-btn-graph')?.classList.remove('on');
+      byId('visualizer-container').style.display = 'block';
+      const g = byId('visualizer-graph-container'); if (g) g.style.display = 'none';
+      if (currentSnapshotData) updateVisualizer(currentSnapshotData);
+    });
+
+    byId('viz-btn-micro')?.addEventListener('click', () => {
+      currentVizMode = 'micro';
+      byId('viz-btn-micro').classList.add('on');
+      byId('viz-btn-macro').classList.remove('on');
+      byId('viz-btn-graph')?.classList.remove('on');
+      byId('visualizer-container').style.display = 'block';
+      const g = byId('visualizer-graph-container'); if (g) g.style.display = 'none';
+      if (currentSnapshotData) updateVisualizer(currentSnapshotData);
+    });
+
+    byId('viz-btn-graph')?.addEventListener('click', () => {
+      currentVizMode = 'graph';
+      byId('viz-btn-graph').classList.add('on');
+      byId('viz-btn-macro').classList.remove('on');
+      byId('viz-btn-micro').classList.remove('on');
+      byId('visualizer-container').style.display = 'none';
+      const g = byId('visualizer-graph-container'); if (g) g.style.display = 'block';
+    });
+
+    function renderRecommendedSkills(skills) {
+      const root = byId('recommended-skills-list');
+      if (!root) return;
+      root.replaceChildren();
+      const list = skills || [];
+      const installedCount = list.filter(s => s.installed).length;
+      pill('skills-count-pill', installedCount === list.length ? 'ok' : 'active', installedCount + '/' + list.length + ' Installed');
+
+      list.forEach(skill => {
+        const card = document.createElement('article');
+        card.className = 'skill-card ' + (skill.installed ? 'skill-installed' : 'skill-missing');
+        const catBadge = skill.category === 'vendor' ? '<span class="skill-cat vendor">VENDOR</span>' : '<span class="skill-cat skill">SKILL</span>';
+        const statusAction = skill.installed 
+          ? '<span class="badge-installed">✔ Installed</span>'
+          : '<button class="btn-install-cmd" type="button" data-cmd="' + escapeHtml(skill.installCommand) + '">📋 Copy Command</button>';
+
+        card.innerHTML = 
+          '<div class="skill-head">' +
+            '<div class="skill-title-block">' +
+              '<strong class="skill-title">' + escapeHtml(skill.title) + '</strong>' +
+              '<span class="skill-name"><code>' + escapeHtml(skill.name) + '</code></span>' +
+            '</div>' +
+            catBadge +
+          '</div>' +
+          '<p class="skill-desc">' + escapeHtml(skill.description) + '</p>' +
+          '<div class="skill-footer">' +
+            statusAction +
+          '</div>';
+
+        const btn = card.querySelector('.btn-install-cmd');
+        if (btn) {
+          wireCopy(btn, () => btn.getAttribute('data-cmd'));
+        }
         root.append(card);
       });
     }
@@ -740,15 +1011,20 @@ const DASHBOARD_BASE_HTML = `<!doctype html>
       pill('track-badge', workflow.track, 'Track ' + titleCase(workflow.track || 'idle'));
 
       text('adapter-count', (devflow.adapters || []).length + ' configured'); text('header-branch', git.branch || 'unknown'); text('generated-at', new Date(data.generatedAt).toLocaleTimeString()); text('footer-revision', 'snapshot ' + data.generatedAt);
-      renderPipeline('pipeline-preflight', workflow.deep || workflow.preflight); renderPipeline('pipeline-fast', workflow.fast); decoratePipeline('pipeline-preflight'); decoratePipeline('pipeline-fast');
-      if (!userHasSwitchedTab) {
-        if (work.state === 'active' || workflow.track === 'fast') {
-          selectTrack('fast');
-        } else {
-          selectTrack('preflight');
+      if (byId('pipeline-fast')) {
+        renderPipeline('pipeline-preflight', workflow.deep || workflow.preflight); renderPipeline('pipeline-fast', workflow.fast); decoratePipeline('pipeline-preflight'); decoratePipeline('pipeline-fast');
+        if (!userHasSwitchedTab) {
+          if (work.state === 'active' || workflow.track === 'fast') {
+            selectTrack('fast');
+          } else {
+            selectTrack('preflight');
+          }
         }
       }
-      renderSwarm(data.swarm); renderMcp(data.mcpTools); text('stat-mcp', (data.mcpTools || []).length + ' Ready');
+      currentSnapshotData = data;
+      renderRecommendedSkills(data.recommendedSkills);
+      updateVisualizer(data);
+      renderMcp(data.mcpTools); text('stat-mcp', (data.mcpTools || []).length + ' Ready');
       renderActiveWorkspaces(status.activeRuns, work);
 
       const nextCommand = data.nextAction?.command || status.nextAction?.command || '/feature'; text('next-command', nextCommand); text('next-reason', data.nextAction?.reason || 'Ready for new work.');
@@ -1118,24 +1394,215 @@ export class StudioViewRenderer {
   }
 
   /**
-   * Renders the complete web dashboard HTML document with optional initial snapshot injection.
+   * Resolves the active stage name from a dashboard snapshot.
    */
+  resolveActiveStage(snapshot: DashboardSnapshot): string {
+    if (snapshot.workflow?.currentStage) {
+      return snapshot.workflow.currentStage;
+    }
+    const primaryRun = (snapshot.status as any)?.activeRuns?.[0];
+    if (primaryRun?.stage) return primaryRun.stage;
+    if (primaryRun?.status) return primaryRun.status;
+    if (snapshot.status?.currentWork?.status) return snapshot.status.currentWork.status;
+    const nextCmd = snapshot.nextAction?.command || (snapshot.status as any)?.nextAction?.command;
+    if (nextCmd) {
+      if (nextCmd.includes("complete") || nextCmd.includes("merge")) return "complete";
+      if (nextCmd.includes("check") || nextCmd.includes("verif") || nextCmd.includes("test")) return "check";
+      if (nextCmd.includes("implement") || nextCmd.includes("build")) return "implement";
+      if (nextCmd.includes("feature") || nextCmd.includes("spec")) return "feature";
+    }
+    return "feature";
+  }
+
+  /**
+   * Renders the Macro Living Spec Lifecycle Pulse Map SVG.
+   */
+  renderMacroLifecycleSvg(activeStage: string = "feature"): string {
+    const stageOrder = ["feature", "implement", "check", "complete"] as const;
+    const normalize = (raw: string): "feature" | "implement" | "check" | "complete" => {
+      const s = String(raw || "").toLowerCase().trim();
+      if (s.includes("complete") || s.includes("archive") || s.includes("merge") || s.includes("done")) return "complete";
+      if (s.includes("check") || s.includes("verif") || s.includes("qa") || s.includes("test")) return "check";
+      if (s.includes("implement") || s.includes("progress") || s.includes("build") || s.includes("code") || s.includes("dev")) return "implement";
+      return "feature";
+    };
+
+    const activeId = normalize(activeStage);
+    const activeIdx = stageOrder.indexOf(activeId);
+
+    const stages = [
+      { id: "feature", label: "/feature", desc: "Discover & Spec", icon: "🎯", x: 60 },
+      { id: "implement", label: "/implement", desc: "TDD Build", icon: "⚙️", x: 270 },
+      { id: "check", label: "/check", desc: "QA Proof", icon: "🧪", x: 480 },
+      { id: "complete", label: "/complete", desc: "Archive & Merge", icon: "📦", x: 690 },
+    ];
+
+    let connectors = "";
+    for (let i = 0; i < stages.length - 1; i++) {
+      const from = stages[i];
+      const to = stages[i + 1];
+      const x1 = from.x + 130;
+      const x2 = to.x;
+      const y = 60;
+      const isPastOrActive = i < activeIdx;
+      const stroke = isPastOrActive ? "#7dd8ff" : "rgba(191, 224, 255, 0.25)";
+      const traceClass = isPastOrActive ? "viz-active-trace" : "";
+      connectors += `
+        <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${stroke}" stroke-width="${isPastOrActive ? 3 : 2}" class="${traceClass}" />
+        <polygon points="${x2 - 6},${y - 4} ${x2},${y} ${x2 - 6},${y + 4}" fill="${stroke}" />
+      `;
+    }
+
+    const nodes = stages.map((s, idx) => {
+      const isDone = idx < activeIdx;
+      const isActive = idx === activeIdx;
+
+      let stroke = "rgba(191, 224, 255, 0.2)";
+      let fill = "rgba(255, 255, 255, 0.02)";
+      let labelFill = "#7598ba";
+      let statusBadge = `<text x="${s.x + 120}" y="42" text-anchor="end" fill="#7598ba" font-family="var(--font-mono)" font-size="9">⏳ Next</text>`;
+      let glowFilter = "";
+      let activeClass = "";
+      let pulseRing = "";
+
+      if (isDone) {
+        stroke = "#6fe3b4";
+        fill = "rgba(111, 227, 180, 0.08)";
+        labelFill = "#6fe3b4";
+        statusBadge = `<text x="${s.x + 120}" y="42" text-anchor="end" fill="#6fe3b4" font-family="var(--font-mono)" font-size="9" font-weight="700">✔ Done</text>`;
+      } else if (isActive) {
+        stroke = "#7dd8ff";
+        fill = "rgba(125, 216, 255, 0.16)";
+        labelFill = "#edf6ff";
+        statusBadge = `<text x="${s.x + 120}" y="42" text-anchor="end" fill="#7dd8ff" font-family="var(--font-mono)" font-size="9" font-weight="700">● Active</text>`;
+        glowFilter = 'filter="url(#archify-glow)"';
+        activeClass = "is-active";
+        pulseRing = `<circle cx="${s.x + 24}" cy="60" r="18" fill="none" stroke="#7dd8ff" stroke-width="2" class="viz-pulse-circle" opacity="0.8"/>`;
+      }
+
+      return `
+        <g class="viz-stage-node ${activeClass}">
+          <rect x="${s.x}" y="25" width="130" height="70" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="${isActive ? 2 : 1}" ${glowFilter} />
+          ${pulseRing}
+          <text x="${s.x + 16}" y="65" font-size="18">${s.icon}</text>
+          <text x="${s.x + 44}" y="52" fill="${labelFill}" font-family="var(--font-mono)" font-size="12" font-weight="700">${s.label}</text>
+          <text x="${s.x + 44}" y="72" fill="#7598ba" font-family="var(--font-sans)" font-size="10">${s.desc}</text>
+          ${statusBadge}
+        </g>
+      `;
+    }).join("");
+
+    return `
+      <svg viewBox="0 0 880 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="archify-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        ${connectors}
+        ${nodes}
+      </svg>
+    `.trim();
+  }
+
+  /**
+   * Renders the Micro Tracer-Bullet Tickets Dependency DAG SVG.
+   */
+  renderTicketsDagSvg(tickets: DashboardActiveTicket[] = []): string {
+    if (!tickets || tickets.length === 0) {
+      return `
+        <svg viewBox="0 0 880 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="840" height="80" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(191,224,255,0.15)" stroke-dasharray="4 4" />
+          <text x="440" y="66" text-anchor="middle" fill="#7598ba" font-family="var(--font-mono)" font-size="12">
+            No active tracer-bullet tickets found in devflow/context/{xxx-slug}/tickets/.
+          </text>
+        </svg>
+      `.trim();
+    }
+
+    const cardWidth = 170;
+    const cardHeight = 65;
+    const gapX = 50;
+    const startX = 40;
+    const startY = 30;
+
+    const positions = new Map<string, { x: number; y: number }>();
+    tickets.forEach((t, i) => {
+      positions.set(t.id, { x: startX + i * (cardWidth + gapX), y: startY });
+    });
+
+    const totalWidth = Math.max(880, startX * 2 + tickets.length * (cardWidth + gapX));
+
+    let connectors = "";
+    tickets.forEach((ticket) => {
+      const toPos = positions.get(ticket.id);
+      if (!toPos) return;
+      (ticket.blockedBy || []).forEach((blockerId) => {
+        const fromPos = positions.get(blockerId);
+        if (!fromPos) return;
+        const x1 = fromPos.x + cardWidth;
+        const y1 = fromPos.y + cardHeight / 2;
+        const x2 = toPos.x;
+        const y2 = toPos.y + cardHeight / 2;
+        connectors += `
+          <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#7dd8ff" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)" />
+        `;
+      });
+    });
+
+    const cards = tickets.map((t) => {
+      const pos = positions.get(t.id) || { x: 0, y: 0 };
+      const statusColor = t.status === "done" ? "#6fe3b4" : t.status === "in_progress" ? "#7dd8ff" : "#ff7061";
+      const statusBg = t.status === "done" ? "rgba(111, 227, 180, 0.12)" : t.status === "in_progress" ? "rgba(125, 216, 255, 0.15)" : "rgba(255, 112, 97, 0.12)";
+      const statusLabel = t.status === "done" ? "✔ Done" : t.status === "in_progress" ? "▶ Active" : "⏳ Blocked";
+      const titleEsc = this.escapeHtml(t.title.length > 20 ? t.title.slice(0, 19) + "…" : t.title);
+
+      return `
+        <g class="viz-ticket-node ticket-${t.status}">
+          <rect x="${pos.x}" y="${pos.y}" width="${cardWidth}" height="${cardHeight}" rx="6" fill="${statusBg}" stroke="${statusColor}" stroke-width="1.5" />
+          <text x="${pos.x + 12}" y="${pos.y + 22}" fill="${statusColor}" font-family="var(--font-mono)" font-size="11" font-weight="700">${this.escapeHtml(t.id)}</text>
+          <text x="${pos.x + cardWidth - 12}" y="${pos.y + 22}" text-anchor="end" fill="${statusColor}" font-family="var(--font-mono)" font-size="9" font-weight="600">${statusLabel}</text>
+          <text x="${pos.x + 12}" y="${pos.y + 44}" fill="#edf6ff" font-family="var(--font-sans)" font-size="11" font-weight="500">${titleEsc}</text>
+        </g>
+      `;
+    }).join("");
+
+    return `
+      <svg viewBox="0 0 ${totalWidth} 130" width="100%" height="130" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 8 5 L 0 9 z" fill="#7dd8ff"/>
+          </marker>
+        </defs>
+        ${connectors}
+        ${cards}
+      </svg>
+    `.trim();
+  }
+
   /**
    * Returns the static base dashboard HTML without snapshot injection.
    */
   getBaseDashboardHtml(): string {
-    return DASHBOARD_BASE_HTML;
+    return this.renderWebDashboard();
   }
 
   /**
    * Renders the complete web dashboard HTML document with optional initial snapshot injection.
    */
   renderWebDashboard(snapshot?: DashboardSnapshot | null): string {
+    const activeStage = snapshot ? this.resolveActiveStage(snapshot) : "feature";
+    const initialSvg = this.renderMacroLifecycleSvg(activeStage);
+    let html = DASHBOARD_BASE_HTML.replace(
+      '<div class="visualizer-canvas-container" id="visualizer-container"></div>',
+      `<div class="visualizer-canvas-container" id="visualizer-container">${initialSvg}</div>`
+    );
     if (!snapshot) {
-      return DASHBOARD_BASE_HTML;
+      return html;
     }
     const serialized = this.escapeJsonForHtml(snapshot);
-    return DASHBOARD_BASE_HTML.replace(
+    return html.replace(
       "window.__INITIAL_SNAPSHOT__ = null;",
       `window.__INITIAL_SNAPSHOT__ = ${serialized};`
     );

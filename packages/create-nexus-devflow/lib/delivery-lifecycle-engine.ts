@@ -36,8 +36,9 @@ export interface DeliveryCommitPlan {
   commitMessage: string;
   stagedPaths: string[];
   branchHint: string;
-  recommendedDeliveryOption: "Option 1: Team MR/PR" | "Option 2: Direct Squash-Merge";
+  recommendedDeliveryOption: "Option 1: Direct Squash-Merge (Solo)" | "Option 2: Team MR/PR";
 }
+
 
 function stripCode(value: string): string {
   return value.replace(/^`|`$/g, "").trim();
@@ -460,8 +461,9 @@ export class DeliveryLifecycleEngine {
       commitMessage,
       stagedPaths,
       branchHint: `git checkout main && git merge --squash feature/${taskResult.taskId}`,
-      recommendedDeliveryOption: "Option 1: Team MR/PR",
+      recommendedDeliveryOption: "Option 1: Direct Squash-Merge (Solo)",
     };
+
   }
 }
 

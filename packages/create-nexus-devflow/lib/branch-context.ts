@@ -34,6 +34,7 @@ export interface ActiveRunSummary {
   runId: string;
   title: string;
   status: string;
+  stage?: string;
   track: string;
   branch: string;
   totalTasks: number;
@@ -127,17 +128,20 @@ export async function listActiveRunContexts(projectRoot: string): Promise<Active
 
           let track = "fast";
           let status = "spec_ready";
+          let stage = "feature";
           let branch = `feature/${entry.name}`;
 
           const stagePath = path.join(runDir, "stage.md");
           if (fsSync.existsSync(stagePath)) {
             const stageContent = await fs.readFile(stagePath, "utf8");
-            const trackMatch = stageContent.match(/Track:\s*`?([a-zA-Z0-9_-]+)`?/i);
-            const branchMatch = stageContent.match(/Branch:\s*`?([a-zA-Z0-9_/.-]+)`?/i);
-            const statusMatch = stageContent.match(/Status:\s*`?([a-zA-Z0-9_-]+)`?/i);
+            const trackMatch = stageContent.match(/(?:-\s*(?:\*\*)?Track(?:\*\*)?:\s*|Track:\s*)`?([a-zA-Z0-9_-]+)`?/i);
+            const branchMatch = stageContent.match(/(?:-\s*(?:\*\*)?Branch(?:\*\*)?:\s*|Branch:\s*)`?([a-zA-Z0-9_/.-]+)`?/i);
+            const statusMatch = stageContent.match(/(?:-\s*(?:\*\*)?Status(?:\*\*)?:\s*|Status:\s*)`?([a-zA-Z0-9_-]+)`?/i);
+            const stageMatch = stageContent.match(/(?:-\s*(?:\*\*)?(?:Current Stage|Stage)(?:\*\*)?:\s*|(?:Current Stage|Stage):\s*)`?([a-zA-Z0-9_-]+)`?/i);
             if (trackMatch) track = trackMatch[1];
             if (branchMatch) branch = branchMatch[1];
             if (statusMatch) status = statusMatch[1];
+            if (stageMatch) stage = stageMatch[1];
           }
 
           let hasOpenFindings = false;
@@ -152,6 +156,7 @@ export async function listActiveRunContexts(projectRoot: string): Promise<Active
             runId: entry.name,
             title,
             status,
+            stage,
             track,
             branch,
             totalTasks: total,
