@@ -36,10 +36,19 @@ describe("DashboardStateEngine Seam", () => {
     assert.ok(Array.isArray(blastRadius.directDependents));
   });
 
-  it("dispatches actions and returns structured action results", async () => {
+  it("composes GatekeeperEngine and dispatches gate and reconcile actions", async () => {
     const engine = new DashboardStateEngine(projectRoot);
-    const result = await engine.dispatchAction({ type: "check-gate" });
-    assert.equal(result.ok, true);
-    assert.ok(result.data);
+    assert.ok(engine.gatekeeper);
+    assert.equal(typeof engine.gatekeeper.evaluate, "function");
+    assert.equal(typeof engine.gatekeeper.reconcile, "function");
+
+    const gateResult = await engine.dispatchAction({ type: "check-gate" });
+    assert.equal(gateResult.ok, true);
+    assert.ok(gateResult.data);
+
+    const reconcileResult = await engine.dispatchAction({ type: "reconcile" });
+    assert.equal(reconcileResult.ok, true);
+    assert.ok(reconcileResult.data);
   });
 });
+

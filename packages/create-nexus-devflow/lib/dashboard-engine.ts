@@ -2,8 +2,8 @@ import path from "node:path";
 import { readDashboardSnapshot, type DashboardSnapshot, type DashboardSnapshotOptions } from "./dashboard-snapshot.js";
 import { readProjectStatus, type ProjectStatus } from "./status.js";
 import { buildCodeGraph, calculateBlastRadius, type CodeGraph, type BlastRadiusReport } from "./code-graph.js";
-import { evaluateGate, type GateReport, type GateOptions } from "./gatekeeper.js";
-import { reconcileState, type ReconcileResult } from "./drift-reconciler.js";
+import { GatekeeperEngine, type GateReport, type GateEvaluateOptions } from "./gatekeeper.js";
+import type { ReconcileResult } from "./drift-reconciler.js";
 
 export interface DashboardEngineOptions {
   snapshotOptions?: DashboardSnapshotOptions;
@@ -29,10 +29,12 @@ export class DashboardStateEngine {
   private readonly options: DashboardEngineOptions;
   private cachedSnapshot: DashboardSnapshot | null = null;
   private cachedGraph: CodeGraph | null = null;
+  public readonly gatekeeper: GatekeeperEngine;
 
   constructor(projectRoot: string = process.cwd(), options: DashboardEngineOptions = {}) {
     this.projectRoot = path.resolve(projectRoot);
     this.options = options;
+    this.gatekeeper = new GatekeeperEngine(this.projectRoot);
   }
 
   /**
@@ -95,7 +97,7 @@ export class DashboardStateEngine {
   public async dispatchAction(action: DashboardAction): Promise<ActionResult> {
     switch (action.type) {
       case "check-gate": {
-        const gateReport = await evaluateGate(this.projectRoot, {
+        const gateReport = await this.gatekeeper.evaluate({
           strict: Boolean(action.strict)
         });
         return {
@@ -105,7 +107,7 @@ export class DashboardStateEngine {
         };
       }
       case "reconcile": {
-        const result = await reconcileState(this.projectRoot, {
+        const result = await this.gatekeeper.reconcile({
           autoAddUndocumented: true,
           healStage: true
         });
@@ -119,6 +121,7 @@ export class DashboardStateEngine {
           data: result
         };
       }
+
       case "refresh":
       case "invalidate-cache": {
         this.cachedSnapshot = null;
