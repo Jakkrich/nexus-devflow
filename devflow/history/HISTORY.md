@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-07 | `080` | Feature | Modernize Web Dashboard with Dynamic Archify Visualizer, Recommended Skills & De-cluttering (`DISC-20260907-003`) | `cacd433` | `Released` | [`080-dashboard-workflow-visualizer.md`](features/080-dashboard-workflow-visualizer.md) |
 | 2026-09-07 | `079` | Feature | Decompose Monolithic Dashboard HTML into StudioViewRenderer (`ADR-0010`) | `5381b42` | `Released` | [`079-studio-view-componentization.md`](features/079-studio-view-componentization.md) |
 | 2026-09-07 | `078` | Feature | Absorb Project Status Aggregation into ProjectStatusEngine (`ADR-0009`) | `5381b42` | `Released` | [`078-project-status-engine.md`](features/078-project-status-engine.md) |
 | 2026-09-07 | `077` | Feature | Deepen MCP Protocol Dispatch into McpServerEngine (`ADR-0008`) | `5381b42` | `Released` | [`077-mcp-server-engine.md`](features/077-mcp-server-engine.md) |

@@ -105,6 +105,7 @@ coverage/
 .nyc_output/
 *.lcov
 test-results/
+playwright-report/
 
 # Python Cache & Virtualenvs (if applicable)
 __pycache__/

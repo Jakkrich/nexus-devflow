@@ -27,9 +27,9 @@ test("startDashboardServer starts server and responds to / and /api/status", asy
     assert.equal(rootRes.body.includes("Google Sans Thai"), true);
     assert.equal(rootRes.body.includes("#dual-track{overflow:hidden}"), true);
     assert.equal(rootRes.body.includes(".cmd:focus:after"), true);
-    assert.equal(rootRes.body.includes('id="dual-track"'), true);
+    assert.equal(rootRes.body.includes('id="workflow-visualizer-panel"'), true);
     assert.equal(rootRes.body.includes('id="command-list"'), true);
-    assert.equal(rootRes.body.indexOf('id="dual-track"') < rootRes.body.indexOf('id="next-panel"'), true);
+    assert.equal(rootRes.body.indexOf('id="workflow-visualizer-panel"') < rootRes.body.indexOf('id="next-panel"'), true);
     assert.equal(rootRes.body.indexOf('id="next-panel"') < rootRes.body.indexOf('class="stats"'), true);
 
     const apiRes = await fetchUrl(`${server.url}/api/status`);

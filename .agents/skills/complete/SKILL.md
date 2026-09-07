@@ -135,26 +135,27 @@ and tests, must pass first.
 
 Present the user with two clear delivery options:
 
-### 🔀 Option 1: Team MR / PR Flow (Pull latest main/master & Push dev branch) [Default for Teams]
-- **When to choose**: When working in a team where code reviews happen via GitLab Merge Request (MR) or GitHub Pull Request (PR), or where developers lack direct write access to protected `main`/`master` branches.
+### 🔀 Option 1: Direct Local Squash-Merge / Direct Commit (Solo Mode - For Solo Development)
+- **When to choose**: When working alone (Solo Developer) or possessing direct merge/commit authority to `main` or `master` locally.
 - **Execution Actions**:
-  1. Detect default base branch name (`main` or `master`).
+  1. If on a feature branch: Switch to `main` or `master` (`git checkout <main/master>`), squash-merge the branch (`git merge --squash <feature-branch>`), and commit the work.
+  2. If working directly on local `main`/`master`: Commit the changes directly to the active branch.
+  3. Delete the local feature branch only upon explicit user confirmation.
+  4. **Always stop and ask separately** before pushing local `main`/`master` to the remote upstream repository. Merge approval never implies push approval.
+  5. Run `git push origin <main/master>` only after separate explicit confirmation.
+
+### 🔀 Option 2: Team MR / PR Flow (Team Mode - For Teams / Multi-Developer)
+- **When to choose**: When collaborating in a team with more than one person where code changes require peer review via GitLab Merge Request (MR) or GitHub Pull Request (PR), or where developers lack direct write access to protected `main`/`master` branches.
+- **Execution Actions**:
+  1. Detect the default base branch name (`main` or `master`).
   2. Run `git pull origin <main/master>` (or `git fetch origin <main/master> && git merge origin/<main/master>`) to bring the latest upstream changes into the active feature/dev branch.
-  3. If merge conflicts occur, highlight them clearly and help the user resolve them.
+  3. If merge conflicts occur, highlight them clearly and guide the user through resolution.
   4. Run `Verify` (or build & tests) to ensure integrity after the merge.
   5. Run `git push origin <current-feature-branch>` to push the up-to-date branch to the remote repository.
   6. Stop and inform the user that the branch is synchronized and pushed, ready for them to open a Merge Request (MR / PR) on GitLab/GitHub.
   7. **Do NOT merge into local `main`/`master` and do NOT delete the branch.**
 
-### 🔀 Option 2: Direct Local Squash-Merge (Solo / Direct Access Mode)
-- **When to choose**: Only when the user explicitly instructs that they want to merge directly into `main` or `master` locally now (e.g. solo projects or Tech Leads with merge privileges).
-- **Execution Actions**:
-  1. Switch to `main` or `master`: `git checkout <main/master>`.
-  2. Squash-merge the branch: `git merge --squash <feature-branch>`.
-  3. Commit the squash-merge.
-  4. Delete the local feature branch only with the user's explicit consent.
-  5. **Stop and ask separately** before pushing local `main`/`master` to remote upstream. The merge approval does NOT count as push approval.
-  6. Run `git push origin <main/master>` only after separate explicit confirmation.
+
 
 ---
 

@@ -230,11 +230,12 @@
 
 ---
 
-## 🛡️ Phase 29: DevFlow Development Files Hygiene & Client Repo Isolation
+## 🖥️ Phase 30: Modernize Web Dashboard with Dynamic Archify Visualizer & Recommended Skills
 
-- [x] **29. DevFlow Internal Development Files Hygiene, Git Ignore Hardening, and Client Repo Isolation (`DISC-20260907-002`, `074-devflow-development-files-hygiene-and-client-isolation`)** `[Size: S]`
-  - *Dependencies*: DISC-20260907-002
-  - *Scope*: ปรับปรุง `.gitignore` ให้ครอบคลุม `devflow/inbox/*/raw/*`, `devflow/analysis/*`, และไฟล์ทดสอบ/แคชชั่วคราว, เสริมระบบคัดกรองใน `packages/create-nexus-devflow/scripts/prepare-template.ts` เพื่อป้องกันไม่ให้ไฟล์วิเคราะห์และข้อมูลดิบหลุดเข้า Starter Template, เพิ่มคู่มือและคำแนะนำใน `onboard/SKILL.md` และ `adopt/SKILL.md` สำหรับโหมด Local-Only (Zero-Visibility) พร้อม automated tests ตรวจสอบความสะอาดของ template ก่อน publish
+- [x] **30. Modernize Web Dashboard with Dynamic Archify Visualizer & Recommended Skills (`DISC-20260907-003`, `080-dashboard-workflow-visualizer`)** `[Size: M]`
+  - *Dependencies*: Feature 28, DISC-20260907-003
+  - *Scope*: เพิ่ม Dynamic Archify SVG Workflow Visualizer (Macro Lifecycle Pulse Map พร้อม CSS Trace Motion และ Micro Tracer-Bullet Tickets DAG), เพิ่มการ์ด Recommended Skills & Vendors (`matt-pocock`, `bughunter`, `archify`, `diagram-design`, `9arm-skills`) พร้อมตรวจจับสถานะติดตั้งจริงและแสดงป้ายติ๊กถูก ✔, ปรับลดความรกบนแดชบอร์ด (ลบ Swarm Tab, ยุบ Doctor สรุปคลีน), เพิ่มข้อมูลใน `DashboardSnapshot` และชุดทดสอบความถูกต้องผ่าน 100%
+
 
 
 

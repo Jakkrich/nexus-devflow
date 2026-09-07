@@ -40,10 +40,45 @@ test("readDashboardSnapshot composes status, workflow, history, doctor and offli
     assert.equal(typeof snapshot.graph.totalFiles, "number");
     assert.ok(Array.isArray(snapshot.mcpTools));
     assert.equal(snapshot.mcpTools.length, 12);
+    assert.ok(Array.isArray(snapshot.recommendedSkills));
+    assert.ok(snapshot.recommendedSkills.length >= 5);
+    assert.ok(Array.isArray(snapshot.activeTickets));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("readDashboardSnapshot detects active tracer-bullet tickets from context", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-tickets-"));
+  try {
+    const taskDir = path.join(tempDir, "devflow", "context", "080-test-task");
+    const ticketsDir = path.join(taskDir, "tickets");
+    await fs.mkdir(ticketsDir, { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Nexus-DevFlow");
+    await fs.writeFile(path.join(taskDir, "spec.md"), "# Spec 080\nStatus: In Progress");
+
+    await fs.writeFile(
+      path.join(ticketsDir, "01-first.md"),
+      "# Ticket 01: First Seam\n- **Status**: Done\n- **Blocked by**: None"
+    );
+    await fs.writeFile(
+      path.join(ticketsDir, "02-second.md"),
+      "# Ticket 02: Second Adapters\n- **Status**: In Progress\n- **Blocked by**: 01"
+    );
+
+    clearDashboardSnapshotCache();
+    const snapshot = await readDashboardSnapshot(tempDir);
+    assert.ok(Array.isArray(snapshot.activeTickets));
+    assert.equal(snapshot.activeTickets.length, 2);
+    assert.equal(snapshot.activeTickets[0].id, "01");
+    assert.equal(snapshot.activeTickets[0].status, "done");
+    assert.equal(snapshot.activeTickets[1].id, "02");
+    assert.equal(snapshot.activeTickets[1].status, "in_progress");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
 
 
 test("selectDashboardNextAction prefers the active workflow stage", () => {
