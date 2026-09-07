@@ -5,6 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.4] - 2026-09-07
+
+### Added
+- **DevFlow Internal Development Files Hygiene, Git Ignore Hardening, and Client Repo Isolation (074)**:
+  - **Git Ignore Hardening**: Added `devflow/inbox/*/raw/*`, `devflow/inbox/raw/*`, `devflow/analysis/*`, `devflow/scratch/*`, and `evals/results/` to `.gitignore` to prevent raw client documents, secrets, and transient analysis files from being tracked or committed.
+  - **Packaging Sanitization Engine (`prepare-template.ts`)**: Implemented `matchesPrefix` helper to strictly exclude development and transient folders (`inbox`, `analysis`, `scratch`, `tmp`, `temp`, `brainstorm`, `reports`, `research`, `prototypes`, `evals`, `.nexus`) from the `@jakkrichm/create-nexus-devflow` template.
+  - **Automated Packaging Test Suite**: Added `packages/create-nexus-devflow/test/prepare-template.test.ts` to enforce template hygiene and ignore rules before publishing.
+  - **Enhanced Client Visibility & Local-Only Workflow**: Updated Step 6 in `onboard` and Step 5 in `adopt` (both `.agents/` and `.claude/`) with comprehensive `.gitignore` rules for Committed and Local-Only (Zero-Visibility) modes, along with safe `git rm --cached -r` guidance.
+
 ## [2.12.3] - 2026-09-07
 
 ### Added
