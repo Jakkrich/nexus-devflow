@@ -130,3 +130,19 @@ The helper writes this schema:
 - Test installer package: `npm test`
 - Package smoke test: `npm run test:package`
 - Browser tests (Optional): `npm run test:browser` (via Playwright) + MCP `browseros-neo` (`http://127.0.0.1:9010/mcp`) for interactive live visual QA
+
+---
+
+## Agent skills
+
+### Issue tracker
+
+Local markdown files in `.scratch/`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Canonical 5 triage roles. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context (`CONTEXT.md` + `docs/adr/`). See `docs/agents/domain.md`.
