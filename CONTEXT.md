@@ -27,3 +27,11 @@ _Avoid_: Dashboard server, dashboard backend, snapshot handler
 **Dashboard Transport Adapter**:
 A concrete presentation or network adapter (HTTP server, IDE Webview) that translates external requests into calls against the Dashboard State Engine.
 _Avoid_: Dashboard controller, route handler
+
+**Gatekeeper Engine**:
+The centralized policy enforcement and verification engine that evaluates Two-Stage quality criteria (Spec Fidelity & Code Quality), absorbs finding blocker inspection, detects Git drift, and triggers state reconciliation behind a unified seam.
+_Avoid_: Gate check, gate script, verification runner
+
+**Gate Policy**:
+The deterministic set of quality rules defined in `devflow/config.json` that governs whether gates run in strict, standard, or conditional modes (e.g. `when-sensitive`, `always`, `manual`).
+_Avoid_: Gate settings, gate flags, config overrides
