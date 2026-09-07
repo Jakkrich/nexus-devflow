@@ -3,7 +3,7 @@
   "diagram_type": "architecture",
   "meta": {
     "title": "Nexus-DevFlow System Architecture",
-    "output": "docs/diagrams/nexus-devflow-architecture.html",
+    "output": "devflow/docs/diagrams/nexus-devflow-architecture.html",
     "quality_profile": "showcase",
     "views": [
       {

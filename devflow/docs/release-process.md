@@ -7,7 +7,7 @@ This guide is for framework maintainers preparing a Nexus-DevFlow release. Keep 
 ## 1. Pre-Release Readiness
 
 - Confirm the intended release scope before changing version or release wording.
-- Confirm that maintainer-facing and user-facing docs (`README.md`, `README.th.md`, `docs/`) stay aligned.
+- Confirm that maintainer-facing and user-facing docs (`README.md`, `README.th.md`, `devflow/docs/`) stay aligned.
 - Review `ROADMAP.md` only for a status refresh when the release changes roadmap milestones.
 - Decide whether the release is patch, minor, or major according to Semantic Versioning.
 

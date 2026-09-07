@@ -3,7 +3,7 @@
   "diagram_type": "lifecycle",
   "meta": {
     "title": "Nexus-DevFlow Living Spec Lifecycle",
-    "output": "docs/diagrams/nexus-devflow-lifecycle.html",
+    "output": "devflow/docs/diagrams/nexus-devflow-lifecycle.html",
     "viewBox": [980, 680],
     "animation": "trace",
     "visual_preset": "signal-flow",

@@ -27,7 +27,7 @@ Example:
 ## 3. Documentation Placement Rule
 
 - Update `README.md`, `README.th.md`, and `USAGE.md` only when maintainers or users need the change to be discoverable from a high-surface entry point.
-- Put maintainer-operating detail in focused docs under `docs/` instead of expanding public onboarding pages.
+- Put maintainer-operating detail in focused docs under `devflow/docs/` instead of expanding public onboarding pages.
 - Keep `AGENTS.md` aligned with workflow, agent, and skill boundaries, but avoid turning it into a full maintainer manual.
 
 ---

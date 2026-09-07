@@ -8,7 +8,7 @@ This guide provides full operating instructions for **Nexus-DevFlow 2.13.0 (The 
 
 Nexus-DevFlow structures development history and active context into three distinct temporal pillars:
 
-1. **🔮 Future (Backlog)**: [`devflow/ideas.md`](../devflow/ideas.md), [`devflow/project-plan.md`](../devflow/project-plan.md), [`devflow/build-plan.md`](../devflow/build-plan.md)
+1. **🔮 Future (Backlog)**: [`devflow/ideas.md`](../ideas.md), [`devflow/project-plan.md`](../project-plan.md), [`devflow/build-plan.md`](../build-plan.md)
    - Centralized Idea Inbox with AI feasibility, value scoring, and priority tagging (`[IDEA-xxx]`).
    - Product vision and master build-plan sequencing.
    - Quick idea capture via `/idea {description}`.

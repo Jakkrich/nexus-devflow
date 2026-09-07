@@ -110,7 +110,7 @@ Every delivery run operates on `devflow/context/{xxx-slug}/spec.md`, structured 
 ## 5. Reference Examples
 
 For complete markdown templates and living spec examples, refer to:
-- [`docs/examples/living-spec/current-feature.example.md`](examples/living-spec/current-feature.example.md)
-- [`docs/examples/living-spec/discovery.example.md`](examples/living-spec/discovery.example.md)
-- [`docs/examples/living-spec/adr.example.md`](examples/living-spec/adr.example.md)
-- [`docs/examples/living-spec/ideas.example.md`](examples/living-spec/ideas.example.md)
+- [`devflow/docs/examples/living-spec/current-feature.example.md`](examples/living-spec/current-feature.example.md)
+- [`devflow/docs/examples/living-spec/discovery.example.md`](examples/living-spec/discovery.example.md)
+- [`devflow/docs/examples/living-spec/adr.example.md`](examples/living-spec/adr.example.md)
+- [`devflow/docs/examples/living-spec/ideas.example.md`](examples/living-spec/ideas.example.md)
