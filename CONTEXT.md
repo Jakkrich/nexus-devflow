@@ -40,3 +40,17 @@ _Avoid_: Gate settings, gate flags, config overrides
 The authoritative engine that resolves active task workspaces (`devflow/context/{xxx-slug}/`), detects Git branch alignment, parses living spec task checklists, and tracks workflow state behind a unified in-memory seam.
 _Avoid_: Branch context resolver, current work parser, stage detector
 
+**Studio View Renderer**:
+The deep presentation and component engine that renders the 3-Pillars Workspace, dual-track steppers, and real-time project status across web browsers and IDE Webviews behind a unified, adaptive design system.
+_Avoid_: Dashboard template, HTML generator, studio builder
+
+**Delivery Lifecycle Engine**:
+The deep transactional engine that orchestrates the 4-stage task delivery boundary, atomic archiving of living specs into historical categories, bidirectional build-plan synchronization, and history ledger recording behind a unified seam.
+_Avoid_: Task archiver, history writer, completion script
+
+**History Ledger**:
+The structured, chronological markdown ledger (`devflow/history/HISTORY.md`) and in-memory table model that tracks all released delivery runs, categories, git commit references, and archive links.
+_Avoid_: Release log, changelog table, history file
+
+
+
