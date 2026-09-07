@@ -5,6 +5,16 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.3] - 2026-09-07
+
+### Added
+- **Upstream AI Blueprint v1.5.4 – v1.6.0 Synchronization (073)**:
+  - **Automatic Independent Review (`review.independentExecution: "automatic" | "manual"`)**: Automatic spawning of isolated child subagent with clean checkpoints for independent code audits. Receipts recorded in `review.md` and `devflow/history/` with metadata (`Requested execution`, `Actual execution`, `Reviewer context: fresh subagent` vs `fresh session`).
+  - **Sensitive-Domain Quality Gates Defaults**: `qualityGates.regular.independentReview` and `qualityGates.continuous.independentReview` default to `when-sensitive` (triggers on auth, secrets, payments, destructive operations, deployment boundaries).
+  - **Post-Implementation Code Walkthroughs**: Optional read-only architecture and code walkthrough offering at the end of `/implement` and `/autopilot`.
+  - **Hardened Status & Strict Spec Heading Contracts**: Enforced strict `# Feature: <title>`, `# Fix: <title>`, `# Rollback: Feature <id> - <title>` heading parsing in `current-work.ts` and `status.ts` to prevent false dashboard attention states.
+  - **Sortable Findings & Active Roadmap Focus**: Dashboard engine enhancements supporting sortable findings tables and focused roadmap view.
+
 ## [2.12.2] - 2026-09-04
 
 ### Added
