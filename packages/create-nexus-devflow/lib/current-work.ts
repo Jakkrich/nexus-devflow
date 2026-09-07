@@ -43,38 +43,13 @@ const RESET_MARKER = "_Nothing in progress.";
 const CHECKBOX_PATTERN = /^\s*-\s+\[([ xX])\]\s+(.+?)\s*$/;
 const COMPATIBILITY_FEATURE_PATTERN = /^\*\*Feature ([0-9]+[a-zA-Z]?): ([^*\r\n]+)\*\*\s*$/m;
 
+import { ActiveContextEngine } from "./active-context-engine.js";
+
 async function readCurrentWork(projectRoot: string): Promise<CurrentWorkSummary> {
-  const contextPaths = await resolveActiveContextPaths(projectRoot);
-  const currentStageFile = contextPaths.stagePath;
-  const devflowFeatureFile = contextPaths.featureSpecPath;
-
-  if (!devflowFeatureFile) {
-    return idleSummary();
-  }
-
-  try {
-    let activeRunningId: string | null = null;
-    if (currentStageFile) {
-      const stageStats = await fs.lstat(currentStageFile).catch(() => null);
-      if (stageStats?.isFile()) {
-        const stageContent = await fs.readFile(currentStageFile, "utf8");
-        activeRunningId = extractStageField(stageContent, "Active Running ID");
-      }
-    }
-
-    const fastSummary = await readFastTrackWork(devflowFeatureFile);
-    if (fastSummary.state === "active") {
-      if (activeRunningId && activeRunningId.toLowerCase() !== "none") {
-        fastSummary.runId = activeRunningId;
-      }
-      return fastSummary;
-    }
-  } catch {
-    // Return idle on read error
-  }
-
-  return idleSummary();
+  const engine = new ActiveContextEngine(projectRoot);
+  return engine.getCurrentWork();
 }
+
 
 function extractStageField(markdown: string, label: string): string | null {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

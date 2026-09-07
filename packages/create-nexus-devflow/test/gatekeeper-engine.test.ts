@@ -22,6 +22,10 @@ test("GatekeeperEngine: passes evaluation on clean idle workspace", async () => 
     assert.equal(findings.total, 0);
     assert.equal(findings.blockers.length, 0);
 
+    assert.ok(engine.context);
+    const activeCtx = await engine.getActiveContext();
+    assert.equal(activeCtx.state, "idle");
+
     const report = await engine.evaluate();
     assert.equal(report.passed, true);
     assert.equal(report.exitCode, 0);
@@ -29,6 +33,7 @@ test("GatekeeperEngine: passes evaluation on clean idle workspace", async () => 
     assert.equal(report.twoStage.stage1SpecFidelity, true);
     assert.equal(report.twoStage.stage2CodeQuality, true);
   } finally {
+
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });

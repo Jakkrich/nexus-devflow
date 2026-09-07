@@ -35,3 +35,8 @@ _Avoid_: Gate check, gate script, verification runner
 **Gate Policy**:
 The deterministic set of quality rules defined in `devflow/config.json` that governs whether gates run in strict, standard, or conditional modes (e.g. `when-sensitive`, `always`, `manual`).
 _Avoid_: Gate settings, gate flags, config overrides
+
+**Active Context Engine**:
+The authoritative engine that resolves active task workspaces (`devflow/context/{xxx-slug}/`), detects Git branch alignment, parses living spec task checklists, and tracks workflow state behind a unified in-memory seam.
+_Avoid_: Branch context resolver, current work parser, stage detector
+

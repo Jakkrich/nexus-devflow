@@ -2,6 +2,11 @@ import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
 import { readGitStatus } from "./git-status.js";
+export {
+  ActiveContextEngine,
+  type ActiveContextEngineOptions,
+  type ActiveTaskContext
+} from "./active-context-engine.js";
 
 export interface ActiveContextPaths {
   isBranchScoped: boolean;
