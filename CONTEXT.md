@@ -52,5 +52,18 @@ _Avoid_: Task archiver, history writer, completion script
 The structured, chronological markdown ledger (`devflow/history/HISTORY.md`) and in-memory table model that tracks all released delivery runs, categories, git commit references, and archive links.
 _Avoid_: Release log, changelog table, history file
 
+**Skill Registry Engine**:
+The deep lifecycle engine that orchestrates skill cataloging, package resolution, repository cloning, compound knowledge unpacking, and multi-adapter synchronization behind a minimal programmatic seam (`list`, `install`, `sync`).
+_Avoid_: Skill manager, skill script, skill downloader
 
+**Skill Repository Adapter**:
+A swappable adapter satisfying the skill resolution seam for specific storage or remote sources (e.g. `GitCloneAdapter`, `NpmArchiveAdapter`, `InMemoryRepositoryAdapter`).
+_Avoid_: Git helper, npm fetcher
 
+**MCP Server Engine**:
+The protocol and tool dispatch engine that exposes DevFlow intelligence to MCP clients behind a protocol-agnostic in-memory message seam (`handleMessage`) and registered tool adapters.
+_Avoid_: MCP script, MCP runner, JSON-RPC handler
+
+**Project Status Engine**:
+The deep evaluation engine that consolidates active task context, gate policies, Git porcelain status, review state, and findings into an atomic, verified project health snapshot (`getStatus`).
+_Avoid_: Status script, status formatter, health check runner

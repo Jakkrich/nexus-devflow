@@ -8,6 +8,12 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-07 | `079` | Feature | Decompose Monolithic Dashboard HTML into StudioViewRenderer (`ADR-0010`) | `5381b42` | `Released` | [`079-studio-view-componentization.md`](features/079-studio-view-componentization.md) |
+| 2026-09-07 | `078` | Feature | Absorb Project Status Aggregation into ProjectStatusEngine (`ADR-0009`) | `5381b42` | `Released` | [`078-project-status-engine.md`](features/078-project-status-engine.md) |
+| 2026-09-07 | `077` | Feature | Deepen MCP Protocol Dispatch into McpServerEngine (`ADR-0008`) | `5381b42` | `Released` | [`077-mcp-server-engine.md`](features/077-mcp-server-engine.md) |
+| 2026-09-07 | `076` | Feature | Collapse Skill Lifecycle into SkillRegistryEngine (`ADR-0007`) | `5381b42` | `Released` | [`076-skill-registry-engine.md`](features/076-skill-registry-engine.md) |
+
+
 | 2026-09-07 | `075` | Feature | DevFlow `/implement` รองรับ Input จาก `to-tickets` (Tracer-Bullet Tickets Bridge for Matt Pocock Main Flow) | `c737b98` | `Released` | [`075-implement-to-tickets-bridge.md`](features/075-implement-to-tickets-bridge.md) |
 | 2026-09-07 | `074` | Feature | DevFlow Internal Development Files Hygiene, Git Ignore Hardening, and Client Repo Isolation (`DISC-20260907-002`) | `24b846a` | `Released` | [`074-devflow-development-files-hygiene-and-client-isolation.md`](features/074-devflow-development-files-hygiene-and-client-isolation.md) |
 | 2026-09-07 | `073` | Feature | ซิงก์ส่วนขยาย Upstream AI Blueprint (v1.5.4 – v1.6.0) — Automatic Independent Review, Post-Implementation Walkthroughs & Hardened Dashboard Engine (`DISC-20260907-001`) | `HEAD` | `Released` | [`073-sync-upstream-ai-blueprint-v154-v160.md`](features/073-sync-upstream-ai-blueprint-v154-v160.md) |
