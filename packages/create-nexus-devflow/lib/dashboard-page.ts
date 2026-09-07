@@ -384,4 +384,22 @@ const DASHBOARD_PAGE_HTML = `<!doctype html>
 </body>
 </html>`;
 
+import type { DashboardSnapshot } from "./dashboard-snapshot.js";
+
+/**
+ * Safely renders the dashboard HTML page with an optional embedded snapshot.
+ * Escapes `<` to `\u003c` to avoid closing the script tag or triggering XSS.
+ */
+export function renderDashboardPage(snapshot?: DashboardSnapshot | null): string {
+  if (!snapshot) {
+    return DASHBOARD_PAGE_HTML;
+  }
+  const serialized = JSON.stringify(snapshot).replace(/</g, "\\u003c");
+  return DASHBOARD_PAGE_HTML.replace(
+    "window.__INITIAL_SNAPSHOT__ = null;",
+    `window.__INITIAL_SNAPSHOT__ = ${serialized};`
+  );
+}
+
 export { DASHBOARD_PAGE_HTML };
+
