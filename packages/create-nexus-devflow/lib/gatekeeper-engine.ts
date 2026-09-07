@@ -37,18 +37,30 @@ export interface ReconcileOptions {
   healStage?: boolean;
 }
 
+import { ActiveContextEngine, type ActiveTaskContext } from "./active-context-engine.js";
+
 export class GatekeeperEngine {
   public readonly projectRoot: string;
   private readonly options: GatekeeperEngineOptions;
   private cachedConfig: ProjectConfig | null = null;
+  public readonly context: ActiveContextEngine;
 
   constructor(projectRoot: string = process.cwd(), options: GatekeeperEngineOptions = {}) {
     this.projectRoot = path.resolve(projectRoot);
     this.options = options;
+    this.context = new ActiveContextEngine(this.projectRoot);
     if (options.config) {
       this.cachedConfig = options.config;
     }
   }
+
+  /**
+   * Retrieves active task context through composed ActiveContextEngine.
+   */
+  public async getActiveContext(): Promise<ActiveTaskContext> {
+    return this.context.getActiveContext();
+  }
+
 
   /**
    * Resolves project configuration from devflow/config.json or defaults.
