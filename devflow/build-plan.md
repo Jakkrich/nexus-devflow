@@ -228,5 +228,14 @@
   - *Dependencies*: Feature 27, DISC-20260907-001
   - *Scope*: นำเข้าระบบตรวจทานอิสระแบบอัตโนมัติ (`review.independentExecution: "automatic"` พร้อม Isolated Subagent Spawning, Receipts Metadata Schema), ปรับค่าเริ่มต้น Quality Gates เป็น `when-sensitive`, เพิ่ม Post-Implementation Code Walkthrough ใน `implement` / `autopilot`, ปรับปรุงความทนทานของสถานะโครงการและ Dashboard (Sortable Findings, Roadmap Focus, Strict Heading Contracts), อัปเดต Framework Validation และ Unit Tests ผ่าน 100%
 
+---
+
+## 🛡️ Phase 29: DevFlow Development Files Hygiene & Client Repo Isolation
+
+- [x] **29. DevFlow Internal Development Files Hygiene, Git Ignore Hardening, and Client Repo Isolation (`DISC-20260907-002`, `074-devflow-development-files-hygiene-and-client-isolation`)** `[Size: S]`
+  - *Dependencies*: DISC-20260907-002
+  - *Scope*: ปรับปรุง `.gitignore` ให้ครอบคลุม `devflow/inbox/*/raw/*`, `devflow/analysis/*`, และไฟล์ทดสอบ/แคชชั่วคราว, เสริมระบบคัดกรองใน `packages/create-nexus-devflow/scripts/prepare-template.ts` เพื่อป้องกันไม่ให้ไฟล์วิเคราะห์และข้อมูลดิบหลุดเข้า Starter Template, เพิ่มคู่มือและคำแนะนำใน `onboard/SKILL.md` และ `adopt/SKILL.md` สำหรับโหมด Local-Only (Zero-Visibility) พร้อม automated tests ตรวจสอบความสะอาดของ template ก่อน publish
+
+
 
 

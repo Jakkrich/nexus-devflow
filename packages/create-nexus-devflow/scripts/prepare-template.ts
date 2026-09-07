@@ -21,6 +21,10 @@ const entries = [
   "LICENSE"
 ];
 
+function matchesPrefix(filePath: string, prefix: string): boolean {
+  return filePath === prefix || filePath.startsWith(`${prefix}/`);
+}
+
 async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<void> {
   const source = path.join(repoRoot, entry);
   const target = path.join(templateRoot, entry);
@@ -32,7 +36,7 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
         if (!shouldIncludeTemplatePath(normalized, inventory)) {
           return false;
         }
-        if (normalized.startsWith("devflow/.state/")) {
+        if (matchesPrefix(normalized, "devflow/.state")) {
           return false;
         }
         if (
@@ -84,15 +88,29 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
         ) {
           return false;
         }
-        if (normalized.startsWith("devflow/research/")) {
+        if (
+          matchesPrefix(normalized, "devflow/inbox") ||
+          matchesPrefix(normalized, "devflow/analysis") ||
+          matchesPrefix(normalized, "devflow/scratch") ||
+          matchesPrefix(normalized, "devflow/tmp") ||
+          matchesPrefix(normalized, "devflow/temp") ||
+          matchesPrefix(normalized, "devflow/brainstorm") ||
+          matchesPrefix(normalized, "devflow/brainstorms") ||
+          matchesPrefix(normalized, "devflow/backups") ||
+          matchesPrefix(normalized, "devflow/reports") ||
+          matchesPrefix(normalized, "devflow/research") ||
+          matchesPrefix(normalized, "prototypes") ||
+          matchesPrefix(normalized, "evals") ||
+          matchesPrefix(normalized, ".nexus")
+        ) {
           return false;
         }
         if (
-          normalized.startsWith("devflow/.vendor/") ||
-          normalized.startsWith("devflow/reference/bughunter/skills/") ||
-          normalized.startsWith("devflow/reference/bughunter/commands/") ||
-          normalized.startsWith("devflow/reference/bughunter/disclosed-reports/") ||
-          normalized.startsWith("devflow/reference/bughunter/docs/")
+          matchesPrefix(normalized, "devflow/.vendor") ||
+          matchesPrefix(normalized, "devflow/reference/bughunter/skills") ||
+          matchesPrefix(normalized, "devflow/reference/bughunter/commands") ||
+          matchesPrefix(normalized, "devflow/reference/bughunter/disclosed-reports") ||
+          matchesPrefix(normalized, "devflow/reference/bughunter/docs")
         ) {
           return false;
         }

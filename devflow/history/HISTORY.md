@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-07 | `074` | Feature | DevFlow Internal Development Files Hygiene, Git Ignore Hardening, and Client Repo Isolation (`DISC-20260907-002`) | `24b846a` | `Released` | [`074-devflow-development-files-hygiene-and-client-isolation.md`](features/074-devflow-development-files-hygiene-and-client-isolation.md) |
 | 2026-09-07 | `073` | Feature | ซิงก์ส่วนขยาย Upstream AI Blueprint (v1.5.4 – v1.6.0) — Automatic Independent Review, Post-Implementation Walkthroughs & Hardened Dashboard Engine (`DISC-20260907-001`) | `HEAD` | `Released` | [`073-sync-upstream-ai-blueprint-v154-v160.md`](features/073-sync-upstream-ai-blueprint-v154-v160.md) |
 | 2026-09-04 | `072` | Feature | ซิงก์ส่วนขยาย Upstream AI Blueprint (v1.5.3) — Manifest-Aware Adapter Selection in Onboard & E2E Scenario Parity (`REQ-20260904-001`) | `HEAD` | `Released` | [`072-sync-upstream-ai-blueprint-v153.md`](features/072-sync-upstream-ai-blueprint-v153.md) |
 | 2026-09-03 | `071` | Feature | ซิงก์ส่วนขยาย Upstream AI Blueprint (v1.5.2) — Unborn Repository Onboarding & Branch Baseline Finalization (`REQ-20260903-001`) | `HEAD` | `Released` | [`071-sync-upstream-ai-blueprint-v152.md`](features/071-sync-upstream-ai-blueprint-v152.md) |

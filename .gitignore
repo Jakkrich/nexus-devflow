@@ -59,11 +59,17 @@ devflow/scratch/*
 devflow/decisions/*
 !devflow/decisions/.gitkeep
 !devflow/decisions/README.md
+devflow/inbox/*/raw/*
+devflow/inbox/raw/*
+devflow/analysis/*
+!devflow/analysis/.gitkeep
 devflow/tmp/*
 devflow/temp/*
 devflow/brainstorm/*
 devflow/brainstorms/*
 devflow/backups/*
+evals/results/
+
 
 # DevFlow Internal State, Branches & Backups
 .devflow/
