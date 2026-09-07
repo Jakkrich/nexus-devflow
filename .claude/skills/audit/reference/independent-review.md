@@ -11,7 +11,7 @@ work, archived by `/complete`, and then reset.
 
 > **Generated file.** Holds the active independent-review request or latest
 > receipt for the current work item. `/audit independent current` prepares a
-> handoff against an approved checkpoint, a fresh reviewer session completes it,
+> handoff against an approved checkpoint, a fresh reviewer context completes it,
 > and `/complete` refuses stale, pending, or changes-requested review state.
 
 _No independent review requested. Run `/audit independent current` to prepare one._
@@ -30,6 +30,11 @@ review runtime cannot select a specific model before the session starts, use
 `runtime default (exact model not known until reviewer starts)` for Requested
 model and record the exact runtime model in the completed receipt.
 
+A pending request without `Requested execution` is a legacy manual request.
+Never auto-upgrade it or send it to a subagent. Complete it only from a fresh
+reviewer session, keep `Reviewer context: fresh session`, and omit `Actual
+execution` so both execution fields remain absent.
+
 ```markdown
 # Independent Review
 
@@ -42,6 +47,7 @@ model and record the exact runtime model in the completed receipt.
 **Builder model:** <exact model reported by the builder runtime>
 **Requested reviewer:** <adapter>
 **Requested model:** <exact model or user-selected runtime default>
+**Requested execution:** <manual or automatic>
 **Requested at:** <ISO-8601 timestamp>
 **Workflow:** <regular or continuous>
 **Check required:** <yes or no>
@@ -49,7 +55,7 @@ model and record the exact runtime model in the completed receipt.
 ## Handoff
 
 Review the active spec and the complete `<base>..<target>` delta in a fresh
-session without the builder conversation. Run all Audit lenses from scratch.
+session or isolated subagent without the builder conversation. Run all Audit lenses from scratch.
 Run Check when required above. Do not edit product code, accept findings, or
 reuse the existing findings as the review scope.
 ```
@@ -68,7 +74,8 @@ Keep the request fields unchanged and replace `pending` with `passed` or
 ```markdown
 **Reviewer adapter:** <adapter>
 **Reviewer model:** <exact model reported by the reviewer runtime>
-**Reviewer context:** fresh session
+**Reviewer context:** <fresh session or fresh subagent>
+**Actual execution:** <manual or automatic>
 **Reviewed at:** <ISO-8601 timestamp>
 **Scope:** current
 **Lenses:** quality, security, performance, tests
@@ -104,7 +111,14 @@ Use `passed` only when all four lenses covered the complete target delta, every
 required check passed, and no P0 or P1 finding is `open` or `fixed`.
 P2 and P3 findings may remain with their normal ledger status. Use
 `changes-requested` for a blocking finding, failed required check, incomplete
-scope, adapter mismatch, or missing fresh-session declaration.
+scope, adapter mismatch, or missing a valid fresh-context declaration.
+
+Execution and context must agree. A manual request completes only as actual
+`manual` with `fresh session`. An automatic request normally completes as
+actual `automatic` with `fresh subagent`; when automatic capability falls back,
+it may complete as actual `manual` with `fresh session`. Reject every other
+pairing. Legacy receipts with neither execution field remain valid only with
+`fresh session`; a legacy receipt can never claim `fresh subagent`.
 
 ## Freshness
 
@@ -122,7 +136,20 @@ A receipt is current only when all of these hold:
   request explicitly selected the runtime-default sentinel above. In that case,
   `Reviewer model` must still contain the exact model exposed after the reviewer
   session starts, never the sentinel itself.
+- `Reviewer context` is exactly `fresh session` or `fresh subagent`. A subagent
+  receipt is valid only when the runtime started it without the builder
+  transcript and exposed its exact adapter and model. The automatic child is a
+  generic current-runtime child instructed from the project-local Audit skill
+  and this project-local contract. It never depends on a global role, skill,
+  prompt, or another workflow.
+- `Requested execution` and `Actual execution` form one of the allowed pairings
+  above. New requests always record the requested value, and new receipts always
+  record the actual value.
 
 Any other code, test, configuration, spec, or acceptance-criteria change makes
 the receipt stale. A stale receipt never proves the new state. Prepare a new
 request against a new approved checkpoint and review the whole delta again.
+
+The adapter, model, and context fields are declared metadata. DevFlow proves
+the target and staleness, but it cannot cryptographically prove that a separate
+agent or fresh context performed the review.

@@ -29,12 +29,15 @@ _No independent review requested. Run /audit independent current to prepare one.
 });
 
 test("parseIndependentReview reads pending and completed records", () => {
-  const pending = parseIndependentReview(reviewRecord("pending"));
+  const pending = parseIndependentReview(
+    reviewRecord("pending", false, { requested: "automatic" })
+  );
 
   assert.equal(pending.state, "pending");
   assert.equal(pending.targetCommit, TARGET);
   assert.equal(pending.requestedReviewer, "claude");
   assert.equal(pending.requestedModel, "claude-opus");
+  assert.equal(pending.requestedExecution, "automatic");
 
   const passed = parseIndependentReview(reviewRecord("passed", true));
 
@@ -42,7 +45,105 @@ test("parseIndependentReview reads pending and completed records", () => {
   assert.equal(passed.reviewerAdapter, "claude");
   assert.equal(passed.reviewerModel, "claude-opus");
   assert.equal(passed.reviewerContext, "fresh session");
+  assert.equal(passed.requestedExecution, null);
+  assert.equal(passed.actualExecution, null);
   assert.equal(passed.checkResult, "not-required");
+
+  const subagent = parseIndependentReview(
+    reviewRecord("passed", true, {
+      requested: "automatic",
+      actual: "automatic",
+      context: "fresh subagent"
+    })
+  );
+  assert.equal(subagent.state, "passed");
+  assert.equal(subagent.reviewerContext, "fresh subagent");
+  assert.equal(subagent.requestedExecution, "automatic");
+  assert.equal(subagent.actualExecution, "automatic");
+});
+
+test("parseIndependentReview keeps legacy pending and completed reviews manual-only", () => {
+  const pending = parseIndependentReview(reviewRecord("pending"));
+  assert.equal(pending.state, "pending");
+  assert.equal(pending.requestedExecution, null);
+
+  const completed = parseIndependentReview(reviewRecord("passed", true));
+  assert.equal(completed.state, "passed");
+  assert.equal(completed.reviewerContext, "fresh session");
+  assert.equal(completed.requestedExecution, null);
+  assert.equal(completed.actualExecution, null);
+
+  const actualAdded = parseIndependentReview(
+    reviewRecord("passed", true).replace(
+      "**Reviewer context:** fresh session",
+      "**Reviewer context:** fresh session\n**Actual execution:** manual"
+    )
+  );
+  assert.equal(actualAdded.state, "malformed");
+
+  const pendingActualAdded = parseIndependentReview(
+    reviewRecord("pending").replace(
+      "**Requested at:**",
+      "**Actual execution:** manual\n**Requested at:**"
+    )
+  );
+  assert.equal(pendingActualAdded.state, "malformed");
+
+  const subagent = parseIndependentReview(
+    reviewRecord("passed", true).replace(
+      "**Reviewer context:** fresh session",
+      "**Reviewer context:** fresh subagent"
+    )
+  );
+  assert.equal(subagent.state, "malformed");
+});
+
+test("parseIndependentReview accepts an explicit automatic-to-manual fallback", () => {
+  const review = parseIndependentReview(
+    reviewRecord("passed", true, {
+      requested: "automatic",
+      actual: "manual",
+      context: "fresh session"
+    })
+  );
+
+  assert.equal(review.state, "passed");
+  assert.equal(review.requestedExecution, "automatic");
+  assert.equal(review.actualExecution, "manual");
+});
+
+test("parseIndependentReview accepts an explicitly bound manual review", () => {
+  const review = parseIndependentReview(
+    reviewRecord("passed", true, {
+      requested: "manual",
+      actual: "manual",
+      context: "fresh session"
+    })
+  );
+
+  assert.equal(review.state, "passed");
+  assert.equal(review.requestedExecution, "manual");
+  assert.equal(review.actualExecution, "manual");
+});
+
+test("parseIndependentReview rejects invalid execution and context pairings", () => {
+  const manualSubagent = parseIndependentReview(
+    reviewRecord("passed", true, {
+      requested: "manual",
+      actual: "automatic",
+      context: "fresh subagent"
+    })
+  );
+  assert.equal(manualSubagent.state, "malformed");
+
+  const mismatchedAutomatic = parseIndependentReview(
+    reviewRecord("passed", true, {
+      requested: "automatic",
+      actual: "automatic",
+      context: "fresh session"
+    })
+  );
+  assert.equal(mismatchedAutomatic.state, "malformed");
 });
 
 test("parseIndependentReview rejects incomplete receipts", () => {
@@ -54,6 +155,17 @@ test("parseIndependentReview rejects incomplete receipts", () => {
 
   assert.equal(review.state, "malformed");
   assert.equal(review.warnings[0]?.code, "malformed_review");
+});
+
+test("parseIndependentReview rejects an unsupported reviewer context", () => {
+  const review = parseIndependentReview(
+    reviewRecord("passed", true).replace(
+      "**Reviewer context:** fresh session",
+      "**Reviewer context:** builder session"
+    )
+  );
+
+  assert.equal(review.state, "malformed");
 });
 
 test("parseIndependentReview requires completed evidence and a passing required Check", () => {
@@ -183,7 +295,15 @@ test("readIndependentReview rejects an incorrect base and reviewer model", async
   assert.equal(mismatchedModel.freshness, "stale");
 });
 
-function reviewRecord(status: "passed" | "pending", completed = false): string {
+function reviewRecord(
+  status: "changes-requested" | "passed" | "pending",
+  completed = false,
+  execution?: {
+    requested: "automatic" | "manual";
+    actual?: "automatic" | "manual";
+    context?: "fresh session" | "fresh subagent";
+  }
+): string {
   const fields = [
     `**Status:** ${status}`,
     `**Target commit:** ${TARGET}`,
@@ -194,6 +314,7 @@ function reviewRecord(status: "passed" | "pending", completed = false): string {
     "**Builder model:** gpt-5",
     "**Requested reviewer:** claude",
     "**Requested model:** claude-opus",
+    ...(execution ? [`**Requested execution:** ${execution.requested}`] : []),
     "**Requested at:** 2026-08-31T00:00:00.000Z",
     "**Workflow:** regular",
     "**Check required:** no"
@@ -203,7 +324,8 @@ function reviewRecord(status: "passed" | "pending", completed = false): string {
     fields.push(
       "**Reviewer adapter:** claude",
       "**Reviewer model:** claude-opus",
-      "**Reviewer context:** fresh session",
+      `**Reviewer context:** ${execution?.context || "fresh session"}`,
+      ...(execution?.actual ? [`**Actual execution:** ${execution.actual}`] : []),
       "**Reviewed at:** 2026-08-31T00:10:00.000Z",
       "**Scope:** current",
       "**Lenses:** quality, security, performance, tests",

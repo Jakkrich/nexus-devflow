@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { parseCompatibilityFeature } from "./current-work.js";
 import { createStyle } from "./ui.js";
 
 type HistoryItemType = "feature" | "fix" | "rollback";
@@ -173,30 +174,43 @@ function parseHistoryItem(
   const line = markdown.split(/\r?\n/)[0] || "";
   let cleanLine = line.replace(/^#\s*/, "").trim();
 
-  let buildPlanItem: string | null = null;
+  let bracketedId: string | null = null;
   const idBrackets = cleanLine.match(/^\[([0-9a-zA-Z-]+)\]\s*/);
   if (idBrackets) {
-    buildPlanItem = idBrackets[1];
+    bracketedId = idBrackets[1].toLowerCase();
     cleanLine = cleanLine.slice(idBrackets[0].length).trim();
   }
 
-  const typeMatch = cleanLine.match(/^(Feature|Fix|Rollback):\s*/i);
-  let type: HistoryItemType = fallbackType;
-  if (typeMatch) {
-    const normalized = normalizeHistoryType(typeMatch[1]);
-    if (normalized) {
-      type = normalized;
-    }
-    cleanLine = cleanLine.slice(typeMatch[0].length).trim();
-  }
+  const headingMatch = cleanLine.match(/^(Feature|Fix|Rollback):\s*(.+)$/i);
+  const headingType = headingMatch?.[1];
+  const headingTitle = headingMatch?.[2]?.trim() || cleanLine;
 
-  if (!buildPlanItem) {
-    buildPlanItem = markdown.match(
-      /^\*\*From build-plan:\*\*\s*feature\s+([0-9]+[a-z]?)\b/im
-    )?.[1]?.toLowerCase() || null;
-  }
-
-  const title = cleanLine || titleFromFile(file);
+  const fieldIdentity = markdown.match(
+    /^\*\*(Feature|Fix|Rollback):\*\*\s*(.+)$/im
+  );
+  const canonicalType = normalizeHistoryType(headingType || fieldIdentity?.[1]);
+  const compatibilityFeature = fallbackType === "feature" &&
+      (!canonicalType || canonicalType === "feature")
+    ? parseCompatibilityFeature(markdown, headingTitle)
+    : null;
+  const type = canonicalType ||
+    (compatibilityFeature ? "feature" : fallbackType);
+  const fieldValue = fieldIdentity?.[2]?.trim() || null;
+  const fieldFeatureIdentity = type === "feature"
+    ? fieldValue?.match(/^([0-9]+[a-z]?)\.?(?:\s+|$)(.*)$/i)
+    : null;
+  const title = headingType
+    ? headingTitle || titleFromFile(file)
+    : fieldFeatureIdentity?.[2]?.trim() || fieldValue || compatibilityFeature?.title ||
+      headingTitle || titleFromFile(file);
+  const explicitBuildPlanItem = markdown.match(
+    /^\*\*From build-plan:\*\*\s*feature\s+([0-9]+[a-z]?)\b/im
+  )?.[1]?.toLowerCase() || null;
+  const buildPlanItem = bracketedId ||
+    explicitBuildPlanItem ||
+    fieldFeatureIdentity?.[1]?.toLowerCase() ||
+    compatibilityFeature?.id ||
+    null;
   const status = markdown.match(/^\*\*Status:\*\*\s*(.+)$/im)?.[1]?.trim() || null;
 
   return { type, title, buildPlanItem, status, file };

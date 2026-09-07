@@ -613,6 +613,18 @@ Every confirmed issue is recorded with a durable ID (`F-01`), severity (P0-P3), 
 > [!IMPORTANT]
 > **Blocker Gate**: `/complete` will refuse to merge if any P0 or P1 finding remains `open` or `fixed`.
 
+### Independent Review & Quality Gates (`devflow/config.json`)
+
+DevFlow supports configurable Quality Gates and Independent Code Review across regular development, Autopilot, and Continuous modes:
+
+- **Quality Gates Configuration (`qualityGates.regular` / `qualityGates.continuous`)**:
+  - `independentReview`: Defaults to `when-sensitive` (triggers automatically on auth, payments, encryption, permissions, destructive operations, or wide-surface changes). Can be configured to `always` or `manual`.
+  - `audit`, `check`, `tryGuide`: Defaults to `manual`. Can be set to `when-sensitive`, `when-behavioral`, `when-user-facing`, or `always`.
+- **Review Execution (`review.independentExecution`)**:
+  - `automatic` (Default): The active AI runtime automatically spawns a fresh, isolated generic reviewer subagent with the clean checkpoint to complete the review autonomously, recording `Reviewer context: fresh subagent`.
+  - `manual`: The primary agent creates an immutable review checkpoint and prompts the user to open a fresh session to run `/audit independent complete`, recording `Reviewer context: fresh session`.
+
+
 ---
 
 ## Manual try guides

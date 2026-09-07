@@ -127,7 +127,15 @@ build plan starts high-level.
 ## Step 3 - write the spec
 
 For the one (sub-)feature being built now, allocate sequential ID (`xxx-slug`) and create a dedicated workspace at `devflow/context/{xxx-slug}/`. Write the full living spec to
-`devflow/context/{xxx-slug}/spec.md`, following `reference/feature-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. Fill every section:
+`devflow/context/{xxx-slug}/spec.md`, following `reference/feature-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. The first heading and build-plan identity must use this canonical form:
+
+```markdown
+# Feature: <title>
+
+**From build-plan:** feature <id>
+```
+
+Fill every section:
 - Goal, Problem Statement, and In/Out of scope
 - Acceptance Criteria (AC-1, AC-2, ...)
 - Small build steps as atomic 2-5 min checklist items (`- [ ]`, supporting `[TDD-Red]`, `[TDD-Green]`, `[TDD-Refactor]` triplets for functional logic)

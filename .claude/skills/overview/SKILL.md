@@ -63,6 +63,20 @@ The compiler writes:
 
 The generated output follows `devflow/reference/project-overview-template.md`.
 
+After the title, write a plan fingerprint in this exact form:
+
+```markdown
+<!-- devflow:source-hash <sha256> -->
+```
+
+Before hashing, normalize only build-plan completion markers by replacing each
+`- [x]` or `- [X]` marker with `- [ ]`, while preserving indentation and every
+other byte. Compute `<sha256>` from the exact UTF-8 bytes of `project-plan.md`,
+one zero byte, then the normalized UTF-8 bytes of `build-plan.md`. This lets
+`/status` detect real plan changes after cloning, copying, or updating without
+treating completed features as overview drift. Replace the previous marker every
+time this skill regenerates the overview.
+
 ## Step 3 - output and report
 
 After compilation:

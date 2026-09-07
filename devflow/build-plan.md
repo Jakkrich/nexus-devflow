@@ -220,4 +220,13 @@
   - *Dependencies*: Feature 26, REQ-20260904-001
   - *Scope*: ปรับปรุง `/onboard` (ทั้ง `.agents/` และ `.claude/`) ให้อ่านและยึดถือรายการ `adapters` จาก Manifest (`.nexus/nexus-devflow.json` / `devflow/.state/manifest.json`) เป็นความจริงหลัก (Authoritative Selection) โดยไม่ถามซ้ำและไม่อนุมานผิดพลาด, เพิ่มชุดทดสอบ E2E Scenario ตัวที่ 10 `scripts/e2e/scenarios/adapter-selection.ts`, อัปเดต `agent-bundle.manifest.json` และ `scripts/validate-framework.ts` ให้ครอบคลุม Verification Contracts ใหม่ 100%
 
+---
+
+## 🔄 Phase 28: Upstream AI Blueprint v1.5.4 – v1.6.0 Synchronization
+
+- [x] **28. Sync Upstream v1.5.4 & v1.6.0 (Automatic Independent Review, Post-Implementation Walkthroughs & Hardened Dashboard Engine) (`DISC-20260907-001`, `073-sync-upstream-ai-blueprint-v154-v160`)** `[Size: M]`
+  - *Dependencies*: Feature 27, DISC-20260907-001
+  - *Scope*: นำเข้าระบบตรวจทานอิสระแบบอัตโนมัติ (`review.independentExecution: "automatic"` พร้อม Isolated Subagent Spawning, Receipts Metadata Schema), ปรับค่าเริ่มต้น Quality Gates เป็น `when-sensitive`, เพิ่ม Post-Implementation Code Walkthrough ใน `implement` / `autopilot`, ปรับปรุงความทนทานของสถานะโครงการและ Dashboard (Sortable Findings, Roadmap Focus, Strict Heading Contracts), อัปเดต Framework Validation และ Unit Tests ผ่าน 100%
+
+
 

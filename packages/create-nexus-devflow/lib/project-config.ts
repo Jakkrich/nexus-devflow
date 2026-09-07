@@ -7,6 +7,7 @@ import path from "node:path";
 const PROJECT_CONFIG_PATH = "devflow/config.json";
 const PROJECT_CONFIG_SCHEMA_VERSION = 1 as const;
 
+type IndependentReviewExecution = "automatic" | "manual";
 type RolePolicy = "dev" | "sa" | "full";
 type StepReviewPolicy = "every" | "feature";
 type CheckpointCommitPolicy = "disabled" | "enabled";
@@ -40,6 +41,9 @@ interface ProjectConfig {
   verification: {
     logicTests: LogicTestPolicy;
     uiEvidence: UiEvidencePolicy;
+  };
+  review: {
+    independentExecution: IndependentReviewExecution;
   };
   qualityGates: {
     regular: QualityGatePolicy;
@@ -81,16 +85,19 @@ function createDefaultProjectConfig(): ProjectConfig {
       logicTests: "when-configured",
       uiEvidence: "when-available"
     },
+    review: {
+      independentExecution: "automatic"
+    },
     qualityGates: {
       regular: {
         audit: "manual",
-        independentReview: "manual",
+        independentReview: "when-sensitive",
         check: "manual",
         tryGuide: "manual"
       },
       continuous: {
         audit: "manual",
-        independentReview: "manual",
+        independentReview: "when-sensitive",
         check: "manual",
         tryGuide: "manual"
       }
@@ -176,6 +183,7 @@ function parseProjectConfig(value: unknown): ProjectConfig {
       "workflow",
       "git",
       "verification",
+      "review",
       "qualityGates",
       "continuous"
     ],
@@ -190,6 +198,7 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   const workflow = optionalRecord(root.workflow, "workflow");
   const git = optionalRecord(root.git, "git");
   const verification = optionalRecord(root.verification, "verification");
+  const review = optionalRecord(root.review, "review");
   const qualityGates = optionalRecord(root.qualityGates, "qualityGates");
   const regularGates = optionalRecord(
     qualityGates.regular,
@@ -208,6 +217,7 @@ function parseProjectConfig(value: unknown): ProjectConfig {
     "git"
   );
   assertKnownKeys(verification, ["logicTests", "uiEvidence"], "verification");
+  assertKnownKeys(review, ["independentExecution"], "review");
   assertKnownKeys(qualityGates, ["regular", "continuous"], "qualityGates");
   assertKnownKeys(
     regularGates,
@@ -276,6 +286,14 @@ function parseProjectConfig(value: unknown): ProjectConfig {
         ["required", "when-available"],
         defaults.verification.uiEvidence,
         "verification.uiEvidence"
+      )
+    },
+    review: {
+      independentExecution: optionalEnum(
+        review.independentExecution,
+        ["automatic", "manual"],
+        defaults.review.independentExecution,
+        "review.independentExecution"
       )
     },
     qualityGates: {
@@ -481,6 +499,8 @@ export type {
   AuditGatePolicy,
   CheckpointCommitPolicy,
   CheckGatePolicy,
+  IndependentReviewExecution,
+  IndependentReviewGatePolicy,
   LogicTestPolicy,
   ProjectConfig,
   ProjectConfigResult,

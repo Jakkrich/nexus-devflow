@@ -37,7 +37,7 @@ import type {
   ReviewState
 } from "./review.js";
 
-type CompletionState = "blocked" | "needs_verification" | "ready";
+type CompletionState = "blocked" | "idle" | "needs_verification" | "ready";
 
 interface StatusWarning {
   code: string;
@@ -79,8 +79,10 @@ interface StatusReview {
   targetCommit: string | null;
   requestedReviewer: string | null;
   requestedModel: string | null;
+  requestedExecution: string | null;
   reviewerAdapter: string | null;
   reviewerModel: string | null;
+  actualExecution: string | null;
   warnings: StatusWarning[];
 }
 
@@ -235,6 +237,11 @@ function formatHumanStatus(
     formatRow("Version", status.devflow.version || "unknown", style),
     formatRow("Adapters", adapters, style),
     formatRow("Config", formatConfigValue(status.configuration.state), style),
+    formatRow(
+      "Review exec.",
+      status.configuration.values.review.independentExecution,
+      style
+    ),
     formatRow("Quality gates", formatQualityGates(status.configuration.values.qualityGates.regular), style),
     "",
     formatSection("Progress", style),
@@ -338,6 +345,11 @@ function formatRow(label: string, value: string, style: TextStyle): string {
 }
 
 function formatReviewValue(review: StatusReview, style: TextStyle): string {
+  const reviewer = review.reviewerAdapter || review.requestedReviewer;
+  const model = review.reviewerModel || review.requestedModel;
+  const execution = review.actualExecution || review.requestedExecution;
+  const reviewerLabel = reviewer && model ? `${reviewer}/${model}` : reviewer || model;
+
   const parts: string[] = [review.state];
   if (review.verdict) {
     parts.push(`verdict ${review.verdict}`);
@@ -346,8 +358,10 @@ function formatReviewValue(review: StatusReview, style: TextStyle): string {
     parts.push(`check ${review.checkResult}`);
   }
   parts.push(`freshness ${review.freshness}`);
-  if (review.reviewerModel) {
-    parts.push(`(${review.reviewerModel})`);
+  if (reviewerLabel) {
+    parts.push(execution ? `(${reviewerLabel}, ${execution})` : `(${reviewerLabel})`);
+  } else if (execution) {
+    parts.push(`(${execution})`);
   }
   return review.freshness === "stale"
     ? style.yellow(parts.join(", "))
@@ -363,8 +377,10 @@ function formatReview(review: IndependentReviewSummary): StatusReview {
     targetCommit: review.targetCommit,
     requestedReviewer: review.requestedReviewer,
     requestedModel: review.requestedModel,
+    requestedExecution: review.requestedExecution,
     reviewerAdapter: review.reviewerAdapter,
     reviewerModel: review.reviewerModel,
+    actualExecution: review.actualExecution,
     warnings: review.warnings.map((warning) => ({
       code: warning.code,
       message: warning.message
@@ -454,6 +470,10 @@ function formatCompletionValue(
   completion: StatusCompletion,
   style: TextStyle
 ): string {
+  if (completion.state === "idle") {
+    return style.dim("idle");
+  }
+
   if (completion.state === "ready") {
     return style.green("ready to complete");
   }
@@ -563,11 +583,20 @@ function selectCompletion(
   review?: IndependentReviewSummary,
   config?: ProjectConfig
 ): StatusCompletion {
+  if (currentWork.state === "idle") {
+    return { state: "idle", blockers: [] };
+  }
+
+  if (currentWork.state === "malformed") {
+    return {
+      state: "blocked",
+      blockers: ["current work contract is malformed"]
+    };
+  }
+
   const blockers: string[] = [];
 
-  if (currentWork.state !== "active") {
-    blockers.push("no active delivery run or living spec");
-  } else if (currentWork.remaining > 0) {
+  if (currentWork.remaining > 0) {
     blockers.push(`${currentWork.remaining} checklist steps remain`);
   }
 

@@ -113,6 +113,12 @@ Run the exact documented `Verify` command locally. The individual build, test,
 or typecheck commands may still be run separately for diagnosis, but the final
 proof must use Verify because that is what GitHub will run.
 
+A passing local run proves the recipe against the current working copy. It does
+not prove dependency installation or command behavior from a fresh checkout.
+Until the workflow is pushed and reports green on GitHub, describe the setup as
+prepared locally, not CI verified. The first successful GitHub run is the
+authoritative clean-checkout proof.
+
 If Verify fails, report the failing subcommand and stop. Do not weaken the
 command, remove a legitimate check, or describe CI as ready.
 
@@ -128,7 +134,8 @@ Finish with a concise setup report:
 - checks included and checks omitted
 - test gate status
 - workflow path and triggers
-- local Verify result
+- local Verify result and whether CI is only prepared locally or confirmed by a
+  successful GitHub run
 - files changed
 - any overlap, uncertainty, or follow-up
 
