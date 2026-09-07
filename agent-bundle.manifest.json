@@ -52,7 +52,6 @@
     "devflow/reference/running-id-contract.md"
   ],
   "forbidden_legacy_paths": [
-    ".agent",
     ".cursor",
     ".windsurf"
   ],
