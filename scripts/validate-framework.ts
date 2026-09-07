@@ -16,8 +16,8 @@ const coreSkillDocumentationPaths = [
   "README.md",
   "README.th.md",
   "packages/create-nexus-devflow/README.md",
-  "docs/USAGE.md",
-  "docs/workflow-surface-map.md"
+  "devflow/docs/USAGE.md",
+  "devflow/docs/workflow-surface-map.md"
 ];
 
 function fail(message: string, failures: string[]): void {
