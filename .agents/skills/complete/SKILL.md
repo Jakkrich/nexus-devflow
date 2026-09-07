@@ -135,25 +135,26 @@ and tests, must pass first.
 
 Present the user with two clear delivery options:
 
-### 🔀 Option 1: Direct Local Squash-Merge / Direct Commit (Solo Mode - สำหรับทำงานคนเดียว)
-- **When to choose**: เมื่อทำงานคนเดียว (Solo Developer) หรือมีสิทธิ์ merge/commit เข้า `main` หรือ `master` ได้โดยตรงในเครื่อง
+### 🔀 Option 1: Direct Local Squash-Merge / Direct Commit (Solo Mode - For Solo Development)
+- **When to choose**: When working alone (Solo Developer) or possessing direct merge/commit authority to `main` or `master` locally.
 - **Execution Actions**:
-  1. หากอยู่บน feature branch: Switch ไปยัง `main` หรือ `master` (`git checkout <main/master>`), ทำการ Squash-merge (`git merge --squash <feature-branch>`) และ commit
-  2. หากทำงานบน local main/master branch โดยตรง: บันทึก commit ลงบน branch โดยตรง
-  3. ลบ local feature branch เมื่อได้รับการยืนยัน
-  4. **หยุดและถามแยกต่างหากเสมอ** ก่อนจะ push local `main`/`master` ขึ้น remote upstream โดยการอนุมัติ merge ไม่ถือเป็นการอนุมัติ push
-  5. รัน `git push origin <main/master>` เฉพาะเมื่อผู้ใช้ยืนยันอย่างชัดเจน
+  1. If on a feature branch: Switch to `main` or `master` (`git checkout <main/master>`), squash-merge the branch (`git merge --squash <feature-branch>`), and commit the work.
+  2. If working directly on local `main`/`master`: Commit the changes directly to the active branch.
+  3. Delete the local feature branch only upon explicit user confirmation.
+  4. **Always stop and ask separately** before pushing local `main`/`master` to the remote upstream repository. Merge approval never implies push approval.
+  5. Run `git push origin <main/master>` only after separate explicit confirmation.
 
-### 🔀 Option 2: Team MR / PR Flow (Team Mode - สำหรับทำงานเป็นทีมมากกว่า 1 คน)
-- **When to choose**: เมื่อทำงานเป็นทีมมากกว่า 1 คน (Team Collaboration) ที่ต้องผ่านการตรวจโค้ด (Code Review) ผ่าน GitLab Merge Request (MR) หรือ GitHub Pull Request (PR) หรือไม่มีสิทธิ์ push ตรงเข้า protected `main`/`master` branch
+### 🔀 Option 2: Team MR / PR Flow (Team Mode - For Teams / Multi-Developer)
+- **When to choose**: When collaborating in a team with more than one person where code changes require peer review via GitLab Merge Request (MR) or GitHub Pull Request (PR), or where developers lack direct write access to protected `main`/`master` branches.
 - **Execution Actions**:
-  1. ตรวจจับชื่อ default base branch (`main` หรือ `master`).
-  2. รัน `git pull origin <main/master>` (หรือ `git fetch origin <main/master> && git merge origin/<main/master>`) เพื่อรวมการเปลี่ยนแปลงล่าสุดจาก upstream เข้า feature branch
-  3. หากเกิด merge conflict ให้ระบุให้ชัดเจนและช่วยผู้ใช้แก้ conflict
-  4. รัน `Verify` (หรือ build & tests) เพื่อตรวจสอบความสมบูรณ์หลังการ merge
-  5. รัน `git push origin <current-feature-branch>` เพื่อนำ branch ขึ้น remote repository
-  6. หยุดและแจ้งผู้ใช้ให้เปิด Merge Request (MR / PR) บน GitLab/GitHub
-  7. **ห้าม merge เข้า local `main`/`master` และห้ามลบ branch**
+  1. Detect the default base branch name (`main` or `master`).
+  2. Run `git pull origin <main/master>` (or `git fetch origin <main/master> && git merge origin/<main/master>`) to bring the latest upstream changes into the active feature/dev branch.
+  3. If merge conflicts occur, highlight them clearly and guide the user through resolution.
+  4. Run `Verify` (or build & tests) to ensure integrity after the merge.
+  5. Run `git push origin <current-feature-branch>` to push the up-to-date branch to the remote repository.
+  6. Stop and inform the user that the branch is synchronized and pushed, ready for them to open a Merge Request (MR / PR) on GitLab/GitHub.
+  7. **Do NOT merge into local `main`/`master` and do NOT delete the branch.**
+
 
 
 ---
