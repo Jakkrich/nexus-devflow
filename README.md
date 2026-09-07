@@ -331,8 +331,8 @@ AI:  Recorded Release Digest in living spec.
 
 Explore the interactive system architecture and living spec lifecycle generated with **Archify**:
 
-- 🌐 **[Nexus-DevFlow System Architecture Map (Interactive HTML)](docs/diagrams/nexus-devflow-architecture.html)** — Trace the 3-Pillars workspace, multi-agent adapters, and senior QA gates.
-- ⚡ **[Nexus-DevFlow Living Spec Lifecycle & State Machine (Interactive HTML)](docs/diagrams/nexus-devflow-lifecycle.html)** — Step through the 4-stage progressive rail (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), blocker gates, and reversals.
+- 🌐 **[Nexus-DevFlow System Architecture Map (Interactive HTML)](devflow/docs/diagrams/nexus-devflow-architecture.html)** — Trace the 3-Pillars workspace, multi-agent adapters, and senior QA gates.
+- ⚡ **[Nexus-DevFlow Living Spec Lifecycle & State Machine (Interactive HTML)](devflow/docs/diagrams/nexus-devflow-lifecycle.html)** — Step through the 4-stage progressive rail (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), blocker gates, and reversals.
 
 ![Nexus-DevFlow Workflow](assets/nexus-devflow-workflow.png)
 
@@ -835,13 +835,13 @@ When starting a new session or resuming after clearing context:
 
 ## Documentation and governance
 
-- [Comprehensive usage guide](docs/USAGE.md) — full operating instructions and Core Skill inventory.
-- [Workflow surface map](docs/workflow-surface-map.md) — canonical commands, categories, and artifacts.
-- [Skill selection policy](docs/skill-selection-policy.md) — choose the smallest appropriate workflow or companion skill.
-- [Governance rules](docs/governance-rules.md) — public-surface and documentation placement rules for maintainers.
-- [Markdown metadata contract](docs/markdown-metadata-contract.md) — frontmatter and semantic heading requirements.
-- [Manual review workflow](docs/manual-review-workflow-spec.md) — human review gates from spec through delivery.
-- [Living Spec examples](docs/examples/living-spec/) — reference artifacts for specs, discoveries, ADRs, and ideas.
+- [Comprehensive usage guide](devflow/docs/USAGE.md) — full operating instructions and Core Skill inventory.
+- [Workflow surface map](devflow/docs/workflow-surface-map.md) — canonical commands, categories, and artifacts.
+- [Skill selection policy](devflow/docs/skill-selection-policy.md) — choose the smallest appropriate workflow or companion skill.
+- [Governance rules](devflow/docs/governance-rules.md) — public-surface and documentation placement rules for maintainers.
+- [Markdown metadata contract](devflow/docs/markdown-metadata-contract.md) — frontmatter and semantic heading requirements.
+- [Manual review workflow](devflow/docs/manual-review-workflow-spec.md) — human review gates from spec through delivery.
+- [Living Spec examples](devflow/docs/examples/living-spec/) — reference artifacts for specs, discoveries, ADRs, and ideas.
 
 ---
 

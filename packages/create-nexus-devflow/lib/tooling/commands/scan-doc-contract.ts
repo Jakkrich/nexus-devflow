@@ -7,6 +7,7 @@ const targets = [
   "README.md",
   "USAGE.md",
   "docs",
+  "devflow/docs",
   ".agent/agents",
   ".agent/resources/schemas",
   ".agent/scripts/README.md",

@@ -66,10 +66,10 @@ Deep Modules principles: small public interfaces, hidden implementation
 complexity, and stable seams.
 
 Maintainer contracts and examples are available in the repository:
-[governance rules](https://github.com/Jakkrich/nexus-devflow/blob/main/docs/governance-rules.md),
-[Markdown metadata](https://github.com/Jakkrich/nexus-devflow/blob/main/docs/markdown-metadata-contract.md),
-[manual review workflow](https://github.com/Jakkrich/nexus-devflow/blob/main/docs/manual-review-workflow-spec.md), and
-[Living Spec examples](https://github.com/Jakkrich/nexus-devflow/tree/main/docs/examples/living-spec).
+[governance rules](https://github.com/Jakkrich/nexus-devflow/blob/main/devflow/docs/governance-rules.md),
+[Markdown metadata](https://github.com/Jakkrich/nexus-devflow/blob/main/devflow/docs/markdown-metadata-contract.md),
+[manual review workflow](https://github.com/Jakkrich/nexus-devflow/blob/main/devflow/docs/manual-review-workflow-spec.md), and
+[Living Spec examples](https://github.com/Jakkrich/nexus-devflow/tree/main/devflow/docs/examples/living-spec).
 
 ---
 
