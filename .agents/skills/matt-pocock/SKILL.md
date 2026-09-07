@@ -108,11 +108,11 @@ Matt Pocock's workflow is built upon a strict division of responsibility:
 2. **`/to-spec`** — [SKILL.md](file:///d:/devtools/nexus-devflow/devflow/.vendor/matt-pocock/skills/engineering/to-spec/SKILL.md)
    - Synthesize interview results into a Living Spec. Explicitly identify the **Testing Seam** (the highest level of integration to test against) and outline comprehensive User Stories.
 3. **`/to-tickets`** — [SKILL.md](file:///d:/devtools/nexus-devflow/devflow/.vendor/matt-pocock/skills/engineering/to-tickets/SKILL.md)
-   - Decompose the spec into thin, end-to-end **Tracer-bullet tickets** with explicit `Blocked by:` dependencies (saved under `.scratch/<feature>/issues/<NN>-<slug>.md` or an issue tracker).
+   - Decompose the spec into thin, end-to-end **Tracer-bullet tickets** with explicit `Blocked by:` dependencies (saved under `.scratch/<feature>/issues/<NN>-<slug>.md`, `devflow/context/{xxx-slug}/tickets/`, or an issue tracker).
 4. ⚠️ **Phase Boundary (Context Hygiene)**:
    - **Clear Context (`/clear` or fresh session)** before coding! Because each ticket is self-contained with its own acceptance criteria, resetting the window brings the agent into the **Smart Zone (~150k tokens)** where code generation is sharpest.
 5. **`/implement`** — [SKILL.md](file:///d:/devtools/nexus-devflow/devflow/.vendor/matt-pocock/skills/engineering/implement/SKILL.md)
-   - Execute tickets sequentially, driven by **`/tdd`** (Red ➔ Green ➔ Refactor).
+   - Execute tickets sequentially, driven by **`/tdd`** (Red ➔ Green ➔ Refactor). In Nexus-DevFlow, `/implement` natively accepts `--ticket <NN | path>` or auto-dispatches the earliest unblocked ticket on the Frontier, syncing acceptance checkboxes and status back to `spec.md`.
 6. **`/code-review`** — [SKILL.md](file:///d:/devtools/nexus-devflow/devflow/.vendor/matt-pocock/skills/engineering/code-review/SKILL.md)
    - Perform independent two-axis review of the diff: **Spec Axis** (did we build what was asked?) and **Standards Axis** (clean code, deep modules, regression safety) prior to committing.
 
@@ -249,7 +249,7 @@ Invoke `matt-pocock` according to your specific task or question:
 /matt-pocock grill "Export PDF feature"  # Socratic grilling of the requirement
 /matt-pocock spec                        # Establish Seam and generate Living Spec
 /matt-pocock tickets                     # Split spec into tracer-bullet tickets
-/matt-pocock run-ticket 01               # TDD implementation of ticket 01
+/matt-pocock run-ticket 01               # TDD implementation of ticket 01 (dispatches to /implement --ticket 01)
 /matt-pocock review                      # Two-axis review before git commit
 
 # 03 Shaping
