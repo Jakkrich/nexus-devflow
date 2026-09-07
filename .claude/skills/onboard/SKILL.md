@@ -266,16 +266,51 @@ DevFlow visibility?
    Keeps AGENTS.md public as the lightweight project agent guide.
 ```
 
-Recommend option 1 by default. If the user chooses option 2:
+Recommend option 1 by default.
+- If option 1 (Commit) is chosen, ensure the project's `.gitignore` ignores transient run files and raw documents:
+  ```gitignore
+  # DevFlow Transient Runtime Data, Research & Scratch Files
+  devflow/runs/*
+  !devflow/runs/.gitkeep
+  devflow/discoveries/*
+  !devflow/discoveries/.gitkeep
+  devflow/reports/*
+  !devflow/reports/.gitkeep
+  devflow/research/*
+  !devflow/research/.gitkeep
+  devflow/scratch/*
+  !devflow/scratch/.gitkeep
+  devflow/decisions/*
+  !devflow/decisions/.gitkeep
+  !devflow/decisions/README.md
+  devflow/inbox/*/raw/*
+  devflow/inbox/raw/*
+  devflow/analysis/*
+  !devflow/analysis/.gitkeep
+  devflow/tmp/*
+  devflow/temp/*
+  devflow/brainstorm/*
+  devflow/brainstorms/*
+  devflow/backups/*
+  devflow/.state/
+  devflow/.vendor/
+  .nexus/
+  prototypes/*
+  !prototypes/.gitkeep
+  ```
+
+If the user chooses option 2 (Local-only / Zero-Visibility):
 
 - Add this block to `.gitignore`, preserving existing entries:
 
   ```gitignore
-  # DevFlow local workflow files
+  # DevFlow local workflow files (Zero-Visibility)
   .agents/
   .claude/
   devflow/
   CLAUDE.md
+  .nexus/
+  prototypes/
   ```
 
 - Keep `AGENTS.md` tracked. It remains the lightweight public project guide for
@@ -289,10 +324,10 @@ Recommend option 1 by default. If the user chooses option 2:
 - Explain that DevFlow state, specs, findings, and history will not travel
   with the repo; another machine needs DevFlow reinstalled or restored
   locally.
-- If any of `.agents/`, `.claude/`, `devflow/`, or
-  `CLAUDE.md` are already tracked, say `.gitignore` will not hide tracked files.
+- If any of `.agents/`, `.claude/`, `devflow/`, `CLAUDE.md`, `.nexus/`, or
+  `prototypes/` are already tracked, say `.gitignore` will not hide tracked files.
   Ask before running
-  `git rm --cached -r .agents .claude devflow CLAUDE.md`, and
+  `git rm --cached -r .agents .claude devflow CLAUDE.md .nexus prototypes`, and
   only run it if the user explicitly approves. Never delete the local files.
 
 Then report which selected tools and adapter folders are needed:
