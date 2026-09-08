@@ -32,6 +32,20 @@ With no useful symptom, ask for expected behavior, actual behavior, and smallest
 
 ---
 
+## 🧘 Phase 0: The 4 Debug Mantras (Mindset & Discipline)
+
+Recite and apply these four ironclad discipline constraints at the start of any debugging session:
+
+> **The 4 Mantras:**
+> 1. **First is reproducibility.** Can the issue be reproduced reliably? Build a fast, deterministic pass/fail signal before hypothesizing.
+> 2. **Know the fail path.** Debugger first; then source trace + knob enumeration; then in-code instrumentation.
+> 3. **Question your hypothesis.** What would disprove it? Run the disproof first before chasing phantoms.
+> 4. **Every run is a breadcrumb.** Maintain a running ledger of every experiment and cross-reference all observations.
+
+Never propose a fix, edit production code, or speculate without satisfying the mantras below.
+
+---
+
 ## 🔬 The 6-Phase Scientific Debugging Loop
 
 ### Phase 1: Build a Red-Capable Feedback Loop (Golden Rule)
