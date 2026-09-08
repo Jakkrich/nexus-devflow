@@ -119,32 +119,18 @@ export const KNOWN_SKILL_ALIASES: Record<
   "9arm-skills": {
     source: "https://github.com/thananon/9arm-skills",
     all: true,
-    description: "6 specialized skills (debug-mantra, post-mortem, qwen-agent, scrutinize, management-talk, qwenchance)"
+    description: "5 specialized skills (post-mortem, qwen-agent, scrutinize, management-talk, qwenchance)"
   },
   "9arm": {
     source: "https://github.com/thananon/9arm-skills",
     all: true,
-    description: "4 specialized skills (debug-mantra, post-mortem, scrutinize, management-talk)"
+    description: "3 specialized skills (post-mortem, scrutinize, management-talk)"
   },
   bughunter: {
     source: "https://github.com/elementalsouls/Claude-BugHunter",
     type: "compound-knowledge",
     referencePath: "devflow/.vendor/bughunter",
     description: "[devflow] Offensive security orchestrator & bug hunting guide"
-  },
-  "matt-pocock": {
-    source: "https://github.com/mattpocock/skills",
-    name: "matt-pocock",
-    type: "compound-knowledge",
-    referencePath: "devflow/.vendor/matt-pocock",
-    description: "Master Matt Pocock's 6 AI-engineering flows (Getting Started, Main Flow, Shaping, Upkeep, Productivity, Reference)"
-  },
-  mattpocock: {
-    source: "https://github.com/mattpocock/skills",
-    name: "matt-pocock",
-    type: "compound-knowledge",
-    referencePath: "devflow/.vendor/matt-pocock",
-    description: "Master Matt Pocock's 6 AI-engineering flows (Getting Started, Main Flow, Shaping, Upkeep, Productivity, Reference)"
   }
 };
 

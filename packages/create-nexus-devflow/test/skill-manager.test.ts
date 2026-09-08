@@ -600,10 +600,8 @@ test("KNOWN_SKILL_ALIASES defines bughunter with compound-knowledge type", () =>
   assert.equal(KNOWN_SKILL_ALIASES.archify.source, "https://github.com/tt-a1i/archify");
 });
 
-test("KNOWN_SKILL_ALIASES defines matt-pocock with compound-knowledge type", () => {
-  assert.equal(KNOWN_SKILL_ALIASES["matt-pocock"].type, "compound-knowledge");
-  assert.equal(KNOWN_SKILL_ALIASES["matt-pocock"].referencePath, "devflow/.vendor/matt-pocock");
-  assert.equal(KNOWN_SKILL_ALIASES["mattpocock"].type, "compound-knowledge");
-  assert.equal(KNOWN_SKILL_ALIASES["mattpocock"].referencePath, "devflow/.vendor/matt-pocock");
+test("KNOWN_SKILL_ALIASES does not define purged matt-pocock", () => {
+  assert.equal((KNOWN_SKILL_ALIASES as Record<string, unknown>)["matt-pocock"], undefined);
+  assert.equal((KNOWN_SKILL_ALIASES as Record<string, unknown>)["mattpocock"], undefined);
 });
 

@@ -235,8 +235,11 @@
 - [x] **30. Modernize Web Dashboard with Dynamic Archify Visualizer & Recommended Skills (`DISC-20260907-003`, `080-dashboard-workflow-visualizer`)** `[Size: M]`
   - *Dependencies*: Feature 28, DISC-20260907-003
   - *Scope*: เพิ่ม Dynamic Archify SVG Workflow Visualizer (Macro Lifecycle Pulse Map พร้อม CSS Trace Motion และ Micro Tracer-Bullet Tickets DAG), เพิ่มการ์ด Recommended Skills & Vendors (`matt-pocock`, `bughunter`, `archify`, `diagram-design`, `9arm-skills`) พร้อมตรวจจับสถานะติดตั้งจริงและแสดงป้ายติ๊กถูก ✔, ปรับลดความรกบนแดชบอร์ด (ลบ Swarm Tab, ยุบ Doctor สรุปคลีน), เพิ่มข้อมูลใน `DashboardSnapshot` และชุดทดสอบความถูกต้องผ่าน 100%
+---
 
+## 🧹 Phase 31: Vendor Purge, Unified Debug & Headless Ticket Ingestion
 
-
-
+- [x] **31. Purge Matt Pocock Vendor, Unify Debug Skill & Headless Ticket Ingestion (`081-purge-vendor-and-unify-debug`)** `[Size: S]`
+  - *Dependencies*: None
+  - *Scope*: ตัดโฟลเดอร์ vendor `devflow/.vendor/matt-pocock/`, ลบ skill wrapper ของ `matt-pocock` และ `debug-mantra`, รวมสาระสำคัญของ mantra 4 ข้อเข้าสู่ `/debug` (ทั้ง `.agents` และ `.claude`), ลบโฟลเดอร์ตกค้าง `.scratch/` และ `docs/agents/`, อัปเดต `AGENTS.md` และเอกสารเพื่อรองรับการนำเข้า external spec และ tickets จาก `devflow/context/{slug}/issues/` หรือ `tickets/` ได้ทันที
 

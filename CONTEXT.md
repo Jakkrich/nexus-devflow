@@ -17,8 +17,24 @@ The single active task specification document (`spec.md`) that drives the 4-stag
 _Avoid_: PRD, design document, static specification
 
 **Quality Gate**:
-A hard programmatic verification checkpoint that blocks completion or commit when tests fail, spec tasks remain incomplete, or unresolved findings persist.
+A programmatic policy decision about whether a work item may proceed at a specified checkpoint. Its required evidence depends on whether the checkpoint is an intermediate development checkpoint or a delivery checkpoint.
 _Avoid_: Lint check, completion check, pre-commit barrier
+
+**Development Checkpoint**:
+An intermediate save of work in progress, subject to the team's baseline checks rather than full feature-completion criteria. Incomplete Living Spec tasks or an intentional TDD-Red state do not alone mean the work cannot be checkpointed.
+_Avoid_: Delivery approval, finished feature
+
+**Delivery Checkpoint**:
+The decision to complete a work item or permit its PR/MR to merge, requiring the full Quality Gate: completed scope, current verification evidence, and findings resolved or waived under policy. Opening a Draft PR is not a Delivery Checkpoint.
+_Avoid_: Checkpoint commit, draft review
+
+**Verification Evidence**:
+A recorded observation tied to a task, the revision examined, its specification and the policy used for assessment. It remains applicable only while the relevant inputs are unchanged; incidental activity timestamps do not invalidate it.
+_Avoid_: Verified keyword, historical test success
+
+**Delivery Target Set**:
+The explicit set of tasks submitted together for a Delivery Checkpoint, covering the changes being delivered. Every target must be unambiguous and pass; unrelated ongoing tasks are outside the set.
+_Avoid_: Current branch guess, all active work
 
 **Dashboard State Engine**:
 The deep state computation engine that aggregates project status, snapshots, code graphs, and blast radius reports behind a protocol-agnostic in-memory seam.
