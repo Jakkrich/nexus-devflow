@@ -55,7 +55,9 @@ execution` so both execution fields remain absent.
 ## Handoff
 
 Review the active spec and the complete `<base>..<target>` delta in a fresh
-session or isolated subagent without the builder conversation. Run all Audit lenses from scratch.
+session or isolated subagent without the builder conversation. Apply the Outsider
+Scrutiny stance: trace full call paths beyond the diff, challenge whether a simpler
+alternative exists, and run all Audit lenses from scratch.
 Run Check when required above. Do not edit product code, accept findings, or
 reuse the existing findings as the review scope.
 ```

@@ -108,7 +108,7 @@ Check whether the spec is a feature, fix, or rollback. A fix is marked
 and records the exact target feature, archive, commit, and parent.
 
 - **Feature** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/features/{xxx-slug}.md`, check it off in `devflow/build-plan.md` (and its parent item once all sub-items are checked), recompute the overview fingerprint using `/overview`'s checkbox-normalized hash contract and update `devflow:source-hash` in `devflow/context/project-overview.md`, and record an entry into `devflow/history/HISTORY.md`.
-- **Fix** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/fixes/{xxx-slug}.md`, and record an entry into `devflow/history/HISTORY.md`.
+- **Fix** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/fixes/{xxx-slug}.md` preserving canonical post-mortem blocks (Summary, Symptom, Root Cause mechanism, Why it produced symptom, Fix, How found, Why slipped through, Validation, Action items), and record an entry into `devflow/history/HISTORY.md`.
 - **Rollback** - archive `devflow/context/{xxx-slug}/spec.md` to `devflow/history/rollbacks/YYYY-MM-DD-{xxx-slug}.md`, preserving the original completed feature archive. Uncheck the target item in `devflow/build-plan.md` and record in `devflow/history/HISTORY.md`.
 
 **Archive resolved findings & review receipts.**
@@ -163,3 +163,10 @@ Present the user with two clear delivery options:
 
 Point the user at `/feature`, `/fix`, or `/rollback` for the next task.
 Finish with a concise **How to try it** note for the completed work.
+
+### 📢 Leadership & Stakeholder Summary (Channel-Ready)
+
+Optionally output a concise, leadership-flavored digest (ready for Slack, JIRA comment, or standup):
+- **Translate**: Reframe engineering mechanism into customer/business impact in 1-2 plain sentences.
+- **Keep**: Product/feature names, PR number, JIRA ticket keys, and owner.
+- **Strip**: Function names, file paths, struct fields, and internal code minutiae.

@@ -87,6 +87,15 @@ A short, scannable summary, not a wall of text. Aim for something like:
 
     Next action: run /implement 061 for Task 2.
 
+### 👔 Leadership / Executive Summary Mode (`/status --exec`)
+
+When requested via `/status --exec`, `/status leadership`, or when writing an update for engineering leadership (VPs, Directors, PMs, release managers):
+- **Tone**: Keep product names, JIRA keys, PR numbers, and business impact. Strip function names, file paths, struct fields, and internal code minutiae.
+- **Channel Shapes**:
+  - *Slack*: 1 bolded TL;DR line + 2-3 short bullets (impact, owner + PR link, next step) under 80 words.
+  - *Async Standup*: 1-2 lines: `<state> <thing> (JIRA/PR). <owner>. <next>.`
+  - *Written Status*: Status (bolded TL;DR) -> Customer Impact -> Progress/Next steps -> Owner.
+
 End with a single suggested next action, chosen in this order:
 
 - The project configuration is invalid -> `/doctor`.
