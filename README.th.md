@@ -717,10 +717,12 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 ## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
 
-Nexus-DevFlow ติดตั้งมาพร้อมกับ **32 Core Skills** มาตรฐาน คุณสามารถติดตั้งสกิลเฉพาะทางจาก Community เพิ่มเติมได้ง่ายๆ ด้วยคำสั่ง `nexus-devflow skill add`:
+Nexus-DevFlow ติดตั้งมาพร้อมกับ **32 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny Outsider Review ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/status` / `/complete`) ไว้ในตัวแล้ว
+
+สำหรับงานเฉพาะทางด้านงานสถาปัตยกรรมภาพและความปลอดภัยเชิงรุก คุณสามารถติดตั้งสกิลเสริมจาก Community เพิ่มเติมได้ด้วยคำสั่ง `nexus-devflow skill add`:
 
 > [!TIP]
-> **🚀 ติดตั้ง Recommended Skills ทั้ง 8 สกิลในคำสั่งเดียว**:
+> **🚀 ติดตั้ง Recommended Skills ในคำสั่งเดียว**:
 > ```bash
 > npx @jakkrichm/create-nexus-devflow skill add --recommended
 > ```
@@ -733,16 +735,10 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **32 Core Skil
 | :--- | :--- | :--- | :--- |
 | **archify** | Visual Architecture | แผนผังสถาปัตยกรรมระบบ Interactive HTML (สลับธีม Dark/Light, มี Animation, ตรวจสอบความถูกต้องได้) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
 | **diagram-design** | Editorial Diagram | ไดอะแกรมสาย Editorial 39 รูปแบบ (Business Quadrant, Timeline, Mindmap, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
-| **debug-mantra** | Diagnostics | วินัยการดีบักตามหลัก 4 มนต์ (Reproduce, Trace, Falsify, Cross-reference) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name debug-mantra` |
-| **post-mortem** | Quality / RCA | เขียนบันทึกวิศวกรรมการแก้บั๊ก (Root Cause Analysis & Post-mortem) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name post-mortem` |
-| **scrutinize** | Code Review | รีวิว Plan, PR และ Diff เชิงลึกจากมุมมองบุคคลภายนอก | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
-| **management-talk** | Communication | แปลงเนื้อหาทางเทคนิคให้เป็นข้อความสื่อสารกับผู้บริหาร (Slack/Jira/Email/Meetings) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
+| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
-> **ติดตั้งชุด 9arm-skills ทั้งหมดในคำสั่งเดียว**:
-> ```bash
-> npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all
-> ```
+> **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/status`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
 
 ---
 
