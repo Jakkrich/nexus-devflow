@@ -133,6 +133,28 @@ Give a structured, concise debug report:
 
 ---
 
+### Phase 7: Post-Mortem & Fix Handoff (Canonical Engineering Record)
+
+Once a fix is identified and validated (or when prompted: "write the post-mortem", "document this fix", "RCA"), draft the canonical engineering record for other engineers:
+
+- **Prerequisites (Refuse to draft without all 4)**:
+  1. Reliable repro exists (from Phase 1 & 2).
+  2. Root cause mechanism is confirmed (from Phase 5).
+  3. Fix is identified (commit / PR / branch).
+  4. Fix is validated (original red loop is now green).
+- **Canonical Structure**:
+  1. *Summary*: One paragraph: what broke, what fixed it, JIRA/PR keys, owner.
+  2. *Symptom*: Actual observed error, test failure, or log lines with concrete identifiers.
+  3. *Root cause*: Actual bug mechanism with code identifiers (functions, files, fields, conditions).
+  4. *Why it produced the symptom*: Cause-and-effect chain linking mechanism to symptom.
+  5. *Fix*: What changed and why this addresses the cause rather than masking the symptom.
+  6. *How it was found*: Repro path, rejected hypotheses, decisive experiment.
+  7. *Why it slipped through*: CI gap, latent code, workload gap, or review miss (blameless).
+  8. *Validation*: Concrete proof (tests passing, benchmark delta, workload completion).
+  9. *Action items*: Concrete follow-ups with owners and ticket keys.
+
+---
+
 ## Rules
 
 - **Diagnose, do not repair**: Never edit production source, package lockfiles, or DevFlow state inside `/debug`.

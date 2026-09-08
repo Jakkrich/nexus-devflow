@@ -67,6 +67,8 @@ Optional lens:
   unbounded-work risks
 - `tests`: missing coverage for important logic, weak assertions, skipped or
   focused tests, poor isolation, brittle mocks, and likely flakiness
+- `scrutiny`: outsider end-to-end review questioning intent, checking simpler
+  alternatives, tracing real call paths beyond diffs, and verifying edge-case claims
 
 `full` is always the full-project scope, not a lens. `/audit full` therefore runs
 all lenses across the full project. When only a lens is supplied, select scope
@@ -277,6 +279,11 @@ expectations. Apply only the selected lens or lenses:
   state, time or order dependence, skipped or focused tests, placeholder tests,
   swallowed failures, and missing browser or integration evidence where behavior
   crosses a real boundary. Never invent a coverage percentage.
+- **Scrutiny (Outsider Stance & Intent Challenge):**
+  - *Question Intent & Simpler Alternatives*: State what the change actually attempts in one sentence. Ask: is there a simpler, smaller, or more elegant way to achieve the same goal (reusing existing code, config vs code, solving at a different layer)?
+  - *Full Call-Path Tracing*: Follow the call graph through real code paths (entry point → call sites → branches taken → state mutated → exit/side effect), including unchanged code on either side of the diff where bugs hide.
+  - *Verify Claims & Edge Cases*: Does the traced path actually produce the claimed behavior? What inputs/states would break it (concurrency, retries, null/unicode/huge payloads, ordering)? What does it silently change?
+  - *No Rubber-Stamping*: "LGTM" is prohibited. State what was traced, what was verified, and what evidence supports the verdict.
 
 Do not nitpick harmless style differences unless they signal drift from the local
 patterns. Prefer a short list of real findings over a broad list of guesses.

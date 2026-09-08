@@ -243,3 +243,12 @@
   - *Dependencies*: None
   - *Scope*: ตัดโฟลเดอร์ vendor `devflow/.vendor/matt-pocock/`, ลบ skill wrapper ของ `matt-pocock` และ `debug-mantra`, รวมสาระสำคัญของ mantra 4 ข้อเข้าสู่ `/debug` (ทั้ง `.agents` และ `.claude`), ลบโฟลเดอร์ตกค้าง `.scratch/` และ `docs/agents/`, อัปเดต `AGENTS.md` และเอกสารเพื่อรองรับการนำเข้า external spec และ tickets จาก `devflow/context/{slug}/issues/` หรือ `tickets/` ได้ทันที
 
+---
+
+## 🧹 Phase 32: Consolidate 9arm Skills into DevFlow Core & Purge Extension
+
+- [x] **32. Consolidate 9arm Skills into DevFlow Core & Purge Extension (`DISC-20260908-001`, `082-consolidate-9arm-skills-and-purge`)** `[Size: S]`
+  - *Dependencies*: None
+  - *Scope*: รวมสาระสำคัญของ `scrutinize` (Outsider Stance, Call-path tracing, Challenge intent) เข้าสู่ `/audit`, ผสาน `post-mortem` เข้าสู่ `/debug` (Phase 4 Handoff) และ `/complete` (Fix Archive Template), เพิ่ม Executive / Stakeholder Summary ใน `/status` และ `/complete`, ลบโฟลเดอร์ extension `post-mortem`, `scrutinize`, `management-talk` ทั้งใน `.agents/` และ `.claude/`, ลบ entries 9arm-skills ออกจาก `.nexus/nexus-devflow.json`, อัปเดตเอกสารและยืนยัน static contracts ผ่าน 100%
+
+
