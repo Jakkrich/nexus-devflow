@@ -718,10 +718,12 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 
 ## Recommended Third-Party Skills & Extensions
 
-Nexus-DevFlow ships with **32 Core Skills** out-of-the-box. You can easily extend your workflow with specialized community and third-party skills using `nexus-devflow skill add`:
+Nexus-DevFlow ships with **32 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/status` / `/complete`).
+
+For specialized visual architecture and offensive security workflows, you can extend your setup with community skills using `nexus-devflow skill add`:
 
 > [!TIP]
-> **🚀 Install All 8 Recommended Skills in One Command**:
+> **🚀 Install Recommended Skills in One Command**:
 > ```bash
 > npx @jakkrichm/create-nexus-devflow skill add --recommended
 > ```
@@ -734,16 +736,10 @@ Nexus-DevFlow ships with **32 Core Skills** out-of-the-box. You can easily exten
 | :--- | :--- | :--- | :--- |
 | **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
 | **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
-| **debug-mantra** | Diagnostics | 4-mantra scientific debugging discipline (Reproduce, Trace, Falsify, Cross-reference) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name debug-mantra` |
-| **post-mortem** | Quality / RCA | Canonical engineering record of fixed bugs (Root cause, fix mechanism, regression proof) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name post-mortem` |
-| **scrutinize** | Code Review | Outsider-perspective deep plan, PR, and diff review | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name scrutinize` |
-| **management-talk** | Communication | Rewrite engineering updates for leadership across Slack/Jira/Email/Meetings | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --name management-talk` |
+| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide indexed to HackerOne patterns | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
-> **Batch Install 9arm-skills**: Install all 4 skills from 9arm-skills in a single command:
-> ```bash
-> npx @jakkrichm/create-nexus-devflow skill add https://github.com/thananon/9arm-skills --all
-> ```
+> **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/status`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.
 
 ---
 
