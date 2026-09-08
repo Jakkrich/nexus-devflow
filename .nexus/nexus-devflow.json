@@ -78,7 +78,7 @@
       "source": "https://github.com/tt-a1i/archify",
       "version": "2.17",
       "description": "Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams as explorable standalone HTML with inline SVG, dark/light themes, optional trace motion, and PNG/JPEG/WebP/SVG/WebM export. Accept plain-language requirements or pasted Mermaid flowchart, sequenceDiagram, and stateDiagram input; inspect repository evidence when the diagram must reflect real code. Use when the user asks to visualize system architecture, infrastructure, cloud/security/network topology, technical workflows, API call sequences, request lifecycles, data pipelines, ETL/ELT, data lineage, state machines, or to convert/beautify Mermaid.",
-      "installedAt": "2026-09-07T10:34:36.062Z",
+      "installedAt": "2026-09-08T15:16:47.170Z",
       "type": "git"
     },
     {
@@ -86,7 +86,7 @@
       "source": "https://github.com/cathrynlavery/diagram-design",
       "version": "2.6",
       "description": "Create branded architecture, IT current-state, flowchart, sequence, state machine, ER/data model, timeline, swimlane, quadrant, radar/spider, polar chart (polar/radial lollipop), loop/flywheel, nested, tree, org chart, layer stack, Venn, pyramid/funnel, treemap, bar, line, Gantt and scatter charts, high-level, process, medallion, data flow, DP integration, DP security matrix, Sankey, fishbone, Wardley map, kanban, user journey, deployment, dependency graph, UML class, story map, or database schema diagrams as standalone HTML/SVG/PNG. Redraw .drawio/.drawio.png/.drawio.svg or Mermaid .mmd sources at a chosen size/detail; onboard brand tokens from a website; add semantic patterns, callouts, accessible motion, or sketchy/hand-drawn styling.",
-      "installedAt": "2026-09-07T10:34:38.061Z",
+      "installedAt": "2026-09-08T15:17:13.193Z",
       "type": "git"
     }
   ]

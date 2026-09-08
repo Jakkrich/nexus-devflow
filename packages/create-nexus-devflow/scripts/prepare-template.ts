@@ -98,6 +98,7 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
           matchesPrefix(normalized, "devflow/brainstorms") ||
           matchesPrefix(normalized, "devflow/backups") ||
           matchesPrefix(normalized, "devflow/reports") ||
+          matchesPrefix(normalized, "devflow/docs/playbooks") ||
           matchesPrefix(normalized, "devflow/research") ||
           matchesPrefix(normalized, "prototypes") ||
           matchesPrefix(normalized, "evals") ||
