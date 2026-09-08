@@ -68,6 +68,7 @@ devflow/temp/*
 devflow/brainstorm/*
 devflow/brainstorms/*
 devflow/backups/*
+devflow/docs/playbooks/
 evals/results/
 
 

@@ -50,6 +50,34 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover and surface `.agents/skills/` and `.claude/skills/`.
 4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` to automatically inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md`.
 5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
+6. **Universal Contextual Help & Playbook Protocol (`help`, `--help`, `-h`, `?`)**:
+   Whenever any skill or command is invoked with a help keyword or flag (e.g., `/bughunter help`, `bughunter --help`, `/archify -h`, `/check ?`, `/feature help`):
+   - **Execution Safety Gate**: DO NOT execute the skill's primary or mutating actions (do not launch scans/attacks, do not modify source code, and do not initialize new task runs).
+   - **Dynamic Workspace Inspection**: Read the target skill definition (`.agents/skills/<skill>/SKILL.md`, `.claude/skills/<skill>/SKILL.md`, and any vendored resources such as `devflow/.vendor/<skill>/`), then scan the active workspace (`devflow/context/project-overview.md`, `package.json`, tech stack, active tasks, endpoints, and file hierarchy).
+   - **Persistent HTML Playbook & Token-Saving Cache**:
+     - **Output Location**: Compile and persist the tailored playbook as a standalone, styled HTML report at `devflow/docs/playbooks/{skill}.html` (responsive design, dark/light theme, collapsible sections, copyable command snippets).
+     - **First Run**: Render the comprehensive 5W1H playbook in chat and write the complete HTML report to `devflow/docs/playbooks/{skill}.html`.
+     - **Subsequent Invocations (Delta Updates & Zero Token Bloat)**: If `devflow/docs/playbooks/{skill}.html` already exists:
+       - Inspect the existing HTML file and compute the diff/delta against the current repository state (e.g., new file paths, modified endpoints, or newly installed vendor assets).
+       - DO NOT repeat unchanged boilerplate or full static content in chat.
+       - Provide a concise **Delta Summary** in chat (highlighting what changed, new recommendations, or newly available commands).
+       - In-place update `devflow/docs/playbooks/{skill}.html` with the fresh timestamp and state.
+       - Provide a direct clickable link to [devflow/docs/playbooks/{skill}.html](file:///d:/devtools/nexus-devflow/devflow/docs/playbooks/{skill}.html) for browser viewing.
+   - **Render the User-Friendly 5W1H Playbook**: Emit an easy-to-read, practical guide organized around the **5W 1H Framework** (rendered on initial run or updated in the HTML playbook):
+     1. **What (คืออะไร & ทำอะไรได้บ้าง)**: Clear, jargon-free summary of what this skill does, its core concept, and its bundled tools/capabilities.
+     2. **Why (ทำไมต้องใช้ & ประโยชน์ที่ได้รับ)**: The problems it solves, key advantages, and why you should use it instead of ad-hoc manual work.
+     3. **Who (เหมาะสำหรับใคร)**: Target audience or engineering role (e.g., Feature Developer, Senior QA, Security Auditor, Solo Dev, or Tech Lead).
+     4. **Where (ใช้กับส่วนไหน & บันทึกผลที่ใด)**: Target workspace boundaries, affected directories, and generated artifact locations (e.g., `devflow/context/`, `devflow/discoveries/`, `findings.md`).
+     5. **When (ควรใช้ตอนไหน & ลำดับก่อน-หลัง)**:
+        - **Timing & Triggers**: Practical situations or milestones when this skill should be invoked.
+        - **Run Before (Prerequisites)**: What to check, prepare, or run beforehand to get the best result.
+        - **Run After (Next Steps)**: What DevFlow command or lifecycle stage should follow next (e.g., handing off to `/fix`, `/feature`, or `/complete`).
+     6. **How (ใช้งานอย่างไร & ตัวอย่างคำสั่งจริง)**:
+        - **How It Works (Lifecycle)**: Simple, plain-language breakdown of the execution steps or phases.
+        - **Available Commands & Options**: Common sub-commands, arguments, and flags with brief explanations.
+        - **Safety & Guardrails**: Operational boundaries (read-only vs. code modifications, credential hygiene).
+        - **Ready-to-Use Command Recipes**: Concrete, copy-pasteable command snippets with plain-language descriptions of what each accomplishes.
+   - Always conclude the response with: `"Help menu displayed successfully"`.
 
 ---
 
