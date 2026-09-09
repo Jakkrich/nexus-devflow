@@ -1626,13 +1626,13 @@ function printNextSteps(): void {
   console.log(`  - ${style.cyan("Fresh project")}    : Run ${style.bold(style.brightCyan("/onboard"))} ${style.dim("(or $onboard)")} to configure project baseline.`);
   console.log(`\n${style.bold("Recommended Third-Party Skills")} ${style.dim("(Optional companion superpowers):")}`);
   console.log(`  - ${style.cyan("Install all (Batch)")}:`);
-  console.log(`      ${style.bold(style.brightGreen("npx @jakkrichm/create-nexus-devflow skill add --recommended"))}`);
+  console.log(`      ${style.bold(style.brightGreen("npx nexus-devflow skill add --recommended"))}`);
   console.log(`  - ${style.cyan("Or install individually by name")}:`);
-  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add archify")}        ${style.dim("# Technical architecture & trace diagrams")}`);
-  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add diagram-design")} ${style.dim("# 39 editorial visual diagram templates & charts")}`);
-  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add bughunter")}      ${style.dim("# Offensive security audit & vulnerability testing")}`);
-  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add ponytail")}       ${style.dim("# Lazy senior dev mode - cuts code bloat & tokens")}`);
-  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add 9arm")}           ${style.dim("# Engineering rituals & post-mortem practices")}`);
+  console.log(`      ${style.bold("npx nexus-devflow skill add archify")}        ${style.dim("# Technical architecture & trace diagrams")}`);
+  console.log(`      ${style.bold("npx nexus-devflow skill add diagram-design")} ${style.dim("# 39 editorial visual diagram templates & charts")}`);
+  console.log(`      ${style.bold("npx nexus-devflow skill add bughunter")}      ${style.dim("# Offensive security audit & vulnerability testing")}`);
+  console.log(`      ${style.bold("npx nexus-devflow skill add ponytail")}       ${style.dim("# Lazy senior dev mode - cuts code bloat & tokens")}`);
+  console.log(`      ${style.bold("npx nexus-devflow skill add 9arm")}           ${style.dim("# Engineering rituals & post-mortem practices")}`);
 }
 
 function printInstallSuccess(targetDir: string, result: { appliedCount: number }): void {
