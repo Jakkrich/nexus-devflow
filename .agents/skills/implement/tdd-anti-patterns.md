@@ -1,32 +1,32 @@
 # TDD Anti-Patterns
 
-อ่านเมื่อวาง RED/GREEN หรือทบทวนคุณภาพ tests
-ใช้ตาม test decision ใน spec และ [implement](SKILL.md)
+Read when planning RED/GREEN or reviewing test quality.
+Follow the test decision in the spec and [implement](SKILL.md).
 
 ## The Iron Law
 
 `NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST`
 
-สำหรับ behavior change ให้เห็น test fail ที่ตั้งใจก่อนเขียน production code
-ถ้าเขียนก่อน ให้ย้อนเฉพาะงานของตนในขั้นนั้น แล้วเริ่มจาก test
-รักษางานเดิมของผู้ใช้; งาน docs/config ที่ไม่มี logic ใช้ verification ตาม spec
+For behavior changes, observe the intended test failure before writing production code.
+If code came first, revert only your own work for that step and restart from the test.
+Preserve the user's existing work; verify docs/config without logic as specified in the spec.
 
 ## Red-Phase Checklist
 
-- รันแล้ว fail จริง ไม่ใช่ syntax/import error
-- ข้อความ failure ชี้ behavior ที่ยังขาดหรือผิด
-- test setup ถูกต้อง และ fail ที่ assertion ที่ตั้งใจ
+- The test actually fails, rather than encountering a syntax/import error.
+- The failure message identifies missing or incorrect behavior.
+- Test setup is valid, and the intended assertion fails.
 
-ถ้าผ่านทันที ตรวจว่า test กระตุ้น behavior ใหม่จริงหรือไม่
-แก้ setup error และรันซ้ำก่อน GREEN
+If the test passes immediately, check whether it exercises the new behavior.
+Fix setup errors and rerun before GREEN.
 
 | Bad | Good |
 | :--- | :--- |
-| ชื่อ `retry works` | `returns success after transient failure` |
-| Assert เฉพาะ mock call | Assert ผลลัพธ์และจำนวน attempts เมื่อเป็น contract |
-| รวมหลาย behavior | แยก success, retry และ exhausted failure |
-| เขียน test แล้วไม่รัน | RED → GREEN → REFACTOR พร้อมผลแต่ละช่วง |
-| เพิ่ม options เผื่ออนาคต | ทำเฉพาะ behavior ที่ spec/test ต้องการ |
+| Name: `retry works` | `returns success after transient failure` |
+| Assert only mock calls | Assert outcomes and attempt counts when part of the contract |
+| Combine multiple behaviors | Separate success, retry, and exhausted failure |
+| Write tests without running them | RED → GREEN → REFACTOR with evidence at each stage |
+| Add options for future use | Implement only behavior required by the spec/test |
 
 ```typescript
 let attempts = 0;
@@ -39,6 +39,6 @@ assert.equal(result, 'ok');
 assert.equal(attempts, 3);
 ```
 
-GREEN ใช้ code น้อยที่สุดให้ผ่าน แล้ว REFACTOR ขณะ tests ยังผ่าน
-mock เฉพาะ boundary ที่จำเป็น; ตรวจ contract ของ dependency ก่อนสร้าง fake
-เสร็จเมื่อมีหลักฐาน RED ที่ถูกเหตุและ GREEN ของ behavior พร้อม regression checks
+During GREEN, write the minimum code needed to pass; then REFACTOR while tests stay green.
+Mock only necessary boundaries; check the dependency's contract before creating a fake.
+Finish with evidence of RED for the intended reason, GREEN for the behavior, and regression checks.

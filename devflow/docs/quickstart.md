@@ -50,6 +50,11 @@ All development tasks (from small UI fixes to deep architectural features) execu
 
 ## 4. Pre-Flight Discovery, SA & Architectural Alignment
 
+For debugging, TDD, and independent review, see the
+[English JIT reference guides](USAGE.md#debugging-tdd--review-reference-guides).
+Use them through `debug`, `implement`, and `audit`; they are bundled supporting
+files, not additional commands or a separate plugin installation.
+
 Before committing to delivery, use specialized companion skills to refine complex requirements:
 
 ```text
