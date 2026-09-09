@@ -131,22 +131,41 @@ export const KNOWN_SKILL_ALIASES: Record<
     type: "compound-knowledge",
     referencePath: "devflow/.vendor/bughunter",
     description: "[devflow] Offensive security orchestrator & bug hunting guide"
+  },
+  ponytail: {
+    source: "https://github.com/DietrichGebert/ponytail",
+    type: "compound-knowledge",
+    referencePath: "devflow/.vendor/ponytail",
+    description: "Lazy senior dev mode for AI agents - cuts code bloat & tokens via YAGNI ladder (Backend/Logic/Fixes)"
   }
 };
 
 export const RECOMMENDED_THIRD_PARTY_SKILLS: readonly RecommendedSkillPreset[] = Object.freeze([
   {
     source: "https://github.com/tt-a1i/archify",
+    name: "archify",
     description: "Interactive technical system architecture, dataflow, and sequence trace diagrams"
   },
   {
     source: "https://github.com/cathrynlavery/diagram-design",
+    name: "diagram-design",
     description: "39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar)"
   },
   {
     source: "https://github.com/thananon/9arm-skills",
+    name: "9arm",
     all: true,
     description: "4 specialized skills (debug-mantra, post-mortem, scrutinize, management-talk)"
+  },
+  {
+    source: "https://github.com/elementalsouls/Claude-BugHunter",
+    name: "bughunter",
+    description: "Offensive security orchestrator & bug hunting guide (83 vuln classes, 681 H1 patterns)"
+  },
+  {
+    source: "https://github.com/DietrichGebert/ponytail",
+    name: "ponytail",
+    description: "Lazy senior dev mode & YAGNI optimization orchestrator (cuts ~54% bloat & tokens)"
   }
 ]);
 
@@ -498,6 +517,10 @@ export class SkillRegistryEngine {
       isCompound = true;
       compoundName = "matt-pocock";
       compoundRefPath = "devflow/.vendor/matt-pocock";
+    } else if (source.includes("DietrichGebert/ponytail") || source.includes("ponytail")) {
+      isCompound = true;
+      compoundName = "ponytail";
+      compoundRefPath = "devflow/.vendor/ponytail";
     }
 
     let tempCloneDir: string | null = null;
@@ -537,6 +560,16 @@ export class SkillRegistryEngine {
           await fs.cp(srcDocs, path.join(targetRefDir, "docs"), { recursive: true });
         }
 
+        const srcExamples = path.join(sourceDirectory, "examples");
+        if (fsSync.existsSync(srcExamples)) {
+          await fs.cp(srcExamples, path.join(targetRefDir, "examples"), { recursive: true });
+        }
+
+        const srcBenchmarks = path.join(sourceDirectory, "benchmarks");
+        if (fsSync.existsSync(srcBenchmarks)) {
+          await fs.cp(srcBenchmarks, path.join(targetRefDir, "benchmarks"), { recursive: true });
+        }
+
         for (const guideFile of [
           "ENGAGEMENTS.md", "USAGE.md", "README.md", "INSTALL.md",
           "CONTEXT.md", "AGENTS.md", "CLAUDE.md"
@@ -547,10 +580,12 @@ export class SkillRegistryEngine {
           }
         }
 
-        const isMatt = compoundName === "matt-pocock";
-        const compoundDesc = isMatt
-          ? "Master Matt Pocock's 6 AI-engineering flows (Getting Started, Main Flow, Shaping, Upkeep, Productivity, Reference)"
-          : "[devflow] Offensive security orchestrator & bug hunting guide";
+        let compoundDesc = "[devflow] Offensive security orchestrator & bug hunting guide";
+        if (compoundName === "matt-pocock") {
+          compoundDesc = "Master Matt Pocock's 6 AI-engineering flows (Getting Started, Main Flow, Shaping, Upkeep, Productivity, Reference)";
+        } else if (compoundName === "ponytail") {
+          compoundDesc = "Lazy senior dev mode for AI agents - cuts code bloat & tokens via YAGNI ladder";
+        }
 
         let compoundVer = "1.0.0";
         try {
@@ -570,8 +605,18 @@ export class SkillRegistryEngine {
 
         await fs.mkdir(targetAgentsDir, { recursive: true });
         await fs.mkdir(targetClaudeDir, { recursive: true });
-        await fs.writeFile(path.join(targetAgentsDir, "SKILL.md"), masterSkillContent, "utf8");
-        await fs.writeFile(path.join(targetClaudeDir, "SKILL.md"), masterSkillContent, "utf8");
+
+        const targetAgentSkill = path.join(targetAgentsDir, "SKILL.md");
+        if (!fsSync.existsSync(targetAgentSkill)) {
+          await fs.writeFile(targetAgentSkill, masterSkillContent, "utf8");
+        }
+        const targetClaudeSkill = path.join(targetClaudeDir, "SKILL.md");
+        if (!fsSync.existsSync(targetClaudeSkill)) {
+          const content = fsSync.existsSync(targetAgentSkill)
+            ? await fs.readFile(targetAgentSkill, "utf8")
+            : masterSkillContent;
+          await fs.writeFile(targetClaudeSkill, content, "utf8");
+        }
 
         const manifest = (await this.readManifest()) || {
           schemaVersion: 1,
@@ -903,6 +948,16 @@ export class SkillRegistryEngine {
                 const srcDocs = path.join(sourceDir, "docs");
                 if (fsSync.existsSync(srcDocs)) {
                   await fs.cp(srcDocs, path.join(targetRefDir, "docs"), { recursive: true });
+                }
+
+                const srcExamples = path.join(sourceDir, "examples");
+                if (fsSync.existsSync(srcExamples)) {
+                  await fs.cp(srcExamples, path.join(targetRefDir, "examples"), { recursive: true });
+                }
+
+                const srcBenchmarks = path.join(sourceDir, "benchmarks");
+                if (fsSync.existsSync(srcBenchmarks)) {
+                  await fs.cp(srcBenchmarks, path.join(targetRefDir, "benchmarks"), { recursive: true });
                 }
 
                 for (const guideFile of ["ENGAGEMENTS.md", "USAGE.md", "README.md", "INSTALL.md"]) {

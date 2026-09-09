@@ -110,6 +110,14 @@ npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
 # Framework Update & Safety Rollback
 npx @jakkrichm/create-nexus-devflow update [--check]
+
+# Recommended Third-Party Companion Skills
+npx @jakkrichm/create-nexus-devflow skill add --recommended
+npx @jakkrichm/create-nexus-devflow skill add archify        # Architecture & trace diagrams
+npx @jakkrichm/create-nexus-devflow skill add diagram-design # 39 visual charts & presentation templates
+npx @jakkrichm/create-nexus-devflow skill add bughunter      # Security audit & vulnerability testing
+npx @jakkrichm/create-nexus-devflow skill add ponytail       # YAGNI optimizer - cuts code bloat & tokens
+npx @jakkrichm/create-nexus-devflow skill add 9arm           # Thai dev engineering rituals
 ```
 
 ---

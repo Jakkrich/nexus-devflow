@@ -105,4 +105,52 @@ describe("SkillRegistryEngine Seam & Lifecycle", () => {
       await fs.rm(tempDir, { recursive: true, force: true });
     }
   });
+
+  it("recognizes ponytail as compound-knowledge alias and installs into devflow/.vendor/ponytail", async () => {
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-ponytail-test-"));
+    try {
+      await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+      await fs.mkdir(path.join(tempDir, ".claude", "skills"), { recursive: true });
+
+      const mockAdapter = new InMemorySkillRepositoryAdapter({
+        "https://github.com/DietrichGebert/ponytail": {
+          "package.json": JSON.stringify({ name: "@dietrichgebert/ponytail", version: "4.9.0" }),
+          "README.md": "# Ponytail",
+          "skills/ponytail/SKILL.md": "---\nname: ponytail\ndescription: Lazy senior dev mode\n---\n# Ponytail\n",
+          "examples/debounce.md": "# Debounce example",
+          "benchmarks/agentic/README.md": "# Benchmarks"
+        }
+      });
+
+      const engine = new SkillRegistryEngine(tempDir, mockAdapter);
+      const res = await engine.install("ponytail");
+
+      assert.deepEqual(res.installedSkills, ["ponytail"]);
+      assert.equal(res.failedSkills.length, 0);
+
+      const vendorSkills = path.join(tempDir, "devflow", ".vendor", "ponytail", "skills", "ponytail", "SKILL.md");
+      assert.ok(fsSync.existsSync(vendorSkills), "vendor skills should exist");
+
+      const vendorExamples = path.join(tempDir, "devflow", ".vendor", "ponytail", "examples", "debounce.md");
+      assert.ok(fsSync.existsSync(vendorExamples), "vendor examples should exist");
+
+      const vendorBenchmarks = path.join(tempDir, "devflow", ".vendor", "ponytail", "benchmarks", "agentic", "README.md");
+      assert.ok(fsSync.existsSync(vendorBenchmarks), "vendor benchmarks should exist");
+
+      const agentSkill = path.join(tempDir, ".agents", "skills", "ponytail", "SKILL.md");
+      assert.ok(fsSync.existsSync(agentSkill), "master wrapper skill should exist");
+
+      const claudeSkill = path.join(tempDir, ".claude", "skills", "ponytail", "SKILL.md");
+      assert.ok(fsSync.existsSync(claudeSkill), "claude skill should exist");
+
+      const manifestRaw = await fs.readFile(path.join(tempDir, ".nexus", "nexus-devflow.json"), "utf8");
+      const manifest = JSON.parse(manifestRaw);
+      const entry = manifest.thirdPartySkills.find((s: { name: string }) => s.name === "ponytail");
+      assert.ok(entry, "manifest must contain ponytail");
+      assert.equal(entry.type, "compound-knowledge");
+      assert.equal(entry.referencePath, "devflow/.vendor/ponytail");
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
 });

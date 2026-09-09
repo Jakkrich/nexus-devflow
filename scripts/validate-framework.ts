@@ -50,7 +50,7 @@ function readText(relativePath: string, failures: string[]): string | null {
 }
 
 function scanForLegacyReferences(failures: string[]): void {
-  const excluded = new Set([".git", "node_modules", ".venv", "venv", "env", "dist", "template"]);
+  const excluded = new Set([".git", "node_modules", ".venv", "venv", "env", "dist", "template", ".vendor", "vendor"]);
   const allowedLegacyMentions = new Set([
     path.normalize("scripts/activate-agent.mjs"),
     path.normalize("agent-bundle.manifest.json"),

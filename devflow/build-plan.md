@@ -251,4 +251,12 @@
   - *Dependencies*: None
   - *Scope*: รวมสาระสำคัญของ `scrutinize` (Outsider Stance, Call-path tracing, Challenge intent) เข้าสู่ `/audit`, ผสาน `post-mortem` เข้าสู่ `/debug` (Phase 4 Handoff) และ `/complete` (Fix Archive Template), เพิ่ม Executive / Stakeholder Summary ใน `/status` และ `/complete`, ลบโฟลเดอร์ extension `post-mortem`, `scrutinize`, `management-talk` ทั้งใน `.agents/` และ `.claude/`, ลบ entries 9arm-skills ออกจาก `.nexus/nexus-devflow.json`, อัปเดตเอกสารและยืนยัน static contracts ผ่าน 100%
 
+---
+
+## 🪓 Phase 33: Ponytail Hybrid Compound-Vendor Integration
+
+- [x] **33. Ponytail Hybrid Compound-Vendor Integration (`DISC-20260909-001`)** `[Size: S]`
+  - *Dependencies*: Feature 17 (`055`), Feature 19 (`065`), DISC-20260909-001
+  - *Scope*: นำเข้า `DietrichGebert/ponytail` ในรูปแบบ Hybrid Compound-Vendor (`type: "compound-knowledge"`) โดยโคลน upstream ลง `devflow/.vendor/ponytail/`, สร้าง Master Wrapper Skill (`.agents/skills/ponytail/` และ `.claude/`) พร้อม 5W1H Playbook และ Auto-Bypass สำหรับงาน Frontend/UI, อัปเดต `skill-registry-engine.ts`, บันทึก `thirdPartySkills` ใน `.nexus/nexus-devflow.json` และเขียน Automated Tests ครอบคลุม
+
 
