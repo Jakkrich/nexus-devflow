@@ -725,18 +725,18 @@ For specialized visual architecture and offensive security workflows, you can ex
 > [!TIP]
 > **🚀 Install Recommended Skills in One Command**:
 > ```bash
-> npx @jakkrichm/create-nexus-devflow skill add --recommended
+> npx nexus-devflow skill add --recommended
 > ```
 > **🔄 Update All Recommended Skills to Latest Version**:
 > ```bash
-> npx @jakkrichm/create-nexus-devflow skill update --recommended
+> npx nexus-devflow skill update --recommended
 > ```
 
 | Skill | Category | Description | Installation Command |
 | :--- | :--- | :--- | :--- |
-| **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
-| **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
-| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide indexed to HackerOne patterns | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
+| **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
+| **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
+| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide indexed to HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
 > **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/status`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.

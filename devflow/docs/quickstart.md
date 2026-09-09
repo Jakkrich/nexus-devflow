@@ -114,6 +114,6 @@ npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 npx @jakkrichm/create-nexus-devflow slice --stage implement
 
 # Manage vendor skills (e.g. bughunter, matt-pocock)
-npx @jakkrichm/create-nexus-devflow skill list
-npx @jakkrichm/create-nexus-devflow skill restore
+npx nexus-devflow skill list
+npx nexus-devflow skill restore
 ```

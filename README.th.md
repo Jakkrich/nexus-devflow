@@ -724,18 +724,18 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **32 Core Skil
 > [!TIP]
 > **🚀 ติดตั้ง Recommended Skills ในคำสั่งเดียว**:
 > ```bash
-> npx @jakkrichm/create-nexus-devflow skill add --recommended
+> npx nexus-devflow skill add --recommended
 > ```
 > **🔄 อัปเดต Recommended Skills ทั้งหมดให้เป็นเวอร์ชันล่าสุดจาก Upstream Git**:
 > ```bash
-> npx @jakkrichm/create-nexus-devflow skill update --recommended
+> npx nexus-devflow skill update --recommended
 > ```
 
 | สกิล (Skill) | หมวดหมู่ | หน้าที่และความสามารถ | คำสั่งติดตั้ง |
 | :--- | :--- | :--- | :--- |
-| **archify** | Visual Architecture | แผนผังสถาปัตยกรรมระบบ Interactive HTML (สลับธีม Dark/Light, มี Animation, ตรวจสอบความถูกต้องได้) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/tt-a1i/archify` |
-| **diagram-design** | Editorial Diagram | ไดอะแกรมสาย Editorial 39 รูปแบบ (Business Quadrant, Timeline, Mindmap, Radar) | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
-| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx @jakkrichm/create-nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
+| **archify** | Visual Architecture | แผนผังสถาปัตยกรรมระบบ Interactive HTML (สลับธีม Dark/Light, มี Animation, ตรวจสอบความถูกต้องได้) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
+| **diagram-design** | Editorial Diagram | ไดอะแกรมสาย Editorial 39 รูปแบบ (Business Quadrant, Timeline, Mindmap, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
+| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
 > **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/status`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
