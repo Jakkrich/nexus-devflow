@@ -9,7 +9,7 @@ This project uses **Nexus-DevFlow**, an agentic workflow layer supporting **The 
 2. **⚡ Present (Active Context)**: `devflow/context/` — Global Shared Source of Truth (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `glossary.md`) & Active Task Workspaces (`devflow/context/{xxx-slug}/`).
 3. **📦 Past (History Archive)**: `devflow/history/` — Categorized delivery archives (`features/`, `fixes/`, `rollbacks/`, and `HISTORY.md`).
 
-To start a new project, scaffold the application first in an empty folder, then run `npm create nexus-devflow` (or `npx nexus-devflow`) to overlay DevFlow onto your codebase.
+To start a new project, scaffold the application first in an empty folder, then run `npx nexus-devflow` (or `npm create @jakkrichm/nexus-devflow`) to overlay DevFlow onto your codebase.
 
 ## Read these for full context
 

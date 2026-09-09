@@ -90,17 +90,6 @@ export function tagRelease(options: VersionBumpOptions = {}): { oldVersion: stri
     console.log(`✔ Updated packages/nexus-devflow/package.json -> ${newVersion}`);
   }
 
-  // 2c. Update packages/create-nexus-devflow-shim/package.json
-  const shimPkgPath = path.join(projectRoot, "packages", "create-nexus-devflow-shim", "package.json");
-  if (fs.existsSync(shimPkgPath)) {
-    const shimPkg = JSON.parse(fs.readFileSync(shimPkgPath, "utf8")) as { version: string; dependencies?: Record<string, string> };
-    shimPkg.version = newVersion;
-    if (shimPkg.dependencies?.["@jakkrichm/create-nexus-devflow"]) {
-      shimPkg.dependencies["@jakkrichm/create-nexus-devflow"] = newVersion;
-    }
-    fs.writeFileSync(shimPkgPath, JSON.stringify(shimPkg, null, 2) + "\n", "utf8");
-    console.log(`✔ Updated packages/create-nexus-devflow-shim/package.json -> ${newVersion}`);
-  }
 
   // 3. Update .nexus/nexus-devflow.json
   const manifestPath = path.join(projectRoot, ".nexus", "nexus-devflow.json");
