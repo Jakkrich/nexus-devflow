@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-09 | `084` | Feature | Unscoped CLI Packages & Shorthand Shims (`npx nexus-devflow` & `npm create nexus-devflow`) | `e62f9dc` | `Released` | [`084-unscoped-nexus-devflow-cli-package.md`](features/084-unscoped-nexus-devflow-cli-package.md) |
 | 2026-09-09 | `083` | Feature | Ponytail Hybrid Compound-Vendor Integration (`DISC-20260909-001`) | `b579917` | `Released` | [`083-ponytail-hybrid-compound-integration.md`](features/083-ponytail-hybrid-compound-integration.md) |
 | 2026-09-08 | `082` | Feature | Consolidate 9arm Skills into DevFlow Core & Purge Extension | `ea425db` | `Released` | [`082-consolidate-9arm-skills-and-purge.md`](features/082-consolidate-9arm-skills-and-purge.md) |
 | 2026-09-08 | `081` | Feature | Purge Matt Pocock Vendor, Unify Debug Skill & Support Headless Ticket Ingestion | `d504e21` | `Released` | [`081-purge-vendor-and-unify-debug.md`](features/081-purge-vendor-and-unify-debug.md) |

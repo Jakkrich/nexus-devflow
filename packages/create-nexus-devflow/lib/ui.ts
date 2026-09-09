@@ -3,6 +3,7 @@ import readline from "node:readline";
 export interface TextStyle {
   bold: (value: string) => string;
   brightCyan: (value: string) => string;
+  brightGreen: (value: string) => string;
   cyan: (value: string) => string;
   dim: (value: string) => string;
   green: (value: string) => string;
@@ -23,6 +24,7 @@ export function createStyle(enabled: boolean = shouldUseColor()): TextStyle {
     return {
       bold: (value) => value,
       brightCyan: (value) => value,
+      brightGreen: (value) => value,
       cyan: (value) => value,
       dim: (value) => value,
       green: (value) => value,
@@ -35,6 +37,7 @@ export function createStyle(enabled: boolean = shouldUseColor()): TextStyle {
   return {
     bold: (value) => `\x1b[1m${value}\x1b[22m`,
     brightCyan: (value) => `\x1b[96m${value}\x1b[39m`,
+    brightGreen: (value) => `\x1b[92m${value}\x1b[39m`,
     cyan: (value) => `\x1b[36m${value}\x1b[39m`,
     dim: (value) => `\x1b[2m${value}\x1b[22m`,
     green: (value) => `\x1b[32m${value}\x1b[39m`,

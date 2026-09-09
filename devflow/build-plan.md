@@ -259,4 +259,12 @@
   - *Dependencies*: Feature 17 (`055`), Feature 19 (`065`), DISC-20260909-001
   - *Scope*: นำเข้า `DietrichGebert/ponytail` ในรูปแบบ Hybrid Compound-Vendor (`type: "compound-knowledge"`) โดยโคลน upstream ลง `devflow/.vendor/ponytail/`, สร้าง Master Wrapper Skill (`.agents/skills/ponytail/` และ `.claude/`) พร้อม 5W1H Playbook และ Auto-Bypass สำหรับงาน Frontend/UI, อัปเดต `skill-registry-engine.ts`, บันทึก `thirdPartySkills` ใน `.nexus/nexus-devflow.json` และเขียน Automated Tests ครอบคลุม
 
+---
+
+## 📦 Phase 34: Unscoped CLI Packages & Shorthand Shims (`npx nexus-devflow` & `npm create nexus-devflow`)
+
+- [x] **34. Unscoped CLI Packages & Shorthand Shims (`nexus-devflow` & `create-nexus-devflow`) (`084-unscoped-nexus-devflow-cli-package`)** `[Size: S]`
+  - *Dependencies*: Feature 1 (`check-gate`), Feature 17 (`055`)
+  - *Scope*: สร้างและกำหนดค่า Wrapper Shims สำหรับ Unscoped NPM Packages: `nexus-devflow` (เพื่อรองรับ `npx nexus-devflow`) และ `create-nexus-devflow` (เพื่อรองรับ `npm create nexus-devflow`), อัปเดต Pipeline การ Publish ใน `.github/workflows/publish.yml` และ `publish-devflow` ให้ซิงก์เวอร์ชันและเผยแพร่คู่ขนานกับ `@jakkrichm/create-nexus-devflow`, อัปเดตเอกสาร `AGENTS.md`, `CLAUDE.md` และ README ให้แนะนำคำสั่งสั้นเป็นหลัก
+
 

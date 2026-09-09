@@ -1,0 +1,48 @@
+{
+  "name": "nexus-devflow",
+  "version": "2.15.3",
+  "description": "Enterprise-grade spec-driven development framework for multi-agent workflows",
+  "license": "MIT",
+  "author": "Jakkrich",
+  "homepage": "https://github.com/Jakkrich/nexus-devflow#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jakkrich/nexus-devflow.git",
+    "directory": "packages/nexus-devflow"
+  },
+  "bugs": {
+    "url": "https://github.com/Jakkrich/nexus-devflow/issues"
+  },
+  "keywords": [
+    "devflow",
+    "nexus-devflow",
+    "ai",
+    "ai-coding",
+    "antigravity",
+    "codex",
+    "claude-code",
+    "agent",
+    "workflow",
+    "scaffold"
+  ],
+  "type": "module",
+  "bin": {
+    "nexus-devflow": "./bin/nexus-devflow.js",
+    "devflow": "./bin/nexus-devflow.js"
+  },
+  "files": [
+    "bin/",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "dependencies": {
+    "@jakkrichm/create-nexus-devflow": "2.15.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
