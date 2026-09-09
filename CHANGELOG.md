@@ -5,6 +5,16 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.16.3] - 2026-09-10
+
+### Added
+- English JIT reference guides for root-cause tracing, defense-in-depth, condition-based waiting, TDD anti-patterns, and two-stage review.
+- Debugging 3-Strike Architecture Review Rule and implementation Iron Law with RED/GREEN verification guidance.
+
+### Changed
+- Synchronize reference guides across Codex and Claude adapters and validate required guide files.
+- Update English/Thai READMEs, the usage manual, and quickstart with guide selection, examples, and review boundaries.
+
 ## [2.16.2] - 2026-09-09
 
 ### Changed
