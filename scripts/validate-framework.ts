@@ -307,6 +307,17 @@ async function main(): Promise<void> {
     "devflow/context/coding-standards.md",
     "devflow/context/ai-interaction.md",
     "devflow/reference/running-id-contract.md",
+    // Feature 085: Superpowers Debugging Heuristics & TDD Reference Guides
+    ".agents/skills/debug/root-cause-tracing.md",
+    ".agents/skills/debug/defense-in-depth.md",
+    ".agents/skills/debug/condition-based-waiting.md",
+    ".agents/skills/implement/tdd-anti-patterns.md",
+    ".agents/skills/audit/two-stage-review-template.md",
+    ".claude/skills/debug/root-cause-tracing.md",
+    ".claude/skills/debug/defense-in-depth.md",
+    ".claude/skills/debug/condition-based-waiting.md",
+    ".claude/skills/implement/tdd-anti-patterns.md",
+    ".claude/skills/audit/two-stage-review-template.md",
     ...(manifest?.required_paths || [])
   ];
   const forbiddenPaths = manifest?.forbidden_legacy_paths || [];
