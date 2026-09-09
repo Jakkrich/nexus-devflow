@@ -123,7 +123,7 @@ export function tagRelease(options: VersionBumpOptions = {}): { oldVersion: stri
 
   // 6. Git commit
   console.log(`\n📦 Committing release files...`);
-  execSync(`git add package.json packages/create-nexus-devflow/package.json packages/nexus-devflow/package.json packages/create-nexus-devflow-shim/package.json .nexus/nexus-devflow.json CHANGELOG.md`, {
+  execSync(`git add package.json packages/create-nexus-devflow/package.json packages/nexus-devflow/package.json .nexus/nexus-devflow.json CHANGELOG.md`, {
     cwd: projectRoot,
     stdio: "inherit"
   });
