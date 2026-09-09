@@ -28,8 +28,8 @@ test("unscoped nexus-devflow wrapper package is correctly configured and runnabl
   assert.equal(parsed.name, "nexus-devflow");
   assert.ok(parsed.version);
   assert.equal(parsed.type, "module");
-  assert.equal(parsed.bin["nexus-devflow"], "./bin/nexus-devflow.js");
-  assert.equal(parsed.bin["devflow"], "./bin/nexus-devflow.js");
+  assert.equal(parsed.bin["nexus-devflow"], "bin/nexus-devflow.js");
+  assert.equal(parsed.bin["devflow"], "bin/nexus-devflow.js");
   assert.ok(parsed.dependencies["@jakkrichm/create-nexus-devflow"]);
 
   const binStats = await fs.stat(binScriptPath);
@@ -53,7 +53,7 @@ test("unscoped create-nexus-devflow shim package is correctly configured and run
   assert.equal(parsed.name, "create-nexus-devflow");
   assert.ok(parsed.version);
   assert.equal(parsed.type, "module");
-  assert.equal(parsed.bin["create-nexus-devflow"], "./bin/create-nexus-devflow.js");
+  assert.equal(parsed.bin["create-nexus-devflow"], "bin/create-nexus-devflow.js");
   assert.ok(parsed.dependencies["@jakkrichm/create-nexus-devflow"]);
 
   const binStats = await fs.stat(binScriptPath);
