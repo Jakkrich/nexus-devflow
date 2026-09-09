@@ -37,7 +37,6 @@ Reads current version from `package.json` and updates the following files in loc
 - `package.json` -> `"version": "<new-version>"`
 - `packages/create-nexus-devflow/package.json` -> `"version": "<new-version>"`
 - `packages/nexus-devflow/package.json` -> `"version": "<new-version>"` and dependency update
-- `packages/create-nexus-devflow-shim/package.json` -> `"version": "<new-version>"` and dependency update
 - `.nexus/nexus-devflow.json` -> `"version": "<new-version>"`
 - `CHANGELOG.md` -> Inserts `## [<new-version>] - YYYY-MM-DD` release section.
 
@@ -50,7 +49,7 @@ Runs full automated test and framework contract validation:
 ### Step 4: Git Release Commit & Annotated Tagging
 1. Stages release metadata files:
    ```bash
-   git add package.json packages/create-nexus-devflow/package.json packages/nexus-devflow/package.json packages/create-nexus-devflow-shim/package.json .nexus/nexus-devflow.json CHANGELOG.md
+   git add package.json packages/create-nexus-devflow/package.json packages/nexus-devflow/package.json .nexus/nexus-devflow.json CHANGELOG.md
    ```
 2. Commits release:
    ```bash
