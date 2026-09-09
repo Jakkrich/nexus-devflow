@@ -70,6 +70,7 @@ async function main() {
   await checkPaths();
   runStep("Static framework & skill validation", "npx", ["tsx", "scripts/validate-framework.ts"]);
   runStep("Skill Routing Evaluations", "npx", ["tsx", "scripts/evals/routing.ts"]);
+  runStep("Build Installer Package", "npm", ["--prefix", "packages/create-nexus-devflow", "run", "build"]);
   runStep("Installer Package Unit Tests", "npm", ["--prefix", "packages/create-nexus-devflow", "test"]);
   runStep("Package Smoke Test", "npx", ["tsx", "scripts/smoke-package.ts"]);
 
