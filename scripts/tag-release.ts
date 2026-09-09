@@ -78,6 +78,30 @@ export function tagRelease(options: VersionBumpOptions = {}): { oldVersion: stri
     console.log(`✔ Updated packages/create-nexus-devflow/package.json -> ${newVersion}`);
   }
 
+  // 2b. Update packages/nexus-devflow/package.json
+  const nexusPkgPath = path.join(projectRoot, "packages", "nexus-devflow", "package.json");
+  if (fs.existsSync(nexusPkgPath)) {
+    const nexusPkg = JSON.parse(fs.readFileSync(nexusPkgPath, "utf8")) as { version: string; dependencies?: Record<string, string> };
+    nexusPkg.version = newVersion;
+    if (nexusPkg.dependencies?.["@jakkrichm/create-nexus-devflow"]) {
+      nexusPkg.dependencies["@jakkrichm/create-nexus-devflow"] = newVersion;
+    }
+    fs.writeFileSync(nexusPkgPath, JSON.stringify(nexusPkg, null, 2) + "\n", "utf8");
+    console.log(`✔ Updated packages/nexus-devflow/package.json -> ${newVersion}`);
+  }
+
+  // 2c. Update packages/create-nexus-devflow-shim/package.json
+  const shimPkgPath = path.join(projectRoot, "packages", "create-nexus-devflow-shim", "package.json");
+  if (fs.existsSync(shimPkgPath)) {
+    const shimPkg = JSON.parse(fs.readFileSync(shimPkgPath, "utf8")) as { version: string; dependencies?: Record<string, string> };
+    shimPkg.version = newVersion;
+    if (shimPkg.dependencies?.["@jakkrichm/create-nexus-devflow"]) {
+      shimPkg.dependencies["@jakkrichm/create-nexus-devflow"] = newVersion;
+    }
+    fs.writeFileSync(shimPkgPath, JSON.stringify(shimPkg, null, 2) + "\n", "utf8");
+    console.log(`✔ Updated packages/create-nexus-devflow-shim/package.json -> ${newVersion}`);
+  }
+
   // 3. Update .nexus/nexus-devflow.json
   const manifestPath = path.join(projectRoot, ".nexus", "nexus-devflow.json");
   if (fs.existsSync(manifestPath)) {
@@ -98,7 +122,7 @@ export function tagRelease(options: VersionBumpOptions = {}): { oldVersion: stri
         const entry = `## [${newVersion}] - ${today}\n\n### Changed\n- ${summary}\n\n`;
         changelog = changelog.slice(0, insertIdx) + entry + changelog.slice(insertIdx);
         fs.writeFileSync(changelogPath, changelog, "utf8");
-        console.log(`✔ Added release entry to CHANGELOG.md`);
+        console.log(`✔ Updated CHANGELOG.md with ${tag}`);
       }
     }
   }
@@ -110,7 +134,7 @@ export function tagRelease(options: VersionBumpOptions = {}): { oldVersion: stri
 
   // 6. Git commit
   console.log(`\n📦 Committing release files...`);
-  execSync(`git add package.json packages/create-nexus-devflow/package.json .nexus/nexus-devflow.json CHANGELOG.md`, {
+  execSync(`git add package.json packages/create-nexus-devflow/package.json packages/nexus-devflow/package.json packages/create-nexus-devflow-shim/package.json .nexus/nexus-devflow.json CHANGELOG.md`, {
     cwd: projectRoot,
     stdio: "inherit"
   });

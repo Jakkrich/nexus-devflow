@@ -26,6 +26,12 @@
     "scaffold"
   ],
   "type": "module",
+  "exports": {
+    ".": "./dist/bin/create-nexus-devflow.js",
+    "./cli": "./dist/bin/create-nexus-devflow.js",
+    "./dist/bin/create-nexus-devflow.js": "./dist/bin/create-nexus-devflow.js",
+    "./package.json": "./package.json"
+  },
   "bin": {
     "create-nexus-devflow": "dist/bin/create-nexus-devflow.js",
     "nexus-devflow": "dist/bin/create-nexus-devflow.js",

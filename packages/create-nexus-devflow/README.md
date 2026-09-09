@@ -17,10 +17,13 @@ Install and manage **Nexus-DevFlow** — an enterprise-grade agentic workflow la
 Requires Node.js 18 or newer. Run the installer in your target project directory:
 
 ```bash
-# Automated install (Recommended)
-npx -y @jakkrichm/create-nexus-devflow@latest -y
+# Standard project initialization (Recommended)
+npm create nexus-devflow
 
-# Interactive install
+# Or run directly via npx shorthand
+npx nexus-devflow
+
+# Or scoped package invocation
 npx @jakkrichm/create-nexus-devflow@latest
 ```
 
