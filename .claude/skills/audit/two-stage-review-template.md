@@ -1,45 +1,45 @@
 # Two-Stage Review Template
 
-ใช้ประกอบ /audit independent หลังอ่าน [SKILL.md](SKILL.md)
-และ [receipt contract](reference/independent-review.md)
-template นี้จัดคำถาม review; ไม่แทน request, receipt หรือ permission gate
+Use with /audit independent after reading [SKILL.md](SKILL.md)
+and the [receipt contract](reference/independent-review.md).
+This template organizes review questions; it does not replace requests, receipts, or permission gates.
 
 ## Reviewer Dispatch Context
 
-เติมข้อมูลจริงจาก immutable checkpoint:
+Fill in actual values from the immutable checkpoint:
 
 ```text
-Feature: {ID และชื่อ}
-Spec: {path และ SHA-256}
+Feature: {ID and title}
+Spec: {path and SHA-256}
 Base ref / Base SHA: {ref / full SHA}
 Target SHA: {full SHA}
 Builder adapter / model: {actual identity}
 Requested reviewer / model / execution: {request values}
-Acceptance criteria: {คัดลอกจาก spec}
-Check evidence: {commands และผล}
-Scope: {paths และ exclusions}
+Acceptance criteria: {copy from spec}
+Check evidence: {commands and results}
+Scope: {paths and exclusions}
 ```
 
-ส่งให้ fresh reviewer ตาม execution ที่บันทึกใน request
-ใช้ Phase A/B และ required fields จาก receipt contract ทุกครั้ง
+Dispatch to a fresh reviewer using the execution mode recorded in the request.
+Always follow Phase A/B and the required fields in the receipt contract.
 
 ## Stage 1: Spec Compliance
 
-ตรวจทุก AC ว่ามี implementation และหลักฐานตรงกัน
-ตรวจ scope creep, ข้อกำหนดที่ทำไม่ครบ และ test/evidence ของ behavioral AC
-รายงาน PASS/FAIL พร้อม path:line และรายการที่ขาด
-ถ้า FAIL ให้หยุดก่อน Stage 2 และส่งกลับเพื่อซ่อม
+Check every AC against its implementation and supporting evidence.
+Identify scope creep, incomplete requirements, and tests/evidence for behavioral ACs.
+Report PASS/FAIL with path:line references and missing items.
+On FAIL, stop before Stage 2 and return the work for repair.
 
 ## Stage 2: Code Quality
 
-เมื่อ Stage 1 PASS ตรวจ security, error paths, performance,
-maintainability และความถูกต้องของ docs/examples
-แต่ละ finding ระบุ ID, P0–P3, path:line, ผลกระทบ, หลักฐาน และแนวทางแก้
+After Stage 1 passes, inspect security, error paths, performance,
+maintainability, and the correctness of documentation/examples.
+For each finding, record ID, P0–P3, path:line, impact, evidence, and a suggested fix.
 
-## ผลส่งกลับ
+## Review Output
 
-ใช้ verdict และ status ตาม receipt contract พร้อม findings, คำสั่งตรวจ,
-remaining risk, reviewer identity, fresh-context declaration และเวลา
-reviewer รายงานอย่างเดียว ไม่แก้ product code
-P0/P1 ที่ open หรือ fixed ยังบล็อก; ปิดผ่านการตรวจซ้ำตาม /audit
-เก็บ target/base SHA และ spec hash เดิม ห้ามสร้างผลผ่านล่วงหน้า
+Use verdicts and statuses from the receipt contract, including findings, check commands,
+remaining risk, reviewer identity, fresh-context declaration, and review time.
+The reviewer reports findings without editing product code.
+Open or fixed P0/P1 findings still block completion; close them through re-review under /audit.
+Preserve the original target/base SHAs and spec hash; never prefill passing results.

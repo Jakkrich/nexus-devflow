@@ -281,6 +281,11 @@ Nexus-DevFlow จัดระเบียบการพัฒนาด้วย
 /debug "อาการที่พังหรือข้อผิดพลาด" ──▶ ดูหลักฐาน ──▶ /fix "สาเหตุที่ยืนยันแล้ว" ──▶ /implement
 ```
 
+Skills มี JIT guides ภาษาอังกฤษสำหรับ root-cause tracing, defense-in-depth,
+condition-based waiting, TDD anti-patterns และ two-stage review พร้อมสำเนาตรงกัน
+ใน `.agents/` และ `.claude/` ดู [วิธีเลือกใช้ guides](devflow/docs/USAGE.md#debugging-tdd--review-reference-guides)
+สำหรับสถานการณ์ใช้งาน, 3-Strike Rule และ review gates ที่ยังต้องปฏิบัติตาม
+
 ---
 
 ### วงจรการย้อนคืนฟีเจอร์อย่างปลอดภัย (The Rollback Loop)

@@ -121,6 +121,55 @@ abstraction. `/debug` diagnoses first and hands confirmed repairs to `/fix` or
 
 ---
 
+### Debugging, TDD & Review Reference Guides
+
+The `debug`, `implement`, and `audit` skills include five English reference guides.
+They are supporting files read when needed, not additional commands. Both
+`.agents/skills/` and `.claude/skills/` contain matching copies; no separate
+Superpowers plugin installation is required.
+
+| Situation | Entry point | Reference guide |
+| :--- | :--- | :--- |
+| Error deep in a call stack or unclear input origin | `/debug` Phase 4 | [Root-cause tracing](../../.agents/skills/debug/root-cause-tracing.md) |
+| Confirmed root cause needs protective checks | `/debug` repair planning → `/fix` → `/implement` | [Defense-in-depth](../../.agents/skills/debug/defense-in-depth.md) |
+| Flaky async tests or guessed sleep delays | `/debug` Phase 4 | [Condition-based waiting](../../.agents/skills/debug/condition-based-waiting.md) |
+| Planning RED/GREEN or inspecting test quality | `/implement [id]` | [TDD anti-patterns](../../.agents/skills/implement/tdd-anti-patterns.md) |
+| Preparing an independent review | `/audit independent current` | [Two-stage review template](../../.agents/skills/audit/two-stage-review-template.md) |
+
+**Debugging:** Trace the trigger before planning a repair. Use validation layers
+according to actual invariants and risks, and keep diagnostic output redacted.
+The waiting example accepts synchronous predicates only; async I/O needs an
+appropriate async helper with cancellation or timeout. `/debug` remains a
+diagnostic stage. After three unsuccessful repair attempts in the supplied
+history, stop and discuss the architecture before attempting another fix.
+
+**Implementation:** Apply the Iron Law to behavior changes according to the
+spec's test decision: observe the intended failing test before production code.
+Confirm that RED reflects missing behavior rather than broken setup, implement
+the minimum change for GREEN, then refactor with tests passing. Preserve existing
+user work; verify documentation or configuration without logic as the spec directs.
+
+**Review:** Check spec compliance first, then code quality only after Stage 1
+passes. Use the template alongside the canonical
+[independent-review contract](../../.agents/skills/audit/reference/independent-review.md).
+The configured gate still determines whether review runs, and its request,
+immutable checkpoint, reviewer identity, and receipt requirements remain in force.
+Open or fixed P0/P1 findings continue to block completion.
+
+Example prompts (use `$debug` and `$implement` in Codex where appropriate):
+
+```text
+/debug "This async test passes locally but times out in CI; inspect its waiting conditions"
+/implement 085
+/audit independent current
+```
+
+Replace `085` with your active task ID. For the review prompt, ask the reviewer
+to use `audit/two-stage-review-template.md` with the canonical receipt contract;
+the template does not launch a reviewer or authorize a checkpoint commit itself.
+
+---
+
 ## 6. Web Dashboard & CLI Management
 
 ```bash

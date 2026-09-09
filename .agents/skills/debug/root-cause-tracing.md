@@ -1,23 +1,23 @@
 # Root-Cause Tracing
 
-อ่านเมื่อ error อยู่ลึกใน call stack หรือไม่รู้ว่าค่าผิดมาจากไหน
-ใช้ประกอบ Phase 4 ของ [debug](SKILL.md); ส่งแผนซ่อมไป /fix และ /implement
+Read when an error occurs deep in the call stack or the source of invalid data is unclear.
+Use with Phase 4 of [debug](SKILL.md); hand repair plans to /fix and /implement.
 
 ## 5-Step Backward Trace
 
-1. **Observe symptom**: เก็บ error, stack และตำแหน่งที่เกิด
-2. **Immediate cause**: ระบุ operation และ input ที่ผิด
-3. **Caller**: หาว่าใครส่ง input นี้มา
-4. **Trace upward**: ไล่ parameter ย้อนทีละ call จนพบจุดเปลี่ยนค่า
-5. **Original trigger**: ทำ reproduction ยืนยันต้นตอและเสนอ regression test
+1. **Observe symptom**: Capture the error, stack, and exact location.
+2. **Immediate cause**: Identify the failing operation and invalid input.
+3. **Caller**: Find who supplied that input.
+4. **Trace upward**: Follow the parameter back one call at a time to its origin.
+5. **Original trigger**: Reproduce the root cause and propose a regression test.
 
-ตัวอย่าง: test อ่าน tempDir ก่อน beforeEach → ส่งค่าว่าง → git init ใช้ cwd ผิด
-พิสูจน์ลำดับ setup ก่อนเสนอ guard ที่ต้นทาง
+Example: a test reads tempDir before beforeEach runs, passes an empty value,
+and git init uses the wrong cwd. Prove the setup order before proposing a source guard.
 
 ## Stack Trace Instrumentation
 
-ใช้ scratch reproduction หรือ debugger ตามขอบเขต /debug
-บันทึกเฉพาะข้อมูลที่ redact แล้ว; ไม่ dump environment หรือ secrets
+Use a scratch reproduction or debugger within /debug's boundaries.
+Record only redacted data; never dump the environment or secrets.
 
 ```typescript
 console.error('[DEBUG-trace]', {
@@ -26,11 +26,11 @@ console.error('[DEBUG-trace]', {
 });
 ```
 
-ใช้ `rg 'DEBUG-trace' diagnostic.log` หา probe แล้วล้าง probe เมื่อจบ
-ระบบหลายชั้นให้เทียบ input/output ที่แต่ละ seam โดยบันทึกเพียงสถานะ SET/UNSET
+Use `rg 'DEBUG-trace' diagnostic.log` to locate probes, then remove them when finished.
+Across multiple layers, compare inputs and outputs at each seam using SET/UNSET status only.
 
-ถ้าบั๊กเกิดเมื่อรัน tests ร่วมกัน ให้แบ่งชุด tests ครึ่งหนึ่งซ้ำเพื่อหาตัว polluter
-พร้อมตรวจ state ก่อน/หลังแต่ละชุด
+If the bug appears only when tests run together, repeatedly bisect the test set
+to find the polluter, checking state before and after each subset.
 
-เสร็จเมื่อระบุ trigger, call chain และหลักฐาน reproduction ได้
-จากนั้นใช้ [defense-in-depth.md](defense-in-depth.md) วางจุดป้องกันในแผนซ่อม
+Finish when the trigger, call chain, and reproduction evidence are established.
+Then use [defense-in-depth.md](defense-in-depth.md) to plan protective checks.

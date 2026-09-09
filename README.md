@@ -281,6 +281,11 @@ When the root cause is unclear, investigate without modifying application state:
 /debug "failing test or error" ──▶ review evidence ──▶ /fix "confirmed cause" ──▶ /implement
 ```
 
+The skills include English JIT guides for root-cause tracing, defense-in-depth,
+condition-based waiting, TDD anti-patterns, and two-stage review. See the
+[reference-guide usage map](devflow/docs/USAGE.md#debugging-tdd--review-reference-guides)
+for when to use each guide, the 3-Strike Rule, and the existing review gates.
+
 ---
 
 ### The Rollback Loop (Safe Reversals)
