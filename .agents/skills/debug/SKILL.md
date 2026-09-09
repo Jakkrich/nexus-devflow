@@ -98,6 +98,11 @@ Test hypotheses by changing **one variable at a time**:
 2. **Debug Tag Rule**: If temporary diagnostic logs are necessary, tag every log line with a unique prefix, e.g. `[DEBUG-a4f2]`. This guarantees a single `grep` can find and remove all probes.
 3. **Redaction**: Redact all secrets, tokens, and credentials in terminal outputs (`<REDACTED>`).
 
+**Phase 4 JIT Reference Guides** (อ่านตามสถานการณ์):
+- **บั๊กเกิดลึกใน Call Stack / ไม่รู้ว่าค่าผิดมาจากที่ไหน** → อ่าน [`root-cause-tracing.md`](root-cause-tracing.md): 5-step backward trace + stack trace instrumentation
+- **พบ root cause แล้ว ต้องการป้องกันไม่ให้ bug กลับมา** → อ่าน [`defense-in-depth.md`](defense-in-depth.md): The Four Layers validation pattern
+- **Flaky Tests ใน Async code / tests timeout ใน CI** → อ่าน [`condition-based-waiting.md`](condition-based-waiting.md): `waitFor()` pattern แทน arbitrary `setTimeout`
+
 ---
 
 ### Phase 5: Confirm Root Cause at Real Seam
@@ -152,6 +157,29 @@ Once a fix is identified and validated (or when prompted: "write the post-mortem
   7. *Why it slipped through*: CI gap, latent code, workload gap, or review miss (blameless).
   8. *Validation*: Concrete proof (tests passing, benchmark delta, workload completion).
   9. *Action items*: Concrete follow-ups with owners and ticket keys.
+
+---
+
+## 🔴 3-Strike Architecture Review Rule
+
+ใช้กับประวัติ repair attempts ที่ส่งเข้ามา; `/debug` ยังคงวิเคราะห์และส่งแผนซ่อมเท่านั้น
+
+ถ้าลองแก้บั๊ก **3 ครั้งแล้วยังไม่หาย** → **STOP ห้ามทำ Fix ครั้งที่ 4**
+
+```text
+Fix 1 ไม่หาย → กลับ Phase 1 วิเคราะห์ใหม่
+Fix 2 ไม่หาย → กลับ Phase 1 พร้อมข้อมูลใหม่ที่ได้มา
+Fix 3 ไม่หาย → STOP — อย่าทำ Fix 4
+```
+
+**Patterns ที่บ่งชี้ว่าปัญหาอยู่ที่ Architecture (ไม่ใช่บั๊ก):**
+- แต่ละ Fix เปิดเผย shared state / coupling ใหม่ในจุดต่างๆ
+- Fix ต้องการ "massive refactoring" เพื่อ implement
+- แต่ละ Fix สร้าง symptom ใหม่ที่จุดอื่น
+
+**เมื่อเจอ Pattern นี้ → หยุด ปรึกษาผู้ใช้ก่อน:**
+- พิจารณา refactor architecture แทนที่จะ fix symptoms ต่อ
+- เสนอขอบเขต `/fix` สำหรับ architectural change โดยรักษา active-run guardrail
 
 ---
 

@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-10 | `085` | Feature | Superpowers Debugging Heuristics & TDD Reference Guides | `439f6b1` (feature work) | `Merged locally; not pushed` | [`085-superpowers-debugging-heuristics-integration.md`](features/085-superpowers-debugging-heuristics-integration.md) |
 | 2026-09-09 | `084` | Feature | Unscoped CLI Packages & Shorthand Shims (`npx nexus-devflow` & `npm create nexus-devflow`) | `e62f9dc` | `Released` | [`084-unscoped-nexus-devflow-cli-package.md`](features/084-unscoped-nexus-devflow-cli-package.md) |
 | 2026-09-09 | `083` | Feature | Ponytail Hybrid Compound-Vendor Integration (`DISC-20260909-001`) | `b579917` | `Released` | [`083-ponytail-hybrid-compound-integration.md`](features/083-ponytail-hybrid-compound-integration.md) |
 | 2026-09-08 | `082` | Feature | Consolidate 9arm Skills into DevFlow Core & Purge Extension | `ea425db` | `Released` | [`082-consolidate-9arm-skills-and-purge.md`](features/082-consolidate-9arm-skills-and-purge.md) |

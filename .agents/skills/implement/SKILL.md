@@ -114,6 +114,18 @@ Work through the spec's build steps in order, one at a time. For each step:
    - **🟢 GREEN**: Implement only the minimal code in the source file necessary to make the test pass. Re-run test and show passing output.
    - **🔵 REFACTOR**: Refactor and format cleanly, verifying that 100% of tests remain green.
    - *Code Reversion Rule*: If production code is written without a prior test for behavior changes, revert it and write the test first.
+
+   **⚖️ The Iron Law**: `NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST` — ใช้กับ behavior changes ตาม test decision ใน spec; ถ้าเขียนก่อนให้ย้อนเฉพาะงานของตนในขั้นนั้นแล้วเริ่มจาก test โดยรักษางานเดิมของผู้ใช้
+
+   **Red-Phase Verification (ก่อนไป GREEN ต้องยืนยัน 3 ข้อ):**
+   - Test ล้มเหลวจริง (ไม่ใช่ syntax error)
+   - Error message บ่งชี้ว่า "feature missing" ไม่ใช่ config ผิด
+   - Failure เกิดจากสิ่งที่ตั้งใจทดสอบ ไม่ใช่ bug ในตัว test
+
+   **Green-Phase Discipline**: เขียน code น้อยที่สุดที่ทำให้ test ผ่าน — ห้ามเพิ่ม options/features ที่ test ไม่ได้ขอ (YAGNI constraint)
+
+   > 📖 รูปแบบ anti-patterns พร้อมตัวอย่าง Bad vs Good → อ่าน [`tdd-anti-patterns.md`](tdd-anti-patterns.md)
+
 2. Implement just that step: the smallest change that satisfies its "done when."
 3. Show the **diff**, not whole files.
 4. **Explain it, and prove it.** Give a short summary: what the step delivered,

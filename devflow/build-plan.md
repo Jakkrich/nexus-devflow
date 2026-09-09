@@ -268,3 +268,11 @@
   - *Scope*: สร้างและกำหนดค่า Wrapper Shims สำหรับ Unscoped NPM Packages: `nexus-devflow` (เพื่อรองรับ `npx nexus-devflow`) และ `create-nexus-devflow` (เพื่อรองรับ `npm create nexus-devflow`), อัปเดต Pipeline การ Publish ใน `.github/workflows/publish.yml` และ `publish-devflow` ให้ซิงก์เวอร์ชันและเผยแพร่คู่ขนานกับ `@jakkrichm/create-nexus-devflow`, อัปเดตเอกสาร `AGENTS.md`, `CLAUDE.md` และ README ให้แนะนำคำสั่งสั้นเป็นหลัก
 
 
+
+---
+
+## Phase 35: Superpowers Debugging & TDD Heuristics Integration
+
+- [x] **35. Superpowers Debugging Heuristics & TDD Reference Guides (`DISC-20260909-003`, `085-superpowers-debugging-heuristics-integration`)** `[Size: S]`
+  - *Dependencies*: Feature 31 (`081`), Feature 32 (`082`)
+  - *Scope*: เพิ่ม JIT reference guides สำหรับ root-cause tracing, defense-in-depth, condition-based waiting, TDD anti-patterns และ two-stage review พร้อม 3-Strike Rule และ Iron Law; ซิงก์ `.agents/` กับ `.claude/` และตรวจ file contracts
