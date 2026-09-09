@@ -370,7 +370,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     const style = createStyle(shouldUseColor());
     if (options.subcommandAction === "add" || options.subcommandAction === "install") {
       if (options.recommended || options.subcommandArg === "recommended" || options.subcommandArg === "--recommended") {
-        const spinner = createSpinner("Installing recommended third-party skills (8 skills from 3 repositories)...").start();
+        const spinner = createSpinner("Installing recommended third-party skills...").start();
         try {
           const detail = await installRecommendedSkills(targetDir, { force: options.force });
           spinner.succeed(`Successfully installed ${detail.length} recommended third-party skill(s): ${detail.map((d) => style.bold(style.cyan(d.name))).join(", ")}`);
@@ -1508,7 +1508,7 @@ ${style.bold("Commands:")}
   ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project
 
 ${style.bold("Options:")}
-  ${style.cyan("--recommended")}      Install or update all recommended community skills (archify, diagram-design, 9arm-skills)
+  ${style.cyan("--recommended")}      Install or update all recommended community skills (archify, diagram-design, bughunter, ponytail, 9arm)
   ${style.cyan("--strict")}           Strict mode for check-gate (blocks unverified runs)
   ${style.cyan("--title <text>")}     Custom title for idea add
   ${style.cyan("--name <skill-name>")} Target specific skill in a multi-skill repository
@@ -1624,6 +1624,15 @@ function printNextSteps(): void {
   console.log(`\n${style.bold("Next steps in your AI IDE")} ${style.dim("(Antigravity, Claude Code, Codex, Cursor, etc.):")}`);
   console.log(`  - ${style.cyan("Existing project")} : Run ${style.bold(style.brightCyan("/adopt"))} ${style.dim("(or $adopt)")} to scan codebase and bootstrap context.`);
   console.log(`  - ${style.cyan("Fresh project")}    : Run ${style.bold(style.brightCyan("/onboard"))} ${style.dim("(or $onboard)")} to configure project baseline.`);
+  console.log(`\n${style.bold("Recommended Third-Party Skills")} ${style.dim("(Optional companion superpowers):")}`);
+  console.log(`  - ${style.cyan("Install all (Batch)")}:`);
+  console.log(`      ${style.bold(style.brightGreen("npx @jakkrichm/create-nexus-devflow skill add --recommended"))}`);
+  console.log(`  - ${style.cyan("Or install individually by name")}:`);
+  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add archify")}        ${style.dim("# Technical architecture & trace diagrams")}`);
+  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add diagram-design")} ${style.dim("# 39 editorial visual diagram templates & charts")}`);
+  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add bughunter")}      ${style.dim("# Offensive security audit & vulnerability testing")}`);
+  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add ponytail")}       ${style.dim("# Lazy senior dev mode - cuts code bloat & tokens")}`);
+  console.log(`      ${style.bold("npx @jakkrichm/create-nexus-devflow skill add 9arm")}           ${style.dim("# Engineering rituals & post-mortem practices")}`);
 }
 
 function printInstallSuccess(targetDir: string, result: { appliedCount: number }): void {
