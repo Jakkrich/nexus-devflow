@@ -1,13 +1,23 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import path from "node:path";
-import { execFile } from "node:child_process";
+import { execFile, execSync } from "node:child_process";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
+function ensureDistBuilt() {
+  const installerDir = path.resolve(import.meta.dirname, "..");
+  const distBin = path.join(installerDir, "dist/bin/create-nexus-devflow.js");
+  if (!fsSync.existsSync(distBin)) {
+    execSync("npm run build", { cwd: installerDir, stdio: "pipe" });
+  }
+}
+
 test("unscoped nexus-devflow wrapper package is correctly configured and runnable", async () => {
+  ensureDistBuilt();
   const pkgDir = path.resolve(import.meta.dirname, "../../nexus-devflow");
   const pkgJsonPath = path.join(pkgDir, "package.json");
   const binScriptPath = path.join(pkgDir, "bin/nexus-devflow.js");
@@ -32,6 +42,7 @@ test("unscoped nexus-devflow wrapper package is correctly configured and runnabl
 });
 
 test("unscoped create-nexus-devflow shim package is correctly configured and runnable", async () => {
+  ensureDistBuilt();
   const pkgDir = path.resolve(import.meta.dirname, "../../create-nexus-devflow-shim");
   const pkgJsonPath = path.join(pkgDir, "package.json");
   const binScriptPath = path.join(pkgDir, "bin/create-nexus-devflow.js");
