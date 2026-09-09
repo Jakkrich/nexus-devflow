@@ -27,8 +27,8 @@
   ],
   "type": "module",
   "bin": {
-    "nexus-devflow": "./bin/nexus-devflow.js",
-    "devflow": "./bin/nexus-devflow.js"
+    "nexus-devflow": "bin/nexus-devflow.js",
+    "devflow": "bin/nexus-devflow.js"
   },
   "files": [
     "bin/",
