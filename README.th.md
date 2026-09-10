@@ -7,16 +7,16 @@
 <p align="center"><strong>สถาปัตยกรรม 3 เสาหลัก และ Single Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ระดับโปรดักชันร่วมกับ AI Coding Agents อย่างเป็นระบบและควบคุมได้จริง</strong></p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow"><img src="https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/nexus-devflow"><img src="https://img.shields.io/npm/v/nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
   <a href="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml"><img src="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg" alt="Validate DevFlow"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/Jakkrich/nexus-devflow?style=flat-square&color=155eef" alt="MIT license"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/nexus-devflow?style=flat-square&color=155eef" alt="MIT license"></a>
 </p>
 
 <p align="center"><strong>ไทย</strong> | <a href="README.md">English</a></p>
 
 <p align="center">
   <a href="https://github.com/Jakkrich/nexus-devflow">Repository</a> |
-  <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow">npm</a> |
+  <a href="https://www.npmjs.com/package/nexus-devflow">npm</a> |
   <a href="https://github.com/Jakkrich/nexus-devflow/releases">Releases</a> |
   <a href="CHANGELOG.md">Changelog</a>
 </p>
@@ -26,7 +26,7 @@
 ติดตั้งลงใน Git repository ใดๆ ได้ในไม่กี่วินาที:
 
 ```bash
-npx -y @jakkrichm/create-nexus-devflow@latest -y
+npx -y nexus-devflow -y
 ```
 
 > [!NOTE]
@@ -127,7 +127,7 @@ git init
 รันคำสั่งติดตั้งแบบ Non-intrusive ในโฟลเดอร์รากของโปรเจกต์:
 
 ```bash
-npx -y @jakkrichm/create-nexus-devflow@latest -y
+npx -y nexus-devflow -y
 ```
 
 ตัวติดตั้งจะวางโฟลเดอร์ Multi-agent skills (`.agents/skills/` และ `.claude/skills/`), สร้าง Workspace โครงสร้าง `devflow/`, และอัปเดตไฟล์ `AGENTS.md` รวมถึง `CLAUDE.md` ให้อัตโนมัติ
@@ -187,13 +187,13 @@ npx -y @jakkrichm/create-nexus-devflow@latest -y
 ตรวจสอบอัปเดตโดยไม่แตะต้องไฟล์:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow update --check
+npx nexus-devflow update --check
 ```
 
 อัปเดตเวอร์ชันเวิร์กโฟลว์อย่างปลอดภัย:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow update
+npx nexus-devflow update
 ```
 
 DevFlow จะอัปเดตเฉพาะไฟล์ Skill ภายใต้ `.agents/skills/` และ `.claude/skills/` เท่านั้น โดย **ไม่มีการเขียนทับ** แผนงาน, Living Spec, บริบทใน `devflow/`, ประวัติงาน หรือซอร์สโค้ดของแอปพลิเคชันคุณเด็ดขาด
@@ -205,13 +205,13 @@ DevFlow จะอัปเดตเฉพาะไฟล์ Skill ภายใ�
 ตรวจสอบสถานะและขั้นตอนถัดไปผ่าน CLI ได้ทุกเมื่อ:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow status
+npx nexus-devflow status
 ```
 
 หากต้องการนำไปใช้ต่อกับสคริปต์หรือเครื่องมืออื่น สามารถส่งออกเป็น JSON ได้:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow status --json
+npx nexus-devflow status --json
 ```
 
 ---
@@ -221,7 +221,7 @@ npx @jakkrichm/create-nexus-devflow status --json
 เปิดใช้งาน Web Dashboard ความเร็วสูงในเครื่องของคุณ:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow dashboard
+npx nexus-devflow dashboard
 # หรือผ่าน package script:
 npm run dashboard
 ```
@@ -407,7 +407,14 @@ devflow/
 - **`/idea`**: บันทึกไอเดียลงใน `devflow/ideas.md` พร้อมระบบ AI ประเมิน Feasibility, Effort, และ Business Value อัตโนมัติ
 - **`/grill`** (หรือ **`/align`**): Socratic Alignment & Domain Modeling — ตั้งคำถามเจาะลึกเพื่อทดสอบสมมติฐาน, สกัดศัพท์เฉพาะทางลง `devflow/context/glossary.md`, และสร้าง Architecture Decision Records (`devflow/decisions/ADR-xxx.md`)
 - **`/brainstorm`**: ระดมสมองแบบ Divergent และ Convergent เพื่อสร้าง 2–3 ทางเลือกพร้อมตารางเปรียบเทียบข้อดีข้อเสีย (Trade-offs)
-- **`/discovery`**: การสำรวจเชิงลึกเพื่อวาง Roadmap หรือศึกษาความเป็นไปได้ก่อนเปิดงาน (`devflow/discoveries/DISC-xxx.md`)
+- **`/discovery`**: เครื่องมือสำรวจ 2 โหมด (Macro วางผัง Roadmap ภาพรวม หรือ Micro สำรวจฟีเจอร์เจาะลึกก่อนเริ่มพัฒนา) บันทึกลงใน `devflow/discoveries/DISC-xxx/discovery.md`
+
+```text
+/discovery                     # โหมด Macro: วางแผน Roadmap และระบบโครงการ
+/discovery "ชื่อฟีเจอร์"         # โหมด Micro: สำรวจเจาะลึกฟีเจอร์ก่อนเริ่มเขียนโค้ด
+/discovery IDEA-001            # สำรวจไอเดียจาก ideas.md สู่ Discovery
+/discovery DISC-20260910-001   # สานต่อเอกสาร Discovery เดิม
+```
 
 ---
 
@@ -654,7 +661,7 @@ DevFlow รองรับระบบ Quality Gates และการทำ In
 ```bash
 npm run dashboard
 # หรือผ่าน CLI:
-npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
+npx nexus-devflow dashboard [--port 4318]
 ```
 
 ```text
@@ -691,31 +698,31 @@ Nexus-DevFlow มีชุดคำสั่ง CLI ครบวงจรสำ�
 
 ```bash
 # เปิด Web Dashboard
-npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
+npx nexus-devflow dashboard [--port 4318]
 
 # ตรวจสอบ Quality Gatekeeper และติดตั้ง Git Pre-commit Hooks
-npx @jakkrichm/create-nexus-devflow check-gate [--strict]
-npx @jakkrichm/create-nexus-devflow hook install pre-commit
+npx nexus-devflow check-gate [--strict]
+npx nexus-devflow hook install pre-commit
 
 # Model Context Protocol (MCP) Server Hub (12 Tools มาตรฐาน)
-npx @jakkrichm/create-nexus-devflow mcp
+npx nexus-devflow mcp
 
 # Just-In-Time (JIT) Dynamic Context Slicing (ตัดเฉพาะ Context ที่จำเป็น)
-npx @jakkrichm/create-nexus-devflow slice --stage implement
+npx nexus-devflow slice --stage implement
 
 # ตรวจจับและกู้คืนความคลาดเคลื่อนของไฟล์ใน Git (Git Drift Reconciler)
-npx @jakkrichm/create-nexus-devflow drift
-npx @jakkrichm/create-nexus-devflow reconcile
+npx nexus-devflow drift
+npx nexus-devflow reconcile
 
 # ดูแผนผัง Multi-Agent Swarm และ Code Graph
-npx @jakkrichm/create-nexus-devflow swarm
-npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
+npx nexus-devflow swarm
+npx nexus-devflow graph --file src/index.ts
 
 # สร้างรายงานสรุปผลงานแบบ Standalone HTML Dashboard
 npm run report:html -- 054-optimize-dashboard-snapshot-latency
 
 # ตรวจสอบและอัปเดตเวอร์ชัน DevFlow พร้อมระบบ Backup ปลอดภัย
-npx @jakkrichm/create-nexus-devflow update [--check]
+npx nexus-devflow update [--check]
 ```
 
 ---

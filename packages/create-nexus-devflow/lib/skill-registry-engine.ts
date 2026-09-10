@@ -116,16 +116,6 @@ export const KNOWN_SKILL_ALIASES: Record<
     source: "https://github.com/cathrynlavery/diagram-design",
     description: "39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar)"
   },
-  "9arm-skills": {
-    source: "https://github.com/thananon/9arm-skills",
-    all: true,
-    description: "5 specialized skills (post-mortem, qwen-agent, scrutinize, management-talk, qwenchance)"
-  },
-  "9arm": {
-    source: "https://github.com/thananon/9arm-skills",
-    all: true,
-    description: "3 specialized skills (post-mortem, scrutinize, management-talk)"
-  },
   bughunter: {
     source: "https://github.com/elementalsouls/Claude-BugHunter",
     type: "compound-knowledge",
@@ -150,12 +140,6 @@ export const RECOMMENDED_THIRD_PARTY_SKILLS: readonly RecommendedSkillPreset[] =
     source: "https://github.com/cathrynlavery/diagram-design",
     name: "diagram-design",
     description: "39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar)"
-  },
-  {
-    source: "https://github.com/thananon/9arm-skills",
-    name: "9arm",
-    all: true,
-    description: "4 specialized skills (debug-mantra, post-mortem, scrutinize, management-talk)"
   },
   {
     source: "https://github.com/elementalsouls/Claude-BugHunter",
