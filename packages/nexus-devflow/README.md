@@ -23,7 +23,7 @@ npx nexus-devflow
 # 2. Launch local real-time Web Dashboard (http://127.0.0.1:4318)
 npx nexus-devflow dashboard
 
-# 3. Install all recommended companion skills (archify, diagram-design, bughunter, ponytail, 9arm)
+# 3. Install all recommended companion skills (archify, diagram-design, bughunter, ponytail)
 npx nexus-devflow skill add --recommended
 
 # 4. Check active workspace status, living specs, and findings
@@ -92,7 +92,6 @@ npx nexus-devflow skill add archify        # Architecture, sequence & data flow 
 npx nexus-devflow skill add diagram-design # 39 editorial charts & presentation diagram templates
 npx nexus-devflow skill add bughunter      # Offensive security audit & vulnerability testing
 npx nexus-devflow skill add ponytail       # Lazy senior dev mode - cuts code bloat & tokens (YAGNI)
-npx nexus-devflow skill add 9arm           # Engineering rituals & post-mortem practices
 
 # Update installed skills to latest versions
 npx nexus-devflow skill update --recommended

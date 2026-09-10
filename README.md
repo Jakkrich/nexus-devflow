@@ -7,16 +7,16 @@
 <p align="center"><strong>A file-backed, spec-driven workflow layer with The 3-Pillars Architecture & Single Living Spec Model for building production software with AI while staying in control.</strong></p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow"><img src="https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/nexus-devflow"><img src="https://img.shields.io/npm/v/nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
   <a href="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml"><img src="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg" alt="Validate DevFlow"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/Jakkrich/nexus-devflow?style=flat-square&color=155eef" alt="MIT license"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/nexus-devflow?style=flat-square&color=155eef" alt="MIT license"></a>
 </p>
 
 <p align="center"><strong>English</strong> | <a href="README.th.md">ไทย</a></p>
 
 <p align="center">
   <a href="https://github.com/Jakkrich/nexus-devflow">Repository</a> |
-  <a href="https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow">npm</a> |
+  <a href="https://www.npmjs.com/package/nexus-devflow">npm</a> |
   <a href="https://github.com/Jakkrich/nexus-devflow/releases">Releases</a> |
   <a href="CHANGELOG.md">Changelog</a>
 </p>
@@ -26,7 +26,7 @@ You capture ideas, architectural decisions, and product requirements in structur
 Install it inside an already scaffolded or existing Git repository in seconds:
 
 ```bash
-npx -y @jakkrichm/create-nexus-devflow@latest -y
+npx -y nexus-devflow -y
 ```
 
 > [!NOTE]
@@ -127,7 +127,7 @@ git init
 Run the non-intrusive installer from the project root:
 
 ```bash
-npx -y @jakkrichm/create-nexus-devflow@latest -y
+npx -y nexus-devflow -y
 ```
 
 The installer configures multi-agent skill adapters (`.agents/skills/` and `.claude/skills/`), sets up the `devflow/` workspace, and updates `AGENTS.md` and `CLAUDE.md`.
@@ -187,13 +187,13 @@ If you are bootstrapping DevFlow into an existing brownfield application with sh
 Check for updates without modifying files:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow update --check
+npx nexus-devflow update --check
 ```
 
 Apply managed updates safely:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow update
+npx nexus-devflow update
 ```
 
 DevFlow updates only managed workflow skills under `.agents/skills/` and `.claude/skills/`. Your project plans, living specs, context, history, and source code are never overwritten.
@@ -205,13 +205,13 @@ DevFlow updates only managed workflow skills under `.agents/skills/` and `.claud
 Run the read-only CLI status checker at any time:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow status
+npx nexus-devflow status
 ```
 
 For tool integrations, output structured JSON:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow status --json
+npx nexus-devflow status --json
 ```
 
 ---
@@ -221,7 +221,7 @@ npx @jakkrichm/create-nexus-devflow status --json
 Launch the high-performance local Web Dashboard:
 
 ```bash
-npx @jakkrichm/create-nexus-devflow dashboard
+npx nexus-devflow dashboard
 # Or via package script:
 npm run dashboard
 ```
@@ -407,7 +407,14 @@ Before committing to code, use specialized companion skills to brainstorm, stres
 - **`/idea`**: Quick capture of raw ideas into `devflow/ideas.md` with automatic AI scoring across Feasibility, Effort, and Business Value.
 - **`/grill`** (or **`/align`**): Socratic alignment & domain modeling. Challenges assumptions, extracts domain terminology into `devflow/context/glossary.md`, and generates Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
 - **`/brainstorm`**: Structured divergent and convergent ideation, creating 2–3 viable options with trade-off matrices.
-- **`/discovery`**: Multi-turn guided domain exploration producing comprehensive discovery artifacts (`devflow/discoveries/DISC-xxx.md`).
+- **`/discovery`**: Dual-mode exploration engine (Macro Roadmap Planning or Micro Feature Pre-Flight) producing structured discovery artifacts (`devflow/discoveries/DISC-xxx/discovery.md`).
+
+```text
+/discovery                     # Macro Mode: high-level roadmap & project planning
+/discovery "feature title"     # Micro Mode: explore & prove feature feasibility
+/discovery IDEA-001            # Explore a pending idea from ideas.md
+/discovery DISC-20260910-001   # Resume an existing discovery artifact
+```
 
 ---
 
@@ -655,7 +662,7 @@ Launch the local high-performance Web Dashboard:
 ```bash
 npm run dashboard
 # Or via CLI:
-npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
+npx nexus-devflow dashboard [--port 4318]
 ```
 
 ```text
@@ -692,31 +699,31 @@ Nexus-DevFlow provides a rich suite of CLI automation tools:
 
 ```bash
 # Start Web Dashboard
-npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
+npx nexus-devflow dashboard [--port 4318]
 
 # Automated Quality Gatekeeper & Pre-commit Hooks
-npx @jakkrichm/create-nexus-devflow check-gate [--strict]
-npx @jakkrichm/create-nexus-devflow hook install pre-commit
+npx nexus-devflow check-gate [--strict]
+npx nexus-devflow hook install pre-commit
 
 # Model Context Protocol (MCP) Server Hub (12 Native Tools)
-npx @jakkrichm/create-nexus-devflow mcp
+npx nexus-devflow mcp
 
 # Just-In-Time (JIT) Dynamic Context Slicing
-npx @jakkrichm/create-nexus-devflow slice --stage implement
+npx nexus-devflow slice --stage implement
 
 # Git Diff Drift Detection & Reconciler
-npx @jakkrichm/create-nexus-devflow drift
-npx @jakkrichm/create-nexus-devflow reconcile
+npx nexus-devflow drift
+npx nexus-devflow reconcile
 
 # Multi-Agent Swarm Visualizer & Code Graph Inspector
-npx @jakkrichm/create-nexus-devflow swarm
-npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
+npx nexus-devflow swarm
+npx nexus-devflow graph --file src/index.ts
 
 # Generate Standalone Interactive HTML Delivery Report
 npm run report:html -- 054-optimize-dashboard-snapshot-latency
 
 # Check and Apply Framework Updates
-npx @jakkrichm/create-nexus-devflow update [--check]
+npx nexus-devflow update [--check]
 ```
 
 ---

@@ -323,19 +323,15 @@ test("updateThirdPartySkills updates installed third-party skills from original 
   }
 });
 
-test("RECOMMENDED_THIRD_PARTY_SKILLS defines archify, diagram-design, 9arm-skills, bughunter, and ponytail", () => {
+test("RECOMMENDED_THIRD_PARTY_SKILLS defines archify, diagram-design, bughunter, and ponytail", () => {
   assert.ok(Array.isArray(RECOMMENDED_THIRD_PARTY_SKILLS));
-  assert.equal(RECOMMENDED_THIRD_PARTY_SKILLS.length, 5);
+  assert.equal(RECOMMENDED_THIRD_PARTY_SKILLS.length, 4);
 
   const sources = RECOMMENDED_THIRD_PARTY_SKILLS.map((p) => p.source);
   assert.ok(sources.some((s) => s.includes("archify")));
   assert.ok(sources.some((s) => s.includes("diagram-design")));
-  assert.ok(sources.some((s) => s.includes("9arm-skills")));
   assert.ok(sources.some((s) => s.includes("Claude-BugHunter")));
   assert.ok(sources.some((s) => s.includes("ponytail")));
-
-  const nineArm = RECOMMENDED_THIRD_PARTY_SKILLS.find((p) => p.source.includes("9arm-skills"));
-  assert.equal(nineArm?.all, true);
 });
 
 test("installRecommendedSkills and updateRecommendedSkills batch-install and refresh preset skills", async () => {

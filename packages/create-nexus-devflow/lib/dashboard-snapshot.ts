@@ -255,31 +255,12 @@ function readRecommendedSkills(projectRoot: string): RecommendedSkillItem[] {
     return { installed: false };
   };
 
-  const matt = checkInstalled("matt-pocock", "matt-pocock");
   const bughunter = checkInstalled("bughunter", "bughunter");
   const archify = checkInstalled("archify");
   const diagram = checkInstalled("diagram-design");
-  const nineArm = checkInstalled("9arm-skills");
+  const ponytail = checkInstalled("ponytail", "ponytail");
 
   return [
-    {
-      name: "matt-pocock",
-      category: "workflow",
-      title: "Matt Pocock AI Engineering Flows",
-      description: "6 AI-Engineering Flows, tracer-bullet tickets pipeline, and spec-driven development mentoring.",
-      installed: matt.installed,
-      installedPath: matt.path,
-      installCommand: "npx @jakkrichm/create-nexus-devflow install matt-pocock"
-    },
-    {
-      name: "bughunter",
-      category: "security",
-      title: "BugHunter Offensive Security Suite",
-      description: "Automated vulnerability scanner covering 83 flaw classes and 681 disclosed HackerOne patterns.",
-      installed: bughunter.installed,
-      installedPath: bughunter.path,
-      installCommand: "npx @jakkrichm/create-nexus-devflow install bughunter"
-    },
     {
       name: "archify",
       category: "visual",
@@ -287,7 +268,7 @@ function readRecommendedSkills(projectRoot: string): RecommendedSkillItem[] {
       description: "Interactive architecture, lifecycle pulse maps, sequence, and state machine HTML/SVG diagrams.",
       installed: archify.installed,
       installedPath: archify.path,
-      installCommand: "npx @jakkrichm/create-nexus-devflow install archify"
+      installCommand: "npx nexus-devflow skill add archify"
     },
     {
       name: "diagram-design",
@@ -296,16 +277,25 @@ function readRecommendedSkills(projectRoot: string): RecommendedSkillItem[] {
       description: "Broad diagramming toolkit for business architectures, IT current-state, process, and data modeling.",
       installed: diagram.installed,
       installedPath: diagram.path,
-      installCommand: "npx @jakkrichm/create-nexus-devflow install diagram-design"
+      installCommand: "npx nexus-devflow skill add diagram-design"
     },
     {
-      name: "9arm-skills",
-      category: "ecosystem",
-      title: "9Arm Community AI Workflow Suite",
-      description: "Essential productivity shortcuts, knowledge engineering, and AI pairing skills from 9Arm.",
-      installed: nineArm.installed,
-      installedPath: nineArm.path,
-      installCommand: "npx @jakkrichm/create-nexus-devflow install 9arm-skills"
+      name: "bughunter",
+      category: "security",
+      title: "BugHunter Offensive Security Suite",
+      description: "Automated vulnerability scanner covering 83 flaw classes and 681 disclosed HackerOne patterns.",
+      installed: bughunter.installed,
+      installedPath: bughunter.path,
+      installCommand: "npx nexus-devflow skill add bughunter"
+    },
+    {
+      name: "ponytail",
+      category: "workflow",
+      title: "Ponytail Lazy Senior Dev Optimizer",
+      description: "YAGNI 7-step decision ladder and token/code bloat cutter (~54% reduction).",
+      installed: ponytail.installed,
+      installedPath: ponytail.path,
+      installCommand: "npx nexus-devflow skill add ponytail"
     }
   ];
 }

@@ -41,7 +41,7 @@ test("readDashboardSnapshot composes status, workflow, history, doctor and offli
     assert.ok(Array.isArray(snapshot.mcpTools));
     assert.equal(snapshot.mcpTools.length, 12);
     assert.ok(Array.isArray(snapshot.recommendedSkills));
-    assert.ok(snapshot.recommendedSkills.length >= 5);
+    assert.ok(snapshot.recommendedSkills.length >= 4);
     assert.ok(Array.isArray(snapshot.activeTickets));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });

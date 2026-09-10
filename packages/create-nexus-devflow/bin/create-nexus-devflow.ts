@@ -1508,7 +1508,7 @@ ${style.bold("Commands:")}
   ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project
 
 ${style.bold("Options:")}
-  ${style.cyan("--recommended")}      Install or update all recommended community skills (archify, diagram-design, bughunter, ponytail, 9arm)
+  ${style.cyan("--recommended")}      Install or update all recommended community skills (archify, diagram-design, bughunter, ponytail)
   ${style.cyan("--strict")}           Strict mode for check-gate (blocks unverified runs)
   ${style.cyan("--title <text>")}     Custom title for idea add
   ${style.cyan("--name <skill-name>")} Target specific skill in a multi-skill repository
@@ -1627,12 +1627,13 @@ function printNextSteps(): void {
   console.log(`\n${style.bold("Recommended Third-Party Skills")} ${style.dim("(Optional companion superpowers):")}`);
   console.log(`  - ${style.cyan("Install all (Batch)")}:`);
   console.log(`      ${style.bold(style.brightGreen("npx nexus-devflow skill add --recommended"))}`);
-  console.log(`  - ${style.cyan("Or install individually by name")}:`);
+  console.log(`  - ${style.cyan("Update all to latest (Batch)")}:`);
+  console.log(`      ${style.bold(style.brightCyan("npx nexus-devflow skill update --recommended"))}`);
+  console.log(`  - ${style.cyan("Or manage individually by name")}:`);
   console.log(`      ${style.bold("npx nexus-devflow skill add archify")}        ${style.dim("# Technical architecture & trace diagrams")}`);
   console.log(`      ${style.bold("npx nexus-devflow skill add diagram-design")} ${style.dim("# 39 editorial visual diagram templates & charts")}`);
   console.log(`      ${style.bold("npx nexus-devflow skill add bughunter")}      ${style.dim("# Offensive security audit & vulnerability testing")}`);
   console.log(`      ${style.bold("npx nexus-devflow skill add ponytail")}       ${style.dim("# Lazy senior dev mode - cuts code bloat & tokens")}`);
-  console.log(`      ${style.bold("npx nexus-devflow skill add 9arm")}           ${style.dim("# Engineering rituals & post-mortem practices")}`);
 }
 
 function printInstallSuccess(targetDir: string, result: { appliedCount: number }): void {
