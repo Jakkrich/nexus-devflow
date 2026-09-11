@@ -148,7 +148,7 @@ Progress lives in persistent files, not in transient chat history:
 
 - **Branch Naming**: `feature/{xxx-slug}` or `fix/{xxx-slug}`.
 - **Commit Messages**: Conventional imperative format (e.g. `feat(uninstall): add clean eject CLI command`, `fix(parser): handle undefined metadata field`).
-- **No AI Attribution in Commits**: Never include "Generated with AI" or agent metadata in Git commit logs.
+- **No AI Attribution in Commits**: Never include "Generated with AI", AI `Co-Authored-By` trailers, or agent metadata in Git commit logs or PR descriptions; preserve genuine human attribution. Claude Code supports `"attribution": { "commit": "", "pr": "" }` in `.claude/settings.json` to suppress default signatures.
 - **Explicit Approval for Push & Deploy**: Merge approval is strictly separate from consent to `git push` to remote repositories or deploy to production.
 
 ---

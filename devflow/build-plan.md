@@ -276,3 +276,12 @@
 - [x] **35. Superpowers Debugging Heuristics & TDD Reference Guides (`DISC-20260909-003`, `085-superpowers-debugging-heuristics-integration`)** `[Size: S]`
   - *Dependencies*: Feature 31 (`081`), Feature 32 (`082`)
   - *Scope*: เพิ่ม JIT reference guides สำหรับ root-cause tracing, defense-in-depth, condition-based waiting, TDD anti-patterns และ two-stage review พร้อม 3-Strike Rule และ Iron Law; ซิงก์ `.agents/` กับ `.claude/` และตรวจ file contracts
+
+---
+
+## Phase 36: Upstream AI Blueprint v1.6.1 Synchronization
+
+- [x] **36. Sync Upstream v1.6.1 (Installer Symlink Rejection, Completion Recovery Engine, Rebuild History Preservation, Local-Only Spec Review & Status Evidence Alignment) (`DISC-20260911-001`, `086-sync-upstream-ai-blueprint-v161`)** `[Size: M]`
+  - *Dependencies*: Feature 28 (`073`), DISC-20260911-001
+  - *Scope*: นำเข้า 5 เสาหลักความปลอดภัยและความแม่นยำจาก AI Blueprint v1.6.1: (1) ปฏิเสธ Symlink paths และตรวจ type compatibility ในตัวติดตั้ง `create-nexus-devflow`, (2) สร้างสัญญา `completion-recovery.md` พร้อม JSON comment annotation `<!-- devflow:completion ... -->` กู้คืนการส่งมอบงานที่สะดุด, (3) สร้างสัญญา `build-history.md` รองรับการตั้งชื่อ `--build-N` เมื่อ Rebuild ฟีเจอร์ที่เคยถูก Rollback, (4) ขยาย `lib/review.ts` ให้รองรับ `specSnapshot` สำหรับ Local-only spec review, (5) บูรณาการ `classifyWorkEvidence` ใน `project-status-engine.ts` และ `dashboard.ts` ป้องกัน False Ready State เมื่อ verification failed หรือพบ malformed records, (6) ซิงก์สคิลและเอกสารทั้ง `.agents/` และ `.claude/` พร้อม automated tests ผ่าน 100%
+

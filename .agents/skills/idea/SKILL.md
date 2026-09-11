@@ -26,32 +26,32 @@ When invoked:
 3. Allocate the next sequential ID (e.g. `IDEA-001`, `IDEA-002`).
 
 ### 2. AI Feasibility & Value Analysis
-Evaluate the user's raw idea and generate an enriched summary in **Thai (`th`)**:
-- **ไอเดียตั้งต้น (Raw Idea)**: ข้อความที่ผู้ใช้ระบุ
-- **AI Feasibility & Tech**: ประเมินความเป็นไปได้ (ง่าย / ปานกลาง / ซับซ้อน) พร้อมแนะนำ Library, API, หรือแนวทางเทคนิคเบื้องต้น
-- **Value & Potential**: คุณค่า ประโยชน์ และความน่าสนใจของฟีเจอร์นี้
-- **Quick Seed (สรุปประเด็นกันลืม)**: 2-3 ประเด็นทางเทคนิคหรือแนวทางการต่อยอด เพื่อให้กลับมาอ่านทีหลังแล้วจำบริบทได้ทันที
+Evaluate the user's raw idea and generate an enriched entry in Thai (`th` per user communication rules):
+- **Raw Idea**: The user's input description
+- **AI Feasibility & Tech**: Feasibility rating (Easy / Medium / Complex) along with recommended libraries, APIs, or architectural approaches
+- **Value & Potential**: Business value, user benefits, and strategic impact
+- **Quick Seed**: 2-3 key technical nuances or seed points to preserve context for later pickup
 
 ### 3. Append to `devflow/ideas.md`
 Insert the new idea block directly under `## 📌 Pending Ideas` in `devflow/ideas.md`:
 
 ```markdown
-### [IDEA-001] {หัวข้อไอเดียสั้นๆ}
+### [IDEA-001] {Brief idea title}
 - **บันทึกเมื่อ**: {YYYY-MM-DD}
-- **ไอเดียตั้งต้น**: {ข้อความที่ผู้ใช้ป้อน}
-- **AI Feasibility & Tech**: {บทวิเคราะห์ความเป็นไปได้และเครื่องมือ}
-- **Value & Potential**: {บทวิเคราะห์คุณค่าและความน่าสนใจ}
+- **ไอเดียตั้งต้น**: {User's raw idea text}
+- **AI Feasibility & Tech**: {Feasibility and tooling analysis}
+- **Value & Potential**: {Value and impact analysis}
 - **Quick Seed (กันลืม)**:
-  1. {ประเด็นสำคัญที่ 1}
-  2. {ประเด็นสำคัญที่ 2}
-- **สถานะ**: `Pending` (หยิบไปทำได้ด้วย `/feature IDEA-001` หรือ `/discovery IDEA-001`)
+  1. {Key point 1}
+  2. {Key point 2}
+- **สถานะ**: `Pending` (Ready for pickup via `/feature IDEA-001` or `/discovery IDEA-001`)
 ```
 
-*(หากมีข้อความ `*(ยังไม่มีไอเดียค้างอยู่...)*` ให้ลบออกเมื่อมีไอเดียแรก)*
+*(If placeholder `*(ยังไม่มีไอเดียค้างอยู่...)*` exists, remove it upon recording the first idea)*
 
 ### 4. Output Summary
 Report to the user:
 - Allocated Idea ID: `[IDEA-xxx]`
 - Summary of Feasibility & Value analysis
 - Seed points saved
-- Instructions for promotion: "เมื่อพร้อมลงมือทำ สามารถพิมพ์ `/feature IDEA-xxx` หรือ `/discovery IDEA-xxx` ได้ทันที"
+- Instructions for promotion: "Ready to implement? Run `/feature IDEA-xxx` or `/discovery IDEA-xxx` anytime."

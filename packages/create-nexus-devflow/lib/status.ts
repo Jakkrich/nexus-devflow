@@ -1,5 +1,6 @@
 import {
   ProjectStatusEngine,
+  classifyWorkEvidence,
   type CompletionState,
   type HumanStatusOptions,
   type ProjectStatus,
@@ -9,7 +10,8 @@ import {
   type StatusCurrentWork,
   type StatusFindings,
   type StatusNextAction,
-  type StatusWarning
+  type StatusWarning,
+  type WorkEvidence
 } from "./project-status-engine.js";
 
 async function readProjectStatus(
@@ -35,7 +37,7 @@ function shouldUseColor(
   return engine.shouldUseColor(isTTY, environment);
 }
 
-export { formatHumanStatus, readProjectStatus, shouldUseColor };
+export { classifyWorkEvidence, formatHumanStatus, readProjectStatus, shouldUseColor };
 
 export type {
   CompletionState,
@@ -47,5 +49,6 @@ export type {
   StatusCurrentWork,
   StatusFindings,
   StatusNextAction,
-  StatusWarning
+  StatusWarning,
+  WorkEvidence
 };

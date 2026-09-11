@@ -37,7 +37,7 @@ Provide at least 2-3 materially distinct approaches:
 ### 3. Trade-off Comparison Matrix
 Construct a structured evaluation table:
 
-| Option | Pros (ข้อดี) | Cons (ข้อเสีย) | Effort & Complexity | Verdict / Status |
+| Option | Pros | Cons | Effort & Complexity | Verdict / Status |
 | :--- | :--- | :--- | :--- | :--- |
 | **Option A** | ... | ... | Low / Med / High | ... |
 | **Option B** | ... | ... | Low / Med / High | **Recommended** |

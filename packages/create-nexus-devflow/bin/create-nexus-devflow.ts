@@ -72,7 +72,8 @@ import {
 import {
   applyPreparedUpdate,
   prepareUpdate,
-  type PreparedUpdate
+  type PreparedUpdate,
+  validateInstallDestinations
 } from "../lib/update.js";
 import {
   applyUninstall,
@@ -810,6 +811,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     adapter: options.adapter,
     role: options.role
   });
+  await validateInstallDestinations(prepared.templateFiles, targetDir);
   spinner.stop();
 
   printInstallPlan(prepared);

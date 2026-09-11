@@ -68,6 +68,56 @@ work branch, and `Base commit` cannot equal `Target commit`. If none of those
 base refs reliably covers the active work, stop instead of creating a receipt
 whose review range cannot be re-derived.
 
+## Local spec snapshot
+
+For a new request whose verified spec is intentionally ignored, keep application
+code in the approved checkpoint and freeze the spec outside Git. Add exactly one
+field after `Spec hash`, using a plain path with no backticks:
+
+```markdown
+**Spec snapshot:** devflow/.state/review-specs/<Target commit>-<Spec hash>.md
+```
+
+Substitute the request's full lowercase target SHA and lowercase spec hash. This
+is the only permitted snapshot path; duplicate fields or another path are
+malformed. Tracked-spec requests do not need this field. Existing requests and
+receipts without it retain their previous hash, freshness, and execution rules.
+Never retroactively add `Spec snapshot` to a pending or completed record.
+
+Phase A prepares the copy before publishing a new pending request:
+
+1. Read the verified active spec as raw bytes and calculate its SHA-256 without
+   decoding, trimming, or normalizing line endings. Use that digest as `Spec hash`.
+2. Use `lstat` on the selected project root and every directory below it leading
+   to the spec and snapshot. Require ordinary directories, a regular spec file,
+   and a regular file for any existing snapshot. Reject symbolic links, including
+   dangling links. Ancestor aliases above the selected root are not inspected.
+   Create missing snapshot directories only beneath verified ordinary parents;
+   a missing snapshot leaf is allowed only for exclusive creation below them.
+3. Require both paths to be ignored and untracked, absent from the index and
+   `Target commit`. Check ignore status separately for each path, require no
+   entries from `git ls-files --stage -- <spec-path> <snapshot-path>` or
+   `git ls-tree -r --name-only <target> -- <spec-path> <snapshot-path>`, and
+   distinguish expected absence from Git failure. Never force-add files or
+   change ignore visibility to make these checks pass.
+4. Create the snapshot exclusively, for example with Node's `fs.open` using
+   `wx`, then write the raw byte buffer and close the handle. If it already
+   exists, reuse only an ordinary file whose bytes exactly match the spec.
+   Conflicting bytes, unsafe paths, or a failed write stop preparation; never
+   overwrite or repair the existing snapshot in place.
+5. Read both files back and require identical raw bytes and the recorded hash.
+   Recheck their path and Git conditions before writing the request. Keep the
+   snapshot unchanged through review and completion; do not automatically delete
+   or regenerate it to make an existing receipt pass.
+
+The target/base fields bind application code; `Spec hash` binds both local files.
+The snapshot is an input, never another allowed dirty Git path. Manual handoff
+names the original checkout, target/base SHAs, snapshot path, and hash. An
+automatic child must be able to read those same ignored inputs and installed
+project-local skills. If that access cannot be confirmed, retain the request and
+use the manual fresh-session handoff in the original checkout. Do not copy local
+inputs externally or substitute a clone/worktree that lacks them.
+
 ## Completed receipt
 
 Keep the request fields unchanged and replace `pending` with `passed` or
@@ -131,6 +181,9 @@ A receipt is current only when all of these hold:
   equals `Base commit`, and it remains a locally recorded remote default branch,
   local `main`, or local `master`.
 - The exact task spec bytes still match `Spec hash`.
+- When `Spec snapshot` is present, both raw files match that hash and every
+  snapshot path, visibility, and Git condition above still holds. Missing or
+  changed snapshot inputs make the record stale; Git failure never passes.
 - No tracked, staged, unstaged, or untracked path differs from the target except
   `devflow/context/{xxx-slug}/review.md` and `devflow/context/{xxx-slug}/findings.md`.
 - The completed reviewer adapter matches `Requested reviewer`.
@@ -149,8 +202,11 @@ A receipt is current only when all of these hold:
   record the actual value.
 
 Any other code, test, configuration, spec, or acceptance-criteria change makes
-the receipt stale. A stale receipt never proves the new state. Prepare a new
-request against a new approved checkpoint and review the whole delta again.
+the receipt stale. A stale receipt never proves the new state. Product changes
+need a new approved checkpoint. A local-spec-only revision may reuse the same
+approved product HEAD after normal spec and verification gates, with a new
+snapshot, a new request, and a full fresh review. Never create an empty commit
+just to capture ignored spec changes or edit a passed receipt into a new review.
 
 The adapter, model, and context fields are declared metadata. DevFlow proves
 the target and staleness, but it cannot cryptographically prove that a separate
