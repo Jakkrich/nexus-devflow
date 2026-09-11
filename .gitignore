@@ -68,6 +68,8 @@ devflow/history/fixes/*
 devflow/history/rollbacks/*
 !devflow/history/rollbacks/.gitkeep
 !devflow/history/rollbacks/README.md
+devflow/inbox/*/raw/*
+devflow/inbox/raw/*
 devflow/inbox/*
 !devflow/inbox/.gitkeep
 devflow/analysis/*
