@@ -346,6 +346,13 @@ export async function prepareUpdate({
       continue;
     }
 
+    // Special handling for user-owned workflow configuration (devflow/config.json)
+    if (relativePath === "devflow/config.json") {
+      // User-owned config is preserved and merged during update rather than treated as a conflict
+      nextManifest.managedFiles[relativePath] = currentHash;
+      continue;
+    }
+
     const recordedHash = previousManifest?.managedFiles?.[relativePath];
     if (recordedHash && recordedHash === currentHash) {
       updateList.push(relativePath);
@@ -549,6 +556,29 @@ export async function applyPreparedUpdate(
       }
     }
 
+    // Smart merge user-owned config (devflow/config.json) if it exists
+    const configRelPath = "devflow/config.json";
+    const templateConfigFile = prepared.templateFiles.get(configRelPath);
+    if (templateConfigFile) {
+      const targetConfigFile = targetPath(prepared.targetDir, configRelPath);
+      try {
+        const stats = await fs.lstat(targetConfigFile);
+        if (stats.isFile()) {
+          const targetRaw = await fs.readFile(targetConfigFile, "utf8");
+          const targetJson = JSON.parse(targetRaw.replace(/^\uFEFF/, ""));
+          const templateRaw = await fs.readFile(templateConfigFile.source, "utf8");
+          const templateJson = JSON.parse(templateRaw.replace(/^\uFEFF/, ""));
+          const { merged, changed } = deepMergeDefaults(targetJson, templateJson);
+          if (changed) {
+            await fs.writeFile(targetConfigFile, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
+          }
+          prepared.nextManifest.managedFiles[configRelPath] = await hashFile(targetConfigFile);
+        }
+      } catch {
+        // If file doesn't exist or is invalid JSON, ignore
+      }
+    }
+
     await writeInstallManifest(prepared.targetDir, prepared.nextManifest);
     await writeControlIgnore(prepared.targetDir);
   } catch (error: unknown) {
@@ -743,4 +773,44 @@ export async function validateInstallDestinations(
   await assertDestinationType(path.join(targetDir, CONTROL_DIR), "directory");
   await assertDestinationType(path.join(targetDir, MANIFEST_PATH), "file");
   await assertDestinationType(path.join(targetDir, CONTROL_DIR, ".gitignore"), "file");
+}
+
+export function deepMergeDefaults(
+  target: any,
+  defaults: any
+): { merged: any; changed: boolean } {
+  if (typeof target !== "object" || target === null || Array.isArray(target)) {
+    return { merged: target, changed: false };
+  }
+  let changed = false;
+  const merged = { ...target };
+  for (const [key, val] of Object.entries(defaults)) {
+    if (!(key in merged)) {
+      merged[key] = val;
+      changed = true;
+    } else if (typeof val === "object" && val !== null && !Array.isArray(val)) {
+      const sub = deepMergeDefaults(merged[key], val);
+      merged[key] = sub.merged;
+      if (sub.changed) changed = true;
+    }
+  }
+  return { merged, changed };
+}
+
+export async function updateManifestFileHash(
+  targetDir: string,
+  relativePath: string
+): Promise<void> {
+  const manifest = await readManifest(targetDir);
+  if (!manifest) return;
+  const targetFile = targetPath(targetDir, relativePath);
+  try {
+    const stats = await fs.lstat(targetFile);
+    if (stats.isFile()) {
+      manifest.managedFiles[relativePath] = await hashFile(targetFile);
+      await writeInstallManifest(targetDir, manifest);
+    }
+  } catch {
+    // ignore
+  }
 }

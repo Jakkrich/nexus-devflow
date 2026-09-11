@@ -141,3 +141,89 @@ test("applyPreparedUpdate creates backup directory and backup.json when updating
   }
 });
 
+test("prepareUpdate and applyPreparedUpdate preserve and merge user-owned devflow/config.json without conflicts", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-config-test-"));
+  const templateRoot1 = path.join(tempDir, "template1");
+  const templateRoot2 = path.join(tempDir, "template2");
+  const targetDir = path.join(tempDir, "target");
+
+  await fs.mkdir(path.join(templateRoot1, "devflow"), { recursive: true });
+  await fs.mkdir(path.join(templateRoot2, "devflow"), { recursive: true });
+  await fs.mkdir(targetDir, { recursive: true });
+
+  await fs.writeFile(path.join(templateRoot1, "AGENTS.md"), "# AGENTS\n");
+  await fs.writeFile(path.join(templateRoot1, "LICENSE"), "MIT\n");
+  await fs.writeFile(
+    path.join(templateRoot1, "devflow", "config.json"),
+    JSON.stringify({
+      schemaVersion: 1,
+      workflow: { role: "dev", stepReview: "feature" }
+    }, null, 2)
+  );
+
+  await fs.writeFile(path.join(templateRoot2, "AGENTS.md"), "# AGENTS v2\n");
+  await fs.writeFile(path.join(templateRoot2, "LICENSE"), "MIT\n");
+  await fs.writeFile(
+    path.join(templateRoot2, "devflow", "config.json"),
+    JSON.stringify({
+      schemaVersion: 1,
+      workflow: { role: "dev", stepReview: "feature" },
+      git: { featureBranchPrefix: "feature/" }
+    }, null, 2)
+  );
+
+  try {
+    // 1. Initial install
+    const prep1 = await prepareUpdate({
+      targetDir,
+      templateRoot: templateRoot1,
+      version: "1.0.0",
+      adapter: "both"
+    });
+    await applyPreparedUpdate(prep1);
+
+    // 2. User customizes devflow/config.json
+    const configPath = path.join(targetDir, "devflow", "config.json");
+    const userConfig = {
+      schemaVersion: 1,
+      workflow: { role: "sa", stepReview: "every", customFlag: true }
+    };
+    await fs.writeFile(configPath, JSON.stringify(userConfig, null, 2));
+
+    // 3. Prepare update to v2 - MUST NOT have conflicts for devflow/config.json!
+    const prep2 = await prepareUpdate({
+      targetDir,
+      templateRoot: templateRoot2,
+      version: "2.0.0",
+      adapter: "both"
+    });
+
+    assert.equal(prep2.conflictList.length, 0);
+
+    // 4. Apply update - MUST preserve user settings and merge new git prefix
+    await applyPreparedUpdate(prep2);
+
+    const mergedRaw = await fs.readFile(configPath, "utf8");
+    const mergedConfig = JSON.parse(mergedRaw);
+
+    assert.equal(mergedConfig.workflow.role, "sa");
+    assert.equal(mergedConfig.workflow.stepReview, "every");
+    assert.equal(mergedConfig.workflow.customFlag, true);
+    assert.equal(mergedConfig.git.featureBranchPrefix, "feature/");
+
+    // 5. Subsequent update must be completely clean with 0 conflicts and 0 updates
+    const prep3 = await prepareUpdate({
+      targetDir,
+      templateRoot: templateRoot2,
+      version: "2.0.0",
+      adapter: "both"
+    });
+
+    assert.equal(prep3.conflictList.length, 0);
+    assert.equal(prep3.updateList.length, 0);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+

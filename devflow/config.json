@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "workflow": {
+    "role": "dev",
     "stepReview": "feature",
     "checkpointCommits": "disabled"
   },

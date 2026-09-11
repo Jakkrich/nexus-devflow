@@ -73,6 +73,7 @@ import {
   applyPreparedUpdate,
   prepareUpdate,
   type PreparedUpdate,
+  updateManifestFileHash,
   validateInstallDestinations
 } from "../lib/update.js";
 import {
@@ -827,9 +828,14 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       if (fsSync.existsSync(configPath)) {
         const raw = await fs.readFile(configPath, "utf8");
         const cfg = JSON.parse(raw.replace(/^\uFEFF/, ""));
+        let modified = false;
         if (cfg && cfg.workflow && cfg.workflow.role !== options.role) {
           cfg.workflow.role = options.role;
+          modified = true;
+        }
+        if (modified) {
           await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`, "utf8");
+          await updateManifestFileHash(targetDir, "devflow/config.json");
         }
       }
     } catch {
@@ -900,9 +906,14 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     if (fsSync.existsSync(configPath)) {
       const raw = await fs.readFile(configPath, "utf8");
       const cfg = JSON.parse(raw.replace(/^\uFEFF/, ""));
+      let modified = false;
       if (cfg && cfg.workflow && cfg.workflow.role !== options.role) {
         cfg.workflow.role = options.role;
+        modified = true;
+      }
+      if (modified) {
         await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`, "utf8");
+        await updateManifestFileHash(targetDir, "devflow/config.json");
       }
     }
   } catch {
