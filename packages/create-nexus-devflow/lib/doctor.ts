@@ -215,7 +215,8 @@ export async function runDoctor(
   const hasManifest = await fileExists(manifestPath);
   if (hasManifest) {
     try {
-      const parsed = JSON.parse(await fs.readFile(manifestPath, "utf8"));
+      const content = await fs.readFile(manifestPath, "utf8");
+      const parsed = JSON.parse(content.replace(/^\uFEFF/, ""));
       checks.push({
         id: "manifest_state",
         name: "Internal State Manifest (.nexus/)",

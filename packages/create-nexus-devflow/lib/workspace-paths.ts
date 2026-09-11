@@ -76,7 +76,7 @@ export async function resolveWorkspacePaths(projectRoot: string): Promise<Worksp
   try {
     const manifestPath = path.join(projectRoot, ".nexus", "nexus-devflow.json");
     const content = await fs.readFile(manifestPath, "utf8");
-    const manifest = JSON.parse(content);
+    const manifest = JSON.parse(content.replace(/^\uFEFF/, ""));
     if (manifest && typeof manifest === "object" && manifest.workspace) {
       const isDecade = Boolean(
         manifest.workspace.contextDir?.includes("00-context") ||

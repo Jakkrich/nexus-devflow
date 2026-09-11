@@ -128,7 +128,8 @@ async function readProjectConfig(projectRoot: string): Promise<ProjectConfigResu
     let parsed: unknown;
 
     try {
-      parsed = JSON.parse(await fs.readFile(configPath, "utf8"));
+      const content = await fs.readFile(configPath, "utf8");
+      parsed = JSON.parse(content.replace(/^\uFEFF/, ""));
     } catch (error: unknown) {
       if (error instanceof SyntaxError) {
         return invalidResult(`Invalid DevFlow config JSON: ${PROJECT_CONFIG_PATH}`);

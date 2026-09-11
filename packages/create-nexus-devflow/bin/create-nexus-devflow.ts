@@ -826,7 +826,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       const configPath = path.join(targetDir, "devflow", "config.json");
       if (fsSync.existsSync(configPath)) {
         const raw = await fs.readFile(configPath, "utf8");
-        const cfg = JSON.parse(raw);
+        const cfg = JSON.parse(raw.replace(/^\uFEFF/, ""));
         if (cfg && cfg.workflow && cfg.workflow.role !== options.role) {
           cfg.workflow.role = options.role;
           await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`, "utf8");
@@ -899,7 +899,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     const configPath = path.join(targetDir, "devflow", "config.json");
     if (fsSync.existsSync(configPath)) {
       const raw = await fs.readFile(configPath, "utf8");
-      const cfg = JSON.parse(raw);
+      const cfg = JSON.parse(raw.replace(/^\uFEFF/, ""));
       if (cfg && cfg.workflow && cfg.workflow.role !== options.role) {
         cfg.workflow.role = options.role;
         await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`, "utf8");

@@ -252,7 +252,7 @@ export async function readManifest(targetDir: string): Promise<Manifest | null> 
 
   try {
     const content = await fs.readFile(manifestFile, "utf8");
-    const data = JSON.parse(content) as Manifest;
+    const data = JSON.parse(content.replace(/^\uFEFF/, "")) as Manifest;
 
     if (!data || data.schemaVersion !== MANIFEST_SCHEMA_VERSION) {
       throw new Error("Unsupported manifest schema version.");
