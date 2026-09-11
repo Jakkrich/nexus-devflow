@@ -46,6 +46,31 @@ export async function isDecadeNumberedLayout(projectRoot: string): Promise<boole
   }
 }
 
+export async function hasLegacyDevflowStructure(projectRoot: string): Promise<boolean> {
+  const devflowDir = path.join(projectRoot, "devflow");
+  const legacyPaths = [
+    path.join(devflowDir, "context"),
+    path.join(devflowDir, "discoveries"),
+    path.join(devflowDir, "history"),
+    path.join(devflowDir, "docs"),
+    path.join(devflowDir, "reference"),
+    path.join(devflowDir, "runs"),
+    path.join(devflowDir, "ideas.md"),
+    path.join(devflowDir, "project-plan.md"),
+    path.join(devflowDir, "build-plan.md")
+  ];
+
+  for (const p of legacyPaths) {
+    try {
+      await fs.stat(p);
+      return true;
+    } catch {
+      // continue
+    }
+  }
+  return false;
+}
+
 export async function resolveWorkspacePaths(projectRoot: string): Promise<WorkspacePaths> {
   // 1. Check manifest for custom workspace configuration
   try {

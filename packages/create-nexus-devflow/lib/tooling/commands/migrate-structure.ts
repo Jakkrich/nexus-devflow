@@ -213,7 +213,10 @@ export async function migrateDevflowStructure(projectRoot: string): Promise<Migr
           planningDir: "devflow/30-planning",
           tasksDir: "devflow/40-tasks",
           historyDir: "devflow/50-history",
-          docsDir: "devflow/60-docs"
+          docsDir: "devflow/60-docs",
+          referenceDir: "devflow/10-ideation/reference",
+          discoveriesDir: "devflow/20-discovery/discoveries",
+          decisionsDir: "devflow/20-discovery/decisions"
         };
         delete manifest.workspace.runsDir;
         await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 2), "utf8");

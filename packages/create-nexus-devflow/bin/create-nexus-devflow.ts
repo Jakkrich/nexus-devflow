@@ -91,7 +91,7 @@ import {
   updateThirdPartySkills
 } from "../lib/skill-manager.js";
 import { migrateDevflowStructure } from "../lib/tooling/commands/migrate-structure.js";
-import { isDecadeNumberedLayout } from "../lib/workspace-paths.js";
+import { hasLegacyDevflowStructure, isDecadeNumberedLayout } from "../lib/workspace-paths.js";
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -804,6 +804,15 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     const replaceConflicts =
       options.force || (await confirmUpdateConflicts(prepared, options));
 
+    // Auto-migrate structure if legacy layout is detected before applying template updates
+    if (await hasLegacyDevflowStructure(targetDir)) {
+      const migration = await migrateDevflowStructure(targetDir);
+      if (migration.success && migration.moved.length > 0) {
+        const style = createStyle(shouldUseColor());
+        console.log(`\n${style.green("✔")} ${style.bold("Automatically migrated folder structure to Decade-Numbered layout (00-context, 10-ideation...).")}`);
+      }
+    }
+
     spinner.start("Applying DevFlow updates...");
     const result = await applyPreparedUpdate(prepared, { replaceConflicts });
 
@@ -827,8 +836,8 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       // ignore
     }
 
-    // Auto-migrate structure if legacy layout is detected
-    if (!(await isDecadeNumberedLayout(targetDir))) {
+    // Auto-migrate structure if legacy layout or un-migrated items remain
+    if (await hasLegacyDevflowStructure(targetDir)) {
       const migration = await migrateDevflowStructure(targetDir);
       if (migration.success && migration.moved.length > 0) {
         const style = createStyle(shouldUseColor());
@@ -866,6 +875,15 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
   }
 
+  // Auto-migrate structure if overlaying onto existing project with legacy layout
+  if (await hasLegacyDevflowStructure(targetDir)) {
+    const migration = await migrateDevflowStructure(targetDir);
+    if (migration.success && migration.moved.length > 0) {
+      const style = createStyle(shouldUseColor());
+      console.log(`\n${style.green("✔")} ${style.bold("Automatically migrated folder structure to Decade-Numbered layout (00-context, 10-ideation...).")}`);
+    }
+  }
+
   spinner.start("Installing Nexus-DevFlow overlay...");
   const result = await applyPreparedUpdate(prepared, {
     replaceConflicts: options.force || prepared.conflictList.length > 0
@@ -889,6 +907,15 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
   } catch {
     // ignore
+  }
+
+  // Auto-migrate structure if legacy layout or un-migrated items remain
+  if (await hasLegacyDevflowStructure(targetDir)) {
+    const migration = await migrateDevflowStructure(targetDir);
+    if (migration.success && migration.moved.length > 0) {
+      const style = createStyle(shouldUseColor());
+      console.log(`\n${style.green("✔")} ${style.bold("Automatically migrated folder structure to Decade-Numbered layout (00-context, 10-ideation...).")}`);
+    }
   }
 
   spinner.succeed("Nexus-DevFlow overlay successfully installed!");
