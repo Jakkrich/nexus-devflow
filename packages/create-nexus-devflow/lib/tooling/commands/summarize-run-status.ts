@@ -34,7 +34,9 @@ export const summarizeRunStatusCommand: ToolCommand = {
       }
     }
 
-    const contextDir = path.join(projectRoot, "devflow", "context");
+    const decadeTasksDir = path.join(projectRoot, "devflow", "40-tasks");
+    const legacyContextDir = path.join(projectRoot, "devflow", "context");
+    const contextDir = fs.existsSync(decadeTasksDir) ? decadeTasksDir : legacyContextDir;
     let activeStage = "idle";
     let activeTask: string | null = null;
 

@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-11 | `088` | Feature | Decade-Numbered Folder Architecture, Legacy Path Resolver & Structure Migration Engine | `31fddc4` | `Merged locally; not pushed` | [`088-decade-numbered-folder-architecture.md`](features/088-decade-numbered-folder-architecture.md) |
 | 2026-09-11 | `087` | Feature | AI-Orchestrated Project-Local Vendor Skill Ingestion (`/vendor`, `skill-add`, `equip`, `ingest`) | `4efaec4` | `Merged locally; not pushed` | [`087-ai-orchestrated-vendor-skill-ingestion.md`](features/087-ai-orchestrated-vendor-skill-ingestion.md) |
 | 2026-09-11 | `086` | Feature | Upstream AI Blueprint v1.6.1 Synchronization (Installer Security, Completion Recovery, Build History, Local-Only Review & Status Alignment) | `de2e867` | `Merged locally; not pushed` | [`086-sync-upstream-ai-blueprint-v161.md`](features/086-sync-upstream-ai-blueprint-v161.md) |
 | 2026-09-10 | `085` | Feature | Superpowers Debugging Heuristics & TDD Reference Guides | `439f6b1` (feature work) | `Merged locally; not pushed` | [`085-superpowers-debugging-heuristics-integration.md`](features/085-superpowers-debugging-heuristics-integration.md) |

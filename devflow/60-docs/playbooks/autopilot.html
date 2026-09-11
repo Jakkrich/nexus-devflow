@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🤖 autopilot — คู่มือการใช้งาน 5W1H | Nexus-DevFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       NEXUS-DEVFLOW — BASE LIGHT TEMPLATE (Paper & Ink + Teal)
+       ============================================================ */
+    :root {
+      color-scheme: light;
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-alt: #eef0f4;
+      --border: #e1e4ea;
+      --ink: #171a21;
+      --ink-muted: #5b6072;
+      --ink-faint: #9297a6;
+
+      --accent: #0f766e;
+      --accent-soft: #e5f3f1;
+      --accent-line: #9fd6d0;
+
+      --violet: #6d28d9;
+      --violet-soft: #f1ecfc;
+
+      --amber: #b45309;
+      --amber-soft: #fdf1e2;
+      --amber-line: #f3d19c;
+
+      --red: #b42318;
+      --red-soft: #fdecea;
+      --red-line: #f3b8b0;
+
+      --green: #15803d;
+      --green-soft: #e8f6ee;
+      --green-line: #a9dcbb;
+
+      --radius: 10px;
+      --shadow-sm: 0 1px 2px rgba(23, 26, 33, .05);
+      --shadow-md: 0 8px 24px -8px rgba(23, 26, 33, .14);
+
+      --font-display: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --font-body: 'Google Sans Text', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: -1px -1px;
+      color: var(--ink);
+      line-height: 1.65;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    .container { max-width: 860px; margin: 0 auto; }
+
+    .hero {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.25rem 2rem 2rem;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--amber), var(--accent) 55%, var(--violet));
+    }
+
+    .hero-ruler {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 96px;
+      height: 96px;
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    .eyebrow-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .9rem;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(21, 128, 61, .45);
+      animation: pulse 2.4s ease-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(21, 128, 61, .45); }
+      70% { box-shadow: 0 0 0 8px rgba(21, 128, 61, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: .74rem;
+      letter-spacing: .02em;
+      color: var(--ink-muted);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.55rem, 3vw, 1.95rem);
+      color: var(--ink);
+    }
+
+    .hero p.sub {
+      color: var(--ink-muted);
+      font-size: .98rem;
+      margin-top: .5rem;
+      max-width: 58ch;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: 1.15rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .3rem .65rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 500;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    .badge.b-accent { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+    .badge.b-amber { background: var(--amber-soft); border-color: var(--amber-line); color: var(--amber); }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: .9rem;
+      margin-bottom: 2rem;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .metric-label {
+      font-size: .82rem;
+      color: var(--ink-muted);
+      margin-top: .2rem;
+    }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.7rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-head .num {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      color: var(--ink-faint);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .15rem .45rem;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .section p { color: var(--ink); font-size: .96rem; }
+    .section p + p { margin-top: .6rem; }
+    .section ul { margin: .75rem 0 0 1.35rem; font-size: .95rem; }
+    .section li + li { margin-top: .4rem; }
+
+    .alert {
+      display: flex;
+      gap: .7rem;
+      align-items: flex-start;
+      padding: .9rem 1.1rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      margin: 1rem 0;
+    }
+
+    .alert-warning { background: var(--amber-soft); border: 1px solid var(--amber-line); color: #8a4109; }
+    .alert-info { background: var(--accent-soft); border: 1px solid var(--accent-line); color: #0b544e; }
+
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      margin-top: .9rem;
+    }
+
+    .pipeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: .9rem;
+      background: var(--surface-alt);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: .8rem 1rem;
+      transform: translateX(-6px);
+      opacity: 0;
+      animation: step-in .4s ease-out forwards;
+    }
+
+    .pipeline-step:nth-child(1) { animation-delay: .02s; }
+    .pipeline-step:nth-child(2) { animation-delay: .07s; }
+    .pipeline-step:nth-child(3) { animation-delay: .12s; }
+    .pipeline-step:nth-child(4) { animation-delay: .17s; }
+    .pipeline-step:nth-child(5) { animation-delay: .22s; border-left-color: var(--green); }
+
+    @keyframes step-in {
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      font-weight: 700;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .terminal {
+      background: #14161c;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin: 1rem 0;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .6rem .8rem;
+      background: #1d2029;
+      border-bottom: 1px solid #262a35;
+    }
+
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-dot.r { background: #ff5f57; }
+    .terminal-dot.y { background: #febc2e; }
+    .terminal-dot.g { background: #28c840; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: #8b90a0;
+      margin-left: .5rem;
+    }
+
+    .terminal-body {
+      padding: 1rem 1.1rem 1.2rem;
+      font-family: var(--font-mono);
+      font-size: .86rem;
+      color: #d7dae2;
+    }
+
+    .terminal-line { display: flex; gap: .55rem; margin-bottom: .5rem; }
+    .terminal-prompt { color: #5fd9c9; flex-shrink: 0; }
+    .terminal-out { color: #8b90a0; }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 1em;
+      background: #5fd9c9;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .diagram-slot {
+      border: 1.5px dashed var(--accent-line);
+      border-radius: var(--radius);
+      background: repeating-linear-gradient(135deg, var(--accent-soft) 0 10px, transparent 10px 20px);
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .diagram-slot .tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      background: var(--surface);
+      border: 1px solid var(--accent-line);
+      color: var(--accent);
+      padding: .25rem .6rem;
+      border-radius: 6px;
+      margin-bottom: .6rem;
+    }
+
+    .diagram-slot p {
+      color: var(--ink-muted);
+      font-size: .88rem;
+      max-width: 52ch;
+      margin: 0 auto;
+    }
+
+    .code-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .8rem 1rem;
+      margin: .6rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: .86rem;
+      color: var(--ink);
+    }
+
+    .copy-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+      padding: .35rem .65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .74rem;
+      font-family: var(--font-body);
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    .copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+      margin-top: .75rem;
+    }
+
+    th, td { border: 1px solid var(--border); padding: .7rem .9rem; text-align: left; }
+    th { background: var(--surface-alt); color: var(--ink); font-weight: 600; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .18rem .5rem;
+      border-radius: 999px;
+      font-size: .76rem;
+      font-weight: 600;
+    }
+
+    .pill-active { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-line); }
+
+    footer {
+      text-align: center;
+      font-size: .82rem;
+      color: var(--ink-faint);
+      margin-top: 2.5rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ========== HERO ========== -->
+    <header class="hero">
+      <svg class="hero-ruler" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M100 0 V100 M100 20 H80 M100 40 H85 M100 60 H80 M100 80 H85" stroke="#c9cdd6" stroke-width="1" />
+        <path d="M0 100 H100 M20 100 V80 M40 100 V85 M60 100 V80 M80 100 V85" stroke="#c9cdd6" stroke-width="1" />
+      </svg>
+      <div class="eyebrow-row">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="eyebrow">devflow/docs/playbooks/autopilot.html</span>
+      </div>
+      <h1>🤖 autopilot — คู่มือการใช้งาน 5W1H</h1>
+      <p class="sub">โหมดพัฒนาอัตโนมัติรอบเดียวจบ (Single Bounded Loop) ควบรวม Spec + Code + QA พร้อมหยุดรอการตรวจทานก่อนส่งมอบ</p>
+      <div class="badge-row">
+        <span class="badge b-accent">Single Bounded Loop</span>
+        <span class="badge b-amber">Theme: Light (Paper & Ink)</span>
+        <span class="badge">Human-in-the-Loop</span>
+      </div>
+    </header>
+
+    <!-- ========== METRICS ========== -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">1</div>
+        <div class="metric-label">Single Bounded Feature Run</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">0</div>
+        <div class="metric-label">Unattended Merges (Safe Final Gate)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">TDD & Quality Gates Enforced</div>
+      </div>
+    </div>
+
+    <!-- ========== 1. WHAT ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">01</span><h2>What (คืออะไร &amp; ทำอะไรได้บ้าง)</h2></div>
+      <p><code>/autopilot</code> คือโหมดพัฒนาอัตโนมัติแบบ <strong>1 รอบการทำงานที่มีขอบเขตชัดเจน (Single Bounded Loop)</strong> โดย AI จะควบรวมการเขียนสเปก (<code>/feature</code> หรือ <code>/fix</code>), การเขียนโค้ด (<code>/implement</code>), และการตรวจเทสต์ (<code>/check</code> & Quality Gates) วิ่งต่อเนื่องจนจบ แล้วหยุดรอให้มนุษย์ตรวจรับงาน (Review Packet) ก่อนการ Commit และ Merge</p>
+      <ul>
+        <li><strong>Unified Pass</strong> — ควบรวม Preflight ➔ Living Spec ➔ TDD Implementation ➔ Multi-lane QA ในคำสั่งเดียว</li>
+        <li><strong>Safety Boundary</strong> — หยุดก่อนการ Merge หรือ Push เสมอ เพื่อให้คุณตรวจผลงานก่อนส่งมอบ</li>
+        <li><strong>Review Packet</strong> — สรุปความเปลี่ยนแปลง diff, ผลการรันเทส, และคำสั่งตรวจทานอย่างชัดเจน</li>
+      </ul>
+    </section>
+
+    <!-- ========== 2. WHY ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">02</span><h2>Why (ทำไมต้องใช้ &amp; ประโยชน์ที่ได้รับ)</h2></div>
+      <ul>
+        <li><strong>ประหยัดเวลาและลดการขัดจังหวะ</strong> — ไม่ต้องคอยกด Approve ทุกขั้นตอนย่อย AI จะทำต่อเนื่องจนเสร็จพร้อมตรวจ</li>
+        <li><strong>รักษามาตรฐานวิศวกรรมครบถ้วน</strong> — ยังคงรัน TDD, Typecheck, Unit Tests และเกณฑ์ความปลอดภัยเต็มรูปแบบ ไม่ตัดตอน</li>
+        <li><strong>ปลอดภัย ไม่ทำลายระบบ</strong> — มี Safe Boundary หยุดก่อนการ Merge หรือ Push ขึ้น Git เสมอ</li>
+      </ul>
+    </section>
+
+    <!-- ========== 3. WHO ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">03</span><h2>Who (เหมาะสำหรับใคร)</h2></div>
+      <ul>
+        <li><strong>Solo Developers</strong> — ที่ต้องการให้ AI ช่วยเคลียร์งานใน Build Plan อย่างรวดเร็ว</li>
+        <li><strong>Experienced Engineers</strong> — ที่มีข้อกำหนดในแผนงานชัดเจน และต้องการตรวจโค้ดทีเดียวตอนงานเสร็จเรียบร้อย</li>
+      </ul>
+    </section>
+
+    <!-- ========== 4. WHERE & SAFETY ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">04</span><h2>Where (ใช้กับส่วนไหน &amp; สิ่งที่สร้าง)</h2></div>
+      <div class="alert alert-warning">
+        <span aria-hidden="true">⚠️</span>
+        <div><strong>Human Final Gate:</strong> Autopilot จะไม่ทำการ squash-merge หรือ push ขึ้น remote ให้โดยอัตโนมัติ ต้องได้รับการยืนยันผ่าน <code>/complete</code> เสมอ</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>จุดทำงาน</th>
+            <th>สถานะ</th>
+            <th>หน้าที่</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Feature Branch</strong></td>
+            <td><span class="pill pill-active">ACTIVE</span></td>
+            <td>ทำงานแยกอิสระบน branch เช่น <code>feature/xxx-slug</code></td>
+          </tr>
+          <tr>
+            <td><strong>Task Workspace</strong></td>
+            <td><span class="pill pill-active">ACTIVE</span></td>
+            <td>บันทึกสเปกและหลักฐาน QA ใน <code>devflow/context/{xxx-slug}/</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== 5. WHEN ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">05</span><h2>When (ควรใช้ตอนไหน &amp; ลำดับขั้นตอน)</h2></div>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-num">1</div>
+          <div><strong>Preflight</strong> — ตรวจสอบสถานะและเช็กความพร้อมของ Git working tree</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">2</div>
+          <div><strong>Spec Creation</strong> — ร่าง living spec และเกณฑ์ Done-When Criteria</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">3</div>
+          <div><strong>TDD Implementation</strong> — เขียนโค้ดแบบ Red-Green-Refactor พร้อมรันเทส</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">4</div>
+          <div><strong>Quality Gates</strong> — รัน multi-lane verification, lint และ audit</div>
+        </div>
+        <div class="pipeline-step after">
+          <div class="step-num">5</div>
+          <div><strong>Review Packet Stop</strong> — แสดงสรุปงานให้มนุษย์ตรวจทานก่อนพิมพ์ <code>/complete</code></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 6. HOW & RECIPES ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">06</span><h2>How (ใช้งานอย่างไร &amp; ตัวอย่างคำสั่งจริง)</h2></div>
+
+      <!-- Terminal Mockup UI -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">zsh — nexus-devflow</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">❯</span><span>/autopilot</span></div>
+          <div class="terminal-line"><span class="terminal-out">→ Auto-implementing next feature from build-plan.md...</span></div>
+          <div class="terminal-line"><span class="terminal-out">✓ All quality gates passed. Review packet ready. Type /complete to finish.</span><span class="cursor" aria-hidden="true"></span></div>
+        </div>
+      </div>
+
+      <p style="margin-top: 1.25rem; font-size: .9rem; color: var(--ink-muted);">สูตรคำสั่งที่พร้อมใช้งาน:</p>
+
+      <div class="code-box">
+        <code>/autopilot</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/autopilot')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/autopilot 3</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/autopilot 3')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/autopilot fix "ปุ่ม Export Report กดแล้วไม่ตอบสนอง"</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/autopilot fix \"ปุ่ม Export Report กดแล้วไม่ตอบสนอง\"')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/autopilot resume</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/autopilot resume')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/autopilot help</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/autopilot help')">Copy</button>
+      </div>
+    </section>
+
+    <!-- ========== 7. DIAGRAM SLOT ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">07</span><h2>แผนภาพสถาปัตยกรรม &amp; Autopilot Bounded Execution Pipeline</h2></div>
+      
+      <!-- Real Interactive / Vector Autopilot Architecture Diagram -->
+      <div style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-top: 0.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 0.5rem;">
+            <span>🤖</span> Autopilot: Single Bounded Loop &amp; Mandatory Human Gate Architecture
+          </div>
+          <span class="badge b-accent" style="font-size: 0.72rem;">archify: data-theme="light"</span>
+        </div>
+
+        <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; display: block; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+          <defs>
+            <linearGradient id="bg-auto-phase" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f8fafc" />
+              <stop offset="100%" stop-color="#f1f5f9" />
+            </linearGradient>
+            <linearGradient id="bg-auto-gate" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fef2f2" />
+              <stop offset="100%" stop-color="#fee2e2" />
+            </linearGradient>
+            <marker id="arrow-auto" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 8 5 L 0 9 z" fill="#0f766e" />
+            </marker>
+          </defs>
+
+          <!-- Stage Dividers -->
+          <line x1="250" y1="20" x2="250" y2="320" stroke="#e1e4ea" stroke-width="1.5" stroke-dasharray="4" />
+          <line x1="510" y1="20" x2="510" y2="320" stroke="#e1e4ea" stroke-width="1.5" stroke-dasharray="4" />
+
+          <!-- Column Headers -->
+          <text x="30" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#0284c7">1. สร้างสเปกและโค้ดอัตโนมัติ</text>
+          <text x="270" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#0f766e">2. ตรวจสอบผ่านเกตคุณภาพ</text>
+          <text x="530" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626">3. จุดหยุดตรวจโดยมนุษย์ (ห้ามข้าม)</text>
+
+          <!-- Column 1: Automated Execution -->
+          <rect x="25" y="60" width="205" height="75" rx="8" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.2" />
+          <text x="37" y="84" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#0f766e">เฟส 1: สร้าง Living Spec</text>
+          <text x="37" y="102" font-family="Google Sans Text, sans-serif" font-size="9" fill="#134e4a">• ดึงรายการจาก build-plan.md</text>
+          <text x="37" y="117" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#0f766e">devflow/context/{xxx}/spec.md</text>
+
+          <path d="M 127 135 L 127 155" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-auto)" fill="none" />
+
+          <rect x="25" y="160" width="205" height="75" rx="8" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.2" />
+          <text x="37" y="184" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#0f766e">เฟส 2: เขียนโค้ดตามรอบ TDD</text>
+          <text x="37" y="202" font-family="Google Sans Text, sans-serif" font-size="9" fill="#134e4a">• แตกกิ่งทำงาน: feature/{xxx}</text>
+          <text x="37" y="217" font-family="Google Sans Text, sans-serif" font-size="9" fill="#134e4a">• วงจรทดสอบ Red-Green-Refactor</text>
+
+          <path d="M 127 235 L 127 255" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-auto)" fill="none" />
+
+          <rect x="25" y="260" width="205" height="50" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" />
+          <text x="37" y="282" font-family="Google Sans, sans-serif" font-size="10.5" font-weight="700" fill="#334155">ขอบเขตการทำงานจำกัด (Boundary)</text>
+          <text x="37" y="297" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#475569">ทำทีละ 1 ฟีเจอร์เท่านั้น (ไม่ทำต่อเนื่อง)</text>
+
+          <!-- Column 2: Quality Gates -->
+          <rect x="270" y="60" width="220" height="75" rx="8" fill="url(#bg-auto-phase)" stroke="#cbd5e1" stroke-width="1.2" />
+          <text x="282" y="84" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#0f766e">เกต A: ตรวจสถิต (Static Safety)</text>
+          <text x="282" y="102" font-family="Google Sans Text, sans-serif" font-size="9" fill="#334155">• ผ่าน Typecheck และ Linter 100%</text>
+          <text x="282" y="118" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#0f766e">npm run check:static</text>
+
+          <rect x="270" y="145" width="220" height="75" rx="8" fill="url(#bg-auto-phase)" stroke="#cbd5e1" stroke-width="1.2" />
+          <text x="282" y="169" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#0f766e">เกต B: ชุดทดสอบอัตโนมัติ (Tests)</text>
+          <text x="282" y="187" font-family="Google Sans Text, sans-serif" font-size="9" fill="#334155">• รันชุดทดสอบ Unit &amp; Integration</text>
+          <text x="282" y="203" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#0f766e">npm test (ผ่านเขียวทั้งหมด)</text>
+
+          <rect x="270" y="230" width="220" height="80" rx="8" fill="url(#bg-auto-phase)" stroke="#cbd5e1" stroke-width="1.2" />
+          <text x="282" y="254" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#0f766e">เกต C: ตรวจสอบอิสระ (Review)</text>
+          <text x="282" y="272" font-family="Google Sans Text, sans-serif" font-size="9" fill="#334155">• ตรวจสอบแบบแยกเซสชันอิสระ</text>
+          <text x="282" y="288" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#0f766e">ตามนโยบาย devflow/config.json</text>
+
+          <!-- Column 3: Mandatory Human Stop -->
+          <rect x="530" y="60" width="225" height="150" rx="8" fill="url(#bg-auto-gate)" stroke="#fca5a5" stroke-width="1.5" />
+          <text x="545" y="86" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#991b1b">🛑 จุดหยุดตรวจ: กล่องส่งมอบ</text>
+          <text x="545" y="108" font-family="Google Sans Text, sans-serif" font-size="9.5" fill="#7f1d1d">• ห้าม Merge อัตโนมัติเด็ดขาด</text>
+          <text x="545" y="126" font-family="Google Sans Text, sans-serif" font-size="9.5" fill="#7f1d1d">• ห้ามรัน /complete โดยพลการ</text>
+          <text x="545" y="144" font-family="Google Sans Text, sans-serif" font-size="9.5" fill="#7f1d1d">• ส่งสถานะ "ready" เพื่อรอตรวจ</text>
+          <rect x="545" y="156" width="195" height="40" rx="5" fill="#ffffff" stroke="#fecaca" />
+          <text x="555" y="174" font-family="Google Sans, sans-serif" font-size="9" font-weight="700" fill="#dc2626">รอการอนุมัติจากมนุษย์</text>
+          <text x="555" y="188" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#991b1b">User ตรวจและสั่ง /complete เอง</text>
+
+          <rect x="530" y="225" width="225" height="85" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2" />
+          <text x="545" y="249" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#166534">สิ่งที่ผู้ใช้ต้องดำเนินการ:</text>
+          <text x="545" y="268" font-family="JetBrains Mono, monospace" font-size="9" fill="#15803d">1. ตรวจสอบความถูกต้อง (diff)</text>
+          <text x="545" y="284" font-family="JetBrains Mono, monospace" font-size="9" fill="#15803d">2. สั่ง /complete {xxx}</text>
+          <text x="545" y="299" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#14532d">จัดเก็บประวัติและ Squash เข้า main</text>
+
+          <!-- Inter-column Arrows -->
+          <path d="M 230 197 L 270 182" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-auto)" fill="none" />
+          <path d="M 490 182 L 530 135" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-auto)" fill="none" />
+          <path d="M 642 210 L 642 225" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-auto)" fill="none" />
+        </svg>
+
+        <p style="margin-top: 0.9rem; font-size: 0.85rem; color: var(--ink-muted); text-align: center;">
+          สถาปัตยกรรม Autopilot: ทำงานอัตโนมัติเฉพาะภายในกรอบ 1 ฟีเจอร์ ➔ ผ่าน Quality Gates ➔ หยุดที่ Review Packet รอให้มนุษย์สั่ง /complete เสมอ
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Nexus-DevFlow Framework &middot; Paper &amp; Ink Light Theme &middot; Updated: 2026-09-09
+    </footer>
+  </div>
+</body>
+</html>

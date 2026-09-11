@@ -16,8 +16,12 @@ const coreSkillDocumentationPaths = [
   "README.md",
   "README.th.md",
   "packages/create-nexus-devflow/README.md",
-  "devflow/docs/USAGE.md",
-  "devflow/docs/workflow-surface-map.md"
+  fs.existsSync(path.join(projectRoot, "devflow", "60-docs", "USAGE.md"))
+    ? "devflow/60-docs/USAGE.md"
+    : "devflow/docs/USAGE.md",
+  fs.existsSync(path.join(projectRoot, "devflow", "60-docs", "workflow-surface-map.md"))
+    ? "devflow/60-docs/workflow-surface-map.md"
+    : "devflow/docs/workflow-surface-map.md"
 ];
 
 function fail(message: string, failures: string[]): void {
@@ -303,10 +307,18 @@ async function main(): Promise<void> {
     ".agents/skills",
     ".claude/skills",
     ".nexus/nexus-devflow.json",
-    "devflow/context/project-overview.md",
-    "devflow/context/coding-standards.md",
-    "devflow/context/ai-interaction.md",
-    "devflow/reference/running-id-contract.md",
+    (fs.existsSync(path.join(projectRoot, "devflow", "00-context", "project-overview.md"))
+      ? "devflow/00-context/project-overview.md"
+      : "devflow/context/project-overview.md"),
+    (fs.existsSync(path.join(projectRoot, "devflow", "00-context", "coding-standards.md"))
+      ? "devflow/00-context/coding-standards.md"
+      : "devflow/context/coding-standards.md"),
+    (fs.existsSync(path.join(projectRoot, "devflow", "00-context", "ai-interaction.md"))
+      ? "devflow/00-context/ai-interaction.md"
+      : "devflow/context/ai-interaction.md"),
+    (fs.existsSync(path.join(projectRoot, "devflow", "10-ideation", "reference", "running-id-contract.md"))
+      ? "devflow/10-ideation/reference/running-id-contract.md"
+      : "devflow/reference/running-id-contract.md"),
     // Feature 085: Superpowers Debugging Heuristics & TDD Reference Guides
     ".agents/skills/debug/root-cause-tracing.md",
     ".agents/skills/debug/defense-in-depth.md",
@@ -331,8 +343,18 @@ async function main(): Promise<void> {
   for (const item of requiredPaths) {
     if (seenRequired.has(item)) continue;
     seenRequired.add(item);
-    if (!fs.existsSync(path.join(projectRoot, item))) fail(`Missing required path: ${item}`, failures);
-    else ok(`Found ${item}`);
+    const directExists = fs.existsSync(path.join(projectRoot, item));
+    const decadeContextExists = item.startsWith("devflow/context/") &&
+      fs.existsSync(path.join(projectRoot, "devflow", "00-context", path.basename(item)));
+    const decadeRefExists = item.startsWith("devflow/reference/") &&
+      (fs.existsSync(path.join(projectRoot, "devflow", "10-ideation", "reference", path.basename(item))) ||
+       fs.existsSync(path.join(projectRoot, "devflow", "10-ideation", path.basename(item))));
+
+    if (!directExists && !decadeContextExists && !decadeRefExists) {
+      fail(`Missing required path: ${item}`, failures);
+    } else {
+      ok(`Found ${item}${decadeContextExists ? " (via devflow/00-context)" : decadeRefExists ? " (via devflow/10-ideation)" : ""}`);
+    }
   }
 
   for (const item of forbiddenPaths) {

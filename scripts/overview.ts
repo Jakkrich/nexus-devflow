@@ -353,15 +353,47 @@ function createDefaultTemplate(): string {
   ].join("\n");
 }
 
+async function resolveExistingPath(candidates: string[]): Promise<string> {
+  for (const candidate of candidates) {
+    try {
+      await fs.stat(candidate);
+      return candidate;
+    } catch {
+      // try next candidate
+    }
+  }
+  return candidates[candidates.length - 1];
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   const projectRoot = args.projectRoot;
-  const projectPlanPath = path.join(projectRoot, "devflow", "project-plan.md");
-  const buildPlanPath = path.join(projectRoot, "devflow", "build-plan.md");
-  const ideasPath = path.join(projectRoot, "devflow", "ideas.md");
-  const historyPath = path.join(projectRoot, "devflow", "history", "HISTORY.md");
-  const templateDefaultPath = path.join(projectRoot, "devflow", "reference", "project-overview-template.md");
-  const outputPath = path.join(projectRoot, "devflow", "context", "project-overview.md");
+
+  const isDecade = await fs.stat(path.join(projectRoot, "devflow", "00-context")).then(() => true).catch(() => false);
+  const outputPath = isDecade
+    ? path.join(projectRoot, "devflow", "00-context", "project-overview.md")
+    : path.join(projectRoot, "devflow", "context", "project-overview.md");
+
+  const projectPlanPath = await resolveExistingPath([
+    path.join(projectRoot, "devflow", "30-planning", "project-plan.md"),
+    path.join(projectRoot, "devflow", "project-plan.md")
+  ]);
+  const buildPlanPath = await resolveExistingPath([
+    path.join(projectRoot, "devflow", "30-planning", "build-plan.md"),
+    path.join(projectRoot, "devflow", "build-plan.md")
+  ]);
+  const ideasPath = await resolveExistingPath([
+    path.join(projectRoot, "devflow", "10-ideation", "ideas.md"),
+    path.join(projectRoot, "devflow", "ideas.md")
+  ]);
+  const historyPath = await resolveExistingPath([
+    path.join(projectRoot, "devflow", "50-history", "HISTORY.md"),
+    path.join(projectRoot, "devflow", "history", "HISTORY.md")
+  ]);
+  const templateDefaultPath = await resolveExistingPath([
+    path.join(projectRoot, "devflow", "10-ideation", "reference", "project-overview-template.md"),
+    path.join(projectRoot, "devflow", "reference", "project-overview-template.md")
+  ]);
 
   const projectPlanRaw = await readText(projectPlanPath);
   const buildPlanRaw = await readText(buildPlanPath);

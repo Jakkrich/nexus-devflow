@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧪 setup-tests — คู่มือการใช้งาน 5W1H | Nexus-DevFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       NEXUS-DEVFLOW — BASE LIGHT TEMPLATE (Paper & Ink + Teal)
+       ============================================================ */
+    :root {
+      color-scheme: light;
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-alt: #eef0f4;
+      --border: #e1e4ea;
+      --ink: #171a21;
+      --ink-muted: #5b6072;
+      --ink-faint: #9297a6;
+
+      --accent: #0f766e;
+      --accent-soft: #e5f3f1;
+      --accent-line: #9fd6d0;
+
+      --violet: #6d28d9;
+      --violet-soft: #f1ecfc;
+
+      --amber: #b45309;
+      --amber-soft: #fdf1e2;
+      --amber-line: #f3d19c;
+
+      --red: #b42318;
+      --red-soft: #fdecea;
+      --red-line: #f3b8b0;
+
+      --green: #15803d;
+      --green-soft: #e8f6ee;
+      --green-line: #a9dcbb;
+
+      --radius: 10px;
+      --shadow-sm: 0 1px 2px rgba(23, 26, 33, .05);
+      --shadow-md: 0 8px 24px -8px rgba(23, 26, 33, .14);
+
+      --font-display: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --font-body: 'Google Sans Text', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: -1px -1px;
+      color: var(--ink);
+      line-height: 1.65;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    .container { max-width: 860px; margin: 0 auto; }
+
+    .hero {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.25rem 2rem 2rem;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--green) 55%, var(--violet));
+    }
+
+    .hero-ruler {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 96px;
+      height: 96px;
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    .eyebrow-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .9rem;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(21, 128, 61, .45);
+      animation: pulse 2.4s ease-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(21, 128, 61, .45); }
+      70% { box-shadow: 0 0 0 8px rgba(21, 128, 61, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: .74rem;
+      letter-spacing: .02em;
+      color: var(--ink-muted);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.55rem, 3vw, 1.95rem);
+      color: var(--ink);
+    }
+
+    .hero p.sub {
+      color: var(--ink-muted);
+      font-size: .98rem;
+      margin-top: .5rem;
+      max-width: 58ch;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: 1.15rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .3rem .65rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 500;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    .badge.b-accent { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+    .badge.b-green { background: var(--green-soft); border-color: var(--green-line); color: var(--green); }
+    .badge.b-amber { background: var(--amber-soft); border-color: var(--amber-line); color: var(--amber); }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: .9rem;
+      margin-bottom: 2rem;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .metric-label {
+      font-size: .82rem;
+      color: var(--ink-muted);
+      margin-top: .2rem;
+    }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.7rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-head .num {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      color: var(--ink-faint);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .15rem .45rem;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .section p { color: var(--ink); font-size: .96rem; }
+    .section p + p { margin-top: .6rem; }
+    .section ul { margin: .75rem 0 0 1.35rem; font-size: .95rem; }
+    .section li + li { margin-top: .4rem; }
+
+    .alert {
+      display: flex;
+      gap: .7rem;
+      align-items: flex-start;
+      padding: .9rem 1.1rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      margin: 1rem 0;
+    }
+
+    .alert-info { background: var(--accent-soft); border: 1px solid var(--accent-line); color: #0b544e; }
+
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      margin-top: .9rem;
+    }
+
+    .pipeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: .9rem;
+      background: var(--surface-alt);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: .8rem 1rem;
+      transform: translateX(-6px);
+      opacity: 0;
+      animation: step-in .4s ease-out forwards;
+    }
+
+    .pipeline-step:nth-child(1) { animation-delay: .02s; }
+    .pipeline-step:nth-child(2) { animation-delay: .07s; }
+    .pipeline-step:nth-child(3) { animation-delay: .12s; }
+    .pipeline-step:nth-child(4) { animation-delay: .17s; }
+    .pipeline-step:nth-child(5) { animation-delay: .22s; border-left-color: var(--green); }
+
+    @keyframes step-in {
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      font-weight: 700;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .terminal {
+      background: #14161c;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin: 1rem 0;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .6rem .8rem;
+      background: #1d2029;
+      border-bottom: 1px solid #262a35;
+    }
+
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-dot.r { background: #ff5f57; }
+    .terminal-dot.y { background: #febc2e; }
+    .terminal-dot.g { background: #28c840; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: #8b90a0;
+      margin-left: .5rem;
+    }
+
+    .terminal-body {
+      padding: 1rem 1.1rem 1.2rem;
+      font-family: var(--font-mono);
+      font-size: .86rem;
+      color: #d7dae2;
+    }
+
+    .terminal-line { display: flex; gap: .55rem; margin-bottom: .5rem; }
+    .terminal-prompt { color: #5fd9c9; flex-shrink: 0; }
+    .terminal-out { color: #8b90a0; }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 1em;
+      background: #5fd9c9;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .code-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .8rem 1rem;
+      margin: .6rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: .86rem;
+      color: var(--ink);
+    }
+
+    .copy-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+      padding: .35rem .65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .74rem;
+      font-family: var(--font-body);
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    .copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+      margin-top: .75rem;
+    }
+
+    th, td { border: 1px solid var(--border); padding: .7rem .9rem; text-align: left; }
+    th { background: var(--surface-alt); color: var(--ink); font-weight: 600; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .18rem .5rem;
+      border-radius: 999px;
+      font-size: .76rem;
+      font-weight: 600;
+    }
+
+    .pill-active { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-line); }
+
+    footer {
+      text-align: center;
+      font-size: .82rem;
+      color: var(--ink-faint);
+      margin-top: 2.5rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ========== HERO ========== -->
+    <header class="hero">
+      <svg class="hero-ruler" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M100 0 V100 M100 20 H80 M100 40 H85 M100 60 H80 M100 80 H85" stroke="#c9cdd6" stroke-width="1" />
+        <path d="M0 100 H100 M20 100 V80 M40 100 V85 M60 100 V80 M80 100 V85" stroke="#c9cdd6" stroke-width="1" />
+      </svg>
+      <div class="eyebrow-row">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="eyebrow">devflow/docs/playbooks/setup-tests.html</span>
+      </div>
+      <h1>🧪 setup-tests — คู่มือการใช้งาน 5W1H</h1>
+      <p class="sub">ติดตั้งและจัดมาตรฐานระบบ Unit Testing ประจำโปรเจกต์อัตโนมัติ เพื่อรองรับ TDD Red-Green-Refactor</p>
+      <div class="badge-row">
+        <span class="badge b-green">Testing Harness</span>
+        <span class="badge b-accent">Vitest / Jest / Pytest</span>
+        <span class="badge b-amber">Theme: Light (Paper & Ink)</span>
+      </div>
+    </header>
+
+    <!-- ========== METRICS ========== -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">1</div>
+        <div class="metric-label">Command to setup complete harness</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">Stack-Native Runner Choice</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">0</div>
+        <div class="metric-label">Unnecessary Heavy Mock Bloat</div>
+      </div>
+    </div>
+
+    <!-- ========== 1. WHAT ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">01</span><h2>What (คืออะไร &amp; ทำอะไรได้บ้าง)</h2></div>
+      <p><code>/setup-tests</code> คือคำสั่งติดตั้งหรือปรับมาตรฐานระบบ <strong>Unit Testing</strong> ให้เข้ากับภาษาและเฟรมเวิร์กของโปรเจกต์คุณแบบอัตโนมัติ โดยจะเลือกใช้ Test Runner ที่เบาและตรงกับภาษามากที่สุด พร้อมสร้างตัวอย่างเทสต์ 1 ไฟล์และผูกคำสั่งเข้ากับ <code>AGENTS.md</code> ทันที</p>
+      <ul>
+        <li><strong>Automatic Stack Detection</strong> — ตรวจจับภาษาและรันไทม์ (TypeScript, JavaScript, Python, Go, Rust)</li>
+        <li><strong>Minimalist Config</strong> — ติดตั้งเฉพาะแพ็กเกจที่จำเป็นที่สุด ไม่ใส่ของหนักอย่าง mock framework เกินความจำเป็น</li>
+        <li><strong>Example Test Generation</strong> — สร้างตัวอย่างเทสต์ที่รันผ่านจริง 1 ไฟล์ เพื่อยืนยันว่า harness ทำงานได้ 100%</li>
+      </ul>
+    </section>
+
+    <!-- ========== 2. WHY ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">02</span><h2>Why (ทำไมต้องใช้ &amp; ประโยชน์ที่ได้รับ)</h2></div>
+      <ul>
+        <li><strong>เปิดทางสู่ Quality Gate</strong> — หากโปรเจกต์ไม่มีคำสั่งเทสต์ AI จะไม่สามารถรัน Test-Driven Development (TDD) ได้</li>
+        <li><strong>ประหยัดเวลาตั้งค่า</strong> — ไม่ต้องค้นหาและเขียน config ด้วยตัวเอง AI ติดตั้งให้พร้อมรันได้ในคำสั่งเดียว</li>
+        <li><strong>รักษาความน่าเชื่อถือ</strong> — โค้ดทุกบรรทัดใน <code>/implement</code> จะมีเทสต์ยืนยันความถูกต้อง ป้องกันการพังในอนาคต</li>
+      </ul>
+    </section>
+
+    <!-- ========== 3. WHO ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">03</span><h2>Who (เหมาะสำหรับใคร)</h2></div>
+      <ul>
+        <li><strong>ผู้เริ่มต้นสร้างโปรเจกต์ใหม่</strong> — ที่เพิ่งรัน <code>/onboard</code> และต้องการวางรากฐานการเขียนเทสต์ทันที</li>
+        <li><strong>โปรเจกต์เดิมที่ยังไม่มีเทสต์ (Brownfield)</strong> — ที่ต้องการเพิ่มความน่าเชื่อถือให้โค้ดก่อนเริ่มทำฟีเจอร์ใหม่</li>
+      </ul>
+    </section>
+
+    <!-- ========== 4. WHERE & CONTRACT ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">04</span><h2>Where (ใช้กับส่วนไหน &amp; สิ่งที่สร้าง)</h2></div>
+      <div class="alert alert-info">
+        <span aria-hidden="true">💡</span>
+        <div><strong>Living Contract:</strong> คำสั่งเทสต์ที่ติดตั้งสำเร็จจะถูกบันทึกลงใน <code>AGENTS.md</code> เพื่อให้ Agent ทุกตัวในโปรเจกต์ใช้คำสั่งเดียวกันเสมอ</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ภาษา / รันไทม์</th>
+            <th>Test Runner แนะนำ</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>TypeScript / JavaScript</strong></td>
+            <td>Vitest หรือ Jest</td>
+            <td><span class="pill pill-active">SUPPORTED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Python</strong></td>
+            <td>pytest</td>
+            <td><span class="pill pill-active">SUPPORTED</span></td>
+          </tr>
+          <tr>
+            <td><strong>Go / Rust</strong></td>
+            <td>go test / cargo test (Built-in)</td>
+            <td><span class="pill pill-active">SUPPORTED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== 5. WHEN ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">05</span><h2>When (ควรใช้ตอนไหน &amp; ลำดับขั้นตอน)</h2></div>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-num">1</div>
+          <div><strong>ตรวจสอบ Stack</strong> — ตรวจจับ package manager lockfile และ dependencies</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">2</div>
+          <div><strong>เลือก Runner</strong> — เลือก test runner ที่เบาและตรงกับภาษามากที่สุด</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">3</div>
+          <div><strong>ติดตั้ง Config &amp; ตัวอย่างเทสต์</strong> — สร้างไฟล์ config และตัวอย่างเทสต์ที่รันผ่าน</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">4</div>
+          <div><strong>รัน Verify</strong> — รันเทสต์ยืนยันว่าผ่านสมบูรณ์ 100%</div>
+        </div>
+        <div class="pipeline-step after">
+          <div class="step-num">5</div>
+          <div><strong>อัปเดต AGENTS.md</strong> — บันทึกคำสั่งเทสต์เข้าสู่ Source of Truth</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 6. HOW & RECIPES ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">06</span><h2>How (ใช้งานอย่างไร &amp; ตัวอย่างคำสั่งจริง)</h2></div>
+
+      <!-- Terminal Mockup UI -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">zsh — nexus-devflow</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">❯</span><span>/setup-tests</span></div>
+          <div class="terminal-line"><span class="terminal-out">→ Detecting project stack: TypeScript + Node.js ESM. Selecting Vitest...</span></div>
+          <div class="terminal-line"><span class="terminal-out">✓ Installed vitest. Created test/example.test.ts. Verified: 1 passed.</span><span class="cursor" aria-hidden="true"></span></div>
+        </div>
+      </div>
+
+      <p style="margin-top: 1.25rem; font-size: .9rem; color: var(--ink-muted);">สูตรคำสั่งที่พร้อมใช้งาน:</p>
+
+      <div class="code-box">
+        <code>/setup-tests</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/setup-tests')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/setup-tests vitest</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/setup-tests vitest')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/setup-tests jest</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/setup-tests jest')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/setup-tests help</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/setup-tests help')">Copy</button>
+      </div>
+    </section>
+
+    <!-- ========== 7. REAL ARCHITECTURE DIAGRAM ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">07</span><h2>แผนภาพสถาปัตยกรรม &amp; Stack Detection &amp; Test Harness Pipeline</h2></div>
+      
+      <!-- Real Interactive / Vector Setup-Tests Architecture Diagram -->
+      <div style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-top: 0.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 0.5rem;">
+            <span>🧪</span> Setup-Tests: Stack-Native Detection &amp; Harness Wiring Architecture
+          </div>
+          <span class="badge b-accent" style="font-size: 0.72rem;">archify: data-theme="light"</span>
+        </div>
+
+        <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; display: block; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+          <defs>
+            <linearGradient id="bg-test-stack" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#eff6ff" />
+              <stop offset="100%" stop-color="#dbeafe" />
+            </linearGradient>
+            <linearGradient id="bg-test-matrix" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f0fdfa" />
+              <stop offset="100%" stop-color="#ccfbf1" />
+            </linearGradient>
+            <marker id="arrow-test" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 8 5 L 0 9 z" fill="#0f766e" />
+            </marker>
+          </defs>
+
+          <!-- Zone Separators -->
+          <line x1="220" y1="20" x2="220" y2="320" stroke="#e1e4ea" stroke-width="1.5" stroke-dasharray="4" />
+          <line x1="520" y1="20" x2="520" y2="320" stroke="#e1e4ea" stroke-width="1.5" stroke-dasharray="4" />
+
+          <!-- Column Headers -->
+          <text x="25" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#1e40af">1. สแกนโครงสร้าง &amp; MANIFEST</text>
+          <text x="235" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#0f766e">2. เลือกรันเนอร์ตรงตามสแตก</text>
+          <text x="535" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#166534">3. ติดตั้ง HARNESS &amp; รันพิสูจน์</text>
+
+          <!-- Column 1: Stack Detection Inputs -->
+          <rect x="25" y="60" width="175" height="52" rx="7" fill="url(#bg-test-stack)" stroke="#93c5fd" stroke-width="1.2" />
+          <text x="35" y="82" font-family="Google Sans, sans-serif" font-size="11" font-weight="600" fill="#1e3a8a">สแตก Node / TypeScript</text>
+          <text x="35" y="98" font-family="JetBrains Mono, monospace" font-size="9" fill="#2563eb">package.json, tsconfig.json</text>
+
+          <rect x="25" y="125" width="175" height="52" rx="7" fill="url(#bg-test-stack)" stroke="#93c5fd" stroke-width="1.2" />
+          <text x="35" y="147" font-family="Google Sans, sans-serif" font-size="11" font-weight="600" fill="#1e3a8a">สแตกภาษา Python</text>
+          <text x="35" y="163" font-family="JetBrains Mono, monospace" font-size="9" fill="#2563eb">pyproject.toml, requirements</text>
+
+          <rect x="25" y="190" width="175" height="52" rx="7" fill="url(#bg-test-stack)" stroke="#93c5fd" stroke-width="1.2" />
+          <text x="35" y="212" font-family="Google Sans, sans-serif" font-size="11" font-weight="600" fill="#1e3a8a">สแตก Go หรือ Rust</text>
+          <text x="35" y="228" font-family="JetBrains Mono, monospace" font-size="9" fill="#2563eb">go.mod, Cargo.toml</text>
+
+          <rect x="25" y="255" width="175" height="52" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" />
+          <text x="35" y="277" font-family="Google Sans, sans-serif" font-size="10.5" font-weight="600" fill="#475569">ตรวจเช็กชุดทดสอบเดิม</text>
+          <text x="35" y="293" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#64748b">ใช้คอนฟิกเดิมต่อทันทีถ้ามีอยู่แล้ว</text>
+
+          <!-- Column 2: Runner Selection Matrix -->
+          <g transform="translate(235, 60)">
+            <rect x="0" y="0" width="265" height="46" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.2" />
+            <text x="12" y="20" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#0f766e">TypeScript / ESM ➔ Vitest</text>
+            <text x="12" y="36" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#134e4a">รองรับ TS ในตัว บิลด์เร็ว รัน watch ทันใจ</text>
+
+            <rect x="0" y="52" width="265" height="46" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.2" />
+            <text x="12" y="72" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#0f766e">React / CJS ➔ Jest</text>
+            <text x="12" y="88" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#134e4a">แปลงโค้ดด้วย Babel/TS รองรับ Snapshot Test</text>
+
+            <rect x="0" y="104" width="265" height="46" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.2" />
+            <text x="12" y="124" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#0f766e">Python ➔ Pytest</text>
+            <text x="12" y="140" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#134e4a">ระบบ Fixtures สมัยใหม่พร้อมรายงาน Coverage</text>
+
+            <rect x="0" y="156" width="265" height="46" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.2" />
+            <text x="12" y="176" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#0f766e">Node.js ใหม่ ➔ node:test</text>
+            <text x="12" y="192" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#134e4a">ใช้โมดูลในตัวของ Node 0 ไลบรารีภายนอก</text>
+
+            <rect x="0" y="208" width="265" height="40" rx="6" fill="#ffffff" stroke="#99f6e4" />
+            <text x="12" y="232" font-family="Google Sans, sans-serif" font-size="9" font-weight="600" fill="#0f766e">เลือกเองได้ผ่าน: /setup-tests &lt;runner&gt;</text>
+          </g>
+
+          <!-- Column 3: Harness Wiring -->
+          <rect x="535" y="60" width="220" height="75" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2" />
+          <text x="548" y="84" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#166534">1. สร้างไฟล์ทดสอบตั้งต้น</text>
+          <text x="548" y="103" font-family="JetBrains Mono, monospace" font-size="9" fill="#14532d">test/example.test.ts</text>
+          <text x="548" y="119" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#15803d">Smoke assert: 1+1 === 2</text>
+
+          <rect x="535" y="145" width="220" height="75" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2" />
+          <text x="548" y="169" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#166534">2. ผูกสคริปต์ package.json</text>
+          <text x="548" y="188" font-family="JetBrains Mono, monospace" font-size="9" fill="#14532d">"test": "vitest run"</text>
+          <text x="548" y="204" font-family="JetBrains Mono, monospace" font-size="9" fill="#14532d">"test:watch": "vitest"</text>
+
+          <rect x="535" y="230" width="220" height="75" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2" />
+          <text x="548" y="254" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#166534">3. รันพิสูจน์ผลลัพธ์จริง</text>
+          <text x="548" y="272" font-family="Google Sans Text, sans-serif" font-size="9" fill="#15803d">รัน npm test ตรวจสอบทันที</text>
+          <text x="548" y="288" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#166534">ยืนยันผล: ผ่าน 1, ล้มเหลว 0</text>
+
+          <!-- Connecting Arrows -->
+          <path d="M 200 86 L 235 83" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-test)" fill="none" />
+          <path d="M 200 151 L 235 127" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-test)" fill="none" />
+          <path d="M 500 127 L 535 97" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-test)" fill="none" />
+          <path d="M 500 180 L 535 182" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-test)" fill="none" />
+        </svg>
+
+        <p style="margin-top: 0.9rem; font-size: 0.85rem; color: var(--ink-muted); text-align: center;">
+          สถาปัตยกรรม Setup-Tests: สแกนโครงสร้างโปรเจกต์ ➔ เลือกรันเนอร์ที่เหมาะสมที่สุด ➔ ติดตั้งไฟล์ทดสอบและสคริปต์พร้อมตรวจสอบผลสำเร็จ
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Nexus-DevFlow Framework &middot; Paper &amp; Ink Light Theme &middot; Updated: 2026-09-09
+    </footer>
+  </div>
+</body>
+</html>

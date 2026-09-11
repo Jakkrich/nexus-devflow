@@ -5,20 +5,21 @@ Instructions for AI coding agents working in this project. This is the cross-too
 ## What this is
 
 This project uses **Nexus-DevFlow**, an agentic workflow layer supporting **The 3-Pillars Workspace Architecture & Pure Task-Isolated Living Spec Model**:
-1. **🔮 Future (Backlog)**: `devflow/ideas.md`, `devflow/project-plan.md`, `devflow/build-plan.md` — Centralized Idea Inbox & Master Build Plan.
-2. **⚡ Present (Active Context)**: `devflow/context/` — Global Shared Source of Truth (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `glossary.md`) & Active Task Workspaces (`devflow/context/{xxx-slug}/`).
-3. **📦 Past (History Archive)**: `devflow/history/` — Categorized delivery archives (`features/`, `fixes/`, `rollbacks/`, and `HISTORY.md`).
+1. **🔮 Future (Backlog)**: `devflow/ideas.md`, `devflow/project-plan.md`, `devflow/build-plan.md` (or Decade-Numbered `devflow/10-ideation/` & `devflow/30-planning/`).
+2. **⚡ Present (Active Context)**: `devflow/context/` (or Decade-Numbered `devflow/00-context/`) — Global Shared Source of Truth (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `glossary.md`) & Active Task Workspaces (`devflow/context/{xxx-slug}/` or `devflow/40-tasks/{xxx-slug}/`).
+3. **📦 Past (History Archive)**: `devflow/history/` (or Decade-Numbered `devflow/50-history/`) — Categorized delivery archives (`features/`, `fixes/`, `rollbacks/`, and `HISTORY.md`).
 
-To start a new project, scaffold the application first in an empty folder, then run `npx nexus-devflow` (or `npm create @jakkrichm/nexus-devflow`) to overlay DevFlow onto your codebase.
+To start a new project, scaffold the application first in an empty folder, then run `npx nexus-devflow` (or `npm create @jakkrichm/nexus-devflow`) to overlay DevFlow onto your codebase. To migrate an existing workspace to the Decade-Numbered Stages structure (`00-context`, `10-ideation`, `20-discovery`, `30-planning`, `40-tasks`, `50-history`, `60-docs`), run `npx nexus-devflow migrate-structure`.
 
 ## Read these for full context
 
 - `devflow/config.json` - deterministic project workflow settings
-- `devflow/context/project-overview.md` - the project's source of truth
-- `devflow/context/coding-standards.md` - engineering conventions & rules to follow
-- `devflow/context/ai-interaction.md` - how to interact with the user on this project
-- `devflow/context/glossary.md` - domain terms & architecture definitions
-- `devflow/context/{xxx-slug}/` - active task living spec, stage, findings ledger, and independent review receipt
+- `devflow/00-context/` (or `devflow/context/`) `project-overview.md` - the project's source of truth
+- `devflow/00-context/` (or `devflow/context/`) `coding-standards.md` - engineering conventions & rules to follow
+- `devflow/00-context/` (or `devflow/context/`) `ai-interaction.md` - how to interact with the user on this project
+- `devflow/00-context/` (or `devflow/context/`) `glossary.md` - domain terms & architecture definitions
+- `devflow/40-tasks/{xxx-slug}/` (or `devflow/context/{xxx-slug}/`) - active task living spec, stage, findings ledger, and independent review receipt
+
 
 ## Project configuration
 

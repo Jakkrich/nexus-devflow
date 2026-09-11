@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Theming Pipeline & Architecture Diagram — Nexus-DevFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --surface-border: #e2e8f0;
+      --text: #334155;
+      --text-heading: #0f172a;
+      --text-muted: #64748b;
+      --primary: #0284c7;
+      --primary-bg: #e0f2fe;
+      --primary-border: #bae6fd;
+      --success: #059669;
+      --success-bg: #d1fae5;
+      --success-border: #a7f3d0;
+      --warning: #d97706;
+      --warning-bg: #fef3c7;
+      --warning-border: #fde68a;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      --danger-border: #fecaca;
+      --code-bg: #f8fafc;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-title h1 {
+      font-size: 1.65rem;
+      color: var(--text-heading);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    .badges {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--surface-subtle);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+    }
+
+    .badge-primary {
+      background: var(--primary-bg);
+      border-color: var(--primary-border);
+      color: var(--primary);
+    }
+
+    .badge-success {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+      color: var(--success);
+    }
+
+    .diagram-panel {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+
+    .diagram-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Interactive Pipeline SVG */
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      color: var(--text-heading);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cause-item {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      align-items: flex-start;
+      font-size: 0.92rem;
+    }
+
+    .cause-icon {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid var(--danger-border);
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .solution-icon {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success-border);
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    th, td {
+      border: 1px solid var(--surface-border);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--surface-subtle);
+      color: var(--text-heading);
+      font-weight: 600;
+    }
+
+    .color-dot {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--surface-border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-title">
+        <h1>☀️ HTML Light Theme Architecture Pipeline</h1>
+        <p>การวิเคราะห์รากเหง้าของ Dark Theme และสถาปัตยกรรมการย้ายสู่ Light Theme ใน Nexus-DevFlow</p>
+      </div>
+      <div class="badges">
+        <span class="badge badge-primary">DISC-20260909-002</span>
+        <span class="badge badge-success">Theme: Light (Default)</span>
+      </div>
+    </header>
+
+    <div class="diagram-panel">
+      <div class="diagram-title">
+        <span>🗺️</span> Pipeline Diagram: จากคำขอ HTML สู่ผลลัพธ์ Light Theme ทั่วระบบ
+      </div>
+
+      <!-- Clean Light Theme Pipeline Vector Diagram -->
+      <svg viewBox="0 0 980 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad-sky" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f0f9ff" />
+            <stop offset="100%" stop-color="#e0f2fe" />
+          </linearGradient>
+          <linearGradient id="grad-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ecfdf5" />
+            <stop offset="100%" stop-color="#d1fae5" />
+          </linearGradient>
+          <linearGradient id="grad-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#eef2ff" />
+            <stop offset="100%" stop-color="#e0e7ff" />
+          </linearGradient>
+          <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06" />
+          </filter>
+        </defs>
+
+        <!-- Lanes Background -->
+        <rect x="10" y="10" width="960" height="320" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+
+        <!-- Lane Headers -->
+        <text x="40" y="45" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#0f172a">1. INPUT TRIGGERS</text>
+        <text x="350" y="45" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#0f172a">2. CENTRAL THEME CONTROLLER</text>
+        <text x="710" y="45" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#0f172a">3. STANDARDIZED ARTIFACTS</text>
+
+        <!-- Divider Lines -->
+        <line x1="310" y1="25" x2="310" y2="310" stroke="#f1f5f9" stroke-width="2" stroke-dasharray="4" />
+        <line x1="670" y1="25" x2="670" y2="310" stroke="#f1f5f9" stroke-width="2" stroke-dasharray="4" />
+
+        <!-- Nodes: Triggers -->
+        <!-- Trigger 1: Help Menu -->
+        <g filter="url(#shadow)">
+          <rect x="30" y="70" width="240" height="60" rx="8" fill="url(#grad-sky)" stroke="#bae6fd" stroke-width="1.5" />
+          <text x="45" y="95" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0369a1">📖 Help / Playbook Request</text>
+          <text x="45" y="115" font-family="JetBrains Mono, monospace" font-size="11" fill="#0284c7">/ponytail ?, /bughunter help</text>
+        </g>
+
+        <!-- Trigger 2: Report HTML -->
+        <g filter="url(#shadow)">
+          <rect x="30" y="150" width="240" height="60" rx="8" fill="url(#grad-sky)" stroke="#bae6fd" stroke-width="1.5" />
+          <text x="45" y="175" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0369a1">📊 Standalone Report Request</text>
+          <text x="45" y="195" font-family="JetBrains Mono, monospace" font-size="11" fill="#0284c7">/report:html, npm run report:html</text>
+        </g>
+
+        <!-- Trigger 3: Diagram Generation -->
+        <g filter="url(#shadow)">
+          <rect x="30" y="230" width="240" height="60" rx="8" fill="url(#grad-sky)" stroke="#bae6fd" stroke-width="1.5" />
+          <text x="45" y="255" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0369a1">🎨 Diagram Generation Request</text>
+          <text x="45" y="275" font-family="JetBrains Mono, monospace" font-size="11" fill="#0284c7">archify, diagram-design</text>
+        </g>
+
+        <!-- Nodes: Controller & Rules -->
+        <g filter="url(#shadow)">
+          <rect x="340" y="90" width="290" height="170" rx="10" fill="url(#grad-emerald)" stroke="#a7f3d0" stroke-width="2" />
+          <text x="360" y="125" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#047857">🛡️ Global Light Theme Policy</text>
+          <text x="360" y="150" font-family="Inter, sans-serif" font-size="12" fill="#065f46">บันทึกใน coding-standards.md & AGENTS.md</text>
+          
+          <rect x="355" y="165" width="260" height="30" rx="5" fill="#ffffff" stroke="#6ee7b7" />
+          <text x="365" y="185" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#059669">✓ Mandatory Light Theme Default</text>
+
+          <rect x="355" y="205" width="260" height="40" rx="5" fill="#ffffff" stroke="#6ee7b7" />
+          <text x="365" y="222" font-family="Inter, sans-serif" font-size="10.5" fill="#334155">• Slate-50 Canvas (#f8fafc)</text>
+          <text x="365" y="237" font-family="Inter, sans-serif" font-size="10.5" fill="#334155">• Crisp Pure White Cards & Sharp Contrast</text>
+        </g>
+
+        <!-- Nodes: Standardized Outputs -->
+        <!-- Output 1: Playbooks -->
+        <g filter="url(#shadow)">
+          <rect x="700" y="70" width="250" height="60" rx="8" fill="url(#grad-indigo)" stroke="#c7d2fe" stroke-width="1.5" />
+          <text x="715" y="95" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#3730a3">📄 Light Theme Playbooks</text>
+          <text x="715" y="115" font-family="JetBrains Mono, monospace" font-size="10.5" fill="#4338ca">devflow/docs/playbooks/*.html</text>
+        </g>
+
+        <!-- Output 2: Reports -->
+        <g filter="url(#shadow)">
+          <rect x="700" y="150" width="250" height="60" rx="8" fill="url(#grad-indigo)" stroke="#c7d2fe" stroke-width="1.5" />
+          <text x="715" y="175" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#3730a3">📑 Light Theme HTML Reports</text>
+          <text x="715" y="195" font-family="JetBrains Mono, monospace" font-size="10.5" fill="#4338ca">devflow/context/*/report.html</text>
+        </g>
+
+        <!-- Output 3: Diagrams -->
+        <g filter="url(#shadow)">
+          <rect x="700" y="230" width="250" height="60" rx="8" fill="url(#grad-indigo)" stroke="#c7d2fe" stroke-width="1.5" />
+          <text x="715" y="255" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#3730a3">📈 Light Theme Visual Diagrams</text>
+          <text x="715" y="275" font-family="JetBrains Mono, monospace" font-size="10.5" fill="#4338ca">archify data-theme="light"</text>
+        </g>
+
+        <!-- Arrows -->
+        <!-- Trigger to Controller -->
+        <path d="M 270 100 L 340 140" stroke="#0284c7" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)" fill="none" />
+        <path d="M 270 180 L 340 180" stroke="#0284c7" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)" fill="none" />
+        <path d="M 270 260 L 340 220" stroke="#0284c7" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)" fill="none" />
+
+        <!-- Controller to Outputs -->
+        <path d="M 630 140 L 700 100" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none" />
+        <path d="M 630 180 L 700 180" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none" />
+        <path d="M 630 220 L 700 260" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none" />
+      </svg>
+    </div>
+
+    <div class="grid-2">
+      <!-- Card 1: สาเหตุของ Dark Theme เดิม -->
+      <div class="card">
+        <h3><span>🔍</span> ที่มาของ Dark Theme เดิม (Root Causes)</h3>
+        <div class="cause-item">
+          <div class="cause-icon">1</div>
+          <div><strong>System Prompt Bias:</strong> มีข้อความชี้นำ <em>"vibrant colors, dark modes, glassmorphism"</em> ใน Developer Prompt ของ AI</div>
+        </div>
+        <div class="cause-item">
+          <div class="cause-icon">2</div>
+          <div><strong>Playbooks Hardcoded:</strong> ไฟล์ใน <code>devflow/docs/playbooks/</code> ฝัง <code>--bg: #0d1117</code> (GitHub Dark) เอาไว้ตายตัว</div>
+        </div>
+        <div class="cause-item">
+          <div class="cause-icon">3</div>
+          <div><strong>Archify Default:</strong> Template ของ <code>archify</code> มีค่าเริ่มต้นเป็น <code>data-theme="dark"</code></div>
+        </div>
+        <div class="cause-item">
+          <div class="cause-icon">4</div>
+          <div><strong>Diagram-Design Templates:</strong> ตัวอย่างส่วนใหญ่ถูกจัดเก็บเป็น <code>*-dark.html</code></div>
+        </div>
+      </div>
+
+      <!-- Card 2: ทางออกและการเปลี่ยนเป็น Light Theme -->
+      <div class="card">
+        <h3><span>☀️</span> มาตรฐาน Light Theme ใหม่ (Standardization)</h3>
+        <div class="cause-item">
+          <div class="solution-icon">✓</div>
+          <div><strong>Global Policy:</strong> ระบุใน <code>coding-standards.md</code> ให้ใช้ Light Theme เป็นค่าเริ่มต้นทุกงาน HTML</div>
+        </div>
+        <div class="cause-item">
+          <div class="solution-icon">✓</div>
+          <div><strong>Playbooks Modernization:</strong> ปรับแก้ CSS ของ Playbooks ทั้งหมดให้ใช้ Slate-50 + Pure White</div>
+        </div>
+        <div class="cause-item">
+          <div class="solution-icon">✓</div>
+          <div><strong>Archify Parameter:</strong> ส่ง <code>data-theme="light"</code> และ <code>?theme=light</code> เสมอ</div>
+        </div>
+        <div class="cause-item">
+          <div class="solution-icon">✓</div>
+          <div><strong>Diagram-Design Selection:</strong> สลับไปใช้ <code>template.html</code> (Light) เป็นค่าหลัก</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Palette Table -->
+    <div class="card">
+      <h3><span>🎨</span> มาตรฐานจานสี Light Theme สำหรับทุกเอกสาร HTML</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>CSS Variable</th>
+            <th>Color Preview & Hex</th>
+            <th>หน้าที่ในการแสดงผล (Role)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--bg</code></td>
+            <td><span class="color-dot" style="background: #f8fafc;"></span> #f8fafc (Slate 50)</td>
+            <td>พื้นหลังหลักของหน้าจอ สว่าง นุ่มตา ไม่ขาวจ้าจนแสบตา</td>
+          </tr>
+          <tr>
+            <td><code>--surface</code></td>
+            <td><span class="color-dot" style="background: #ffffff;"></span> #ffffff (Pure White)</td>
+            <td>พื้นหลังของการ์ด, กล่องเนื้อหา, Section</td>
+          </tr>
+          <tr>
+            <td><code>--surface-border</code></td>
+            <td><span class="color-dot" style="background: #e2e8f0;"></span> #e2e8f0 (Slate 200)</td>
+            <td>เส้นขอบบาง ตัดแบ่งขอบเขตเนื้อหาอย่างประณีต</td>
+          </tr>
+          <tr>
+            <td><code>--text-heading</code></td>
+            <td><span class="color-dot" style="background: #0f172a;"></span> #0f172a (Slate 900)</td>
+            <td>หัวข้อหลัก คอนทราสต์สูงสุด คมชัด</td>
+          </tr>
+          <tr>
+            <td><code>--text</code></td>
+            <td><span class="color-dot" style="background: #334155;"></span> #334155 (Slate 700)</td>
+            <td>ตัวอักษรเนื้อหา อ่านง่าย สบายสายตา</td>
+          </tr>
+          <tr>
+            <td><code>--primary</code></td>
+            <td><span class="color-dot" style="background: #0284c7;"></span> #0284c7 (Sky 600)</td>
+            <td>สีไฮไลต์หลัก สำหรับ Badge และปุ่มกด</td>
+          </tr>
+          <tr>
+            <td><code>--code-bg</code></td>
+            <td><span class="color-dot" style="background: #f1f5f9;"></span> #f1f5f9 (Slate 100)</td>
+            <td>พื้นหลังสำหรับบล็อกโค้ดและคำสั่ง CLI</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      Nexus-DevFlow Framework &middot; Light Theme Architecture Standard &middot; Discovery Reference DISC-20260909-002
+    </footer>
+  </div>
+</body>
+</html>

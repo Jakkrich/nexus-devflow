@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus-DevFlow - Upstream AI Blueprint v1.6.1 Synchronization Architecture</title>
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-elevated: #f1f5f9;
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      --accent-primary: #0f766e;
+      --accent-light: #ccfbf1;
+      --accent-dark: #115e59;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --warning: #b45309;
+      --warning-bg: #fef3c7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --info: #0369a1;
+      --info-bg: #e0f2fe;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Thai", Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
+      padding: 2rem;
+    }
+
+    header {
+      border-bottom: 2px solid var(--border-subtle);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .pillar-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 1.25rem;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .pillar-card:hover {
+      border-color: var(--accent-primary);
+      box-shadow: 0 6px 12px -2px rgba(15, 118, 110, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .pillar-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .card-1::before { background: #0f766e; }
+    .card-2::before { background: #2563eb; }
+    .card-3::before { background: #7c3aed; }
+    .card-4::before { background: #ea580c; }
+    .card-5::before { background: #059669; }
+
+    .pillar-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pillar-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .tech-tag {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 0.75rem;
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--border-strong);
+    }
+
+    .diagram-container {
+      margin: 2.5rem 0;
+      padding: 1.5rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .diagram-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    svg.flow-svg {
+      width: 100%;
+      height: auto;
+      min-width: 900px;
+    }
+
+    .comparison-section {
+      margin-top: 2.5rem;
+    }
+
+    table.styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    table.styled-table th {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    table.styled-table td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+
+    table.styled-table tr:hover {
+      background-color: #f8fafc;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">📡 Upstream Synchronization • Discovery DISC-20260911-001</div>
+      <h1>การซิงก์ส่วนขยาย Upstream AI Blueprint (v1.6.1) สู่ Nexus-DevFlow</h1>
+      <p class="subtitle">สถาปัตยกรรม 5 เสาหลักความปลอดภัยและความแม่นยำ: Installer Hardening, Completion Recovery, History Preservation, Local-Only Review, และ Status Evidence Alignment</p>
+    </header>
+
+    <div class="pillars-grid">
+      <div class="pillar-card card-1">
+        <h3>🛡️ 1. Installer Symlink Rejection</h3>
+        <p>ตรวจสอบปลายทางการติดตั้งก่อนทำการคัดลอกไฟล์ ปฏิเสธ Symbolic Links และ Path ที่ไม่ตรงกับประเภท (Directory vs File) เพื่อป้องกัน Symlink Traversal และ Partial Install</p>
+        <span class="tech-tag">bin/create-nexus-devflow.ts</span>
+        <span class="tech-tag">assertDestinationType()</span>
+      </div>
+
+      <div class="pillar-card card-2">
+        <h3>🔄 2. Safe Completion Recovery</h3>
+        <p>สัญญาฟื้นฟูการส่งมอบงานเมื่อระบบขัดข้อง (`completion-recovery.md`) ตรวจจับ JSON Annotation ฝังใน Archive ระบุ Phase ที่ค้างอยู่ (Archived, Committed, Merged) ไร้ข้อมูลสูญหาย</p>
+        <span class="tech-tag">complete/SKILL.md</span>
+        <span class="tech-tag">completion-recovery.md</span>
+      </div>
+
+      <div class="pillar-card card-3">
+        <h3>📚 3. Rebuild History Preservation</h3>
+        <p>คงประวัติการพัฒนาเมื่อสร้างฟีเจอร์ใหม่หลัง Rollback ด้วยการตั้งชื่อ `--build-N` (`NN-slug--build-N.md`) ป้องกันการเขียนทับ Archive เดิม และคงความถูกต้องของการอ้างอิง Findings</p>
+        <span class="tech-tag">feature/SKILL.md</span>
+        <span class="tech-tag">build-history.md</span>
+      </div>
+
+      <div class="pillar-card card-4">
+        <h3>🔍 4. Local-Only Spec Review</h3>
+        <p>รองรับการทำ Independent Review สำหรับ Living Spec ที่ไม่ได้ commit ลง Git (เช่น Local-only หรือ gitignored) ด้วยการเก็บและตรวจสอบ Snapshot Hash ใน `devflow/.state/review-specs/`</p>
+        <span class="tech-tag">lib/review.ts</span>
+        <span class="tech-tag">specSnapshot</span>
+      </div>
+
+      <div class="pillar-card card-5">
+        <h3>⚖️ 5. Status Evidence Alignment</h3>
+        <p>จำแนกสถานะการตรวจสอบ (`classifyWorkEvidence`) ป้องกัน False Ready State เมื่อ `verification failed` พร้อมเตือน Malformed/Unsafe Findings และชี้ทางแก้ไขไปยัง `/implement` หรือ `/doctor`</p>
+        <span class="tech-tag">lib/status.ts</span>
+        <span class="tech-tag">classifyWorkEvidence()</span>
+      </div>
+    </div>
+
+    <div class="diagram-container">
+      <div class="diagram-title">🗺️ สถาปัตยกรรมการทำงานและวงจรชีวิตความสอดคล้อง (Upstream v1.6.1 Sync Workflow)</div>
+      
+      <svg class="flow-svg" viewBox="0 0 1060 560" xmlns="http://www.w3.org/2000/svg">
+        <!-- Definitions for gradients and markers -->
+        <defs>
+          <linearGradient id="gradTeal" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0f766e" />
+            <stop offset="100%" stop-color="#14b8a6" />
+          </linearGradient>
+          <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e40af" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+          <linearGradient id="gradAmber" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#b45309" />
+            <stop offset="100%" stop-color="#f59e0b" />
+          </linearGradient>
+          <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 8 5 L 0 9 z" fill="#475569" />
+          </marker>
+        </defs>
+
+        <!-- Background grid styling -->
+        <rect x="10" y="10" width="1040" height="540" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+
+        <!-- Lane 1: Installation Security Gate -->
+        <rect x="30" y="30" width="310" height="230" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+        <text x="45" y="55" font-size="14" font-weight="700" fill="#0f766e">1. ขั้นตอนติดตั้ง (Installer Gate)</text>
+        
+        <rect x="50" y="75" width="270" height="42" rx="6" fill="#ffffff" stroke="#94a3b8" />
+        <text x="60" y="95" font-size="12" font-weight="600" fill="#0f172a">ตรวจสอบ Path ปลายทางทั้งหมด</text>
+        <text x="60" y="109" font-size="10" fill="#64748b">validateInstallDestinations()</text>
+
+        <path d="M 185 117 L 185 140" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+
+        <polygon points="185,142 275,175 185,208 95,175" fill="#fef3c7" stroke="#d97706" />
+        <text x="185" y="172" font-size="11" font-weight="600" fill="#b45309" text-anchor="middle">เป็น Symlink หรือ</text>
+        <text x="185" y="185" font-size="11" font-weight="600" fill="#b45309" text-anchor="middle">Type ขัดแย้ง?</text>
+
+        <path d="M 275 175 L 320 175" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrow)" />
+        <rect x="325" y="157" width="15" height="36" rx="3" fill="#fee2e2" stroke="#dc2626" />
+        <text x="332" y="179" font-size="9" font-weight="700" fill="#dc2626" text-anchor="middle">หยุด</text>
+
+        <!-- Lane 2: Living Spec & Feature Rebuild -->
+        <rect x="370" y="30" width="310" height="230" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+        <text x="385" y="55" font-size="14" font-weight="700" fill="#2563eb">2. สร้าง Spec / Rebuild Feature</text>
+
+        <rect x="390" y="75" width="270" height="42" rx="6" fill="#ffffff" stroke="#94a3b8" />
+        <text x="400" y="95" font-size="12" font-weight="600" fill="#0f172a">สร้าง Task-Isolated Spec</text>
+        <text x="400" y="109" font-size="10" fill="#64748b">devflow/context/{xxx-slug}/spec.md</text>
+
+        <path d="M 525 117 L 525 140" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+
+        <polygon points="525,142 615,175 525,208 435,175" fill="#f0fdfa" stroke="#0f766e" />
+        <text x="525" y="172" font-size="11" font-weight="600" fill="#0f766e" text-anchor="middle">เคยมี Archive เดิม</text>
+        <text x="525" y="185" font-size="11" font-weight="600" fill="#0f766e" text-anchor="middle">หรือ Rebuild ซ้ำ?</text>
+
+        <path d="M 615 175 L 660 175" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)" />
+        <rect x="665" y="157" width="13" height="36" rx="3" fill="#ccfbf1" stroke="#0f766e" />
+        <text x="671" y="179" font-size="8" font-weight="700" fill="#0f766e" text-anchor="middle">--build-N</text>
+
+        <!-- Lane 3: Independent Review & Local Snapshot -->
+        <rect x="710" y="30" width="320" height="230" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+        <text x="725" y="55" font-size="14" font-weight="700" fill="#7c3aed">3. ตรวจทานอิสระ (Local-Only Review)</text>
+
+        <rect x="730" y="75" width="280" height="45" rx="6" fill="#ffffff" stroke="#94a3b8" />
+        <text x="740" y="95" font-size="12" font-weight="600" fill="#0f172a">รัน /audit independent current</text>
+        <text x="740" y="110" font-size="10" fill="#64748b">ตรวจจับ Spec แม้อยู่ใน Local-Only Mode</text>
+
+        <path d="M 870 120 L 870 142" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+
+        <rect x="730" y="145" width="280" height="50" rx="6" fill="#f5f3ff" stroke="#7c3aed" />
+        <text x="740" y="165" font-size="11" font-weight="600" fill="#6d28d9">สร้าง Snapshot Hash ใน .state/</text>
+        <text x="740" y="180" font-size="9" fill="#5b21b6">review-specs/{targetCommit}-{specHash}.md</text>
+        <text x="740" y="191" font-size="9" fill="#7c3aed">บันทึก specSnapshot ใน review.md receipt</text>
+
+        <!-- Lane 4: Status Engine & Work Evidence -->
+        <rect x="30" y="290" width="480" height="240" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+        <text x="45" y="315" font-size="14" font-weight="700" fill="#0369a1">4. คำนวณความพร้อมส่งมอบ (Status Engine Hardening)</text>
+
+        <rect x="50" y="335" width="440" height="45" rx="6" fill="#ffffff" stroke="#94a3b8" />
+        <text x="60" y="355" font-size="12" font-weight="600" fill="#0f172a">classifyWorkEvidence(currentWork, findings, review)</text>
+        <text x="60" y="370" font-size="10" fill="#64748b">ตรวจสอบสถานะ Verification และ Faults ในเอกสาร Findings / Review</text>
+
+        <!-- Decision tree in Lane 4 -->
+        <path d="M 160 380 L 160 410" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+        <path d="M 370 380 L 370 410" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+
+        <rect x="50" y="415" width="210" height="55" rx="6" fill="#fee2e2" stroke="#dc2626" />
+        <text x="60" y="435" font-size="11" font-weight="600" fill="#b91c1c">Verification Failed / Incomplete</text>
+        <text x="60" y="450" font-size="9.5" fill="#991b1b">บล็อกสถานะ Ready ของ Completion</text>
+        <text x="60" y="462" font-size="9.5" font-weight="600" fill="#b91c1c">Next Action ➔ /implement</text>
+
+        <rect x="280" y="415" width="210" height="55" rx="6" fill="#fef3c7" stroke="#d97706" />
+        <text x="290" y="435" font-size="11" font-weight="600" fill="#b45309">Malformed Findings / Review</text>
+        <text x="290" y="450" font-size="9.5" fill="#92400e">ตรวจพบ Unsafe Path หรือข้อผิดพลาด</text>
+        <text x="290" y="462" font-size="9.5" font-weight="600" fill="#b45309">Next Action ➔ /doctor</text>
+
+        <rect x="140" y="480" width="260" height="38" rx="6" fill="#dcfce7" stroke="#16a34a" />
+        <text x="270" y="497" font-size="11" font-weight="700" fill="#15803d" text-anchor="middle">ทุกอย่าง Verified & ปราศจาก Faults</text>
+        <text x="270" y="510" font-size="9.5" fill="#166534" text-anchor="middle">Next Action ➔ /complete (พร้อมส่งมอบ)</text>
+
+        <!-- Lane 5: Safe Completion Interruption Recovery -->
+        <rect x="540" y="290" width="490" height="240" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+        <text x="555" y="315" font-size="14" font-weight="700" fill="#0f766e">5. ระบบกู้คืนการส่งมอบ (Completion Recovery Engine)</text>
+
+        <rect x="560" y="335" width="450" height="42" rx="6" fill="#ffffff" stroke="#94a3b8" />
+        <text x="570" y="353" font-size="11.5" font-weight="600" fill="#0f172a">ฝัง JSON Recovery Annotation ลงใน Archive</text>
+        <text x="570" y="367" font-size="9.5" font-family="monospace" fill="#0f766e">&lt;!-- devflow:completion {"specBytes":..., "specSha256":..., "sourceTree":...} --&gt;</text>
+
+        <path d="M 785 377 L 785 400" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+
+        <g transform="translate(560, 405)">
+          <rect x="0" y="0" width="140" height="60" rx="6" fill="#f1f5f9" stroke="#94a3b8" />
+          <text x="70" y="22" font-size="10.5" font-weight="700" fill="#0f172a" text-anchor="middle">Phase 1: Archive</text>
+          <text x="70" y="38" font-size="9" fill="#475569" text-anchor="middle">เขียน Archive แล้ว</text>
+          <text x="70" y="50" font-size="8.5" font-weight="600" fill="#0f766e" text-anchor="middle">➔ กู้คืน Work Commit</text>
+
+          <path d="M 140 30 L 155 30" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+
+          <rect x="155" y="0" width="140" height="60" rx="6" fill="#f1f5f9" stroke="#94a3b8" />
+          <text x="225" y="22" font-size="10.5" font-weight="700" fill="#0f172a" text-anchor="middle">Phase 2: Commit</text>
+          <text x="225" y="38" font-size="9" fill="#475569" text-anchor="middle">Commit บน Branch แล้ว</text>
+          <text x="225" y="50" font-size="8.5" font-weight="600" fill="#0f766e" text-anchor="middle">➔ กู้คืน Squash-Merge</text>
+
+          <path d="M 295 30 L 310 30" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)" />
+
+          <rect x="310" y="0" width="140" height="60" rx="6" fill="#f1f5f9" stroke="#94a3b8" />
+          <text x="380" y="22" font-size="10.5" font-weight="700" fill="#0f172a" text-anchor="middle">Phase 3: Merged</text>
+          <text x="380" y="38" font-size="9" fill="#475569" text-anchor="middle">Merge ลง Main แล้ว</text>
+          <text x="380" y="50" font-size="8.5" font-weight="600" fill="#0f766e" text-anchor="middle">➔ Clean Context Workspace</text>
+        </g>
+
+        <rect x="560" y="475" width="450" height="38" rx="6" fill="#f0fdfa" stroke="#0f766e" />
+        <text x="785" y="492" font-size="10.5" font-weight="600" fill="#0f766e" text-anchor="middle">🛡️ กู้คืนปลอดภัย 100%: ตรวจ SHA-256 ของ Spec เดิม และตรวจสอบ Git Tree</text>
+        <text x="785" y="505" font-size="9" fill="#115e59" text-anchor="middle">ไม่สร้าง Commit ซ้ำซ้อน และไม่เริ่มฟีเจอร์ถัดไปก่อนส่งมอบงานเก่าเสร็จสมบูรณ์</text>
+      </svg>
+    </div>
+
+    <div class="comparison-section">
+      <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem;">📊 ตารางวิเคราะห์การเปลี่ยนแปลงและผลกระทบ (Impact & Matrix)</h2>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>องค์ประกอบ (Component)</th>
+            <th>การเปลี่ยนแปลงจาก Upstream (v1.6.1)</th>
+            <th>การปรับใช้ใน Nexus-DevFlow</th>
+            <th>ระดับความสำคัญ (Risk/Priority)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Installer Validation</strong></td>
+            <td>ตรวจจับและปฏิเสธ Symbolic Links และ Incompatible Types ก่อนคัดลอกไฟล์</td>
+            <td>เพิ่ม <code>validateInstallDestinations</code> ใน <code>bin/create-nexus-devflow.ts</code> ป้องกันความเสี่ยง Symlink Escape</td>
+            <td><span style="color: #b91c1c; font-weight: 600;">High / Security</span></td>
+          </tr>
+          <tr>
+            <td><strong>Completion Recovery</strong></td>
+            <td>เพิ่ม <code>completion-recovery.md</code> พร้อม JSON Comment Annotation เพื่อกู้คืนสถานะส่งมอบที่ค้างคา</td>
+            <td>ปรับใช้ใน <code>complete/SKILL.md</code> และ <code>continuous/SKILL.md</code> ให้เข้ากับ Task-Isolated Living Spec</td>
+            <td><span style="color: #b91c1c; font-weight: 600;">High / Robustness</span></td>
+          </tr>
+          <tr>
+            <td><strong>Build History Rebuild</strong></td>
+            <td>เพิ่ม <code>build-history.md</code> รองรับ <code>NN-slug--build-N.md</code> เมื่อ Rebuild หลัง Rollback</td>
+            <td>ปรับปรุง <code>feature/SKILL.md</code>, <code>rollback/SKILL.md</code> และตัวจัดเก็บใน <code>devflow/history/features/</code></td>
+            <td><span style="color: #b45309; font-weight: 600;">Medium / Integrity</span></td>
+          </tr>
+          <tr>
+            <td><strong>Local-Only Spec Review</strong></td>
+            <td>ตรวจ Snapshot Hash ของ Spec ใน <code>.state/review-specs/</code> โดยไม่ต้อง Commit ลง Git</td>
+            <td>ปรับปรุง <code>packages/create-nexus-devflow/lib/review.ts</code> เพิ่มฟิลด์ <code>specSnapshot</code></td>
+            <td><span style="color: #0369a1; font-weight: 600;">Medium / Parity</span></td>
+          </tr>
+          <tr>
+            <td><strong>Status Readiness Alignment</strong></td>
+            <td>บล็อก Ready State เมื่อ Verification Failed หรือพบ Malformed/Unsafe Records</td>
+            <td>อัปเกรด <code>project-status-engine.ts</code> และ <code>dashboard.ts</code> เพิ่ม <code>classifyWorkEvidence</code></td>
+            <td><span style="color: #b91c1c; font-weight: 600;">High / Correctness</span></td>
+          </tr>
+          <tr>
+            <td><strong>Overview & Build Plan</strong></td>
+            <td>จัดรูปแบบ Feature List ให้กระชับ พร้อมอัปเดตนโยบาย No-AI-Attribution</td>
+            <td>ปรับปรุง <code>overview/SKILL.md</code> และเอกสารคำแนะนำ <code>devflow/context/ai-interaction.md</code></td>
+            <td><span style="color: #059669; font-weight: 600;">Low / Polish</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      <span>Nexus-DevFlow Architecture Playbook &copy; 2026</span>
+      <span>Artifact Path: <code>devflow/discoveries/DISC-20260911-001-sync-upstream-ai-blueprint-v161/</code></span>
+    </footer>
+  </div>
+</body>
+</html>

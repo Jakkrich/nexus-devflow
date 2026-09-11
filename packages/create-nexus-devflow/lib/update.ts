@@ -27,9 +27,14 @@ export interface Manifest {
   workspace: {
     contextDir: string;
     historyDir: string;
-    referenceDir: string;
-    runsDir: string;
-    discoveriesDir: string;
+    referenceDir?: string;
+    runsDir?: string;
+    discoveriesDir?: string;
+    decisionsDir?: string;
+    ideationDir?: string;
+    planningDir?: string;
+    tasksDir?: string;
+    docsDir?: string;
   };
   lifecycle: {
     fastTrackStages: string[];

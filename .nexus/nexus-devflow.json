@@ -13,12 +13,16 @@
     "opencode"
   ],
   "workspace": {
-    "contextDir": "devflow/context",
-    "historyDir": "devflow/history",
+    "contextDir": "devflow/00-context",
+    "historyDir": "devflow/50-history",
     "referenceDir": "devflow/reference",
-    "runsDir": "devflow/runs",
     "discoveriesDir": "devflow/discoveries",
-    "decisionsDir": "devflow/decisions"
+    "decisionsDir": "devflow/decisions",
+    "ideationDir": "devflow/10-ideation",
+    "discoveryDir": "devflow/20-discovery",
+    "planningDir": "devflow/30-planning",
+    "tasksDir": "devflow/40-tasks",
+    "docsDir": "devflow/60-docs"
   },
   "lifecycle": {
     "fastTrackStages": [
@@ -97,6 +101,16 @@
       "installedAt": "2026-09-09T21:22:00.000Z",
       "type": "compound-knowledge",
       "referencePath": "devflow/.vendor/ponytail"
+    },
+    {
+      "name": "book-to-skill",
+      "source": "https://github.com/virgiliojr94/book-to-skill",
+      "version": "1.4.0",
+      "description": "Converts technical books, documents, and folders into structured on-demand agent skills with frameworks, decision rules, and chapter indices",
+      "installedAt": "2026-09-11T12:07:00.000Z",
+      "type": "compound-knowledge",
+      "referencePath": "devflow/.vendor/book-to-skill",
+      "protected": true
     }
   ]
 }

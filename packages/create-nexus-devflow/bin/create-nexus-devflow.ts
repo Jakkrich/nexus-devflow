@@ -90,6 +90,9 @@ import {
   updateRecommendedSkills,
   updateThirdPartySkills
 } from "../lib/skill-manager.js";
+import { migrateDevflowStructure } from "../lib/tooling/commands/migrate-structure.js";
+import { isDecadeNumberedLayout } from "../lib/workspace-paths.js";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(__dirname);
@@ -122,7 +125,8 @@ interface CliOptions {
   | "swarm"
   | "graph"
   | "skill"
-  | "skills";
+  | "skills"
+  | "migrate-structure";
   subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall" | "remove" | "sync" | "update" | "upgrade" | "restore";
   subcommandArg?: string;
   graphFile?: string;
@@ -174,6 +178,30 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
   if (options.deprecatedUi) {
     console.warn("Warning: `ui` is deprecated; use `dashboard` instead.");
+  }
+
+  if (options.command === "migrate-structure") {
+    const spinner = createSpinner("Migrating devflow structure to Decade-Numbered layout...").start();
+    const result = await migrateDevflowStructure(targetDir);
+    if (!result.success) {
+      spinner.fail("Migration failed");
+      for (const w of result.warnings) {
+        console.error(`  ✖ ${w}`);
+      }
+      process.exitCode = 1;
+      return;
+    }
+    spinner.succeed(`Successfully migrated devflow structure (${result.moved.length} items processed)`);
+    const style = createStyle(shouldUseColor());
+    console.log(`\n${style.green("✔")} ${style.bold("Structure migrated to Decade-Numbered stages:")}`);
+    console.log(`  • 00-context/   (Living Source of Truth)`);
+    console.log(`  • 10-ideation/  (Ideas & Reference Ingestion)`);
+    console.log(`  • 20-discovery/ (Analysis, Discoveries & ADRs)`);
+    console.log(`  • 30-planning/  (Project Plan & Build Plan)`);
+    console.log(`  • 40-tasks/     (Active Living Spec Workspaces)`);
+    console.log(`  • 50-history/   (Shipped Archives & Release Ledger)`);
+    console.log(`  • 60-docs/      (System Playbooks)`);
+    return;
   }
 
   if (options.command === "mcp") {
@@ -799,6 +827,15 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       // ignore
     }
 
+    // Auto-migrate structure if legacy layout is detected
+    if (!(await isDecadeNumberedLayout(targetDir))) {
+      const migration = await migrateDevflowStructure(targetDir);
+      if (migration.success && migration.moved.length > 0) {
+        const style = createStyle(shouldUseColor());
+        console.log(`\n${style.green("✔")} ${style.bold("Automatically migrated folder structure to Decade-Numbered layout (00-context, 10-ideation...).")}`);
+      }
+    }
+
     spinner.succeed("Nexus-DevFlow update successfully applied!");
     printUpdateSuccess(prepared, result);
     return;
@@ -1281,6 +1318,9 @@ function parseArgs(args: readonly string[]): CliOptions {
       target = positional[1] || target || ".";
     } else if (first === "update") {
       command = "update";
+      target = positional[1] || target || ".";
+    } else if (first === "migrate-structure") {
+      command = "migrate-structure";
       target = positional[1] || target || ".";
     } else if (first === "uninstall") {
       command = "uninstall";

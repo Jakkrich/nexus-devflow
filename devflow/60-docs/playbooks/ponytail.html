@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🪓 Ponytail — คู่มือการใช้งาน 5W1H | Nexus-DevFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       NEXUS-DEVFLOW — BASE LIGHT TEMPLATE (Paper & Ink + Teal)
+       ============================================================ */
+    :root {
+      color-scheme: light;
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-alt: #eef0f4;
+      --border: #e1e4ea;
+      --ink: #171a21;
+      --ink-muted: #5b6072;
+      --ink-faint: #9297a6;
+
+      --accent: #0f766e;        /* teal — ค่าหลักของระบบ */
+      --accent-soft: #e5f3f1;
+      --accent-line: #9fd6d0;
+
+      --violet: #6d28d9;        /* diagrams / architecture */
+      --violet-soft: #f1ecfc;
+
+      --amber: #b45309;         /* warning */
+      --amber-soft: #fdf1e2;
+      --amber-line: #f3d19c;
+
+      --red: #b42318;           /* danger / bypass */
+      --red-soft: #fdecea;
+      --red-line: #f3b8b0;
+
+      --green: #15803d;         /* success / active */
+      --green-soft: #e8f6ee;
+      --green-line: #a9dcbb;
+
+      --radius: 10px;
+      --shadow-sm: 0 1px 2px rgba(23, 26, 33, .05);
+      --shadow-md: 0 8px 24px -8px rgba(23, 26, 33, .14);
+
+      --font-display: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --font-body: 'Google Sans Text', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: -1px -1px;
+      color: var(--ink);
+      line-height: 1.65;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO / HEADER ---------- */
+    .hero {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.25rem 2rem 2rem;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--violet) 60%, var(--amber));
+    }
+
+    .hero-ruler {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 96px;
+      height: 96px;
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    .eyebrow-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .9rem;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(21, 128, 61, .45);
+      animation: pulse 2.4s ease-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(21, 128, 61, .45); }
+      70% { box-shadow: 0 0 0 8px rgba(21, 128, 61, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: .74rem;
+      letter-spacing: .02em;
+      color: var(--ink-muted);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(1.55rem, 3vw, 1.95rem);
+      color: var(--ink);
+    }
+
+    .hero p.sub {
+      color: var(--ink-muted);
+      font-size: .98rem;
+      margin-top: .5rem;
+      max-width: 58ch;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: 1.15rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .3rem .65rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 500;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    .badge.b-accent {
+      background: var(--accent-soft);
+      border-color: var(--accent-line);
+      color: var(--accent);
+    }
+
+    .badge.b-amber {
+      background: var(--amber-soft);
+      border-color: var(--amber-line);
+      color: var(--amber);
+    }
+
+    /* ---------- METRICS ---------- */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: .9rem;
+      margin-bottom: 2rem;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .metric-label {
+      font-size: .82rem;
+      color: var(--ink-muted);
+      margin-top: .2rem;
+    }
+
+    /* ---------- SECTIONS ---------- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.7rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: 1.1rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-head .num {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      color: var(--ink-faint);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .15rem .45rem;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .section p {
+      color: var(--ink);
+      font-size: .96rem;
+    }
+
+    .section p + p { margin-top: .6rem; }
+    .section ul { margin: .75rem 0 0 1.35rem; font-size: .95rem; }
+    .section li + li { margin-top: .4rem; }
+
+    /* ---------- ALERTS ---------- */
+    .alert {
+      display: flex;
+      gap: .7rem;
+      align-items: flex-start;
+      padding: .9rem 1.1rem;
+      border-radius: 8px;
+      font-size: .9rem;
+      margin: 1rem 0;
+    }
+
+    .alert-danger {
+      background: var(--red-soft);
+      border: 1px solid var(--red-line);
+      color: #8f2318;
+    }
+
+    .alert-info {
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      color: #0b544e;
+    }
+
+    /* ---------- PIPELINE LADDER ---------- */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      margin-top: .9rem;
+    }
+
+    .pipeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: .9rem;
+      background: var(--surface-alt);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: .8rem 1rem;
+      transform: translateX(-6px);
+      opacity: 0;
+      animation: step-in .4s ease-out forwards;
+    }
+
+    .pipeline-step:nth-child(1) { animation-delay: .02s; }
+    .pipeline-step:nth-child(2) { animation-delay: .06s; }
+    .pipeline-step:nth-child(3) { animation-delay: .10s; }
+    .pipeline-step:nth-child(4) { animation-delay: .14s; }
+    .pipeline-step:nth-child(5) { animation-delay: .18s; }
+    .pipeline-step:nth-child(6) { animation-delay: .22s; }
+    .pipeline-step:nth-child(7) { animation-delay: .26s; border-left-color: var(--green); }
+
+    @keyframes step-in {
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      font-weight: 700;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ---------- TERMINAL MOCKUP ---------- */
+    .terminal {
+      background: #14161c;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin: 1rem 0;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .6rem .8rem;
+      background: #1d2029;
+      border-bottom: 1px solid #262a35;
+    }
+
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-dot.r { background: #ff5f57; }
+    .terminal-dot.y { background: #febc2e; }
+    .terminal-dot.g { background: #28c840; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: #8b90a0;
+      margin-left: .5rem;
+    }
+
+    .terminal-body {
+      padding: 1rem 1.1rem 1.2rem;
+      font-family: var(--font-mono);
+      font-size: .86rem;
+      color: #d7dae2;
+    }
+
+    .terminal-line {
+      display: flex;
+      gap: .55rem;
+      margin-bottom: .5rem;
+    }
+
+    .terminal-prompt { color: #5fd9c9; flex-shrink: 0; }
+    .terminal-out { color: #8b90a0; }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 1em;
+      background: #5fd9c9;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ---------- DIAGRAM SLOT ---------- */
+    .diagram-slot {
+      border: 1.5px dashed var(--accent-line);
+      border-radius: var(--radius);
+      background: repeating-linear-gradient(135deg, var(--accent-soft) 0 10px, transparent 10px 20px);
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .diagram-slot .tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      background: var(--surface);
+      border: 1px solid var(--accent-line);
+      color: var(--accent);
+      padding: .25rem .6rem;
+      border-radius: 6px;
+      margin-bottom: .6rem;
+    }
+
+    .diagram-slot p {
+      color: var(--ink-muted);
+      font-size: .88rem;
+      max-width: 52ch;
+      margin: 0 auto;
+    }
+
+    /* ---------- CODE / COMMAND BOX ---------- */
+    .code-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .8rem 1rem;
+      margin: .6rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: .86rem;
+      color: var(--ink);
+    }
+
+    .copy-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+      padding: .35rem .65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .74rem;
+      font-family: var(--font-body);
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ---------- TABLE & PILLS ---------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+      margin-top: .75rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: .7rem .9rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--surface-alt);
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .18rem .5rem;
+      border-radius: 999px;
+      font-size: .76rem;
+      font-weight: 600;
+    }
+
+    .pill-active {
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid var(--green-line);
+    }
+
+    .pill-bypass {
+      background: var(--red-soft);
+      color: var(--red);
+      border: 1px solid var(--red-line);
+    }
+
+    footer {
+      text-align: center;
+      font-size: .82rem;
+      color: var(--ink-faint);
+      margin-top: 2.5rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ========== HERO ========== -->
+    <header class="hero">
+      <svg class="hero-ruler" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M100 0 V100 M100 20 H80 M100 40 H85 M100 60 H80 M100 80 H85" stroke="#c9cdd6" stroke-width="1" />
+        <path d="M0 100 H100 M20 100 V80 M40 100 V85 M60 100 V80 M80 100 V85" stroke="#c9cdd6" stroke-width="1" />
+      </svg>
+      <div class="eyebrow-row">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="eyebrow">devflow/docs/playbooks/ponytail.html</span>
+      </div>
+      <h1>🪓 Ponytail — คู่มือการใช้งาน 5W1H</h1>
+      <p class="sub">Lazy senior dev mode & YAGNI optimization orchestrator ช่วยตัดโค้ดส่วนเกินและหยุด Over-Engineering ของ AI Agent</p>
+      <div class="badge-row">
+        <span class="badge b-accent">Upstream v4.9.0</span>
+        <span class="badge">Type: Compound-Knowledge</span>
+        <span class="badge b-amber">Theme: Light (Paper & Ink)</span>
+        <span class="badge">Verified: 2026-09-09</span>
+      </div>
+    </header>
+
+    <!-- ========== METRICS ========== -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">-54%</div>
+        <div class="metric-label">LOC Reduction (ตัดโค้ดส่วนเกิน)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">-22%</div>
+        <div class="metric-label">Token Consumption ประหยัด context</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">-27%</div>
+        <div class="metric-label">Execution Time รวดเร็วขึ้น</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">Safety & Quality Preserved</div>
+      </div>
+    </div>
+
+    <!-- ========== 1. WHAT ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">01</span><h2>What (คืออะไร &amp; ทำอะไรได้บ้าง)</h2></div>
+      <p><strong>Ponytail</strong> คือ Skill & Mindset จำลองแนวคิดนักพัฒนาอาวุโส (Senior Developer) ที่ยึดคติ <em>"The best code is the code you never wrote"</em> เพื่อป้องกันไม่ให้ AI Agent สร้าง Abstraction ซ้ำซ้อน หรือติดตั้ง dependencies ภายนอกพร่ำเพรื่อ</p>
+      <ul>
+        <li><strong>Decision Ladder</strong> — บันไดการตัดสินใจ 7 ขั้น ค้นหาทางออกที่กระชับที่สุดก่อนเขียนโค้ด</li>
+        <li><strong>Root-Cause Bug Fixing</strong> — ซ่อมบั๊กที่ shared caller กลางจุดเดียว ไม่แก้แบบแปะปลาสเตอร์ (Band-aid fixes)</li>
+        <li><strong>Intensity Modes</strong> — เลือกระดับความลีนได้ตามงาน: <code>lite</code>, <code>full</code> (default), <code>ultra</code>, <code>audit</code>, <code>debt</code></li>
+        <li><strong>Dependency Hygiene</strong> — ใช้ฟังก์ชัน Built-in / Runtime stdlib ก่อนพิจารณาลง npm package ใหม่</li>
+      </ul>
+    </section>
+
+    <!-- ========== 2. WHY ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">02</span><h2>Why (ทำไมต้องใช้ &amp; ประโยชน์ที่ได้รับ)</h2></div>
+      <p>โดยธรรมชาติ โมเดลภาษา (LLM) มักมีแนวโน้มที่จะ Over-Abstract สร้างไฟล์ย่อยๆ จำนวนมาก และสร้าง wrapper ครอบไปเรื่อยๆ ซึ่งส่งผลเสียในระยะยาว:</p>
+      <ul>
+        <li><strong>ลด Token Consumption</strong> — ประหยัดบริบทหน้าต่าง (Context Window) โดยเฉพาะในการรันลูปอัตโนมัติหลายฟีเจอร์ (<code>/continuous</code>)</li>
+        <li><strong>ลดหนี้ทางเทคนิค (Technical Debt)</strong> — ยึดหลัก <em>Boring over clever</em> และ <em>Deletion over addition</em></li>
+        <li><strong>อ่านโค้ดง่ายขึ้น</strong> — โค้ดตรงไปตรงมา ดูแลรักษาง่าย ไม่ต้องไล่ตามคลาสเชื่อมต่อหลายชั้น</li>
+      </ul>
+    </section>
+
+    <!-- ========== 3. WHO ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">03</span><h2>Who (เหมาะสำหรับใคร)</h2></div>
+      <ul>
+        <li><strong>Backend &amp; Logic Developers</strong> — ผู้พัฒนา REST API, Middleware, CLI, และ Data Pipeline</li>
+        <li><strong>Bug Fixers &amp; Maintainers</strong> — ผู้แก้บั๊กผ่านสเตจ <code>/fix</code> หรือ <code>/debug</code></li>
+        <li><strong>Solo Developers &amp; Tech Leads</strong> — ที่ต้องการคุม Codebase ให้สะอาด เล็ก และอ่านเข้าใจง่าย</li>
+      </ul>
+    </section>
+
+    <!-- ========== 4. WHERE & GUARDRAIL ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">04</span><h2>Where (ใช้กับส่วนไหน &amp; ขอบเขตความปลอดภัย)</h2></div>
+      <div class="alert alert-danger">
+        <span aria-hidden="true">🛑</span>
+        <div><strong>Aesthetic Protection Gate:</strong> Ponytail ถูก <strong>ห้ามทำงาน</strong> ในงาน Web Frontend, UI Components, Styling (<code>.css</code>, <code>.tsx</code>) และสเตจ <code>/prototype</code> โดยเด็ดขาด เพื่อรักษาความสวยงามระดับพรีเมียม</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ขอบเขตงาน (Scope)</th>
+            <th>สถานะ</th>
+            <th>เหตุผลและแนวทาง</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Backend / CLI / Core Logic</strong></td>
+            <td><span class="pill pill-active">ACTIVE</span></td>
+            <td>ลดความซับซ้อน ป้องกันการเขียน Wrapper ซ้อนกัน</td>
+          </tr>
+          <tr>
+            <td><strong>Bug Fixing (<code>/fix</code>, <code>/debug</code>)</strong></td>
+            <td><span class="pill pill-active">ACTIVE</span></td>
+            <td>บังคับแก้ที่จุดศูนย์กลาง (Shared function) จุดเดียว</td>
+          </tr>
+          <tr>
+            <td><strong>Code Audit (<code>/audit</code>)</strong></td>
+            <td><span class="pill pill-active">ACTIVE</span></td>
+            <td>สแกนหา Single-implementation interfaces และ dead abstractions</td>
+          </tr>
+          <tr>
+            <td><strong>Frontend / UI Mockup (<code>/prototype</code>)</strong></td>
+            <td><span class="pill pill-bypass">AUTO-BYPASS</span></td>
+            <td>ต้องคง Micro-animations, Glassmorphism, และ Typography ระดับพรีเมียมไว้</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========== 5. WHEN ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">05</span><h2>When (ควรใช้ตอนไหน &amp; ลำดับก่อน-หลัง)</h2></div>
+      <ul>
+        <li><strong>ในสเตจ <code>/implement</code></strong> — เมื่อเข้าสู่ TDD Green Phase เพื่อเขียนโค้ดที่สั้นและตรงไปตรงมาที่สุด</li>
+        <li><strong>ในสเตจ <code>/fix</code></strong> — เมื่อต้องการแก้บั๊กให้จบที่ต้นตอของฟังก์ชันส่วนกลาง</li>
+        <li><strong>ในสเตจ <code>/audit</code></strong> — ก่อนทำ Release เพื่อสแกนดูว่ามีไฟล์หรือ class ไหนที่เกินจำเป็น</li>
+        <li><strong>ห้ามใช้ในสเตจ <code>/discovery</code>, <code>/brainstorm</code></strong> — เพราะช่วงระดมไอเดียต้องการมุมมองที่กว้าง ไม่ควรถูกจำกัดด้วย YAGNI ตั้งแต่แรก</li>
+      </ul>
+    </section>
+
+    <!-- ========== 6. HOW & PIPELINE ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">06</span><h2>How (ใช้งานอย่างไร &amp; บันได 7 ขั้น)</h2></div>
+      <p>เมื่อทำงานในฝั่ง Backend หรือ Core Logic ให้หยุดที่ขั้นแรกที่แก้โจทย์ได้สำเร็จ:</p>
+      
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-num">1</div>
+          <div><strong>Does this need to exist? (YAGNI)</strong> — ถ้าเป็นความต้องการล่วงหน้า ให้ข้ามเลย</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">2</div>
+          <div><strong>Already in this codebase?</strong> — ตรวจสอบ helper, util ที่มีอยู่แล้ว นำมา reuse ห้ามเขียนใหม่</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">3</div>
+          <div><strong>Standard library does it?</strong> — ใช้ Node.js / Runtime built-in ก่อนเขียนเองเสมอ</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">4</div>
+          <div><strong>Native platform feature covers it?</strong> — ใช้ฟีเจอร์พื้นฐาน เช่น DB constraint แทน app logic</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">5</div>
+          <div><strong>Already-installed dependency solves it?</strong> — ใช้ library ที่ลงไว้แล้ว ห้ามลง package ใหม่เพื่อโค้ดไม่กี่บรรทัด</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">6</div>
+          <div><strong>Can this be one line?</strong> — รวบเป็นบรรทัดเดียวถ้าอ่านรู้เรื่องและปลอดภัย</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="step-num">7</div>
+          <div><strong>Only then: minimum code that works</strong> — เขียนโค้ดให้น้อยที่สุดที่ทำงานได้ถูกต้อง</div>
+        </div>
+      </div>
+
+      <!-- Terminal Mockup UI -->
+      <div class="terminal" style="margin-top: 1.5rem;">
+        <div class="terminal-bar">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-title">zsh — nexus-devflow</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="terminal-prompt">❯</span><span>/ponytail audit</span></div>
+          <div class="terminal-line"><span class="terminal-out">→ Scanning codebase for single-implementation interfaces & dead wrappers...</span></div>
+          <div class="terminal-line"><span class="terminal-out">✓ Audit complete: 0 bloated abstractions found. Code is lean.</span><span class="cursor" aria-hidden="true"></span></div>
+        </div>
+      </div>
+
+      <p style="margin-top: 1.25rem; font-size: .9rem; color: var(--ink-muted);">คำสั่งพร้อมใช้งาน (Command Recipes):</p>
+      
+      <div class="code-box">
+        <code>/ponytail</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/ponytail')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/ponytail ultra</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/ponytail ultra')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/ponytail audit</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/ponytail audit')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/ponytail debt</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/ponytail debt')">Copy</button>
+      </div>
+      <div class="code-box">
+        <code>/ponytail help</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('/ponytail help')">Copy</button>
+      </div>
+    </section>
+
+    <!-- ========== 7. DIAGRAM SLOT ========== -->
+    <section class="section">
+      <div class="section-head"><span class="num">07</span><h2>แผนภาพสถาปัตยกรรม &amp; Ponytail 7-Rung Decision Ladder</h2></div>
+      
+      <!-- Real Interactive / Vector YAGNI Architecture Diagram -->
+      <div style="background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-top: 0.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 0.5rem;">
+            <span>🪜</span> Ponytail YAGNI Decision Ladder &amp; UI Safety Bypass Architecture
+          </div>
+          <span class="badge b-accent" style="font-size: 0.72rem;">archify: data-theme="light"</span>
+        </div>
+
+        <svg viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; display: block; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+          <defs>
+            <linearGradient id="bg-bypass" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#eff6ff" />
+              <stop offset="100%" stop-color="#dbeafe" />
+            </linearGradient>
+            <linearGradient id="bg-ladder" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f0fdf4" />
+              <stop offset="100%" stop-color="#dcfce7" />
+            </linearGradient>
+            <linearGradient id="bg-cut" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fff7ed" />
+              <stop offset="100%" stop-color="#ffedd5" />
+            </linearGradient>
+            <marker id="arrow-pony" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 8 5 L 0 9 z" fill="#0f766e" />
+            </marker>
+          </defs>
+
+          <!-- Zone Dividers -->
+          <line x1="220" y1="20" x2="220" y2="320" stroke="#e1e4ea" stroke-width="1.5" stroke-dasharray="4" />
+          <line x1="520" y1="20" x2="520" y2="320" stroke="#e1e4ea" stroke-width="1.5" stroke-dasharray="4" />
+
+          <!-- Zone Headers -->
+          <text x="25" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#1e40af">1. คัดแยกประเภทงาน (Classifier)</text>
+          <text x="235" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#166534">2. บันไดตัดสินใจ 7 ขั้น (YAGNI)</text>
+          <text x="535" y="38" font-family="Google Sans, sans-serif" font-size="11.5" font-weight="700" fill="#9a3412">3. ตัวชี้วัดผลลัพธ์การลดโค้ดส่วนเกิน</text>
+
+          <!-- Zone 1: Ingress & Classification -->
+          <rect x="25" y="60" width="175" height="60" rx="8" fill="url(#bg-bypass)" stroke="#93c5fd" stroke-width="1.2" />
+          <text x="37" y="83" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">คำขอพัฒนางานใหม่</text>
+          <text x="37" y="101" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#2563eb">Feature / Refactor / Fix</text>
+
+          <!-- Classifier Branch -->
+          <path d="M 112 120 L 112 150" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-pony)" fill="none" />
+
+          <!-- UI Safety Shield (Auto-Bypass) -->
+          <rect x="25" y="155" width="175" height="68" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="3" />
+          <text x="37" y="177" font-family="Google Sans, sans-serif" font-size="10.5" font-weight="700" fill="#475569">งาน UI / หน้าบ้าน / ดีไซน์?</text>
+          <text x="37" y="195" font-family="Google Sans Text, sans-serif" font-size="9" fill="#64748b">🛡️ ข้ามการตัดทอน (AUTO-BYPASS)</text>
+          <text x="37" y="210" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#0284c7">คงความสวยงามหรูหรา 100%</text>
+
+          <!-- Backend Path to Ladder -->
+          <rect x="25" y="240" width="175" height="65" rx="8" fill="url(#bg-ladder)" stroke="#86efac" stroke-width="1.2" />
+          <text x="37" y="262" font-family="Google Sans, sans-serif" font-size="10.5" font-weight="700" fill="#14532d">งานหลังบ้าน / ตรรกะ / ระบบ</text>
+          <text x="37" y="280" font-family="Google Sans Text, sans-serif" font-size="9" fill="#15803d">⚡ ไต่บันได 7 ขั้นตัดความซับซ้อน</text>
+          <text x="37" y="294" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#166534">Lite | Full (54%) | Ultra</text>
+
+          <!-- Zone 2: The 7 Rungs -->
+          <g transform="translate(235, 55)">
+            <!-- Rung 1 -->
+            <rect x="0" y="0" width="265" height="30" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" />
+            <text x="10" y="19" font-family="Google Sans, sans-serif" font-size="10" font-weight="700" fill="#15803d">ขั้น 1: ไม่เขียนเพิ่ม</text>
+            <text x="140" y="19" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#166534">(ใช้โค้ดเดิมหรือ stdlib)</text>
+
+            <!-- Rung 2 -->
+            <rect x="0" y="36" width="265" height="30" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" />
+            <text x="10" y="55" font-family="Google Sans, sans-serif" font-size="10" font-weight="700" fill="#15803d">ขั้น 2: เขียนแบบ Inline</text>
+            <text x="140" y="55" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#166534">(ไม่แตกฟังก์ชันถ้าใช้จุดเดียว)</text>
+
+            <!-- Rung 3 -->
+            <rect x="0" y="72" width="265" height="30" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" />
+            <text x="10" y="91" font-family="Google Sans, sans-serif" font-size="10" font-weight="700" fill="#15803d">ขั้น 3: รวมในไฟล์เดียว</text>
+            <text x="140" y="91" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#166534">(Co-locate อยู่กับที่ใช้งาน)</text>
+
+            <!-- Rung 4 -->
+            <rect x="0" y="108" width="265" height="30" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" />
+            <text x="10" y="127" font-family="Google Sans, sans-serif" font-size="10" font-weight="700" fill="#15803d">ขั้น 4: ใช้ Type ธรรมดา</text>
+            <text x="140" y="127" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#166534">(ไม่สร้าง DTO/Class ซ้อนหลายชั้น)</text>
+
+            <!-- Rung 5 -->
+            <rect x="0" y="144" width="265" height="30" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" />
+            <text x="10" y="163" font-family="Google Sans, sans-serif" font-size="10" font-weight="700" fill="#15803d">ขั้น 5: เทสต์เฉพาะจุดวิกฤต</text>
+            <text x="155" y="163" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#166534">(เน้น Business Logic สำคัญ)</text>
+
+            <!-- Rung 6 -->
+            <rect x="0" y="180" width="265" height="30" rx="5" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1" />
+            <text x="10" y="199" font-family="Google Sans, sans-serif" font-size="10" font-weight="700" fill="#15803d">ขั้น 6: บันทึกเฉพาะ 'เหตุผล'</text>
+            <text x="155" y="199" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#166534">(งดเขียน docstring ที่ชัดเจนอยู่แล้ว)</text>
+
+            <!-- Rung 7 -->
+            <rect x="0" y="216" width="265" height="30" rx="5" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
+            <text x="10" y="235" font-family="Google Sans, sans-serif" font-size="10" font-weight="700" fill="#b91c1c">ขั้น 7: ส่งมอบและลบส่วนเกิน</text>
+            <text x="155" y="235" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#991b1b">(ตัดโค้ดที่ไม่ได้ใช้ออกทันที)</text>
+          </g>
+
+          <!-- Zone 3: Metrics & Output -->
+          <rect x="535" y="60" width="220" height="75" rx="8" fill="url(#bg-cut)" stroke="#fdba74" stroke-width="1.2" />
+          <text x="548" y="84" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#9a3412">ลดโค้ดส่วนเกินและโทเค็น</text>
+          <text x="548" y="104" font-family="Google Sans, sans-serif" font-size="20" font-weight="700" fill="#ea580c">~54.2%</text>
+          <text x="640" y="104" font-family="Google Sans Text, sans-serif" font-size="9.5" fill="#7c2d12">ประหยัดบรรทัดโค้ดเฉลี่ย</text>
+          <text x="548" y="122" font-family="Google Sans Text, sans-serif" font-size="8.5" fill="#c2410c">ตัดความซับซ้อนที่เผื่ออนาคต</text>
+
+          <rect x="535" y="150" width="220" height="75" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2" />
+          <text x="548" y="174" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#334155">ความคล่องตัวของระบบ</text>
+          <text x="548" y="195" font-family="Google Sans Text, sans-serif" font-size="9.5" fill="#475569">• ไม่เพิ่ม Dependency ภายนอกที่ไม่จำเป็น</text>
+          <text x="548" y="211" font-family="Google Sans Text, sans-serif" font-size="9.5" fill="#475569">• บิลด์เร็วและทดสอบเสร็จอย่างรวดเร็ว</text>
+
+          <rect x="535" y="240" width="220" height="65" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2" />
+          <text x="548" y="262" font-family="Google Sans, sans-serif" font-size="11" font-weight="700" fill="#166534">คุณภาพการส่งมอบงาน</text>
+          <text x="548" y="280" font-family="Google Sans Text, sans-serif" font-size="9.5" fill="#15803d">โค้ดสะอาด ชัดเจน Git Diff กระชับ</text>
+          <text x="548" y="295" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#0f766e">พร้อมสำหรับ /check หรือ /complete</text>
+
+          <!-- Connecting Arrows -->
+          <path d="M 200 272 L 235 155" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-pony)" fill="none" />
+          <path d="M 500 170 L 535 97" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-pony)" fill="none" />
+          <path d="M 500 270 L 535 272" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow-pony)" fill="none" />
+        </svg>
+
+        <p style="margin-top: 0.9rem; font-size: 0.85rem; color: var(--ink-muted); text-align: center;">
+          สถาปัตยกรรม Ponytail: ตรวจสอบประเภทงาน (UI Auto-Bypass) ➔ ไต่บันได 7 ขั้นตัดความซับซ้อน ➔ บันทึกผลประหยัดโค้ดเฉลี่ย 54%
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Nexus-DevFlow Framework &middot; Paper &amp; Ink Light Theme &middot; Updated: 2026-09-09
+    </footer>
+  </div>
+</body>
+</html>
