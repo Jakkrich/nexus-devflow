@@ -503,7 +503,8 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       }
 
       const targetSkill = options.subcommandArg || (options.installAllSkills ? "--all" : undefined);
-      const spinner = createSpinner(targetSkill && targetSkill !== "--all" ? `Updating skill ${targetSkill}...` : "Updating third-party skills...").start();
+      const isAllTarget = !targetSkill || targetSkill === "--all" || targetSkill.toLowerCase() === "all";
+      const spinner = createSpinner(!isAllTarget ? `Updating skill ${targetSkill}...` : "Updating third-party skills...").start();
       try {
         const result = await updateThirdPartySkills(targetDir, targetSkill);
         if (result.totalUpdated === 0 && result.failedSkills.length === 0) {

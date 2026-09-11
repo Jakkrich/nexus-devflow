@@ -492,7 +492,10 @@ test("classifyWorkEvidence correctly detects status verification and record faul
     completed: 1,
     remaining: 0,
     total: 1,
-    nextStep: null
+    nextStep: null,
+    buildPlanItem: null,
+    steps: [],
+    warnings: []
   });
 
   const emptyFindings = {
@@ -554,7 +557,7 @@ test("classifyWorkEvidence correctly detects status verification and record faul
 
   const findingsWithWarning = {
     ...emptyFindings,
-    warnings: [{ code: "malformed_findings", message: "Malformed findings record." }]
+    warnings: [{ code: "malformed_findings" as const, message: "Malformed findings record." }]
   };
   const findingsFault = classifyWorkEvidence(dummyWork("verified"), findingsWithWarning);
   assert.equal(findingsFault.recordFaults.length, 1);
