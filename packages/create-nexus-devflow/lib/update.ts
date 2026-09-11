@@ -626,3 +626,82 @@ export async function hashFile(filePath: string): Promise<string> {
   const content = await fs.readFile(filePath);
   return crypto.createHash("sha256").update(content).digest("hex");
 }
+
+export async function assertDestinationType(
+  target: string,
+  expected: "directory" | "file"
+): Promise<void> {
+  let stats;
+
+  try {
+    stats = await fs.lstat(target);
+  } catch (error: unknown) {
+    if (error instanceof Error && "code" in error) {
+      if (error.code === "ENOTDIR") {
+        throw new Error(`Refusing to install at ${target}: a parent path is not a directory.`);
+      }
+
+      if (error.code === "ENOENT") {
+        // On Windows, lstat returns ENOENT even when an ancestor is a file instead of a directory
+        let parent = path.dirname(path.resolve(target));
+        const root = path.parse(parent).root;
+        while (parent && parent !== root) {
+          try {
+            const parentStats = await fs.lstat(parent);
+            if (!parentStats.isDirectory()) {
+              throw new Error(`Refusing to install at ${target}: a parent path is not a directory.`);
+            }
+            break;
+          } catch (pErr: unknown) {
+            if (pErr instanceof Error && "code" in pErr) {
+              if (pErr.code === "ENOTDIR") {
+                throw new Error(`Refusing to install at ${target}: a parent path is not a directory.`);
+              }
+              if (pErr.code === "ENOENT") {
+                parent = path.dirname(parent);
+                continue;
+              }
+            }
+            throw pErr;
+          }
+        }
+        return;
+      }
+    }
+
+    throw error;
+  }
+
+  if (stats.isSymbolicLink()) {
+    throw new Error(`Refusing to install through symbolic-link path: ${target}`);
+  }
+
+  if (expected === "directory" ? !stats.isDirectory() : !stats.isFile()) {
+    throw new Error(`Refusing to install at ${target}: expected a ${expected}.`);
+  }
+}
+
+
+export async function validateInstallDestinations(
+  templateFiles: Iterable<string> | Map<string, TemplateFile>,
+  targetDir: string
+): Promise<void> {
+  await assertDestinationType(targetDir, "directory");
+
+  const paths = templateFiles instanceof Map ? templateFiles.keys() : templateFiles;
+  for (const relativePath of paths) {
+    const dest = targetPath(targetDir, relativePath);
+    await assertDestinationType(dest, "file");
+
+    const parts = relativePath.split("/");
+    let current = path.resolve(targetDir);
+    for (let i = 0; i < parts.length - 1; i++) {
+      current = path.join(current, parts[i]);
+      await assertDestinationType(current, "directory");
+    }
+  }
+
+  await assertDestinationType(path.join(targetDir, CONTROL_DIR), "directory");
+  await assertDestinationType(path.join(targetDir, MANIFEST_PATH), "file");
+  await assertDestinationType(path.join(targetDir, CONTROL_DIR, ".gitignore"), "file");
+}

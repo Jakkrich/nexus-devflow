@@ -8,7 +8,7 @@ import test, { type TestContext } from "node:test";
 import { promisify } from "node:util";
 import { parseArgs } from "../bin/create-nexus-devflow.js";
 import { startDashboardServer } from "../lib/dashboard.js";
-import { formatHumanStatus, readProjectStatus } from "../lib/status.js";
+import { formatHumanStatus, readProjectStatus, classifyWorkEvidence } from "../lib/status.js";
 import { parseIdeasContent } from "../lib/ideas.js";
 
 const execFileAsync = promisify(execFile);
@@ -481,3 +481,129 @@ async function runGit(root: string, args: string[]): Promise<string> {
   const result = await execFileAsync("git", ["-C", root, ...args], { encoding: "utf8" });
   return result.stdout.trim();
 }
+
+test("classifyWorkEvidence correctly detects status verification and record faults", () => {
+  const dummyWork = (status: string | null) => ({
+    state: "active" as const,
+    type: "feature" as const,
+    title: "Test",
+    status,
+    runId: "001-test",
+    completed: 1,
+    remaining: 0,
+    total: 1,
+    nextStep: null
+  });
+
+  const emptyFindings = {
+    total: 0,
+    byStatus: { unverified: 0, open: 0, fixed: 0, closed: 0, accepted: 0, invalid: 0 },
+    items: [],
+    blockers: [],
+    warnings: []
+  };
+
+  const verified = classifyWorkEvidence(dummyWork("verified"), emptyFindings);
+  assert.equal(verified.verification, "verified");
+  assert.equal(verified.recordFaults.length, 0);
+
+  const failed = classifyWorkEvidence(dummyWork("verification failed"), emptyFindings);
+  assert.equal(failed.verification, "failed");
+  assert.equal(failed.recordFaults.length, 0);
+
+  const incomplete = classifyWorkEvidence(dummyWork("verification incomplete"), emptyFindings);
+  assert.equal(incomplete.verification, "incomplete");
+  assert.equal(incomplete.recordFaults.length, 0);
+
+  const missing = classifyWorkEvidence(dummyWork("in progress"), emptyFindings);
+  assert.equal(missing.verification, "missing");
+  assert.equal(missing.recordFaults.length, 0);
+
+  const malformedReview = {
+    state: "malformed" as const,
+    freshness: "unknown" as const,
+    targetCommit: null,
+    baseCommit: null,
+    baseRef: null,
+    specHash: null,
+    specSnapshot: null,
+    preparedBy: null,
+    builderModel: null,
+    requestedReviewer: null,
+    requestedModel: null,
+    requestedExecution: null,
+    requestedAt: null,
+    workflow: null,
+    checkRequired: null,
+    reviewerAdapter: null,
+    reviewerModel: null,
+    reviewerContext: null,
+    actualExecution: null,
+    reviewedAt: null,
+    scope: null,
+    lenses: [],
+    verdict: null,
+    checkResult: null,
+    warnings: [{ code: "malformed_review" as const, message: "malformed" }]
+  };
+
+  const reviewFault = classifyWorkEvidence(dummyWork("verified"), emptyFindings, malformedReview);
+  assert.equal(reviewFault.verification, "verified");
+  assert.equal(reviewFault.recordFaults.length, 1);
+  assert.equal(reviewFault.recordFaults[0]?.blocker, "independent review record is malformed");
+
+  const findingsWithWarning = {
+    ...emptyFindings,
+    warnings: [{ code: "malformed_findings", message: "Malformed findings record." }]
+  };
+  const findingsFault = classifyWorkEvidence(dummyWork("verified"), findingsWithWarning);
+  assert.equal(findingsFault.recordFaults.length, 1);
+  assert.equal(findingsFault.recordFaults[0]?.blocker, "findings record is malformed");
+});
+
+test("readProjectStatus blocks ready completion and suggests implement on verification failed", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-failed-"));
+  try {
+    const taskDir = path.join(tempDir, "devflow", "context", "002-test-failed");
+    await fs.mkdir(taskDir, { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
+    await fs.writeFile(path.join(taskDir, "findings.md"), "# Findings\n");
+
+    await fs.writeFile(
+      path.join(taskDir, "spec.md"),
+      `# Feature: 002-test-failed\n**Status:** verification failed\n- [x] Step 1\n`
+    );
+
+    const status = await readProjectStatus(tempDir);
+    assert.equal(status.completion.state, "blocked");
+    assert.ok(status.completion.blockers.includes("verification failed"));
+    assert.equal(status.nextAction.command, "/implement");
+    assert.equal(status.health, "warning");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("readProjectStatus blocks completion and suggests doctor on findings fault", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-fault-"));
+  try {
+    const taskDir = path.join(tempDir, "devflow", "context", "003-test-fault");
+    await fs.mkdir(taskDir, { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
+    await fs.writeFile(path.join(taskDir, "findings.md"), "### F-01 [P1] invalid-status - Test\n");
+
+    await fs.writeFile(
+      path.join(taskDir, "spec.md"),
+      `# Feature: 003-test-fault\n**Status:** verified\n- [x] Step 1\n`
+    );
+
+    const status = await readProjectStatus(tempDir);
+    assert.equal(status.completion.state, "blocked");
+    assert.ok(status.completion.blockers.includes("findings record is malformed"));
+    assert.equal(status.nextAction.command, "/doctor");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});

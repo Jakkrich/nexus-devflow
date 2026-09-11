@@ -138,6 +138,11 @@ export interface ProjectStatus {
   warnings: StatusWarning[];
 }
 
+export interface WorkEvidence {
+  verification: "verified" | "failed" | "incomplete" | "missing";
+  recordFaults: Array<{ blocker: string; path: string }>;
+}
+
 export class ProjectStatusEngine {
   constructor(private projectRoot: string = process.cwd()) {}
 
@@ -180,12 +185,29 @@ export class ProjectStatusEngine {
     ...review.warnings,
     ...findDrift(currentWork, git)
   ];
-  const completion = selectCompletion(currentWork, findings, git, stageMarkdown, review, config.values);
-  const nextAction = selectNextAction(currentWork, findings, stageMarkdown);
+  const evidence = classifyWorkEvidence(currentWork, findings, review, stageMarkdown);
+  const completion = selectCompletion(
+    currentWork,
+    findings,
+    git,
+    stageMarkdown,
+    review,
+    config.values,
+    evidence
+  );
+  const nextAction = selectNextAction(
+    currentWork,
+    findings,
+    stageMarkdown,
+    evidence,
+    completion
+  );
 
   return {
     schemaVersion: metadata.schemaVersion,
-    health: warnings.length > 0 || findings.blockers.length > 0
+    health: warnings.length > 0 || findings.blockers.length > 0 ||
+      (currentWork.state === "active" && evidence.verification === "failed") ||
+      isReviewBlocked(review, config.values, currentWork, runState.mode)
       ? "warning"
       : "ok",
     project: metadata.project,
@@ -591,7 +613,8 @@ function selectCompletion(
   git: GitStatusSummary,
   stageMarkdown?: string,
   review?: IndependentReviewSummary,
-  config?: ProjectConfig
+  config?: ProjectConfig,
+  evidence?: WorkEvidence
 ): StatusCompletion {
   if (currentWork.state === "idle") {
     return { state: "idle", blockers: [] };
@@ -604,7 +627,11 @@ function selectCompletion(
     };
   }
 
-  const blockers: string[] = [];
+  const blockers: string[] = evidence ? evidence.recordFaults.map((fault) => fault.blocker) : [];
+
+  if (evidence?.verification === "failed") {
+    blockers.push("verification failed");
+  }
 
   if (currentWork.remaining > 0) {
     blockers.push(`${currentWork.remaining} checklist steps remain`);
@@ -622,9 +649,7 @@ function selectCompletion(
 
   if (review && config) {
     const isGateActive = config.qualityGates.regular.independentReview !== "manual";
-    if (review.state === "malformed") {
-      blockers.push("independent review record is malformed");
-    } else if (review.state === "changes-requested") {
+    if (review.state === "changes-requested") {
       blockers.push("independent review requested changes");
     } else if (review.state === "pending") {
       blockers.push("independent review is pending");
@@ -646,9 +671,10 @@ function selectCompletion(
   );
 
   if (
-    isVerified ||
-    currentWork.status?.toLowerCase().includes("verified") ||
-    currentWork.status?.toLowerCase().includes("ready")
+    (evidence && evidence.verification === "verified") ||
+    (!evidence && (isVerified ||
+      currentWork.status?.toLowerCase().includes("verified") ||
+      currentWork.status?.toLowerCase().includes("ready")))
   ) {
     return {
       state: "ready",
@@ -658,20 +684,40 @@ function selectCompletion(
 
   return {
     state: "needs_verification",
-    blockers: ["verification evidence is not persisted"]
+    blockers: [evidence?.verification === "incomplete"
+      ? "verification is incomplete"
+      : "verification evidence is not persisted"]
   };
 }
 
 function selectNextAction(
   currentWork: CurrentWorkSummary,
   findings: FindingsSummary,
-  stageMarkdown?: string
+  stageMarkdown?: string,
+  evidence?: WorkEvidence,
+  completion?: StatusCompletion
 ): StatusNextAction {
   if (currentWork.state === "malformed") {
     return {
       command: "/doctor",
       reason: "Repair the stage or spec contract before continuing."
     };
+  }
+
+  if (currentWork.state === "active" && evidence) {
+    if (evidence.recordFaults.length > 0) {
+      return {
+        command: "/doctor",
+        reason: `Diagnose ${evidence.recordFaults.map((fault) => fault.path).join(" and ")} before continuing: ${evidence.recordFaults.map((fault) => fault.blocker).join("; ")}.`
+      };
+    }
+
+    if (evidence.verification === "failed") {
+      return {
+        command: "/implement",
+        reason: "Verification failed. Repair the current work before running /check again."
+      };
+    }
   }
 
   // 1. Authoritative Next Action from current-stage.md
@@ -732,9 +778,25 @@ function selectNextAction(
       };
     }
 
+    if (evidence && evidence.verification !== "verified") {
+      return {
+        command: "/check",
+        reason: evidence.verification === "incomplete"
+          ? "Verification is incomplete. Finish checking the current work."
+          : "All build steps are checked, but verification is not persisted."
+      };
+    }
+
+    if (completion && completion.state !== "ready") {
+      return {
+        command: "/doctor",
+        reason: `Resolve completion blockers before continuing: ${completion.blockers.join("; ")}.`
+      };
+    }
+
     return {
-      command: "/check",
-      reason: "All checklist steps are completed; run QA verification."
+      command: "/complete",
+      reason: "The current work is verified and ready for its final safety pass."
     };
   }
 
@@ -752,6 +814,80 @@ function selectNextAction(
     command: "/feature",
     reason: "Workspace is idle. Ready to spec or discover a new feature."
   };
+}
+
+function classifyWorkEvidence(
+  currentWork: CurrentWorkSummary,
+  findings: FindingsSummary,
+  review?: IndependentReviewSummary,
+  stageMarkdown?: string
+): WorkEvidence {
+  const status = currentWork.status?.trim().toLowerCase() || "";
+  const isVerifiedByStage = Boolean(
+    stageMarkdown &&
+    (/ready\s+for\s+\/complete|Passed\s+->\s+Ready|\/complete/i.test(stageMarkdown) ||
+     /Current Stage:\s*check\s*\(Passed/i.test(stageMarkdown))
+  );
+
+  const isFailedByStage = Boolean(
+    stageMarkdown &&
+    (/check\s*\(Failed/i.test(stageMarkdown) || /verification failed/i.test(stageMarkdown))
+  );
+
+  const verification = status === "verification failed" || status === "failed" || isFailedByStage
+    ? "failed"
+    : status === "verification incomplete" || status === "incomplete"
+      ? "incomplete"
+      : status === "verified" || status.includes("verified") || status === "ready" || status.includes("ready") || isVerifiedByStage
+        ? "verified"
+        : "missing";
+  const recordFaults: WorkEvidence["recordFaults"] = [];
+
+  if (review?.state === "malformed") {
+    recordFaults.push({
+      blocker: "independent review record is malformed",
+      path: "devflow/context/review.md"
+    });
+  }
+
+  for (const warning of findings.warnings) {
+    const blocker = warning.code === "malformed_findings"
+      ? "findings record is malformed"
+      : warning.code === "invalid_findings_path"
+        ? "findings path is not a regular file"
+        : warning.code === "unsafe_findings_path"
+          ? "findings path is a symbolic link and was not read"
+          : null;
+    if (blocker) {
+      recordFaults.push({ blocker, path: "devflow/context/findings.md" });
+    }
+  }
+
+  return { verification, recordFaults };
+}
+
+function isReviewBlocked(
+  review: IndependentReviewSummary,
+  config: ProjectConfig,
+  currentWork: CurrentWorkSummary,
+  runMode?: string
+): boolean {
+  return review.state === "malformed" ||
+    review.state === "pending" ||
+    review.state === "changes-requested" ||
+    (review.state === "passed" && review.freshness !== "current") ||
+    (review.state === "none" &&
+      currentWork.state === "active" &&
+      selectIndependentReviewPolicy(config, review, runMode) === "always");
+}
+
+function selectIndependentReviewPolicy(
+  config: ProjectConfig,
+  review: IndependentReviewSummary,
+  runMode?: string
+): QualityGatePolicy["independentReview"] {
+  const workflow = review.workflow || (runMode === "continuous" ? "continuous" : "regular");
+  return config.qualityGates[workflow].independentReview;
 }
 
 function findDrift(
@@ -781,7 +917,6 @@ function findDrift(
   return warnings;
 }
 
-
 async function readProjectStatus(
   startPath: string = process.cwd()
 ): Promise<ProjectStatus> {
@@ -797,5 +932,5 @@ function formatHumanStatus(
   return engine.formatHuman(status, options);
 }
 
-export { formatHumanStatus, readProjectStatus, shouldUseColor };
+export { classifyWorkEvidence, formatHumanStatus, readProjectStatus, shouldUseColor };
 

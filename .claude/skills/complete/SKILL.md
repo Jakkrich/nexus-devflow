@@ -33,6 +33,15 @@ passes.
 Read `devflow/config.json`. A missing file means the built-in defaults apply.
 If the file exists but is invalid, stop and point the user to `/doctor`.
 
+Before requiring a real active spec, check for pending completion using
+`reference/completion-recovery.md`. A matching archive may mean archival was
+interrupted, the work commit awaits merge, or the merge already finished. Follow
+that phase instead of restarting logging. Missing or ambiguous evidence stops
+with concrete recovery steps; an archive or clean context never authorizes selecting new work.
+Recovery uses archive and Git proof, never dashboard activity as authority.
+
+For a normal completion with no recovery in progress, continue below.
+
 Confirm the target work is actually finished: `devflow/context/{xxx-slug}/spec.md`
 holds a real spec, its steps are built on a branch, and `Verify`, or the fallback
 build and tests, passes. If any of the
@@ -44,6 +53,7 @@ the steps to be pre-committed.
 Read `devflow/context/{xxx-slug}/review.md` (or `devflow/context/review.md`) when present. A pending,
 changes-requested, malformed, or stale record is always a blocker because the
 user already initiated that gate, even when its configured policy is `manual`.
+
 
 ## Configured regular quality gates
 
@@ -103,6 +113,15 @@ evidence is missing.
 
 ## Step 1 - log the work
 
+Follow `reference/completion-recovery.md` to capture the source tree and compact
+archive annotation before any logging edits. Preserve the exact verified spec
+prefix, its UTF-8 byte length and SHA-256, branch, original HEAD, and local base.
+Record the reference's narrow `absentOptional` proof before creating any optional
+findings/review stub on an older installation; tree absence alone is insufficient.
+Prepare the entire archive, including the sections below and any generated try
+guide, before placing it at its destination in `devflow/history/features/`, `fixes/`, or `rollbacks/`. An existing matching archive
+enters recovery; never overwrite it or append duplicate sections.
+
 Check whether the spec is a feature, fix, or rollback. A fix is marked
 `Type: Fix` and has no build-plan number. A rollback is marked `Type: Rollback`
 and records the exact target feature, archive, commit, and parent.
@@ -122,10 +141,13 @@ delete the `prototypes/` folder now.
 
 ## Step 2 - make the work commit on feature branch
 
-Stage everything on the branch (any uncommitted step work plus the Step 1 logging
+Show the complete product and logging diff with the proposed commit message,
+then obtain explicit commit approval. Only then stage the reviewed branch work
+(any uncommitted step work plus the Step 1 logging
 changes) and make one conventional work commit on the active branch (for example `feat: <feature>`,
 `fix: <name>`, or `revert: roll back <feature>`). `Verify`, or the fallback build
 and tests, must pass first.
+
 
 ## Step 3 - Mandatory Delivery Gate (Ask User First)
 

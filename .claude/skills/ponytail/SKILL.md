@@ -34,29 +34,29 @@ Before executing any Ponytail optimization or JIT inspection:
 
 > [!IMPORTANT]
 > **Aesthetic Protection Gate**:
-> หากงานปัจจุบันเกี่ยวข้องกับ **Web Frontend, UI Components, Styling (`.css`, `.scss`, `.tsx`, `.vue`, `.html`), หรือคำสั่ง `/prototype`**:
-> - **AUTO-BYPASS PONYTAIL**: ปิดการทำงานของ Ponytail ทันที
-> - **PRESERVE RICH AESTHETICS**: ห้ามตัดทอน Micro-animations, Glassmorphism, Modern typography, หรือ Rich UI components เป็นอันขาด
-> - **REASON**: ป้องกันไม่ให้ Agent ถอยกลับไปใช้ unstyled HTML ดั้งเดิม (เช่น `<input type="date">`) ซึ่งขัดต่อมาตรฐานความสวยงามระดับพรีเมียมของระบบ
+> If the current task involves **Web Frontend, UI Components, Styling (`.css`, `.scss`, `.tsx`, `.vue`, `.html`), or `/prototype`**:
+> - **AUTO-BYPASS PONYTAIL**: Immediately disable Ponytail.
+> - **PRESERVE RICH AESTHETICS**: Never strip micro-animations, glassmorphism, modern typography, or rich UI components.
+> - **REASON**: Prevents the agent from reverting to raw unstyled HTML (e.g., `<input type="date">`), violating the project's premium aesthetic standards.
 
 ---
 
 ## 🪜 The 7-Rung Decision Ladder
 
-เมื่อทำงานในส่วน **Backend Logic, Algorithms, CLI, Data Processing, `/fix`, `/debug`, หรือ `/implement` (Non-UI)** ให้หยุดที่ขั้นแรกที่แก้โจทย์ได้:
+When working on **Backend Logic, Algorithms, CLI, Data Processing, `/fix`, `/debug`, or `/implement` (Non-UI)**, stop at the earliest rung that solves the requirement:
 
 ```text
-1. Does this need to exist at all?  ➔ YAGNI: หากเป็นความต้องการล่วงหน้า ให้ข้ามและบันทึกเหตุผลสั้นๆ
-2. Already in this codebase?        ➔ Reuse: ค้นหา util/helper/type ที่มีอยู่แล้ว ห้ามเขียนซ้ำ
-3. Standard library does it?        ➔ Stdlib: ใช้ Node.js / Runtime built-in ก่อนเสมอ
-4. Native platform covers it?       ➔ Platform: ใช้ฟีเจอร์พื้นฐาน เช่น DB constraint แทน app logic
-5. Installed dependency solves it?  ➔ Deps: ใช้ package ที่ลงไว้แล้ว ห้ามลง npm เพิ่มเพื่อโค้ดไม่กี่บรรทัด
-6. Can this be one line?            ➔ One-liner: ยุบเหลือบรรทัดเดียวถ้าอ่านรู้เรื่องและปลอดภัย
-7. Only then: minimum that works    ➔ Code: เขียนโค้ดให้น้อยที่สุดที่ทำงานได้ถูกต้อง
+1. Does this need to exist at all?  ➔ YAGNI: If it is speculative future-proofing, skip and record brief rationale.
+2. Already in this codebase?        ➔ Reuse: Search existing utils/helpers/types. Never duplicate.
+3. Standard library does it?        ➔ Stdlib: Always prefer Node.js / runtime built-in modules.
+4. Native platform covers it?       ➔ Platform: Use platform features (e.g., DB constraints) instead of app logic.
+5. Installed dependency solves it?  ➔ Deps: Use installed packages. Do not add npm packages for trivial code.
+6. Can this be one line?            ➔ One-liner: Collapse to a single line if readable and safe.
+7. Only then: minimum that works    ➔ Code: Write the minimum viable code that is correct and tested.
 ```
 
 ### Senior Bug Fixing Mandate (`/fix` & `/debug`)
-- **Root Cause over Symptom**: เมื่อพบรายงานบั๊ก ให้ Grep หา caller ทุกตัวที่เรียกใช้ฟังก์ชันนั้น แล้วแก้ไขที่จุดศูนย์กลาง (Shared function) เพียงครั้งเดียว แทนที่จะตามไปแก้เป็นหย่อมๆ ทีละ Caller
+- **Root Cause over Symptom**: When diagnosing a bug, find all callers of the affected function. Fix once at the shared source instead of patching individual call sites.
 
 ---
 
@@ -64,19 +64,19 @@ Before executing any Ponytail optimization or JIT inspection:
 
 | Mode | Trigger | Behavior |
 | :--- | :--- | :--- |
-| **lite** | `/ponytail lite` | เตือนสติเบาๆ ป้องกันการลง external library และ abstraction ที่ไม่จำเป็น |
-| **full** | `/ponytail` หรือ `/ponytail full` | *(Default)* ยึด Decision Ladder อย่างเคร่งครัด ลบ boilerplate และ abstraction ที่มี implementation เดียว |
-| **ultra** | `/ponytail ultra` | ลีนขั้นสุดสำหรับงาน Refactor / Code Golfing: สั้นที่สุด, ไฟล์น้อยที่สุด, ลบมากกว่าเพิ่ม |
-| **audit** | `/ponytail audit` | ตรวจจับ Over-engineering, Dead code และ Bloated dependencies (อ้างอิง `devflow/.vendor/ponytail/skills/ponytail-audit/`) |
-| **debt** | `/ponytail debt` | ประเมินหนี้ทางเทคนิคจาก abstraction ส่วนเกิน (อ้างอิง `devflow/.vendor/ponytail/skills/ponytail-debt/`) |
+| **lite** | `/ponytail lite` | Gentle nudge: prevents unnecessary external libraries and redundant abstractions. |
+| **full** | `/ponytail` or `/ponytail full` | *(Default)* Strictly enforce Decision Ladder: eliminates single-implementation boilerplate. |
+| **ultra** | `/ponytail ultra` | Maximum minimalism for refactoring/code golfing: fewest files, shortest diffs, net negative lines. |
+| **audit** | `/ponytail audit` | Scans for over-engineering, dead code, and bloated dependencies (per `devflow/.vendor/ponytail/skills/ponytail-audit/`). |
+| **debt** | `/ponytail debt` | Assesses technical debt from superfluous abstractions (per `devflow/.vendor/ponytail/skills/ponytail-debt/`). |
 
 ---
 
 ## 📖 Universal Contextual Help & Playbook Protocol (`help`, `--help`, `-h`, `?`)
 
-เมื่อผู้ใช้เรียก `/ponytail help`, `ponytail --help`, หรือ `/ponytail -h`:
-1. **Execution Safety Gate**: ไม่แก้ไขโค้ดหรือรันการปรับแต่งใดๆ
-2. **5W1H Framework Presentation**: เรนเดอร์คู่มือ 5W1H ในแชท
-3. **HTML Playbook Generation**: เขียนหรืออัปเดตไฟล์ HTML รายงานที่:
+When invoked with `/ponytail help`, `ponytail --help`, or `/ponytail -h`:
+1. **Execution Safety Gate**: Do not edit code or apply transformations.
+2. **5W1H Framework Presentation**: Render the 5W1H guide in chat.
+3. **HTML Playbook Generation**: Generate or update the styled HTML report at:
    `devflow/docs/playbooks/ponytail.html`
-4. ปิดท้ายด้วยข้อความ: `"Help menu displayed successfully"`
+4. Conclude with: `"Help menu displayed successfully"`

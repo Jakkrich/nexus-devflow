@@ -318,6 +318,11 @@ async function main(): Promise<void> {
     ".claude/skills/debug/condition-based-waiting.md",
     ".claude/skills/implement/tdd-anti-patterns.md",
     ".claude/skills/audit/two-stage-review-template.md",
+    // Feature 086: Upstream AI Blueprint v1.6.1 Reference Contracts
+    ".agents/skills/complete/reference/completion-recovery.md",
+    ".claude/skills/complete/reference/completion-recovery.md",
+    ".agents/skills/feature/reference/build-history.md",
+    ".claude/skills/feature/reference/build-history.md",
     ...(manifest?.required_paths || [])
   ];
   const forbiddenPaths = manifest?.forbidden_legacy_paths || [];
