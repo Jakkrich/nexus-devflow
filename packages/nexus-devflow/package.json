@@ -1,6 +1,6 @@
 {
   "name": "nexus-devflow",
-  "version": "2.16.4",
+  "version": "2.17.2",
   "description": "Enterprise-grade spec-driven development framework for multi-agent workflows",
   "license": "MIT",
   "author": "Jakkrich",
@@ -37,7 +37,7 @@
     "package.json"
   ],
   "dependencies": {
-    "@jakkrichm/create-nexus-devflow": "2.16.4"
+    "@jakkrichm/create-nexus-devflow": "2.17.2"
   },
   "publishConfig": {
     "access": "public"
