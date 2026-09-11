@@ -5,6 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.17.0] - 2026-09-11
+
+### Added
+- Decade-Numbered Folder Architecture: reorganized `devflow/` into chronological stages (`00-context`, `10-ideation`, `20-discovery`, `30-planning`, `40-tasks`, `50-history`, `60-docs`).
+- Zero-Breaking Dynamic Workspace Path Resolver (`resolveWorkspacePaths`) with automatic legacy path fallback.
+- CLI Migration Subcommand: `nexus-devflow migrate-structure` for safe automated workspace structure upgrade.
+- Automatic migration during `nexus-devflow update` when legacy layout is detected.
+- Comprehensive migration guide in `devflow/60-docs/migration-guide-decade-numbered.md`.
+
 ## [2.16.4] - 2026-09-10
 
 ### Changed
