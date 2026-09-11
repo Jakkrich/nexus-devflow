@@ -862,7 +862,7 @@ export class SkillRegistryEngine {
     }
 
     let skillsToUpdate = existingThirdParty;
-    if (targetSkillName && targetSkillName !== "--all") {
+    if (targetSkillName && targetSkillName !== "--all" && targetSkillName.toLowerCase() !== "all") {
       skillsToUpdate = existingThirdParty.filter((s) => s.name === targetSkillName);
       if (skillsToUpdate.length === 0) {
         throw new Error(`Skill "${targetSkillName}" is not installed as a third-party skill.`);

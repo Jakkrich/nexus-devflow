@@ -285,3 +285,11 @@
   - *Dependencies*: Feature 28 (`073`), DISC-20260911-001
   - *Scope*: นำเข้า 5 เสาหลักความปลอดภัยและความแม่นยำจาก AI Blueprint v1.6.1: (1) ปฏิเสธ Symlink paths และตรวจ type compatibility ในตัวติดตั้ง `create-nexus-devflow`, (2) สร้างสัญญา `completion-recovery.md` พร้อม JSON comment annotation `<!-- devflow:completion ... -->` กู้คืนการส่งมอบงานที่สะดุด, (3) สร้างสัญญา `build-history.md` รองรับการตั้งชื่อ `--build-N` เมื่อ Rebuild ฟีเจอร์ที่เคยถูก Rollback, (4) ขยาย `lib/review.ts` ให้รองรับ `specSnapshot` สำหรับ Local-only spec review, (5) บูรณาการ `classifyWorkEvidence` ใน `project-status-engine.ts` และ `dashboard.ts` ป้องกัน False Ready State เมื่อ verification failed หรือพบ malformed records, (6) ซิงก์สคิลและเอกสารทั้ง `.agents/` และ `.claude/` พร้อม automated tests ผ่าน 100%
 
+---
+
+## 🔌 Phase 37: AI-Orchestrated Project-Local Vendor Skill Ingestion (`/vendor`)
+
+- [x] **37. AI-Orchestrated Project-Local Vendor Skill Ingestion (`DISC-20260911-002`, `087-ai-orchestrated-vendor-skill-ingestion`)** `[Size: M]`
+  - *Dependencies*: Feature 33 (`083`), Feature 34 (`084`), DISC-20260911-002
+  - *Scope*: พัฒนาคำสั่ง `/vendor` (พร้อม aliases: `skill-add`, `equip`, `ingest`) สำหรับนำเข้า Git repository ลงในระดับโปรเจกต์ `devflow/.vendor/<slug>/`, ให้ AI Agent สำรวจโค้ดและสังเคราะห์ Custom Wrapper Skill ใน `.agents/skills/<slug>/SKILL.md` และ `.claude/skills/<slug>/SKILL.md`, พัฒนากลไก Update Protection ใน `update.ts` เพื่อป้องกันไม่ให้คำสั่งอัปเดต DevFlow ลบ custom skills เหล่านี้, บันทึก metadata ลง `.nexus/nexus-devflow.json`, ปรับปรุง CLI `nexus-devflow skill update all` ให้รองรับการ pull upstream ใน `.vendor/` โดยคงรักษา custom wrapper ที่ AI เขียนไว้, พร้อมเขียน Automated Unit Tests ครอบคลุม 100%
+

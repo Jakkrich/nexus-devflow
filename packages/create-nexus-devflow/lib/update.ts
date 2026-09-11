@@ -37,6 +37,25 @@ export interface Manifest {
     companionCommands: string[];
   };
   managedFiles: Record<string, string>;
+  thirdPartySkills?: Array<{
+    name: string;
+    source: string;
+    version?: string;
+    description?: string;
+    installedAt?: string;
+    type?: string;
+    referencePath?: string;
+  }>;
+  customVendorSkills?: Array<{
+    name: string;
+    source: string;
+    vendorPath: string;
+    skillPath?: string;
+    version?: string;
+    description?: string;
+    installedAt?: string;
+    protected?: boolean;
+  }>;
 }
 
 export interface TemplateFile {
@@ -270,6 +289,12 @@ export async function prepareUpdate({
     role
   );
   const nextManifest = createManifest(version, activeAdapters, templateFiles);
+  if (previousManifest?.thirdPartySkills) {
+    nextManifest.thirdPartySkills = previousManifest.thirdPartySkills;
+  }
+  if (previousManifest?.customVendorSkills) {
+    nextManifest.customVendorSkills = previousManifest.customVendorSkills;
+  }
 
   const createList: string[] = [];
   const updateList: string[] = [];
@@ -337,6 +362,15 @@ export async function prepareUpdate({
       previousManifest.managedFiles
     )) {
       if (templateFiles.has(relativePath)) {
+        continue;
+      }
+
+      if (
+        relativePath.startsWith("devflow/.vendor/") ||
+        relativePath.includes("/.vendor/") ||
+        previousManifest.thirdPartySkills?.some((s) => s.name && relativePath.includes(s.name)) ||
+        previousManifest.customVendorSkills?.some((s) => s.name && relativePath.includes(s.name))
+      ) {
         continue;
       }
 
