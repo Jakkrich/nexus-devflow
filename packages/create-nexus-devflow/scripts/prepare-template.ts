@@ -89,6 +89,55 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
           return false;
         }
         if (
+          normalized.startsWith("devflow/00-context/") &&
+          normalized !== "devflow/00-context" &&
+          normalized !== "devflow/00-context/project-overview.md" &&
+          normalized !== "devflow/00-context/coding-standards.md" &&
+          normalized !== "devflow/00-context/ai-interaction.md" &&
+          normalized !== "devflow/00-context/glossary.md"
+        ) {
+          return false;
+        }
+        if (
+          normalized.startsWith("devflow/40-tasks/") &&
+          !normalized.endsWith(".gitkeep") &&
+          !normalized.endsWith("README.md")
+        ) {
+          return false;
+        }
+        if (
+          normalized.startsWith("devflow/50-history/features/") &&
+          !normalized.endsWith("README.md")
+        ) {
+          return false;
+        }
+        if (
+          normalized.startsWith("devflow/50-history/fixes/") &&
+          !normalized.endsWith("README.md")
+        ) {
+          return false;
+        }
+        if (
+          normalized.startsWith("devflow/50-history/rollbacks/") &&
+          !normalized.endsWith("README.md")
+        ) {
+          return false;
+        }
+        if (
+          normalized.startsWith("devflow/20-discovery/discoveries/") &&
+          !normalized.endsWith(".gitkeep") &&
+          !normalized.endsWith("README.md")
+        ) {
+          return false;
+        }
+        if (
+          normalized.startsWith("devflow/20-discovery/decisions/") &&
+          !normalized.endsWith(".gitkeep") &&
+          !normalized.endsWith("README.md")
+        ) {
+          return false;
+        }
+        if (
           matchesPrefix(normalized, "devflow/inbox") ||
           matchesPrefix(normalized, "devflow/analysis") ||
           matchesPrefix(normalized, "devflow/scratch") ||
@@ -100,6 +149,17 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
           matchesPrefix(normalized, "devflow/reports") ||
           matchesPrefix(normalized, "devflow/docs/playbooks") ||
           matchesPrefix(normalized, "devflow/research") ||
+          matchesPrefix(normalized, "devflow/10-ideation/inbox") ||
+          matchesPrefix(normalized, "devflow/10-ideation/scratch") ||
+          matchesPrefix(normalized, "devflow/10-ideation/brainstorm") ||
+          matchesPrefix(normalized, "devflow/10-ideation/brainstorms") ||
+          matchesPrefix(normalized, "devflow/20-discovery/analysis") ||
+          matchesPrefix(normalized, "devflow/20-discovery/reports") ||
+          matchesPrefix(normalized, "devflow/20-discovery/research") ||
+          matchesPrefix(normalized, "devflow/20-discovery/scratch") ||
+          matchesPrefix(normalized, "devflow/20-discovery/brainstorm") ||
+          matchesPrefix(normalized, "devflow/20-discovery/brainstorms") ||
+          matchesPrefix(normalized, "devflow/60-docs/playbooks") ||
           matchesPrefix(normalized, "prototypes") ||
           matchesPrefix(normalized, "evals") ||
           matchesPrefix(normalized, ".nexus")

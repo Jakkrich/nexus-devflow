@@ -71,6 +71,33 @@ devflow/backups/*
 devflow/docs/playbooks/
 evals/results/
 
+# Decade-Numbered Stages Transient & Runtime Files
+devflow/10-ideation/inbox/*/raw/*
+devflow/10-ideation/inbox/raw/*
+devflow/10-ideation/scratch/*
+!devflow/10-ideation/scratch/.gitkeep
+devflow/10-ideation/brainstorm/*
+devflow/10-ideation/brainstorms/*
+devflow/20-discovery/discoveries/*
+!devflow/20-discovery/discoveries/.gitkeep
+devflow/20-discovery/analysis/*
+!devflow/20-discovery/analysis/.gitkeep
+devflow/20-discovery/reports/*
+!devflow/20-discovery/reports/.gitkeep
+devflow/20-discovery/research/*
+!devflow/20-discovery/research/.gitkeep
+devflow/20-discovery/scratch/*
+!devflow/20-discovery/scratch/.gitkeep
+devflow/20-discovery/decisions/*
+!devflow/20-discovery/decisions/.gitkeep
+!devflow/20-discovery/decisions/README.md
+devflow/20-discovery/brainstorm/*
+devflow/20-discovery/brainstorms/*
+devflow/40-tasks/*
+!devflow/40-tasks/.gitkeep
+!devflow/40-tasks/README.md
+devflow/60-docs/playbooks/
+
 
 # DevFlow Internal State, Branches & Backups
 .devflow/
