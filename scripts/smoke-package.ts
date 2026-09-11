@@ -74,12 +74,18 @@ async function smokeTestPackage(): Promise<void> {
       "LICENSE",
       ".agents/skills",
       ".claude/skills",
-      ".nexus/nexus-devflow.json",
-      "devflow/context/project-overview.md"
+      ".nexus/nexus-devflow.json"
     ];
 
     for (const rel of expected) {
       await fs.stat(path.join(tempDir, rel));
+    }
+
+    const hasContext = await fs.stat(path.join(tempDir, "devflow", "00-context", "project-overview.md"))
+      .then(() => true)
+      .catch(() => fs.stat(path.join(tempDir, "devflow", "context", "project-overview.md")).then(() => true).catch(() => false));
+    if (!hasContext) {
+      throw new Error("Missing project-overview.md in devflow/00-context or devflow/context");
     }
 
     const inventory = await loadCoreSkillInventory(

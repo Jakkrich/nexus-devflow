@@ -164,8 +164,18 @@ function main() {
   for (const item of requiredPaths) {
     if (seenRequired.has(item)) continue;
     seenRequired.add(item);
-    if (!fs.existsSync(path.join(projectRoot, item))) fail(`Missing required path: ${item}`, failures);
-    else ok(`Found ${item}`);
+    const directExists = fs.existsSync(path.join(projectRoot, item));
+    const decadeContextExists = item.startsWith("devflow/context/") &&
+      fs.existsSync(path.join(projectRoot, "devflow", "00-context", path.basename(item)));
+    const decadeRefExists = item.startsWith("devflow/reference/") &&
+      (fs.existsSync(path.join(projectRoot, "devflow", "10-ideation", "reference", path.basename(item))) ||
+       fs.existsSync(path.join(projectRoot, "devflow", "10-ideation", path.basename(item))));
+
+    if (!directExists && !decadeContextExists && !decadeRefExists) {
+      fail(`Missing required path: ${item}`, failures);
+    } else {
+      ok(`Found ${item}${decadeContextExists ? " (via devflow/00-context)" : decadeRefExists ? " (via devflow/10-ideation)" : ""}`);
+    }
   }
 
   for (const item of forbiddenPaths) {

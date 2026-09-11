@@ -49,11 +49,41 @@ async function checkPaths(): Promise<void> {
   let missingCount = 0;
 
   for (const relPath of REQUIRED_PATHS) {
-    const fullPath = path.join(rootDir, relPath);
+    const directPath = path.join(rootDir, relPath);
+    let resolvedRelPath: string | null = null;
+
     try {
-      await fs.stat(fullPath);
-      console.log(`  [OK] ${relPath}`);
+      await fs.stat(directPath);
+      resolvedRelPath = relPath;
     } catch {
+      if (relPath.startsWith("devflow/context/")) {
+        const decadePath = path.join(rootDir, "devflow", "00-context", path.basename(relPath));
+        try {
+          await fs.stat(decadePath);
+          resolvedRelPath = `devflow/00-context/${path.basename(relPath)}`;
+        } catch {
+          // not found
+        }
+      } else if (relPath.startsWith("devflow/reference/")) {
+        const decadeRefPath = path.join(rootDir, "devflow", "10-ideation", "reference", path.basename(relPath));
+        const decadeIdeationPath = path.join(rootDir, "devflow", "10-ideation", path.basename(relPath));
+        try {
+          await fs.stat(decadeRefPath);
+          resolvedRelPath = `devflow/10-ideation/reference/${path.basename(relPath)}`;
+        } catch {
+          try {
+            await fs.stat(decadeIdeationPath);
+            resolvedRelPath = `devflow/10-ideation/${path.basename(relPath)}`;
+          } catch {
+            // not found
+          }
+        }
+      }
+    }
+
+    if (resolvedRelPath) {
+      console.log(`  [OK] ${resolvedRelPath}`);
+    } else {
       console.error(`  [MISSING] ${relPath}`);
       missingCount++;
     }

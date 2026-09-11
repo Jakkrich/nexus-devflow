@@ -15,9 +15,9 @@
   "workspace": {
     "contextDir": "devflow/00-context",
     "historyDir": "devflow/50-history",
-    "referenceDir": "devflow/reference",
-    "discoveriesDir": "devflow/discoveries",
-    "decisionsDir": "devflow/decisions",
+    "referenceDir": "devflow/10-ideation/reference",
+    "discoveriesDir": "devflow/20-discovery/discoveries",
+    "decisionsDir": "devflow/20-discovery/decisions",
     "ideationDir": "devflow/10-ideation",
     "discoveryDir": "devflow/20-discovery",
     "planningDir": "devflow/30-planning",

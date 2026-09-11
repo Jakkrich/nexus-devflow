@@ -186,20 +186,28 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
 }
 
 async function ensureEmptyDirectories(): Promise<void> {
-  const discDir = path.join(templateRoot, "devflow", "discoveries");
-  const decDir = path.join(templateRoot, "devflow", "decisions");
-  const featDir = path.join(templateRoot, "devflow", "history", "features");
-  const fixDir = path.join(templateRoot, "devflow", "history", "fixes");
-  const rollDir = path.join(templateRoot, "devflow", "history", "rollbacks");
+  const dirs = [
+    path.join(templateRoot, "devflow", "00-context"),
+    path.join(templateRoot, "devflow", "10-ideation"),
+    path.join(templateRoot, "devflow", "20-discovery"),
+    path.join(templateRoot, "devflow", "20-discovery", "discoveries"),
+    path.join(templateRoot, "devflow", "20-discovery", "decisions"),
+    path.join(templateRoot, "devflow", "30-planning"),
+    path.join(templateRoot, "devflow", "40-tasks"),
+    path.join(templateRoot, "devflow", "50-history"),
+    path.join(templateRoot, "devflow", "50-history", "features"),
+    path.join(templateRoot, "devflow", "50-history", "fixes"),
+    path.join(templateRoot, "devflow", "50-history", "rollbacks"),
+    path.join(templateRoot, "devflow", "60-docs")
+  ];
 
-  await fs.mkdir(discDir, { recursive: true });
-  await fs.mkdir(decDir, { recursive: true });
-  await fs.mkdir(featDir, { recursive: true });
-  await fs.mkdir(fixDir, { recursive: true });
-  await fs.mkdir(rollDir, { recursive: true });
+  for (const dir of dirs) {
+    await fs.mkdir(dir, { recursive: true });
+  }
 
-  await fs.writeFile(path.join(discDir, ".gitkeep"), "", "utf8");
-  await fs.writeFile(path.join(decDir, ".gitkeep"), "", "utf8");
+  await fs.writeFile(path.join(templateRoot, "devflow", "20-discovery", "discoveries", ".gitkeep"), "", "utf8");
+  await fs.writeFile(path.join(templateRoot, "devflow", "20-discovery", "decisions", ".gitkeep"), "", "utf8");
+  await fs.writeFile(path.join(templateRoot, "devflow", "40-tasks", ".gitkeep"), "", "utf8");
 }
 
 async function sanitizeStarterFiles(): Promise<void> {
@@ -242,7 +250,9 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 - **\`fixes/\`**: Bug fixes, hotfixes, regressions, security patches, and performance optimizations.
 - **\`rollbacks/\`**: Safe feature reversal and rollback execution records.
 `;
-  await fs.writeFile(path.join(templateRoot, "devflow", "history", "HISTORY.md"), starterHistory, "utf8");
+  const historyPath = path.join(templateRoot, "devflow", "50-history", "HISTORY.md");
+  await fs.mkdir(path.dirname(historyPath), { recursive: true });
+  await fs.writeFile(historyPath, starterHistory, "utf8");
 
   // 3. Clean Starter ideas.md
   const starterIdeas = `# 🔮 Centralized Idea Inbox & Backlog
@@ -265,7 +275,9 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 | ID | Title | Shipped In | Completed Date |
 | :--- | :--- | :--- | :--- |
 `;
-  await fs.writeFile(path.join(templateRoot, "devflow", "ideas.md"), starterIdeas, "utf8");
+  const ideasPath = path.join(templateRoot, "devflow", "10-ideation", "ideas.md");
+  await fs.mkdir(path.dirname(ideasPath), { recursive: true });
+  await fs.writeFile(ideasPath, starterIdeas, "utf8");
 
   // 4. Clean Starter project-overview.md
   const starterOverview = `# Project Overview & Source of Truth
@@ -296,7 +308,9 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 7. Known Architectural Focus Areas
 - Upcoming priorities, refactoring targets, or known technical considerations.
 `;
-  await fs.writeFile(path.join(templateRoot, "devflow", "context", "project-overview.md"), starterOverview, "utf8");
+  const overviewPath = path.join(templateRoot, "devflow", "00-context", "project-overview.md");
+  await fs.mkdir(path.dirname(overviewPath), { recursive: true });
+  await fs.writeFile(overviewPath, starterOverview, "utf8");
 }
 
 async function main() {
