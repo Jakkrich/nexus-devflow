@@ -119,12 +119,13 @@ nexus-devflow/
 
 Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
-- **Unit Test Mandate**: Any new feature, modified logic, parser improvement, or bug fix **MUST ship with automated unit tests** in the same diff.
+- **Unit Test Mandate**: Logic or behavior changes must include meaningful automated coverage when the spec's test gate is enabled. Documentation, prompt wording, or formatting-only changes use structural checks and review instead of artificial unit tests.
 - **Strict TDD (Red-Green-Refactor) Protocol**:
   1. **🔴 RED (Test First)**: Always write automated tests *before* writing or modifying functional logic. Run the test command and verify that it fails for the expected reason.
   2. **🟢 GREEN (Minimal Code)**: Write only the minimal production code necessary to make the failing test pass. Run the test command and verify 100% green pass.
   3. **🔵 REFACTOR (Clean & Robust)**: Refactor code for readability, performance, and DRY/YAGNI discipline while ensuring all tests stay green.
   - *Code Deletion / Reversion Rule*: If functional code is created without a prior failing test for behavior changes, it must be reverted or immediately backed by tests before continuing.
+- **Verification Scope**: Run focused checks during edits and required project gates before handoff. Repeat passing checks only after relevant changes, new failures, or unresolved risk.
 - **Test Framework**: Use Node.js native test runner executed via `tsx --test test/*.test.ts` under `packages/create-nexus-devflow/`.
 - **Test Design (AAA Pattern)**:
   - Structure each test case cleanly: **Arrange** (setup fixtures/mock directories), **Act** (execute function), **Assert** (verify invariants).
@@ -137,7 +138,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
     2. *Interactive AI Visual QA (MCP)*: Live DOM and styling inspection via MCP `browseros-neo` (`http://127.0.0.1:9010/mcp`) during `/check` and `/try`.
 - **Two-Stage Review Pattern (Verification Gate)**:
   - **Stage 1: Spec Fidelity & Acceptance Gate**:
-    - Verify 100% conformance against the Single Living Spec (`current-feature.md`).
+    - Verify 100% conformance against the Single Living Spec (`devflow/context/{xxx-slug}/spec.md`).
     - Validate all Acceptance Criteria (ACs) and "Done When" observables without missing requirements or scope creep.
     - Test edge cases and boundary conditions defined in the specification.
   - **Stage 2: Code Quality, Security & Architecture Gate**:
@@ -145,13 +146,13 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
     - **Lane 2 (Automated Test Suites & Evals)**: `npm test` (Unit tests 100% pass) + `npm run test:routing` (Skill routing accuracy).
     - **Lane 3 (Scrutinize & Security Audit)**: Edge cases, null-safety, 0 secrets, safe inputs.
     - **Lane 4 (Manual / Scenario Proof)**: Concrete walkthrough steps ("Where to go", "What to run", "What to expect").
-    - **Findings Ledger State**: 0 blockers (P0/P1) in `devflow/context/findings.md`.
+    - **Findings Ledger State**: 0 blockers (P0/P1) in `devflow/context/{xxx-slug}/findings.md`.
 
 ---
 
 ## 8. Findings Ledger & Quality Gates (`findings.md`, `review.md`)
 
-- All quality defects, security findings, or regression issues identified during review must be logged in `devflow/context/findings.md`.
+- All quality defects, security findings, or regression issues identified during review must be logged in `devflow/context/{xxx-slug}/findings.md`.
 - **Finding State Machine**:
   - `open`: Confirmed issue waiting to be fixed.
   - `fixed`: Repaired in code, pending QA re-verification.

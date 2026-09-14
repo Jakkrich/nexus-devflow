@@ -1,14 +1,21 @@
 {
   "skill": "fix",
-  "description": "\"[devflow] Write a task-isolated spec (devflow/context/{xxx-slug}/spec.md) for an ad-hoc bug fix or small unplanned change, then stop before implementation. Use for /fix, confirmed bugs, or small changes outside the build plan.\"",
+  "description": "[devflow] Draft a task-isolated spec for a bug or small change. Use when invoking /fix or requesting a fix plan.",
   "positive": [
     "run fix skill",
     "invoke /fix command",
     "use fix for devflow write task isolated spec devflow context slug",
-    "apply fix guidance"
+    "apply fix guidance",
+    "ช่วยเรียก /fix ให้หน่อย",
+    "$fix login",
+    "Draft a task-isolated spec for a bug"
   ],
   "negative": [
     "unrelated random task query",
-    "general generic string prompt"
+    "general generic string prompt",
+    "fix this typo",
+    "/debug failing login",
+    "/implement 086",
+    "แก้คำสะกดนี้ให้ถูกต้อง"
   ]
 }

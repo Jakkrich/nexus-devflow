@@ -89,7 +89,7 @@ Marker-first direct reads are what make two parallel workspaces with different c
 
 1. A valid leading profile header names the active copied-in profile. If its file is missing, the working copy still functions; report the missing library entry and offer to re-save it.
 2. With no header, compare every row in `### Semantic roles` and every font family in the `## Typography` table with the shipped defaults. If any differs, classify it as **custom-unsaved** and offer `save`.
-3. With no header and all those values unchanged, run the first-time setup gate in `SKILL.md`.
+3. With no header and all those values unchanged, run the first-time [setup gate](setup.md).
 
 Do not infer customization from `accent` alone. Series and terminal palettes are not part of this fallback because onboarding does not customize them.
 

@@ -2,139 +2,108 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, "..", "..");
-const skillsRoot = path.join(repoRoot, ".agents", "skills");
-const casesRoot = path.join(repoRoot, "evals", "routing");
-
-const stopWords = new Set([
-  "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "he",
-  "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were", "will", "with"
-]);
+const filename = fileURLToPath(import.meta.url);
+const repoRoot = path.resolve(path.dirname(filename), "..", "..");
+const stopWords = new Set("a an and are as at be by for from has he in is it its of on that the to was were will with use when devflow skill run invoke guidance".split(" "));
 
 export interface SkillInfo {
   name: string;
   description: string;
   descTokens: Set<string>;
 }
-
+export interface RoutingCases {
+  skill: string;
+  positive: string[];
+  negative: string[];
+}
+export interface RoutingResult {
+  totalCases: number;
+  rank1Passes: number;
+  negativeFailures: number;
+  accuracy: number;
+  failures: string[];
+}
 export function tokenize(text: string): string[] {
-  return String(text || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9-]/g, " ")
-    .split(/\s+/)
-    .filter((token) => token.length > 1 && !stopWords.has(token));
+  // Preserve non-Latin scripts; this probe does not understand language semantics.
+  return text.toLowerCase().replace(/[^\p{L}\p{M}\p{N}-]/gu, " ").split(/\s+/)
+    .filter(token => token.length > 1 && !stopWords.has(token));
 }
-
 export function parseSkillFrontmatter(content: string): { name: string; description: string } {
-  if (!content.startsWith("---")) return { name: "", description: "" };
-  const parts = content.split("---");
-  if (parts.length < 3) return { name: "", description: "" };
-  const lines = parts[1].split("\n");
-  let name = "";
-  let description = "";
-  for (const line of lines) {
-    if (line.startsWith("name:")) name = line.replace("name:", "").trim();
-    if (line.startsWith("description:")) description = line.replace("description:", "").trim();
-  }
-  return { name, description };
+  const frontmatter = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const field = (key: string): string => {
+    const value = frontmatter?.[1].match(new RegExp("^" + key + ":\\s*(.*)$", "m"))?.[1].trim() ?? "";
+    if (value.startsWith('"') && value.endsWith('"')) return JSON.parse(value) as string;
+    if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replace(/''/g, "'");
+    return value;
+  };
+  return { name: field("name"), description: field("description") };
 }
-
-export function loadSkills(): Map<string, SkillInfo> {
+export function loadSkills(root = path.join(repoRoot, ".agents", "skills")): Map<string, SkillInfo> {
   const skills = new Map<string, SkillInfo>();
-  if (!fs.existsSync(skillsRoot)) return skills;
-  const entries = fs.readdirSync(skillsRoot);
-  for (const entry of entries) {
-    const skillFile = path.join(skillsRoot, entry, "SKILL.md");
-    if (fs.existsSync(skillFile)) {
-      const content = fs.readFileSync(skillFile, "utf8");
-      const meta = parseSkillFrontmatter(content);
-      skills.set(entry.toLowerCase(), {
-        name: meta.name || entry,
-        description: meta.description || "",
-        descTokens: new Set(tokenize(meta.description || ""))
-      });
-    }
+  for (const entry of fs.readdirSync(root)) {
+    const file = path.join(root, entry, "SKILL.md");
+    if (!fs.existsSync(file)) continue;
+    const meta = parseSkillFrontmatter(fs.readFileSync(file, "utf8"));
+    if (!/^[a-z0-9-]+$/.test(entry) || !meta.name || !meta.description) throw new Error("Invalid skill metadata: " + file);
+    skills.set(entry, { ...meta, descTokens: new Set(tokenize(meta.description)) });
   }
+  if (!skills.size) throw new Error("No skills found to evaluate");
   return skills;
 }
-
-export function evaluateRouting(): { totalCases: number; rank1Passes: number; accuracy: number } {
-  console.log("Running DevFlow Skill Routing Evaluation...\n");
-  const skills = loadSkills();
-  if (skills.size === 0) {
-    console.log("No skills found to evaluate.");
-    return { totalCases: 0, rank1Passes: 0, accuracy: 100 };
-  }
-
-  if (!fs.existsSync(casesRoot)) {
-    console.log("No evals/routing cases directory found.");
-    return { totalCases: 0, rank1Passes: 0, accuracy: 100 };
-  }
-
-  const caseFiles = fs.readdirSync(casesRoot).filter((f) => f.endsWith(".json"));
+export function rankSkill(prompt: string, skills: Map<string, SkillInfo>): string | null {
+  const lower = prompt.toLowerCase().trim();
+  const explicit = [...skills.keys()].filter(name =>
+    /^[a-z0-9-]+$/.test(name) && (lower === name ||
+      new RegExp("(?:^|\\s)[/$]" + name + "(?=$|[\\s?!,])", "u").test(lower) ||
+      new RegExp("^(?:run|invoke|use|apply)\\s+" + name + "(?:\\s|$)", "u").test(lower)));
+  if (explicit.length) return explicit.length === 1 ? explicit[0] : null;
+  const tokens = new Set(tokenize(prompt));
+  const scores = [...skills].map(([name, skill]) => ({
+    name, score: [...tokens].filter(token => skill.descTokens.has(token)).length
+  })).sort((a, b) => b.score - a.score);
+  const first = scores[0];
+  return first && first.score >= 2 && first.score > (scores[1]?.score ?? 0) ? first.name : null;
+}
+export function evaluateCases(cases: RoutingCases[], route: (prompt: string) => string | null): RoutingResult {
   let totalCases = 0;
   let rank1Passes = 0;
-
-  for (const caseFile of caseFiles) {
-    const targetSkill = path.basename(caseFile, ".json").toLowerCase();
-    const data = JSON.parse(fs.readFileSync(path.join(casesRoot, caseFile), "utf8")) as { positive?: string[] };
-    const positiveCases = data.positive || [];
-
-    for (const prompt of positiveCases) {
-      totalCases++;
-      const promptLower = prompt.toLowerCase();
-      const promptTokens = tokenize(prompt);
-
-      let bestSkill = "";
-      let maxScore = -1;
-
-      for (const [skillName, skillData] of skills) {
-        let score = 0;
-
-        // Exact or hyphenated skill name match in prompt
-        const pattern = skillName.replace(/-/g, "[\\-\\s]");
-        const nameRegex = new RegExp(`(?:^|\\s|\\/)${pattern}(?:$|\\s|\\/)`, "i");
-        if (nameRegex.test(promptLower)) {
-          score += 1000;
+  let negativeFailures = 0;
+  const failures: string[] = [];
+  for (const group of cases) {
+    for (const kind of ["positive", "negative"] as const) {
+      for (const prompt of group[kind]) {
+        totalCases++;
+        const actual = route(prompt);
+        const passed = kind === "positive" ? actual === group.skill : actual !== group.skill;
+        if (passed) rank1Passes++;
+        else {
+          if (kind === "negative") negativeFailures++;
+          failures.push(kind + ": " + JSON.stringify(prompt) + " -> " + (actual ?? "none") + "; " + (kind === "positive" ? "expected " : "must not select ") + group.skill);
         }
-
-        // Match description tokens
-        for (const token of promptTokens) {
-          if (skillData.descTokens.has(token)) {
-            score += 10;
-          }
-        }
-
-        if (score > maxScore) {
-          maxScore = score;
-          bestSkill = skillName;
-        }
-      }
-
-      if (bestSkill === targetSkill) {
-        rank1Passes++;
-      } else {
-        console.log(`  [MISS] Prompt "${prompt}" -> Best match: "${bestSkill}", Expected: "${targetSkill}"`);
       }
     }
   }
-
-  const accuracy = totalCases > 0 ? (rank1Passes / totalCases) * 100 : 100;
-  console.log(`\nEvaluated ${totalCases} test cases across ${caseFiles.length} skills.`);
-  console.log(`Rank 1 Match Accuracy: ${accuracy.toFixed(2)}%\n`);
-
-  return { totalCases, rank1Passes, accuracy };
+  if (!totalCases) throw new Error("No routing cases to evaluate");
+  return { totalCases, rank1Passes, negativeFailures, accuracy: 100 * rank1Passes / totalCases, failures };
 }
-
-if (
-  process.argv[1] &&
-  fs.realpathSync(process.argv[1]) === fs.realpathSync(__filename)
-) {
+export function evaluateRouting(): RoutingResult {
+  const skills = loadSkills();
+  const root = path.join(repoRoot, "evals", "routing");
+  const cases = fs.readdirSync(root).filter(file => file.endsWith(".json")).map(file => {
+    const data = JSON.parse(fs.readFileSync(path.join(root, file), "utf8")) as RoutingCases;
+    if (!skills.has(data.skill) || !Array.isArray(data.positive) || !Array.isArray(data.negative)
+      || [...data.positive, ...data.negative].some(prompt => typeof prompt !== "string")) {
+      throw new Error("Invalid routing fixture: " + file);
+    }
+    return data;
+  });
+  const result = evaluateCases(cases, prompt => rankSkill(prompt, skills));
+  console.log("Lexical routing smoke check (not model behavior or language understanding)");
+  for (const failure of result.failures) console.error("[MISS] " + failure);
+  console.log(result.rank1Passes + "/" + result.totalCases + " positive + negative cases passed; false activations: " + result.negativeFailures);
+  return result;
+}
+if (process.argv[1] && fs.realpathSync(process.argv[1]) === fs.realpathSync(filename)) {
   const result = evaluateRouting();
-  if (result.accuracy < 80 && result.totalCases > 0) {
-    console.error("Routing accuracy below 80% threshold!");
-    process.exit(1);
-  }
+  if (result.failures.length) process.exitCode = 1;
 }

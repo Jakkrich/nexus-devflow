@@ -1,10 +1,10 @@
 ---
 name: implement
-description: "[devflow] Implement or start coding the active task-isolated spec on its branch in small steps, running tests after each step and presenting the configured review handoff. Use for /implement or requests to build or resume an approved spec."
+description: "[devflow] Build and verify a task-isolated spec. Use for /implement or requests to implement an approved plan."
 argument-hint: "[{run-id, number, or name}] [--ticket <NN | path>]"
 ---
 
-# implement - build the target spec, one reviewed step at a time
+# implement - build and verify the target spec
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
@@ -20,17 +20,23 @@ Where this sits in the workflow:
 
 `/feature`, `/fix`, or `/rollback` wrote the spec to
 `devflow/context/{xxx-slug}/spec.md` and stopped.
-This skill turns that spec into code, following the build loop in
-`devflow/context/ai-interaction.md`, without vibe coding: small steps, a visible diff plus
-a plain-English explanation for each, testing, and iteration until it works, all
-behind your approval. It builds on a branch and offers an optional commit
-checkpoint after each step; the work-level commit, merging, and logging are
-`/complete`'s job.
+Build the selected spec through its acceptance criteria and required verification, then present the configured review handoff. Preserve authorization already given for this work. Read only relevant conventions and reuse loaded context.
+
+## Review cadence and checkpoints
+
+Read `workflow.stepReview` and `workflow.checkpointCommits` from `devflow/config.json` independently; defaults are `feature` and `disabled`.
+
+- `stepReview: "feature"`: continue through all authorized steps without asking Continue after each step. Record evidence as work proceeds and present one final review packet.
+- `stepReview: "every"`: after a working step, show its diff and evidence, then wait for approval before the next step. A walkthrough is available on request.
+- `checkpointCommits: "disabled"`: omit ordinary checkpoint offers.
+- `checkpointCommits: "enabled"`: offer an optional checkpoint at the configured review boundary (per-step for `every`, final packet for `feature`). Show the exact candidate and obtain commit authorization before committing. The setting itself is not authorization.
+
+Independent-review checkpoints follow their separate contract below. Review cadence never authorizes commit, merge, push, or deployment.
 
 ## Multi-Run Target & Ticket-Driven Target Resolution
 
-- **Given an ID or name** (e.g. `/implement 12`, `/implement 012`, `/implement kanban`) -> locates the matching run folder `devflow/context/{xxx-slug}/`, checks out `feature/{xxx-slug}`, and loads only that run's `spec.md`.
-- **With no argument** (`/implement`) -> checks current git branch matching `feature/{xxx-slug}`, or auto-picks if only 1 spec is active in `devflow/context/`, or prompts the user if multiple specs are queued.
+- **Given an ID or name** (e.g. `/implement 12`, `/implement 012`, `/implement kanban`) -> locates the matching run folder `devflow/context/{xxx-slug}/`, selects the branch matching the run type and configured prefix, and loads only that run's `spec.md`.
+- **With no argument** (`/implement`) -> checks the current feature, fix, or rollback branch against the configured prefixes, or auto-picks if only 1 spec is active in `devflow/context/`, or prompts the user if multiple specs are queued.
 - **Ticket Input (`--ticket <NN | path>`)**: Targets a specific tracer-bullet ticket directly (e.g. `/implement 12 --ticket 01`, `/implement --ticket 02`, `/implement --ticket issues/01-auth.md`, or `/implement 01` when run-id is not ambiguous).
 
 ### Ticket Discovery Hierarchy
@@ -80,11 +86,7 @@ receipt. After the final Verify pass, an active gate routes to
 `current` freshness may proceed toward `/complete`. This skill never approves
 its own work or rewrites receipt evidence.
 
-For a browser-facing step, run `npm run test:browser` when the script exists and
-record the result in the step evidence. Use `browseros-neo` for the interactive
-handoff when it is available and the done-when is visual or behavioral. When the
-script or MCP is absent, report that exact limitation; do not silently install a
-runner or claim browser evidence.
+For browser-facing changes, run focused browser tests during iteration when available. Run the required `npm run test:browser` gate once before handoff if the spec or project requires it. Use `browseros-neo` for visual or behavioral evidence when available and relevant. Record missing tooling accurately; install a runner only when setup is in the authorized scope.
 
 **Resuming?** If the spec already has some build steps checked off (`- [x]`), this
 feature was started earlier and interrupted (often a cleared context). The spec and
@@ -95,8 +97,7 @@ starting over.
 
 ## Step 1 - branch
 
-Create and check out a branch named from the spec: `feature/{xxx-slug}` for a feature,
-`fix/{xxx-slug}` for a fix, or `rollback/{xxx-slug}` for a Type: Rollback spec. If the
+Create or select the branch for the spec using `git.featureBranchPrefix`, `git.fixBranchPrefix`, or `git.rollbackBranchPrefix` from config (defaults: `feature/`, `fix/`, `rollback/`). Preserve unrelated working-tree changes before switching. If the
 project isn't a git repo yet, say so and ask the user to run `git init` first;
 the loop needs branches. On resume, the branch already exists - check it out
 instead of creating a new one.
@@ -105,99 +106,20 @@ instead of creating a new one.
 
 When implementing a rollback task, follow the exact safety procedure in `reference/rollback-implementation.md`.
 
-## Step 2 - build one step, review, iterate, checkpoint (Strict TDD)
+## Step 2 - implement and verify
 
-Work through the spec's build steps in order, one at a time. For each step:
+Work in small reviewable diffs, keeping progress in the selected spec.
 
-1. **Strict TDD Cycle (for logic & behavior changes)**:
-   - **🔴 RED**: Write the unit test first in the relevant test file. Execute the test command and show the failing assertion output.
-   - **🟢 GREEN**: Implement only the minimal code in the source file necessary to make the test pass. Re-run test and show passing output.
-   - **🔵 REFACTOR**: Refactor and format cleanly, verifying that 100% of tests remain green.
-   - *Code Reversion Rule*: If production code is written without a prior test for behavior changes, revert it and write the test first.
+1. For logic or behavior changes with the test gate on, use Red-Green-Refactor: write a focused failing test, confirm the assertion fails for the missing behavior, implement the smallest change, then refactor with affected tests green. Preserve the user's existing work. Consult [TDD anti-patterns](tdd-anti-patterns.md) when test design needs it.
+2. Match the step's done-when and run focused checks. Documentation or formatting-only edits use structural checks and review; they do not require artificial unit tests. Capture relevant runtime or browser proof for behavioral criteria, following the selected Check policy.
+3. Fix failures caused by the change and rerun affected checks without requesting authorization again. Broaden verification when dependencies, failures, or risk justify it.
+4. Record the diff summary and evidence. Mark a step complete once its done-when passes and any configured per-step review has been approved. A repaired finding becomes `fixed` with resolution evidence; only a subsequent audit can close it. Apply the review cadence above before proceeding.
 
-   **⚖️ The Iron Law**: `NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST` — Apply to behavior changes according to the spec's test decision. If code came first, revert only your own work for that step and restart from the test, preserving the user's existing work.
+At the final handoff, run the exact documented Verify command and all required gates. If there is no Verify command, use the project's declared build and test commands. Reuse a passing result for unchanged inputs within this pass; rerun affected gates after subsequent edits. Do not add tests or tools just to inflate the verification matrix.
 
-   **Red-Phase Verification (confirm all three before GREEN):**
-   - The test actually fails, rather than encountering a syntax error
-   - The error message identifies missing behavior, rather than invalid configuration
-   - The failure reflects the behavior under test, rather than a bug in the test itself
+### Ticket execution
 
-   **Green-Phase Discipline**: Write the minimum code needed to pass the test; add only the options/features it requires (YAGNI constraint).
-
-   > 📖 For anti-patterns and Bad vs Good examples, read [`tdd-anti-patterns.md`](tdd-anti-patterns.md).
-
-2. Implement just that step: the smallest change that satisfies its "done when."
-3. Show the **diff**, not whole files.
-4. **Explain it, and prove it.** Give a short summary: what the step delivered,
-   one line per changed file on what it does and why, then confirm the step's
-   "done when" is met with empirical evidence (test pass output, build output, or screenshot). This summary is the comprehension gate, so keep it concrete, not
-   vague. Include a short **How to try it** note when the step has a manual
-   path: the command, URL, click, endpoint, or output the user can check.
-5. **Verify the step.** If `AGENTS.md` declares a `Verify` command, run that exact
-   command as the automated gate. It is only an umbrella for checks the project
-   actually has, so do not invent tests or other checks to satisfy it. If no
-   `Verify` command exists, run the documented build command and the test command
-   when the project declares one. A step that adds logic must ship a passing test
-   in the same diff when the test gate is on, and the suite must be green before
-   the step is approved (see the Testing gate in `coding-standards.md`). UI and
-   integration-only steps ride on screenshot plus build evidence. Run a focused
-   test separately when it gives faster feedback, then use `Verify` as the final
-   automated gate. For UI or integration done-whens, prefer Playwright when it is
-   already installed or declared in `AGENTS.md`; do not add it silently for an
-   unrelated feature. Create focused test files next to the source they cover,
-   per `coding-standards.md`. Never install a runner mid-step unless the current
-   spec is explicitly the unit-testing setup itself (for example `/fix "add unit
-   testing"`). If a step surfaces non-trivial logic the spec did not foresee, add
-   a focused test then, or note why not. When a step's done-when is behavioral (a
-   click, a download, or a flow across screens), run `/check` to prove it against
-   the running app rather than eyeballing it.
-5. **Iterate until it works.** If it fails or the user wants changes, revise the
-   step (re-prompt or hand-edit the code), show the updated diff, and re-test.
-   Repeat until it works and the user approves. Nothing is committed until the
-   user is happy with the step.
-6. **Mark it done, then prompt to move on.** Once the step is approved, check that
-   step off (`- [x]`) in `devflow/context/{xxx-slug}/spec.md` so progress survives a context
-   clear. If the step repaired a finding tracked in
-   `devflow/context/{xxx-slug}/findings.md`, set that finding's status to `fixed` now too
-   and note the repair in its **Resolution** line. Never set `closed`: a repair
-   is re-reviewed by `/audit` before it clears, because a fix can introduce a
-   worse defect than the one it removed. Then offer a short choice, noting that checkpoints are optional since
-   `/complete` makes the real feature-level commit. Use the current tool's short
-   user-input prompt when available; when you've just produced a long block to
-   read (a deep explanation, a big
-   walk-through), ask in plain text instead, so the prompt doesn't cover what the
-   user is still reading:
-   - **Continue** (default) - roll into the next step without committing.
-   - **Commit checkpoint** - commit just this step on the branch with a
-     conventional message (a cheap rollback point).
-   - **Walk me through it** - give a deeper, line-level explanation of the new or
-     changed code (why this approach, what each part does, any gotchas), then
-     re-ask this checkpoint prompt. A loop-back, not a terminal choice.
-   - **Stop here** - pause the loop so the user can review or come back later.
-
-   On **Continue** or after **Commit checkpoint**, go to the next step. On **Walk
-   me through it**, explain in depth and then re-ask this prompt in plain text (the
-   explanation is long, so a modal would cover it). On **Stop here**, stop and say
-   where things stand: the branch is intact; run `/implement` again to resume, or
-   `/complete` to wrap up what's built so far.
-
-### Ticket-Driven TDD Execution (when working from a Ticket)
-
-When executing a tracer-bullet ticket (via `--ticket` or auto-frontier):
-1. **Extract Scope**: Read *What to build* and *Acceptance criteria* checklist (`- [ ]`) from the active ticket file.
-2. **Strict TDD Cycle per Criterion**:
-   - **🔴 RED**: Write the unit/integration test for the criterion first at the agreed seam. Execute the test command and verify the expected failing assertion.
-   - **🟢 GREEN**: Implement only the minimal code in the source file necessary to make the test pass. Re-run test and show passing output.
-   - **🔵 REFACTOR**: Refactor and format cleanly, verifying that 100% of tests remain green.
-3. **Verify Gate**: Run the project's Verify command (`npm run check` or documented test suite) to ensure whole-system health before concluding the ticket.
-4. **Bidirectional State Sync**:
-   - Mark each completed criterion `- [x]` in the ticket file.
-   - Once all criteria in the ticket pass, update the ticket status to `**Status:** done` (or `Status: done`).
-   - Mirror the completed work, status, and diff evidence into `devflow/context/{xxx-slug}/spec.md` (under `## 📋 3. Execution Plan & TDD Checklist` and `## ⚡ 4. Implementation Log & Evidence`) so the Living Spec remains the authoritative single source of truth for `/check`, `/audit`, and `/complete`.
-
-Never batch the whole thing into one diff. If a step's diff is too big to read,
-split it. The documented `Verify` command, or the fallback build and tests, must
-pass before any commit.
+When a ticket is selected, use its acceptance criteria as the steps above. Mark completed criteria in the ticket, mark it `done` after its criteria and required verification pass, and mirror status and evidence into the run's spec. A ticket handoff runs required gates once; criteria within the ticket use focused checks. A request to finish the whole run continues through the dependency frontier until the authorized scope is verified.
 
 After final Verify and required Check pass, set the active spec to `verified`
 with every completed box checked. Then resolve independent review before the
@@ -270,23 +192,19 @@ named area. If the feature spans too many distinct areas for one useful pass,
 name the sections first and let the user choose where to begin. Remain read-only
 unless the user separately requests changes.
 
-Never create an ordinary step, product, or work-level commit from this skill.
-The sole exception is exactly one immutable independent-review checkpoint after
-showing its exact candidate and receiving current explicit commit approval.
-Configuration never supplies that approval. Never merge, push, deploy, publish,
+Ordinary checkpoint commits are available only through the configured review boundary and explicit candidate approval above. The immutable independent-review checkpoint also requires explicit candidate approval. Work-level completion commits belong to `/complete`. Configuration never supplies commit approval. Never merge, push, deploy, publish,
 or start unrelated work from this skill.
 
 ## Rules
 
-- One small step per diff; the user reviews and approves each before any commit.
+- Keep diffs small and apply the configured review cadence.
 - Explain every change in plain English. Understanding the code is the point.
 - Iterate on the branch until each step works; never commit code the user hasn't
   approved.
 - Follow `devflow/context/coding-standards.md` (server vs client, scope user-owned queries
   by the authenticated user id, validate inputs, and so on).
-- Build only what the spec says. If the spec is wrong or thin, stop and fix the
-  spec first, do not improvise.
-- Per-step commits are optional checkpoints. The work-level commit, the merge,
+- Keep the spec aligned with the authorized scope. Correct routine omissions with evidence; ask only when a material scope or design decision is unresolved.
+- Configured checkpoint offers are optional. The work-level commit, the merge,
   and any push are `/complete`'s job.
 - For Type: Rollback, reverse only the approved product diff and preserve all
   protected Blueprint paths.

@@ -1,6 +1,6 @@
 ---
 name: fix
-description: "[devflow] Write a task-isolated spec (devflow/context/{xxx-slug}/spec.md) for an ad-hoc bug fix or small unplanned change, then stop before implementation. Use for /fix, confirmed bugs, or small changes outside the build plan."
+description: "[devflow] Draft a task-isolated spec for a bug or small change. Use when invoking /fix or requesting a fix plan."
 argument-hint: "[{title or issue-description}]"
 ---
 
@@ -23,7 +23,7 @@ it creates a dedicated run folder at `devflow/context/{xxx-slug}/` (e.g. `059-fi
 ## Input
 
 A description of the bug or change, for example `/fix "password reset email never
-sends"`. If the user just reported the problem in chat, use that.
+sends"`. Use the reported problem as input when the user asks for a fix plan. A request to diagnose a problem belongs to `/debug`; a request to fix and verify it retains its full delivery scope.
 
 The input may also be a finding ID from `devflow/context/{xxx-slug}/findings.md` (or previous findings), alone
 or with a description, for example `/fix F-03`.
@@ -46,7 +46,7 @@ then write a short spec to `devflow/context/{xxx-slug}/spec.md`. Also initialize
   big to read. Each ends with an observable "done when".
 - **Verify** - how to confirm it's fixed (what to click or test).
 
-Then stop. Tell the user to review the fix spec, then run `/implement` to build it.
+For an explicit `/fix` or a planning-only request, present the spec as the completed deliverable and identify `/implement` as the next command. For an existing request to implement and verify the fix, preserve that authorization: use this spec as the internal handoff and continue through `/implement` without an extra approval pause. Ask only for unresolved material scope, design, or permission decisions.
 
 ## Rules
 

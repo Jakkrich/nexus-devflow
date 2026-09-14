@@ -22,7 +22,7 @@ Infer choices that are clear from the request (for example, "for my deck" implie
 | `png` | `.png` at `device_scale_factor` | pixels exactly as the browser renders them | vector editability |
 | `html+png` | both | — | — |
 
-Always generate the HTML first — `svg` and `png` are produced *from* it via [`export.md`](export.md). Never hand-author an SVG file directly; the HTML is the source of truth and the only artifact the taste gate (SKILL.md §9) is written against.
+Always generate the HTML first — `svg` and `png` are produced *from* it via [`export.md`](export.md). Never hand-author an SVG file directly; the HTML is the source of truth and the only artifact the taste gate ([section 9](validation.md)) is written against.
 
 Pick by destination:
 
@@ -39,7 +39,7 @@ Pick by destination:
 
 ## 2. Size
 
-The preset sets the SVG `viewBox`. Every value below is divisible by 4, so the grid rule in SKILL.md §7 still holds.
+The preset sets the SVG `viewBox`. Every value below is divisible by 4, so the grid rule in [section 7](layout.md) still holds.
 
 | Preset | viewBox | Aspect | PNG @2 | Type ramp | Use |
 |---|---|---|---|---|---|
@@ -91,10 +91,10 @@ How much of the source survives. This is a *count* dial — it governs how many 
 | `balanced` (default) | ≤12 | ≤16 | technical sublabel on ≤4 nodes | Components that carry the story; leaf clusters collapse to one node each. |
 | `simplified` (簡略) | ≤7 | ≤9 | none | Capabilities and their sequence. Infrastructure disappears. |
 
-`balanced` and `simplified` sit inside the standard complexity budget (SKILL.md §7). **`faithful` deliberately exceeds it** — that's the trade, and it comes with conditions:
+`balanced` and `simplified` sit inside the standard complexity budget ([section 7](layout.md)). **`faithful` deliberately exceeds it** — that's the trade, and it comes with conditions:
 
 1. **Zoning is mandatory.** Above 9 nodes, every node belongs to a labeled zone (2–4 zones, hairline-bordered, `paper-2` fill, mono uppercase zone label at top-left). An unzoned 20-node diagram is a wiring diagram, not a schematic.
-2. **Connector rules don't relax.** SKILL.md §6 rules 1–5 still apply at 24 nodes. If you can't route it without overlaps, you're over the real ceiling — split.
+2. **Connector rules don't relax.** [section 6](svg-primitives.md) rules 1–5 still apply at 24 nodes. If you can't route it without overlaps, you're over the real ceiling — split.
 3. **Above 24 nodes, split.** Produce an overview (zones as nodes, `balanced` grammar) plus one detail diagram per zone. Name them `<base>-overview.html`, `<base>-<zone>.html`. Never ship a 40-node single canvas.
 4. **Accent stays at 2.** More nodes never buys more focal elements.
 
@@ -169,7 +169,7 @@ The reader of the diagram can't see what's missing. The person who asked for it 
 
 ## 6. Checklist
 
-Run alongside the SKILL.md §9 taste gate.
+Run alongside the [section 9](validation.md) taste gate.
 
 - [ ] All four dials set — explicitly requested, inferred from the destination, or defaulted and stated?
 - [ ] `viewBox` matches the size preset exactly, values divisible by 4?

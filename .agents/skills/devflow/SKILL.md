@@ -36,7 +36,8 @@ When invoked without an argument (or when determining the next step), inspect:
 
 ### Default State Recommendations
 - If no run is active and user wants to start a feature -> Recommend `/feature <name>`.
-- If no run is active and user wants to fix a bug -> Recommend `/fix <bug>`.
+- If the user requests a bugfix plan -> Recommend `/fix <bug>`.
+- If the user requests a completed fix -> preserve the implementation and verification scope; draft the required spec internally and continue to `/implement` using existing authorization.
 - If no run is active and user has pending ideas in `devflow/ideas.md` -> Highlight `/feature IDEA-xxx` or `/discovery IDEA-xxx`.
 - If no run is active and user wants deep architectural exploration -> Recommend `/discovery`.
 - If user asks to check system health -> Recommend `doctor`.
@@ -48,7 +49,7 @@ When invoked without an argument (or when determining the next step), inspect:
 | User Intent / Request Type | Recommended Skill | Normal Name / Alias | Lifecycle Path |
 | :--- | :--- | :--- | :--- |
 | **"Spec new feature / living spec"** | `feature` | `/feature` / `/spec` | **Unified**: `/feature` -> `/implement` -> `/check` -> `/complete` |
-| **"Quick bugfix / ad-hoc change"** | `fix` | `/fix` | **Unified**: `/fix` -> `/implement` -> `/check` -> `/complete` |
+| **"Draft a bugfix / small-change plan"** | `fix` | `/fix` | **Unified**: `/fix` -> `/implement` -> `/check` -> `/complete` |
 | **"Capture quick idea / thought"** | `idea` | `/idea` | **Companion**: Enriches & saves to `devflow/ideas.md` |
 | **"Pre-delivery exploration / research"**| `discovery`| `/discovery` | **Pre-Flight**: `discovery` -> `/feature` |
 | **"Socratic alignment / ADR / glossary"**| `grill` | `/grill` / `/align` | **Pre-Flight**: `grill` -> `/feature` |

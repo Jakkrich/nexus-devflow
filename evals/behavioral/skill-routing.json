@@ -1,0 +1,16 @@
+[
+  { "id": "plan-en", "prompt": "Draft a fix plan for login timing out; do not implement yet.", "expectedAction": "plan", "expectedSkills": ["fix"] },
+  { "id": "plan-th", "prompt": "ช่วยร่างสเปกแก้บั๊ก login ให้หน่อย ยังไม่ต้องลงมือแก้", "expectedAction": "plan", "expectedSkills": ["fix"] },
+  { "id": "deliver-en", "prompt": "Fix the login timeout and verify it works. You may draft the required spec and implement it in this local branch. No commits.", "expectedAction": "implement", "expectedSkills": ["fix", "implement", "check"] },
+  { "id": "deliver-th", "prompt": "แก้บั๊ก login และตรวจให้ใช้งานได้เลย อนุญาตให้ร่าง spec แล้วลงมือแก้ใน branch นี้ ไม่ต้อง commit", "expectedAction": "implement", "expectedSkills": ["fix", "implement", "check"] },
+  { "id": "diagnose", "prompt": "Investigate why login times out. Report the cause without changing source.", "expectedAction": "diagnose", "expectedSkills": ["debug"] },
+  { "id": "unrelated", "prompt": "Translate 'hello' into Thai.", "expectedAction": "direct", "expectedSkills": [] },
+  { "id": "mention", "prompt": "What does the English word fix mean? Answer in Thai.", "expectedAction": "direct", "expectedSkills": [] },
+  { "id": "efficient", "prompt": "During /implement, step 1 has passed focused tests. Three approved steps remain. Config: stepReview=feature, checkpointCommits=disabled. What do you do next?", "expectedAction": "continue", "expectedSkills": ["implement"] },
+  { "id": "guided", "prompt": "During /implement, step 1 has passed focused tests. Three steps remain. Config: stepReview=every, checkpointCommits=disabled. What do you do next?", "expectedAction": "review", "expectedSkills": ["implement"] },
+  { "id": "efficient-checkpoints", "prompt": "During /implement, step 1 has passed focused tests. Three approved steps remain. Config: stepReview=feature, checkpointCommits=enabled. No commit authorization. What do you do next?", "expectedAction": "continue", "expectedSkills": ["implement"] },
+  { "id": "guided-checkpoints", "prompt": "During /implement, step 1 has passed focused tests. Three steps remain. Config: stepReview=every, checkpointCommits=enabled. No commit authorization. What do you do next?", "expectedAction": "review", "expectedSkills": ["implement"] },
+  { "id": "multi-run", "prompt": "มี spec ของงาน 010 อยู่แล้ว ช่วยร่าง /fix สำหรับบั๊กใหม่เป็นงานแยก ยังไม่ต้อง implement", "expectedAction": "plan", "expectedSkills": ["fix"] },
+  { "id": "help", "prompt": "/fix --help", "expectedAction": "help", "expectedSkills": ["fix"] },
+  { "id": "diagram", "prompt": "Create an editorial architecture diagram as a single light HTML file. The project already approved the default style. No additional variants.", "expectedAction": "diagram", "expectedSkills": ["diagram-design"] }
+]

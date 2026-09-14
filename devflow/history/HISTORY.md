@@ -8,7 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| _No shipped runs yet_ | - | - | Run `/feature` or `/discovery` to start your first delivery run | - | - | - |
+| 2026-09-14 | `086` | Fix | Align skill prompts and routing verification | `7a1f786` (reviewed checkpoint) | `Merged locally; publication pending` | [`086-align-skill-prompts.md`](fixes/086-align-skill-prompts.md) |
 
 ---
 

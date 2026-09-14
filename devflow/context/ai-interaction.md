@@ -8,7 +8,7 @@
 
 - **Be Concise and Direct**: State conclusions, status, and findings first; provide supporting context afterward.
 - **Explain Non-Obvious Decisions Briefly**: Highlight architectural trade-offs, edge-case rationale, or safety considerations in 1–2 sentences.
-- **Ask Before Destructive or Architectural Changes**: Always obtain explicit confirmation before deleting files, executing major refactors, or altering public interfaces.
+- **Authorization**: Reuse explicit authorization already given for the requested work. Ask before destructive actions or material architectural changes outside that scope. Identify the instruction requiring a pause; routine implementation choices do not require renewed approval.
 - **Don't Add Unplanned Scope**: Stick strictly to the Acceptance Criteria defined in the spec. Avoid adding "nice-to-have" features that were not requested.
 - **Preserve Existing Codebase Patterns**: Respect existing file structure, typing patterns, naming conventions, and deep module boundaries.
 
@@ -21,8 +21,8 @@ Format every response for fast scanning and readability:
 - **Real Markdown, Not Prose Walls**: Use bold labels, concise bullet points, and blank lines between blocks.
 - **Enumerations Are Lists**: Numbered or bulleted lists for sequential steps or findings, never inline runs crammed into paragraphs.
 - **Tables for Comparative Matrices**: Use markdown tables when comparing status, options, test results, or trade-offs.
-- **Backticks for Code References**: Wrap file paths, variable names, functions, CLI flags, and commands in backticks (e.g. `current-feature.md`, `npm run check`).
-- **Clickable File Links**: Use GitHub-style markdown links with `file://` scheme (e.g. `[current-feature.md](file:///d:/path/to/current-feature.md)`).
+- **Backticks for Code References**: Wrap file paths, variable names, functions, CLI flags, and commands in backticks (e.g. `devflow/context/{xxx-slug}/spec.md`, `npm run check`).
+- **Clickable File Links**: Use the active client's supported local-file link format with the actual resolved path.
 - **Lead With the Result**: State pass/fail status or completed action before presenting logs.
 
 ---
@@ -97,7 +97,7 @@ After the first successful `/overview`, DevFlow offers a reviewed local commit f
 ## 4. Strict TDD & Two-Stage Review Interaction Rules
 
 ### 🔴🟢 Strict TDD Execution Discipline
-During implementation in `/implement`:
+For logic and behavior changes during `/implement`, follow the spec's test decision:
 - **Show Red Phase**: First execute tests to demonstrate expected failure *before* adding production code.
 - **Show Green Phase**: Add minimal production code, re-run tests, and report pass rate.
 - **Show Refactor Phase**: Polish and clean up with zero test regression.
@@ -111,10 +111,10 @@ During `/check`:
 
 ### ⚡ Review Cadence & Implementation Loop
 - **Efficient Default (`stepReview: "feature"`)**: Presents one comprehensive review packet after all implementation steps of the feature complete, with step checkpoint commits disabled (`checkpointCommits: "disabled"`). This minimizes review fatigue and saves context window tokens.
-- **Guided Review (`stepReview: "every"`)**: Available for high-risk changes, pair programming, or instructional sessions. Pauses for user approval after each small step and offers checkpoint commits (`checkpointCommits: "enabled"`).
+- **Guided Review (`stepReview: "every"`)**: Available for high-risk changes, pair programming, or instructional sessions. Pauses for user approval after each small step. Offer optional checkpoints only if `checkpointCommits: "enabled"`.
 - **Post-Implementation Walkthrough**: After the final review packet, `/implement` always offers an optional read-only walkthrough of the finished code, regardless of review cadence or checkpoint settings.
 - **Independent Review Execution**: Regular and Continuous independent review default to `when-sensitive`, while `review.independentExecution` defaults to `automatic` (spawning an isolated reviewer child when the active adapter supports it). Setting `review.independentExecution: "manual"` produces the fresh-session handoff.
-- **Configuration**: Managed directly in `devflow/config.json`.
+- **Configuration**: Managed directly in `devflow/config.json`. The two workflow keys are independent: `every` does not imply checkpoints are enabled, and `enabled` never grants commit authorization. Use the implementation skill's cadence contract for all four combinations.
 
 ---
 
@@ -131,16 +131,17 @@ During `/check`:
 
 Progress lives in persistent files, not in transient chat history:
 
-- In Fast-Track: `devflow/context/current-feature.md` maintains ticked checklist boxes `- [x]`.
+- In the selected run: `devflow/context/{xxx-slug}/spec.md` maintains ticked checklist boxes `- [x]`.
 - In Git: Commits, branches, and working tree maintain the code history.
-- When starting a fresh session after a context clear, run `devflow` or inspect `current-stage.md` to pick up immediately from the next pending step.
+- When starting a fresh session after a context clear, resolve the run from an explicit ID or current branch, then inspect `devflow/context/{xxx-slug}/stage.md` and its spec to pick up immediately from the next pending step.
 
 ---
 
-## 6. Single Active Run Guardrail (One Thing at a Time)
+## 6. Multi-Run Isolation
 
-- Only one active Single Living Spec run is allowed at a time.
-- The AI will actively block opening a new feature or fix until the current one is completed with `/complete` (or explicitly rolled back/cancelled).
+- Multiple specs may be queued in `devflow/context/{xxx-slug}/` without blocking new drafts.
+- Select a run by explicit ID, matching branch, or the sole active candidate. Ask only when the target remains ambiguous.
+- Keep each run's spec, stage, findings, and branch separate. Protect unrelated working-tree changes before switching; use an isolated worktree when concurrent implementation requires it.
 
 ---
 
@@ -177,14 +178,14 @@ Progress lives in persistent files, not in transient chat history:
 Nexus-DevFlow natively supports extending workflow capabilities with **Third-Party Skills** (installed via `nexus-devflow skill add <repo-or-path>`):
 
 ### 🧩 1. Discovery & Inventory
-- Core workflow commands and AI agents automatically inspect `.agents/skills/` (and `.claude/skills/`) or run `nexus-devflow skill list` to discover installed third-party capabilities.
+- Reuse the available skill catalog. Inspect the active adapter or run `nexus-devflow skill list` only when a required capability is not already known.
 - Installed third-party skills maintain their exact original directory structure, references, assets, scripts, and `SKILL.md`.
 
 ### 🎯 2. Cross-Command Delegation & Genuine Execution
-- **Verbatim & Original Prompt Fidelity**: When a DevFlow stage requires specialized domain expertise (e.g., editorial diagramming, system mapping, domain modeling, cloud provisioning, UI benchmarking), the AI agent must read the third-party skill's `SKILL.md` (e.g. `.agents/skills/archify/SKILL.md` or `.agents/skills/diagram-design/SKILL.md`) and strictly follow its original instructions, philosophy, style guide gates, and complexity constraints.
+- **Verbatim & Original Prompt Fidelity**: When a DevFlow stage requires specialized domain expertise (e.g., editorial diagramming, system mapping, domain modeling, cloud provisioning, UI benchmarking), the AI agent must read the third-party skill's `SKILL.md` (e.g. `.agents/skills/archify/SKILL.md` or `.agents/skills/diagram-design/SKILL.md`) and apply the relevant workflow within the user's requested scope. Explicit user instructions take precedence over skill guidance; reuse existing authorization rather than adding approval gates.
 - **Workflow Command Integration Map**:
   - **`/discovery`**: When macro roadmap planning or micro pre-flight exploration involves system architecture, IT landscape, data pipelines, sequence flows, or user journeys, check for `archify` (for interactive system maps, data flows, and sequence traces) or `diagram-design` (for editorial and business layouts).
-  - **`/feature` & `/fix`**: In Section 2 (`## 📐 2. Technical Spec & Contracts`), invoke `archify` for interactive component diagrams, state machines, and sequence traces, or `diagram-design` for database ER models.
+  - **`/feature` & `/fix`**: When a diagram materially clarifies Section 2 (`## 📐 2. Technical Spec & Contracts`), use `archify` for interactive component diagrams, state machines, and sequence traces, or `diagram-design` for database ER models.
   - **`/implement`**: Seamlessly consumes Tracer-Bullet Tickets generated by Matt Pocock's `/to-tickets` (`.scratch/<feature>/issues/`, `devflow/context/{xxx-slug}/tickets/`), resolving the unblocked Frontier and executing with Strict TDD.
   - **`/brainstorm` & `/grill`**: Leverage visual trade-off matrices (Quadrant, Radar spider) or domain models (UML class, ER).
   - **`/prototype` & `/report-html`**: Embed standalone HTML/SVG assets seamlessly.

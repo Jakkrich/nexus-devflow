@@ -1,6 +1,6 @@
 ---
 name: bughunter
-description: "[devflow] Offensive security orchestrator & bug hunting guide. Indexes 83 vulnerability classes, 5-phase methodology (Think, Hunt, Perimeter, Ship), 681 disclosed HackerOne patterns, and JIT reference guides in devflow/.vendor/bughunter/. Use when running /bughunter, performing security reviews, verifying auth/injection risks in /check or /audit, or testing API endpoints for vulnerabilities."
+description: "[devflow] Investigate security vulnerabilities with evidence. Use for /bughunter or an authorized security review of code or endpoints."
 argument-hint: "[{target, vuln-class, or topic}]"
 ---
 

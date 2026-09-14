@@ -1,6 +1,6 @@
 ---
 name: ponytail
-description: "[devflow] Lazy senior dev mode & YAGNI optimization orchestrator. Cuts ~54% code bloat, tokens, and unnecessary dependencies via the 7-step Decision Ladder. Includes 5W1H Playbook, intensity modes (lite, full, ultra), and auto-bypass safety for UI/frontend tasks. JIT resources in devflow/.vendor/ponytail/."
+description: "[devflow] Review unnecessary complexity and propose simpler implementations. Use for /ponytail or requests to simplify code or dependencies."
 argument-hint: "[lite|full|ultra|audit|debt|help]"
 ---
 
