@@ -5,6 +5,18 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.17.4] - 2026-09-14
+
+### Changed
+- Align workflow prompts with configured review cadence, task-isolated context, and authorized implementation scope.
+- Load Help and diagram references on demand and separate lexical routing checks from behavioral observations.
+
+### Fixed
+- Correct diagram output checklist links and add nested-link regression coverage across both adapters.
+
+### Known limitations
+- Q-002: routine diagram generation can bypass marker-selected profile resolution in a fresh session; tracked in the task 086 archive.
+
 ## [2.17.3] - 2026-09-11
 
 ### Changed

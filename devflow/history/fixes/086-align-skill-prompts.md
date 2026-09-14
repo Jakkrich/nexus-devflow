@@ -1,7 +1,7 @@
 # Completed Fix 086: Skill prompts and routing verification
 
 **Type:** Fix
-**Status:** Integrated into main; publication pending
+**Status:** Integrated into main; included in release v2.17.4
 **Completed date:** 2026-09-14
 **Branch:** fix/086-align-skill-prompts
 **Reviewed checkpoint:** 7a1f78655ee71dd68fa40ab22cfe739be8f0edb1
@@ -284,3 +284,5 @@ Review the active spec and complete 53c0d3819bd9091e4fe86456872ebf6d9c601c18..7a
 ## Main Integration
 
 User authorized main integration and publication. Applied only task delta 53c0d38..3b13473 onto origin/main ab3f96b because local and remote histories diverged. Preserved remote starter-workspace cleanup and resolved only HISTORY.md by retaining the remote table plus this run. Original review receipt covers the original checkpoint; release verification checks the integrated state. Local pre-integration main remains at backup/main-before-086-publish.
+
+Release candidate v2.17.4 verification: `npm.cmd test` and `npm.cmd run check` PASS on the integrated main tree. Static contracts, routing, regression suites, installer tests, and package smoke passed. Integration commit: d212330. Publication runs through the v2.17.4 GitHub Actions tag workflow.
