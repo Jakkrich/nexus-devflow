@@ -46,8 +46,6 @@ Desktop.ini
 .security-key
 
 # DevFlow Transient Runtime Data, Research & Scratch Files
-devflow/runs/*
-!devflow/runs/.gitkeep
 devflow/discoveries/*
 !devflow/discoveries/.gitkeep
 devflow/reports/*

@@ -50,13 +50,6 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
           return false;
         }
         if (
-          normalized.startsWith("devflow/runs/") &&
-          !normalized.endsWith(".gitkeep") &&
-          !normalized.endsWith("README.md")
-        ) {
-          return false;
-        }
-        if (
           normalized.startsWith("devflow/history/features/") &&
           !normalized.endsWith("README.md")
         ) {
@@ -89,6 +82,7 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
           return false;
         }
         if (
+          matchesPrefix(normalized, "devflow/runs") ||
           matchesPrefix(normalized, "devflow/inbox") ||
           matchesPrefix(normalized, "devflow/analysis") ||
           matchesPrefix(normalized, "devflow/scratch") ||

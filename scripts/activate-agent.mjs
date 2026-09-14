@@ -21,7 +21,6 @@ function main() {
 
   ensureDir('devflow');
   ensureDir('devflow/discoveries');
-  ensureDir('devflow/runs');
 
   if (problems.length) {
     console.error('Activation completed with issues:');

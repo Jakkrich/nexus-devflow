@@ -47,8 +47,7 @@ try {
 
   assert(fs.existsSync(path.join(target, 'devflow')), 'activate should create devflow');
   assert(fs.existsSync(path.join(target, 'devflow', 'discoveries')), 'activate should create devflow/discoveries');
-  assert(fs.existsSync(path.join(target, 'devflow', 'runs')), 'activate should create devflow/runs');
-  for (const dir of ['roadmap', 'issues', 'research', 'prds', 'debug', 'reports']) {
+  for (const dir of ['roadmap', 'issues', 'research', 'prds', 'debug', 'reports', 'runs']) {
     assert(!fs.existsSync(path.join(target, 'devflow', dir)), `activate should not precreate devflow/${dir}`);
   }
 
