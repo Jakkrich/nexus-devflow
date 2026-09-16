@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus-DevFlow - พัฒนาซอฟต์แวร์ด้วย AI อย่างมั่นใจ คุมสโคปได้ 100%</title>
+  <meta name="description" content="ระบบเวิร์กโฟลว์สำหรับ AI Coding Agent สถาปัตยกรรม The 3-Pillars และ Pure Task-Isolated Living Spec Model ช่วยควบคุมสโคป การตรวจสอบ และประวัติโปรเจกต์ได้อย่างปลอดภัย">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/">
+  <link rel="icon" href="./docs/brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Nexus-DevFlow">
+  <meta property="og:title" content="Nexus-DevFlow - พัฒนาซอฟต์แวร์ด้วย AI อย่างมั่นใจ คุมสโคปได้ 100%">
+  <meta property="og:description" content="ระบบเวิร์กโฟลว์สำหรับ AI Coding Agent สถาปัตยกรรม The 3-Pillars และ Pure Task-Isolated Living Spec Model ช่วยควบคุมสโคป การตรวจสอบ และประวัติโปรเจกต์ได้อย่างปลอดภัย">
+  <meta property="og:url" content="https://jakkrich.github.io/nexus-devflow/">
+  <meta property="og:image" content="./docs/brand/logo-light.svg">
+  
+  <!-- Local Standalone Style (Zero External Dependencies) -->
+  <link rel="stylesheet" href="./docs/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">ข้ามไปยังเนื้อหาหลัก</a>
+
+  <!-- Header -->
+  <header class="site-header" data-site-header>
+    <nav class="container site-header-inner" aria-label="Main navigation">
+      <a href="./" aria-label="Nexus-DevFlow หน้าแรก">
+        <img src="./docs/brand/logo-light.svg" alt="Nexus-DevFlow" class="site-logo">
+      </a>
+      
+      <div class="site-nav" id="site-navigation">
+        <a href="#workflow">ขั้นตอนการทำงาน</a>
+        <a href="#files">โครงสร้างไฟล์</a>
+        <a href="#commands">ชุดคำสั่ง</a>
+        <a href="#capabilities">ความสามารถ</a>
+        <a href="#faq">คำถามที่พบบ่อย</a>
+        <a class="site-nav-updates" href="./docs/updates/">อัปเดตล่าสุด</a>
+      </div>
+      
+      <div class="site-actions">
+        <a href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.27-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a href="./docs/getting-started/" class="button button-primary">อ่านคู่มือ</a>
+        <button class="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" data-site-menu>เมนู</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section id="hero-commands" class="page-grid relative overflow-hidden border-b border-[var(--line)] pt-16">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_48%_35%,rgba(245,246,243,.15)_0%,rgba(245,246,243,.82)_58%,var(--paper)_85%)]"></div>
+      
+      <!-- Circuit Nodes Vector -->
+      <svg class="desktop-only absolute left-1/2 top-20 h-[690px] w-[980px] -translate-x-1/2 opacity-[0.16]" viewBox="0 0 980 690" aria-hidden="true">
+        <path class="workflow-line" d="M70 190H245V92H432V190H610V90H880"></path>
+        <path class="workflow-line-muted" d="M108 515H285V410H470V540H680V410H890"></path>
+        <rect class="workflow-node" x="52" y="172" width="36" height="36" rx="4"></rect>
+        <rect class="workflow-node" x="227" y="74" width="36" height="36" rx="4"></rect>
+        <circle class="workflow-node" cx="432" cy="190" r="18"></circle>
+        <rect class="workflow-node" x="592" y="172" width="36" height="36" rx="4"></rect>
+        <circle class="workflow-node" cx="880" cy="90" r="18"></circle>
+      </svg>
+
+      <div class="relative mx-auto grid min-h-[780px] max-w-7xl items-center gap-14 px-5 py-24 lg:grid-cols-[1.02fr_.98fr] lg:px-8 lg:py-28">
+        <div>
+          <div class="eyebrow mb-7">ระบบเวิร์กโฟลว์สำหรับ AI Coding Agent</div>
+          <h1 class="text-balance max-w-3xl text-[3.3rem] font-semibold leading-[.98] tracking-[-0.055em] sm:text-7xl lg:text-[5.15rem]">
+            พัฒนาซอฟต์แวร์ด้วย AI.<br><span class="text-[var(--blue)]">ควบคุมได้ทุกขั้นตอน.</span>
+          </h1>
+          <p class="mt-7 max-w-xl text-balance text-lg leading-8 text-[var(--ink-soft)]">
+            Vibe coding ดูเหมือนเร็ว จนกระทั่งโค้ดเริ่มพัง: สปาเก็ตตี้โค้ด บั๊กสะสม และบริบทที่สูญหาย Nexus-DevFlow ใช้ AI Agent Skills ที่ช่วยวางแผน เขียนโค้ด และทดสอบทีละฟีเจอร์ แปลงทุกการตัดสินใจให้กลายเป็นเอกสารและสถานะที่ตรวจสอบได้จริง
+          </p>
+          
+          <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+            <button class="group flex items-center justify-between gap-6 rounded-xl bg-[var(--ink)] px-5 py-3.5 text-left text-sm text-white shadow-lg hover:bg-[var(--blue)] transition-colors" type="button" data-copy-command="npx -y nexus-devflow -y">
+              <span class="mono"><span class="text-[#7f8c87]">$</span> npx -y nexus-devflow -y</span>
+              <span class="text-xs text-[#aab3b0] group-hover:text-white" data-copy-label data-default-label="คัดลอก">คัดลอก</span>
+            </button>
+            <a href="#workflow" class="rounded-xl border border-[var(--line-strong)] bg-[var(--surface)] px-5 py-3.5 text-center text-sm font-medium hover:border-[var(--ink)] transition-colors">ดูวิธีการทำงาน</a>
+          </div>
+
+          <div class="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-xs text-[var(--ink-muted)]">
+            <span class="flex items-center gap-2">
+              <span class="h-1.5 w-1.5 rounded-full bg-[var(--green)]"></span>โอเพนซอร์ส (MIT)
+            </span>
+            <span>รองรับ Antigravity, Claude Code, Codex, Copilot, OpenCode</span>
+            <span>ใช้ได้กับทุก Tech Stack</span>
+          </div>
+        </div>
+
+        <!-- Interactive Hero Code Window -->
+        <div class="relative mx-auto w-full max-w-[590px] pb-9 pt-10 lg:translate-x-3">
+          <div class="measure-label absolute left-0 top-0 flex items-center gap-2">
+            <span class="h-px w-16 bg-[var(--blue)]"></span>1 ฟีเจอร์ / วงจรที่สมบูรณ์
+          </div>
+          
+          <div class="code-window relative z-30 mt-9">
+            <div class="code-window-bar">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="ml-3 font-semibold">Nexus-DevFlow / build loop</span>
+              <span class="ml-auto text-[#70d5a9]">เสร็จสมบูรณ์</span>
+            </div>
+            
+            <div class="p-4 sm:p-5">
+              <div class="flex flex-col gap-2 rounded-lg border border-[#35403d] bg-[#0d1211] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="font-mono text-[10px] uppercase tracking-[.12em] text-[#7f8c87]">พร้อมใช้งาน</div>
+                <div class="font-mono text-[10px] text-[#c8d0cd]">
+                  <span class="text-[#76a8ff]">/overview</span> → project-overview.md <span class="ml-2 text-[#70d5a9]">✓</span>
+                </div>
+              </div>
+
+              <!-- Workflow Stages -->
+              <div class="relative mt-4 space-y-2 before:absolute before:bottom-6 before:left-[17px] before:top-6 before:w-px before:bg-[#35403d]">
+                <!-- Step 01 -->
+                <div class="relative grid grid-cols-[36px_1fr] gap-3 rounded-lg border border-[#2c3532] bg-[#171e1c] p-3">
+                  <div class="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#315da6] bg-[#16243f] font-mono text-[10px] text-[#76a8ff]">01</div>
+                  <div class="min-w-0 sm:grid sm:grid-cols-[112px_1fr_auto] sm:items-center sm:gap-3">
+                    <div>
+                      <div class="font-mono text-xs font-semibold text-[#76a8ff]">/feature</div>
+                      <div class="mt-0.5 text-[10px] text-[#7f8c87]">SPEC</div>
+                    </div>
+                    <div class="mt-2 truncate font-mono text-[10px] text-[#d9dfdc] sm:mt-0">context/{089-slug}/spec.md</div>
+                    <div class="mt-2 inline-flex rounded bg-[#173c30] px-2 py-1 font-mono text-[9px] text-[#70d5a9] sm:mt-0">อนุมัติแล้ว</div>
+                  </div>
+                </div>
+
+                <!-- Step 02 -->
+                <div class="relative grid grid-cols-[36px_1fr] gap-3 rounded-lg border border-[#2c3532] bg-[#171e1c] p-3">
+                  <div class="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#35403d] bg-[#202a27] font-mono text-[10px] text-[#c8d0cd]">02</div>
+                  <div class="min-w-0 sm:grid sm:grid-cols-[112px_1fr_auto] sm:items-center sm:gap-3">
+                    <div>
+                      <div class="font-mono text-xs font-semibold text-white">/implement</div>
+                      <div class="mt-0.5 text-[10px] text-[#7f8c87]">BUILD</div>
+                    </div>
+                    <div class="mt-2 truncate font-mono text-[10px] text-[#d9dfdc] sm:mt-0">3 การแก้โค้ดแบบ TDD</div>
+                    <div class="mt-2 inline-flex rounded bg-[#202a27] px-2 py-1 font-mono text-[9px] text-[#c8d0cd] sm:mt-0">ผ่านเกณฑ์</div>
+                  </div>
+                </div>
+
+                <!-- Step 03 -->
+                <div class="relative grid grid-cols-[36px_1fr] gap-3 rounded-lg border border-[#2c3532] bg-[#171e1c] p-3">
+                  <div class="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#35403d] bg-[#202a27] font-mono text-[10px] text-[#c8d0cd]">03</div>
+                  <div class="min-w-0 sm:grid sm:grid-cols-[112px_1fr_auto] sm:items-center sm:gap-3">
+                    <div>
+                      <div class="font-mono text-xs font-semibold text-white">/check</div>
+                      <div class="mt-0.5 text-[10px] text-[#7f8c87]">PROVE</div>
+                    </div>
+                    <div class="mt-2 truncate font-mono text-[10px] text-[#d9dfdc] sm:mt-0">4 / 4 เกณฑ์ยอมรับ + หลักฐาน</div>
+                    <div class="mt-2 inline-flex rounded bg-[#173c30] px-2 py-1 font-mono text-[9px] text-[#70d5a9] sm:mt-0">ผ่านการทดสอบ</div>
+                  </div>
+                </div>
+
+                <!-- Optional Audit -->
+                <div class="relative ml-12 rounded-lg border border-dashed border-[#315da6] bg-[#111917] px-3 py-2">
+                  <div class="flex flex-col gap-2 sm:grid sm:grid-cols-[112px_1fr_auto] sm:items-center sm:gap-3">
+                    <div class="font-mono text-[10px] font-semibold text-[#76a8ff]">↳ /audit current</div>
+                    <div class="font-mono text-[9px] text-[#9ba7a2]">ตรวจคุณภาพโค้ด & บันทึกข้อผิดพลาด</div>
+                    <div class="inline-flex w-fit rounded bg-[#16243f] px-2 py-1 font-mono text-[8px] text-[#76a8ff]">อ่านอย่างเดียว</div>
+                  </div>
+                </div>
+
+                <!-- Step 04 -->
+                <div class="relative grid grid-cols-[36px_1fr] gap-3 rounded-lg border border-[#315da6] bg-[#16243f] p-3">
+                  <div class="relative z-10 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--blue)] font-mono text-[10px] text-white">04</div>
+                  <div class="min-w-0 sm:grid sm:grid-cols-[112px_1fr_auto] sm:items-center sm:gap-3">
+                    <div>
+                      <div class="font-mono text-xs font-semibold text-white">/complete</div>
+                      <div class="mt-0.5 text-[10px] text-[#76a8ff]">LAND</div>
+                    </div>
+                    <div class="mt-2 truncate font-mono text-[10px] text-white sm:mt-0">history/features/089.md</div>
+                    <div class="mt-2 inline-flex rounded bg-[var(--blue)] px-2 py-1 font-mono text-[9px] text-white sm:mt-0">บันทึกประวัติแล้ว</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 flex items-center justify-between rounded-lg border border-dashed border-[#315da6] px-4 py-3 font-mono text-[10px] text-[#76a8ff]">
+                <span>↻ ฟีเจอร์ถัดไป</span>
+                <span class="text-[#9ba7a2]">อัปเดต build-plan.md แล้ว</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Helpers Drawer -->
+          <div class="relative z-20 mx-2 -mt-5 rounded-b-xl border border-[var(--line-strong)] bg-[rgba(251,252,250,.96)] px-4 pb-3 pt-8 shadow-sm sm:mx-5">
+            <div class="mb-2 font-mono text-[8px] font-semibold uppercase tracking-[.14em] text-[var(--ink-muted)]">คำสั่งช่วยเหลือเสริม</div>
+            <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+              <div class="rounded border border-[var(--line)] bg-white px-2 py-1.5">
+                <div class="font-mono text-[9px] text-[var(--blue-dark)]">/brief</div>
+                <div class="mt-0.5 text-[8px] text-[var(--ink-muted)]">พรีวิว</div>
+              </div>
+              <div class="rounded border border-[var(--line)] bg-white px-2 py-1.5">
+                <div class="font-mono text-[9px] text-[var(--blue-dark)]">/check guide</div>
+                <div class="mt-0.5 text-[8px] text-[var(--ink-muted)]">คู่มือทดสอบ</div>
+              </div>
+              <div class="rounded border border-[var(--line)] bg-white px-2 py-1.5">
+                <div class="font-mono text-[9px] text-[var(--blue-dark)]">/setup-tests</div>
+                <div class="mt-0.5 text-[8px] text-[var(--ink-muted)]">ตั้งค่าเทส</div>
+              </div>
+              <div class="rounded border border-[var(--line)] bg-white px-2 py-1.5">
+                <div class="font-mono text-[9px] text-[var(--blue-dark)]">/ci</div>
+                <div class="mt-0.5 text-[8px] text-[var(--ink-muted)]">ตรวจบน GitHub</div>
+              </div>
+              <div class="rounded border border-[var(--line)] bg-white px-2 py-1.5">
+                <div class="font-mono text-[9px] text-[var(--blue-dark)]">/status</div>
+                <div class="mt-0.5 text-[8px] text-[var(--ink-muted)]">เช็กสถานะ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compatibility Ribbon -->
+    <section class="border-b border-[var(--line)] bg-[var(--ink)] py-6 text-white">
+      <div class="mx-auto flex max-w-7xl flex-col gap-5 px-5 text-xs sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div class="flex items-center gap-6">
+          <span class="mono text-[#7f8c87]">รองรับการทำงานร่วมกับ</span>
+          <div class="flex flex-wrap gap-x-6 gap-y-2 font-semibold text-[#d9dfdc]">
+            <span>ANTIGRAVITY</span>
+            <span>CLAUDE CODE</span>
+            <span>CODEX</span>
+            <span>GITHUB COPILOT</span>
+            <span>OPENCODE</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-6 border-t border-[#2c3532] pt-5 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
+          <span class="mono text-[#7f8c87]">ไม่จำกัดภาษา & สแตก</span>
+          <div class="flex gap-6 font-semibold text-[#d9dfdc]">
+            <span>ทุกภาษาโปรแกรม</span>
+            <span>ทุกเฟรมเวิร์ก</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Update Banner -->
+    <section class="border-b border-[var(--line)] bg-[var(--paper-bright)]" aria-labelledby="latest-update-title">
+      <a class="group mx-auto grid max-w-7xl gap-4 px-5 py-6 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-7 lg:px-8" href="./docs/updates/">
+        <div class="flex items-center gap-3 sm:block">
+          <span class="inline-flex items-center gap-2 rounded-full bg-[var(--blue-soft)] px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[.1em] text-[var(--blue-dark)]">
+            <span class="h-1.5 w-1.5 rounded-full bg-[var(--blue)]"></span>อัปเดตล่าสุด
+          </span>
+          <time class="font-mono text-[10px] uppercase tracking-[.08em] text-[var(--ink-muted)] sm:mt-2 sm:block" datetime="2026-09-16">16 กันยายน 2026</time>
+        </div>
+        <div class="min-w-0">
+          <h2 id="latest-update-title" class="text-lg font-semibold tracking-[-0.025em] text-[var(--ink)] transition-colors group-hover:text-[var(--blue-dark)]">
+            Nexus-DevFlow 2.18.0 ปล่อยสถาปัตยกรรม The 3-Pillars & Task-Isolated Living Spec Model
+          </h2>
+          <p class="mt-1 max-w-3xl text-sm leading-6 text-[var(--ink-soft)]">
+            แยกโฟลเดอร์ทำงานเฉพาะแต่ละงานใน <code>devflow/context/{xxx-slug}/</code>, รองรับ Explore skill เต็มรูปแบบ, ระบบป้องกัน Over-engineering และชุดตรวจความถูกต้องอัตโนมัติ
+          </p>
+        </div>
+        <span class="font-mono text-xs font-semibold text-[var(--blue-dark)]">ดูอัปเดตทั้งหมด <span aria-hidden="true">→</span></span>
+      </a>
+    </section>
+
+    <!-- Start Here Section -->
+    <section id="start" class="border-b border-[var(--line)] bg-[var(--paper-bright)] py-24 lg:py-32">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="grid gap-6 lg:grid-cols-[1fr_.62fr] lg:items-end">
+          <div class="max-w-3xl">
+            <div class="eyebrow">เริ่มต้นใช้งาน</div>
+            <h2 class="mt-6 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">ติดตั้ง DevFlow หลังจากคุณสร้างแอปพลิเคชันแล้ว</h2>
+          </div>
+          <p class="max-w-xl text-sm leading-6 text-[var(--ink-soft)]">
+            เริ่มโปรเจกต์ใหม่? สร้างโครงร่างแอปตามสแตกที่ต้องการก่อน มีโค้ดเดิมอยู่แล้ว? ติดตั้ง DevFlow ลงในโปรเจกต์เดิมและใช้คำสั่งปรับโครงสร้างอัตโนมัติ
+          </p>
+        </div>
+
+        <div class="mt-14 grid gap-6 lg:grid-cols-2">
+          <!-- Fresh Project -->
+          <article class="micro-grid rounded-2xl border border-[var(--line)] bg-white p-8 sm:p-10 hover-lift">
+            <span class="mono text-xs text-[var(--green)]">โปรเจกต์ใหม่ (FRESH PROJECT)</span>
+            <h3 class="mt-6 text-3xl font-semibold tracking-[-0.035em]">สร้างแอปก่อน ติดตั้ง DevFlow ทีหลัง</h3>
+            <p class="mt-3 max-w-md text-sm leading-6 text-[var(--ink-soft)]">
+              สร้างโครงสร้างแอปด้วยเฟรมเวิร์กที่คุณถนัด (Vite, Next.js, FastAPI, Go ฯลฯ) จากนั้นติดตั้ง DevFlow แล้วปรับแต่งเวิร์กโฟลว์ให้เข้ากับโปรเจกต์
+            </p>
+            <div class="mt-10 rounded-xl bg-[var(--ink)] p-5 font-mono text-xs leading-7 text-white shadow-md">
+              <div><span class="text-[#7f8c87]">$</span> npm create vite@latest my-app</div>
+              <div><span class="text-[#7f8c87]">$</span> cd my-app</div>
+              <div><span class="text-[#7f8c87]">$</span> npx -y nexus-devflow -y</div>
+              <div class="mt-2 text-[#76a8ff]">/onboard</div>
+              <div class="text-[#70d5a9]">เขียนแผนงานโดยตรงหรือรัน /discovery</div>
+              <div class="text-[#76a8ff]">/overview</div>
+            </div>
+          </article>
+
+          <!-- Existing Codebase -->
+          <article class="micro-grid rounded-2xl border border-[var(--line)] bg-white p-8 sm:p-10 hover-lift">
+            <span class="mono text-xs text-[var(--amber)]">โปรเจกต์เดิม (EXISTING CODEBASE)</span>
+            <h3 class="mt-6 text-3xl font-semibold tracking-[-0.035em]">นำไปปรับใช้กับโค้ดที่มีอยู่ได้อย่างราบรื่น</h3>
+            <p class="mt-3 max-w-md text-sm leading-6 text-[var(--ink-soft)]">
+              DevFlow จะสำรวจฟีเจอร์ที่พัฒนาเสร็จแล้ว รูปแบบการเขียนโค้ด และการทดสอบเดิม จากนั้นสร้างแผนงานที่ตรงกับความเป็นจริงของโปรเจกต์
+            </p>
+            <div class="mt-10 rounded-xl bg-[var(--ink)] p-5 font-mono text-xs leading-7 text-white shadow-md">
+              <div><span class="text-[#7f8c87]">$</span> cd established-app</div>
+              <div><span class="text-[#7f8c87]">$</span> npx -y nexus-devflow -y</div>
+              <div class="mt-2 text-[#e8bd72]">/adopt</div>
+              <div class="text-[#70d5a9]">ตรวจสอบแผนงานที่ระบบสร้างให้</div>
+              <div class="text-[#76a8ff]">/overview</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section id="workflow" class="page-grid relative overflow-hidden py-24 lg:py-32">
+      <div class="absolute inset-0 bg-[rgba(245,246,243,.82)]"></div>
+      <div class="relative mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div class="max-w-3xl">
+            <div class="eyebrow">ขั้นตอนการทำงาน</div>
+            <h2 class="mt-6 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">ตั้งค่าเพียงครั้งเดียว สร้างทุกฟีเจอร์ผ่านลูปที่ควบคุมได้อย่างปลอดภัย</h2>
+          </div>
+          <p class="max-w-sm text-sm leading-6 text-[var(--ink-soft)]">
+            การตั้งค่าจะสร้างบริบทถาวรของโปรเจกต์ จากนั้นทุกฟีเจอร์จะเคลื่อนผ่านวงจร สเปก -> พัฒนา -> พิสูจน์ผล -> ตรวจสอบ
+          </p>
+        </div>
+
+        <div class="mt-16 space-y-5">
+          <!-- Step 01: Setup -->
+          <div class="overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[rgba(251,252,250,.94)] shadow-[var(--shadow-sm)]">
+            <div class="grid lg:grid-cols-[210px_1fr]">
+              <div class="border-b border-[var(--line)] bg-[var(--surface-muted)] p-6 lg:border-b-0 lg:border-r lg:p-8">
+                <div class="measure-label">01 / การตั้งค่าระบบ</div>
+                <h3 class="mt-4 text-xl font-semibold">รันเพียงครั้งเดียวต่อโปรเจกต์</h3>
+                <p class="mt-2 text-xs leading-5 text-[var(--ink-soft)]">มอบความเข้าใจที่ถาวรและแม่นยำให้ AI Agent เกี่ยวกับสิ่งที่คุณกำลังสร้าง</p>
+              </div>
+              <div class="p-6 lg:p-8">
+                <div class="grid gap-3 sm:grid-cols-5">
+                  <div class="rounded-lg border border-[var(--line)] bg-white p-4">
+                    <span class="mono text-[10px] text-[var(--ink-muted)]">1</span>
+                    <div class="mt-3 text-sm font-semibold">สร้างโครงแอป</div>
+                    <div class="mt-2 text-[10px] text-[var(--ink-muted)]">สแตกของคุณ</div>
+                  </div>
+                  <div class="rounded-lg border border-[var(--line)] bg-white p-4">
+                    <span class="mono text-[10px] text-[var(--ink-muted)]">2</span>
+                    <div class="mt-3 text-sm font-semibold">ติดตั้ง</div>
+                    <div class="mt-2 text-[10px] text-[var(--ink-muted)]">เพิ่ม DEVFLOW</div>
+                  </div>
+                  <div class="rounded-lg border border-[var(--blue)] bg-[var(--blue-soft)] p-4">
+                    <span class="mono text-[10px] text-[var(--blue-dark)]">3</span>
+                    <div class="mono mt-3 text-sm font-semibold text-[var(--blue-dark)]">/onboard</div>
+                    <div class="mt-2 text-[10px] text-[var(--blue-dark)]">ปรับแต่งเวิร์กโฟลว์</div>
+                  </div>
+                  <div class="rounded-lg border border-[var(--line)] bg-white p-4">
+                    <span class="mono text-[10px] text-[var(--ink-muted)]">4</span>
+                    <div class="mt-3 text-sm font-semibold">เขียน 2 แผนงาน</div>
+                    <div class="mono mt-2 truncate text-[10px] text-[var(--green)]">project + build</div>
+                  </div>
+                  <div class="rounded-lg border border-[var(--blue)] bg-[var(--blue-soft)] p-4">
+                    <span class="mono text-[10px] text-[var(--blue-dark)]">5</span>
+                    <div class="mono mt-3 text-sm font-semibold text-[var(--blue-dark)]">/overview</div>
+                    <div class="mono mt-2 truncate text-[10px] text-[var(--green)]">project-overview.md</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 02: Feature Loop -->
+          <div class="overflow-hidden rounded-2xl border border-[#2c3532] bg-[var(--ink)] text-white shadow-[var(--shadow-lg)]">
+            <div class="grid lg:grid-cols-[210px_1fr]">
+              <div class="border-b border-[#2c3532] bg-[#171e1c] p-6 lg:border-b-0 lg:border-r lg:p-8">
+                <div class="mono text-[10px] font-semibold uppercase tracking-[.14em] text-[#76a8ff]">02 / วงจรพัฒนาฟีเจอร์</div>
+                <h3 class="mt-4 text-xl font-semibold">ทำซ้ำสำหรับทุกฟีเจอร์</h3>
+                <p class="mt-2 text-xs leading-5 text-[#9ba7a2]">หนึ่งฟีเจอร์ที่กำหนดขอบเขตชัดเจน เคลื่อนผ่านประตูกั้นการตรวจทานของมนุษย์</p>
+                <div class="mt-6 inline-flex items-center gap-2 rounded-full border border-[#35403d] px-3 py-1.5 font-mono text-[10px] text-[#9ba7a2]">
+                  <span class="h-1.5 w-1.5 rounded-full bg-[#70d5a9]"></span>มนุษย์เป็นผู้ควบคุมเสมอ
+                </div>
+              </div>
+              <div class="p-6 lg:p-8">
+                <div class="grid items-stretch gap-3 lg:grid-cols-[1fr_54px_1fr_1fr_54px_1fr]">
+                  <div class="rounded-xl border border-[#35403d] bg-[#171e1c] p-4">
+                    <div class="mono text-[10px] text-[#76a8ff]">SPEC</div>
+                    <div class="mono mt-3 font-semibold">/feature</div>
+                    <div class="mono mt-1 text-[10px] text-[#9ba7a2]">หรือ /fix สำหรับแก้บั๊ก</div>
+                    <div class="mono mt-4 rounded bg-[#202a27] px-2 py-1.5 text-[10px] text-[#70d5a9]">context/{xxx}/spec.md</div>
+                  </div>
+                  <div class="flex items-center justify-center py-2">
+                    <div class="flex h-11 w-11 rotate-45 items-center justify-center border border-[#76a8ff] bg-[#16243f]">
+                      <span class="-rotate-45 font-mono text-[8px] text-[#76a8ff]">REVIEW</span>
+                    </div>
+                  </div>
+                  <div class="rounded-xl border border-[#35403d] bg-[#171e1c] p-4">
+                    <div class="mono text-[10px] text-[#9ba7a2]">BUILD</div>
+                    <div class="mono mt-3 font-semibold">/implement</div>
+                    <div class="mono mt-5 rounded bg-[#202a27] px-2 py-1.5 text-[10px] text-[#d9dfdc]">โค้ดสั้นๆ แบบ TDD</div>
+                  </div>
+                  <div class="rounded-xl border border-[#35403d] bg-[#171e1c] p-4">
+                    <div class="mono text-[10px] text-[#9ba7a2]">PROVE</div>
+                    <div class="mono mt-3 font-semibold">/check</div>
+                    <div class="mono mt-5 rounded bg-[#202a27] px-2 py-1.5 text-[10px] text-[#d9dfdc]">หลักฐานเชิงประจักษ์</div>
+                    <div class="mt-2 flex items-center justify-between gap-2 rounded border border-[#35403d] bg-[#131a18] px-2 py-1.5 text-[10px]">
+                      <span class="mono text-[#76a8ff]">/audit current</span>
+                      <span class="text-[#9ba7a2]">Ledger</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-center py-2">
+                    <div class="flex h-11 w-11 rotate-45 items-center justify-center border border-[#76a8ff] bg-[#16243f]">
+                      <span class="-rotate-45 font-mono text-[8px] text-[#76a8ff]">REVIEW</span>
+                    </div>
+                  </div>
+                  <div class="rounded-xl border border-[#76a8ff] bg-[var(--blue)] p-4">
+                    <div class="mono text-[10px] text-[#c7d8ff]">LAND</div>
+                    <div class="mono mt-3 font-semibold">/complete</div>
+                    <div class="mono mt-5 rounded bg-[rgba(11,67,186,.7)] px-2 py-1.5 text-[10px] text-white">เก็บประวัติ & ถัดไป</div>
+                  </div>
+                </div>
+
+                <!-- Automation Additions -->
+                <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div class="rounded-xl border border-[#315da6] bg-[#16243f] p-4">
+                    <div class="mono text-[9px] uppercase tracking-[.12em] text-[#8cabef]">พัฒนาอัตโนมัติแบบกำหนดขอบเขต</div>
+                    <div class="mono mt-1 font-semibold text-white">/autopilot</div>
+                    <div class="mono mt-3 rounded bg-[rgba(11,67,186,.5)] px-3 py-2 text-[10px] text-[#c7d8ff]">1 ฟีเจอร์หรือฟิกซ์ + เกณฑ์คุณภาพ</div>
+                    <div class="mono mt-3 text-[9px] uppercase tracking-[.1em] text-[#70d5a9]">หยุดรอให้คุณตรวจทานเสมอ</div>
+                  </div>
+                  <div class="rounded-xl border border-[#315da6] bg-[#16243f] p-4">
+                    <div class="mono text-[9px] uppercase tracking-[.12em] text-[#8cabef]">พัฒนาอัตโนมัติตามแผนงาน</div>
+                    <div class="mono mt-1 font-semibold text-white">/continuous</div>
+                    <div class="mono mt-3 rounded bg-[rgba(11,67,186,.5)] px-3 py-2 text-[10px] text-[#c7d8ff]">ทำตามคิวฟีเจอร์ + คอมมิตในเครื่อง</div>
+                    <div class="mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[9px] uppercase tracking-[.1em]">
+                      <span class="text-[#f0bd67]">เกณฑ์ Review ยังคงทำงาน</span>
+                      <span class="text-[#70d5a9]">ไม่ Push ขึ้นรีโมตเอง</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Files Behind The Workflow (The 3-Pillars) -->
+    <section id="files" class="border-y border-[var(--line)] bg-[var(--ink)] py-24 text-white lg:py-32">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="grid items-center gap-16 lg:grid-cols-[.72fr_1.28fr]">
+          <div>
+            <div class="eyebrow !text-[#76a8ff]">สถาปัตยกรรม The 3-Pillars</div>
+            <h2 class="mt-6 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">สถานะโปร่งใส อ่านง่าย.<br>ไร้ความจำแอบแฝง.</h2>
+            <p class="mt-5 text-base leading-7 text-[#aab3b0]">
+              คุณเป็นเจ้าของแผนงาน DevFlow จะแปลงให้เป็นบริบทถาวร โฟลเดอร์งานที่แยกอิสระ และประวัติศาสตร์ที่แก้ไขไม่ได้ของสิ่งที่ส่งมอบไปแล้ว
+            </p>
+            <p class="mt-4 text-base leading-7 text-[#aab3b0]">
+              เคลียร์แชต AI ทิ้ง หรือกลับมาทำงานต่อในอีกหลายสัปดาห์ข้างหน้า Agent ก็สามารถทำงานต่อได้ทันทีจากไฟล์เอกสาร ไม่หลงลืมหรือสูญเสียบริบท
+            </p>
+            <div class="mt-10 space-y-4 text-sm">
+              <div class="flex gap-3">
+                <span class="text-[#70d5a9] font-mono font-bold">01</span>
+                <span><strong class="text-white">Future (อนาคต / แผนงาน):</strong> <code>ideas.md</code>, <code>project-plan.md</code>, <code>build-plan.md</code></span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-[#76a8ff] font-mono font-bold">02</span>
+                <span><strong class="text-white">Present (ปัจจุบัน / บริบททำงาน):</strong> <code>context/project-overview.md</code> & <code>context/{xxx-slug}/</code></span>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-[#e8bd72] font-mono font-bold">03</span>
+                <span><strong class="text-white">Past (อดีต / ประวัติส่งมอบ):</strong> <code>history/features/</code>, <code>fixes/</code>, <code>rollbacks/</code></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3D Tilted Card Stack -->
+          <div class="relative mx-auto w-full max-w-[650px] pb-10 pt-12">
+            <div class="absolute left-0 top-0 flex items-center gap-3 font-mono text-[9px] uppercase tracking-[.12em] text-[#76a8ff]">
+              <span class="h-px w-14 bg-[#76a8ff]"></span>สถานะอิงไฟล์เอกสาร / 3-pillars
+            </div>
+            
+            <div class="relative z-10 grid grid-cols-2 gap-3">
+              <div class="file-card rotate-[-1deg]">
+                <div class="file-tab">
+                  <span class="text-[var(--green)]">01</span> devflow/project-plan.md <span class="ml-auto text-[var(--green)]">เป็นเจ้าของ</span>
+                </div>
+                <div class="p-4 font-mono text-[10px] leading-5 text-[var(--ink-soft)]">
+                  <span class="text-[var(--blue)]"># Product Spec</span><br>ปัญหา, ผู้ใช้, ฟีเจอร์, สแตก
+                </div>
+              </div>
+              <div class="file-card rotate-[1deg]">
+                <div class="file-tab">
+                  <span class="text-[var(--green)]">02</span> devflow/build-plan.md <span class="ml-auto text-[var(--green)]">เป็นเจ้าของ</span>
+                </div>
+                <div class="p-4 font-mono text-[10px] leading-5 text-[var(--ink-soft)]">
+                  <span class="text-[var(--green)]">[x]</span> 088 ซิงก์ Upstream<br>
+                  <span class="text-[var(--blue)]">[ ] 089 หน้าเว็บเอกสาร</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="file-card relative z-20 -mt-3 mx-5 rotate-[-.5deg]">
+              <div class="file-tab">
+                <span class="text-[var(--blue)]">03</span> devflow/context/project-overview.md <span class="ml-auto text-[var(--blue)]">สร้างอัตโนมัติ</span>
+              </div>
+              <div class="grid gap-3 p-4 font-mono text-[10px] leading-5 text-[var(--ink-soft)] sm:grid-cols-3">
+                <div><span class="text-[var(--blue)]">PRODUCT</span><br>อะไรและทำไม</div>
+                <div><span class="text-[var(--blue)]">ARCHITECTURE</span><br>สแตกและกฎระเบียบ</div>
+                <div><span class="text-[var(--blue)]">UX / FLOW</span><br>เส้นทางและสถานะ</div>
+              </div>
+            </div>
+
+            <div class="file-card relative z-30 -mt-3 mx-10 rotate-[.5deg] shadow-[var(--shadow-lg)]">
+              <div class="file-tab">
+                <span class="text-[var(--amber)]">04</span> devflow/context/089-clone-ai-blueprint-ui/spec.md <span class="ml-auto rounded bg-[var(--amber-soft)] px-2 py-0.5 text-[var(--amber)]">กำลังทำงาน</span>
+              </div>
+              <div class="p-5 font-mono text-[10px] leading-5 text-[var(--ink-soft)] sm:text-[11px]">
+                <div class="text-[var(--ink)] font-semibold"># Feature: Nexus-DevFlow UI</div>
+                <div class="mt-2"><span class="text-[var(--green)]">✓</span> สเปกผ่านการอนุมัติก่อนเขียนโค้ด</div>
+                <div><span class="text-[var(--ink-muted)]">○</span> พัฒนาผ่าน 7 ขั้นตอนแบบ TDD</div>
+                <div><span class="text-[var(--ink-muted)]">○</span> พิสูจน์เกณฑ์ยอมรับครบทั้ง 7 ข้อ</div>
+              </div>
+            </div>
+
+            <div class="relative z-40 -mt-2 mx-auto flex w-[78%] items-center gap-3 rounded-lg border border-[#315da6] bg-[#16243f] px-4 py-3 font-mono text-[9px] text-white shadow-lg sm:text-[10px]">
+              <span class="text-[#e8bd72]">05</span>
+              <span class="truncate">devflow/history/features/088-sync-upstream.md</span>
+              <span class="ml-auto text-[#70d5a9]">บันทึกประวัติแล้ว</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Local Dashboard Showcase -->
+    <section id="dashboard" class="page-grid relative overflow-hidden border-y border-[var(--line)] py-24 lg:py-32">
+      <div class="absolute inset-0 bg-[rgba(245,246,243,.78)]"></div>
+      <div class="relative mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div class="dashboard-tilter" data-dashboard-tilter>
+            <div class="dashboard-tilter__frame">
+              <div class="dashboard-tilter__page font-mono text-xs">
+                <div class="flex items-center justify-between border-b border-[#2c3532] pb-3 text-[#9ba7a2]">
+                  <span class="text-white font-bold">NEXUS-DEVFLOW DASHBOARD</span>
+                  <span class="text-[#70d5a9]">● LIVE (PORT 4200)</span>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-3">
+                  <div class="rounded border border-[#2c3532] bg-[#171e1c] p-3">
+                    <div class="text-[10px] text-[#76a8ff]">ACTIVE TASK RUN</div>
+                    <div class="mt-1 text-white font-semibold">089-clone-ai-blueprint-ui</div>
+                    <div class="mt-2 text-[10px] text-[#70d5a9]">Stage: /implement</div>
+                  </div>
+                  <div class="rounded border border-[#2c3532] bg-[#171e1c] p-3">
+                    <div class="text-[10px] text-[#e8bd72]">FINDINGS LEDGER</div>
+                    <div class="mt-1 text-white font-semibold">0 ข้อผิดพลาด P0/P1</div>
+                    <div class="mt-2 text-[10px] text-[#9ba7a2]">สถานะ: CLEAN</div>
+                  </div>
+                </div>
+                <div class="mt-3 rounded border border-[#2c3532] bg-[#171e1c] p-3">
+                  <div class="text-[10px] text-[#7f8c87]">ROADMAP PROGRESS</div>
+                  <div class="mt-1 flex items-center gap-2">
+                    <div class="h-2 flex-1 rounded bg-[#202a27] overflow-hidden">
+                      <div class="h-full bg-[var(--blue)] w-[88%]"></div>
+                    </div>
+                    <span class="text-white text-[10px]">88%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="max-w-xl">
+            <div class="eyebrow">แดชบอร์ดในเครื่อง (Local Dashboard)</div>
+            <h2 class="mt-6 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">เห็นภาพรวมทั้งโปรเจกต์ได้ในพริบตาเดียว</h2>
+            <p class="mt-6 text-sm leading-7 text-[var(--ink-soft)]">
+              เปิดหน้าแดชบอร์ดแบบเรียลไทม์เพื่อดูความคืบหน้าของ Roadmap, โฟลเดอร์งานปัจจุบัน, บันทึกข้อผิดพลาด (Findings), สถานะ Git, และคำสั่งถัดไปที่ต้องทำ เรนเดอร์ตรงจากไฟล์ Markdown ในเครื่อง โหลดเร็ว 0ms
+            </p>
+
+            <div class="mt-8 space-y-4 border-y border-[var(--line)] py-6">
+              <div class="grid grid-cols-[90px_1fr] gap-4">
+                <div class="measure-label pt-1">Roadmap</div>
+                <p class="text-sm leading-6 text-[var(--ink-soft)]">ติดตามสถานะฟีเจอร์ที่เสร็จแล้ว ฟีเจอร์ปัจจุบัน และงานที่รออยู่ในคิว</p>
+              </div>
+              <div class="grid grid-cols-[90px_1fr] gap-4">
+                <div class="measure-label pt-1">Health</div>
+                <p class="text-sm leading-6 text-[var(--ink-soft)]">ตรวจจับคำเตือน ข้อผิดพลาดจากการตรวจสอบ ไฟล์ที่ยังไม่ได้คอมมิต และกิ่ง Git</p>
+              </div>
+              <div class="grid grid-cols-[90px_1fr] gap-4">
+                <div class="measure-label pt-1">Next</div>
+                <p class="text-sm leading-6 text-[var(--ink-soft)]">กลับมาทำต่อหลังจากหยุดพัก และรู้ทันทีว่าคำสั่งใดจะพางานไปข้างหน้า</p>
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <code class="rounded-lg border border-[var(--line-strong)] bg-[var(--ink)] px-4 py-3 font-mono text-xs text-white">
+                <span class="text-[#8cabef]">$</span> npx nexus-devflow dashboard
+              </code>
+              <a class="text-sm font-semibold text-[var(--blue)] hover:text-[var(--blue-dark)]" href="./docs/getting-started/">อ่านคู่มือฉบับเต็ม →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why DevFlow Holds -->
+    <section class="border-b border-[var(--line)] bg-[var(--paper-bright)] py-24 lg:py-32">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="max-w-3xl">
+          <div class="eyebrow">ทำไม DevFlow ถึงคุมคุณภาพได้จริง</div>
+          <p class="mt-6 font-mono text-sm leading-6 text-[var(--blue-dark)]">โปรเจกต์ AI จะหลุดสโคปเสมอ หากการตัดสินใจและหลักฐานอยู่แค่ในหน้าต่างแชต</p>
+          <h2 class="mt-4 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">โครงสร้างที่ช่วยคุมงาน โดยไม่แทรกแซงโค้ดของคุณ</h2>
+          <p class="mt-5 max-w-2xl text-lg leading-8 text-[var(--ink-soft)]">
+            DevFlow คือระบบควบคุมเวิร์กโฟลว์ของ AI ไม่ใช่เฟรมเวิร์กของแอปพลิเคชัน โค้ด สถาปัตยกรรม และการตัดสินใจทางเทคนิคทั้งหมดยังเป็นของคุณ 100%
+          </p>
+        </div>
+
+        <div class="mt-16 grid gap-5 lg:grid-cols-3">
+          <article class="hover-lift rounded-2xl border border-[var(--line)] bg-white p-7">
+            <div class="flex h-11 w-11 items-center justify-center rounded-lg font-mono text-sm bg-[var(--blue-soft)] text-[var(--blue)]">01</div>
+            <h3 class="mt-12 text-xl font-semibold">สเปกชัดเจนก่อนเขียนโค้ด</h3>
+            <p class="mt-3 text-sm leading-6 text-[var(--ink-soft)]">AI จะเขียน Living Spec ให้เสร็จและหยุดรอ คุณอนุมัติขอบเขตและ Data Contract ก่อนเริ่มเขียนโค้ดแม้แต่บรรทัดเดียว</p>
+            <div class="mt-8 border-t border-[var(--line)] pt-4 font-mono text-xs text-[var(--blue-dark)]">/feature → review → /implement</div>
+          </article>
+
+          <article class="hover-lift rounded-2xl border border-[var(--line)] bg-white p-7">
+            <div class="flex h-11 w-11 items-center justify-center rounded-lg font-mono text-sm bg-[var(--green-soft)] text-[var(--green)]">02</div>
+            <h3 class="mt-12 text-xl font-semibold">สถานะทั้งหมดอยู่ในไฟล์</h3>
+            <p class="mt-3 text-sm leading-6 text-[var(--ink-soft)]">The 3-Pillars (อนาคต, ปัจจุบัน, อดีต) จัดเก็บแผนงาน งานปัจจุบัน และประวัติศาสตร์ไว้ในไฟล์ Markdown ที่อ่านเข้าใจง่าย</p>
+            <div class="mt-8 border-t border-[var(--line)] pt-4 font-mono text-xs text-[var(--green)]">devflow/context/{xxx-slug}/*.md</div>
+          </article>
+
+          <article class="hover-lift rounded-2xl border border-[var(--line)] bg-white p-7">
+            <div class="flex h-11 w-11 items-center justify-center rounded-lg font-mono text-sm bg-[var(--amber-soft)] text-[var(--amber)]">03</div>
+            <h3 class="mt-12 text-xl font-semibold">ประตูกั้นคุณภาพหยุดยั้งบั๊ก</h3>
+            <p class="mt-3 text-sm leading-6 text-[var(--ink-soft)]">AI ปฏิบัติตามวินัย TDD รันการทดสอบจริง และบันทึกหลักฐานเชิงประจักษ์ก่อนโค้ดจะถูกผสานเข้า main</p>
+            <div class="mt-8 border-t border-[var(--line)] pt-4 font-mono text-xs text-[var(--amber)]">/check → evidence → /complete</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Commands Matrix (32+ Skills) -->
+    <section id="commands" class="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
+      <div class="text-center">
+        <div class="eyebrow">ชุดคำสั่งที่มีขอบเขตชัดเจน</div>
+        <h2 class="mx-auto mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">เลือกใช้ทักษะของ AI ให้ถูกงาน ถูกเวลา</h2>
+        <p class="mt-6 text-[var(--ink-soft)]">
+          ครอบคลุมกว่า 32+ Agent Skills มาตรฐานสำหรับ Google Antigravity, Claude Code, Codex, Copilot และ OpenCode
+        </p>
+      </div>
+
+      <div class="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Build -->
+        <div class="rounded-2xl border p-6 border-[var(--blue)] bg-[var(--blue-soft)]">
+          <span class="mono text-xs text-[var(--blue-dark)]">วงจรหลักการพัฒนา (Build Core Loop)</span>
+          <div class="mt-8 space-y-5">
+            <div>
+              <strong class="mono text-sm text-[var(--blue-dark)]">/feature</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">เขียน Living Spec ในโฟลเดอร์งานแยกอิสระ</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue-dark)]">/implement</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">พัฒนาด้วยวินัย Strict TDD ทีละขั้นตอน</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue-dark)]">/check</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">พิสูจน์พฤติกรรมจริง หรือสร้างคู่มือทดสอบ</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue-dark)]">/complete</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">บันทึกประวัติศาสตร์ถาวรและ Squash-merge</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Understand & Review -->
+        <div class="rounded-2xl border p-6 border-[var(--line)] bg-[var(--paper-bright)]">
+          <span class="mono text-xs text-[var(--ink-muted)]">ทำความเข้าใจ & ตรวจทาน (Understand & Review)</span>
+          <div class="mt-8 space-y-5">
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/explore</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">คิดวิเคราะห์เปรียบเทียบไอเดียแบบ Read-Only</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/brief</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">พรีวิวขอบเขตและผลกระทบของฟีเจอร์ในแผน</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/status</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ดูความคืบหน้า สเปกปัจจุบัน และขั้นตอนถัดไป</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/debug</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">วินิจฉัยหาสาเหตุของบั๊กโดยไม่แก้โค้ดสุ่มสี่สุ่มห้า</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/audit</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ตรวจทานคุณภาพโค้ดและลงทะเบียนข้อผิดพลาด</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/doctor</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ตรวจสุขภาพระบบและการเบี่ยงเบนของเวิร์กโฟลว์</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan & Setup -->
+        <div class="rounded-2xl border p-6 border-[var(--line)] bg-[var(--paper-bright)]">
+          <span class="mono text-xs text-[var(--ink-muted)]">วางแผน & ตั้งค่าระบบ (Plan & Setup)</span>
+          <div class="mt-8 space-y-5">
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/onboard</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ปรับแต่งโปรเจกต์ใหม่ให้เข้ากับ DevFlow</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/adopt</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">สำรวจโค้ดเดิมและสร้างแผนงานสะท้อนความจริง</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/discovery</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">สำรวจและวิเคราะห์ทิศทางก่อนเปิดงานจริง</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/overview</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">รวมแผนงานเป็น Living Source of Truth</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/analyze</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">SA ถอดความต้องการจากไฟล์ Word/PDF/Excel</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/grill</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ซักถามเชิงลึกเพื่อบันทึก ADR และ Glossary</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recover & Release -->
+        <div class="rounded-2xl border p-6 border-[var(--line)] bg-[var(--paper-bright)]">
+          <span class="mono text-xs text-[var(--ink-muted)]">กู้คืน & ส่งมอบ (Recover & Release)</span>
+          <div class="mt-8 space-y-5">
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/fix</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ทำสเปกและแก้บั๊กฉุกเฉินอย่างเป็นระบบ</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/rollback</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ย้อนกลับฟีเจอร์อย่างปลอดภัยโดยไม่ทำลายประวัติ</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/release</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ตรวจความพร้อมสำหรับการ Deploy สู่ Production</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Automation -->
+        <div class="rounded-2xl border p-6 border-[var(--line)] bg-[var(--paper-bright)]">
+          <span class="mono text-xs text-[var(--ink-muted)]">พัฒนาอัตโนมัติ (Autonomous Delivery)</span>
+          <div class="mt-8 space-y-5">
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/autopilot</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">รัน 1 ฟีเจอร์ผ่านเกณฑ์คุณภาพแล้วหยุดรอตรวจ</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/continuous</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">พัฒนาตามคิวฟีเจอร์ต่อเนื่องแบบอัตโนมัติ</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Companions -->
+        <div class="rounded-2xl border p-6 border-[var(--line)] bg-[var(--paper-bright)]">
+          <span class="mono text-xs text-[var(--ink-muted)]">เครื่องมือเสริมพิเศษ (Companions)</span>
+          <div class="mt-8 space-y-5">
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/archify</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">สร้างไดอะแกรมสถาปัตยกรรม HTML แบบอินเตอร์แอคทีฟ</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/bughunter</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ตรวจหาช่องโหว่ความปลอดภัยพร้อมหลักฐาน</p>
+            </div>
+            <div>
+              <strong class="mono text-sm text-[var(--blue)]">/vendor</strong>
+              <p class="mt-1 text-xs text-[var(--ink-soft)]">ดึง Git Repo ภายนอกมาสร้างเป็น Custom Skills</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities Section -->
+    <section id="capabilities" class="page-grid relative overflow-hidden border-y border-[var(--line)] py-24 lg:py-32">
+      <div class="absolute inset-0 bg-[rgba(245,246,243,.86)]"></div>
+      <div class="relative mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="grid gap-6 lg:grid-cols-[1fr_.62fr] lg:items-end">
+          <div class="max-w-3xl">
+            <div class="eyebrow">ความสามารถเพิ่มเติม</div>
+            <h2 class="mt-6 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">เพิ่มเกณฑ์ตรวจสอบคุณภาพเมื่อโปรเจกต์ของคุณต้องการ</h2>
+          </div>
+          <p class="max-w-xl text-sm leading-6 text-[var(--ink-soft)]">
+            DevFlow เริ่มต้นด้วยความเรียบง่าย เพิ่มการทดสอบ Unit Test เมื่อเริ่มมี Business Logic, เชื่อมต่อการตรวจสอบอัตโนมัติบน GitHub Actions, และเตรียมความพร้อมสำหรับ Deploy เมื่อพร้อมเปิดตัว
+          </p>
+        </div>
+
+        <div class="mt-14 grid gap-6 lg:grid-cols-2">
+          <!-- CI & Testing -->
+          <article class="hover-lift overflow-hidden rounded-2xl border border-[var(--line-strong)] bg-[var(--paper-bright)] shadow-[var(--shadow-sm)]">
+            <div class="flex items-center justify-between border-b border-[var(--line)] bg-[var(--green-soft)] px-6 py-4 font-mono text-[10px] uppercase tracking-[.1em] text-[var(--green)]">
+              <span>ทุกช่วงเวลา</span><span>Testing + CI</span>
+            </div>
+            <div class="p-7 sm:p-9">
+              <div class="font-mono text-2xl font-semibold text-[var(--green)]">/setup-tests + /ci</div>
+              <h3 class="mt-7 text-3xl font-semibold tracking-[-0.035em]">สูตรการตรวจสอบเดียวกันทั้งในเครื่องและบน CI</h3>
+              <p class="mt-4 max-w-xl text-sm leading-6 text-[var(--ink-soft)]">
+                เพิ่ม Test Runner ที่เข้ากับสแตกของคุณเมื่อจำเป็น จากนั้นให้ DevFlow กำหนดสูตรคำสั่ง Verify เพียงหนึ่งเดียวจาก Typecheck, Tests, และ Build ซึ่ง GitHub Actions จะรันสูตรนี้โดยอัตโนมัติ
+              </p>
+              <div class="mt-9 rounded-xl border border-[var(--line)] bg-[var(--surface-muted)] p-4">
+                <div class="grid gap-3 text-[11px] sm:grid-cols-4">
+                  <div><span class="font-mono text-[var(--green)]">01</span><div class="mt-1 font-medium">ตรวจจับคำสั่ง</div></div>
+                  <div><span class="font-mono text-[var(--green)]">02</span><div class="mt-1 font-medium">เพิ่มการทดสอบ</div></div>
+                  <div><span class="font-mono text-[var(--green)]">03</span><div class="mt-1 font-medium">กำหนด Verify</div></div>
+                  <div><span class="font-mono text-[var(--green)]">04</span><div class="mt-1 font-medium">เชื่อมต่อ CI</div></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Release Readiness -->
+          <article class="hover-lift overflow-hidden rounded-2xl border border-[#2c3532] bg-[var(--ink)] text-white shadow-[var(--shadow-lg)]">
+            <div class="flex items-center justify-between border-b border-[#2c3532] bg-[#171e1c] px-6 py-4 font-mono text-[10px] uppercase tracking-[.1em] text-[#76a8ff]">
+              <span>หลังคำสั่ง /complete</span><span>Production & Hosting</span>
+            </div>
+            <div class="p-7 sm:p-9">
+              <div class="font-mono text-2xl font-semibold text-[#76a8ff]">/release</div>
+              <h3 class="mt-7 text-3xl font-semibold tracking-[-0.035em]">เตรียมความพร้อมก่อนขึ้น Production</h3>
+              <p class="mt-4 max-w-xl text-sm leading-6 text-[#aab3b0]">
+                DevFlow ตรวจสอบสคริปต์ Build, คำสั่ง Start, โฟลเดอร์ Output, ตัวแปร Environment Variables, และ Health Check สำหรับ Render, Vercel หรือ Docker
+              </p>
+              <div class="mt-9 rounded-xl border border-[#35403d] bg-[#171e1c] p-4">
+                <div class="grid gap-3 text-[11px] sm:grid-cols-4">
+                  <div><span class="font-mono text-[#76a8ff]">01</span><div class="mt-1 font-medium">เลือกเป้าหมาย</div></div>
+                  <div><span class="font-mono text-[#76a8ff]">02</span><div class="mt-1 font-medium">รันการตรวจสอบ</div></div>
+                  <div><span class="font-mono text-[#76a8ff]">03</span><div class="mt-1 font-medium">เตรียมคอนฟิก</div></div>
+                  <div><span class="font-mono text-[#76a8ff]">04</span><div class="mt-1 font-medium">รีวิวก่อนปล่อย</div></div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
+      <div class="grid gap-14 lg:grid-cols-[.75fr_1.25fr]">
+        <div>
+          <div class="eyebrow">ความแตกต่างในระดับเลเยอร์</div>
+          <h2 class="mt-6 text-4xl font-semibold tracking-[-0.045em]">ใช้ Stack เดิมของคุณ<br>เพิ่มเติมด้วยเวิร์กโฟลว์ระดับมืออาชีพ</h2>
+          <p class="mt-5 text-sm leading-6 text-[var(--ink-soft)]">
+            Nexus-DevFlow ไม่ได้มาแข่งกับ Boilerplate หรือ AI Agent แต่มาเป็นระบบความจำถาวรและเกณฑ์กั้นคุณภาพที่ช่วยให้ AI ทำงานได้อย่างแม่นยำ
+          </p>
+        </div>
+        <div class="overflow-x-auto rounded-2xl border border-[var(--line)] bg-white shadow-sm">
+          <table class="w-full min-w-[650px] text-left text-sm">
+            <thead class="border-b border-[var(--line)] bg-[var(--surface-muted)] text-xs text-[var(--ink-muted)]">
+              <tr>
+                <th class="p-5 font-medium">ตัวเลือก</th>
+                <th class="p-5 font-medium">สิ่งที่คุณได้รับ</th>
+                <th class="p-5 font-medium">สิ่งที่ยังขาดหายไป</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--line)]">
+              <tr>
+                <td class="p-5 font-semibold">App Boilerplate</td>
+                <td class="p-5 text-[var(--ink-soft)]">โค้ดเริ่มต้นและรูปแบบพื้นฐาน</td>
+                <td class="p-5 text-[var(--ink-soft)]">แผนงานผลิตภัณฑ์และประวัติการพัฒนา</td>
+              </tr>
+              <tr>
+                <td class="p-5 font-semibold">Chat-only AI Coding</td>
+                <td class="p-5 text-[var(--ink-soft)]">สร้างโค้ดได้รวดเร็วในตอนแรก</td>
+                <td class="p-5 text-[var(--ink-soft)]">การควบคุมสถานะถาวรและป้องกันการพังซ้ำซ้อน</td>
+              </tr>
+              <tr class="bg-[var(--blue-soft)]">
+                <td class="p-5 font-semibold text-[var(--blue-dark)]">Nexus-DevFlow</td>
+                <td class="p-5 text-[var(--ink-soft)]">เลเยอร์ควบคุมเวิร์กโฟลว์ด้วยไฟล์เอกสารและ TDD</td>
+                <td class="p-5 text-[var(--ink-soft)]">โค้ดและการตัดสินใจทั้งหมดยังเป็นของคุณ 100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion -->
+    <section id="faq" class="border-t border-[var(--line)] bg-[var(--paper-bright)] py-24 lg:py-32">
+      <div class="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-[.65fr_1.35fr] lg:px-8">
+        <div>
+          <div class="eyebrow">คำถามที่พบบ่อย (FAQ)</div>
+          <h2 class="mt-6 text-4xl font-semibold tracking-[-0.045em]">ข้อสงสัยก่อนเริ่มใช้งาน</h2>
+        </div>
+        <div class="divide-y divide-[var(--line)] border-y border-[var(--line)]">
+          <details class="group py-6" open>
+            <summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+              นี่คือ SaaS Starter Kit หรือไม่?
+              <span class="mono text-[var(--blue)] text-lg">+</span>
+            </summary>
+            <p class="mt-4 max-w-2xl text-sm leading-6 text-[var(--ink-soft)]">
+              ไม่ใช่ นี่คือการติดตั้งไฟล์เวิร์กโฟลว์และทักษะของ AI Agent ไม่ใช่โค้ด Auth, Database หรือ UI ให้สร้างแอปพลิเคชันที่คุณต้องการก่อน แล้วจึงติดตั้ง DevFlow
+            </p>
+          </details>
+
+          <details class="group py-6">
+            <summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+              ล็อกอินหรือผูกขาดกับ AI ค่ายใดค่ายหนึ่งหรือไม่?
+              <span class="mono text-[var(--blue)] text-lg">+</span>
+            </summary>
+            <p class="mt-4 max-w-2xl text-sm leading-6 text-[var(--ink-soft)]">
+              ไม่เลย สถานะของโปรเจกต์อยู่ในไฟล์ Markdown ธรรมดา รองรับ Google Antigravity, Claude Code, OpenAI Codex, GitHub Copilot, Gemini CLI, และ OpenCode
+            </p>
+          </details>
+
+          <details class="group py-6">
+            <summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+              จำเป็นต้องใช้คำสั่งทั้งหมดหรือไม่?
+              <span class="mono text-[var(--blue)] text-lg">+</span>
+            </summary>
+            <p class="mt-4 max-w-2xl text-sm leading-6 text-[var(--ink-soft)]">
+              ไม่จำเป็น วงจรหลักมีเพียง 4 คำสั่งคือ <code>/feature</code>, <code>/implement</code>, <code>/check</code>, และ <code>/complete</code> ส่วนคำสั่งอื่นๆ เป็นเครื่องมือเสริมสำหรับสถานการณ์เฉพาะ
+            </p>
+          </details>
+
+          <details class="group py-6">
+            <summary class="flex cursor-pointer list-none items-center justify-between font-semibold">
+              สามารถใช้กับโปรเจกต์ที่มีอยู่เดิมแล้วได้หรือไม่?
+              <span class="mono text-[var(--blue)] text-lg">+</span>
+            </summary>
+            <p class="mt-4 max-w-2xl text-sm leading-6 text-[var(--ink-soft)]">
+              ได้แน่นอน เพียงรันคำสั่ง <code>/adopt</code> ระบบจะสำรวจโค้ดจริงและสร้างแผนงานที่สอดคล้องกับฟีเจอร์ที่คุณส่งมอบไปแล้ว
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA Banner -->
+    <section class="page-grid relative overflow-hidden border-t border-[var(--line)] py-24 lg:py-32">
+      <div class="absolute inset-0 bg-[rgba(245,246,243,.75)]"></div>
+      <div class="relative mx-auto max-w-4xl px-5 text-center">
+        <img src="./docs/brand/mark-light.svg" alt="DevFlow" class="mx-auto h-12 w-12">
+        <h2 class="mt-8 text-balance text-4xl font-semibold tracking-[-0.05em] sm:text-6xl">สร้างซอฟต์แวร์ได้เร็วกว่า โดยไม่สูญเสียการควบคุม</h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-[var(--ink-soft)]">
+          ติดตั้ง Nexus-DevFlow ลงในแอปพลิเคชันที่คุณสร้างไว้ โค้ดยังเป็นของคุณ และเวิร์กโฟลว์จะชัดเจนและปลอดภัยยิ่งขึ้น
+        </p>
+        <div class="mx-auto mt-9 flex max-w-xl flex-col gap-3 sm:flex-row">
+          <button class="flex flex-1 items-center justify-between rounded-xl bg-[var(--ink)] px-5 py-4 font-mono text-xs text-white hover:bg-[var(--blue)] transition-colors" type="button" data-copy-command="npx -y nexus-devflow -y">
+            <span><span class="text-[#7f8c87]">$</span> npx -y nexus-devflow -y</span>
+            <span data-copy-label data-default-label="คัดลอก">คัดลอก</span>
+          </button>
+          <a href="./docs/getting-started/" class="rounded-xl border border-[var(--line-strong)] bg-white px-6 py-4 text-sm font-medium hover:border-[var(--ink)] transition-colors">อ่านคู่มือการใช้งาน</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container site-footer-inner">
+      <div class="site-footer-brand">
+        <img src="./docs/brand/logo-light.svg" alt="Nexus-DevFlow">
+        <span>เลเยอร์เวิร์กโฟลว์แบบโอเพนซอร์สสำหรับการพัฒนาซอฟต์แวร์ด้วย AI</span>
+      </div>
+      <div class="site-footer-links">
+        <a href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="./docs/getting-started/">คู่มือ (Docs)</a>
+        <a href="./docs/updates/">อัปเดต (Updates)</a>
+        <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">สัญญาอนุญาต MIT</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="./docs/js/main.js"></script>
+</body>
+</html>

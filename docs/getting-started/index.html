@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เริ่มต้นใช้งาน - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="คู่มือเริ่มต้นอย่างรวดเร็วสำหรับการติดตั้งและตั้งค่า Nexus-DevFlow ลงในโปรเจกต์ของคุณ">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/getting-started/">
+  <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Local Standalone Style (Zero External Dependencies) -->
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="docs-body">
+  <a class="skip-link" href="#docs-content">ข้ามไปยังเนื้อหาหลัก</a>
+
+  <!-- Docs Header -->
+  <header class="docs-header">
+    <div class="docs-header-inner">
+      <div class="docs-brand">
+        <a href="../" aria-label="Nexus-DevFlow หน้าแรก">
+          <img src="../brand/logo-light.svg" alt="Nexus-DevFlow" class="site-logo">
+        </a>
+        <span class="docs-badge">คู่มือ</span>
+      </div>
+
+      <div class="docs-header-actions">
+        <a class="docs-header-link" href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.27-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a href="../" class="button button-primary text-xs" style="min-height:36px; padding: 0.4rem 0.8rem;">กลับหน้าแรก</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Docs Shell (3 Columns) -->
+  <div class="docs-shell">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <nav aria-label="Documentation sidebar">
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">ภาพรวม (Overview)</div>
+          <a class="docs-nav-link active" href="./">เริ่มต้นใช้งาน (Getting Started)</a>
+          <a class="docs-nav-link" href="#core-architecture">สถาปัตยกรรมหลัก</a>
+          <a class="docs-nav-link" href="#tool-adapters">อะแดปเตอร์เครื่องมือ AI</a>
+        </div>
+
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">สถาปัตยกรรม 3 เสาหลัก (3-Pillars)</div>
+          <a class="docs-nav-link" href="#future-backlog">1. อนาคต (Future / Backlog)</a>
+          <a class="docs-nav-link" href="#present-context">2. ปัจจุบัน (Present / Living Spec)</a>
+          <a class="docs-nav-link" href="#past-history">3. อดีต (Past / History)</a>
+        </div>
+
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">วงจร 4 ขั้นตอนการพัฒนา</div>
+          <a class="docs-nav-link" href="#feature-stage">/feature (Living Spec)</a>
+          <a class="docs-nav-link" href="#implement-stage">/implement (Strict TDD)</a>
+          <a class="docs-nav-link" href="#check-stage">/check (Senior QA Proof)</a>
+          <a class="docs-nav-link" href="#complete-stage">/complete (Archive & Merge)</a>
+        </div>
+
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">ระบบอัตโนมัติ & ทักษะเสริม</div>
+          <a class="docs-nav-link" href="#autopilot">/autopilot</a>
+          <a class="docs-nav-link" href="#continuous">/continuous</a>
+          <a class="docs-nav-link" href="#discovery">/discovery</a>
+          <a class="docs-nav-link" href="#analyze">/analyze (ชุดเครื่องมือ SA)</a>
+          <a class="docs-nav-link" href="#dashboard">แดชบอร์ดในเครื่อง (Web Dashboard)</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-main" id="docs-content">
+      <div class="docs-breadcrumb">คู่มือ / <span>เริ่มต้นใช้งาน</span></div>
+      
+      <h1 class="docs-title">เริ่มต้นใช้งาน Nexus-DevFlow</h1>
+      
+      <p class="docs-lead">
+        เรียนรู้วิธีติดตั้ง Nexus-DevFlow ลงในโปรเจกต์ใหม่หรือโปรเจกต์ที่มีอยู่เดิม และเริ่มพัฒนาฟีเจอร์แรกผ่านวงจร 4-Stage Task-Isolated Living Spec Lifecycle
+      </p>
+
+      <div class="docs-meta">
+        <span class="docs-pill">เวอร์ชัน: v2.18.0</span>
+        <span class="docs-pill">ใช้ได้กับทุก Tech Stack</span>
+        <span class="docs-pill">Task-Isolated Living Spec</span>
+      </div>
+
+      <div class="docs-prose">
+        <!-- Section: Overview -->
+        <section id="overview">
+          <h2>ภาพรวม</h2>
+          <p>
+            Nexus-DevFlow ติดตั้งเลเยอร์เวิร์กโฟลว์อัจฉริยะสำหรับ AI Coding Agent ลงในโปรเจกต์ของคุณ โดยไม่ดัดแปลงสถาปัตยกรรมของแอปพลิเคชัน และไม่มีภาระ Runtime เพิ่มเติม ช่วยให้ AI Coding Agent (Google Antigravity, Claude Code, OpenAI Codex, GitHub Copilot, OpenCode) มีความจำถาวรและขอบเขตการตรวจทานที่ชัดเจน
+          </p>
+
+          <div class="docs-callout success">
+            <div class="docs-callout-label">ไร้การผูกขาด (Zero Lock-In)</div>
+            <p>
+              โค้ดทั้งหมดเป็นของคุณ 100% หากต้องการยกเลิกการใช้งาน DevFlow ในอนาคต แอปพลิเคชันของคุณยังคงทำงานต่อไปได้ตามปกติโดยไม่มี dependency ตกค้าง
+            </p>
+          </div>
+        </section>
+
+        <!-- Section: Prerequisites -->
+        <section id="prerequisites">
+          <h2>สิ่งที่ต้องมีก่อนเริ่มใช้งาน</h2>
+          <ul>
+            <li><strong>Node.js</strong>: เวอร์ชัน 18.17 หรือใหม่กว่า</li>
+            <li><strong>Git</strong>: มีการกำหนดค่า Git repository (<code>git init</code>)</li>
+            <li><strong>AI Coding Assistant</strong>: หนึ่งในเครื่องมือที่รองรับ (Google Antigravity IDE, Claude Code, OpenAI Codex CLI, GitHub Copilot, Gemini CLI หรือ OpenCode)</li>
+          </ul>
+        </section>
+
+        <!-- Section: Installation -->
+        <section id="installation">
+          <h2>ขั้นตอนการติดตั้ง</h2>
+          
+          <div class="docs-step">
+            <div class="docs-step-number">01</div>
+            <div>
+              <h3>สร้างโครงร่างแอปพลิเคชัน (Scaffold)</h3>
+              <p>สร้างแอปพลิเคชันของคุณด้วยภาษาและเฟรมเวิร์กที่ต้องการก่อน</p>
+              <pre><code><span class="syntax-muted"># ตัวอย่างสร้างด้วย Vite</span>
+npm create vite@latest my-app
+cd my-app
+git init</code></pre>
+            </div>
+          </div>
+
+          <div class="docs-step">
+            <div class="docs-step-number">02</div>
+            <div>
+              <h3>ติดตั้ง Nexus-DevFlow</h3>
+              <p>รันคำสั่งติดตั้งเพื่อวางเลเยอร์เวิร์กโฟลว์ลงในโปรเจกต์ของคุณ</p>
+              <pre><code>npx -y nexus-devflow -y</code></pre>
+            </div>
+          </div>
+
+          <div class="docs-step">
+            <div class="docs-step-number">03</div>
+            <div>
+              <h3>ปรับแต่งเวิร์กโฟลว์ให้เข้ากับโปรเจกต์</h3>
+              <p>ในหน้าต่างแชตของ AI assistant รันคำสั่ง <code>/onboard</code> (สำหรับโปรเจกต์ใหม่) หรือ <code>/adopt</code> (สำหรับโปรเจกต์เดิมที่มีอยู่แล้ว)</p>
+              <pre><code>/onboard</code></pre>
+            </div>
+          </div>
+
+          <div class="docs-step">
+            <div class="docs-step-number">04</div>
+            <div>
+              <h3>รวบรวมบริบทโปรเจกต์</h3>
+              <p>สร้าง Living Source of Truth ในไฟล์ <code>devflow/context/project-overview.md</code></p>
+              <pre><code>/overview</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: First Feature Loop -->
+        <section id="first-feature">
+          <h2>พัฒนาฟีเจอร์แรกของคุณ</h2>
+          <p>
+            ทุกการพัฒนาใน Nexus-DevFlow ดำเนินการผ่านวงจร 4 ขั้นตอนที่รัดกุมและปลอดภัย:
+          </p>
+
+          <pre><code>/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete</code></pre>
+
+          <h3>1. ร่าง Living Spec ด้วยคำสั่ง <code>/feature</code></h3>
+          <p>
+            กำหนด Task Run ID เฉพาะ (เช่น <code>devflow/context/{xxx-slug}/</code>) และร่าง <code>spec.md</code> ก่อนเริ่มเขียนโค้ด:
+          </p>
+          <pre><code>/feature 1</code></pre>
+
+          <h3>2. พัฒนาด้วยวินัย Strict TDD ด้วยคำสั่ง <code>/implement</code></h3>
+          <p>
+            ทำงานตามรายการงานด้วยวินัย Red-Green-Refactor พร้อมบันทึกผลการทดสอบเชิงประจักษ์:
+          </p>
+          <pre><code>/implement 089</code></pre>
+
+          <h3>3. ตรวจสอบคุณภาพระดับ Senior QA ด้วยคำสั่ง <code>/check</code></h3>
+          <p>
+            รันเมทริกซ์การตรวจสอบหลายมิติ (Typecheck, Lint, Test suites, manual proof):
+          </p>
+          <pre><code>/check 089</code></pre>
+
+          <h3>4. บันทึกประวัติและผสานโค้ดด้วยคำสั่ง <code>/complete</code></h3>
+          <p>
+            จัดเก็บเอกสารลงใน <code>devflow/history/features/{xxx-slug}.md</code>, ลบโฟลเดอร์ทำงานชั่วคราว และทำการ Squash-merge:
+          </p>
+          <pre><code>/complete 089</code></pre>
+        </section>
+
+        <!-- Section: Next Steps -->
+        <section id="next-steps">
+          <h2>ขั้นตอนถัดไป</h2>
+          <div class="docs-card-grid">
+            <a class="docs-card hover-lift" href="../#commands">
+              <span class="docs-card-label">COMMAND SUITE</span>
+              <h3>สำรวจกว่า 32+ คำสั่ง</h3>
+              <p>ค้นพบการวิเคราะห์ SA, การจัดสถาปัตยกรรม, การตรวจความปลอดภัย และ CI อัตโนมัติ</p>
+            </a>
+            <a class="docs-card hover-lift" href="../#dashboard">
+              <span class="docs-card-label">LOCAL DASHBOARD</span>
+              <h3>เปิดแดชบอร์ดในเครื่อง</h3>
+              <p>รันหน้าต่างแสดงภาพรวมโปรเจกต์แบบเรียลไทม์ โหลดเร็ว 0ms บนเครื่องของคุณ</p>
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Right Sidebar (TOC) -->
+    <aside class="docs-toc">
+      <div class="docs-toc-title">ในหน้านี้</div>
+      <a href="#overview">ภาพรวม</a>
+      <a href="#prerequisites">สิ่งที่ต้องมีก่อนเริ่ม</a>
+      <a href="#installation">ขั้นตอนการติดตั้ง</a>
+      <a href="#first-feature">พัฒนาฟีเจอร์แรก</a>
+      <a href="#next-steps">ขั้นตอนถัดไป</a>
+    </aside>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container site-footer-inner">
+      <div class="site-footer-brand">
+        <img src="../brand/logo-light.svg" alt="Nexus-DevFlow">
+        <span>เลเยอร์เวิร์กโฟลว์แบบโอเพนซอร์สสำหรับการพัฒนาซอฟต์แวร์ด้วย AI</span>
+      </div>
+      <div class="site-footer-links">
+        <a href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="./">คู่มือ (Docs)</a>
+        <a href="../updates/">อัปเดต (Updates)</a>
+        <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">สัญญาอนุญาต MIT</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/main.js"></script>
+</body>
+</html>
