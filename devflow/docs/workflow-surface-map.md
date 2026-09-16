@@ -1,8 +1,8 @@
-# Workflow Surface Map (32 Core Skills)
+# Workflow Surface Map (33 Core Skills)
 
 This document outlines the active workflow surfaces and command taxonomy in **Nexus-DevFlow 2.13.0**.
 
-The canonical surface contains **32 Core Skills** from
+The canonical surface contains **33 Core Skills** from
 `agent-bundle.manifest.json#core_skills`. Additional Local or Personal Skills
 may exist in a workspace, but are not bundled product commands until explicitly
 promoted into that inventory.
@@ -18,7 +18,7 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-## 2. Canonical Surface Taxonomy (32 Core Skills)
+## 2. Canonical Surface Taxonomy (33 Core Skills)
 
 ### ⚡ 1. The 4-Stage Living Spec Lifecycle Skills (7 Skills)
 | Command | Category | Purpose | Primary Artifact |
@@ -44,11 +44,12 @@ Each command in DevFlow has exactly **one canonical name** and can be invoked ac
 
 ---
 
-### 🧰 3. Workspace Governance & Operations (20 Skills)
+### 🧰 3. Workspace Governance & Operations (21 Skills)
 | Command | Category | Purpose |
 | :--- | :--- | :--- |
 | `devflow` | Navigation | Flagship interactive guide, state inspector, and intent router. |
 | `doctor` | Diagnostics | Read-only health check for setup, adapters, and workflow drift. |
+| `explore` | Navigation | Fast read-only query answering and codebase orientation without writing files. |
 | `overview` | Context | Regenerate and validate `project-overview.md` from planning docs. |
 | `brief` | Planning | Scope and dependency briefing before speccing a feature. |
 | `debug` | Diagnostics | Scientific six-phase diagnosis using a deterministic red-capable feedback loop. |

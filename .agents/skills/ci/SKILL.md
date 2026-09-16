@@ -1,9 +1,12 @@
 ---
 name: ci
-description: "[devflow] Set up or normalize one project Verify command and matching GitHub Actions checks while preserving existing CI. Use for /ci, GitHub Actions setup, pull-request checks, automatic checks, or aligning verification."
+description: "[devflow] Set up or normalize one project Verify command and matching GitHub Actions checks while preserving existing CI, with an optional local pre-push hook. Use for /ci, GitHub Actions setup, pull-request checks, automatic checks, pre-push hooks, or aligning verification."
+argument-hint: "[--hook | --no-hook]"
 ---
 
 # ci - set up automatic GitHub checks
+
+**Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
 **First action:** Before project inspection, preflight, or any other tool call,
 publish `running` to `devflow/.state/run.json` using the dashboard activity
@@ -15,7 +18,7 @@ Where this sits in the workflow:
     (project commands)     (setup)    (same recipe)      (pull requests)
 
 This skill gives local work and GitHub one shared automated command. It is an
-optional setup task, not a requirement for using the Blueprint.
+optional setup task, not a requirement for using DevFlow.
 
 Keep the beginner explanation simple:
 
@@ -23,9 +26,12 @@ Keep the beginner explanation simple:
 - **GitHub Actions is the worker.** It runs the same recipe automatically.
 - **A GitHub ruleset is the lock.** That optional remote setting can require the
   worker to report green before merge.
+- **A pre-push hook is the early warning.** That optional local setting runs the
+  recipe before a push leaves the machine. It is a convenience, not the lock:
+  `git push --no-verify` skips it.
 
-This skill configures the recipe and worker. It never changes the remote ruleset,
-pushes, publishes, deploys, or adds local git hooks.
+This skill configures the recipe and worker, and adds the hook only when the
+user opts in. It never changes the remote ruleset, pushes, publishes, or deploys.
 
 ## Input
 
@@ -47,7 +53,7 @@ Read enough to identify the real project setup:
 - `.github/workflows/` and any documented external CI
 - git's current branch, configured default branch, and remotes when available
 
-Do not assume npm, Node.js, `main`, or GitHub from the Blueprint template. Do not
+Do not assume npm, Node.js, `main`, or GitHub from the DevFlow template. Do not
 run installs or edit files during inspection.
 
 If an existing workflow already provides equivalent pull-request checks, explain
@@ -107,6 +113,33 @@ before writing the push trigger instead of guessing. Preserve all other workflow
 files. When another workflow overlaps, report the overlap and ask whether to
 reuse, align, or leave it alone.
 
+## Step 3b - offer a local pre-push hook (opt-in)
+
+After the workflow exists, ask one question and default to no:
+
+    Also add a local pre-push hook that runs Verify before every push? [y/N]
+
+Skip the question when the request already answered it (for example "/ci with
+hook" or "no hook"). When the answer is no, write nothing and move on. When it
+is yes:
+
+1. Write `.githooks/pre-push` (mode 755) that announces itself and then runs
+   the exact `Verify` command from `AGENTS.md` with `exec`, so the command's
+   exit code is the hook's exit code.
+2. Point git at the folder: `git config core.hooksPath .githooks`.
+3. For JavaScript and TypeScript projects, add a `prepare` script,
+   `git config core.hooksPath .githooks 2>/dev/null || true`, so a fresh
+   install wires the hook without a manual step. The `|| true` keeps installs
+   working where no git checkout exists, such as a deploy build. For other
+   stacks, document the `git config` line in the README instead.
+4. Run the hook once (`.githooks/pre-push`). If it fails, remove what this
+   step added and report the failing subcommand. Never leave a hook the
+   project cannot pass.
+
+The hook and the workflow run the same `Verify` command; if one changes, the
+other changes with it. Say in the report that `--no-verify` bypasses the hook,
+so the GitHub ruleset remains the lock.
+
 ## Step 4 - prove the setup locally
 
 Run the exact documented `Verify` command locally. The individual build, test,
@@ -134,6 +167,7 @@ Finish with a concise setup report:
 - checks included and checks omitted
 - test gate status
 - workflow path and triggers
+- whether a pre-push hook was added, and that `--no-verify` bypasses it
 - local Verify result and whether CI is only prepared locally or confirmed by a
   successful GitHub run
 - files changed
@@ -145,7 +179,7 @@ part of this skill.
 
 ## Interaction with other skills
 
-- `/tests` adds the real test command to an existing Verify command, but never
+- `/setup-tests` or `/test` adds the real test command to an existing Verify command, but never
   creates CI by itself.
 - `/implement`, `/complete`, and `/autopilot` run Verify when it is documented,
   with their existing fallback behavior when it is absent.
@@ -156,8 +190,8 @@ part of this skill.
 
 - Preserve existing CI and custom checks.
 - Never invent tests or install a runner as part of CI setup.
-- Never add git hooks, coverage, browser tests, security scans, or matrices by
-  default.
+- Never add coverage, browser tests, security scans, or matrices by default.
+- Add a git hook only through the Step 3b opt-in, never silently.
 - Never push or change a remote ruleset without separate explicit approval.
 - Keep one exact Verify command shared by local work and GitHub.
 

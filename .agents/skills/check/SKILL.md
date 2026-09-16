@@ -1,126 +1,36 @@
 ---
 name: check
-description: "[devflow] Check the running app, CLI, or server against the active spec's done-when criteria and capture observable pass or fail evidence without editing code. Use for /check, proving behavior before completion beyond builds and tests."
-argument-hint: "[{run-id, number, or name}]"
+description: "[devflow] Check the running app, CLI, or server against the active spec's done-when criteria and capture observable pass or fail evidence without editing source. Use /check to verify real feature behavior, or /check guide [latest|scope] for a read-only manual walkthrough: how to test manually, where to click, expected and incorrect results, or a human review path."
+argument-hint: "[guide] [latest | <step> | <path> | <route>]"
 ---
 
-# check - Dual-Axis Independent Verification Engine
+# check - verify behavior or explain how to try it
 
-$ARGUMENTS
+**Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
+
+## Select the mode before any tool call
+
+- `/check guide` or `$check guide`: generate a read-only manual walkthrough.
+  Pass remaining arguments such as `latest`, a step, a path, route, or command
+  to `reference/guide.md`. Read and follow that reference only. Do not write
+  activity state, run checks or the app, edit files, update spec status, or
+  produce verification receipts.
+- A natural-language request for instructions on how the user can manually test
+  or review a change also selects guide mode. If the request mixes a guide with
+  agent verification, clarify which mode to run first before any activity.
+- `/check` or `$check`, optionally with a verification scope: verify observed
+  behavior against the spec. Follow verification startup below, then read and
+  follow `reference/verify.md` only.
+
+Load only the selected reference. Do not read both references preemptively.
+Guide generation never satisfies a verification gate. The existing
+`qualityGates.regular.tryGuide` and `qualityGates.continuous.tryGuide` keys now
+select `/check guide`; their policy values and automatic invocation rules are
+unchanged. The separate `check` gates continue to select verification mode.
+
+## Verification startup (verification mode only)
 
 **First action:** Before project inspection, preflight, or any other tool call,
 publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
-Where this sits in the workflow:
-
-    /implement  ->  [check]  ->  /complete
-    (built a       (dual-axis       (only once both
-     step or        review with      axes pass with
-     the feature)   empirical proof) evidence)
-
-`/implement` builds and does a quick build-plus-screenshot check inline. `/check` is the rigorous, repeatable gate for when a feature or step needs **empirical proof** on the running app and **two-axis code review** before merging.
-
-It changes no source and commits nothing — it executes, inspects, and reports observed facts.
-
----
-
-## Input
-
-- **Given an ID or name** (e.g. `/check 12`, `/check 012`) -> targets `devflow/context/{xxx-slug}/` and records audit ledger to `{xxx-slug}/findings.md`.
-- **With no argument** (`/check`) -> verifies the active run matching current git branch or single active spec.
-
----
-
-## Hybrid Browser Verification Engine
-
-Nexus-DevFlow uses a **Dual-Layer Browser Verification Hierarchy**:
-
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    🌐 Hybrid Browser Verification Engine                    │
-├──────────────────────────────────────┬──────────────────────────────────────┤
-│ 1. Code-Driven Test Automation (CI)  │ 2. Interactive AI Visual QA (MCP)    │
-│    • Framework: Playwright           │    • Server: MCP browseros-neo       │
-│    • Command: npm run test:browser   │    • URL: http://127.0.0.1:9010/mcp  │
-│    • Purpose: Assertions, Headless,  │    • Purpose: Live DOM Inspection,   │
-│      Regression Suite & Pre-commit   │      Real Screenshot Proofs, /try    │
-└──────────────────────────────────────┴──────────────────────────────────────┘
-```
-
-1. **Layer 1: Code-Driven Repeatable Tests (Playwright)**:
-   - If `AGENTS.md` declares `Browser tests: <command>`, run that exact command as repeatable automated evidence.
-2. **Layer 2: Interactive AI Visual QA (MCP browseros-neo)**:
-   - When the `browseros-neo` MCP server (`http://127.0.0.1:9010/mcp`) is active, use it to inspect the live running app, verify rendered CSS/layout, test click flows, and capture actual screenshot proofs.
-
----
-
-## Step 1 - Build the Dual-Axis Review Matrix
-
-Read the target spec from `devflow/context/{xxx-slug}/spec.md` and `devflow/context/coding-standards.md`. Prepare the inspection criteria across two independent axes:
-
-1. **Axis 1 (Standards & Architecture Criteria)**:
-   - Coding conventions in `coding-standards.md`
-   - Deep Modules discipline (Small interface, deep implementation, clean seams, no leaky abstractions)
-   - Baseline 12 Fowler Code Smells (Primitive obsession, Feature envy, Shotgun surgery, Speculative generality, etc.)
-   - Multi-lane technical gates (Typecheck, test suites, zero secrets, zero P0/P1 findings)
-2. **Axis 2 (Spec Fidelity & Behavioral Observables)**:
-   - Line-by-line Acceptance Criteria (ACs) and "Done When" observables from `devflow/context/{xxx-slug}/spec.md`
-   - Scope Creep detection (Unrequested behavior in the diff)
-   - Missing Requirements detection (Unimplemented edge cases)
-
----
-
-## Step 2 - Get the App Running & Exercise Live Proof
-
-Use the project's real commands (from `AGENTS.md`):
-
-- **Web app**: Start (or reuse) the local dev server. Drive a real browser to relevant routes. If `Browser tests: <command>` is declared, run it. When MCP `browseros-neo` is active, connect to inspect live visual state.
-- **CLI**: Execute commands with representative input fixtures, asserting exit codes and output snapshots.
-- **Server / API**: Hit endpoints with real payloads and assert on HTTP response status and bodies.
-- **Library**: Exercise public interfaces through integration tests or sample scripts.
-
-> [!IMPORTANT]
-> **Evidence or it didn't happen**: Every verdict must be backed by empirical evidence (screenshot, command output, status code, response time). Never assume a pass from reading source code alone.
-
----
-
-## Step 3 - Dual-Axis Independent Report & State Update
-
-Format the report into two distinct, un-merged review axes:
-
-```markdown
-# 🔍 Verification Report: [Feature Name]
-
-## ⚖️ Axis 1: Standards, Architecture & Quality Gate
-
-- **Technical Lanes**:
-  - [pass] Type Safety: `tsc --noEmit` (0 errors)
-  - [pass] Automated Tests: `npm test` (All tests green)
-  - [pass] Browser Tests: `npm run test:browser` (Playwright passed)
-  - [pass] Visual Inspection: MCP browseros-neo verified UI layout & zero console errors
-  - [pass] Security & Hygiene: Zero secrets, sanitized inputs
-  - [pass] Findings Ledger: 0 blocking P0/P1 in `devflow/context/{xxx-slug}/findings.md`
-- **Deep Modules & Architecture**:
-  - [pass] Seam Integrity: Public interfaces remain small, implementation details hidden.
-  - [pass] The Deletion Test: Complexity is concentrated inside the module, not scattered across callers.
-- **Code Smells Assessment**:
-  - [clean] 12 Fowler Code Smells evaluated across git diff: No critical smells detected.
-
-## 🎯 Axis 2: Spec Fidelity & Behavioral Acceptance Gate
-
-Line-by-line verification against `devflow/context/{xxx-slug}/spec.md`:
-- [pass] **AC-1 (<title>)**: <Observed empirical evidence / screenshot path>
-- [pass] **AC-2 (<title>)**: <Observed empirical evidence / terminal output>
-- [fail] **AC-3 (<title>)**: <Exact observed failure with reproduction command>
-- [clean] **Scope Creep Check**: No unrequested features or unnecessary abstractions introduced.
-- [clean] **Completeness Check**: 100% of spec requirements addressed.
-
----
-
-## 🚦 Final Routing & Verdict
-
-- **ALL PASSED**: Both axes green. Update `stage.md` (Passed -> Ready for `/complete`).
-- **ANY FAILURE**: Hand back to `/implement` with exact failure evidence and reproduction steps.
-- **UNVERIFIABLE**: Clearly document the gap and residual risk. Never fabricate a pass.
-```
+contract in `AGENTS.md`, with command `check`. This precedes reading the
+verification reference. Guide mode must skip this startup entirely.

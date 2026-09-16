@@ -111,9 +111,12 @@ When implementing a rollback task, follow the exact safety procedure in `referen
 Work in small reviewable diffs, keeping progress in the selected spec.
 
 1. For logic or behavior changes with the test gate on, use Red-Green-Refactor: write a focused failing test, confirm the assertion fails for the missing behavior, implement the smallest change, then refactor with affected tests green. Preserve the user's existing work. Consult [TDD anti-patterns](tdd-anti-patterns.md) when test design needs it.
+   - **Proportional Engineering**: Add an abstraction, dependency, service, configuration surface, compatibility layer, or security mechanism only when the approved spec or an established repository requirement needs it now. Prefer existing code, standard library, and native platform features.
 2. Match the step's done-when and run focused checks. Documentation or formatting-only edits use structural checks and review; they do not require artificial unit tests. Capture relevant runtime or browser proof for behavioral criteria, following the selected Check policy.
 3. Fix failures caused by the change and rerun affected checks without requesting authorization again. Broaden verification when dependencies, failures, or risk justify it.
 4. Record the diff summary and evidence. Mark a step complete once its done-when passes and any configured per-step review has been approved. A repaired finding becomes `fixed` with resolution evidence; only a subsequent audit can close it. Apply the review cadence above before proceeding.
+
+Run a proportionality check before final verification: every new abstraction, dependency, service, configuration surface, compatibility layer, and security mechanism must trace to the approved spec or an established repository requirement. Remove speculative machinery this work added without weakening real trust-boundary validation, data-loss prevention, accessibility, or configured verification.
 
 At the final handoff, run the exact documented Verify command and all required gates. If there is no Verify command, use the project's declared build and test commands. Reuse a passing result for unchanged inputs within this pass; rerun affected gates after subsequent edits. Do not add tests or tools just to inflate the verification matrix.
 

@@ -218,6 +218,7 @@ code exists. Run the draft against these questions:
   anything pushed to "out of scope" that this feature actually can't ship without?
 - **Done-whens.** Is each one observable and checkable by `/check`, or is it a
   vague "it works"? Make it concrete.
+- **Proportionality.** Does any proposed abstraction, dependency, service, config surface, or security mechanism lack a current requirement, or duplicate existing code/platform features? If so, remove it.
 - **Testing.** Does the predicted coverage match the gate - in-scope logic gets a
   test when a `test` command is declared in `AGENTS.md`, UI/integration rides on
   screenshot + build?

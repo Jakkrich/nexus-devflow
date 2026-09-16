@@ -26,7 +26,7 @@ When invoked:
 3. Allocate the next sequential ID (e.g. `IDEA-001`, `IDEA-002`).
 
 ### 2. AI Feasibility & Value Analysis
-Evaluate the user's raw idea and generate an enriched entry in Thai (`th` per user communication rules):
+Evaluate the user's raw idea and generate an enriched entry:
 - **Raw Idea**: The user's input description
 - **AI Feasibility & Tech**: Feasibility rating (Easy / Medium / Complex) along with recommended libraries, APIs, or architectural approaches
 - **Value & Potential**: Business value, user benefits, and strategic impact
@@ -37,17 +37,17 @@ Insert the new idea block directly under `## 📌 Pending Ideas` in `devflow/ide
 
 ```markdown
 ### [IDEA-001] {Brief idea title}
-- **บันทึกเมื่อ**: {YYYY-MM-DD}
-- **ไอเดียตั้งต้น**: {User's raw idea text}
+- **Recorded Date**: {YYYY-MM-DD}
+- **Original Idea**: {User's raw idea text}
 - **AI Feasibility & Tech**: {Feasibility and tooling analysis}
 - **Value & Potential**: {Value and impact analysis}
-- **Quick Seed (กันลืม)**:
+- **Quick Seed**:
   1. {Key point 1}
   2. {Key point 2}
-- **สถานะ**: `Pending` (Ready for pickup via `/feature IDEA-001` or `/discovery IDEA-001`)
+- **Status**: `Pending` (Ready for pickup via `/feature IDEA-001` or `/discovery IDEA-001`)
 ```
 
-*(If placeholder `*(ยังไม่มีไอเดียค้างอยู่...)*` exists, remove it upon recording the first idea)*
+*(If placeholder `*(No pending ideas...)*` exists, remove it upon recording the first idea)*
 
 ### 4. Output Summary
 Report to the user:

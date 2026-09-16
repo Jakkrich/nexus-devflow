@@ -1,11 +1,13 @@
 {
   "skill": "check",
-  "description": "\"[devflow] Check the running app, CLI, or server against the active spec's done-when criteria and capture observable pass or fail evidence without editing code. Use for /check, proving behavior before completion beyond builds and tests.\"",
+  "description": "\"[devflow] Check the running app, CLI, or server against the active spec's done-when criteria and capture observable pass or fail evidence without editing source. Use /check to verify real feature behavior, or /check guide [latest|scope] for a read-only manual walkthrough: how to test manually, where to click, expected and incorrect results, or a human review path.\"",
   "positive": [
     "run check skill",
     "invoke /check command",
     "use check for devflow check running server against active spec done",
-    "apply check guidance"
+    "apply check guidance",
+    "run /check guide to generate manual walkthrough instructions",
+    "อธิบายวิธีทดสอบด้วยตนเองผ่าน /check guide"
   ],
   "negative": [
     "unrelated random task query",

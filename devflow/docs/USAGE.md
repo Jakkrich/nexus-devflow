@@ -57,9 +57,9 @@ Before committing to delivery, use specialized companion skills:
 
 ---
 
-## 4. Core Skills Inventory (32 Skills)
+## 4. Core Skills Inventory (33 Skills)
 
-DevFlow ships **32 bundled Core Skills** from the ordered `core_skills` inventory
+DevFlow ships **33 bundled Core Skills** from the ordered `core_skills` inventory
 in `agent-bundle.manifest.json`, synchronized 1:1 across `.agents/skills/`
 (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code). Local or
 Personal Skills may coexist in a workspace, but are excluded from the Core count
@@ -82,9 +82,10 @@ and package template until explicitly promoted.
 - `grill` / `align`: Socratic alignment, domain modeling, and ADR recording (`devflow/decisions/`).
 - `brainstorm`: Structured divergent & convergent ideation with trade-off matrices.
 
-### C. Workspace & Governance Skills (19 Skills)
+### C. Workspace & Governance Skills (20 Skills)
 - `devflow`: Interactive workspace inspector and intent router.
 - `doctor`: Read-only health check for setup, adapters, and workflow drift.
+- `explore`: Fast read-only query answering and codebase orientation without writing files.
 - `onboard`: Configure freshly scaffolded projects.
 - `adopt`: Bootstrap DevFlow into existing brownfield codebases.
 - `overview`: Compile living source of truth from planning docs.

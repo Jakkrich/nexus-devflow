@@ -59,21 +59,21 @@ export type DevFlowRole = "dev" | "sa" | "full";
 export const DEV_ROLE_SKILLS: readonly string[] = Object.freeze([
   "adopt", "audit", "autopilot", "brainstorm", "brief", "browser-tests",
   "bughunter", "check", "ci", "complete", "continuous", "convert-any-to-md",
-  "debug", "devflow", "discovery", "doctor", "feature", "fix", "grill",
+  "debug", "devflow", "discovery", "doctor", "explore", "feature", "fix", "grill",
   "idea", "implement", "onboard", "overview", "prototype", "release",
   "report-html", "rollback", "setup-tests", "status", "test", "try"
 ]);
 
 export const SA_ROLE_SKILLS: readonly string[] = Object.freeze([
   "analyze", "audit", "brainstorm", "brief", "bughunter", "convert-any-to-md",
-  "devflow", "discovery", "doctor", "grill", "idea", "overview", "prototype",
+  "devflow", "discovery", "doctor", "explore", "grill", "idea", "overview", "prototype",
   "report-html", "status"
 ]);
 
 export const FULL_ROLE_SKILLS: readonly string[] = Object.freeze([
   "adopt", "analyze", "audit", "autopilot", "brainstorm", "brief", "browser-tests",
   "bughunter", "check", "ci", "complete", "continuous", "convert-any-to-md",
-  "debug", "devflow", "discovery", "doctor", "feature", "fix", "grill",
+  "debug", "devflow", "discovery", "doctor", "explore", "feature", "fix", "grill",
   "idea", "implement", "onboard", "overview", "prototype", "release",
   "report-html", "rollback", "setup-tests", "status", "test", "try"
 ]);

@@ -1,0 +1,18 @@
+{
+  "skill": "explore",
+  "description": "\"[devflow] Explore an idea against the actual codebase without changing files. Investigate whether a change would help, compare alternatives and tradeoffs, and discuss uncertainty before deciding whether to plan anything. Use for /explore, considering an idea, or weighing options without writing a spec.\"",
+  "positive": [
+    "run explore skill",
+    "invoke /explore command",
+    "use explore for devflow explore an idea against the actual codebase without changing files",
+    "apply explore guidance",
+    "Run /explore would caching help our dashboard?",
+    "Explore this idea against the actual codebase and compare alternatives without changing files"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt",
+    "Preview the next build-plan feature and explain its scope, dependencies, and size",
+    "Turn the next build-plan item into a buildable spec with done-when criteria"
+  ]
+}

@@ -266,6 +266,34 @@ export async function runDoctor(
     });
   }
 
+  // Check 3b: Proportional Engineering in AGENTS.md
+  const agentsMdPath = path.join(projectRoot, "AGENTS.md");
+  const hasAgentsMd = await fileExists(agentsMdPath);
+  if (hasAgentsMd) {
+    const agentsContent = await fs.readFile(agentsMdPath, "utf8");
+    const hasProportionalGuidance =
+      /##\s+Proportional engineering/i.test(agentsContent) ||
+      /proportional-engineering/i.test(agentsContent) ||
+      /Build for established requirements, not hypothetical scale/i.test(agentsContent);
+    if (hasProportionalGuidance) {
+      checks.push({
+        id: "proportional_engineering",
+        name: "Proportional Engineering Guidance (AGENTS.md)",
+        status: "pass",
+        message: "AGENTS.md contains substantive proportional engineering guidance.",
+        fixable: false
+      });
+    } else {
+      checks.push({
+        id: "proportional_engineering",
+        name: "Proportional Engineering Guidance (AGENTS.md)",
+        status: "warn",
+        message: "AGENTS.md lacks proportional engineering guidance. Add '## Proportional engineering' section to prevent AI over-engineering.",
+        fixable: false
+      });
+    }
+  }
+
   // Check 4: Global Shared Context Files (Pure Multi-Run Architecture)
   const contextFiles = [
     { name: "project-overview.md", path: path.join("devflow", "context", "project-overview.md"), stub: "# Project Overview\n\n_Source of truth for project architecture and domain rules._\n" },

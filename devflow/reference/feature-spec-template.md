@@ -1,110 +1,82 @@
-# [ID-slug] Feature Title
+# 📐 [{xxx-slug}] {title}
 
-> **Template Type**: Task-Isolated Living Spec
-> **Active Location**: `devflow/context/{xxx-slug}/spec.md`
-> **Archive Location**: `devflow/history/{features|fixes|rollbacks}/{ID-slug}.md`
-
-- **Feature ID**: `{xxx-slug}`
-- **Category**: `features` | `fixes` | `rollbacks`
-- **Target Branch**: `feature/{xxx-slug}`
-- **Status**: `Spec Ready` | `In-Progress` | `Verified` | `Completed`
-- **Track**: `Unified Fast-Track`
-- **Discovery Ref**: `devflow/discoveries/DISC-xxx.md` (Optional)
-- **ADR Ref**: `devflow/decisions/ADR-xxx.md` (Optional)
+> **Status**: In-Progress  
+> **Track**: Fast-Track (Task-Isolated Living Spec Mode - Feature)  
+> **Category**: Feature  
+> **Source**: `devflow/build-plan.md: Feature {n}` & `devflow/discoveries/{DISC-ID}/discovery.md`  
+> **Branch**: `feature/{xxx-slug}`  
+> **Started Date**: {YYYY-MM-DD}  
+> **Delivered Date**: TBD  
+> **Owner**: DevFlow Core Framework Team & AI  
 
 ---
 
-## 🎯 1. Define & Boundaries
+## 1. Specification & Scope
 
-### Problem Statement & Goal
-- **Problem**: อธิบายปัญหาที่พบ หรือสิ่งที่ต้องการแก้ไข/ปรับปรุง
-- **Goal**: ผลลัพธ์หรือเป้าหมายที่ต้องการให้เกิดขึ้น
+### 1.1 Problem Statement
+{Description of the problem, background, and rationale for developing this feature}
 
-### In-Scope & Out-of-Scope
-- **In-Scope**:
-  - สิ่งที่ต้องทำในรอบนี้
-- **Out-of-Scope**:
-  - สิ่งที่ไม่ทำในรอบนี้ หรือยกยอดไปทำในเฟสถัดไป
+### 1.2 In-Scope
+1. {In-scope item 1}
+2. {In-scope item 2}
 
-### Risk & Mitigation Matrix
-| Risk | Severity | Mitigation |
-| :--- | :--- | :--- |
-| ความเสี่ยงที่อาจเกิดขึ้น | Low/Medium/High | แนวทางป้องกันหรือรับมือ |
+### 1.3 Out-of-Scope
+- {Items deliberately excluded or deferred to future features}
 
-### Success Criteria
-1. เกณฑ์ชี้วัดความสำเร็จข้อที่ 1
-2. เกณฑ์ชี้วัดความสำเร็จข้อที่ 2
+### 1.4 Acceptance Criteria
+- [ ] **AC-1**: {Acceptance criterion 1}
+- [ ] **AC-2**: {Acceptance criterion 2}
 
 ---
 
-## 📐 2. Technical Spec & Contracts
+## 2. Plan & Test Strategy
 
-### Architecture & Component Design
-- อธิบายโครงสร้างหรือ Flow การทำงานของ Component/Module
+### 2.1 Files Modified / Created
+- `{file-path}` [NEW | MODIFY | DELETE]
 
-### Data Models & Schemas
-```typescript
-// Interface หรือ Type Definition
-```
+### 2.2 Quality Gates & Sensitivity Check
+- **Quality Gate Policy (`independentReview`)**: `manual` | `always` | `when-sensitive`
+- **UI Evidence / Browser Tests**: {Not applicable | Playwright / BrowserOS Neo}
+- **Review Strategy**: One feature-level review packet at completion
 
-### API & Interface Contracts
-- **Endpoint / Function**: `methodName(params: Type): ReturnType`
-- **Error Handling**: รายละเอียด Error Codes และวิธีจัดการ
-
-### Non-Functional Constraints
-- **Security**: การตรวจสอบ Input, การจัดการสิทธิ์, Secrets
-- **Performance**: ข้อจำกัดเรื่องความเร็ว หรือ Resource Usage
-
-### Acceptance Criteria (AC)
-- [ ] **AC-1**: เงื่อนไขการยอมรับข้อที่ 1
-- [ ] **AC-2**: เงื่อนไขการยอมรับข้อที่ 2
+### 2.3 Test Decision: Required (TDD) | Optional
+- **Rationale**: {Reason for requiring Unit Tests / TDD}
 
 ---
 
-## 📋 3. Execution Plan & TDD Checklist
+## 3. Implementation Checklist (Strict TDD)
 
-- [ ] **Task 1: Core Foundation & Types**
-  - [ ] 1.1 `[TDD-Red]` เขียน Unit Test สำหรับ Logic ส่วนที่ 1
-  - [ ] 1.2 `[TDD-Green]` Implement Logic ให้ผ่าน Test
-  - [ ] 1.3 `[TDD-Refactor]` Clean up และ Optimize โค้ด
+- [ ] **Task 1: {Task 1 title}**
+  - [ ] 1.1 `[TDD-Red]`: {Write failing unit or behavioral test}
+  - [ ] 1.2 `[TDD-Green]`: {Write minimal implementation to pass test}
+  - [ ] 1.3 `[TDD-Refactor]`: {Refactor and ensure 100% tests green}
 
-- [ ] **Task 2: Feature Implementation**
-  - [ ] 2.1 `[TDD-Red]` เขียน Test ครอบคลุม Edge Cases
-  - [ ] 2.2 `[TDD-Green]` Implement Feature ตาม Contract
-  - [ ] 2.3 `[TDD-Refactor]` ตรวจสอบความถูกต้องและ Architecture
-
-- [ ] **Task 3: Integration & QA Verification**
-  - [ ] 3.1 `[TDD-Green]` เชื่อมต่อ UI/API และตรวจสอบ End-to-End
+- [ ] **Task 2: {Task 2 title}**
+  - [ ] 2.1 `[TDD-Red]`: ...
+  - [ ] 2.2 `[TDD-Green]`: ...
+  - [ ] 2.3 `[TDD-Refactor]`: ...
 
 ---
 
-## ⚡ 4. Implementation Log & Evidence
+## 4. Verification Evidence Matrix
 
-*(จะถูกบันทึกและอัปเดตความคืบหน้าระหว่างรันคำสั่ง `/implement`)*
+### ⚖️ Axis 1: Standards, Architecture & Quality Gate
+- **Type Safety & Build Integrity**: TBD
+- **Automated Test Matrix**: TBD
+- **Static Contract Verification**: TBD
+- **Package Smoke Test**: TBD
+- **Findings Ledger**: Verify `findings.md` is 100% clean
 
-- **Step 1**: ...
-- **Checkpoint Commit**: `feat(scope): ...`
-
----
-
-## 🧪 5. Multi-Lane Verification Matrix
-
-*(จะถูกบันทึกผลการตรวจสอบระหว่างรันคำสั่ง `/check`)*
-
-| Lane | Command / Verification Target | Result | Notes / Proof |
-| :--- | :--- | :--- | :--- |
-| **Typecheck** | `npm run typecheck` | ⏳ PENDING | |
-| **Lint** | `npm run lint` | ⏳ PENDING | |
-| **Unit Tests** | `npm test` | ⏳ PENDING | |
-| **Manual Proof** | UI / CLI Behavioral Verification | ⏳ PENDING | |
+### 🎯 Axis 2: Spec Fidelity & Behavioral Acceptance Gate
+- [ ] **AC-1**: {Empirical proof for AC-1}
+- [ ] **AC-2**: {Empirical proof for AC-2}
 
 ---
 
-## 📦 6. Release Digest & Retrospective
+## 5. Delivery Verification & Independent Receipt
 
-*(จะถูกสรุปและบันทึกอัตโนมัติก่อนทำการ Squash Merge ในคำสั่ง `/complete`)*
-
-- **What Changed**: สรุปสิ่งที่เปลี่ยนแปลง
-- **Key Decisions**: การตัดสินใจสำคัญระหว่างพัฒนา
-- **Lessons Learned**: บทเรียนที่ได้รับ
-- **Known Limitations**: ข้อจำกัดที่ทราบและข้อเสนอแนะในอนาคต
+- **Delivery Date**: TBD
+- **Verification Verdict**: TBD
+- **Framework Tests**: TBD
+- **Static Contract**: TBD
+- **Package Smoke Test**: TBD

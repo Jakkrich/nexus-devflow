@@ -131,7 +131,7 @@ async function readHistoryEntry(
   isDirectory: boolean
 ): Promise<HistoryItem | null> {
   if (!isDirectory) {
-    const relativeFile = path.join(group.directory, entryName);
+    const relativeFile = path.join(group.directory, entryName).replaceAll("\\", "/");
     const markdown = await fs.readFile(path.join(directoryPath, entryName), "utf8");
     return parseHistoryItem(markdown, group.type, relativeFile);
   }
@@ -149,7 +149,7 @@ async function readHistoryEntry(
   )?.name;
   if (!selected) return null;
 
-  const relativeFile = path.join(group.directory, entryName, selected);
+  const relativeFile = path.join(group.directory, entryName, selected).replaceAll("\\", "/");
   const markdown = await fs.readFile(path.join(archivePath, selected), "utf8");
   return parseHistoryItem(markdown, group.type, relativeFile);
 }

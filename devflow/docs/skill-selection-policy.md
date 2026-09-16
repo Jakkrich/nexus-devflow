@@ -42,6 +42,7 @@ Use pre-flight skills before committing to delivery when exploring new ideas or 
 | **System Diagnostics** | `/doctor` | Read-only check of adapters, configs, and workflow drift. |
 | **Workspace Navigation** | `/devflow` | Flagship state inspector and next action router. |
 | **Root-Cause Analysis** | `/debug` | Scientific six-phase diagnosis using a deterministic red-capable feedback loop without modifying source. |
+| **Read-Only Code Exploration** | `/explore` | Fast read-only query answering and codebase orientation without writing files. |
 | **Architecture & Spec Verification** | `/check` | Reviews Deep Modules, documented standards, and behavioral acceptance as independent axes. |
 | **Manual QA Guide** | `/try` | Generates click-by-click human manual test guide. |
 | **Code & Security Audit** | `/audit` | Branch-aware or full-project code and security audit. |
@@ -57,7 +58,7 @@ Use pre-flight skills before committing to delivery when exploring new ideas or 
 
 ## 4. Selection Boundaries & References
 
-- The **32 bundled Core Skills** are the names in `agent-bundle.manifest.json#core_skills`; Local or Personal Skills are workspace extensions, not automatic public commands.
+- The **33 bundled Core Skills** are the names in `agent-bundle.manifest.json#core_skills`; Local or Personal Skills are workspace extensions, not automatic public commands.
 - Prefer an existing Core Skill before adding a new public surface. Follow [governance rules](governance-rules.md) for promotion and placement decisions.
 - Generated artifacts follow the [Markdown metadata contract](markdown-metadata-contract.md).
 - Human review responsibilities are defined in the [manual review workflow](manual-review-workflow-spec.md).

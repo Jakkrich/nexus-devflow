@@ -319,7 +319,8 @@ Maintain the durable record in `devflow/context/{xxx-slug}/findings.md` (or `dev
 3. Set severity honestly:
    - `P0`: critical blocking bug, data corruption, severe vulnerability, complete outage.
    - `P1`: serious defect, missing critical test, unhandled core error.
-   - `P2`: moderate debt, performance degradation, missing edge cases.
+   - `P2`: moderate debt, performance degradation, missing edge cases, or pure proportionality finding.
    - `P3`: minor improvement, code cleanup, cosmetic tweak.
+   *(For a proportionality finding, state in Suggested fix what can be deleted. An otherwise pure proportionality finding is P2 or P3. Raise to P0/P1 only when the unnecessary machinery causes a concrete reachable defect or violates an established security or data-integrity boundary.)*
 4. Set status: `open`, `fixed`, `closed`, `accepted`, or `invalid`.
 5. Display concise findings summary and next actions.

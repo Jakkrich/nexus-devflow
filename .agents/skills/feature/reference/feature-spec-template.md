@@ -14,18 +14,18 @@
 ## 1. Specification & Scope
 
 ### 1.1 Problem Statement
-{คำอธิบายปัญหาและที่มาของความจำเป็นในการพัฒนาฟีเจอร์นี้}
+{Description of the problem, background, and rationale for developing this feature}
 
 ### 1.2 In-Scope
-1. {ขอบเขตการทำงานข้อที่ 1}
-2. {ขอบเขตการทำงานข้อที่ 2}
+1. {In-scope item 1}
+2. {In-scope item 2}
 
 ### 1.3 Out-of-Scope
-- {สิ่งที่อยู่นอกเหนือขอบเขตหรือไม่ทำในรอบนี้}
+- {Items deliberately excluded or deferred to future features}
 
-### 1.4 Acceptance Criteria (เกณฑ์การยอมรับ)
-- [ ] **AC-1**: {เกณฑ์การตรวจรับข้อที่ 1}
-- [ ] **AC-2**: {เกณฑ์การตรวจรับข้อที่ 2}
+### 1.4 Acceptance Criteria
+- [ ] **AC-1**: {Acceptance criterion 1}
+- [ ] **AC-2**: {Acceptance criterion 2}
 
 ---
 
@@ -40,18 +40,18 @@
 - **Review Strategy**: One feature-level review packet at completion
 
 ### 2.3 Test Decision: Required (TDD) | Optional
-- **Rationale**: {เหตุผลความจำเป็นในการเขียน Unit Tests / TDD}
+- **Rationale**: {Reason for requiring Unit Tests / TDD}
 
 ---
 
 ## 3. Implementation Checklist (Strict TDD)
 
-- [ ] **Task 1: {หัวข้องานที่ 1}**
-  - [ ] 1.1 `[TDD-Red]`: {เขียน Test เคสล้มเหลว}
-  - [ ] 1.2 `[TDD-Green]`: {เขียนโค้ดขั้นต่ำเพื่อให้ Test ผ่าน}
-  - [ ] 1.3 `[TDD-Refactor]`: {Refactor และตรวจให้ 100% Tests Green}
+- [ ] **Task 1: {Task 1 title}**
+  - [ ] 1.1 `[TDD-Red]`: {Write failing unit or behavioral test}
+  - [ ] 1.2 `[TDD-Green]`: {Write minimal implementation to pass test}
+  - [ ] 1.3 `[TDD-Refactor]`: {Refactor and ensure 100% tests green}
 
-- [ ] **Task 2: {หัวข้องานที่ 2}**
+- [ ] **Task 2: {Task 2 title}**
   - [ ] 2.1 `[TDD-Red]`: ...
   - [ ] 2.2 `[TDD-Green]`: ...
   - [ ] 2.3 `[TDD-Refactor]`: ...
@@ -65,11 +65,11 @@
 - **Automated Test Matrix**: TBD
 - **Static Contract Verification**: TBD
 - **Package Smoke Test**: TBD
-- **Findings Ledger**: ตรวจสอบ `findings.md` สะอาด 100%
+- **Findings Ledger**: Verify `findings.md` is 100% clean
 
 ### 🎯 Axis 2: Spec Fidelity & Behavioral Acceptance Gate
-- [ ] **AC-1**: {หลักฐานการผ่านเกณฑ์ข้อที่ 1}
-- [ ] **AC-2**: {หลักฐานการผ่านเกณฑ์ข้อที่ 2}
+- [ ] **AC-1**: {Empirical proof for AC-1}
+- [ ] **AC-2**: {Empirical proof for AC-2}
 
 ---
 

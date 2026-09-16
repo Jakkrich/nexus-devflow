@@ -507,7 +507,7 @@ AI จะสร้าง Fix Spec พร้อมขั้นตอนการ�
 
 ## ตารางอ้างอิงคำสั่งทั้งหมด (Command reference)
 
-Nexus-DevFlow แจก **32 bundled Core Skills** ตาม canonical `core_skills`
+Nexus-DevFlow แจก **33 bundled Core Skills** ตาม canonical `core_skills`
 inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Personal Skills ที่เพิ่ม
 เฉพาะ workspace จะไม่ถูกนับรวมเป็น Core และไม่ติดไปกับ package ที่เผยแพร่
 จนกว่าจะได้รับการ promote อย่างชัดเจน
@@ -729,7 +729,7 @@ npx nexus-devflow update [--check]
 
 ## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
 
-Nexus-DevFlow ติดตั้งมาพร้อมกับ **32 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny Outsider Review ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/status` / `/complete`) ไว้ในตัวแล้ว
+Nexus-DevFlow ติดตั้งมาพร้อมกับ **33 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny Outsider Review ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/status` / `/complete`) ไว้ในตัวแล้ว
 
 สำหรับงานเฉพาะทางด้านงานสถาปัตยกรรมภาพและความปลอดภัยเชิงรุก คุณสามารถติดตั้งสกิลเสริมจาก Community เพิ่มเติมได้ด้วยคำสั่ง `nexus-devflow skill add`:
 

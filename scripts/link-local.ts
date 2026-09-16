@@ -70,6 +70,11 @@ function main(): void {
 
   runNpm(["run", "build"]);
   runNpm(["run", "prepare-template"]);
+  try {
+    runNpm(["rm", "--global", packageName]);
+  } catch {
+    // ignore if package was not globally linked before
+  }
   runNpm(["link"]);
 
   console.log(`
