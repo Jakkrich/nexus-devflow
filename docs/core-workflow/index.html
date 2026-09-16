@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Core Workflow (วงจร 4 ขั้นตอนการพัฒนา) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="สถาปัตยกรรม The 3-Pillars Workspace และวงจร Pure Task-Isolated Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ด้วย AI อย่างเป็นระบบ">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/core-workflow/">
+  <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Local Standalone Style (Zero External Dependencies) -->
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="docs-body">
+  <a class="skip-link" href="#docs-content">ข้ามไปยังเนื้อหาหลัก</a>
+
+  <!-- Docs Header -->
+  <header class="docs-header">
+    <div class="docs-header-inner">
+      <div class="docs-brand">
+        <a href="../" aria-label="Nexus-DevFlow หน้าแรก">
+          <img src="../brand/logo-light.svg" alt="Nexus-DevFlow" class="site-logo">
+        </a>
+        <span class="docs-badge">คู่มือ</span>
+      </div>
+
+      <div class="docs-header-actions">
+        <!-- Instant Search Button -->
+        <button class="docs-search" type="button" data-search-open aria-label="เปิดหน้าต่างค้นหาเอกสาร">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>ค้นหาเอกสาร...</span>
+          <span class="docs-key">⌘ K</span>
+        </button>
+
+        <a class="docs-header-link" href="../">หน้าแรก</a>
+        <a class="docs-header-link" href="../updates/">อัปเดต</a>
+        <a class="docs-header-link" href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.27-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <button class="docs-mobile-menu" type="button" aria-expanded="false" aria-controls="docs-sidebar" data-docs-menu>เมนู</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Docs Shell (3 Columns) -->
+  <div class="docs-shell">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation sidebar" data-docs-sidebar>
+      <nav>
+        <!-- START -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">START</div>
+          <a class="docs-nav-link" href="../getting-started/">Getting Started</a>
+          <a class="docs-nav-link" href="../existing-codebase/">Existing Codebase Adoption</a>
+          <a class="docs-nav-link" href="../command-guide/">Command Guide</a>
+          <a class="docs-nav-link" href="../writing-your-plans/">Writing Your Plans</a>
+          <a class="docs-nav-link" href="../updating-devflow/">Updating DevFlow</a>
+        </div>
+
+        <!-- WORKFLOW -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">WORKFLOW</div>
+          <a class="docs-nav-link active" href="../core-workflow/">Core Workflow</a>
+        </div>
+
+        <!-- COMMANDS -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">COMMANDS</div>
+          <a class="docs-nav-link" href="../commands/onboard/">Onboard</a>
+          <a class="docs-nav-link" href="../commands/adopt/">Adopt</a>
+          <a class="docs-nav-link" href="../commands/discovery/">Discovery</a>
+          <a class="docs-nav-link" href="../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../commands/overview/">Overview</a>
+          <a class="docs-nav-link" href="../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../commands/implement/">Implement</a>
+          <a class="docs-nav-link" href="../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../commands/complete/">Complete</a>
+          <a class="docs-nav-link" href="../commands/status/">Status</a>
+          <a class="docs-nav-link" href="../commands/doctor/">Doctor</a>
+          <a class="docs-nav-link" href="../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../commands/fix/">Fix</a>
+          <a class="docs-nav-link" href="../commands/brief/">Brief</a>
+          <a class="docs-nav-link" href="../commands/audit/">Audit</a>
+          <a class="docs-nav-link" href="../commands/tests/">Tests</a>
+          <a class="docs-nav-link" href="../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
+          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot</a>
+          <a class="docs-nav-link" href="../commands/continuous/">Continuous</a>
+          <a class="docs-nav-link" href="../commands/release/">Release</a>
+          <a class="docs-nav-link" href="../commands/rollback/">Rollback</a>
+          <a class="docs-nav-link" href="../commands/analyze/">Analyze (SA Suite)</a>
+          <a class="docs-nav-link" href="../commands/grill/">Grill (Domain & ADR)</a>
+          <a class="docs-nav-link" href="../commands/bughunter/">Bughunter (Security)</a>
+        </div>
+
+        <!-- CLI -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">CLI</div>
+          <a class="docs-nav-link" href="../cli/">CLI Overview</a>
+          <a class="docs-nav-link" href="../cli/status/">Status</a>
+          <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
+        </div>
+
+        <!-- REFERENCE -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">REFERENCE</div>
+          <a class="docs-nav-link" href="../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
+          <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
+          <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
+          <a class="docs-nav-link" href="../commands/try/">Try migration</a>
+          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests migration</a>
+        </div>
+
+        <!-- QUALITY -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">QUALITY</div>
+          <a class="docs-nav-link" href="../testing/">Testing and CI</a>
+          <a class="docs-nav-link" href="../manual-review/">Manual Review With Try</a>
+          <a class="docs-nav-link" href="../code-quality/">Code Quality With Audit</a>
+          <a class="docs-nav-link" href="../findings-ledger/">The Findings Ledger</a>
+        </div>
+
+        <!-- SHIP -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">SHIP</div>
+          <a class="docs-nav-link" href="../release-readiness/">Release Readiness</a>
+          <a class="docs-nav-link" href="../troubleshooting/">Troubleshooting</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-main" id="docs-content">
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>WORKFLOW</span> <span>/</span> <strong>Core Workflow (วงจร 4 ขั้นตอนการพัฒนา)</strong></div>
+      
+      <h1 class="docs-title">Core Workflow (วงจร 4 ขั้นตอนการพัฒนา)</h1>
+      
+      <p class="docs-lead">
+        สถาปัตยกรรม The 3-Pillars Workspace และวงจร Pure Task-Isolated Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ด้วย AI อย่างเป็นระบบ
+      </p>
+
+      <div class="docs-meta">
+        <span class="docs-pill">Workflow</span>
+        <span class="docs-pill">3-Pillars</span>
+        <span class="docs-pill">LivingSpec</span>
+        <span class="docs-pill">TDD</span>
+        <span class="docs-pill">SquashMerge</span>
+        <span class="docs-pill">TaskIsolation</span>
+        <span class="docs-pill">VerificationMatrix</span>
+      </div>
+
+      <div class="docs-prose">
+
+        <!-- Section: สถาปัตยกรรม 3 เสาหลัก (The 3-Pillars Workspace Architecture) -->
+        <section id="the-3-pillars">
+          <h2>สถาปัตยกรรม 3 เสาหลัก (The 3-Pillars Workspace Architecture)</h2>
+          
+          <p>ปัญหาคลาสสิกของการใช้ AI ในการเขียนโค้ดคือ AI มักจะจำประวัติเก่าจนเกิด Context Bloat หรือลืมบริบทสำคัญของโปรเจกต์ Nexus-DevFlow แก้ไขปัญหานี้ด้วยการแบ่งเวลาและพื้นที่ของ Workspace ออกเป็น 3 เสาหลักที่ตัดขาดจากกันอย่างชัดเจน:</p>
+          <table>
+            <thead><tr><th>เสาหลัก (Pillar)</th><th>โฟลเดอร์ / ไฟล์</th><th>ความหมายและหน้าที่</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>1. 🔮 Future (อนาคต)</strong></td>
+                <td><code>devflow/ideas.md</code><br><code>devflow/project-plan.md</code><br><code>devflow/build-plan.md</code></td>
+                <td>กล่องรับไอเดีย แผนงานระดับผลิตภัณฑ์ และรายการฟีเจอร์ที่รอการพัฒนาในอนาคต</td>
+              </tr>
+              <tr>
+                <td><strong>2. ⚡ Present (ปัจจุบัน)</strong></td>
+                <td><code>devflow/context/project-overview.md</code><br><code>devflow/context/{xxx-slug}/</code></td>
+                <td>Living Source of Truth ร่วมกัน และพื้นที่พัฒนาฟีเจอร์ปัจจุบันที่แยกเอกเทศ (Task-Isolated Workspace)</td>
+              </tr>
+              <tr>
+                <td><strong>3. 📦 Past (อดีต)</strong></td>
+                <td><code>devflow/history/features/</code><br><code>devflow/history/fixes/</code><br><code>devflow/history/rollbacks/</code><br><code>devflow/history/HISTORY.md</code></td>
+                <td>คลังจัดเก็บประวัติการตัดสินใจและผลลัพธ์ของฟีเจอร์ที่ส่งมอบแล้วอย่างถาวร</td>
+              </tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+
+        <!-- Section: วงจร 4 ขั้นตอนการพัฒนา (The 4-Stage Living Spec Lifecycle) -->
+        <section id="4-stage-lifecycle">
+          <h2>วงจร 4 ขั้นตอนการพัฒนา (The 4-Stage Living Spec Lifecycle)</h2>
+          
+          <p>ทุกงานพัฒนา ไม่ว่าจะเป็นฟีเจอร์ใหม่หรือการแก้บั๊ก จะดำเนินผ่านวงจร 4 ขั้นตอนแบบต่อเนื่อง:</p>
+          <pre><code><span style="color:#76a8ff;">/feature</span> ──▶ <span style="color:#e8bd72;">review</span> ──▶ <span style="color:#70d5a9;">/implement</span> ──▶ <span style="color:#76a8ff;">/check</span> ──▶ <span style="color:#0b7a53;">/complete</span></code></pre>
+          <table>
+            <thead><tr><th>ขั้นตอน</th><th>คำสั่ง</th><th>คำอธิบายกระบวนการ</th><th>ผลลัพธ์ (Artifact)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Feature / Fix (Spec)</strong></td>
+                <td><code>/feature [id]</code> หรือ <code>/fix</code></td>
+                <td>วิเคราะห์ขอบเขต จัดสรร Task ID (เช่น <code>001-user-auth</code>), สลับ branch และร่าง Living Spec พร้อม Data Contracts และ TDD Tasks</td>
+                <td><code>devflow/context/{id}/spec.md</code><br><code>stage.md</code>, <code>findings.md</code></td>
+              </tr>
+              <tr>
+                <td><strong>2. Implement</strong></td>
+                <td><code>/implement [id]</code></td>
+                <td>ดำเนินการเขียนโค้ดตาม Task Checklist ด้วยวินัย Strict TDD (Red-Green-Refactor) และบันทึกผลการทดสอบและ Diff Evidence</td>
+                <td>Code diffs + Test Evidence</td>
+              </tr>
+              <tr>
+                <td><strong>3. Check</strong></td>
+                <td><code>/check [id]</code></td>
+                <td>ตรวจรับระดับ Senior QA รัน Verification Matrix (Typecheck, Lint, Test, Manual Proof) และบันทึกลง findings.md</td>
+                <td>Empirical Proof + Manual Try Guide</td>
+              </tr>
+              <tr>
+                <td><strong>4. Complete</strong></td>
+                <td><code>/complete [id]</code></td>
+                <td>สรุป Release Digest ย้ายเอกสารเข้า History Archive อัปเดต Build Plan และทำ Git Squash-Merge เข้าสู่ main</td>
+                <td><code>devflow/history/{type}/{id}.md</code><br><code>HISTORY.md</code></td>
+              </tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+
+        <!-- Section: การแยก Branch และวินัย Strict TDD -->
+        <section id="branch-isolation-and-tdd">
+          <h2>การแยก Branch และวินัย Strict TDD</h2>
+          
+          <div class="docs-callout note">
+            <div class="docs-callout-label">Branch Isolation Guarantee</div>
+            <p>Nexus-DevFlow บังคับให้งานทุกชิ้นถูกพัฒนาบน Branch เฉพาะงาน (เช่น <code>feature/001-auth</code>) เสมอ เพื่อป้องกันไม่ให้โค้ดที่ยังไม่ผ่านการตรวจรับรั่วไหลเข้าสู่ branch หลัก (<code>main</code>)</p>
+          </div>
+          <p>ในขั้นตอน <code>/implement</code> AI จะยึดหลักการ Red-Green-Refactor อย่างเคร่งครัด:</p>
+          <ol>
+            <li><strong>Red</strong>: เขียนชุดการทดสอบ (Unit Test) ที่ล้มเหลวก่อนเพื่อยืนยันเงื่อนไขที่ถูกต้อง</li>
+            <li><strong>Green</strong>: เขียนโค้ดการทำงานจริงที่เรียบง่ายที่สุดเพื่อให้ชุดการทดสอบผ่าน 100%</li>
+            <li><strong>Refactor</strong>: ปรับปรุงโครงสร้างโค้ดให้สะอาด ปลอดภัย และตรงตาม Coding Standards โดยที่ Test ยังคงผ่านทั้งหมด</li>
+          </ol>
+        
+          
+        </section>
+
+        <!-- Section: การสนับสนุนการวางแผนคู่ขนาน (Multi-Run Spec-Ahead) -->
+        <section id="multi-run-support">
+          <h2>การสนับสนุนการวางแผนคู่ขนาน (Multi-Run Spec-Ahead)</h2>
+          
+          <p>คุณสามารถร่างสเปกล่วงหน้าได้หลายฟีเจอร์พร้อมกัน เช่น รัน <code>/feature 1</code>, <code>/feature 2</code>, <code>/feature 3</code> ระบบจะสร้าง Workspace แยกโฟลเดอร์กันใน <code>devflow/context/</code> โดยไม่รบกวนกัน ทำให้การส่งต่องานในทีมทำได้อย่างลื่นไหล</p>
+        
+          
+        </section>
+
+        <!-- Section: หลักการความปลอดภัย Zero-Push -->
+        <section id="zero-push-safety">
+          <h2>หลักการความปลอดภัย Zero-Push</h2>
+          
+          <div class="docs-callout success">
+            <div class="docs-callout-label">Zero-Push Safety Guarantee</div>
+            <p>Nexus-DevFlow จะ<strong>ไม่มีวันรันคำสั่ง <code>git push</code></strong> ไปยัง Remote Server โดยอัตโนมัติ การตัดสินใจ Push โค้ดขึ้นสู่ GitHub, GitLab หรือ Production เป็นสิทธิ์ขาดของนักพัฒนาเสมอ</p>
+          </div>
+        
+          
+        </section>
+      </div>
+
+      <!-- Bottom Page Navigation -->
+      <nav class="docs-page-nav" aria-label="Documentation page navigation">
+        <a class="prev" href="../updating-devflow/">
+          <span>ก่อนหน้า (Previous)</span>
+          <strong>Updating DevFlow</strong>
+        </a>
+        <a class="next" href="../commands/onboard/">
+          <span>ถัดไป (Next)</span>
+          <strong>Onboard</strong>
+        </a>
+      </nav>
+    </main>
+
+    <!-- Right Sidebar (TOC) -->
+    <aside class="docs-toc" aria-label="On this page">
+      <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
+      <a href="#the-3-pillars">สถาปัตยกรรม 3 เสาหลัก (The 3-Pillars Workspace Architecture)</a>
+      <a href="#4-stage-lifecycle">วงจร 4 ขั้นตอนการพัฒนา (The 4-Stage Living Spec Lifecycle)</a>
+      <a href="#branch-isolation-and-tdd">การแยก Branch และวินัย Strict TDD</a>
+      <a href="#multi-run-support">การสนับสนุนการวางแผนคู่ขนาน (Multi-Run Spec-Ahead)</a>
+      <a href="#zero-push-safety">หลักการความปลอดภัย Zero-Push</a>
+    </aside>
+  </div>
+
+  <!-- Instant Search Dialog Modal (Zero Dependency) -->
+  <dialog class="search-dialog" data-search-dialog aria-labelledby="search-title">
+    <div class="search-panel">
+      <div class="search-heading">
+        <div>
+          <span class="eyebrow" style="font-size:0.7rem; text-transform:uppercase; color:var(--blue-dark); font-family:var(--font-mono);">Nexus-DevFlow Docs</span>
+          <h2 id="search-title">ค้นหาเอกสารและคำสั่ง</h2>
+        </div>
+        <button type="button" data-search-close aria-label="ปิดหน้าต่างค้นหา">Esc</button>
+      </div>
+      <label class="search-input">
+        <span class="sr-only">ค้นหาเอกสาร</span>
+        <input type="search" placeholder="พิมพ์ชื่อคำสั่ง เช่น /feature, /audit, config, testing..." autocomplete="off" data-search-input>
+      </label>
+      <div class="search-results" data-search-results aria-live="polite">
+        <p>พิมพ์เพื่อค้นหาคำสั่ง คู่มือ และสถาปัตยกรรม...</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container site-footer-inner">
+      <div class="site-footer-brand">
+        <img src="../brand/logo-light.svg" alt="Nexus-DevFlow">
+        <span>เลเยอร์เวิร์กโฟลว์แบบโอเพนซอร์สสำหรับการพัฒนาซอฟต์แวร์ด้วย AI</span>
+      </div>
+      <div class="site-footer-links">
+        <a href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="../getting-started/">คู่มือ (Docs)</a>
+        <a href="../updates/">อัปเดต (Updates)</a>
+        <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">สัญญาอนุญาต MIT</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

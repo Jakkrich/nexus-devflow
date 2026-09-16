@@ -1,0 +1,799 @@
+[
+  {
+    "title": "เริ่มต้นใช้งาน (Getting Started)",
+    "description": "ติดตั้งเลเยอร์เวิร์กโฟลว์ Nexus-DevFlow ลงในโปรเจกต์ที่สร้างโครงร่างไว้แล้ว และเตรียมพร้อมสำหรับการพัฒนาฟีเจอร์แรกผ่านวงจร Task-Isolated Living Spec",
+    "section": "START",
+    "slug": "getting-started",
+    "href": "../getting-started/",
+    "tags": [
+      "Start",
+      "Guide",
+      "Install",
+      "Onboard",
+      "Zero-Lock-in",
+      "3-Pillars",
+      "LivingSpec",
+      "start",
+      "getting-started"
+    ]
+  },
+  {
+    "title": "Existing Codebase Adoption (Brownfield)",
+    "description": "ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม",
+    "section": "START",
+    "slug": "existing-codebase",
+    "href": "../existing-codebase/",
+    "tags": [
+      "Adopt",
+      "Brownfield",
+      "Legacy",
+      "Survey",
+      "Migration",
+      "Reconciliation",
+      "start",
+      "existing-codebase"
+    ]
+  },
+  {
+    "title": "Command Guide (คู่มือรวมชุดคำสั่ง)",
+    "description": "คู่มือสรุปชุดคำสั่งทั้งหมดกว่า 38+ คำสั่งของ Nexus-DevFlow จัดกลุ่มตามหมวดหมู่งานและความรับผิดชอบอย่างละเอียด",
+    "section": "START",
+    "slug": "command-guide",
+    "href": "../command-guide/",
+    "tags": [
+      "Commands",
+      "Matrix",
+      "Reference",
+      "CheatSheet",
+      "Skills",
+      "38-Skills",
+      "start",
+      "command-guide"
+    ]
+  },
+  {
+    "title": "Writing Your Plans (การเขียนแผนงาน)",
+    "description": "วิธีเขียน devflow/project-plan.md และ devflow/build-plan.md ให้มีประสิทธิภาพและช่วยให้ AI ทำงานได้อย่างแม่นยำ",
+    "section": "START",
+    "slug": "writing-your-plans",
+    "href": "../writing-your-plans/",
+    "tags": [
+      "Plans",
+      "ProjectPlan",
+      "BuildPlan",
+      "Strategy",
+      "Roadmap",
+      "SpecWriter",
+      "start",
+      "writing-your-plans"
+    ]
+  },
+  {
+    "title": "Updating DevFlow (การอัปเดตเวอร์ชัน)",
+    "description": "วิธีอัปเกรดเวอร์ชันของ Nexus-DevFlow ให้ทันสมัยอยู่เสมอ โดยไม่สูญเสียประวัติหรือบริบทของโปรเจกต์",
+    "section": "START",
+    "slug": "updating-devflow",
+    "href": "../updating-devflow/",
+    "tags": [
+      "Update",
+      "Upgrade",
+      "Version",
+      "Sync",
+      "Manifest",
+      "Compatibility",
+      "start",
+      "updating-devflow"
+    ]
+  },
+  {
+    "title": "Core Workflow (วงจร 4 ขั้นตอนการพัฒนา)",
+    "description": "สถาปัตยกรรม The 3-Pillars Workspace และวงจร Pure Task-Isolated Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ด้วย AI อย่างเป็นระบบ",
+    "section": "WORKFLOW",
+    "slug": "core-workflow",
+    "href": "../core-workflow/",
+    "tags": [
+      "Workflow",
+      "3-Pillars",
+      "LivingSpec",
+      "TDD",
+      "SquashMerge",
+      "TaskIsolation",
+      "VerificationMatrix",
+      "workflow",
+      "core-workflow"
+    ]
+  },
+  {
+    "title": "Onboard (/onboard)",
+    "description": "ปรับแต่งเวิร์กโฟลว์ให้เข้ากับสภาพแวดล้อมจริง ตรวจสอบ tech stack, คำสั่ง verify/test, มาตรฐานโค้ด และกำหนด Review Cadence",
+    "section": "COMMANDS",
+    "slug": "commands/onboard",
+    "href": "../commands/onboard/",
+    "tags": [
+      "Command",
+      "Onboard",
+      "Setup",
+      "Config",
+      "Cadence",
+      "Preset",
+      "QualityGates",
+      "commands",
+      "commands onboard"
+    ]
+  },
+  {
+    "title": "Adopt (/adopt)",
+    "description": "นำ Nexus-DevFlow เข้าสู่โปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (Brownfield Codebase) สำรวจฟังก์ชันจริง และสร้างแผนงานต่อเนื่อง",
+    "section": "COMMANDS",
+    "slug": "commands/adopt",
+    "href": "../commands/adopt/",
+    "tags": [
+      "Command",
+      "Adopt",
+      "Brownfield",
+      "Legacy",
+      "Survey",
+      "Reconcile",
+      "ZeroRegression",
+      "commands",
+      "commands adopt"
+    ]
+  },
+  {
+    "title": "Discovery (/discovery)",
+    "description": "สำรวจและวางแผน Roadmap ระดับโปรเจกต์ หรือสำรวจความเป็นไปได้ของฟีเจอร์ก่อนเริ่มพัฒนาผ่าน 6 เลนส์การวิเคราะห์",
+    "section": "COMMANDS",
+    "slug": "commands/discovery",
+    "href": "../commands/discovery/",
+    "tags": [
+      "Command",
+      "Discovery",
+      "Research",
+      "PreFlight",
+      "6-Lens",
+      "ADR",
+      "Archify",
+      "commands",
+      "commands discovery"
+    ]
+  },
+  {
+    "title": "Explore (/explore)",
+    "description": "สำรวจไอเดีย เปรียบเทียบข้อดีข้อเสีย และผลกระทบต่อโค้ดเบสโดยไม่มีการแก้ไขไฟล์ใดๆ (Zero-Touch Read-Only)",
+    "section": "COMMANDS",
+    "slug": "commands/explore",
+    "href": "../commands/explore/",
+    "tags": [
+      "Command",
+      "Explore",
+      "Idea",
+      "ReadOnly",
+      "ZeroTouch",
+      "Tradeoffs",
+      "BlastRadius",
+      "commands",
+      "commands explore"
+    ]
+  },
+  {
+    "title": "Overview (/overview)",
+    "description": "คอมไพล์เอกสารแผนงานทั้งหมดให้กลายเป็น Living Source of Truth ใน devflow/context/project-overview.md (<20KB)",
+    "section": "COMMANDS",
+    "slug": "commands/overview",
+    "href": "../commands/overview/",
+    "tags": [
+      "Command",
+      "Overview",
+      "Compiler",
+      "Context",
+      "TokenBudget",
+      "LivingSourceOfTruth",
+      "commands",
+      "commands overview"
+    ]
+  },
+  {
+    "title": "Feature (/feature)",
+    "description": "ดึงรายการจาก Build Plan มาร่าง Task-Isolated Living Spec (devflow/context/{xxx-slug}/spec.md) พร้อมประเมินขนาดและสร้าง TDD Tasks Checklist",
+    "section": "COMMANDS",
+    "slug": "commands/feature",
+    "href": "../commands/feature/",
+    "tags": [
+      "Command",
+      "Feature",
+      "LivingSpec",
+      "Isolation",
+      "Sizing",
+      "TDD",
+      "SpecAhead",
+      "commands",
+      "commands feature"
+    ]
+  },
+  {
+    "title": "Implement (/implement)",
+    "description": "พัฒนาฟีเจอร์ตาม Living Spec ด้วยวินัย Strict TDD (Red-Green-Refactor) บน Git Branch แยกเฉพาะงาน พร้อมบันทึก Diff Evidence",
+    "section": "COMMANDS",
+    "slug": "commands/implement",
+    "href": "../commands/implement/",
+    "tags": [
+      "Command",
+      "Implement",
+      "TDD",
+      "RedGreenRefactor",
+      "TracerBullet",
+      "BranchIsolation",
+      "commands",
+      "commands implement"
+    ]
+  },
+  {
+    "title": "Check (/check)",
+    "description": "ตรวจรับคุณภาพและทดสอบการทำงานจริงของฟีเจอร์ (Senior QA Verification) ผ่าน Multi-Lane Verification Matrix โดยไม่มีการแก้ไขโค้ด",
+    "section": "COMMANDS",
+    "slug": "commands/check",
+    "href": "../commands/check/",
+    "tags": [
+      "Command",
+      "Check",
+      "QA",
+      "Verification",
+      "ZeroTouch",
+      "ManualProof",
+      "TryGuide",
+      "commands",
+      "commands check"
+    ]
+  },
+  {
+    "title": "Complete (/complete)",
+    "description": "สรุปผลงาน จัดเก็บประวัติเข้า History Archive ทำความสะอาด Task Workspace และรวมโค้ดเข้าสู่ Branch หลัก (Squash-Merge)",
+    "section": "COMMANDS",
+    "slug": "commands/complete",
+    "href": "../commands/complete/",
+    "tags": [
+      "Command",
+      "Complete",
+      "Archive",
+      "ReleaseDigest",
+      "SquashMerge",
+      "HistorySync",
+      "commands",
+      "commands complete"
+    ]
+  },
+  {
+    "title": "Status (/status)",
+    "description": "แสดงสถานะความคืบหน้าของโปรเจกต์ ฟีเจอร์ที่กำลังทำอยู่ สถานะ Git และคำสั่งถัดไปที่แนะนำ (Read-Only)",
+    "section": "COMMANDS",
+    "slug": "commands/status",
+    "href": "../commands/status/",
+    "tags": [
+      "Command",
+      "Status",
+      "Dashboard",
+      "Read-Only",
+      "GitState",
+      "DriftCheck",
+      "commands",
+      "commands status"
+    ]
+  },
+  {
+    "title": "Doctor (/doctor)",
+    "description": "ตรวจสุขภาพเวิร์กโฟลว์ ความสมบูรณ์ของ Adapters ความสดใหม่ของ Context และล้างสถานะผิดปกติ",
+    "section": "COMMANDS",
+    "slug": "commands/doctor",
+    "href": "../commands/doctor/",
+    "tags": [
+      "Command",
+      "Doctor",
+      "HealthCheck",
+      "Adapters",
+      "SelfHealing",
+      "Integrity",
+      "commands",
+      "commands doctor"
+    ]
+  },
+  {
+    "title": "Debug (/debug)",
+    "description": "วินิจฉัยหาสาเหตุของบั๊ก อาการทดสอบตก หรือความผิดปกติของระบบตามหลักการทางวิทยาศาสตร์โดยไม่มีการแก้ไขโค้ด",
+    "section": "COMMANDS",
+    "slug": "commands/debug",
+    "href": "../commands/debug/",
+    "tags": [
+      "Command",
+      "Debug",
+      "RootCause",
+      "Hypothesis",
+      "ZeroTouch",
+      "Reproduction",
+      "commands",
+      "commands debug"
+    ]
+  },
+  {
+    "title": "Fix (/fix)",
+    "description": "สร้าง Task-Isolated Living Spec สำหรับแก้บั๊กหรือการปรับปรุงขนาดเล็ก โดยยังคงวินัย TDD และ Regression Safety",
+    "section": "COMMANDS",
+    "slug": "commands/fix",
+    "href": "../commands/fix/",
+    "tags": [
+      "Command",
+      "Fix",
+      "BugFix",
+      "LivingSpec",
+      "TDD",
+      "RegressionSafety",
+      "commands",
+      "commands fix"
+    ]
+  },
+  {
+    "title": "Brief (/brief)",
+    "description": "บรรยายสรุปขอบเขตงาน ความซับซ้อน พื้นที่ที่ได้รับผลกระทบ และความเสี่ยงของฟีเจอร์ใน Build Plan ก่อนลงมือทำ (Read-Only)",
+    "section": "COMMANDS",
+    "slug": "commands/brief",
+    "href": "../commands/brief/",
+    "tags": [
+      "Command",
+      "Brief",
+      "PreFlight",
+      "Sizing",
+      "ScopeAnalysis",
+      "ReadOnly",
+      "commands",
+      "commands brief"
+    ]
+  },
+  {
+    "title": "Audit (/audit)",
+    "description": "ตรวจสอบคุณภาพโค้ด ความปลอดภัย ประสิทธิภาพ และการครอบคลุมของชุดการทดสอบ พร้อมบันทึกลง Findings Ledger",
+    "section": "COMMANDS",
+    "slug": "commands/audit",
+    "href": "../commands/audit/",
+    "tags": [
+      "Command",
+      "Audit",
+      "Security",
+      "Quality",
+      "Performance",
+      "IndependentReview",
+      "Findings",
+      "commands",
+      "commands audit"
+    ]
+  },
+  {
+    "title": "Tests (/test, /setup-tests, /browser-tests)",
+    "description": "จัดการชุดการทดสอบ รันการทดสอบ สร้าง Test Cases ที่ขาดหายไป และเชื่อมต่อ Browser E2E Automation",
+    "section": "COMMANDS",
+    "slug": "commands/tests",
+    "href": "../commands/tests/",
+    "tags": [
+      "Command",
+      "Test",
+      "SetupTests",
+      "BrowserTests",
+      "Playwright",
+      "BrowserOS",
+      "Coverage",
+      "commands",
+      "commands tests"
+    ]
+  },
+  {
+    "title": "CI (/ci)",
+    "description": "รวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook",
+    "section": "COMMANDS",
+    "slug": "commands/ci",
+    "href": "../commands/ci/",
+    "tags": [
+      "Command",
+      "CI",
+      "GitHubActions",
+      "VerifyCommand",
+      "PrePushHook",
+      "Automation",
+      "commands",
+      "commands ci"
+    ]
+  },
+  {
+    "title": "Prototype (/prototype)",
+    "description": "สร้างหน้าจำลอง Static HTML/CSS แบบ Throwaway พร้อม Design Tokens สำเร็จรูปเพื่อทดสอบ UX ก่อนเขียนโค้ดจริง",
+    "section": "COMMANDS",
+    "slug": "commands/prototype",
+    "href": "../commands/prototype/",
+    "tags": [
+      "Command",
+      "Prototype",
+      "DesignTokens",
+      "StaticHTML",
+      "UX",
+      "Wireframe",
+      "commands",
+      "commands prototype"
+    ]
+  },
+  {
+    "title": "Autopilot (/autopilot)",
+    "description": "รันการพัฒนาฟีเจอร์เดี่ยวแบบอัตโนมัติต่อเนื่องตั้งแต่ Feature -> Implement -> Check ผ่านทุก Quality Gates และหยุดรอคำสั่ง Complete",
+    "section": "COMMANDS",
+    "slug": "commands/autopilot",
+    "href": "../commands/autopilot/",
+    "tags": [
+      "Command",
+      "Autopilot",
+      "SingleFeature",
+      "Autonomous",
+      "QualityGates",
+      "ReviewGate",
+      "commands",
+      "commands autopilot"
+    ]
+  },
+  {
+    "title": "Continuous (/continuous)",
+    "description": "วงจรการส่งมอบอัตโนมัติหลายฟีเจอร์ต่อเนื่อง พัฒนาฟีเจอร์จาก Build Plan ทีละรายการพร้อมทำ Squash-Merge เข้าสู่ main",
+    "section": "COMMANDS",
+    "slug": "commands/continuous",
+    "href": "../commands/continuous/",
+    "tags": [
+      "Command",
+      "Continuous",
+      "AutonomousLoop",
+      "MultiFeature",
+      "SafetyBoundary",
+      "CircuitBreaker",
+      "commands",
+      "commands continuous"
+    ]
+  },
+  {
+    "title": "Release (/release)",
+    "description": "ตรวจสอบความพร้อมก่อนส่งมอบสู่ Production (Render, Vercel, Docker) ตรวจสอบ Secrets, Health Check Probes และ Database Migrations",
+    "section": "COMMANDS",
+    "slug": "commands/release",
+    "href": "../commands/release/",
+    "tags": [
+      "Command",
+      "Release",
+      "ProductionReadiness",
+      "Vercel",
+      "Render",
+      "Docker",
+      "SecretAudit",
+      "commands",
+      "commands release"
+    ]
+  },
+  {
+    "title": "Rollback (/rollback)",
+    "description": "วางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)",
+    "section": "COMMANDS",
+    "slug": "commands/rollback",
+    "href": "../commands/rollback/",
+    "tags": [
+      "Command",
+      "Rollback",
+      "ReversalSpec",
+      "SafeUndo",
+      "ForwardDependency",
+      "HistoryPreserving",
+      "commands",
+      "commands rollback"
+    ]
+  },
+  {
+    "title": "Analyze (/analyze) - SA Suite",
+    "description": "ชุดเครื่องมือสำหรับ System Analyst (SA) นำเข้าเอกสารความต้องการทุกรูปแบบ (PDF, Word, Excel, รูปภาพ, ข้อความแชต) และวิเคราะห์ Codebase Impact",
+    "section": "COMMANDS",
+    "slug": "commands/analyze",
+    "href": "../commands/analyze/",
+    "tags": [
+      "Command",
+      "Analyze",
+      "SA",
+      "DocIngestion",
+      "OCR",
+      "CodebaseImpact",
+      "Clarifications",
+      "commands",
+      "commands analyze"
+    ]
+  },
+  {
+    "title": "Grill (/grill, /align)",
+    "description": "สัมภาษณ์เจาะลึกทางสถาปัตยกรรมแบบ Socratic เพื่อท้าทายสมมติฐาน สกัดคำศัพท์ลง Glossary และบันทึก ADR ก่อนเขียนสเปก",
+    "section": "COMMANDS",
+    "slug": "commands/grill",
+    "href": "../commands/grill/",
+    "tags": [
+      "Command",
+      "Grill",
+      "Align",
+      "Socratic",
+      "ADR",
+      "Glossary",
+      "DomainModeling",
+      "commands",
+      "commands grill"
+    ]
+  },
+  {
+    "title": "Bughunter (/bughunter)",
+    "description": "ค้นหาช่องโหว่ความปลอดภัย ตรวจสอบ Trust Boundaries และล่าบั๊กลึกด้วยหลักฐานเชิงประจักษ์และการจำลองการโจมตี",
+    "section": "COMMANDS",
+    "slug": "commands/bughunter",
+    "href": "../commands/bughunter/",
+    "tags": [
+      "Command",
+      "Bughunter",
+      "Security",
+      "Vulnerability",
+      "OWASP",
+      "EmpiricalProof",
+      "commands",
+      "commands bughunter"
+    ]
+  },
+  {
+    "title": "CLI Overview (ภาพรวมเครื่องมือ CLI)",
+    "description": "ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง",
+    "section": "CLI",
+    "slug": "cli",
+    "href": "../cli/",
+    "tags": [
+      "CLI",
+      "Overview",
+      "Terminal",
+      "ZeroLatency",
+      "Dashboard",
+      "Commands",
+      "cli",
+      "cli"
+    ]
+  },
+  {
+    "title": "CLI Status (การตรวจเช็กสถานะผ่าน Terminal)",
+    "description": "เรียกดูสรุปความคืบหน้าของ Build Plan, งานที่กำลังดำเนินการใน Task Context, และสถานะ Git ผ่าน Terminal โดยใช้เวลา 0ms",
+    "section": "CLI",
+    "slug": "cli/status",
+    "href": "../cli/status/",
+    "tags": [
+      "CLI",
+      "Status",
+      "Terminal",
+      "GitState",
+      "Progress",
+      "ZeroTokenOverhead",
+      "cli",
+      "cli status"
+    ]
+  },
+  {
+    "title": "CLI Dashboard (Live Web Dashboard)",
+    "description": "เปิดแดชบอร์ดเว็บมอนิเตอร์สถานะแบบ Real-time เชื่อมต่อผ่าน Local WebSocket พร้อมการตอบสนองความเร็วสูงและใช้ Token 0 หน่วย",
+    "section": "CLI",
+    "slug": "cli/dashboard",
+    "href": "../cli/dashboard/",
+    "tags": [
+      "CLI",
+      "Dashboard",
+      "RealTime",
+      "WebSockets",
+      "ZeroTokens",
+      "VisualUI",
+      "cli",
+      "cli dashboard"
+    ]
+  },
+  {
+    "title": "File Reference (โครงสร้างไฟล์และหน้าที่)",
+    "description": "เอกสารอธิบายโครงสร้างไฟล์และโฟลเดอร์ทั้งหมดภายใต้ devflow/ และหน้าที่ของแต่ละไฟล์ในระบบอย่างละเอียด",
+    "section": "REFERENCE",
+    "slug": "file-reference",
+    "href": "../file-reference/",
+    "tags": [
+      "Reference",
+      "Files",
+      "Structure",
+      "Pillars",
+      "Architecture",
+      "Schema",
+      "reference",
+      "file-reference"
+    ]
+  },
+  {
+    "title": "Tool Adapters (การรองรับ AI Assistants)",
+    "description": "การรองรับเครื่องมือ AI Coding Assistant หลักทุกตัว: Google Antigravity, Claude Code, Codex, Copilot, OpenCode",
+    "section": "REFERENCE",
+    "slug": "tool-adapters",
+    "href": "../tool-adapters/",
+    "tags": [
+      "Reference",
+      "Adapters",
+      "Antigravity",
+      "ClaudeCode",
+      "Codex",
+      "Copilot",
+      "OpenCode",
+      "reference",
+      "tool-adapters"
+    ]
+  },
+  {
+    "title": "Local-Only Mode (ความเป็นส่วนตัว 100%)",
+    "description": "การใช้งาน Nexus-DevFlow ในสภาพแวดล้อมที่ปิดกั้นอินเทอร์เน็ต (Air-Gapped) หรือต้องการความเป็นส่วนตัวสูงสุด",
+    "section": "REFERENCE",
+    "slug": "local-only-mode",
+    "href": "../local-only-mode/",
+    "tags": [
+      "Reference",
+      "LocalOnly",
+      "Privacy",
+      "Offline",
+      "AirGapped",
+      "ZeroDataLeak",
+      "reference",
+      "local-only-mode"
+    ]
+  },
+  {
+    "title": "Project Configuration (config.json)",
+    "description": "คู่มือการตั้งค่า devflow/config.json เพื่อควบคุม Quality Gates, Git Prefixes, และ Review Policies",
+    "section": "REFERENCE",
+    "slug": "project-configuration",
+    "href": "../project-configuration/",
+    "tags": [
+      "Reference",
+      "Config",
+      "QualityGates",
+      "Policies",
+      "JSONSchema",
+      "reference",
+      "project-configuration"
+    ]
+  },
+  {
+    "title": "Manual Review With Try (/try)",
+    "description": "คู่มือการใช้งานคำสั่ง /try เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)",
+    "section": "REFERENCE",
+    "slug": "commands/try",
+    "href": "../commands/try/",
+    "tags": [
+      "Reference",
+      "Try",
+      "ManualReview",
+      "Walkthrough",
+      "QA",
+      "UAT",
+      "reference",
+      "commands try"
+    ]
+  },
+  {
+    "title": "Browser Tests (/browser-tests)",
+    "description": "การติดตั้ง Playwright Test Harness และเชื่อมต่อ MCP BrowserOS Neo สำหรับการทดสอบหน้าเว็บและ UI อัตโนมัติ",
+    "section": "REFERENCE",
+    "slug": "commands/browser-tests",
+    "href": "../commands/browser-tests/",
+    "tags": [
+      "Reference",
+      "BrowserTests",
+      "Playwright",
+      "BrowserOS",
+      "E2E",
+      "VisualQA",
+      "reference",
+      "commands browser-tests"
+    ]
+  },
+  {
+    "title": "Testing and CI (ปรัชญาการทดสอบและการรวมศูนย์ CI)",
+    "description": "ปรัชญาการทดสอบแบบ Multi-lane Verification, วินัย Strict TDD (Red-Green-Refactor), และการรวมคำสั่ง Verify เข้าสู่ GitHub Actions",
+    "section": "QUALITY",
+    "slug": "testing",
+    "href": "../testing/",
+    "tags": [
+      "Quality",
+      "Testing",
+      "TDD",
+      "MultiLane",
+      "CI",
+      "GitHubActions",
+      "Verification",
+      "quality",
+      "testing"
+    ]
+  },
+  {
+    "title": "Manual Review With Try (การตรวจรับด้วยมือ)",
+    "description": "การสร้างคู่มือตรวจรับงานแบบ Manual Walkthrough ด้วยคำสั่ง /try สำหรับ Product Owner, Senior Developer, และ QA",
+    "section": "QUALITY",
+    "slug": "manual-review",
+    "href": "../manual-review/",
+    "tags": [
+      "Quality",
+      "Try",
+      "ManualReview",
+      "QA",
+      "UAT",
+      "Walkthrough",
+      "quality",
+      "manual-review"
+    ]
+  },
+  {
+    "title": "Code Quality With Audit (การควบคุมคุณภาพโค้ด)",
+    "description": "การตรวจเช็กคุณภาพโค้ด สถาปัตยกรรม ความปลอดภัย และกระบวนการ Independent Review Checkpoint",
+    "section": "QUALITY",
+    "slug": "code-quality",
+    "href": "../code-quality/",
+    "tags": [
+      "Quality",
+      "Audit",
+      "CodeQuality",
+      "Security",
+      "Review",
+      "IndependentReviewer",
+      "quality",
+      "code-quality"
+    ]
+  },
+  {
+    "title": "The Findings Ledger (สมุดบัญชีข้อค้นพบ)",
+    "description": "สัญญาการบันทึกและจัดการข้อค้นพบใน devflow/context/{xxx-slug}/findings.md และการควบคุม Blocker Gates",
+    "section": "QUALITY",
+    "slug": "findings-ledger",
+    "href": "../findings-ledger/",
+    "tags": [
+      "Quality",
+      "Findings",
+      "Ledger",
+      "Blockers",
+      "Compliance",
+      "AuditTrail",
+      "quality",
+      "findings-ledger"
+    ]
+  },
+  {
+    "title": "Release Readiness (ความพร้อมก่อนขึ้น Production)",
+    "description": "แนวปฏิบัติและชุดการตรวจสอบความพร้อมก่อนส่งมอบซอฟต์แวร์สู่ Production บนแพลตฟอร์ม Render, Vercel และ Docker",
+    "section": "SHIP",
+    "slug": "release-readiness",
+    "href": "../release-readiness/",
+    "tags": [
+      "Ship",
+      "Release",
+      "Production",
+      "Vercel",
+      "Render",
+      "Docker",
+      "HealthCheck",
+      "ship",
+      "release-readiness"
+    ]
+  },
+  {
+    "title": "Troubleshooting (การแก้ปัญหาและกู้คืนสถานะ)",
+    "description": "คู่มือการแก้ไขปัญหาเมื่อเกิดข้อผิดพลาดในการรันคำสั่ง DevFlow การกู้คืนจาก Workflow Drift และการตรวจสุขภาพระบบด้วย /doctor",
+    "section": "SHIP",
+    "slug": "troubleshooting",
+    "href": "../troubleshooting/",
+    "tags": [
+      "Ship",
+      "Troubleshoot",
+      "Doctor",
+      "Drift",
+      "Recovery",
+      "SelfHealing",
+      "ship",
+      "troubleshooting"
+    ]
+  }
+]

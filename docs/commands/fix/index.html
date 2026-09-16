@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix (/fix) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="สร้าง Task-Isolated Living Spec สำหรับแก้บั๊กหรือการปรับปรุงขนาดเล็ก โดยยังคงวินัย TDD และ Regression Safety">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/fix/">
+  <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Local Standalone Style (Zero External Dependencies) -->
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="docs-body">
+  <a class="skip-link" href="#docs-content">ข้ามไปยังเนื้อหาหลัก</a>
+
+  <!-- Docs Header -->
+  <header class="docs-header">
+    <div class="docs-header-inner">
+      <div class="docs-brand">
+        <a href="../../" aria-label="Nexus-DevFlow หน้าแรก">
+          <img src="../../brand/logo-light.svg" alt="Nexus-DevFlow" class="site-logo">
+        </a>
+        <span class="docs-badge">คู่มือ</span>
+      </div>
+
+      <div class="docs-header-actions">
+        <!-- Instant Search Button -->
+        <button class="docs-search" type="button" data-search-open aria-label="เปิดหน้าต่างค้นหาเอกสาร">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>ค้นหาเอกสาร...</span>
+          <span class="docs-key">⌘ K</span>
+        </button>
+
+        <a class="docs-header-link" href="../../">หน้าแรก</a>
+        <a class="docs-header-link" href="../../updates/">อัปเดต</a>
+        <a class="docs-header-link" href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.27-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <button class="docs-mobile-menu" type="button" aria-expanded="false" aria-controls="docs-sidebar" data-docs-menu>เมนู</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Docs Shell (3 Columns) -->
+  <div class="docs-shell">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation sidebar" data-docs-sidebar>
+      <nav>
+        <!-- START -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">START</div>
+          <a class="docs-nav-link" href="../../getting-started/">Getting Started</a>
+          <a class="docs-nav-link" href="../../existing-codebase/">Existing Codebase Adoption</a>
+          <a class="docs-nav-link" href="../../command-guide/">Command Guide</a>
+          <a class="docs-nav-link" href="../../writing-your-plans/">Writing Your Plans</a>
+          <a class="docs-nav-link" href="../../updating-devflow/">Updating DevFlow</a>
+        </div>
+
+        <!-- WORKFLOW -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">WORKFLOW</div>
+          <a class="docs-nav-link" href="../../core-workflow/">Core Workflow</a>
+        </div>
+
+        <!-- COMMANDS -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">COMMANDS</div>
+          <a class="docs-nav-link" href="../../commands/onboard/">Onboard</a>
+          <a class="docs-nav-link" href="../../commands/adopt/">Adopt</a>
+          <a class="docs-nav-link" href="../../commands/discovery/">Discovery</a>
+          <a class="docs-nav-link" href="../../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../../commands/overview/">Overview</a>
+          <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
+          <a class="docs-nav-link" href="../../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
+          <a class="docs-nav-link" href="../../commands/status/">Status</a>
+          <a class="docs-nav-link" href="../../commands/doctor/">Doctor</a>
+          <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link active" href="../../commands/fix/">Fix</a>
+          <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
+          <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
+          <a class="docs-nav-link" href="../../commands/tests/">Tests</a>
+          <a class="docs-nav-link" href="../../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
+          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot</a>
+          <a class="docs-nav-link" href="../../commands/continuous/">Continuous</a>
+          <a class="docs-nav-link" href="../../commands/release/">Release</a>
+          <a class="docs-nav-link" href="../../commands/rollback/">Rollback</a>
+          <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
+          <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
+          <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+        </div>
+
+        <!-- CLI -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">CLI</div>
+          <a class="docs-nav-link" href="../../cli/">CLI Overview</a>
+          <a class="docs-nav-link" href="../../cli/status/">Status</a>
+          <a class="docs-nav-link" href="../../cli/dashboard/">Live Dashboard</a>
+        </div>
+
+        <!-- REFERENCE -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">REFERENCE</div>
+          <a class="docs-nav-link" href="../../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../../tool-adapters/">Tool Adapters</a>
+          <a class="docs-nav-link" href="../../local-only-mode/">Local-Only Mode</a>
+          <a class="docs-nav-link" href="../../project-configuration/">Project Configuration</a>
+          <a class="docs-nav-link" href="../../commands/try/">Try migration</a>
+          <a class="docs-nav-link" href="../../commands/browser-tests/">Browser Tests migration</a>
+        </div>
+
+        <!-- QUALITY -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">QUALITY</div>
+          <a class="docs-nav-link" href="../../testing/">Testing and CI</a>
+          <a class="docs-nav-link" href="../../manual-review/">Manual Review With Try</a>
+          <a class="docs-nav-link" href="../../code-quality/">Code Quality With Audit</a>
+          <a class="docs-nav-link" href="../../findings-ledger/">The Findings Ledger</a>
+        </div>
+
+        <!-- SHIP -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">SHIP</div>
+          <a class="docs-nav-link" href="../../release-readiness/">Release Readiness</a>
+          <a class="docs-nav-link" href="../../troubleshooting/">Troubleshooting</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-main" id="docs-content">
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Fix (/fix)</strong></div>
+      
+      <h1 class="docs-title">Fix (/fix)</h1>
+      
+      <p class="docs-lead">
+        สร้าง Task-Isolated Living Spec สำหรับแก้บั๊กหรือการปรับปรุงขนาดเล็ก โดยยังคงวินัย TDD และ Regression Safety
+      </p>
+
+      <div class="docs-meta">
+        <span class="docs-pill">Command</span>
+        <span class="docs-pill">Fix</span>
+        <span class="docs-pill">BugFix</span>
+        <span class="docs-pill">LivingSpec</span>
+        <span class="docs-pill">TDD</span>
+        <span class="docs-pill">RegressionSafety</span>
+      </div>
+
+      <div class="docs-prose">
+
+        <!-- Section: เมื่อไหร่ที่ควรใช้ (When to use it) -->
+        <section id="when-to-use-it">
+          <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
+          
+          <p>ใช้คำสั่ง <code>/fix</code> สำหรับการแก้ไขบั๊ก ข้อผิดพลาดเฉพาะจุด หรืองานปรับปรุงขนาดเล็กที่ไม่ได้อยู่ใน Build Plan หลัก:</p>
+          <pre><code>/fix "แก้ไขปัญหา token หมดอายุแล้วไม่ refresh อัตโนมัติ"
+/fix "แก้บั๊กการปัดเศษทศนิยมในหน้า checkout"</code></pre>
+        
+          
+        </section>
+
+        <!-- Section: สิ่งที่ระบบสร้างและบันทึก (What it writes) -->
+        <section id="what-it-writes">
+          <h2>สิ่งที่ระบบสร้างและบันทึก (What it writes)</h2>
+          
+          <ul>
+            <li>จัดสรรรหัสงานแยกเฉพาะ (เช่น <code>devflow/context/fix-001-token-refresh/</code>)</li>
+            <li>สร้าง <strong><code>spec.md</code></strong> ที่ระบุ Root Cause, Regression Test Plan และขอบเขตการแก้ไขที่จำกัด</li>
+            <li>สร้าง <code>stage.md</code> และ <code>findings.md</code> ประจำงาน</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: ขั้นตอนถัดไป (Next steps) -->
+        <section id="next-steps">
+          <h2>ขั้นตอนถัดไป (Next steps)</h2>
+          
+          <p>เริ่มเขียน Test และแก้ไขโค้ดด้วยคำสั่ง <code>/implement</code> ตามด้วย <code>/check</code> และ <code>/complete</code></p>
+        
+          
+        </section>
+      </div>
+
+      <!-- Bottom Page Navigation -->
+      <nav class="docs-page-nav" aria-label="Documentation page navigation">
+        <a class="prev" href="../../commands/debug/">
+          <span>ก่อนหน้า (Previous)</span>
+          <strong>Debug</strong>
+        </a>
+        <a class="next" href="../../commands/brief/">
+          <span>ถัดไป (Next)</span>
+          <strong>Brief</strong>
+        </a>
+      </nav>
+    </main>
+
+    <!-- Right Sidebar (TOC) -->
+    <aside class="docs-toc" aria-label="On this page">
+      <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
+      <a href="#when-to-use-it">เมื่อไหร่ที่ควรใช้ (When to use it)</a>
+      <a href="#what-it-writes">สิ่งที่ระบบสร้างและบันทึก (What it writes)</a>
+      <a href="#next-steps">ขั้นตอนถัดไป (Next steps)</a>
+    </aside>
+  </div>
+
+  <!-- Instant Search Dialog Modal (Zero Dependency) -->
+  <dialog class="search-dialog" data-search-dialog aria-labelledby="search-title">
+    <div class="search-panel">
+      <div class="search-heading">
+        <div>
+          <span class="eyebrow" style="font-size:0.7rem; text-transform:uppercase; color:var(--blue-dark); font-family:var(--font-mono);">Nexus-DevFlow Docs</span>
+          <h2 id="search-title">ค้นหาเอกสารและคำสั่ง</h2>
+        </div>
+        <button type="button" data-search-close aria-label="ปิดหน้าต่างค้นหา">Esc</button>
+      </div>
+      <label class="search-input">
+        <span class="sr-only">ค้นหาเอกสาร</span>
+        <input type="search" placeholder="พิมพ์ชื่อคำสั่ง เช่น /feature, /audit, config, testing..." autocomplete="off" data-search-input>
+      </label>
+      <div class="search-results" data-search-results aria-live="polite">
+        <p>พิมพ์เพื่อค้นหาคำสั่ง คู่มือ และสถาปัตยกรรม...</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container site-footer-inner">
+      <div class="site-footer-brand">
+        <img src="../../brand/logo-light.svg" alt="Nexus-DevFlow">
+        <span>เลเยอร์เวิร์กโฟลว์แบบโอเพนซอร์สสำหรับการพัฒนาซอฟต์แวร์ด้วย AI</span>
+      </div>
+      <div class="site-footer-links">
+        <a href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="../../getting-started/">คู่มือ (Docs)</a>
+        <a href="../../updates/">อัปเดต (Updates)</a>
+        <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">สัญญาอนุญาต MIT</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../../js/main.js"></script>
+</body>
+</html>
