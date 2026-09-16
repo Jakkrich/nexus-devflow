@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debug (/debug) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="วินิจฉัยหาสาเหตุของบั๊ก อาการทดสอบตก หรือความผิดปกติของระบบตามหลักการทางวิทยาศาสตร์โดยไม่มีการแก้ไขโค้ด">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/debug/">
+  <title>Ponytail (/ponytail) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="โหมด Senior Developer ขี้เกียจ ตรวจจับ Code Bloat ตัดความซับซ้อนส่วนเกิน (Over-engineering) และลดการใช้ LLM Tokens">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/ponytail/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,7 +85,7 @@
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
           <a class="docs-nav-link" href="../../commands/status/">Status</a>
           <a class="docs-nav-link" href="../../commands/doctor/">Doctor</a>
-          <a class="docs-nav-link active" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
           <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
@@ -103,7 +103,7 @@
           <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
           <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
           <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
+          <a class="docs-nav-link active" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
           <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
         </div>
 
@@ -146,21 +146,21 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Debug (/debug)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Ponytail (/ponytail)</strong></div>
       
-      <h1 class="docs-title">Debug (/debug)</h1>
+      <h1 class="docs-title">Ponytail (/ponytail)</h1>
       
       <p class="docs-lead">
-        วินิจฉัยหาสาเหตุของบั๊ก อาการทดสอบตก หรือความผิดปกติของระบบตามหลักการทางวิทยาศาสตร์โดยไม่มีการแก้ไขโค้ด
+        โหมด Senior Developer ขี้เกียจ ตรวจจับ Code Bloat ตัดความซับซ้อนส่วนเกิน (Over-engineering) และลดการใช้ LLM Tokens
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Command</span>
-        <span class="docs-pill">Debug</span>
-        <span class="docs-pill">RootCause</span>
-        <span class="docs-pill">Hypothesis</span>
-        <span class="docs-pill">ZeroTouch</span>
-        <span class="docs-pill">Reproduction</span>
+        <span class="docs-pill">Ponytail</span>
+        <span class="docs-pill">Simplification</span>
+        <span class="docs-pill">KISS</span>
+        <span class="docs-pill">YAGNI</span>
+        <span class="docs-pill">TokenSaver</span>
       </div>
 
       <div class="docs-prose">
@@ -169,44 +169,18 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>ใช้คำสั่ง <code>/debug</code> เมื่อพบข้อผิดพลาดในโค้ดเบส Test ไม่ผ่าน หรือเกิดข้อผิดพลาดในการรันแอปพลิเคชัน:</p>
-          <pre><code>/debug "TypeError: Cannot read properties of undefined (reading 'userId')"
-/debug "รัน npm test แล้วฟังก์ชันคำนวณภาษีทำงานผิดพลาด"</code></pre>
+          <p>ใช้คำสั่ง <code>/ponytail</code> เมื่อรู้สึกว่าโค้ดเริ่มซับซ้อนเกินจำเป็น มี Abstraction หลายชั้น หรือมี Dependencies ที่ไม่ได้ใช้งาน:</p>
+          <pre><code>/ponytail src/services/
+/ponytail "ช่วยรีวิวว่าโค้ดส่วนนี้เขียนให้เรียบง่ายขึ้นได้อย่างไร"</code></pre>
         
           
         </section>
 
-        <!-- Section: กระบวนการวินิจฉัย 4 ขั้นตอน (Scientific Diagnosis Pipeline) -->
-        <section id="scientific-pipeline">
-          <h2>กระบวนการวินิจฉัย 4 ขั้นตอน (Scientific Diagnosis Pipeline)</h2>
+        <!-- Section: ปรัชญาความเรียบง่าย (KISS & YAGNI) -->
+        <section id="philosophy">
+          <h2>ปรัชญาความเรียบง่าย (KISS & YAGNI)</h2>
           
-          <ol>
-            <li><strong>Symptom Reproduction</strong>: สร้าง Reproduction Script หรือ Test Case ขั้นต่ำที่จำลองอาการบั๊กได้ 100%</li>
-            <li><strong>Hypothesis Generation</strong>: ตั้งสมมติฐานทางเทคนิค 2-3 ข้อที่เป็นไปได้จาก Codebase Analysis</li>
-            <li><strong>Empirical Testing</strong>: พิสูจน์และตัดสมมติฐานที่ไม่ถูกต้องออกด้วยหลักฐานเชิงประจักษ์</li>
-            <li><strong>Root Cause Isolation & Repair Handoff</strong>: ระบุสาเหตุที่แท้จริง (Root Cause) พร้อมเสนอทางแก้ที่รัดกุม</li>
-          </ol>
-        
-          
-        </section>
-
-        <!-- Section: การรับประกันความปลอดภัย (Zero Source Editing) -->
-        <section id="what-it-never-does">
-          <h2>การรับประกันความปลอดภัย (Zero Source Editing)</h2>
-          
-          <div class="docs-callout note">
-            <div class="docs-callout-label">Zero Source Code Editing</div>
-            <p><code>/debug</code> จะ<strong>ไม่แก้ซอร์สโค้ด</strong>ในระหว่างการสืบค้น เพื่อป้องกันปัญหาแก้แบบเดาสุ่ม (Guess & Check) และป้องกันการเกิดบั๊กซ้ำซ้อน</p>
-          </div>
-        
-          
-        </section>
-
-        <!-- Section: ขั้นตอนถัดไป (Next steps) -->
-        <section id="next-steps">
-          <h2>ขั้นตอนถัดไป (Next steps)</h2>
-          
-          <p>นำผลลัพธ์การวินิจฉัยไปสร้าง Living Spec แก้ไขบั๊กด้วยคำสั่ง <code>/fix</code></p>
+          <p>Ponytail จะช่วยเสนอทางเลือกในการเขียนโค้ดที่สั้นลง อ่านง่ายขึ้น โดยใช้ฟีเจอร์มาตรฐานของภาษาหรือ Native Platform APIs แทนการพึ่งพาไลบรารีขนาดใหญ่</p>
         
           
         </section>
@@ -214,13 +188,13 @@
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../../commands/doctor/">
+        <a class="prev" href="../../commands/vendor/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Doctor</strong>
+          <strong>Vendor</strong>
         </a>
-        <a class="next" href="../../commands/fix/">
+        <a class="next" href="../../commands/report-html/">
           <span>ถัดไป (Next)</span>
-          <strong>Fix</strong>
+          <strong>Report HTML</strong>
         </a>
       </nav>
     </main>
@@ -229,9 +203,7 @@
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
       <a href="#when-to-use-it">เมื่อไหร่ที่ควรใช้ (When to use it)</a>
-      <a href="#scientific-pipeline">กระบวนการวินิจฉัย 4 ขั้นตอน (Scientific Diagnosis Pipeline)</a>
-      <a href="#what-it-never-does">การรับประกันความปลอดภัย (Zero Source Editing)</a>
-      <a href="#next-steps">ขั้นตอนถัดไป (Next steps)</a>
+      <a href="#philosophy">ปรัชญาความเรียบง่าย (KISS & YAGNI)</a>
     </aside>
   </div>
 

@@ -99,6 +99,12 @@
           <a class="docs-nav-link active" href="../../commands/analyze/">Analyze (SA Suite)</a>
           <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
           <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
+          <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
+          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
+          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
         </div>
 
         <!-- CLI -->
@@ -182,6 +188,35 @@
         <section id="the-4-step-pipeline">
           <h2>กระบวนการวิเคราะห์ 4 ขั้นตอน (4-Step SA Pipeline)</h2>
           
+          <pre><code>  [Raw Files / Multi-format Docs / Prompts]
+                     │
+                     ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 1. Auto-Allocate & Ingest (devflow/inbox/{REQ-ID}/raw/)      │
+  │    • Generates REQ-YYYYMMDD-NNN Workspace                   │
+  │    • Safe isolated raw copy (PDF, XLSX, DOCX, Images)       │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 2. Parse & Normalize (Multimodal OCR -> parsed.md)          │
+  │    • Executive Summary, User Stories, Scope Boundaries      │
+  │    • Functional (FR) & Non-Functional (NFR) Requirements    │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 3. Codebase Impact & Blast Radius (codebase-impact.md)       │
+  │    • Scans affected API routes, services, schemas, and DB   │
+  │    • Evaluates complexity level (Low / Med / High / Extreme)│
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 4. Socratic Gap Scan (clarifications.md)                    │
+  │    • Detects ambiguities, missing edge-cases, assumptions   │
+  │    • Generates meeting checklist for client alignment       │
+  └─────────────────────────────────────────────────────────────┘</code></pre>
           <ol>
             <li><strong>Auto-Allocate & Ingest (สร้าง Workspace)</strong>: จัดสรรรหัส <code>REQ-YYYYMMDD-NNN</code> และสร้างโฟลเดอร์ <code>devflow/inbox/{REQ-ID}/raw/</code> เพื่อจัดเก็บไฟล์ต้นฉบับ</li>
             <li><strong>Parse & Normalize (สกัดเนื้อหาเป็น Markdown)</strong>: แปลงเนื้อหา ตาราง และรูปภาพ Wireframe (ผ่าน Multimodal OCR) ให้อยู่ในรูป <code>parsed.md</code> แบ่งหมวด Executive Summary, User Stories, Functional (FR) และ Non-Functional Requirements (NFR)</li>

@@ -99,6 +99,12 @@
           <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
           <a class="docs-nav-link active" href="../../commands/grill/">Grill (Domain & ADR)</a>
           <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
+          <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
+          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
+          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
         </div>
 
         <!-- CLI -->
@@ -175,6 +181,28 @@
         <section id="core-philosophy">
           <h2>หลักการสำคัญ: Align Before You Build</h2>
           
+          <pre><code>  [Vague Requirements / Complex Architecture]
+                         │
+                         ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 1. Codebase-Grounded Inspection                             │
+  │    • Inspects existing models, services, and APIs           │
+  │    • Never asks questions already answered in code          │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 2. Socratic Interview (1-2 Focused Questions Rule)          │
+  │    • Challenges assumptions & edge-cases                    │
+  │    • Always provides Recommended Defaults                   │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 3. Lazy Inline Persistence                                  │
+  │    • Glossary: devflow/context/glossary.md                  │
+  │    • Architecture Decision Records: devflow/decisions/      │
+  └─────────────────────────────────────────────────────────────┘</code></pre>
           <ul>
             <li><strong>Codebase-Grounded</strong>: AI จะอ่านโค้ดและบริบทที่มีอยู่ก่อนเสมอ จะ<strong>ไม่ถามคำถามที่โค้ดเบสมีคำตอบอยู่แล้ว</strong></li>
             <li><strong>1-2 Focused Questions Rule</strong>: ถามทีละ 1-2 คำถามที่ตรงจุดสำคัญที่สุด พร้อมเสนอค่า Recommended Default เสมอ เพื่อไม่ให้สร้างภาระทางความคิดแก่คุณ</li>

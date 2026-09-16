@@ -229,6 +229,27 @@ $onboard
         id: 'the-6-lens-framework',
         title: 'กรอบการวิเคราะห์ 6 เลนส์ (The 6-Lens Framework)',
         contentHtml: `
+          <pre><code>                     ┌─────────────────────────────────────────┐
+                     │   DISCOVERY 6-LENS FRAMEWORK PIPELINE   │
+                     └────────────────────┬────────────────────┘
+                                          │
+       ┌─────────────────┬────────────────┼─────────────────┬─────────────────┐
+       ▼                 ▼                ▼                 ▼                 ▼
+ ┌───────────┐    ┌─────────────┐   ┌───────────┐     ┌───────────┐     ┌───────────┐
+ │1.Brain-   │    │ 2.Research  │   │ 3. PRD &  │     │ 4. Issue  │     │ 5. Socratic│
+ │  storming │    │   Empirical │   │  Scoping  │     │   Triage  │     │    Grill  │
+ │ (Options) │    │   (Spikes)  │   │  (Bound.) │     │  (Debug)  │     │   (ADR)   │
+ └───────────┘    └─────────────┘   └───────────┘     └───────────┘     └───────────┘
+                                          │
+                                          ▼
+                     ┌─────────────────────────────────────────┐
+                     │ 6. Visual Architecture (HTML / Archify) │
+                     └────────────────────┬────────────────────┘
+                                          │
+                                          ▼
+                     ┌─────────────────────────────────────────┐
+                     │  Decision Gate: [Proceed | Defer | Drop]│
+                     └─────────────────────────────────────────┘</code></pre>
           <p>เมื่อเข้าสู่กระบวนการสำรวจฟีเจอร์ AI จะนำปัญหามาวิเคราะห์ผ่าน 6 เลนส์มาตรฐานอย่างเป็นระบบ:</p>
           <ol>
             <li><strong>Brainstorming Lens</strong>: แตกไอเดียและสร้างทางเลือกสถาปัตยกรรม 2-3 รูปแบบ พร้อมตาราง Trade-off Comparison (ข้อดี, ข้อเสีย, ความคุ้มค่า)</li>
@@ -1159,6 +1180,35 @@ $onboard
         id: 'the-4-step-pipeline',
         title: 'กระบวนการวิเคราะห์ 4 ขั้นตอน (4-Step SA Pipeline)',
         contentHtml: `
+          <pre><code>  [Raw Files / Multi-format Docs / Prompts]
+                     │
+                     ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 1. Auto-Allocate & Ingest (devflow/inbox/{REQ-ID}/raw/)      │
+  │    • Generates REQ-YYYYMMDD-NNN Workspace                   │
+  │    • Safe isolated raw copy (PDF, XLSX, DOCX, Images)       │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 2. Parse & Normalize (Multimodal OCR -> parsed.md)          │
+  │    • Executive Summary, User Stories, Scope Boundaries      │
+  │    • Functional (FR) & Non-Functional (NFR) Requirements    │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 3. Codebase Impact & Blast Radius (codebase-impact.md)       │
+  │    • Scans affected API routes, services, schemas, and DB   │
+  │    • Evaluates complexity level (Low / Med / High / Extreme)│
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 4. Socratic Gap Scan (clarifications.md)                    │
+  │    • Detects ambiguities, missing edge-cases, assumptions   │
+  │    • Generates meeting checklist for client alignment       │
+  └─────────────────────────────────────────────────────────────┘</code></pre>
           <ol>
             <li><strong>Auto-Allocate & Ingest (สร้าง Workspace)</strong>: จัดสรรรหัส <code>REQ-YYYYMMDD-NNN</code> และสร้างโฟลเดอร์ <code>devflow/inbox/{REQ-ID}/raw/</code> เพื่อจัดเก็บไฟล์ต้นฉบับ</li>
             <li><strong>Parse & Normalize (สกัดเนื้อหาเป็น Markdown)</strong>: แปลงเนื้อหา ตาราง และรูปภาพ Wireframe (ผ่าน Multimodal OCR) ให้อยู่ในรูป <code>parsed.md</code> แบ่งหมวด Executive Summary, User Stories, Functional (FR) และ Non-Functional Requirements (NFR)</li>
@@ -1213,6 +1263,28 @@ $onboard
         id: 'core-philosophy',
         title: 'หลักการสำคัญ: Align Before You Build',
         contentHtml: `
+          <pre><code>  [Vague Requirements / Complex Architecture]
+                         │
+                         ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 1. Codebase-Grounded Inspection                             │
+  │    • Inspects existing models, services, and APIs           │
+  │    • Never asks questions already answered in code          │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 2. Socratic Interview (1-2 Focused Questions Rule)          │
+  │    • Challenges assumptions & edge-cases                    │
+  │    • Always provides Recommended Defaults                   │
+  └──────────────────────────────┬──────────────────────────────┘
+                                 │
+                                 ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 3. Lazy Inline Persistence                                  │
+  │    • Glossary: devflow/context/glossary.md                  │
+  │    • Architecture Decision Records: devflow/decisions/      │
+  └─────────────────────────────────────────────────────────────┘</code></pre>
           <ul>
             <li><strong>Codebase-Grounded</strong>: AI จะอ่านโค้ดและบริบทที่มีอยู่ก่อนเสมอ จะ<strong>ไม่ถามคำถามที่โค้ดเบสมีคำตอบอยู่แล้ว</strong></li>
             <li><strong>1-2 Focused Questions Rule</strong>: ถามทีละ 1-2 คำถามที่ตรงจุดสำคัญที่สุด พร้อมเสนอค่า Recommended Default เสมอ เพื่อไม่ให้สร้างภาระทางความคิดแก่คุณ</li>
@@ -1288,5 +1360,177 @@ $onboard
         `
       }
     ]
+  },
+
+  // 26. Archify
+  {
+    slug: 'commands/archify',
+    category: 'COMMANDS',
+    title: 'Archify (/archify)',
+    lead: 'สร้างแผนภาพสถาปัตยกรรมระบบ Flow การทำงาน และ Data Pipeline แบบ Interactive Standalone HTML สวยงามระดับพรีเมียม',
+    pills: ['Command', 'Archify', 'Architecture', 'InteractiveHTML', 'DataFlow', 'SequenceDiagram'],
+    sections: [
+      {
+        id: 'when-to-use-it',
+        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
+        contentHtml: `
+          <p>ใช้คำสั่ง <code>/archify</code> เมื่อคุณต้องการแผนภาพสถาปัตยกรรมที่สามารถคลิกสำรวจได้ (Explorable Architecture Map), Sequence Diagrams, State Machines หรือแปลง Mermaid ให้กลายเป็นหน้าเว็บ Interactive Standalone HTML:</p>
+          <pre><code>/archify "สร้างแผนภาพแสดง Flow การชำระเงินตั้งแต่ Client -> Payment Gateway -> Webhook -> DB"
+/archify --source ./devflow/context/001-auth/spec.md</code></pre>
+        `
+      },
+      {
+        id: 'core-capabilities',
+        title: 'ความสามารถหลักของ Archify',
+        contentHtml: `
+          <ul>
+            <li><strong>Interactive HTML Output</strong>: แผนภาพที่สร้างเป็น Standalone HTML ไฟล์เดียวจบ สามารถเปิดดูบนเบราว์เซอร์ได้ทันทีโดยไม่ต้องต่ออินเทอร์เน็ต</li>
+            <li><strong>Theme & Motion Support</strong>: สลับ Dark/Light Theme ได้ในตัว พร้อม Animation เส้นทาง Data Flow</li>
+            <li><strong>Route Probes & Inspection</strong>: คลิกที่แต่ละ Node หรือ Layer เพื่อดูรายละเอียด API Spec, Data Model หรือโค้ดที่เกี่ยวข้อง</li>
+          </ul>
+        `
+      },
+      {
+        id: 'next-steps',
+        title: 'ขั้นตอนถัดไป (Next steps)',
+        contentHtml: `
+          <p>นำแผนภาพที่ได้ไปแนบใน <code>devflow/discoveries/</code> หรือ <code>spec.md</code> เพื่อใช้เป็นภาพอ้างอิงในการพัฒนา</p>
+        `
+      }
+    ]
+  },
+
+  // 27. Diagram Design
+  {
+    slug: 'commands/diagram-design',
+    category: 'COMMANDS',
+    title: 'Diagram Design (/diagram-design)',
+    lead: 'ชุดเครื่องมือสร้างแผนภาพเชิงบรรณาธิการและแผนภาพธุรกิจกว่า 39 รูปแบบ ทั้ง HTML, SVG และ PNG พร้อมรองรับ draw.io และ Mermaid',
+    pills: ['Command', 'DiagramDesign', 'Editorial', '39-Templates', 'SVG', 'Mermaid', 'DrawIO'],
+    sections: [
+      {
+        id: 'when-to-use-it',
+        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
+        contentHtml: `
+          <p>ใช้คำสั่ง <code>/diagram-design</code> เมื่อต้องการสร้างแผนภาพนำเสนอระดับมืออาชีพ เช่น Business Process, Mindmap, Cloud Topology, Comparison Matrix หรือ Quadrant Analysis:</p>
+          <pre><code>/diagram-design "สร้างแผนภาพ 2x2 Matrix เปรียบเทียบความคุ้มค่าและความเสี่ยงของสถาปัตยกรรม Microservices"</code></pre>
+        `
+      },
+      {
+        id: 'supported-templates',
+        title: 'เทมเพลตและรูปแบบที่รองรับ',
+        contentHtml: `
+          <p>รองรับกว่า 39 เทมเพลตมาตรฐานสากล ทั้ง Flowchart, C4 Model, Mindmap, Value Stream Map, และ Architecture Topology รองรับการ Export เป็น SVG และ Standalone HTML</p>
+        `
+      }
+    ]
+  },
+
+  // 28. Convert Any to MD
+  {
+    slug: 'commands/convert-any-to-md',
+    category: 'COMMANDS',
+    title: 'Convert Any to MD (/convert-any-to-md)',
+    lead: 'แปลงเอกสารทุกรูปแบบ (.pdf, .docx, .xlsx, .csv, .json, .yaml, รูปภาพ) ให้กลายเป็น Clean Markdown ภายใต้ devflow/reference/',
+    pills: ['Command', 'Converter', 'Markdown', 'PDF', 'Word', 'Excel', 'DataExtraction'],
+    sections: [
+      {
+        id: 'when-to-use-it',
+        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
+        contentHtml: `
+          <p>ใช้คำสั่ง <code>/convert-any-to-md</code> เมื่อคุณมีเอกสารความต้องการจากลูกค้าหรือสเปกจากฝ่ายธุรกิจที่ต้องการแปลงเป็น Markdown เพื่อให้ AI อ่านเข้าใจง่ายและนำไปใช้วิเคราะห์:</p>
+          <pre><code>/convert-any-to-md C:\\Users\\...\\Downloads\\requirements.pdf
+/convert-any-to-md ./specs-folder/</code></pre>
+        `
+      },
+      {
+        id: 'what-it-writes',
+        title: 'สิ่งที่ระบบสร้างและบันทึก',
+        contentHtml: `
+          <p>ระบบจะสกัดข้อความ หัวข้อ และตาราง แล้วบันทึกเป็น Clean Markdown ใน <code>devflow/reference/{filename}.md</code></p>
+        `
+      }
+    ]
+  },
+
+  // 29. Vendor
+  {
+    slug: 'commands/vendor',
+    category: 'COMMANDS',
+    title: 'Vendor (/vendor)',
+    lead: 'ดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity',
+    pills: ['Command', 'Vendor', 'Equip', 'GitSubtree', 'CustomSkill', 'UpdateImmunity'],
+    sections: [
+      {
+        id: 'when-to-use-it',
+        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
+        contentHtml: `
+          <p>ใช้คำสั่ง <code>/vendor</code> (หรือ <code>/equip</code>, <code>/skill-add</code>) เมื่อต้องการนำไลบรารีหรือ Repositories ภายนอกมาเป็นทักษะเสริมในโปรเจกต์:</p>
+          <pre><code>/vendor https://github.com/example/special-toolkit.git</code></pre>
+        `
+      },
+      {
+        id: 'update-immunity',
+        title: 'การป้องกัน Update Immunity',
+        contentHtml: `
+          <p>โฟลเดอร์ใน <code>devflow/.vendor/</code> จะได้รับการคุ้มครองด้วย Update Immunity ซึ่งหมายความว่าเมื่อมีการอัปเกรด DevFlow ไฟล์ที่ Vendor เข้ามาจะไม่ถูกเขียนทับหรือลบหายไป</p>
+        `
+      }
+    ]
+  },
+
+  // 30. Ponytail
+  {
+    slug: 'commands/ponytail',
+    category: 'COMMANDS',
+    title: 'Ponytail (/ponytail)',
+    lead: 'โหมด Senior Developer ขี้เกียจ ตรวจจับ Code Bloat ตัดความซับซ้อนส่วนเกิน (Over-engineering) และลดการใช้ LLM Tokens',
+    pills: ['Command', 'Ponytail', 'Simplification', 'KISS', 'YAGNI', 'TokenSaver'],
+    sections: [
+      {
+        id: 'when-to-use-it',
+        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
+        contentHtml: `
+          <p>ใช้คำสั่ง <code>/ponytail</code> เมื่อรู้สึกว่าโค้ดเริ่มซับซ้อนเกินจำเป็น มี Abstraction หลายชั้น หรือมี Dependencies ที่ไม่ได้ใช้งาน:</p>
+          <pre><code>/ponytail src/services/
+/ponytail "ช่วยรีวิวว่าโค้ดส่วนนี้เขียนให้เรียบง่ายขึ้นได้อย่างไร"</code></pre>
+        `
+      },
+      {
+        id: 'philosophy',
+        title: 'ปรัชญาความเรียบง่าย (KISS & YAGNI)',
+        contentHtml: `
+          <p>Ponytail จะช่วยเสนอทางเลือกในการเขียนโค้ดที่สั้นลง อ่านง่ายขึ้น โดยใช้ฟีเจอร์มาตรฐานของภาษาหรือ Native Platform APIs แทนการพึ่งพาไลบรารีขนาดใหญ่</p>
+        `
+      }
+    ]
+  },
+
+  // 31. Report HTML
+  {
+    slug: 'commands/report-html',
+    category: 'COMMANDS',
+    title: 'Report HTML (/report-html)',
+    lead: 'สังเคราะห์แดชบอร์ดรายงานผลการส่งมอบงานแบบ Standalone Interactive HTML จาก Living Spec หรือ History Archive',
+    pills: ['Command', 'ReportHTML', 'Dashboard', 'Standalone', 'HistoryVisualizer', 'ExecutiveReport'],
+    sections: [
+      {
+        id: 'when-to-use-it',
+        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
+        contentHtml: `
+          <p>ใช้คำสั่ง <code>/report-html</code> เมื่อต้องการสร้างหน้าเว็บสรุปผลงานระดับบริหารจาก <code>spec.md</code> หรือจากประวัติใน <code>devflow/history/</code>:</p>
+          <pre><code>/report-html
+/report-html 090</code></pre>
+        `
+      },
+      {
+        id: 'what-it-writes',
+        title: 'สิ่งที่ระบบสร้างและบันทึก',
+        contentHtml: `
+          <p>สร้างไฟล์ <code>devflow/reports/{task-id}-report.html</code> ที่เป็น Standalone Dashboard พร้อมสรุปผลการทดสอบ ตาราง Checklist และ Diff Metrics</p>
+        `
+      }
+    ]
   }
 ];
+

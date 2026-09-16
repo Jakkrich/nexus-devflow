@@ -99,6 +99,12 @@
           <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
           <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
           <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
+          <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
+          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
+          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
         </div>
 
         <!-- CLI -->
@@ -205,6 +211,27 @@
         <section id="the-6-lens-framework">
           <h2>กรอบการวิเคราะห์ 6 เลนส์ (The 6-Lens Framework)</h2>
           
+          <pre><code>                     ┌─────────────────────────────────────────┐
+                     │   DISCOVERY 6-LENS FRAMEWORK PIPELINE   │
+                     └────────────────────┬────────────────────┘
+                                          │
+       ┌─────────────────┬────────────────┼─────────────────┬─────────────────┐
+       ▼                 ▼                ▼                 ▼                 ▼
+ ┌───────────┐    ┌─────────────┐   ┌───────────┐     ┌───────────┐     ┌───────────┐
+ │1.Brain-   │    │ 2.Research  │   │ 3. PRD &  │     │ 4. Issue  │     │ 5. Socratic│
+ │  storming │    │   Empirical │   │  Scoping  │     │   Triage  │     │    Grill  │
+ │ (Options) │    │   (Spikes)  │   │  (Bound.) │     │  (Debug)  │     │   (ADR)   │
+ └───────────┘    └─────────────┘   └───────────┘     └───────────┘     └───────────┘
+                                          │
+                                          ▼
+                     ┌─────────────────────────────────────────┐
+                     │ 6. Visual Architecture (HTML / Archify) │
+                     └────────────────────┬────────────────────┘
+                                          │
+                                          ▼
+                     ┌─────────────────────────────────────────┐
+                     │  Decision Gate: [Proceed | Defer | Drop]│
+                     └─────────────────────────────────────────┘</code></pre>
           <p>เมื่อเข้าสู่กระบวนการสำรวจฟีเจอร์ AI จะนำปัญหามาวิเคราะห์ผ่าน 6 เลนส์มาตรฐานอย่างเป็นระบบ:</p>
           <ol>
             <li><strong>Brainstorming Lens</strong>: แตกไอเดียและสร้างทางเลือกสถาปัตยกรรม 2-3 รูปแบบ พร้อมตาราง Trade-off Comparison (ข้อดี, ข้อเสีย, ความคุ้มค่า)</li>

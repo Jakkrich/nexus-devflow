@@ -6,13 +6,38 @@ export const WORKFLOW_PAGES: DocPage[] = [
     category: 'WORKFLOW',
     title: 'Core Workflow (วงจร 4 ขั้นตอนการพัฒนา)',
     lead: 'สถาปัตยกรรม The 3-Pillars Workspace และวงจร Pure Task-Isolated Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ด้วย AI อย่างเป็นระบบ',
-    pills: ['Workflow', '3-Pillars', 'LivingSpec', 'TDD', 'SquashMerge', 'TaskIsolation', 'VerificationMatrix'],
+    pills: ['Workflow', '3-Pillars', 'LivingSpec', 'TDD', 'SquashMerge', 'TaskIsolation', 'VerificationMatrix', 'Diagrams'],
     sections: [
       {
         id: 'the-3-pillars',
         title: 'สถาปัตยกรรม 3 เสาหลัก (The 3-Pillars Workspace Architecture)',
         contentHtml: `
           <p>ปัญหาคลาสสิกของการใช้ AI ในการเขียนโค้ดคือ AI มักจะจำประวัติเก่าจนเกิด Context Bloat หรือลืมบริบทสำคัญของโปรเจกต์ Nexus-DevFlow แก้ไขปัญหานี้ด้วยการแบ่งเวลาและพื้นที่ของ Workspace ออกเป็น 3 เสาหลักที่ตัดขาดจากกันอย่างชัดเจน:</p>
+          <pre><code>┌─────────────────────────────────────────────────────────────────────────┐
+│                    NEXUS-DEVFLOW 3-PILLARS MODEL                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+  1. 🔮 FUTURE (Backlog)
+     ├── devflow/ideas.md          (Idea Inbox & Feasibility Scoring)
+     ├── devflow/project-plan.md   (High-level System Vision & NFRs)
+     └── devflow/build-plan.md     (Master Linear Feature Checklist)
+                 │
+                 ▼
+  2. ⚡ PRESENT (Active Workspace)
+     ├── devflow/context/project-overview.md  (Compiled Living Source of Truth <20KB)
+     ├── devflow/context/coding-standards.md  (Project Coding Standards)
+     ├── devflow/context/glossary.md          (Settled Domain Terminology)
+     └── devflow/context/{xxx-slug}/          (Task-Isolated Workspace)
+         ├── spec.md                          (Living Spec & TDD Tasks)
+         ├── stage.md                         (Current Stage Pointer)
+         └── findings.md                      (Isolated Findings Ledger)
+                 │
+                 ▼
+  3. 📦 PAST (History Archive)
+     ├── devflow/history/features/{xxx-slug}.md
+     ├── devflow/history/fixes/{xxx-slug}.md
+     ├── devflow/history/rollbacks/{xxx-slug}.md
+     └── devflow/history/HISTORY.md           (Release Changelog)</code></pre>
           <table>
             <thead><tr><th>เสาหลัก (Pillar)</th><th>โฟลเดอร์ / ไฟล์</th><th>ความหมายและหน้าที่</th></tr></thead>
             <tbody>
@@ -40,7 +65,19 @@ export const WORKFLOW_PAGES: DocPage[] = [
         title: 'วงจร 4 ขั้นตอนการพัฒนา (The 4-Stage Living Spec Lifecycle)',
         contentHtml: `
           <p>ทุกงานพัฒนา ไม่ว่าจะเป็นฟีเจอร์ใหม่หรือการแก้บั๊ก จะดำเนินผ่านวงจร 4 ขั้นตอนแบบต่อเนื่อง:</p>
-          <pre><code><span style="color:#76a8ff;">/feature</span> ──▶ <span style="color:#e8bd72;">review</span> ──▶ <span style="color:#70d5a9;">/implement</span> ──▶ <span style="color:#76a8ff;">/check</span> ──▶ <span style="color:#0b7a53;">/complete</span></code></pre>
+          <pre><code> [Build Plan Item]
+        │
+        ▼
+ ┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+ │   /feature   │ ──▶  │  /implement  │ ──▶  │    /check    │ ──▶  │  /complete   │
+ │   or /fix    │      │ (Strict TDD) │      │  (Senior QA) │      │ (SquashMerge)│
+ └──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘
+        │                     │                     │                     │
+        ▼                     ▼                     ▼                     ▼
+ • Allocates Task ID   • Red: Failing Test   • 5-Lane Verification • Release Digest
+ • Generates spec.md   • Green: Code to pass • Typecheck & Lint    • Archive to history
+ • Sets stage: feature • Refactor: Clean     • Tests & Manual Proof• Remove context/xxx
+ • findings.md ledger  • Collects Diff Proof • findings.md check   • Squash-merge main</code></pre>
           <table>
             <thead><tr><th>ขั้นตอน</th><th>คำสั่ง</th><th>คำอธิบายกระบวนการ</th><th>ผลลัพธ์ (Artifact)</th></tr></thead>
             <tbody>

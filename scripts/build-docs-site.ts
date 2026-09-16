@@ -59,7 +59,13 @@ const SIDEBAR_ITEMS = [
       { slug: 'commands/rollback', title: 'Rollback' },
       { slug: 'commands/analyze', title: 'Analyze (SA Suite)' },
       { slug: 'commands/grill', title: 'Grill (Domain & ADR)' },
-      { slug: 'commands/bughunter', title: 'Bughunter (Security)' }
+      { slug: 'commands/bughunter', title: 'Bughunter (Security)' },
+      { slug: 'commands/archify', title: 'Archify (Diagrams)' },
+      { slug: 'commands/diagram-design', title: 'Diagram Design' },
+      { slug: 'commands/convert-any-to-md', title: 'Convert Any to MD' },
+      { slug: 'commands/vendor', title: 'Vendor' },
+      { slug: 'commands/ponytail', title: 'Ponytail (Simplifier)' },
+      { slug: 'commands/report-html', title: 'Report HTML' }
     ]
   },
   {

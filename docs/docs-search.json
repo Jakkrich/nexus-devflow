@@ -99,6 +99,7 @@
       "SquashMerge",
       "TaskIsolation",
       "VerificationMatrix",
+      "Diagrams",
       "workflow",
       "core-workflow"
     ]
@@ -537,6 +538,110 @@
       "EmpiricalProof",
       "commands",
       "commands bughunter"
+    ]
+  },
+  {
+    "title": "Archify (/archify)",
+    "description": "สร้างแผนภาพสถาปัตยกรรมระบบ Flow การทำงาน และ Data Pipeline แบบ Interactive Standalone HTML สวยงามระดับพรีเมียม",
+    "section": "COMMANDS",
+    "slug": "commands/archify",
+    "href": "../commands/archify/",
+    "tags": [
+      "Command",
+      "Archify",
+      "Architecture",
+      "InteractiveHTML",
+      "DataFlow",
+      "SequenceDiagram",
+      "commands",
+      "commands archify"
+    ]
+  },
+  {
+    "title": "Diagram Design (/diagram-design)",
+    "description": "ชุดเครื่องมือสร้างแผนภาพเชิงบรรณาธิการและแผนภาพธุรกิจกว่า 39 รูปแบบ ทั้ง HTML, SVG และ PNG พร้อมรองรับ draw.io และ Mermaid",
+    "section": "COMMANDS",
+    "slug": "commands/diagram-design",
+    "href": "../commands/diagram-design/",
+    "tags": [
+      "Command",
+      "DiagramDesign",
+      "Editorial",
+      "39-Templates",
+      "SVG",
+      "Mermaid",
+      "DrawIO",
+      "commands",
+      "commands diagram-design"
+    ]
+  },
+  {
+    "title": "Convert Any to MD (/convert-any-to-md)",
+    "description": "แปลงเอกสารทุกรูปแบบ (.pdf, .docx, .xlsx, .csv, .json, .yaml, รูปภาพ) ให้กลายเป็น Clean Markdown ภายใต้ devflow/reference/",
+    "section": "COMMANDS",
+    "slug": "commands/convert-any-to-md",
+    "href": "../commands/convert-any-to-md/",
+    "tags": [
+      "Command",
+      "Converter",
+      "Markdown",
+      "PDF",
+      "Word",
+      "Excel",
+      "DataExtraction",
+      "commands",
+      "commands convert-any-to-md"
+    ]
+  },
+  {
+    "title": "Vendor (/vendor)",
+    "description": "ดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity",
+    "section": "COMMANDS",
+    "slug": "commands/vendor",
+    "href": "../commands/vendor/",
+    "tags": [
+      "Command",
+      "Vendor",
+      "Equip",
+      "GitSubtree",
+      "CustomSkill",
+      "UpdateImmunity",
+      "commands",
+      "commands vendor"
+    ]
+  },
+  {
+    "title": "Ponytail (/ponytail)",
+    "description": "โหมด Senior Developer ขี้เกียจ ตรวจจับ Code Bloat ตัดความซับซ้อนส่วนเกิน (Over-engineering) และลดการใช้ LLM Tokens",
+    "section": "COMMANDS",
+    "slug": "commands/ponytail",
+    "href": "../commands/ponytail/",
+    "tags": [
+      "Command",
+      "Ponytail",
+      "Simplification",
+      "KISS",
+      "YAGNI",
+      "TokenSaver",
+      "commands",
+      "commands ponytail"
+    ]
+  },
+  {
+    "title": "Report HTML (/report-html)",
+    "description": "สังเคราะห์แดชบอร์ดรายงานผลการส่งมอบงานแบบ Standalone Interactive HTML จาก Living Spec หรือ History Archive",
+    "section": "COMMANDS",
+    "slug": "commands/report-html",
+    "href": "../commands/report-html/",
+    "tags": [
+      "Command",
+      "ReportHTML",
+      "Dashboard",
+      "Standalone",
+      "HistoryVisualizer",
+      "ExecutiveReport",
+      "commands",
+      "commands report-html"
     ]
   },
   {
