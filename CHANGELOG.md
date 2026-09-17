@@ -5,6 +5,20 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.17.7] - 2026-09-17
+
+### Added
+- **Token Usage & Cost Analytics CLI Tool** (`npm run analyze:tokens`, `scripts/analyze-token-usage.ts`): Track session token economics across Main Thread vs Subagents, cache hit ratios, and USD pricing catalogs (Claude 3.7, Gemini 2.5, GPT-4o).
+- **5-Tier Test Classification & AC Traceability Matrix Protocol**: Structured testing classification across Tier 1 (Pure Logic) through Tier 5 (Docs/Prose) with mandatory `AC-N` test traceability.
+- **4 Slicing Archetypes Framework & Assumed Decision Governance**: Standardized slicing patterns (Skateboard, Facade, Tracer Bullet, Journey) and Assumed Decision Debt lifecycle management.
+- **Skill Token Budget Guard Linter**: Automated byte ceiling enforcement (32KB/24KB/400-char descriptions) via `npm run check:budgets`.
+- **6 New Web Documentation Subpages**: Added `workflow-surface-map` (33 Core Skills map), `skill-selection-policy`, `governance-rules`, `markdown-metadata-contract`, `living-spec-examples`, and `cli/tokens` (58 total documentation pages).
+
+### Changed
+- **Web Documentation Consolidation & Workspace Cleanup**: Migrated all framework guides from `devflow/docs/` into `docs/` and completely deleted `devflow/docs/` directory to eliminate sync drift.
+- **Interactive System Maps Relocation**: Moved interactive architecture and lifecycle HTML diagrams to `docs/diagrams/`.
+- **Playbook Protocol Path Alignment**: Updated contextual help playbooks protocol to write to `devflow/reference/playbooks/`.
+
 ## [2.17.6] - 2026-09-17
 
 ### Changed
