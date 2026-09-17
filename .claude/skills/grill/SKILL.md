@@ -70,10 +70,14 @@ Allocate the next sequential ID (`ADR-001`, `ADR-002`, ...) and create `devflow/
 ```markdown
 # ADR-xxx: {Title}
 
-- **Status**: Accepted
+- **Status**: Accepted | Assumed (Fast-tracked Assumption)
 - **Date**: {YYYY-MM-DD}
 - **Context**: {Why was this decision needed? What problem does it solve?}
 - **Decision**: {What did we decide to do?}
+- **Assumption Metadata** *(Required when Status is Assumed)*:
+  - **Assumption**: {What was assumed to unblock progress}
+  - **Risk Level & Blast Radius**: {Risk if assumption fails}
+  - **Ratification Plan**: {Trigger, date, or test to ratify as Accepted or Rejected}
 - **Alternatives Considered**:
   - *Option 1*: {Pros / Cons}
   - *Option 2*: {Pros / Cons}
@@ -81,6 +85,7 @@ Allocate the next sequential ID (`ADR-001`, `ADR-002`, ...) and create `devflow/
   - *Positive*: {Benefits gained}
   - *Trade-offs / Risks*: {Costs, constraints, or follow-ups}
 ```
+
 
 ---
 

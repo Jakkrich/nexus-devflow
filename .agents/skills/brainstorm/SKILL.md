@@ -29,10 +29,11 @@ Use this when:
 - Identify technical, business, or timeline constraints.
 
 ### 2. Option Formulation (Divergent Phase)
-Provide at least 2-3 materially distinct approaches:
-- **Option A (Standard / Conservative)**: Low risk, proven pattern, minimal changes.
-- **Option B (Modern / Optimized)**: Best-practice architecture, balanced trade-off, scalable.
-- **Option C (Alternative / Unconventional)**: High innovation, simplified scope, or creative alternative.
+Provide at least 2-3 materially distinct approaches. Where applicable, map each option to its **Slicing Archetype** ([`devflow/reference/slicing-archetypes.md`](file:///d:/Projects/devtools/nexus-devflow/devflow/reference/slicing-archetypes.md)):
+- **Option A (Standard / Conservative)**: Low risk, proven pattern, minimal changes (e.g. *Skateboard* or *Tracer Bullet*).
+- **Option B (Modern / Optimized)**: Best-practice architecture, balanced trade-off, scalable (e.g. *Journey*).
+- **Option C (Alternative / Fast-Feedback)**: High innovation, simplified scope, or UX-first (e.g. *Facade*).
+
 
 ### 3. Trade-off Comparison Matrix
 Construct a structured evaluation table:

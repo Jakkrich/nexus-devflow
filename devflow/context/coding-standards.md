@@ -265,5 +265,22 @@ All generated HTML artifacts across the framework (Contextual Help Playbooks `de
   - Each value must have an explicitly named source (Database column, Input argument, Calculated derivation, or Settled architectural decision).
   - Any required value lacking a named source represents an **Owed Decision**; agents are prohibited from making unrecorded architectural choices or guessing implementations under the guise of "just wiring". Stop and route to `/grill` or request user clarification.
 
+---
+
+## 14. Architectural Slicing & Assumed Decision Governance
+
+- **4 Slicing Archetypes Framework (`devflow/reference/slicing-archetypes.md`)**:
+  - When decomposing large roadmaps or splitting oversized features, select from the 4 standard archetypes:
+    - **Skateboard**: Minimal functional loop (prove core logic end-to-end with minimal UI).
+    - **Facade**: Rich UI/DX with mock backend (validate user flow & interaction first).
+    - **Tracer Bullet**: Deep vertical slice across all layers (DB -> API -> UI) for 1 happy path.
+    - **Journey**: Slice along natural user workflow milestones.
+  - Avoid purely technical layer slicing (e.g. DB only or backend only) that leaves work unverifiable in a single delivery run.
+- **Assumed Decision Debt Lifecycle (`Status: Assumed`)**:
+  - For fast-tracking development when user confirmation is pending, record decisions in ADRs (`devflow/decisions/`) with `Status: Assumed`.
+  - Every assumed decision MUST specify `Assumption`, `Risk Level & Blast Radius`, and `Ratification Plan`.
+  - Untracked architectural assumptions are strictly prohibited.
+
+
 
 

@@ -301,7 +301,9 @@ expectations. Apply only the selected lens or lenses:
   - *Question Intent & Simpler Alternatives*: State what the change actually attempts in one sentence. Ask: is there a simpler, smaller, or more elegant way to achieve the same goal (reusing existing code, config vs code, solving at a different layer)?
   - *Full Call-Path Tracing*: Follow the call graph through real code paths (entry point → call sites → branches taken → state mutated → exit/side effect), including unchanged code on either side of the diff where bugs hide.
   - *Verify Claims & Edge Cases*: Does the traced path actually produce the claimed behavior? What inputs/states would break it (concurrency, retries, null/unicode/huge payloads, ordering)? What does it silently change?
+  - *Assumed Decision Debt Check*: Scan `devflow/decisions/` for any ADR with `Status: Assumed`. Flag unratified assumptions as `Q-xxx` (P2) to ensure ratification before production handoff.
   - *No Rubber-Stamping*: "LGTM" is prohibited. State what was traced, what was verified, and what evidence supports the verdict.
+
 
 Do not nitpick harmless style differences unless they signal drift from the local
 patterns. Prefer a short list of real findings over a broad list of guesses.

@@ -102,6 +102,8 @@ the data model, stack, and conventions. Decide how big the feature is:
   those sub-items back under the parent in `build-plan.md` as an indented
   checklist (`4a`, `4b`, `4c` ...). Spec only the **first** sub-feature now; the
   rest get picked up on later `/feature` runs.
+  *Use the **4 Slicing Archetypes** ([`devflow/reference/slicing-archetypes.md`](file:///d:/Projects/devtools/nexus-devflow/devflow/reference/slicing-archetypes.md)) to guide the split: 🛹 Skateboard (core logic first), 🎭 Facade (UI/DX mock first), 🎯 Tracer Bullet (end-to-end slice), or 🧭 Journey (workflow steps).*
+
 
 Two levels of breakdown - don't confuse them:
 

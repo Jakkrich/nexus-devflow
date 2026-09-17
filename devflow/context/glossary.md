@@ -29,3 +29,14 @@
 - **Definition**: สรุปผลการเปลี่ยนแปลง, บทเรียนที่ได้รับ (Lessons Learned), และการตัดสินใจสำคัญที่บันทึกไว้ในตอนปิดรอบการพัฒนา
 - **Constraints**: บันทึกอัตโนมัติใน Living Spec ก่อนที่จะทำการ Squash Merge และ Archive
 - **Aliases / Related**: Delivery Digest, Retrospective Log
+
+### 4 Slicing Archetypes
+- **Definition**: รูปแบบมาตรฐาน 4 ประการในการแบ่งย่อยฟีเจอร์ (Skateboard, Facade, Tracer Bullet, Journey) เพื่อให้ได้รอบการส่งมอบที่เล็ก ทดสอบได้จริง และไม่ติดขัด Technical Layer Dependency
+- **Constraints**: ใช้งานใน `/discovery`, `/brainstorm`, และ `/feature` (Step 2)
+- **Aliases / Related**: `slicing-archetypes.md`, Feature Decomposition, Slicing Strategy
+
+### Assumed Decision Debt
+- **Definition**: หนี้การตัดสินใจที่เกิดขึ้นจากการตั้งสมมติฐานทางสถาปัตยกรรมชั่วคราว (`Status: Assumed` ใน ADR) เพื่อให้การพัฒนาเดินหน้าได้อย่างรวดเร็ว (Fast-track) โดยไม่สะดุด
+- **Constraints**: ต้องระบุ Assumption, Risk Level, และ Ratification Plan กำกับเสมอ และต้องได้รับการตรวจทาน/ยืนยัน (Ratified) ก่อนปล่อยสู่ Production
+- **Aliases / Related**: Assumed ADR, Decision Debt, Fast-track Assumption
+

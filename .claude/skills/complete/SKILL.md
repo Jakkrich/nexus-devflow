@@ -106,6 +106,8 @@ Before logging or committing, run a short safety pass and report blockers only:
 - no P0 or P1 finding in `devflow/context/{xxx-slug}/findings.md` is `open` or `fixed`.
   `fixed` still blocks on purpose: the repair exists but no review has looked at
   it - run `/audit` to close it. The only waivers are `accepted` or `invalid`.
+- any `Status: Assumed` ADR in `devflow/decisions/` has been surfaced with its ratification plan noted.
+
 
 Do not claim "passed", "verified", or "working" without naming the command,
 route, screenshot, or output that proves it. Stop before Step 1 if required
