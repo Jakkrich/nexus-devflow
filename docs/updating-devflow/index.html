@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Updating DevFlow (การอัปเดตเวอร์ชัน) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="วิธีอัปเกรดเวอร์ชันของ Nexus-DevFlow ให้ทันสมัยอยู่เสมอ โดยไม่สูญเสียประวัติหรือบริบทของโปรเจกต์">
+  <meta name="description" content="อัปเดตเลเยอร์เวิร์กโฟลว์ของ Nexus-DevFlow อย่างปลอดภัยโดยไม่เขียนทับแผนงาน บริบท หรือประวัติของโปรเจกต์">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/updating-devflow/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,7 +151,7 @@
       <h1 class="docs-title">Updating DevFlow (การอัปเดตเวอร์ชัน)</h1>
       
       <p class="docs-lead">
-        วิธีอัปเกรดเวอร์ชันของ Nexus-DevFlow ให้ทันสมัยอยู่เสมอ โดยไม่สูญเสียประวัติหรือบริบทของโปรเจกต์
+        อัปเดตเลเยอร์เวิร์กโฟลว์ของ Nexus-DevFlow อย่างปลอดภัยโดยไม่เขียนทับแผนงาน บริบท หรือประวัติของโปรเจกต์
       </p>
 
       <div class="docs-meta">
@@ -161,54 +161,226 @@
         <span class="docs-pill">Sync</span>
         <span class="docs-pill">Manifest</span>
         <span class="docs-pill">Compatibility</span>
+        <span class="docs-pill">Skills Migration</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: วิธีการอัปเดตเวอร์ชัน (1-Command Upgrade) -->
-        <section id="how-to-update">
-          <h2>วิธีการอัปเดตเวอร์ชัน (1-Command Upgrade)</h2>
+        <!-- Section: ตรวจสอบผลกระทบก่อนอัปเดต (Preview the update) -->
+        <section id="preview-the-update">
+          <h2>ตรวจสอบผลกระทบก่อนอัปเดต (Preview the update)</h2>
           
-          <p>เมื่อมีเวอร์ชันใหม่ของ Nexus-DevFlow ปล่อยออกมา คุณสามารถอัปเดตโปรเจกต์ของคุณได้ง่ายๆ ด้วยคำสั่งเดียวใน Root Directory:</p>
-          <pre><code>npx -y nexus-devflow@latest -y</code></pre>
-          <p>ตัวติดตั้งจะตรวจสอบ <code>devflow/.state/manifest.json</code> เพื่ออัปเดตเฉพาะทักษะและเอกสารของ DevFlow โดยจะ<strong>ไม่แตะต้อง</strong>ไฟล์ <code>project-plan.md</code>, <code>build-plan.md</code>, <code>context/</code>, หรือโค้ดแอปพลิเคชันของคุณเลย</p>
+          <p>DevFlow สามารถอัปเดตเลเยอร์เวิร์กโฟลว์ ทักษะ (Skills) และความสามารถใหม่ๆ ได้อย่างปลอดภัย โดยมีขอบเขตความเป็นเจ้าของที่ชัดเจน (Narrow ownership boundary) เพื่อให้สถานะและโค้ดของโปรเจกต์ยังคงเป็นของคุณ 100%</p>
+          <p>คุณสามารถรันการจำลองล่วงหน้า (Dry-run) เพื่อดูรายการการเปลี่ยนแปลงทั้งหมดก่อนได้จาก Root Directory ของโปรเจกต์:</p>
+          <pre><code># npm
+npx nexus-devflow@latest update --dry-run
+
+# pnpm
+pnpm dlx nexus-devflow@latest update --dry-run</code></pre>
+          <p>แผนการอัปเดตจะรายงานสรุปรายการไฟล์ที่จะถูกเพิ่ม (Add), อัปเดต (Update), ลบ (Remove) หรือตรวจพบข้อขัดแย้ง (Conflicts) พร้อมแสดงรายการ AI Adapters ที่ตรวจพบในโปรเจกต์ เช่น Codex, Claude Code, GitHub Copilot, Google Antigravity และ OpenCode</p>
         
           
         </section>
 
-        <!-- Section: การรับประกันความปลอดภัยในการอัปเดต (Safety Guarantees) -->
-        <section id="update-safety-guarantees">
-          <h2>การรับประกันความปลอดภัยในการอัปเดต (Safety Guarantees)</h2>
+        <!-- Section: ดำเนินการอัปเดตเวิร์กโฟลว์ (Apply the update) -->
+        <section id="apply-the-update">
+          <h2>ดำเนินการอัปเดตเวิร์กโฟลว์ (Apply the update)</h2>
           
+          <p>เมื่อพร้อมอัปเกรด ให้รันคำสั่ง update เพื่อดำเนินการจริง:</p>
+          <pre><code># npm
+npx nexus-devflow@latest update
+
+# pnpm
+pnpm dlx nexus-devflow@latest update</code></pre>
+          <p>ตัวอัปเดตของ DevFlow จะดูแลและแก้ไขเฉพาะโฟลเดอร์ที่เป็นของเวิร์กโฟลว์ DevFlow เท่านั้น:</p>
+          <ul>
+            <li><code>.agents/skills/</code> — ทักษะสำหรับ OpenAI Codex, Google Antigravity, GitHub Copilot และ OpenCode</li>
+            <li><code>.claude/skills/</code> — ทักษะสำหรับ Claude Code</li>
+          </ul>
+          <p>Codex, Antigravity และ GitHub Copilot จะแชร์ไฟล์ทักษะใน <code>.agents/skills/</code> ร่วมกัน ส่วน OpenCode จะใช้ไฟล์ทักษะที่เข้ากันได้จาก <code>.agents/skills/</code> หรือ <code>.claude/skills/</code> ทำให้ไม่ต้องสร้างโครงสร้างโฟลเดอร์ <code>.opencode/skills/</code> แยกต่างหาก</p>
+          <div class="note-box">
+            <strong>เส้นทางไฟล์ที่เป็นของโปรเจกต์และปลอดภัย 100% (Preserved Paths):</strong>
+            <ul>
+              <li><code>AGENTS.md</code> และ <code>CLAUDE.md</code> (คำสั่งและกฎเฉพาะโปรเจกต์ของคุณ)</li>
+              <li><code>devflow/config.json</code> (นโยบาย Quality Gates และการตั้งค่าเวิร์กโฟลว์)</li>
+              <li><code>devflow/project-plan.md</code> และ <code>devflow/build-plan.md</code> (แผนงานหลัก)</li>
+              <li><code>devflow/context/</code> (บริบทโปรเจกต์และ Task-Isolated Living Specs ที่กำลังทำงาน)</li>
+              <li><code>devflow/history/</code> (ประวัติการส่งมอบฟีเจอร์ บั๊กฟิกซ์ และ Rollbacks ทั้งหมด)</li>
+              <li><code>devflow/reference/</code> และ <code>prototypes/</code> (เอกสารอ้างอิงและหน้าจอต้นแบบ)</li>
+            </ul>
+          </div>
+          <p>การอัปเดตเวอร์ชันล่าสุดได้เพิ่มหลักการ <strong>Proportional Engineering</strong> ลงใน Managed Skills, เพิ่มข้อเสนอติดตั้ง Git pre-push hook ในคำสั่ง <code>/ci</code>, ปรับปรุงระบบกู้คืนการทำงาน (Completion recovery), รองรับ Local-only review snapshots และการจัดรูปแบบ Feature List ใน Overview ให้กระชับอัตโนมัติ</p>
+        
+          
+        </section>
+
+        <!-- Section: การโยกย้ายและเปลี่ยนผ่านคำสั่ง (Command migration) -->
+        <section id="command-migration">
+          <h2>การโยกย้ายและเปลี่ยนผ่านคำสั่ง (Command migration)</h2>
+          
+          <p>ในเวอร์ชันล่าสุด คำสั่งเดี่ยว 2 ตัวได้รับการปรับโครงสร้างให้เป็นโหมดการทำงานย่อย (Sub-modes) ของคำสั่งหลัก เพื่อความกระชับและเป็นระเบียบ:</p>
           <table>
-            <thead><tr><th>สิ่งที่ระบบจะอัปเดต</th><th>สิ่งที่ไม่ถูกแตะต้อง 100%</th></tr></thead>
+            <thead>
+              <tr>
+                <th>คำสั่งเดิม (Previous command)</th>
+                <th>คำสั่งใหม่ (Replacement)</th>
+                <th>คำอธิบายหน้าที่</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td>โฟลเดอร์ทักษะ <code>.agents/skills/</code> และ <code>.claude/skills/</code></td><td>โค้ดแอปพลิเคชันของคุณทุกบรรทัด</td></tr>
-              <tr><td>เอกสารอ้างอิงของ DevFlow</td><td><code>devflow/project-plan.md</code> และ <code>devflow/build-plan.md</code></td></tr>
-              <tr><td>CLI Helper Scripts</td><td><code>devflow/context/</code> และ Living Specs ที่กำลังทำงานอยู่</td></tr>
-              <tr><td>Manifest state <code>devflow/.state/manifest.json</code></td><td>ประวัติการส่งมอบงานทั้งหมดใน <code>devflow/history/</code></td></tr>
+              <tr>
+                <td><code>/browser-tests</code></td>
+                <td><code>/tests browser</code></td>
+                <td>เพิ่มหรือปรับแต่ง Browser Test Harness (Playwright) และเชื่อมต่อกับ MCP browseros-neo</td>
+              </tr>
+              <tr>
+                <td><code>/try</code></td>
+                <td><code>/check guide</code></td>
+                <td>สร้างคู่มือการทดสอบ Manual Walkthrough ทีละขั้นตอนสำหรับมนุษย์ตรวจทาน</td>
+              </tr>
+              <tr>
+                <td><code>/try latest</code></td>
+                <td><code>/check guide latest</code></td>
+                <td>สร้างคู่มือการทดสอบเฉพาะสำหรับฟีเจอร์หรือขอบเขตงานล่าสุด</td>
+              </tr>
             </tbody>
           </table>
+          <p>สำหรับ OpenAI Codex ให้ใช้คำสั่ง <code>$tests browser</code> และ <code>$check guide</code> โดยที่คำสั่งหลัก <code>/tests</code> ยังคงใช้ติดตั้งและรัน Unit Test ตามปกติ และคำสั่ง <code>/check</code> ยังคงใช้ตรวจสอบพฤติกรรมของระบบจริงตามเดิม</p>
+          
+          <h4>กลไกการทำงานของ Skills สำคัญที่เกี่ยวข้อง (Core & Companion Skills)</h4>
+          <ul>
+            <li><strong><code>/tests browser</code> (หรือ <code>browser-tests</code>)</strong>: วิเคราะห์สถาปัตยกรรมเว็บแอป ติดตั้งชุดทดสอบ Playwright E2E พร้อมสคริปต์รันทั้งแบบ Headless และ Interactive UI และเชื่อมต่อกับ MCP Server ของ <code>browseros-neo</code> (ที่พอร์ต <code>http://127.0.0.1:9010/mcp</code>) เพื่อให้เอเจนต์สามารถเปิดเบราว์เซอร์จริงที่ล็อกอินบัญชีจริงไว้แล้ว ตรวจสอบผลลัพธ์เชิงภาพ และบันทึกหลักฐานการทดสอบอัตโนมัติ</li>
+            <li><strong><code>/check guide</code> (หรือ <code>try</code>)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยจะระบุคำสั่งที่ต้องรัน ที่อยู่ URL จุดที่ต้องคลิกบนหน้าจอ ข้อมูลตัวอย่างที่ต้องกรอก ผลลัพธ์ที่ถูกต้อง และสัญญาณที่บ่งบอกว่าเกิดข้อผิดพลาด <em>(หมายเหตุ: โหมด guide เป็นเครื่องมือช่วยตรวจทานของมนุษย์ ไม่นับเป็นการยืนยันความถูกต้องเชิงคุณภาพอัตโนมัติ)</em></li>
+            <li><strong><code>/explore</code></strong>: สกิลสำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรมแบบ Read-Only เปรียบเทียบทางเลือกและข้อดีข้อเสีย (Trade-offs) กับโค้ดจริงในโปรเจกต์ โดยไม่มีการแก้ไขโค้ดหรือบังคับเขียนสเปก/แผนงานล่วงหน้า เหมาะสำหรับการศึกษาความเป็นไปได้ก่อนตัดสินใจ</li>
+            <li><strong><code>/doctor</code></strong>: สแกนตรวจสุขภาพและวินิจฉัยความพร้อมของระบบ DevFlow ตรวจสอบความสมบูรณ์ของ Adapters, ความสดใหม่ของ <code>project-overview.md</code>, ความถูกต้องของคำสั่งใน <code>AGENTS.md</code> และแจ้งเตือนหากไฟล์ Context มีขนาดใหญ่เกินเกณฑ์ 20KB</li>
+            <li><strong><code>/overview</code></strong>: ทำหน้าที่เป็น Deterministic Compiler ที่กลั่นกรองและรวบรวมข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code> เพื่อเป็น Single Living Source of Truth ที่กระชับและแม่นยำให้ AI Agent ทุกตัวอ่านก่อนเริ่มงานในแต่ละเซสชัน</li>
+            <li><strong><code>/ci</code></strong>: จัดระเบียบคำสั่ง Verify ของโปรเจกต์ สร้าง GitHub Actions CI Workflow ที่สอดคล้องกัน และเสนอการติดตั้ง Git pre-push hook ในเครื่องเพื่อป้องกันการ Push โค้ดที่ไม่ผ่านการทดสอบขึ้นสู่ Remote Repository</li>
+          </ul>
+
+          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ที่อาจยังไม่ได้อัปเดตใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
+        
+          
+          <div class="docs-step" id="if-latest-runs-an-older-version">
+            <div class="docs-step-number">1</div>
+            <div>
+              <h3>หาก @latest ยังคงรันเวอร์ชันเก่า (If latest runs an older version)</h3>
+              
+              <p>โปรดตรวจสอบเลขเวอร์ชันที่แสดงในแผนการอัปเดตก่อนดำเนินการเสมอ บางครั้งแคชของเครื่องมือติดตั้ง (Package Resolution Cache) อาจรันเวอร์ชันเก่าที่ถูกแคชไว้ แม้ว่าคำสั่งจะระบุ <code>@latest</code> ก็ตาม</p>
+              <p>วิธีแก้ปัญหาคือการระบุเลขเวอร์ชันที่ต้องการอย่างชัดเจน (Pinned Version) เช่น สำหรับเวอร์ชัน 1.9.0:</p>
+              <pre><code># npm
+npx nexus-devflow@1.9.0 update
+
+# pnpm
+pnpm dlx nexus-devflow@1.9.0 update</code></pre>
+              <p>คุณสามารถตรวจสอบเลขเวอร์ชันล่าสุดได้จาก <a href="https://github.com/jakkrichm/nexus-devflow/releases" target="_blank" rel="noopener">GitHub Releases</a> ทั้งนี้หากรันในโหมด Interactive โดยไม่ระบุแฟล็ก ระบบจะแสดง Adapter Picker ให้เลือก และหากตัวอัปเดตรุ่นเก่าเสนอให้แทนที่ Global CLI ด้วยเวอร์ชันที่เก่ากว่า ให้ตอบ <strong>No</strong> แล้วรันใหม่ด้วยเลขเวอร์ชันที่ถูกต้อง</p>
+            
+            </div>
+          </div>
+      
+        </section>
+
+        <!-- Section: ปรับเปลี่ยน AI Adapters (Change adapters) -->
+        <section id="change-adapters">
+          <h2>ปรับเปลี่ยน AI Adapters (Change adapters)</h2>
+          
+          <p>คำสั่ง <code>update</code> สามารถใช้ปรับเปลี่ยนชุดของ AI Tool Adapters ที่ติดตั้งในโปรเจกต์ได้ตลอดเวลา เมื่อรันใน Interactive Terminal ระบบจะแสดง Checkbox ให้เลือกเครื่องมือ (Codex, Claude Code, GitHub Copilot, Google Antigravity, OpenCode) โดยมีค่าเริ่มต้นตาม Adapters ที่ติดตั้งอยู่แล้ว คุณสามารถกด Enter เพื่อคงชุดเดิม หรือติ๊กเลือก/ยกเลิกเครื่องมือก่อนเริ่มสร้างแผนการอัปเดตได้</p>
+          <p>หากต้องการเพิ่ม Adapter โดยไม่ต้องตอบคำถาม สามารถใช้ Adapter Flags ได้โดยตรง (แฟล็กนี้จะเพิ่มเครื่องมือเท่านั้น ไม่มีการลบเครื่องมือเดิม):</p>
+          <pre><code>npx nexus-devflow@latest update -- --codex</code></pre>
+          <p>สำหรับการรันแบบ <code>--yes</code> หรือในระบบอัตโนมัติ (Non-interactive) ระบบจะคงชุด Adapter เดิมไว้เสมอ การลบ Adapter จะทำได้เฉพาะในโหมด Interactive เท่านั้น โดยไฟล์ทักษะที่ถูกถอดออกจะถูกจัดการตามกฎสำรองข้อมูลและความขัดแย้ง และโฟลเดอร์ทักษะที่ว่างลงจะถูก Prune ทิ้งอย่างปลอดภัย</p>
+          <p>การเพิ่ม Claude Code จะสร้างไฟล์ <code>CLAUDE.md</code> จากเทมเพลตเฉพาะเมื่อยังไม่มีไฟล์นี้อยู่ และการลบ Claude Code จะ<strong>ไม่มีการลบไฟล์</strong> <code>CLAUDE.md</code> ของคุณอย่างเด็ดขาด</p>
+          <p>หากต้องการดูตัวอย่างแผนการอัปเดตโดยข้ามคำถามเลือก Adapter ให้รัน:</p>
+          <pre><code>npx nexus-devflow@latest update --dry-run --yes</code></pre>
         
           
         </section>
 
-        <!-- Section: การจัดการ Companion Skills เพิ่มเติม -->
-        <section id="managing-skills">
-          <h2>การจัดการ Companion Skills เพิ่มเติม</h2>
+        <!-- Section: ปรับใช้การตั้งค่าแบบประหยัด Context (Adopt the lower-context defaults) -->
+        <section id="adopt-the-lower-context-defaults">
+          <h2>ปรับใช้การตั้งค่าแบบประหยัด Context (Adopt the lower-context defaults)</h2>
           
-          <p>คุณสามารถติดตั้งหรืออัปเดต Companion Skills ได้ตามต้องการ:</p>
-          <pre><code># ติดตั้ง Recommended Skills ทั้งหมดพร้อมกัน
-npx nexus-devflow skill add --recommended
+          <p>ตัวอัปเดตจะรีเฟรชเฉพาะไฟล์ Managed Skills และคำอธิบายทักษะที่กระชับขึ้นเพื่อลดการใช้ Token แต่จะ<strong>ไม่เขียนทับ</strong>ไฟล์ <code>CLAUDE.md</code> หรือ <code>devflow/config.json</code> ของผู้ใช้ ดังนั้นโปรเจกต์เดิมจะยังคงได้รับประสบการณ์การรีวิวตามการตั้งค่าเดิม</p>
+          <p>ตัวอัปเดตจะแจ้งเตือนบรรทัด Import ที่ล้าสมัย เช่น <code>@devflow/context/project-overview.md</code>, <code>@devflow/context/current-feature.md</code>, <code>@devflow/context/coding-standards.md</code> หรือ <code>@devflow/context/ai-interaction.md</code> ใน <code>CLAUDE.md</code> ขอแนะนำให้ลบบรรทัดเหล่านั้นออกและคงไว้เพียง <code>@AGENTS.md</code> จากนั้น Restart เซสชันของ AI เอเจนต์ เพื่อให้บริบทโหลดไฟล์ตามความต้องการจริง (On-demand) ซึ่งช่วยประหยัด Context Window ได้มหาศาล</p>
+          <p>หากต้องการปรับใช้เวิร์กโฟลว์แบบคล่องตัวสูง ลดการหยุดถามระหว่างสเต็ปย่อย (Efficient Mode) ให้ตั้งค่าใน <code>devflow/config.json</code> ดังนี้:</p>
+          <pre><code>"workflow": {
+  "stepReview": "feature",
+  "checkpointCommits": "disabled"
+}</code></pre>
+          <p>หรือหากต้องการให้ AI หยุดถามความเห็นและสร้าง Checkpoint ทุกขั้นตอนย่อย (Guided Mode) ให้ตั้งค่าเป็น:</p>
+          <pre><code>"workflow": {
+  "stepReview": "every",
+  "checkpointCommits": "enabled"
+}</code></pre>
+          <p><em>หมายเหตุ: การตั้งค่า <code>stepReview: "every"</code> เพียงอย่างเดียวจะคืนค่าการขออนุมัติทุกสเต็ป แต่จะไม่แสดง Checkpoint Prompt ทั้งนี้ภาพรวมบริบทที่กระชับและคำอธิบายทักษะที่ปรับปรุงใหม่จะช่วยประหยัด Context ได้อย่างมีประสิทธิภาพในทุกรูปแบบ</em></p>
+        
+          
+        </section>
 
-# อัปเดต Skills ทั้งหมดให้เป็นเวอร์ชันล่าสุด
-npx nexus-devflow skill update --recommended
+        <!-- Section: ย้อนกลับสู่เวอร์ชันก่อนหน้า (Return to an earlier workflow version) -->
+        <section id="return-to-an-earlier-workflow-version">
+          <h2>ย้อนกลับสู่เวอร์ชันก่อนหน้า (Return to an earlier workflow version)</h2>
+          
+          <p>คุณสามารถย้อนกลับไปยังเวิร์กโฟลว์เวอร์ชันก่อนหน้าได้อย่างง่ายดาย โดยระบุเลขเวอร์ชันที่ต้องการร่วมกับแฟล็ก <code>--force</code>:</p>
+          <pre><code>npx nexus-devflow@1.4.1 update --target . --yes --force</code></pre>
+          <p>ตัวอัปเดตจะแทนที่เฉพาะไฟล์ Managed Skills ของเวอร์ชันนั้น ลบไฟล์ทักษะที่ไม่มีอยู่ในเวอร์ชันดังกล่าว รักษาไฟล์แผนงานและบริบททั้งหมดไว้ 100% พร้อมบันทึกสำเนาไฟล์เดิมไว้ใน <code>devflow/.state/backups/</code> โดยอัตโนมัติ</p>
+          <p>การย้อนกลับเวอร์ชันจะไม่แก้ไขไฟล์ <code>CLAUDE.md</code> หากต้องการให้ Claude โหลดบริบทแบบเวอร์ชันดั้งเดิม สามารถเพิ่มบรรทัด Import เหล่านี้กลับเข้าไปและ Restart Claude Code:</p>
+          <pre><code>@devflow/context/project-overview.md
+@devflow/context/current-feature.md</code></pre>
+        
+          
+        </section>
 
-# หรือจัดการเฉพาะทักษะที่ต้องการ
-npx nexus-devflow skill add archify        # แผนภาพสถาปัตยกรรมแบบ Interactive HTML
-npx nexus-devflow skill add diagram-design # 39 เทมเพลตแผนภาพระดับพรีเมียม
-npx nexus-devflow skill add bughunter      # ล่าบั๊กลึกและตรวจสอบความปลอดภัย OWASP
-npx nexus-devflow skill add ponytail       # ปรับโค้ดให้เรียบง่าย ตัดความซับซ้อนส่วนเกิน</code></pre>
+        <!-- Section: คำสั่ง Global CLI จะไม่อัปเดต DevFlow (The global command does not update DevFlow) -->
+        <section id="the-global-command-does-not-update-blueprint">
+          <h2>คำสั่ง Global CLI จะไม่อัปเดต DevFlow (The global command does not update DevFlow)</h2>
+          
+          <p>คำสั่งส่วนกลาง (Global CLI) <code>nexus-devflow</code> หรือ <code>devflow</code> ถูกออกแบบมาสำหรับแสดงผล <strong>Status</strong> และ <strong>Live Dashboard</strong> แบบ Read-Only เท่านั้น คำสั่ง <code>devflow update</code> จะไม่ทำงาน เพื่อป้องกันความสับสนของเวอร์ชัน</p>
+          <p>เมื่อต้องการอัปเดตไฟล์เวิร์กโฟลว์ในโปรเจกต์ ให้ใช้คำสั่งระบุแพ็กเกจผ่าน npx เสมอ:</p>
+          <pre><code>npx nexus-devflow@latest update</code></pre>
+          <p>หลังการอัปเดตแบบ Interactive สำเร็จ ตัวติดตั้งจะตรวจสอบเวอร์ชันของ Global CLI ในเครื่อง หากเวอร์ชันไม่ตรงกัน ระบบจะเสนอทางเลือกในการอัปเดต Global CLI ให้ตรงกับเวอร์ชันของโปรเจกต์ (ค่าเริ่มต้นคือ No ซึ่งคำสั่ง <code>npx nexus-devflow@latest status</code> และ <code>dashboard</code> ยังคงทำงานได้สมบูรณ์โดยไม่ต้องติดตั้ง Global CLI)</p>
+          <p>ดูรายละเอียดเพิ่มเติมได้ที่หน้า <a href="../cli/">CLI Overview</a></p>
+        
+          
+        </section>
+
+        <!-- Section: ระบบ Manifest และการสำรองข้อมูล (Manifest and backups) -->
+        <section id="manifest-and-backups">
+          <h2>ระบบ Manifest และการสำรองข้อมูล (Manifest and backups)</h2>
+          
+          <p>การติดตั้ง DevFlow จะสร้างไฟล์ <code>devflow/.state/manifest.json</code> ซึ่งทำหน้าที่บันทึกเวอร์ชันของแพ็กเกจ, รายการ Adapters ที่เลือก และค่า SHA-256 Hashes ของทุกไฟล์ที่ DevFlow ดูแล ขอแนะนำให้ Commit ไฟล์ Manifest นี้ร่วมกับโค้ดของโปรเจกต์ เพื่อให้การ Clone หรือ Checkout ในเครื่องอื่นมี Baseline การอัปเดตที่ตรงกัน</p>
+          <p>ก่อนที่จะมีการแทนที่หรือลบไฟล์ Managed Skill ใดๆ ตัวอัปเดตจะคัดลอกไฟล์เดิมไปเก็บไว้ใน <code>devflow/.state/backups/</code> เสมอ โดยโฟลเดอร์สำรองข้อมูลและโฟลเดอร์ Staging ทั้งหมดจะถูก Ignore โดยอัตโนมัติผ่าน <code>devflow/.state/.gitignore</code></p>
+        
+          
+        </section>
+
+        <!-- Section: การจัดการข้อขัดแย้งของไฟล์ (Conflicts) -->
+        <section id="conflicts">
+          <h2>การจัดการข้อขัดแย้งของไฟล์ (Conflicts)</h2>
+          
+          <p>ข้อขัดแย้ง (Conflict) จะเกิดขึ้นเมื่อไฟล์ที่ DevFlow ดูแลมีเนื้อหาไม่ตรงกับค่า Hash ที่บันทึกไว้ใน Manifest (เช่น มีการเข้าไปแก้ไขโค้ดใน <code>.agents/skills/</code> ด้วยตนเอง)</p>
+          <p>ในการรันคำสั่งอัปเดตปกติ ระบบจะแสดงรายการไฟล์ที่มีข้อขัดแย้งและหยุดถามการยืนยันก่อนที่จะสำรองข้อมูลและเขียนทับ ส่วนการรันแบบ Non-interactive ระบบจะหยุดการทำงานทันทีโดยไม่เขียนไฟล์ใดๆ เพื่อความปลอดภัยสูงสุด</p>
+          <p>หากคุณตรวจสอบแล้วและต้องการสำรองไฟล์เดิมพร้อมเขียนทับด้วยเวอร์ชันใหม่อย่างแน่นอน ให้ระบุแฟล็ก <code>--force</code>:</p>
+          <pre><code>npx nexus-devflow@latest update --force</code></pre>
+          <p><em>หมายเหตุ: ไฟล์ที่อยู่ในเส้นทางที่ไม่ปลอดภัย เช่น Symbolic Links หรือโฟลเดอร์ที่ทับตำแหน่งไฟล์ จะไม่ถูกเขียนทับโดย <code>--force</code> เด็ดขาด คุณต้องแก้ไขโครงสร้างไฟล์ด้วยตนเองก่อนรันอัปเดตอีกครั้ง</em></p>
+        
+          
+        </section>
+
+        <!-- Section: การอัปเกรดโปรเจกต์เวอร์ชันเดิม (Legacy installations) -->
+        <section id="legacy-installations">
+          <h2>การอัปเกรดโปรเจกต์เวอร์ชันเดิม (Legacy installations)</h2>
+          
+          <p>โปรเจกต์ที่ติดตั้ง DevFlow ในยุคแรกก่อนที่จะมีระบบ Manifest สามารถใช้คำสั่ง <code>update</code> เดียวกันนี้เพื่ออัปเกรดได้ทันที</p>
+          <p>ไฟล์ใดที่มีเนื้อหาตรงกับแพ็กเกจปัจจุบันจะถูกบันทึกเข้าสู่ Manifest ใหม่อัตโนมัติ ส่วนไฟล์ Managed ที่มีเนื้อหาแตกต่างจะถูกรายงานเป็นข้อขัดแย้ง (Conflict) เพื่อให้คุณมีโอกาสตรวจสอบและเลือกตัดสินใจว่าจะคงไว้หรือแทนที่ด้วยเวอร์ชันใหม่</p>
+        
+          
+        </section>
+
+        <!-- Section: โหมดการทำงานเฉพาะในเครื่อง (Local-only mode) -->
+        <section id="local-only-mode">
+          <h2>โหมดการทำงานเฉพาะในเครื่อง (Local-only mode)</h2>
+          
+          <p>หากคุณใช้งาน DevFlow ในรูปแบบ Local-Only Mode โฟลเดอร์ <code>devflow/</code> ที่ถูกระบุไว้ใน <code>.gitignore</code> หลักของโปรเจกต์จะครอบคลุมถึง <code>devflow/.state/</code> ด้วย</p>
+          <p>ทำให้ข้อมูล Manifest และประวัติการสำรองข้อมูลทั้งหมดจะคงอยู่เฉพาะในเครื่องของคุณ โดยไม่มีการส่งขึ้น Git Repository ร่วมกับทีม ดูรายละเอียดข้อดีและข้อจำกัดได้ที่หน้า <a href="../local-only-mode/">Local-Only Mode</a></p>
         
           
         </section>
@@ -230,9 +402,18 @@ npx nexus-devflow skill add ponytail       # ปรับโค้ดให้�
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#how-to-update">วิธีการอัปเดตเวอร์ชัน (1-Command Upgrade)</a>
-      <a href="#update-safety-guarantees">การรับประกันความปลอดภัยในการอัปเดต (Safety Guarantees)</a>
-      <a href="#managing-skills">การจัดการ Companion Skills เพิ่มเติม</a>
+      <a href="#preview-the-update">ตรวจสอบผลกระทบก่อนอัปเดต (Preview the update)</a>
+      <a href="#apply-the-update">ดำเนินการอัปเดตเวิร์กโฟลว์ (Apply the update)</a>
+      <a href="#command-migration">การโยกย้ายและเปลี่ยนผ่านคำสั่ง (Command migration)</a>
+      <a class="nested" href="#if-latest-runs-an-older-version" style="padding-left:0.75rem;">หาก @latest ยังคงรันเวอร์ชันเก่า (If latest runs an older version)</a>
+      <a href="#change-adapters">ปรับเปลี่ยน AI Adapters (Change adapters)</a>
+      <a href="#adopt-the-lower-context-defaults">ปรับใช้การตั้งค่าแบบประหยัด Context (Adopt the lower-context defaults)</a>
+      <a href="#return-to-an-earlier-workflow-version">ย้อนกลับสู่เวอร์ชันก่อนหน้า (Return to an earlier workflow version)</a>
+      <a href="#the-global-command-does-not-update-blueprint">คำสั่ง Global CLI จะไม่อัปเดต DevFlow (The global command does not update DevFlow)</a>
+      <a href="#manifest-and-backups">ระบบ Manifest และการสำรองข้อมูล (Manifest and backups)</a>
+      <a href="#conflicts">การจัดการข้อขัดแย้งของไฟล์ (Conflicts)</a>
+      <a href="#legacy-installations">การอัปเกรดโปรเจกต์เวอร์ชันเดิม (Legacy installations)</a>
+      <a href="#local-only-mode">โหมดการทำงานเฉพาะในเครื่อง (Local-only mode)</a>
     </aside>
   </div>
 

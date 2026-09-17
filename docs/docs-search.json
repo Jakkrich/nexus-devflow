@@ -6,20 +6,17 @@
     "slug": "getting-started",
     "href": "../getting-started/",
     "tags": [
-      "Start",
-      "Guide",
-      "Install",
+      "เริ่มต้น",
+      "คู่มือ",
+      "ติดตั้ง",
       "Onboard",
-      "Zero-Lock-in",
-      "3-Pillars",
-      "LivingSpec",
       "start",
       "getting-started"
     ]
   },
   {
-    "title": "Existing Codebase Adoption (Brownfield)",
-    "description": "ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม",
+    "title": "นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption)",
+    "description": "ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม และเตรียมความพร้อมสำหรับการพัฒนาฟีเจอร์ถัดไป",
     "section": "START",
     "slug": "existing-codebase",
     "href": "../existing-codebase/",
@@ -35,8 +32,8 @@
     ]
   },
   {
-    "title": "Command Guide (คู่มือรวมชุดคำสั่ง)",
-    "description": "คู่มือสรุปชุดคำสั่งทั้งหมดกว่า 38+ คำสั่งของ Nexus-DevFlow จัดกลุ่มตามหมวดหมู่งานและความรับผิดชอบอย่างละเอียด",
+    "title": "คู่มือรวมชุดคำสั่ง (Command Guide)",
+    "description": "เลือกคำสั่งของ Nexus-DevFlow ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานและหน้าที่ความรับผิดชอบของแต่ละ Skill อย่างละเอียด",
     "section": "START",
     "slug": "command-guide",
     "href": "../command-guide/",
@@ -52,8 +49,8 @@
     ]
   },
   {
-    "title": "Writing Your Plans (การเขียนแผนงาน)",
-    "description": "วิธีเขียน devflow/project-plan.md และ devflow/build-plan.md ให้มีประสิทธิภาพและช่วยให้ AI ทำงานได้อย่างแม่นยำ",
+    "title": "การเขียนแผนงาน (Writing Your Plans)",
+    "description": "เขียนการตัดสินใจเชิงลึกของโปรเจกต์และสร้างแผนงานพัฒนา (Build Roadmap) ที่ติดตามผลได้จริง ทั้งแบบเขียนด้วยตนเองโดยตรงหรือผ่านการนำทางด้วยคำสั่ง /discovery",
     "section": "START",
     "slug": "writing-your-plans",
     "href": "../writing-your-plans/",
@@ -70,7 +67,7 @@
   },
   {
     "title": "Updating DevFlow (การอัปเดตเวอร์ชัน)",
-    "description": "วิธีอัปเกรดเวอร์ชันของ Nexus-DevFlow ให้ทันสมัยอยู่เสมอ โดยไม่สูญเสียประวัติหรือบริบทของโปรเจกต์",
+    "description": "อัปเดตเลเยอร์เวิร์กโฟลว์ของ Nexus-DevFlow อย่างปลอดภัยโดยไม่เขียนทับแผนงาน บริบท หรือประวัติของโปรเจกต์",
     "section": "START",
     "slug": "updating-devflow",
     "href": "../updating-devflow/",
@@ -81,25 +78,25 @@
       "Sync",
       "Manifest",
       "Compatibility",
+      "Skills Migration",
       "start",
       "updating-devflow"
     ]
   },
   {
-    "title": "Core Workflow (วงจร 4 ขั้นตอนการพัฒนา)",
-    "description": "สถาปัตยกรรม The 3-Pillars Workspace และวงจร Pure Task-Isolated Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ด้วย AI อย่างเป็นระบบ",
+    "title": "Core Workflow (วงจรเวิร์กโฟลว์หลัก)",
+    "description": "ทำความเข้าใจความเชื่อมโยงระหว่างการวางแผน (Planning), การลงมือพัฒนา (Implementation), หลักฐานการตรวจรับ (Evidence) และการส่งมอบงาน (Completion)",
     "section": "WORKFLOW",
     "slug": "core-workflow",
     "href": "../core-workflow/",
     "tags": [
       "Workflow",
-      "3-Pillars",
-      "LivingSpec",
+      "Core-Loop",
+      "Living-Spec",
       "TDD",
-      "SquashMerge",
-      "TaskIsolation",
-      "VerificationMatrix",
-      "Diagrams",
+      "Verification",
+      "Human-in-the-Loop",
+      "Continuous",
       "workflow",
       "core-workflow"
     ]
@@ -798,31 +795,33 @@
     ]
   },
   {
-    "title": "Testing and CI (ปรัชญาการทดสอบและการรวมศูนย์ CI)",
-    "description": "ปรัชญาการทดสอบแบบ Multi-lane Verification, วินัย Strict TDD (Red-Green-Refactor), และการรวมคำสั่ง Verify เข้าสู่ GitHub Actions",
+    "title": "Testing and CI (การทดสอบและการรวมศูนย์ CI)",
+    "description": "เพิ่มการทดสอบอย่างมีจุดประสงค์, ใช้คำสั่ง Verify หนึ่งเดียวร่วมกันทุกที่, และรันการตรวจสอบชุดเดียวกันทั้งในเครื่อง Local และบน GitHub Actions",
     "section": "QUALITY",
     "slug": "testing",
     "href": "../testing/",
     "tags": [
       "Quality",
+      "Guide",
       "Testing",
-      "TDD",
-      "MultiLane",
+      "UnitTests",
+      "BrowserTests",
       "CI",
+      "Verify",
       "GitHubActions",
-      "Verification",
       "quality",
       "testing"
     ]
   },
   {
-    "title": "Manual Review With Try (การตรวจรับด้วยมือ)",
-    "description": "การสร้างคู่มือตรวจรับงานแบบ Manual Walkthrough ด้วยคำสั่ง /try สำหรับ Product Owner, Senior Developer, และ QA",
+    "title": "Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try)",
+    "description": "มอบแนวทางและขั้นตอนการตรวจรับงานอย่างแม่นยำให้แก่ผู้ตรวจทานที่เป็นมนุษย์ สำหรับงานปัจจุบันหรืองานที่เพิ่งเสร็จสมบูรณ์ โดยไม่ต้องเสียเวลาเปิดดูโค้ดก่อน",
     "section": "QUALITY",
     "slug": "manual-review",
     "href": "../manual-review/",
     "tags": [
       "Quality",
+      "Guide",
       "Try",
       "ManualReview",
       "QA",
@@ -833,70 +832,73 @@
     ]
   },
   {
-    "title": "Code Quality With Audit (การควบคุมคุณภาพโค้ด)",
-    "description": "การตรวจเช็กคุณภาพโค้ด สถาปัตยกรรม ความปลอดภัย และกระบวนการ Independent Review Checkpoint",
+    "title": "Code Quality With Audit (การควบคุมคุณภาพโค้ดด้วยการ Audit)",
+    "description": "ใช้การตรวจสอบแบบ Read-Only เพื่อดักจับความเบี่ยงเบนด้านความสามารถในการบำรุงรักษา (Maintainability Drift) ก่อนที่มันจะกลายเป็นรูปแบบเริ่มต้นของโปรเจกต์",
     "section": "QUALITY",
     "slug": "code-quality",
     "href": "../code-quality/",
     "tags": [
       "Quality",
+      "Guide",
       "Audit",
-      "CodeQuality",
+      "Maintainability",
       "Security",
-      "Review",
-      "IndependentReviewer",
+      "Performance",
+      "IndependentReview",
       "quality",
       "code-quality"
     ]
   },
   {
     "title": "The Findings Ledger (สมุดบัญชีข้อค้นพบ)",
-    "description": "สัญญาการบันทึกและจัดการข้อค้นพบใน devflow/context/{xxx-slug}/findings.md และการควบคุม Blocker Gates",
+    "description": "ข้อค้นพบจากการ Audit จะได้รับรหัส ID ถาวรและสถานะกำกับในไฟล์ที่บันทึกร่วมกับ Git โดยข้อค้นพบระดับร้ายแรงจะบล็อกการ Merge จนกว่าจะได้รับการรีวิวซ้ำ, ยอมรับเหตุผลอย่างชัดเจน หรือพิสูจน์ว่าเป็นข้อผิดพลาดเท็จ",
     "section": "QUALITY",
     "slug": "findings-ledger",
     "href": "../findings-ledger/",
     "tags": [
       "Quality",
+      "Guide",
       "Findings",
+      "Audit",
       "Ledger",
       "Blockers",
-      "Compliance",
-      "AuditTrail",
+      "Review",
       "quality",
       "findings-ledger"
     ]
   },
   {
-    "title": "Release Readiness (ความพร้อมก่อนขึ้น Production)",
-    "description": "แนวปฏิบัติและชุดการตรวจสอบความพร้อมก่อนส่งมอบซอฟต์แวร์สู่ Production บนแพลตฟอร์ม Render, Vercel และ Docker",
+    "title": "Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production)",
+    "description": "เตรียมความพร้อมของโปรเจกต์ที่เสร็จสมบูรณ์สำหรับ Render หรือ Vercel โดยยังคงรักษาขอบเขตการอนุมัติความปลอดภัยก่อนการ Deployment ไว้อย่างเคร่งครัด",
     "section": "SHIP",
     "slug": "release-readiness",
     "href": "../release-readiness/",
     "tags": [
       "Ship",
+      "Guide",
       "Release",
-      "Production",
-      "Vercel",
       "Render",
-      "Docker",
+      "Vercel",
+      "Production",
       "HealthCheck",
       "ship",
       "release-readiness"
     ]
   },
   {
-    "title": "Troubleshooting (การแก้ปัญหาและกู้คืนสถานะ)",
-    "description": "คู่มือการแก้ไขปัญหาเมื่อเกิดข้อผิดพลาดในการรันคำสั่ง DevFlow การกู้คืนจาก Workflow Drift และการตรวจสุขภาพระบบด้วย /doctor",
+    "title": "Troubleshooting (การแก้ไขปัญหาและข้อผิดพลาด)",
+    "description": "วินิจฉัยและแก้ไขปัญหาที่พบบ่อยในการติดตั้ง, การค้นหา (Discovery), การวางแผน, ปัญหา Git Branch และข้อผิดพลาดในขั้นตอน Verification",
     "section": "SHIP",
     "slug": "troubleshooting",
     "href": "../troubleshooting/",
     "tags": [
-      "Ship",
       "Troubleshoot",
       "Doctor",
-      "Drift",
+      "Diagnostics",
+      "Errors",
       "Recovery",
-      "SelfHealing",
+      "Git",
+      "Verification",
       "ship",
       "troubleshooting"
     ]

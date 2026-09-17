@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Writing Your Plans (การเขียนแผนงาน) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="วิธีเขียน devflow/project-plan.md และ devflow/build-plan.md ให้มีประสิทธิภาพและช่วยให้ AI ทำงานได้อย่างแม่นยำ">
+  <title>การเขียนแผนงาน (Writing Your Plans) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="เขียนการตัดสินใจเชิงลึกของโปรเจกต์และสร้างแผนงานพัฒนา (Build Roadmap) ที่ติดตามผลได้จริง ทั้งแบบเขียนด้วยตนเองโดยตรงหรือผ่านการนำทางด้วยคำสั่ง /discovery">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/writing-your-plans/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,12 +146,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>START</span> <span>/</span> <strong>Writing Your Plans (การเขียนแผนงาน)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>START</span> <span>/</span> <strong>การเขียนแผนงาน (Writing Your Plans)</strong></div>
       
-      <h1 class="docs-title">Writing Your Plans (การเขียนแผนงาน)</h1>
+      <h1 class="docs-title">การเขียนแผนงาน (Writing Your Plans)</h1>
       
       <p class="docs-lead">
-        วิธีเขียน devflow/project-plan.md และ devflow/build-plan.md ให้มีประสิทธิภาพและช่วยให้ AI ทำงานได้อย่างแม่นยำ
+        เขียนการตัดสินใจเชิงลึกของโปรเจกต์และสร้างแผนงานพัฒนา (Build Roadmap) ที่ติดตามผลได้จริง ทั้งแบบเขียนด้วยตนเองโดยตรงหรือผ่านการนำทางด้วยคำสั่ง /discovery
       </p>
 
       <div class="docs-meta">
@@ -165,56 +165,179 @@
 
       <div class="docs-prose">
 
-        <!-- Section: แนวคิดเอกสารสองฉบับที่คุณเป็นเจ้าของ (The Two Plans You Own) -->
-        <section id="two-plans-model">
-          <h2>แนวคิดเอกสารสองฉบับที่คุณเป็นเจ้าของ (The Two Plans You Own)</h2>
+        <!-- Section: เอกสารสองฉบับที่คุณเป็นเจ้าของ (The two files you own) -->
+        <section id="the-two-files-you-own">
+          <h2>เอกสารสองฉบับที่คุณเป็นเจ้าของ (The two files you own)</h2>
           
-          <p>ใน Nexus-DevFlow คุณควบคุมทิศทางของโปรเจกต์ผ่านไฟล์ Markdown สองไฟล์ที่อยู่ในโฟลเดอร์ <code>devflow/</code>:</p>
+          <p>Nexus-DevFlow สร้างบริบทของโปรเจกต์ (Project Context), ข้อกำหนดฟีเจอร์ (Feature Specs) และประวัติการพัฒนา (History Archives) จากไฟล์ 2 ไฟล์ที่คุณเป็นผู้เขียนและดูแลรักษา เอกสารทั้งสองฉบับยังคงมีประโยชน์อย่างต่อเนื่องแม้จะปล่อยเวอร์ชันแรกไปแล้ว เพราะ Build Plan จะทำหน้าที่เป็น Living Roadmap ของโปรเจกต์ต่อไป ทุกขั้นตอนในเวิร์กโฟลว์ขึ้นอยู่กับเอกสารสองฉบับนี้ จึงคุ้มค่าอย่างยิ่งที่จะเขียนให้ถูกต้องและชัดเจน</p>
           <table>
-            <thead><tr><th>ไฟล์</th><th>หน้าที่</th><th>สิ่งที่ควรระบุ</th></tr></thead>
+            <thead>
+              <tr>
+                <th>ไฟล์ (File)</th>
+                <th>หน้าที่และเนื้อหา (What it is)</th>
+              </tr>
+            </thead>
             <tbody>
               <tr>
-                <td><strong><code>devflow/project-plan.md</code></strong></td>
-                <td>วิสัยทัศน์ สถาปัตยกรรม และขอบเขต</td>
-                <td>ปัญหาที่ต้องการแก้, กลุ่มเป้าหมาย, Non-functional Requirements, Tech Stack, ขอบเขตระบบ</td>
+                <td><code>devflow/project-plan.md</code></td>
+                <td><strong>สิ่งที่สร้างและเหตุผล (The what and why)</strong>: ปัญหาที่ต้องการแก้, กลุ่มผู้ใช้, ฟีเจอร์หลัก, ข้อมูลที่จัดเก็บ, Tech Stack, ข้อจำกัด, และแนวทางการ Deploy โดยใส่รายละเอียดได้มากเท่าที่โปรเจกต์ต้องการ</td>
               </tr>
               <tr>
-                <td><strong><code>devflow/build-plan.md</code></strong></td>
-                <td>รายการฟีเจอร์ตามลำดับการสร้าง</td>
-                <td>Checklist รายการเดียวจบ เรียงจากรากฐาน (Foundation) ไปสู่ฟีเจอร์ระดับสูง</td>
+                <td><code>devflow/build-plan.md</code></td>
+                <td><strong>ลำดับการสร้าง (Build Order)</strong>: 1 บรรทัดต่อ 1 ฟังก์ชันขนาดพอเหมาะ เรียงตามลำดับการพัฒนา โดยคำสั่ง <code>/overview</code> จะช่วยเติมรูปแบบ Checkbox สำหรับติดตามผลให้อัตโนมัติ</td>
               </tr>
             </tbody>
           </table>
+          <p>คุณเป็นเจ้าของไฟล์ทั้งสองฉบับอย่างแท้จริง สามารถเขียนโดยตรง, พัฒนาผ่านการพูดคุยกับ AI ในเซสชันใดๆ หรือใช้คำสั่ง <code>/discovery</code> เพื่อรับคำแนะนำในการวางแผนเชิงลึก การตัดสินใจเป็นของคุณเสมอ และเมื่อทิศทางของโปรเจกต์เปลี่ยนไป ให้แก้ไขไฟล์ทั้งสองนี้แล้วรันคำสั่ง <code>/overview</code> ใหม่ แทนการแก้ไขไฟล์บริบทที่ระบบสร้างขึ้นโดยตรง</p>
         
           
         </section>
 
-        <!-- Section: เทคนิคการจัดเรียงและแบ่งฟีเจอร์ใน Build Plan -->
-        <section id="build-plan-best-practices">
-          <h2>เทคนิคการจัดเรียงและแบ่งฟีเจอร์ใน Build Plan</h2>
+        <!-- Section: ทางเลือกเสริม: การค้นหาและวางแผนแบบมีคำแนะนำ (Optional guided discovery) -->
+        <section id="optional-guided-discovery">
+          <h2>ทางเลือกเสริม: การค้นหาและวางแผนแบบมีคำแนะนำ (Optional guided discovery)</h2>
           
-          <p>ควรเขียนแต่ละข้อเป็นฟีเจอร์ขนาดกระชับที่สามารถพัฒนาและทดสอบได้ใน 1 รอบการทำงาน:</p>
-          <pre><code>## 🚀 Phase 1: MVP Foundation
-- [ ] 1. โครงสร้าง Database Schema และ SQLite Connection
-- [ ] 2. Authentication API (JWT & Session Tokens)
-- [ ] 3. Dashboard UI Component
+          <p>สั่งการ AI ด้วยคำสั่ง <code>$discovery</code> ใน Codex หรือ <code>/discovery</code> ใน Claude Code / Google Antigravity เพื่อเริ่มเซสชันการสนทนาวางแผนที่มีการปรับตามบริบท:</p>
+          <pre><code>/discovery</code></pre>
+          
+          <h4>กลไกการทำงานเชิงลึกของ Skill /discovery</h4>
+          <p>Skill <code>/discovery</code> ช่วยเปลี่ยนไอเดียคร่าวๆ ให้กลายเป็นพิมพ์เขียวที่พร้อมลงมือสร้าง:</p>
+          <ul>
+            <li><strong>ถามคำถามทีละข้ออย่างเจาะจง (One Focused Question at a Time)</strong>: AI จะถามคำถามครั้งละ 1 ประเด็น และตั้งคำถามต่อเนื่องจากคำตอบสำคัญของคุณ เพื่อให้การตัดสินใจชัดเจนและไม่สับสน</li>
+            <li><strong>สรุปความคืบหน้าเป็นระยะ (Periodic Summaries)</strong>: สรุปประเด็นที่ได้รับการยืนยันแล้ว และชี้ให้เห็นช่องว่างที่ยังต้องระบุเพิ่มเติม</li>
+            <li><strong>ไม่มีการจำกัดจำนวนคำถาม</strong>: เมื่อคุณยืนยันว่าโปรเจกต์พร้อมแล้ว Discovery จะนำเสนอแบบร่างฉบับเต็มของ <code>project-plan.md</code> และ <code>build-plan.md</code></li>
+            <li><strong>รอการอนุมัติอย่างชัดเจน (Explicit Approval Gate)</strong>: Skill จะหยุดรอให้คุณตรวจสอบและอนุมัติก่อนที่จะเขียนไฟล์จริงลงในโฟลเดอร์ <code>devflow/</code> เสมอ</li>
+            <li><strong>เป็นตัวเลือกเสริม 100%</strong>: การ Onboard โปรเจกต์จะไม่บังคับรัน Discovery และคำสั่ง <code>/overview</code> สามารถประมวลผลแผนงานที่คุณเขียนเองได้โดยไม่มีข้อจำกัด ดูรายละเอียดเพิ่มเติมได้ที่ <a href="../commands/discovery/">Discovery Command</a></li>
+          </ul>
+        
+          
+        </section>
 
-## ⚡ Phase 2: Advanced Features
-- [ ] 4. Realtime WebSockets Notification
-- [ ] 5. CSV Data Export Service</code></pre>
-          <div class="docs-callout tip">
-            <div class="docs-callout-label">การแตกข้อย่อย (Sub-splits)</div>
-            <p>หากฟีเจอร์มีขอบเขตใหญ่เกินไป สามารถแตกเป็น <code>2a</code>, <code>2b</code>, <code>2c</code> เพื่อให้การพัฒนาและการรีวิวทำได้อย่างแม่นยำและไม่เสียบริบท</p>
+        <!-- Section: โครงสร้างไฟล์ project-plan.md (project-plan.md) -->
+        <section id="project-planmd">
+          <h2>โครงสร้างไฟล์ project-plan.md (project-plan.md)</h2>
+          
+          <p>ใส่รายละเอียดได้มากเท่าที่โปรเจกต์ต้องการ บันทึกเหตุผล, ข้อจำกัด, ตัวอย่าง, Edge Cases, ข้อดีข้อเสีย (Tradeoffs) และสิ่งที่ไม่รวมในขอบเขต (Exclusions) เพื่อไม่ให้ขั้นตอนการพัฒนาฟีเจอร์ในภายหลังต้องเสียเวลาสืบค้นซ้ำ ตัวอย่างด้านล่างเป็นโครงสร้าง 9 หัวข้อมาตรฐาน:</p>
+          <pre><code># Project Plan
+
+## 1. Problem - ปัญหาที่เรากำลังแก้ไขคืออะไร?
+การติดตามนิสัยประจำวันทำได้ยากหากมองไม่เห็นความคืบหน้าที่ชัดเจน
+
+## 2. Users - กลุ่มผู้ใช้งานเป้าหมายคือใคร?
+บุคคลที่ต้องการสร้างวินัยส่วนตัวและมองหาแอปบันทึกกิจวัตรประจำวันที่เรียบง่าย
+
+## 3. Features - MVP ต้องการฟังก์ชันอะไรบ้าง?
+สร้างนิสัย, เช็คชื่อประจำวัน, แสดง Streak ความต่อเนื่อง, และดูสรุปรายงานรายสัปดาห์
+
+## 4. Data - ข้อมูลอะไรบ้างที่เราต้องจัดเก็บ?
+ผู้ใช้ (Users), นิสัย (Habits), และประวัติการทำเสร็จแต่ละวัน (Daily Completions)
+
+## 5. Tech - สถาปัตยกรรมและ Tech Stack ใดที่เลือกใช้?
+Next.js, PostgreSQL, และ Tailwind CSS (สามารถเลือกใช้ Stack ใดก็ได้ตามต้องการ)
+
+## 6. Monetize - โมเดลธุรกิจหรือการสร้างรายได้?
+เปิดให้ใช้งานฟรีสำหรับ Core Tracker พร้อมตัวเลือก Paid Tier สำหรับการ Sync ข้ามอุปกรณ์
+
+## 7. UI/UX - รูปลักษณ์ ความรู้สึก และประสบการณ์ใช้งาน?
+สะอาดตา, ออกแบบเน้น Mobile-First, รวดเร็ว และมีการกระทำที่ชัดเจนวันละ 1 ครั้ง
+
+## 8. Deployment - ส่งมอบงานที่ไหนและอย่างไร?
+Deploy บน Vercel พร้อมฐานข้อมูล PostgreSQL และกระบวนการ Build ตามมาตรฐาน
+
+## 9. Usage model and constraints (optional)
+การใช้งานส่วนบุคคล, ผู้ใช้คนเดียว, รันภายในเครื่อง ไม่มีความต้องการด้านกฎหมายพิเศษ</code></pre>
+          <div class="docs-callout note">
+            <div class="docs-callout-label">ข้อแนะนำสำหรับหัวข้อที่ 9 (Usage model and constraints)</div>
+            <p>หัวข้อที่ 9 เป็นตัวเลือกเสริม ให้ระบุเฉพาะข้อเท็จจริงที่กำหนดไว้ชัดเจน เช่น ขนาดการรองรับ, การทำงานในเครื่องหรือออกอินเทอร์เน็ต, ความน่าเชื่อถือของผู้ใช้, Tenancy หรือข้อกำหนดความปลอดภัย หากเว้นว่างไว้จะถือว่ายังไม่ระบุ และระบบจะไม่ด่วนสรุปไปเองว่าเป็นระบบระดับ Enterprise หรือ Multi-tenant</p>
           </div>
         
           
         </section>
 
-        <!-- Section: กล่องรับไอเดีย (Ideas Inbox: devflow/ideas.md) -->
-        <section id="ideas-inbox">
-          <h2>กล่องรับไอเดีย (Ideas Inbox: devflow/ideas.md)</h2>
+        <!-- Section: โครงสร้างไฟล์ build-plan.md (build-plan.md) -->
+        <section id="build-planmd">
+          <h2>โครงสร้างไฟล์ build-plan.md (build-plan.md)</h2>
           
-          <p>สำหรับไอเดียที่ยังไม่พร้อมนำเข้า Build Plan ให้บันทึกไว้ใน <code>devflow/ideas.md</code> ด้วยคำสั่ง <code>/idea "รายละเอียดไอเดีย"</code> AI จะทำการประเมินคะแนนความเป็นไปได้ คุณค่าทางธุรกิจ และจุดสังเกตทางเทคนิคให้อัตโนมัติ</p>
+          <p>เขียน 1 บรรทัดต่อ 1 ฟังก์ชันขนาดพอเหมาะ (Feature-sized outcome) เรียงตามลำดับการพัฒนา การเขียนด้วย Plain Bullets หรือ Numbered List ก็เพียงพอแล้ว โดยคำสั่ง <code>/overview</code> จะเติม Checkbox และหมายเลขข้อให้อัตโนมัติ หรือจะเขียนในรูปแบบ Checkbox โดยตรงก็ได้:</p>
+          <pre><code># Build Plan
+
+- [ ] 1. **Habit list** - สร้าง แก้ไขชื่อ และลบนิสัย
+- [ ] 2. **Daily check-in** - ทำเครื่องหมายนิสัยที่ทำเสร็จในวันนี้
+- [ ] 3. **Streak view** - แสดงจำนวนวันต่อเนื่องปัจจุบันและสถิติสูงสุด
+- [ ] 4. **Weekly summary** - สรุปอัตราความสำเร็จย้อนหลัง 7 วัน
+- [ ] 5. **Deployment readiness** - กำหนดค่าโฮสต์และตรวจสอบ Production Build</code></pre>
+          <p>คำสั่ง <code>/feature</code> (เมื่อไม่ระบุอาร์กิวเมนต์) จะสเปกฟีเจอร์แรกที่ยังไม่ได้ทำ และเมื่อฟีเจอร์เสร็จสิ้นจะถูกทำเครื่องหมาย <code>[x]</code> รายการนี้จึงทำหน้าที่เป็น Progress Tracker ไปในตัว หากฟีเจอร์มีขนาดใหญ่เกินไป จะถูกแบ่งเป็นข้อย่อย (เช่น <code>4a</code>, <code>4b</code>) ในขั้นตอนการเขียน Spec</p>
+        
+          
+          <div class="docs-step" id="continue-after-the-initial-build">
+            <div class="docs-step-number">1</div>
+            <div>
+              <h3>สานต่อหลังจากการสร้างระยะแรก (Continue after the initial build)</h3>
+              
+              <p>ห้ามลบหรือแทนที่ Build Plan ทั้งฉบับเมื่อฟีเจอร์ชุดแรกสร้างเสร็จ ให้คงรายการที่เสร็จแล้ว (<code>[x]</code>) และหมายเลขข้อเดิมไว้ แล้วเพิ่มฟีเจอร์ใหม่ที่ยังไม่ได้ทำต่อท้าย การใช้หัวข้อ Milestone (เช่น <code>## MVP</code>, <code>## Post-MVP</code>) จะช่วยให้อ่านง่ายโดยไม่กระทบต่อวิธีที่ <code>/feature</code> ค้นหาข้อถัดไป:</p>
+              <pre><code>## MVP
+
+- [x] 1. **Habit list** - สร้าง แก้ไขชื่อ และลบนิสัย
+- [x] 2. **Daily check-in** - ทำเครื่องหมายนิสัยที่ทำเสร็จในวันนี้
+
+## Post-MVP
+
+- [ ] 3. **Shared habits** - เชิญผู้ใช้อื่นมาร่วมติดตามนิสัยด้วยกัน
+- [ ] 4. **Reminder schedule** - กำหนดเวลาการแจ้งเตือนนิสัย</code></pre>
+              <p>สำหรับการเพิ่มฟีเจอร์ใหม่ ให้เพิ่ม 1 บรรทัดใน <code>build-plan.md</code>, รันคำสั่ง <code>/overview</code> ใหม่ แล้วดำเนินการต่อด้วย <code>/feature</code> (แก้ไข <code>project-plan.md</code> เฉพาะเมื่อฟีเจอร์นั้นเปลี่ยนทิศทางผลิตภัณฑ์, ข้อมูล, สถาปัตยกรรม หรือการ Deploy)</p>
+              <p>คุณยังสามารถสั่งงานแบบเจาะจงได้ เช่น <code>/feature "shared habits"</code> หากไม่มีข้อที่ตรงกัน Skill จะเสนอเพิ่มบรรทัดใหม่ลงในแผน พร้อมตรวจสอบผลกระทบต่อ Project Plan และรอการอนุมัติจากคุณก่อนอัปเดต Overview และเริ่มเขียน Feature Spec</p>
+              <p>สำหรับบั๊กหรืองานแก้ไขด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ให้ใช้คำสั่ง <code>/fix</code> โดยไม่ต้องนำมาเพิ่มเป็นข้อใน Build Plan</p>
+            
+            </div>
+          </div>
+      
+          <div class="docs-step" id="keep-items-feature-sized">
+            <div class="docs-step-number">2</div>
+            <div>
+              <h3>รักษาขนาดของแต่ละข้อให้อยู่ในระดับฟีเจอร์ (Keep items feature-sized)</h3>
+              
+              <p>การแบ่งขนาดฟีเจอร์ที่เหมาะสมจะช่วยให้การพัฒนาและการตรวจสอบทำได้อย่างแม่นยำ:</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ขนาดที่เหมาะสม (Good)</th>
+                    <th>สิ่งที่ควรหลีกเลี่ยง (Avoid)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>Daily check-in - ทำเครื่องหมายนิสัยที่ทำเสร็จในวันนี้</code></td>
+                    <td><code>Database</code> (กว้างเกินไป ขาดพฤติกรรมผู้ใช้)</td>
+                  </tr>
+                  <tr>
+                    <td><code>Streak view - แสดงจำนวนวันต่อเนื่องและสถิติสูงสุด</code></td>
+                    <td><code>Make it look nice</code> (คลุมเครือ ไม่สามารถวัดผลได้)</td>
+                  </tr>
+                  <tr>
+                    <td><code>Weekly summary - สรุปอัตราความสำเร็จย้อนหลัง 7 วัน</code></td>
+                    <td><code>Habits, streaks, summary, and deploy</code> (ใหญ่เกินไป รวมหลายฟีเจอร์)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>อย่าใส่ขั้นตอนการ Scaffold หรือ Prototype ลงใน Build Plan เพราะสิ่งเหล่านั้นเป็นขั้นตอนก่อนการสร้าง ให้เริ่มต้นด้วยฟังก์ชันที่ทำงานได้จริงชิ้นแรก</p>
+            
+            </div>
+          </div>
+      
+        </section>
+
+        <!-- Section: สิ่งที่ควรรู้ก่อนรันคำสั่ง Overview (Before you run overview) -->
+        <section id="before-you-run-overview">
+          <h2>สิ่งที่ควรรู้ก่อนรันคำสั่ง Overview (Before you run overview)</h2>
+          
+          <p>ในการเขียนรอบแรก เพียงแค่มีรายการฟีเจอร์ที่ชัดเจนก็เพียงพอ คำสั่ง <code>/overview</code> จะช่วยเติมรูปแบบไวยากรณ์ Checklist ที่ขาดหายไป โดยคงข้อความ ลำดับ หมายเลข ID สถานะความสำเร็จ และบันทึกย่อของคุณไว้อย่างครบถ้วน เช็คลิสต์ที่ถูกต้องอยู่แล้วจะไม่ถูกดัดแปลง</p>
+          
+          <h4>กลไกการทำงานเชิงลึกของ Skill /overview</h4>
+          <ul>
+            <li><strong>ขออนุมัติก่อนปรับเปลี่ยน (Approval Gate)</strong>: Overview จะถามก่อนเสมอหากจำเป็นต้องเปลี่ยนความหมายหรือลำดับของฟีเจอร์, ทำการแยกหรือรวมข้อ, หรือแก้ไขหมายเลข ID ที่กำกวม</li>
+            <li><strong>เสนอสร้าง Build Checklist อัตโนมัติ</strong>: หากมีรายการฟีเจอร์เฉพาะใน <code>project-plan.md</code> แต่ยังไม่มีใน <code>build-plan.md</code> Overview จะเสนอร่าง Checklist ที่ขาดอยู่ให้คุณตรวจสอบและอนุมัติก่อน</li>
+            <li><strong>คอมไพล์เป็น Living Source of Truth</strong>: สังเคราะห์แผนงานทั้งสองฉบับเป็น <code>devflow/context/project-overview.md</code> ที่มีขนาดกะทัดรัด (&lt; 20KB) เพื่อให้ AI Agent ทุกตัวในทุกเซสชันโหลดอ่านได้อย่างรวดเร็วโดยไม่สิ้นเปลือง Context Window</li>
+          </ul>
         
           
         </section>
@@ -236,9 +359,13 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#two-plans-model">แนวคิดเอกสารสองฉบับที่คุณเป็นเจ้าของ (The Two Plans You Own)</a>
-      <a href="#build-plan-best-practices">เทคนิคการจัดเรียงและแบ่งฟีเจอร์ใน Build Plan</a>
-      <a href="#ideas-inbox">กล่องรับไอเดีย (Ideas Inbox: devflow/ideas.md)</a>
+      <a href="#the-two-files-you-own">เอกสารสองฉบับที่คุณเป็นเจ้าของ (The two files you own)</a>
+      <a href="#optional-guided-discovery">ทางเลือกเสริม: การค้นหาและวางแผนแบบมีคำแนะนำ (Optional guided discovery)</a>
+      <a href="#project-planmd">โครงสร้างไฟล์ project-plan.md (project-plan.md)</a>
+      <a href="#build-planmd">โครงสร้างไฟล์ build-plan.md (build-plan.md)</a>
+      <a class="nested" href="#continue-after-the-initial-build" style="padding-left:0.75rem;">สานต่อหลังจากการสร้างระยะแรก (Continue after the initial build)</a>
+      <a class="nested" href="#keep-items-feature-sized" style="padding-left:0.75rem;">รักษาขนาดของแต่ละข้อให้อยู่ในระดับฟีเจอร์ (Keep items feature-sized)</a>
+      <a href="#before-you-run-overview">สิ่งที่ควรรู้ก่อนรันคำสั่ง Overview (Before you run overview)</a>
     </aside>
   </div>
 

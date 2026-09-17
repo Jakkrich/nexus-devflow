@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Command Guide (คู่มือรวมชุดคำสั่ง) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="คู่มือสรุปชุดคำสั่งทั้งหมดกว่า 38+ คำสั่งของ Nexus-DevFlow จัดกลุ่มตามหมวดหมู่งานและความรับผิดชอบอย่างละเอียด">
+  <title>คู่มือรวมชุดคำสั่ง (Command Guide) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="เลือกคำสั่งของ Nexus-DevFlow ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานและหน้าที่ความรับผิดชอบของแต่ละ Skill อย่างละเอียด">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/command-guide/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,12 +146,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>START</span> <span>/</span> <strong>Command Guide (คู่มือรวมชุดคำสั่ง)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>START</span> <span>/</span> <strong>คู่มือรวมชุดคำสั่ง (Command Guide)</strong></div>
       
-      <h1 class="docs-title">Command Guide (คู่มือรวมชุดคำสั่ง)</h1>
+      <h1 class="docs-title">คู่มือรวมชุดคำสั่ง (Command Guide)</h1>
       
       <p class="docs-lead">
-        คู่มือสรุปชุดคำสั่งทั้งหมดกว่า 38+ คำสั่งของ Nexus-DevFlow จัดกลุ่มตามหมวดหมู่งานและความรับผิดชอบอย่างละเอียด
+        เลือกคำสั่งของ Nexus-DevFlow ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานและหน้าที่ความรับผิดชอบของแต่ละ Skill อย่างละเอียด
       </p>
 
       <div class="docs-meta">
@@ -165,51 +165,74 @@
 
       <div class="docs-prose">
 
-        <!-- Section: ตารางสรุปชุดคำสั่งแยกตามหมวดหมู่ (Complete Command Matrix) -->
-        <section id="commands-matrix">
-          <h2>ตารางสรุปชุดคำสั่งแยกตามหมวดหมู่ (Complete Command Matrix)</h2>
+        <!-- Section: เลือกจุดเริ่มต้นตามประเภทงาน (Pick a starting point) -->
+        <section id="pick-a-starting-point">
+          <h2>เลือกจุดเริ่มต้นตามประเภทงาน (Pick a starting point)</h2>
           
-          <p>Nexus-DevFlow แบ่งทักษะออกเป็น 6 กลุ่มการทำงานหลัก ครอบคลุมตั้งแต่การวางแผนความต้องการจนถึงการส่งมอบขึ้น Production:</p>
+          <p>เริ่มต้นจากงานที่คุณต้องการทำ แล้วเลือกคำสั่ง Skill ที่ตรงจุด ทุกคำสั่งด้านล่างนี้สามารถรันได้โดยตรงใน AI Chat ของคุณ (ส่วนคำสั่ง Terminal เช่น <code>npx nexus-devflow status</code> หรือ <code>npx nexus-devflow dashboard</code> ใช้สำหรับจัดการเครื่องมือและเปิด Live Dashboard):</p>
           <table>
             <thead>
-              <tr><th>หมวดหมู่</th><th>คำสั่ง (Slash / Plain)</th><th>หน้าที่ความรับผิดชอบ</th><th>ผลลัพธ์ที่สร้าง</th></tr>
+              <tr>
+                <th>สิ่งที่คุณต้องการทำ</th>
+                <th>คำสั่งที่แนะนำ</th>
+                <th>หน้าที่และความรับผิดชอบ</th>
+              </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>1. Core Lifecycle</strong></td>
-                <td><code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code></td>
-                <td>วงจรพัฒนา 4 ขั้นตอน Task-Isolated Living Spec พร้อม TDD และ Squash-Merge</td>
-                <td><code>spec.md</code>, Source Code, Test Proof, <code>history/</code></td>
+                <td>มีไอเดียใหม่แต่ยังไม่แน่ใจว่าจะทำดีไหม</td>
+                <td><code>/explore</code></td>
+                <td>สำรวจโค้ดเบสจริง เปรียบเทียบทางเลือกและข้อดีข้อเสียโดยไม่แก้ไขไฟล์ใดๆ</td>
               </tr>
               <tr>
-                <td><strong>2. Pre-Flight & SA</strong></td>
-                <td><code>/analyze</code>, <code>/discovery</code>, <code>/explore</code>, <code>/grill</code>, <code>/brainstorm</code>, <code>/idea</code></td>
-                <td>วิเคราะห์เอกสารความต้องการ (PDF/Word/Excel), สำรวจ Roadmap, Domain Modeling, ADRs</td>
-                <td><code>parsed.md</code>, <code>discovery.md</code>, <code>ADR-xxx.md</code>, <code>glossary.md</code></td>
+                <td>อยากรู้ขอบเขตของฟีเจอร์ถัดไปในแผนงาน</td>
+                <td><code>/brief</code></td>
+                <td>สรุปขนาด ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์โดยไม่อ่านไฟล์เกินจำเป็น</td>
               </tr>
               <tr>
-                <td><strong>3. Health & Diagnostics</strong></td>
-                <td><code>/status</code>, <code>/doctor</code>, <code>/debug</code>, <code>/fix</code>, <code>/brief</code></td>
-                <td>ตรวจสุขภาพโปรเจกต์ วินิจฉัยหาสาเหตุของบั๊ก และสร้าง Living Spec สำหรับแก้ไขงานด่วน</td>
-                <td>Health Report, Hypothesis Tests, Fix Specs</td>
+                <td>พร้อมเริ่มพัฒนาฟีเจอร์ใหม่ตามแผนงาน</td>
+                <td><code>/feature</code></td>
+                <td>สร้าง Task-Isolated Living Spec และจัดเตรียมสภาพแวดล้อมสำหรับพัฒนา</td>
               </tr>
               <tr>
-                <td><strong>4. Quality & Review</strong></td>
-                <td><code>/audit</code>, <code>/tests</code>, <code>/setup-tests</code>, <code>/browser-tests</code>, <code>/ci</code>, <code>/try</code>, <code>/bughunter</code></td>
-                <td>ตรวจคุณภาพโค้ด ความปลอดภัย OWASP ระบบทดสอบ Unit/E2E และ GitHub Actions CI</td>
-                <td><code>findings.md</code>, <code>review.md</code>, <code>ci.yml</code>, Try Guide</td>
+                <td>เกิดข้อผิดพลาด บั๊ก หรือระบบไม่ทำงาน</td>
+                <td><code>/debug</code></td>
+                <td>วินิจฉัยหาสาเหตุที่แท้จริง (Root Cause) ผ่านการตั้งสมมติฐานและทดสอบจริง</td>
               </tr>
               <tr>
-                <td><strong>5. Automation & Ship</strong></td>
-                <td><code>/autopilot</code>, <code>/continuous</code>, <code>/release</code>, <code>/rollback</code>, <code>/prototype</code></td>
-                <td>รันลูปพัฒนาฟีเจอร์เดี่ยว/หลายฟีเจอร์อัตโนมัติ ตรวจสอบความพร้อม Production และแผนถอนโค้ด</td>
-                <td>Automated Merges, Prototypes, Rollback Specs</td>
+                <td>ต้องการแก้บั๊กเล็กหรืองานด่วนนอกแผน</td>
+                <td><code>/fix</code></td>
+                <td>สร้าง Spec สำหรับการแก้ไขบั๊กโดยเฉพาะ พร้อมวงจร TDD</td>
               </tr>
               <tr>
-                <td><strong>6. Architecture & Utility</strong></td>
-                <td><code>/overview</code>, <code>/archify</code>, <code>/diagram-design</code>, <code>/convert-any-to-md</code>, <code>/vendor</code>, <code>/ponytail</code>, <code>/report-html</code></td>
-                <td>คอมไพล์บริบท สังเคราะห์แผนภาพสถาปัตยกรรม แปลงเอกสารดิบ และจัดการ Third-Party Repos</td>
-                <td><code>project-overview.md</code>, Interactive HTML Diagrams, Clean Markdown</td>
+                <td>ต้องการทดสอบระบบตาม Living Spec</td>
+                <td><code>/check</code></td>
+                <td>รันชุดตรวจสอบพฤติกรรมจริง (Multi-lane verification) ตามเกณฑ์ Done-when</td>
+              </tr>
+              <tr>
+                <td>ต้องการคู่มือขั้นตอนสำหรับทดสอบด้วยตนเอง</td>
+                <td><code>/check guide</code> หรือ <code>/try</code></td>
+                <td>สร้างคู่มือ Read-Only แนะนำจุดที่มนุษย์ควรคลิกทดสอบและผลลัพธ์ที่คาดหวัง</td>
+              </tr>
+              <tr>
+                <td>ต้องการตรวจสอบคุณภาพโค้ดของฟีเจอร์ปัจจุบัน</td>
+                <td><code>/audit current</code></td>
+                <td>สแกนหาข้อบกพร่อง ความปลอดภัย OWASP และบันทึกลง <code>findings.md</code></td>
+              </tr>
+              <tr>
+                <td>ต้องการรันหรือเพิ่มชุดทดสอบ Unit/Integration</td>
+                <td><code>/tests</code></td>
+                <td>จัดการชุดทดสอบ วิเคราะห์ Coverage และเพิ่มเคสทดสอบที่ขาดหายไป</td>
+              </tr>
+              <tr>
+                <td>ต้องการทดสอบผ่านเบราว์เซอร์จริง (E2E)</td>
+                <td><code>/tests browser</code> หรือ <code>/browser-tests</code></td>
+                <td>ทดสอบ End-to-End บนเบราว์เซอร์จริงผ่าน Playwright และ MCP BrowserOS Neo</td>
+              </tr>
+              <tr>
+                <td>ต้องการตรวจสุขภาพของระบบ DevFlow ทั้งหมด</td>
+                <td><code>/doctor</code></td>
+                <td>ตรวจสอบความสอดคล้องของ Adapters, Plans, Config, และความสดใหม่ของ Overview</td>
               </tr>
             </tbody>
           </table>
@@ -217,16 +240,205 @@
           
         </section>
 
-        <!-- Section: รูปแบบการเรียกใช้คำสั่งในเครื่องมือต่างๆ (Universal Invocation) -->
-        <section id="invocation-styles">
-          <h2>รูปแบบการเรียกใช้คำสั่งในเครื่องมือต่างๆ (Universal Invocation)</h2>
+        <!-- Section: เส้นทางการพัฒนาประจำวัน (Everyday build path) -->
+        <section id="everyday-build-path">
+          <h2>เส้นทางการพัฒนาประจำวัน (Everyday build path)</h2>
+          
+          <p>วงจรการพัฒนามาตรฐานที่ปลอดภัยและมีประสิทธิภาพที่สุดสำหรับการพัฒนาแต่ละฟีเจอร์:</p>
+          <pre><code>/feature -> /implement -> /check -> /audit current -> /complete</code></pre>
+          <p>ลำดับขั้นตอนและการทำงานของแต่ละด่าน (Quality Gates):</p>
+          <ul>
+            <li><strong>ตรวจสอบและอนุมัติ Spec ก่อนเริ่มเขียนโค้ด</strong>: ตรวจสอบ <code>devflow/context/{xxx-slug}/spec.md</code> เพื่อยืนยันขอบเขตงานและเกณฑ์การยอมรับ</li>
+            <li><strong><code>/check</code> พิสูจน์พฤติกรรมจริง</strong>: รันคำสั่งทดสอบจริงในสภาพแวดล้อมที่ใช้งานจริง เพื่อยืนยันว่าฟีเจอร์ทำงานถูกต้องตามเกณฑ์ใน Spec</li>
+            <li><strong><code>/check guide</code> แนะนำการทดสอบด้วยมนุษย์</strong>: อธิบายสิ่งที่คนควรคลิกทดสอบและผลลัพธ์ที่คาดหวัง (คู่มือนี้เป็นเพียงคำแนะนำ ไม่ใช่หลักฐานว่าการทดสอบอัตโนมัติผ่าน)</li>
+            <li><strong><code>/audit current</code> ตรวจสอบคุณภาพโค้ด</strong>: สแกนโค้ดที่เพิ่งแก้ไขเพื่อค้นหาข้อบกพร่อง ช่องโหว่ความปลอดภัย และบันทึกผลลงใน <code>findings.md</code></li>
+            <li><strong><code>/complete</code> ส่งมอบงาน</strong>: สรุป Release Digest, ย้ายเข้า History Archive, ทำความสะอาด Workspace ชั่วคราว และทำการ Squash-Merge เข้าสู่ branch หลัก</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: สร้างและส่งมอบ (Build) -->
+        <section id="build">
+          <h2>สร้างและส่งมอบ (Build)</h2>
+          
+          <p>กลุ่มคำสั่งหลักสำหรับวงจรการพัฒนาและส่งมอบฟีเจอร์:</p>
+          <ul>
+            <li>
+              <strong><a href="../commands/feature/">/feature</a></strong>: 
+              สกัดฟีเจอร์จาก <code>devflow/build-plan.md</code> กำหนดรหัสลำดับงาน (<code>xxx-slug</code>) และสร้าง <strong>Task-Isolated Living Spec (<code>devflow/context/{xxx-slug}/spec.md</code>)</strong>, Stage Pointer (<code>stage.md</code>), และ Audit Ledger (<code>findings.md</code>)
+            </li>
+            <li>
+              <strong><a href="../commands/implement/">/implement</a></strong>: 
+              สลับเข้าทำงานบน Branch <code>feature/{xxx-slug}</code> ดำเนินการพัฒนาตาม Checklist ใน Living Spec ด้วยระเบียบวินัย <strong>TDD (Red-Green-Refactor)</strong> และบันทึก Diff Evidence
+            </li>
+            <li>
+              <strong><a href="../commands/check/">/check</a></strong>: 
+              ทำหน้าที่เป็น Senior QA Gatekeeper ตรวจสอบ Multi-Lane Verification Matrix (Typecheck, Lint, Test Suites, Manual Proof) และบันทึกผลการตรวจสอบเชิงประจักษ์ลงใน Living Spec
+            </li>
+            <li>
+              <strong>/check guide (หรือ /try)</strong>: 
+              สร้างคู่มือการทดสอบแบบแมนนวล (Read-Only Try Guide) ระบุขั้นตอนการรัน จุดที่ต้องคลิกบนหน้าจอ และสิ่งที่ควรสังเกต เพื่อให้ผู้ใช้สามารถทดสอบด้วยตนเองได้อย่างง่ายดาย
+            </li>
+            <li>
+              <strong><a href="../commands/complete/">/complete</a></strong>: 
+              ด่านตรวจความปลอดภัยขั้นตอนสุดท้าย บันทึก Release Digest, ย้าย Living Spec ไปเก็บถาวรใน <code>devflow/history/features/</code>, ทำความสะอาด Workspace ชั่วคราว, อัปเดต <code>build-plan.md</code> และ <code>HISTORY.md</code>, แล้วทำ Git Squash-Merge เข้าสู่ <code>main</code>
+            </li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: ทำความเข้าใจและตรวจสอบ (Understand and review) -->
+        <section id="understand-and-review">
+          <h2>ทำความเข้าใจและตรวจสอบ (Understand and review)</h2>
+          
+          <p>กลุ่มคำสั่งสำหรับการวิเคราะห์ สำรวจ และตรวจสอบคุณภาพระบบ:</p>
+          <ul>
+            <li>
+              <strong><a href="../commands/explore/">/explore</a></strong>: 
+              สำรวจโค้ดเบสจริงเพื่อตอบคำถามทางเทคนิค เปรียบเทียบทางเลือกและข้อดีข้อเสียก่อนตัดสินใจวางแผน โดยไม่มีการแก้ไขไฟล์ใดๆ
+            </li>
+            <li>
+              <strong><a href="../commands/brief/">/brief</a></strong>: 
+              สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่อ่านไฟล์เกินจำเป็น
+            </li>
+            <li>
+              <strong><a href="../commands/status/">/status</a></strong>: 
+              รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สถานะของฟีเจอร์ปัจจุบัน, Git State, และคำสั่งถัดไปที่ต้องทำ
+            </li>
+            <li>
+              <strong><a href="../commands/debug/">/debug</a></strong>: 
+              วินิจฉัยหาสาเหตุที่แท้จริงของข้อผิดพลาด (Root-Cause Tracing) ผ่านการตั้งสมมติฐานและทดสอบ โดยไม่แก้โค้ดแบบสุ่มสี่สุ่มห้า พร้อมส่งมอบแนวทางการแก้ไข
+            </li>
+            <li>
+              <strong><a href="../commands/audit/">/audit</a></strong>: 
+              ตรวจสอบคุณภาพและความปลอดภัย 5 มิติ (Code Quality, OWASP Top 10 Security, Performance Bottlenecks, Architecture Drift, Test Integrity) และบันทึกลง <code>findings.md</code> (รองรับ <code>/audit current</code> สำหรับงานปัจจุบัน และ <code>/audit full</code> สำหรับทั้งโปรเจกต์)
+            </li>
+            <li>
+              <strong><a href="../commands/doctor/">/doctor</a></strong>: 
+              ตรวจสุขภาพของระบบ DevFlow ทั้งหมด ตรวจสอบ Adapter Sync, Config Drift, และความสดใหม่ของ <code>project-overview.md</code>
+            </li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: วางแผนและติดตั้งระบบ (Plan and setup) -->
+        <section id="plan-and-setup">
+          <h2>วางแผนและติดตั้งระบบ (Plan and setup)</h2>
+          
+          <p>กลุ่มคำสั่งสำหรับการเริ่มต้น ติดตั้ง และกำหนดโครงสร้างโปรเจกต์:</p>
+          <ul>
+            <li>
+              <strong><a href="../commands/onboard/">/onboard</a></strong>: 
+              ปรับแต่งโปรเจกต์ใหม่ ตรวจจับ Stack, คำสั่ง Test, Coding Conventions, และระดับการ Review Cadence (Efficient vs Guided)
+            </li>
+            <li>
+              <strong><a href="../commands/adopt/">/adopt</a></strong>: 
+              สำรวจโค้ดเบสเดิม (Brownfield) 5 ขั้นตอนเชิงลึก สกัดฟังก์ชันที่มีอยู่แล้วลงใน <code>build-plan.md</code> เป็น <code>- [x]</code> โดยไม่กระทบ Git History เดิม
+            </li>
+            <li>
+              <strong><a href="../commands/discovery/">/discovery</a></strong>: 
+              สัมภาษณ์เชิงลึกและสำรวจ Roadmap ของผลิตภัณฑ์ เพื่อช่วยจัดทำและปรับปรุง <code>project-plan.md</code> และ <code>build-plan.md</code>
+            </li>
+            <li>
+              <strong><a href="../commands/overview/">/overview</a></strong>: 
+              Deterministic Compiler คอมไพล์แผนงานทั้งสองฉบับเป็น <code>devflow/context/project-overview.md</code> (ขนาดกะทัดรัด &lt; 20KB) เพื่อให้ AI โหลดเป็น Living Source of Truth ร่วมกัน
+            </li>
+            <li>
+              <strong><a href="../commands/prototype/">/prototype</a></strong>: 
+              สร้าง UI Mockup (HTML/CSS Standalone) และ Design Tokens อย่างรวดเร็วก่อนลงมือพัฒนาจริง
+            </li>
+            <li>
+              <strong><a href="../commands/tests/">/tests</a></strong>: 
+              จัดการและรันชุดทดสอบ Unit/Integration Tests รวมถึงการทดสอบผ่านเบราว์เซอร์จริง (<code>/tests browser</code>) ผ่าน Playwright และ MCP BrowserOS Neo
+            </li>
+            <li>
+              <strong><a href="../commands/ci/">/ci</a></strong>: 
+              สร้างคำสั่ง Verify หนึ่งคำสั่งเฉพาะสำหรับโปรเจกต์ และสร้างไฟล์ GitHub Actions Workflow (<code>devflow-verify.yml</code>) ให้ตรงกัน
+            </li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: กู้คืนระบบและเตรียมปล่อยงาน (Recover and release) -->
+        <section id="recover-and-release">
+          <h2>กู้คืนระบบและเตรียมปล่อยงาน (Recover and release)</h2>
+          
+          <p>กลุ่มคำสั่งสำหรับการแก้ไขงานด่วน กู้คืนประวัติ และเตรียมความพร้อมสำหรับ Production:</p>
+          <ul>
+            <li>
+              <strong><a href="../commands/fix/">/fix</a></strong>: 
+              สร้าง Task-Isolated Spec สำหรับแก้ไขบั๊กเร่งด่วนหรืองานเล็กนอกแผน พร้อมวงจร TDD และบันทึกเข้าสู่ History Archive
+            </li>
+            <li>
+              <strong><a href="../commands/rollback/">/rollback</a></strong>: 
+              วางแผนถอนฟีเจอร์ที่เสร็จสมบูรณ์แล้วอย่างปลอดภัย โดยอ้างอิงจาก History Archive และ Git Commit โดยรักษาประวัติ Git ไว้อย่างถูกต้อง
+            </li>
+            <li>
+              <strong><a href="../commands/release/">/release</a></strong>: 
+              ตรวจสอบความพร้อมสำหรับการ Deploy ขึ้น Production (Render / Vercel), เช็ค Build, Environment Variables, และ Health-Check Endpoint
+            </li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: ระบบอัตโนมัติ (Automation) -->
+        <section id="automation">
+          <h2>ระบบอัตโนมัติ (Automation)</h2>
+          
+          <p>กลุ่มคำสั่งสำหรับการพัฒนาระบบแบบอัตโนมัติโดยลดการแทรกแซงของมนุษย์:</p>
+          <ul>
+            <li>
+              <strong><a href="../commands/autopilot/">/autopilot</a></strong>: 
+              รันกระบวนการพัฒนา 1 ฟีเจอร์แบบอัตโนมัติตั้งแต่ต้นจนจบ (Spec -> Implement -> Check -> Audit) แล้วหยุดรอการอนุมัติก่อนทำ Complete
+            </li>
+            <li>
+              <strong><a href="../commands/continuous/">/continuous</a></strong>: 
+              Autonomous Multi-Feature Delivery Loop พัฒนาฟีเจอร์ใน <code>build-plan.md</code> ต่อเนื่องทีละรายการแบบอัตโนมัติ มีการสร้าง Branch แยก, รัน TDD, ตรวจสอบ Quality Gates, และ Squash-Merge ทีละฟีเจอร์จนจบแผน
+            </li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: รูปแบบการเรียกใช้และการย้ายคำสั่ง (Invocation and migration) -->
+        <section id="invocation-and-migration">
+          <h2>รูปแบบการเรียกใช้และการย้ายคำสั่ง (Invocation and migration)</h2>
           
           <p>คุณสามารถเรียกใช้คำสั่งได้ตามรูปแบบที่เครื่องมือ AI ของคุณรองรับ:</p>
           <ul>
-            <li><strong>Slash Prefix (<code>/</code>)</strong>: แนะนำสำหรับ Google Antigravity IDE, Claude Code, Gemini CLI (เช่น <code>/feature</code>, <code>/implement</code>, <code>/check</code>)</li>
-            <li><strong>Dollar Prefix (<code>$</code>)</strong>: สำหรับ OpenAI Codex CLI หรือเครื่องมือ Skill-invocation (เช่น <code>$feature</code>, <code>$continuous</code>)</li>
-            <li><strong>Plain English / Thai</strong>: พิมพ์ชื่อคำสั่งหรือความต้องการได้โดยตรง (เช่น <code>feature 1</code>, <code>ช่วยรัน check ให้หน่อย</code>)</li>
+            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/tests browser</code>, <code>/check guide</code></li>
+            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$tests browser</code>, <code>$check guide</code></li>
+            <li><strong>GitHub Copilot / OpenCode / Chat ทั่วไป</strong>: พิมพ์ชื่อคำสั่งหรือระบุความต้องการเป็นภาษาไทยหรืออังกฤษได้โดยตรง</li>
           </ul>
+          
+          <h4>การย้ายและเปลี่ยนผ่านคำสั่ง (Command Migration)</h4>
+          <p>ใน Nexus-DevFlow เวอร์ชันปัจจุบัน มีการปรับชื่อคำสั่งให้กระชับและเป็นหมวดหมู่มากขึ้น:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>คำสั่งเดิม (Legacy)</th>
+                <th>คำสั่งใหม่ (Canonical)</th>
+                <th>คำอธิบาย</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>/browser-tests</code></td>
+                <td><code>/tests browser</code></td>
+                <td>รวมการทดสอบ Browser เข้าเป็นคำสั่งย่อยของ <code>/tests</code> (ยังคงรองรับคำสั่งเดิม)</td>
+              </tr>
+              <tr>
+                <td><code>/try</code></td>
+                <td><code>/check guide</code></td>
+                <td>รวมคู่มือการทดสอบด้วยตนเองเข้าเป็นโหมด Guide ของ <code>/check</code> (ยังคงรองรับคำสั่งเดิม)</td>
+              </tr>
+            </tbody>
+          </table>
         
           
         </section>
@@ -248,8 +460,14 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#commands-matrix">ตารางสรุปชุดคำสั่งแยกตามหมวดหมู่ (Complete Command Matrix)</a>
-      <a href="#invocation-styles">รูปแบบการเรียกใช้คำสั่งในเครื่องมือต่างๆ (Universal Invocation)</a>
+      <a href="#pick-a-starting-point">เลือกจุดเริ่มต้นตามประเภทงาน (Pick a starting point)</a>
+      <a href="#everyday-build-path">เส้นทางการพัฒนาประจำวัน (Everyday build path)</a>
+      <a href="#build">สร้างและส่งมอบ (Build)</a>
+      <a href="#understand-and-review">ทำความเข้าใจและตรวจสอบ (Understand and review)</a>
+      <a href="#plan-and-setup">วางแผนและติดตั้งระบบ (Plan and setup)</a>
+      <a href="#recover-and-release">กู้คืนระบบและเตรียมปล่อยงาน (Recover and release)</a>
+      <a href="#automation">ระบบอัตโนมัติ (Automation)</a>
+      <a href="#invocation-and-migration">รูปแบบการเรียกใช้และการย้ายคำสั่ง (Invocation and migration)</a>
     </aside>
   </div>
 

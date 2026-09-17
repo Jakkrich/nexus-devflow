@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual Review With Try (การตรวจรับด้วยมือ) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="การสร้างคู่มือตรวจรับงานแบบ Manual Walkthrough ด้วยคำสั่ง /try สำหรับ Product Owner, Senior Developer, และ QA">
+  <title>Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="มอบแนวทางและขั้นตอนการตรวจรับงานอย่างแม่นยำให้แก่ผู้ตรวจทานที่เป็นมนุษย์ สำหรับงานปัจจุบันหรืองานที่เพิ่งเสร็จสมบูรณ์ โดยไม่ต้องเสียเวลาเปิดดูโค้ดก่อน">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/manual-review/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,16 +146,17 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>QUALITY</span> <span>/</span> <strong>Manual Review With Try (การตรวจรับด้วยมือ)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>QUALITY</span> <span>/</span> <strong>Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try)</strong></div>
       
-      <h1 class="docs-title">Manual Review With Try (การตรวจรับด้วยมือ)</h1>
+      <h1 class="docs-title">Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try)</h1>
       
       <p class="docs-lead">
-        การสร้างคู่มือตรวจรับงานแบบ Manual Walkthrough ด้วยคำสั่ง /try สำหรับ Product Owner, Senior Developer, และ QA
+        มอบแนวทางและขั้นตอนการตรวจรับงานอย่างแม่นยำให้แก่ผู้ตรวจทานที่เป็นมนุษย์ สำหรับงานปัจจุบันหรืองานที่เพิ่งเสร็จสมบูรณ์ โดยไม่ต้องเสียเวลาเปิดดูโค้ดก่อน
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Quality</span>
+        <span class="docs-pill">Guide</span>
         <span class="docs-pill">Try</span>
         <span class="docs-pill">ManualReview</span>
         <span class="docs-pill">QA</span>
@@ -165,24 +166,54 @@
 
       <div class="docs-prose">
 
-        <!-- Section: ทำไมการทดสอบด้วยมือยังคงสำคัญ? -->
-        <section id="overview">
-          <h2>ทำไมการทดสอบด้วยมือยังคงสำคัญ?</h2>
+        <!-- Section: สร้างเส้นทางการทดสอบ (Generate the path) -->
+        <section id="generate-the-path">
+          <h2>สร้างเส้นทางการทดสอบ (Generate the path)</h2>
           
-          <p>แม้ว่า Automated Test จะผ่าน 100% แต่การทดสอบในฐานะผู้ใช้งานจริง (User Acceptance Testing - UAT) ยังคงจำเป็นสำหรับการยืนยัน User Experience (UX), การจัดวาง Layout, และความลื่นไหลของระบบ คำสั่ง <code>/try</code> หรือ <code>/check guide</code> จะสรุปขั้นตอนการตรวจรับงานให้อย่างเป็นรูปธรรม</p>
+          <p>รันคำสั่ง <strong><code>$check guide</code></strong> ใน OpenAI Codex CLI หรือ <strong><code>/check guide</code></strong> / <strong><code>/try</code></strong> ใน Claude Code, Google Antigravity และ Gemini CLI ภายหลังการ Implement เสร็จสิ้น</p>
+          <pre><code># สร้างคู่มือสำหรับงานปัจจุบัน
+/check guide
+/try
+
+# สร้างคู่มือสำหรับงานล่าสุดที่ส่งมอบแล้ว
+/try latest
+
+# กำหนดเป้าหมายเฉพาะสเต็ปหรือเส้นทาง
+/try step-2
+/try src/api/auth</code></pre>
+          <p>สกิลจะอ่านข้อมูลจากฟีเจอร์ปัจจุบัน, บั๊กฟิกซ์, หรือการ Rollback ใน <code>devflow/context/{xxx-slug}/spec.md</code> (หรือชิ้นงานล่าสุดใน <code>devflow/history/</code>) และดึงคำสั่งรันระบบจาก <code>AGENTS.md</code> มาสร้างเป็นแนวทางการทดสอบที่กระชับ</p>
+          <p>สำหรับงาน <strong>Rollback</strong>: สกิลจะอธิบายขั้นตอนการพิสูจน์ว่าเส้นทางการทำงานที่ถูกถอดถอนนั้นหายไปจริง พร้อมชี้จุดตรวจสอบเพื่อยืนยันว่าจะไม่มีปัญหาถดถอย (Regression) ในฟังก์ชันส่วนอื่นที่ไม่เกี่ยวข้อง</p>
         
           
         </section>
 
-        <!-- Section: โครงสร้างของคู่มือ Manual Try Guide -->
-        <section id="guide-anatomy">
-          <h2>โครงสร้างของคู่มือ Manual Try Guide</h2>
+        <!-- Section: คู่มือการตรวจทานที่มีประโยชน์ควรประกอบด้วย (A useful review guide includes) -->
+        <section id="a-useful-review-guide-includes">
+          <h2>คู่มือการตรวจทานที่มีประโยชน์ควรประกอบด้วย (A useful review guide includes)</h2>
           
+          <p>คู่มือ Try Guide ที่สมบูรณ์จะจัดโครงสร้างเป็น 5 ขั้นตอนหลักที่กระชับและปฏิบัติได้จริง:</p>
           <ul>
-            <li><strong>Prerequisites</strong>: คำสั่งเปิด Dev Server หรือเตรียมข้อมูลทดสอบ (Seed data)</li>
-            <li><strong>Step-by-Step UI Actions</strong>: ขั้นตอนการคลิกหรือพิมพ์ข้อมูลทีละสเต็ปบนหน้าจอ</li>
-            <li><strong>Expected Observable Proof</strong>: สิ่งที่ต้องปรากฏบนหน้าจอหรือใน API Response</li>
-            <li><strong>Red Flags</strong>: ข้อผิดพลาดที่ต้องระวังหรือสัญญาณความผิดปกติที่ไม่ควรเกิดขึ้น</li>
+            <li><strong>1. Start (คำสั่งเริ่มต้นระบบ)</strong>: คำสั่งรัน Dev Server, Backend หรือ CLI พร้อมตำแหน่งโฟลเดอร์ที่ต้องรัน</li>
+            <li><strong>2. Open (จุดเข้าถึงระบบ)</strong>: URL, หน้าจอ, แท็บเมนู, API Endpoint หรือคำสั่ง CLI ที่ต้องเปิดใช้งาน</li>
+            <li><strong>3. Do (ลำดับการกระทำ)</strong>: ลำดับขั้นตอนการป้อนข้อมูล การคลิกปุ่ม การเลือกอ็อปชัน หรือการส่งพารามิเตอร์</li>
+            <li><strong>4. Expect (ผลลัพธ์ที่คาดหวัง)</strong>: สิ่งที่ต้องมองเห็นบนหน้าจอ การเปลี่ยนแปลงสถานะ โครงสร้าง Response หรือไฟล์ที่ถูกสร้างขึ้น</li>
+            <li><strong>5. Watch For (สัญญาณข้อผิดพลาดที่ต้องระวัง)</strong>: ผลลัพธ์ที่ไม่ถูกต้อง ข้อผิดพลาดบน Console/Network ข้อมูลค้างไม่อัปเดต ฟิลด์ที่ขาดหาย สภาวะข้อมูลว่าง (Bad Empty State) หรือ Layout ที่ผิดเพี้ยน</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: การรีวิวไม่ใช่แค่การแสดงหลักฐานซ้ำซ้อน (Review is not proof theater) -->
+        <section id="review-is-not-proof-theater">
+          <h2>การรีวิวไม่ใช่แค่การแสดงหลักฐานซ้ำซ้อน (Review is not proof theater)</h2>
+          
+          <p>เป้าหมายของคู่มือ Try **ไม่ใช่การให้มนุษย์มานั่งคลิกทำซ้ำทุกข้อที่ Automated Test ตรวจไปแล้ว**</p>
+          <p>แต่เป็นการมุ่งเน้นความใส่ใจของมนุษย์ไปยังจุดที่การทดสอบอัตโนมัติไม่สามารถประเมินได้ดี เช่น:</p>
+          <ul>
+            <li><strong>คุณภาพเชิงภาพและความประณีตของ UI (Visual Quality & Aesthetics)</strong></li>
+            <li><strong>สำนวนและการใช้ภาษา (Wording & Copywriting)</strong></li>
+            <li><strong>ความรู้สึกในการโต้ตอบและความลื่นไหล (Interaction Feel & Responsiveness)</strong></li>
+            <li><strong>พฤติกรรมในมุมมองของผู้ใช้งานจริง (Holistic Product Behavior)</strong></li>
           </ul>
         
           
@@ -205,8 +236,9 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#overview">ทำไมการทดสอบด้วยมือยังคงสำคัญ?</a>
-      <a href="#guide-anatomy">โครงสร้างของคู่มือ Manual Try Guide</a>
+      <a href="#generate-the-path">สร้างเส้นทางการทดสอบ (Generate the path)</a>
+      <a href="#a-useful-review-guide-includes">คู่มือการตรวจทานที่มีประโยชน์ควรประกอบด้วย (A useful review guide includes)</a>
+      <a href="#review-is-not-proof-theater">การรีวิวไม่ใช่แค่การแสดงหลักฐานซ้ำซ้อน (Review is not proof theater)</a>
     </aside>
   </div>
 

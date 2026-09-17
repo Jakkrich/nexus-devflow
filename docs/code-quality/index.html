@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Code Quality With Audit (การควบคุมคุณภาพโค้ด) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="การตรวจเช็กคุณภาพโค้ด สถาปัตยกรรม ความปลอดภัย และกระบวนการ Independent Review Checkpoint">
+  <title>Code Quality With Audit (การควบคุมคุณภาพโค้ดด้วยการ Audit) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ใช้การตรวจสอบแบบ Read-Only เพื่อดักจับความเบี่ยงเบนด้านความสามารถในการบำรุงรักษา (Maintainability Drift) ก่อนที่มันจะกลายเป็นรูปแบบเริ่มต้นของโปรเจกต์">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/code-quality/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,45 +146,125 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>QUALITY</span> <span>/</span> <strong>Code Quality With Audit (การควบคุมคุณภาพโค้ด)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>QUALITY</span> <span>/</span> <strong>Code Quality With Audit (การควบคุมคุณภาพโค้ดด้วยการ Audit)</strong></div>
       
-      <h1 class="docs-title">Code Quality With Audit (การควบคุมคุณภาพโค้ด)</h1>
+      <h1 class="docs-title">Code Quality With Audit (การควบคุมคุณภาพโค้ดด้วยการ Audit)</h1>
       
       <p class="docs-lead">
-        การตรวจเช็กคุณภาพโค้ด สถาปัตยกรรม ความปลอดภัย และกระบวนการ Independent Review Checkpoint
+        ใช้การตรวจสอบแบบ Read-Only เพื่อดักจับความเบี่ยงเบนด้านความสามารถในการบำรุงรักษา (Maintainability Drift) ก่อนที่มันจะกลายเป็นรูปแบบเริ่มต้นของโปรเจกต์
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Quality</span>
+        <span class="docs-pill">Guide</span>
         <span class="docs-pill">Audit</span>
-        <span class="docs-pill">CodeQuality</span>
+        <span class="docs-pill">Maintainability</span>
         <span class="docs-pill">Security</span>
-        <span class="docs-pill">Review</span>
-        <span class="docs-pill">IndependentReviewer</span>
+        <span class="docs-pill">Performance</span>
+        <span class="docs-pill">IndependentReview</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: 4 เสาหลักของการ Audit โค้ด -->
-        <section id="audit-pillars">
-          <h2>4 เสาหลักของการ Audit โค้ด</h2>
+        <!-- Section: สิ่งที่ต้องมองหาในการตรวจสอบ (What to look for) -->
+        <section id="what-to-look-for">
+          <h2>สิ่งที่ต้องมองหาในการตรวจสอบ (What to look for)</h2>
           
-          <p>เมื่อรัน <code>/audit</code> ระบบจะทำการตรวจสอบโค้ดอย่างเข้มงวดตาม 4 เสาหลัก:</p>
-          <ol>
-            <li><strong>Architecture & Boundaries</strong>: การไม่ละเมิดขอบเขตระหว่างโมดูล ไม่สร้าง Dependency วนซ้ำ (Circular Dependency)</li>
-            <li><strong>Security Vulnerabilities</strong>: การป้องกัน SQL Injection, XSS, Secret Hardcoding, และ Insecure Auth ตามมาตรฐาน OWASP</li>
-            <li><strong>Performance & Resource Leaks</strong>: การไม่สร้าง Memory Leaks, N+1 Database Queries, หรือ Re-render ที่ไม่จำเป็น</li>
-            <li><strong>Maintainability & Clean Code</strong>: ความเรียบง่าย (KISS/YAGNI), การตั้งชื่อที่สื่อความหมาย, และการไม่มี Dead Code</li>
-          </ol>
+          <p>โค้ดที่พัฒนาด้วยความช่วยเหลือของ AI มีแนวโน้มที่จะสะสม Helper ซ้ำซ้อน, รูปแบบ Component ที่แตกต่างกันเล็กน้อย, ฟังก์ชัน Export ที่ไม่ได้ใช้งาน, ไฟล์ที่มีขนาดยาวเกินไป, และ Business Logic ที่ไม่มีชุดการทดสอบรองรับ</p>
+          <p>สกิล <code>/audit</code> (หรือ <code>$audit</code>) ทำหน้าที่สแกนฐานโค้ดเพื่อตรวจจับแบบแผนเหล่านี้ในโหมด <strong>Read-Only</strong> โดยไม่มีการแก้ไขโค้ดจริง</p>
         
           
         </section>
 
-        <!-- Section: กระบวนการตรวจรับแบบ Two-Stage Independent Review -->
-        <section id="two-stage-review">
-          <h2>กระบวนการตรวจรับแบบ Two-Stage Independent Review</h2>
+        <!-- Section: เลือกขอบเขตและมิติการตรวจสอบ (Lens) ให้เหมาะกับงาน (Match the scope and lens to the job) -->
+        <section id="match-the-scope-and-lens-to-the-job">
+          <h2>เลือกขอบเขตและมิติการตรวจสอบ (Lens) ให้เหมาะกับงาน (Match the scope and lens to the job)</h2>
           
-          <p>สำหรับงานที่มีความเสี่ยงสูง ระบบจะสร้าง Review Checkpoint เพื่อส่งต่อให้ AI Reviewer อิสระคนละ Session ทำการตรวจทานและออกใบรับรอง <strong>Review Receipt</strong> ใน <code>review.md</code> ก่อนส่งมอบ</p>
+          <p><strong>ขอบเขตการตรวจสอบ (Audit Scopes):</strong></p>
+          <ul>
+            <li><strong><code>/audit current</code></strong> (ค่าเริ่มต้น): สำหรับฟีเจอร์ที่กำลังพัฒนา ครอบคลุมงาน Checkpoint Commit ทั้งหมดตั้งแต่ Merge Base ของ Feature Branch จนถึง <code>HEAD</code> รวมถึงไฟล์ที่ยังไม่ Commit และโค้ดโดยรอบ</li>
+            <li><strong><code>/audit changed</code></strong>: ตรวจสอบเฉพาะการเปลี่ยนแปลงของไฟล์ใน Working-tree ปัจจุบัน</li>
+            <li><strong><code>/audit &lt;path&gt;</code></strong>: ตรวจสอบเฉพาะไดเรกทอรีหรือ Subsystem ที่ระบุ (เช่น <code>/audit src/api</code>)</li>
+            <li><strong><code>/audit full</code></strong>: ตรวจสอบความแข็งแกร่งทั่วทั้งโปรเจกต์ (Project-wide hardening) โดยจะคัดแยกโค้ดที่สร้างขึ้นอัตโนมัติ (Generated) และ Third-party Dependencies ออก และระบุว่าการตรวจสอบครอบคลุมครบถ้วนหรือไม่ เพื่อป้องกันความเข้าใจผิดว่าโปรเจกต์สมบูรณ์หลังจากสแกนเพียงบางส่วน</li>
+          </ul>
+          <p><strong>มิติการตรวจสอบเฉพาะด้าน (Focused Lenses):</strong></p>
+          <pre><code>/audit quality changed
+/audit security current
+/audit performance src/api
+/audit tests src/auth</code></pre>
+          <ul>
+            <li><strong><code>quality</code></strong>: ตรวจสอบความสามารถในการบำรุงรักษา (Maintainability) และมาตรฐานโค้ด</li>
+            <li><strong><code>security</code></strong>: ตรวจสอบขอบเขตความไว้วางใจ (Trust Boundaries), การเปิดเผยข้อมูล, และความปลอดภัย</li>
+            <li><strong><code>performance</code></strong>: ตรวจสอบการทำงานซ้ำซ้อนที่ไม่จำกัดขอบเขต และความเสี่ยงใน Runtime</li>
+            <li><strong><code>tests</code></strong>: ตรวจสอบช่องว่างความครอบคลุมของการทดสอบและความน่าเชื่อถือของ Test Suite</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: จัดการข้อค้นพบอย่างมีสติและรอบคอบ (Handle findings deliberately) -->
+        <section id="handle-findings-deliberately">
+          <h2>จัดการข้อค้นพบอย่างมีสติและรอบคอบ (Handle findings deliberately)</h2>
+          
+          <p>จัดหมวดหมู่ข้อค้นพบแต่ละรายการตามผลกระทบ (Impact) และระดับความมั่นใจ (Confidence)</p>
+          <p>แก้ไขข้อบกพร่องที่ชัดเจนและการทำซ้ำที่เป็นอันตราย แต่อย่าเปลี่ยนทุกความพึงพอใจด้านสไตล์ให้กลายเป็นการ Refactor ใหญ่ โดยเฉพาะอย่างยิ่งหากมันจะทำให้ขอบเขตของฟีเจอร์ปัจจุบันบานปลาย</p>
+          <p>ข้อค้นพบระดับร้ายแรงที่ยืนยันแล้วต้องมี <strong>หลักฐานที่เป็นรูปธรรม (Concrete Evidence)</strong> หากไม่สามารถยืนยันเส้นทางโค้ดหรือข้อผิดพลาดได้ ให้ระบุในรายงานเป็นความเสี่ยงที่ยังไม่ได้รับการยืนยัน (<code>unverified</code>) แทนการตัดสินว่าเป็น Blocker ทันที</p>
+          <p>ข้อค้นพบจะถูกบันทึกลงใน <code>findings.md</code> พร้อมรหัส ID ถาวรและสถานะกำกับ โดยข้อค้นพบระดับ P0/P1 จะบล็อกการ Complete จนกว่าจะได้รับการซ่อมแซมและรีวิวซ้ำ ดูรายละเอียดที่หน้า <a href="../findings-ledger/">The Findings Ledger</a></p>
+        
+          
+        </section>
+
+        <!-- Section: รันการตรวจทานแบบอิสระ (Run an independent review) -->
+        <section id="run-an-independent-review">
+          <h2>รันการตรวจทานแบบอิสระ (Run an independent review)</h2>
+          
+          <p>เมื่อต้องการให้การตรวจทานเป็นไปอย่างเที่ยงธรรม โดยที่ผู้สร้าง (Builder) ไม่ควรเป็นผู้ตรวจรับงานของตนเอง ให้รันคำสั่ง:</p>
+          <pre><code>/audit independent current</code></pre>
+          <p>ฝั่งผู้สร้างจะเตรียม Code Checkpoint และสเปกที่ผ่านการ Verify สำหรับสเปกที่อยู่นอก Git จะใช้ Local Snapshot ที่ระบุตัวตนแน่นอน</p>
+          <p>ด้วยการตั้งค่าแบบอัตโนมัติ (Automatic Execution) ระบบจะเริ่มต้น <strong>Subagent ผู้ตรวจสอบอิสระ (Isolated Reviewer)</strong> ที่มีบริบทสดใหม่ ระบุตัวตนโมเดลชัดเจน และออกใบรับรอง <strong>Review Receipt</strong> ใน <code>review.md</code> เมื่อตรวจเสร็จ หากสภาพแวดล้อมไม่รองรับการแยก Subagent ระบบจะสร้าง Request และส่งต่อให้เปิดเซสชันใหม่ (Manual Handoff)</p>
+          <p>ผู้ตรวจสอบอิสระจะตรวจทานโค้ดส่วนต่าง (Delta) ทั้งหมด บันทึกใบรับรองถาวร และปล่อยให้หน้าที่ซ่อมแซมเป็นของผู้สร้าง โดยใช้เพียง Audit Skill และสัญญาการรีวิวในโปรเจกต์เท่านั้น</p>
+          <p>การแก้ไขโค้ดใดๆ จะทำให้ Review Receipt เดิมกลายเป็นโมฆะ (Stale) และจำเป็นต้องได้รับการอนุมัติ Checkpoint ใหม่และรีวิวโค้ดส่วนต่างใหม่อย่างสดใหม่ทั้งหมด</p>
+        
+          
+        </section>
+
+        <!-- Section: การตั้งค่านโยบาย Quality Gates อัตโนมัติ (Configure automatic quality gates) -->
+        <section id="configure-automatic-quality-gates">
+          <h2>การตั้งค่านโยบาย Quality Gates อัตโนมัติ (Configure automatic quality gates)</h2>
+          
+          <p>คุณสามารถเรียกใช้ <code>/audit</code> ได้ด้วยตนเองตลอดเวลา นอกจากนี้ ในไฟล์ <code>devflow/config.json</code> ยังสามารถตั้งค่านโยบายให้รัน Audit อัตโนมัติในโหมดปกติและโหมด Continuous ได้:</p>
+          <ul>
+            <li><code>review.independentExecution</code>: ค่าเริ่มต้น <code>"automatic"</code></li>
+            <li><code>qualityGates.regular.independentReview</code>: ค่าเริ่มต้น <code>"when-sensitive"</code></li>
+            <li><code>qualityGates.regular.audit</code>: ค่าเริ่มต้น <code>"manual"</code></li>
+          </ul>
+          <p>แนะนำให้ใช้ <code>when-sensitive</code> สำหรับงานที่แตะต้องเรื่องความปลอดภัย, ฐานข้อมูล, การชำระเงิน, Database Migrations, การทำงานที่มีผลทำลายข้อมูล หรือการเปลี่ยนแปลงขอบเขตกว้างผิดปกติ หรือใช้ <code>always</code> หากต้องการตรวจทุกชิ้นงาน</p>
+          <p>โหมด <strong>Autopilot</strong> จะปฏิบัติตามนโยบาย Audit ปกติ ส่วน <strong>Continuous Mode</strong> จะรันตามนโยบาย Continuous ในทุกฟีเจอร์ และเมื่อมี Independent Review ผ่านแล้ว จะถือว่าผ่าน Audit โดยไม่ต้องตรวจซ้ำในเซสชันผู้สร้าง ดูรายละเอียดที่หน้า <a href="../project-configuration/">Project Configuration</a></p>
+        
+          
+        </section>
+
+        <!-- Section: การจัดระเบียบโปรเจกต์ที่โค้ดแบบ Vibe-Coding (Clean up a vibe-coded project) -->
+        <section id="clean-up-a-vibe-coded-project">
+          <h2>การจัดระเบียบโปรเจกต์ที่โค้ดแบบ Vibe-Coding (Clean up a vibe-coded project)</h2>
+          
+          <p>สำหรับโปรเจกต์ที่เริ่มต้นด้วยการ Prompt โค้ดอย่างรวดเร็ว (Vibe-Coding) ให้รันขั้นตอน <a href="../existing-codebase/">Adopt</a> เพื่อให้ DevFlow เรียนรู้มาตรฐานของโปรเจกต์จริงก่อน</p>
+          <p>จากนั้นรัน <code>/audit full</code> เพื่อตรวจสอบระบบทั้งหมด จัดลำดับความสำคัญของข้อค้นพบ และแปลงงานที่ยอมรับแล้วให้เป็น Fix Spec ขนาดเล็ก</p>
+          <p>ลำดับความสำคัญในการปรับปรุง: ให้แก้ไขเรื่อง <strong>ความปลอดภัย ➔ ความถูกต้องของข้อมูล ➔ บั๊กการทำงาน ➔ การตรวจสอบข้อมูลนำเข้า (Validation) ➔ ประเภทข้อมูลที่ไม่ปลอดภัย (Unsafe Types)</strong> ก่อนที่จะเริ่มจัดระเบียบความสะอาดของโค้ดในภาพรวม</p>
+          <p>หลีกเลี่ยงการ Rewrite โครงสร้างใหม่ทั้งหมดในคราวเดียว ให้แก้ไขทีละจุดความเสี่ยง รันการทดสอบที่เกี่ยวข้อง และรัน Audit ซ้ำหลังจากการแก้ไขในแต่ละรอบ</p>
+        
+          
+        </section>
+
+        <!-- Section: ประเด็นด้านความปลอดภัยและประสิทธิภาพ (Security and performance) -->
+        <section id="security-and-performance">
+          <h2>ประเด็นด้านความปลอดภัยและประสิทธิภาพ (Security and performance)</h2>
+          
+          <p>มิติ Security และ Performance สามารถดักจับการจัดการ Input ที่ไม่ปลอดภัย, สิทธิ์การเข้าถึงที่ขาดหาย, การเปิดเผย Secret, การทำงานซ้ำซ้อนที่มีต้นทุนสูง หรือโค้ด Client-side ที่ไม่จำเป็น</p>
+          <p>การ Audit ไม่ใช่สิ่งทดแทนการทำ Threat Modeling, Penetration Testing หรือ Production Profiling เต็มรูปแบบเมื่อระบบต้องการความปลอดภัยระดับสูง</p>
+          <div class="note-box">
+            <strong>นโยบายความปลอดภัยต่อ Secret:</strong> สกิล <code>/audit</code> จะ<strong>ไม่มีวันพิมพ์หรือแสดงผล Secret Values จริง</strong>ในรายงานเด็ดขาด โดยจะระบุเฉพาะประเภทที่ถูกเซ็นเซอร์ (Redacted Category), ตำแหน่งบรรทัดไฟล์, ความเสี่ยง และแนวทางแก้ไข
+          </div>
         
           
         </section>
@@ -206,8 +286,13 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#audit-pillars">4 เสาหลักของการ Audit โค้ด</a>
-      <a href="#two-stage-review">กระบวนการตรวจรับแบบ Two-Stage Independent Review</a>
+      <a href="#what-to-look-for">สิ่งที่ต้องมองหาในการตรวจสอบ (What to look for)</a>
+      <a href="#match-the-scope-and-lens-to-the-job">เลือกขอบเขตและมิติการตรวจสอบ (Lens) ให้เหมาะกับงาน (Match the scope and lens to the job)</a>
+      <a href="#handle-findings-deliberately">จัดการข้อค้นพบอย่างมีสติและรอบคอบ (Handle findings deliberately)</a>
+      <a href="#run-an-independent-review">รันการตรวจทานแบบอิสระ (Run an independent review)</a>
+      <a href="#configure-automatic-quality-gates">การตั้งค่านโยบาย Quality Gates อัตโนมัติ (Configure automatic quality gates)</a>
+      <a href="#clean-up-a-vibe-coded-project">การจัดระเบียบโปรเจกต์ที่โค้ดแบบ Vibe-Coding (Clean up a vibe-coded project)</a>
+      <a href="#security-and-performance">ประเด็นด้านความปลอดภัยและประสิทธิภาพ (Security and performance)</a>
     </aside>
   </div>
 

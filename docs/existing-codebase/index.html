@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Existing Codebase Adoption (Brownfield) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม">
+  <title>นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม และเตรียมความพร้อมสำหรับการพัฒนาฟีเจอร์ถัดไป">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/existing-codebase/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,12 +146,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>START</span> <span>/</span> <strong>Existing Codebase Adoption (Brownfield)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>START</span> <span>/</span> <strong>นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption)</strong></div>
       
-      <h1 class="docs-title">Existing Codebase Adoption (Brownfield)</h1>
+      <h1 class="docs-title">นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption)</h1>
       
       <p class="docs-lead">
-        ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม
+        ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม และเตรียมความพร้อมสำหรับการพัฒนาฟีเจอร์ถัดไป
       </p>
 
       <div class="docs-meta">
@@ -165,80 +165,187 @@
 
       <div class="docs-prose">
 
-        <!-- Section: ทำไมต้องใช้ /adopt กับโค้ดเบสเดิม? -->
-        <section id="why-adopt">
-          <h2>ทำไมต้องใช้ /adopt กับโค้ดเบสเดิม?</h2>
+        <!-- Section: เมื่อใดที่ควรใช้การ Adopt เข้าสู่โค้ดเบสเดิม (When to adopt) -->
+        <section id="when-to-adopt">
+          <h2>เมื่อใดที่ควรใช้การ Adopt เข้าสู่โค้ดเบสเดิม (When to adopt)</h2>
           
-          <p>สำหรับโปรเจกต์ที่กำลังพัฒนาอยู่แล้วหรือมีโค้ดเบสเดิม การ Onboard แบบโปรเจกต์ใหม่อาจทำให้ AI สับสนว่าฟังก์ชันใดสร้างไปแล้ว คำสั่ง <code>/adopt</code> ถูกออกแบบมาเพื่อทำหน้าที่สำรวจ (Survey) โค้ดเบสที่มีอยู่จริง ระบุความสามารถที่ส่งมอบไปแล้ว และสร้างแผนงานส่วนต่อขยายได้อย่างแม่นยำ</p>
-          <div class="docs-callout note">
-            <div class="docs-callout-label">สิ่งที่ /adopt แตกต่างจาก /onboard</div>
-            <p><code>/onboard</code> จะมองโปรเจกต์เป็นผ้าขาวและเตรียมสร้างฟีเจอร์ที่ 1 ในขณะที่ <code>/adopt</code> จะอ่านโค้ดจริง วิเคราะห์ Endpoint/UI ที่มีอยู่ และสร้าง Build Plan เฉพาะส่วนที่ยังขาดอยู่</p>
-          </div>
+          <p>ใช้คู่มือนี้แทน <a href="../getting-started/">เริ่มต้นใช้งาน (Getting Started)</a> เมื่อคุณมีแอปพลิเคชันที่ทำงานได้จริงอยู่แล้ว (Working Application) และต้องการนำเลเยอร์เวิร์กโฟลว์ของ Nexus-DevFlow เข้ามาช่วยวางแผนและพัฒนาฟีเจอร์ถัดไปอย่างเป็นระบบ</p>
+          <p>การ Adopt จะทำการสำรวจโค้ดเบสจริง (Codebase Survey) สร้างโครงร่างแผนงาน (Scaffold Plans) และบันทึกฟังก์ชันที่ส่งมอบไปแล้วให้อัตโนมัติ โดยไม่ส่งผลกระทบต่อ Git History เดิมและไม่แตะต้องซอร์สโค้ดเดิมของคุณเลยแม้แต่บรรทัดเดียว</p>
+          <blockquote>
+            <p><strong>ข้อแตกต่างหลักระหว่าง Onboard กับ Adopt:</strong> คำสั่ง <code>/onboard</code> มีไว้สำหรับโปรเจกต์เปล่าที่เพิ่งเริ่มต้นสร้างโครงร่าง (Fresh Scaffold) ในขณะที่ <code>/adopt</code> มีไว้สำหรับโปรเจกต์เดิมที่มีซอร์สโค้ดทำงานอยู่แล้ว (Brownfield Codebase) โดยจะอ่านโค้ดจริงเพื่อสรุปฟังก์ชันเดิมและวางแผนเฉพาะสิ่งที่ต้องทำต่อ</p>
+          </blockquote>
         
           
         </section>
 
-        <!-- Section: ขั้นตอน 4 สเต็ปในการ Adopt โค้ดเบสเดิม -->
-        <section id="adoption-lifecycle">
-          <h2>ขั้นตอน 4 สเต็ปในการ Adopt โค้ดเบสเดิม</h2>
-          <p>ปฏิบัติตาม 4 สเต็ปด้านล่าง:</p>
+        <!-- Section: ติดตั้ง Overlay เข้าสู่โปรเจกต์เดิม (Install the overlay) -->
+        <section id="install-the-overlay">
+          <h2>ติดตั้ง Overlay เข้าสู่โปรเจกต์เดิม (Install the overlay)</h2>
           
-          <div class="docs-step" id="adopt-step-1">
-            <div class="docs-step-number">1</div>
-            <div>
-              <h3>ติดตั้ง Overlay ลงใน Repository เดิม</h3>
-              
-              <p>รันตัวติดตั้งใน Root directory ของโปรเจกต์เดิมของคุณ:</p>
-              <pre><code>npx -y nexus-devflow -y</code></pre>
-              <p>ตัวติดตั้งจะสร้างโฟลเดอร์ <code>devflow/</code> และ <code>.agents/</code> หรือ <code>.claude/</code> โดยไม่แตะต้องไฟล์โค้ดต้นฉบับใดๆ</p>
-            
-            </div>
-          </div>
-      
-          <div class="docs-step" id="adopt-step-2">
-            <div class="docs-step-number">2</div>
-            <div>
-              <h3>รันคำสั่ง /adopt</h3>
-              
-              <p>สั่งการ AI ด้วยคำสั่ง:</p>
-              <pre><code>/adopt</code></pre>
-              <p>AI จะทำการสำรวจ Dependencies, Directory Tree, API Endpoints, สถาปัตยกรรม Database, และชุดคำสั่ง Test/Lint ทั้งหมด</p>
-            
-            </div>
-          </div>
-      
-          <div class="docs-step" id="adopt-step-3">
-            <div class="docs-step-number">3</div>
-            <div>
-              <h3>ปรับสมดุลแผนงาน (Reconcile Plans)</h3>
-              
-              <p>AI จะสร้างร่างเอกสาร <code>devflow/project-plan.md</code> อธิบายสถานะปัจจุบันของระบบ และร่าง <code>devflow/build-plan.md</code> พร้อมทำเครื่องหมายฟังก์ชันเดิมที่เสร็จแล้ว <code>- [x]</code></p>
-            
-            </div>
-          </div>
-      
-          <div class="docs-step" id="adopt-step-4">
-            <div class="docs-step-number">4</div>
-            <div>
-              <h3>คอมไพล์บริบทด้วย /overview</h3>
-              
-              <p>รันคำสั่ง <code>/overview</code> เพื่อสร้าง Source of Truth สำหรับโปรเจกต์:</p>
-              <pre><code>/overview</code></pre>
-            
-            </div>
-          </div>
-      
+          <p>รันตัวติดตั้งใน Root Directory ของโปรเจกต์เดิม โดยเลือกคำสั่งตาม Package Manager ที่โปรเจกต์ของคุณใช้งาน:</p>
+          <pre><code><span style="color:#8B949E"># npm</span>
+<span style="color:#FFA657">npx</span><span style="color:#A5D6FF"> nexus-devflow</span>
+
+<span style="color:#8B949E"># pnpm (แนะนำสำหรับโปรเจกต์ที่ใช้ pnpm เพื่อเลี่ยง EBADDEVENGINES)</span>
+<span style="color:#FFA657">pnpm</span><span style="color:#A5D6FF"> dlx</span><span style="color:#A5D6FF"> nexus-devflow</span>
+
+<span style="color:#8B949E"># yarn / bun</span>
+<span style="color:#FFA657">yarn</span><span style="color:#A5D6FF"> dlx</span><span style="color:#A5D6FF"> nexus-devflow</span>
+<span style="color:#FFA657">bunx</span><span style="color:#A5D6FF"> nexus-devflow</span></code></pre>
+          <p>ตัวติดตั้งแบบโต้ตอบ (Interactive Installer) จะให้คุณเลือก AI Adapters ที่ต้องการใช้งาน เช่น OpenAI Codex, Claude Code, Google Antigravity, GitHub Copilot หรือ OpenCode โดยจะคัดลอกเฉพาะโฟลเดอร์ทักษะที่เข้ากันได้ (<code>.agents/</code> หรือ <code>.claude/</code>) และโฟลเดอร์เวิร์กโฟลว์ <code>devflow/</code></p>
+          <p>ตัวติดตั้งจะสร้าง <code>devflow/.state/manifest.json</code> เพื่อให้ระบบสามารถอัปเดตเวอร์ชันของ DevFlow ในอนาคตได้อย่างปลอดภัยโดยไม่กระทบต่อไฟล์ที่คุณปรับแต่งเอง</p>
+        
+          
         </section>
 
-        <!-- Section: การรับประกัน Zero-Regression & Non-Destructive Survey -->
-        <section id="zero-regression">
-          <h2>การรับประกัน Zero-Regression & Non-Destructive Survey</h2>
+        <!-- Section: รันการสำรวจโค้ดเบสด้วย /adopt (Run the adoption survey) -->
+        <section id="run-the-adoption-survey">
+          <h2>รันการสำรวจโค้ดเบสด้วย /adopt (Run the adoption survey)</h2>
           
-          <p>การรัน <code>/adopt</code> มีการรับประกันความปลอดภัยระดับองค์กร:</p>
+          <p>สั่งการ AI ด้วยคำสั่ง <code>$adopt</code> ใน Codex, <code>/adopt</code> ใน Claude Code / Google Antigravity หรือสั่งให้ Copilot / OpenCode รัน Adopt Skill:</p>
+          <pre><code>/adopt</code></pre>
+          
+          <h4>กลไกการทำงานเชิงลึกของ Skill /adopt</h4>
+          <p>Skill <code>/adopt</code> ทำงานแบบ Read-Only และดำเนินการสำรวจโปรเจกต์อย่างเป็นระบบผ่าน 5 ขั้นตอนหลัก:</p>
+          <ol>
+            <li>
+              <strong>การตรวจสอบความปลอดภัยเบื้องต้น (Safety & Baseline Check)</strong>: ตรวจสอบว่า <code>devflow/project-plan.md</code> มีอยู่แล้วหรือไม่ หากมีข้อมูลจริงอยู่แล้วจะหยุดเพื่อป้องกันการเขียนทับ พร้อมทั้งปกป้องไฟล์ <code>README.md</code> หลักของโปรเจกต์ไม่ให้ถูกแก้ไข
+            </li>
+            <li>
+              <strong>การสำรวจโค้ดเบสจริง (Deep Read-Only Survey)</strong>:
+              <ul>
+                <li><strong>Stack & Tooling</strong>: ตรวจจับภาษา โปรแกรมแปลภาษา เฟรมเวิร์ก และเวอร์ชันจาก <code>package.json</code>, <code>go.mod</code>, <code>Cargo.toml</code>, <code>pyproject.toml</code> ฯลฯ</li>
+                <li><strong>Architecture & Public Surface</strong>: สแกนโครงสร้างโฟลเดอร์, API Routes, Controller, Data Models, UI Components และ Entrypoints ทั้งหมด</li>
+                <li><strong>Shipped Features</strong>: ระบุฟีเจอร์และความสามารถที่พัฒนาเสร็จสมบูรณ์แล้วในระบบปัจจุบัน</li>
+                <li><strong>Coding Conventions</strong>: สกัดรูปแบบการเขียนโค้ดที่มีอยู่จริง เช่น การตั้งชื่อ สไตล์ฟังก์ชัน การจัดการข้อผิดพลาด</li>
+                <li><strong>Tests & CI</strong>: สำรวจชุดทดสอบเดิม (Jest, Vitest, Pytest, Go test, PHPUnit) และระบบ CI/CD ที่มีอยู่</li>
+              </ul>
+            </li>
+            <li>
+              <strong>การสัมภาษณ์แบบ Socratic (Interactive Clarification)</strong>: AI จะถามเจาะจงเฉพาะข้อมูลที่โค้ดไม่สามารถบอกได้ เช่น วัตถุประสงค์ทางธุรกิจ (Business Purpose), กลุ่มผู้ใช้งานเป้าหมาย (Target Audience), ข้อจำกัดด้านสถาปัตยกรรม และแผนงานที่กำลังจะทำถัดไป (Upcoming Roadmap)
+            </li>
+            <li>
+              <strong>การสร้างไฟล์เวิร์กโฟลว์อัตโนมัติ (Workflow Scaffolding)</strong>:
+              <ul>
+                <li>สร้าง <code>devflow/project-plan.md</code> ที่บันทึกสถาปัตยกรรมและบริบทระบบปัจจุบัน</li>
+                <li>สร้าง <code>devflow/build-plan.md</code> โดยใส่ฟังก์ชันเดิมที่ทำงานอยู่แล้วเป็น Checklist ที่เสร็จแล้ว <code>- [x]</code> และร่างรายการฟีเจอร์ใหม่ที่ต้องทำต่อ <code>- [ ]</code></li>
+                <li>สร้าง <code>devflow/context/coding-standards.md</code> ตามธรรมเนียมการเขียนโค้ดของโปรเจกต์เดิม</li>
+                <li>สร้าง <code>devflow/config.json</code> กำหนดนโยบาย Quality Gates ให้สอดคล้องกับขนาดของโปรเจกต์</li>
+              </ul>
+            </li>
+            <li>
+              <strong>การส่งมอบงานอย่างปลอดภัย (Clean Handoff)</strong>: สรุปผลการสำรวจและแนะนำให้รันคำสั่ง <code>/overview</code> เพื่อคอมไพล์บริบทต่อไป
+            </li>
+          </ol>
+        
+          
+        </section>
+
+        <!-- Section: เลือกรูปแบบการจัดเก็บเวิร์กโฟลว์ (Choose workflow visibility) -->
+        <section id="choose-workflow-visibility">
+          <h2>เลือกรูปแบบการจัดเก็บเวิร์กโฟลว์ (Choose workflow visibility)</h2>
+          
+          <p>ในระหว่างการสำรวจหรือตั้งค่า คุณสามารถเลือกรูปแบบการจัดเก็บไฟล์ DevFlow ได้ 2 รูปแบบตามความต้องการของทีม:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>รูปแบบ (Mode)</th>
+                <th>คำอธิบายและการใช้งาน</th>
+                <th>ไฟล์ที่จัดเก็บ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Committed Workflow (แนะนำ)</strong></td>
+                <td>บันทึกไฟล์ DevFlow ทั้งหมดลงใน Git Repository เพื่อให้สมาชิกทุกคนในทีมและ CI ใช้ Agent Instructions, Plans, Standards และประวัติการพัฒนาชุดเดียวกัน</td>
+                <td>เก็บ <code>devflow/</code>, <code>.agents/</code>, <code>.claude/</code> และ <code>AGENTS.md</code> ใน Git</td>
+              </tr>
+              <tr>
+                <td><strong>Local-Only Workflow</strong></td>
+                <td>เหมาะสำหรับกรณีที่คุณต้องการใช้ DevFlow ช่วยทำงานส่วนตัวโดยไม่ส่งผลกระทบต่อเพื่อนร่วมทีม หรือไม่ต้องการให้มีไฟล์ AI ปรากฏใน Git Repository หลัก</td>
+                <td>เพิ่ม <code>devflow/</code>, <code>.agents/</code>, <code>.claude/</code> และ <code>AGENTS.md</code> ลงใน <code>.git/info/exclude</code> หรือ <code>.gitignore</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <p>คุณสามารถสลับรูปแบบการจัดเก็บได้ตลอดเวลาผ่านการแก้ไขการละเว้นใน Git</p>
+        
+          
+        </section>
+
+        <!-- Section: ปรับปรุงระบบตรวจสอบอัตโนมัติเมื่อจำเป็น (Align automatic checks when needed) -->
+        <section id="align-automatic-checks-when-needed">
+          <h2>ปรับปรุงระบบตรวจสอบอัตโนมัติเมื่อจำเป็น (Align automatic checks when needed)</h2>
+          
+          <p>หากโปรเจกต์เดิมมีชุดทดสอบหรือระบบ Lint อยู่แล้ว คุณสามารถใช้ Skill <code>/ci</code> เพื่อเชื่อมโยงการตรวจสอบเข้ากับเวิร์กโฟลว์อัตโนมัติ:</p>
+          <pre><code>/ci</code></pre>
+          
+          <h4>กลไกการทำงานเชิงลึกของ Skill /ci</h4>
           <ul>
-            <li><strong>ไม่มีการลบหรือดัดแปลงซอร์สโค้ดเดิม</strong>: <code>/adopt</code> อ่านเพื่อวิเคราะห์เท่านั้น</li>
-            <li><strong>รักษาโครงสร้างโฟลเดอร์เดิม</strong>: ไม่บังคับย้ายไฟล์หรือเปลี่ยนรูปแบบโปรเจกต์เดิม</li>
-            <li><strong>ไม่แตะต้อง Git History</strong>: ประวัติ commit เดิมยังคงเดิม 100%</li>
+            <li><strong>ตรวจจับคำสั่งทดสอบจริง</strong>: สแกนหาคำสั่ง Typecheck, Linter, Unit Test และ Build Script ที่ใช้งานได้จริงในโปรเจกต์</li>
+            <li><strong>สร้างคำสั่ง Verify มาตรฐาน 1 คำสั่ง</strong>: กำหนดคำสั่งเดียวที่รันการตรวจสอบสำคัญทั้งหมด เช่น <code>npm run verify</code> หรือ <code>npm test</code></li>
+            <li><strong>สร้าง GitHub Actions Workflow</strong>: สร้างไฟล์ <code>.github/workflows/devflow-verify.yml</code> ที่ใช้สูตรการรันเดียวกันกับการตรวจสอบในเครื่อง</li>
+            <li><strong>ทดสอบรันจริงในเครื่อง (Empirical Execution)</strong>: รันคำสั่ง Verify ในเครื่องให้ผ่านจริงก่อนบันทึกการตั้งค่า</li>
+            <li><strong>หยุดที่ขอบเขตปลอดภัย (Safe Boundary)</strong>: Skill จะหยุดก่อนทำการ <code>git push</code> หรือแก้ไขกฎ Branch Protection บน GitHub เสมอ</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: สร้างบริบทโปรเจกต์ด้วย /overview (Generate the overview) -->
+        <section id="generate-the-overview">
+          <h2>สร้างบริบทโปรเจกต์ด้วย /overview (Generate the overview)</h2>
+          
+          <p>หลังจากตรวจสอบ <code>devflow/project-plan.md</code> และ <code>devflow/build-plan.md</code> เรียบร้อยแล้ว ให้รันคำสั่ง <code>/overview</code> เพื่อคอมไพล์บริบทเข้าสู่ Living Source of Truth:</p>
+          <pre><code>/overview</code></pre>
+          
+          <h4>กลไกการทำงานเชิงลึกของ Skill /overview</h4>
+          <ul>
+            <li><strong>คอมไพล์แบบ Deterministic</strong>: อ่านไฟล์แผนงานทั้งสองฉบับ จัดโครงสร้างและหมายเลขข้อของ Build Plan ให้เป็นลำดับที่ถูกต้อง พร้อมรักษาเครื่องหมาย <code>- [x]</code> ของฟังก์ชันเดิมไว้อย่างครบถ้วน</li>
+            <li><strong>จำกัดขนาดบริบทให้กะทัดรัด (Context Budget &lt; 20KB)</strong>: สังเคราะห์เป็น <code>devflow/context/project-overview.md</code> ซึ่งถูกออกแบบให้มีขนาดเล็กและกระชับ เพื่อให้ AI Agent ทุกตัวในทุกเซสชันโหลดอ่านได้ทันทีโดยไม่เปลือง Context Window</li>
+            <li><strong>ข้อเสนอ Reviewed Local Commit</strong>: ในการรันครั้งแรก Overview จะเสนอทำ Local Git Commit สำหรับการตั้งค่า DevFlow และแผนงานที่ผ่านการตรวจสอบแล้ว ก่อนที่จะเริ่มพัฒนาฟีเจอร์ถัดไป</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: ตรวจสอบคุณภาพโค้ดก่อนเริ่มขยายฟีเจอร์ (Audit before extending when needed) -->
+        <section id="audit-before-extending-when-needed">
+          <h2>ตรวจสอบคุณภาพโค้ดก่อนเริ่มขยายฟีเจอร์ (Audit before extending when needed)</h2>
+          
+          <p>ก่อนที่จะเริ่มพัฒนาฟีเจอร์ใหม่ลงบนโค้ดเบสเดิม แนะนำให้รันการตรวจสอบคุณภาพและความปลอดภัยแบบครอบคลุม (Full Baseline Audit):</p>
+          <pre><code>/audit full</code></pre>
+          
+          <h4>กลไกการทำงานเชิงลึกของ Skill /audit</h4>
+          <ul>
+            <li><strong>การสแกน 5 มิติสำคัญ</strong>:
+              <ol>
+                <li><strong>Code Quality & Complexity</strong>: ตรวจหาโค้ดที่มีความซับซ้อนสูง ฟังก์ชันยาวเกินจำเป็น หรือปัญหา Dead Code</li>
+                <li><strong>Security & OWASP Top 10</strong>: ตรวจสอบช่องโหว่ด้านความปลอดภัย เช่น การตรวจสอบ Input, Injection, ช่องโหว่การยืนยันตัวตน และการจัดการ Secrets</li>
+                <li><strong>Performance & Bottlenecks</strong>: ตรวจหาจุดคอขวด เช่น N+1 Queries, Memory Leaks, การเรียก API ซ้ำซ้อน หรือการ Render ที่ไม่จำเป็น</li>
+                <li><strong>Architecture & Convention Drift</strong>: ตรวจสอบความสอดคล้องกับมาตรฐานการเขียนโค้ดและโครงสร้างสถาปัตยกรรม</li>
+                <li><strong>Test Integrity & Coverage</strong>: ตรวจสอบความครอบคลุมของการทดสอบและตรวจหาการทดสอบที่ไม่สะท้อนพฤติกรรมจริง (Flaky / False-positive tests)</li>
+              </ol>
+            </li>
+            <li><strong>บันทึกลงใน Durable Ledger</strong>: บันทึกรายการปัญหาพร้อมระดับความสำคัญ (P1 Blocker, P2 Critical, P3 Polish) ลงใน <code>devflow/findings.md</code></li>
+            <li><strong>เชื่อมโยงเข้ากับวงจรแก้ไข</strong>: หากพบข้อบกพร่องที่ต้องแก้ไขเร่งด่วน สามารถนำรายการจาก Findings ไปเปิดเป็นงานแก้ไขด้วยคำสั่ง <code>/fix</code> ได้ทันทีก่อนเริ่มฟีเจอร์ใหม่</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: ดำเนินวงจรการพัฒนาตามปกติ (Continue normally) -->
+        <section id="continue-normally">
+          <h2>ดำเนินวงจรการพัฒนาตามปกติ (Continue normally)</h2>
+          
+          <p>เมื่อกระบวนการ Adopt เสร็จสมบูรณ์ โค้ดเบสเดิมของคุณจะมีความพร้อมเต็มที่สำหรับการพัฒนาฟีเจอร์ใหม่ตามวงจรมาตรฐาน 4 ขั้นตอน:</p>
+          <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
+          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วยโหมด Continuous:</p>
+          <pre><code>/continuous</code></pre>
+          <p>ดูรายละเอียดและแนวทางปฏิบัติเพิ่มเติมได้ที่:</p>
+          <ul>
+            <li><a href="../command-guide/">Command Guide</a> — คู่มือสรุปชุดคำสั่งทั้งหมดกว่า 38+ ทักษะ</li>
+            <li><a href="../writing-your-plans/">Writing Your Plans</a> — เทคนิคการเขียนและจัดระเบียบแผนงาน</li>
+            <li><a href="../commands/continuous/">Continuous Mode</a> — การรันลูปพัฒนาฟีเจอร์แบบอัตโนมัติ</li>
           </ul>
         
           
@@ -261,13 +368,14 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#why-adopt">ทำไมต้องใช้ /adopt กับโค้ดเบสเดิม?</a>
-      <a href="#adoption-lifecycle">ขั้นตอน 4 สเต็ปในการ Adopt โค้ดเบสเดิม</a>
-      <a class="nested" href="#adopt-step-1" style="padding-left:0.75rem;">1. ติดตั้ง Overlay ลงใน Repository เดิม</a>
-      <a class="nested" href="#adopt-step-2" style="padding-left:0.75rem;">2. รันคำสั่ง /adopt</a>
-      <a class="nested" href="#adopt-step-3" style="padding-left:0.75rem;">3. ปรับสมดุลแผนงาน (Reconcile Plans)</a>
-      <a class="nested" href="#adopt-step-4" style="padding-left:0.75rem;">4. คอมไพล์บริบทด้วย /overview</a>
-      <a href="#zero-regression">การรับประกัน Zero-Regression & Non-Destructive Survey</a>
+      <a href="#when-to-adopt">เมื่อใดที่ควรใช้การ Adopt เข้าสู่โค้ดเบสเดิม (When to adopt)</a>
+      <a href="#install-the-overlay">ติดตั้ง Overlay เข้าสู่โปรเจกต์เดิม (Install the overlay)</a>
+      <a href="#run-the-adoption-survey">รันการสำรวจโค้ดเบสด้วย /adopt (Run the adoption survey)</a>
+      <a href="#choose-workflow-visibility">เลือกรูปแบบการจัดเก็บเวิร์กโฟลว์ (Choose workflow visibility)</a>
+      <a href="#align-automatic-checks-when-needed">ปรับปรุงระบบตรวจสอบอัตโนมัติเมื่อจำเป็น (Align automatic checks when needed)</a>
+      <a href="#generate-the-overview">สร้างบริบทโปรเจกต์ด้วย /overview (Generate the overview)</a>
+      <a href="#audit-before-extending-when-needed">ตรวจสอบคุณภาพโค้ดก่อนเริ่มขยายฟีเจอร์ (Audit before extending when needed)</a>
+      <a href="#continue-normally">ดำเนินวงจรการพัฒนาตามปกติ (Continue normally)</a>
     </aside>
   </div>
 

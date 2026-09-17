@@ -164,10 +164,18 @@ function renderPage(page: DocPage): string {
   // Main Sections
   const sectionsHtml = page.sections.map(sec => {
     const subHtml = sec.subsections ? sec.subsections.map((sub, idx) => {
-      const cleanTitle = sub.title.replace(/^\d+\.\s*/, '');
+      const stepMatch = sub.title.match(/^(\d+)\.\s*(.*)$/);
+      let stepNum = String(idx + 1);
+      let cleanTitle = sub.title;
+      if (stepMatch) {
+        stepNum = stepMatch[1];
+        cleanTitle = stepMatch[2];
+      } else if (sub.title.toLowerCase().startsWith('optional') || sub.title.includes('ทางเลือกเสริม')) {
+        stepNum = '★';
+      }
       return `
           <div class="docs-step" id="${sub.id}">
-            <div class="docs-step-number">${idx + 1}</div>
+            <div class="docs-step-number">${stepNum}</div>
             <div>
               <h3>${cleanTitle}</h3>
               ${sub.contentHtml}

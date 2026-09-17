@@ -155,126 +155,183 @@
       </p>
 
       <div class="docs-meta">
-        <span class="docs-pill">Start</span>
-        <span class="docs-pill">Guide</span>
-        <span class="docs-pill">Install</span>
+        <span class="docs-pill">เริ่มต้น</span>
+        <span class="docs-pill">คู่มือ</span>
+        <span class="docs-pill">ติดตั้ง</span>
         <span class="docs-pill">Onboard</span>
-        <span class="docs-pill">Zero-Lock-in</span>
-        <span class="docs-pill">3-Pillars</span>
-        <span class="docs-pill">LivingSpec</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: สิ่งที่ Nexus-DevFlow เพิ่มเข้ามา (What DevFlow Adds) -->
-        <section id="what-devflow-adds">
-          <h2>สิ่งที่ Nexus-DevFlow เพิ่มเข้ามา (What DevFlow Adds)</h2>
+        <!-- Section: สิ่งที่ Nexus-DevFlow เพิ่มเข้ามา (What Blueprint adds) -->
+        <section id="what-blueprint-adds">
+          <h2>สิ่งที่ Nexus-DevFlow เพิ่มเข้ามา (What Blueprint adds)</h2>
           
-          <p>Nexus-DevFlow เป็นเฟรมเวิร์กจัดการเวิร์กโฟลว์การเขียนโค้ดด้วย AI สำหรับแอปพลิเคชันที่คุณได้สร้างโครงร่างไว้แล้ว โดยจะติดตั้งไฟล์วางแผนที่ทนทาน, Agent Skills ที่มีความเชี่ยวชาญเฉพาะทาง 38+ ทักษะ, และประตูด่านตรวจคุณภาพ (Quality Gates) เข้าไปในโฟลเดอร์ <code>devflow/</code> โดยไม่ดัดแปลงสถาปัตยกรรมแอปพลิเคชันเดิมและไม่มีภาระ Runtime เพิ่มเติม</p>
+          <p>Nexus-DevFlow เป็นเฟรมเวิร์กจัดการเวิร์กโฟลว์การเขียนโค้ดด้วย AI สำหรับแอปพลิเคชันที่คุณได้สร้างโครงร่างไว้แล้ว โดยจะเพิ่มไฟล์วางแผนที่ทนทาน (Durable Plans), Agent Skills ที่มีความเชี่ยวชาญเฉพาะทาง (38+ ทักษะ), และประตูด่านตรวจคุณภาพ (Review Gates) โดยไม่เพิ่มโค้ดแอปพลิเคชันหรือแทนที่แอปพลิเคชันเฟรมเวิร์กของคุณ</p>
           <table>
             <thead>
-              <tr><th>เลเยอร์ (Layer)</th><th>ตำแหน่งโฟลเดอร์ / ไฟล์</th><th>หน้าที่และความสำคัญ</th></tr>
+              <tr>
+                <th>เลเยอร์ (Layer)</th>
+                <th>หน้าที่และความสำคัญ (Purpose)</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td><strong>1. Plans (แผนงาน)</strong></td><td><code>devflow/project-plan.md</code><br><code>devflow/build-plan.md</code></td><td>กำหนดทิศทางผลิตภัณฑ์และลำดับความสำคัญของฟีเจอร์ที่คุณเป็นเจ้าของ 100%</td></tr>
-              <tr><td><strong>2. Configuration</strong></td><td><code>devflow/config.json</code></td><td>แชร์นโยบายเวิร์กโฟลว์และเกณฑ์ Quality Gates ให้ AI ทุกเครื่องมืออ่านตรงกัน</td></tr>
-              <tr><td><strong>3. Living Context</strong></td><td><code>devflow/context/project-overview.md</code></td><td>ให้ AI Agent ในทุก Session เข้าใจบริบทโปรเจกต์ตรงกันแบบ Living Source of Truth (<20KB)</td></tr>
-              <tr><td><strong>4. Task Workspace</strong></td><td><code>devflow/context/{xxx-slug}/spec.md</code></td><td>แยกพื้นที่พัฒนาแต่ละฟีเจอร์อย่างเป็นอิสระ มี Living Spec และ Findings Ledger ประจำงาน</td></tr>
-              <tr><td><strong>5. History Archive</strong></td><td><code>devflow/history/</code></td><td>เก็บบันทึกประวัติการตัดสินใจและผลลัพธ์ของฟีเจอร์ที่ส่งมอบแล้วอย่างถาวร</td></tr>
+              <tr>
+                <td><strong>Plans (แผนงาน)</strong></td>
+                <td>กำหนดสิ่งที่คุณกำลังสร้างและลำดับขั้นตอนการทำงาน (<code>devflow/project-plan.md</code>, <code>devflow/build-plan.md</code>)</td>
+              </tr>
+              <tr>
+                <td><strong>Configuration (การตั้งค่า)</strong></td>
+                <td>แชร์นโยบายเวิร์กโฟลว์ที่แน่นอนไปยังทุก Agent Adapter (<code>devflow/config.json</code>)</td>
+              </tr>
+              <tr>
+                <td><strong>Context (บริบทโปรเจกต์)</strong></td>
+                <td>ให้ AI Agent ทุกเซสชันเข้าใจบริบทตรงกันแบบ Living Source of Truth (<code>devflow/context/project-overview.md</code>)</td>
+              </tr>
+              <tr>
+                <td><strong>Current feature (ฟีเจอร์ปัจจุบัน)</strong></td>
+                <td>รักษาขอบเขตการทำงานที่สร้างได้จริงให้ Active ทีละหนึ่งฟีเจอร์ (<code>devflow/context/{xxx-slug}/</code>)</td>
+              </tr>
+              <tr>
+                <td><strong>History (ประวัติการพัฒนา)</strong></td>
+                <td>บันทึกการตัดสินใจและผลลัพธ์ของฟีเจอร์ที่ส่งมอบแล้วอย่างถาวร (<code>devflow/history/</code>)</td>
+              </tr>
             </tbody>
           </table>
-          <div class="docs-callout success">
-            <div class="docs-callout-label">Zero-Lock-In & Pure Standalone</div>
-            <p>Nexus-DevFlow ไม่ใช่ App Starter Boilerplate คุณสามารถเลือกภาษา เฟรมเวิร์ก สถาปัตยกรรม (TypeScript, Go, Python, Rust, PHP, Java) และโครงสร้างพื้นฐานที่ต้องการได้ก่อนอย่างอิสระ 100%</p>
-          </div>
+          <blockquote>
+            <p>DevFlow ไม่ใช่ App Starter คุณสามารถเลือกภาษา เฟรมเวิร์ก สถาปัตยกรรม (TypeScript, Go, Python, Rust, PHP, Java) และโครงสร้างพื้นฐานที่ต้องการได้ก่อนอย่างอิสระ 100%</p>
+          </blockquote>
         
           
         </section>
 
-        <!-- Section: ขั้นตอนการติดตั้งโปรเจกต์ใหม่ (5-Step Setup Loop) -->
+        <!-- Section: ขั้นตอนการติดตั้งโปรเจกต์ใหม่ (Fresh project setup) -->
         <section id="fresh-project-setup">
-          <h2>ขั้นตอนการติดตั้งโปรเจกต์ใหม่ (5-Step Setup Loop)</h2>
-          <p>ปฏิบัติตาม 5 ขั้นตอนมาตรฐานเพื่อติดตั้งและเริ่มใช้งานเวิร์กโฟลว์เข้าสู่โปรเจกต์ของคุณ:</p>
+          <h2>ขั้นตอนการติดตั้งโปรเจกต์ใหม่ (Fresh project setup)</h2>
+          <p>ปฏิบัติตามขั้นตอนมาตรฐานเพื่อติดตั้งและเริ่มใช้งานเวิร์กโฟลว์เข้าสู่โปรเจกต์ของคุณ:</p>
           
-          <div class="docs-step" id="step-1-scaffold">
+          <div class="docs-step" id="1-scaffold-the-application">
             <div class="docs-step-number">1</div>
             <div>
               <h3>สร้างโครงร่างแอปพลิเคชัน (Scaffold the application)</h3>
               
-              <p>เริ่มต้นสร้างโฟลเดอร์โปรเจกต์และสร้างแอปพลิเคชันด้วยเครื่องมือที่คุณต้องการตามปกติ จากนั้นทำการกำหนด Git Repository:</p>
-              <pre><code><span style="color:#FFA657">npm</span><span style="color:#A5D6FF"> create</span><span style="color:#A5D6FF"> vite@latest</span><span style="color:#A5D6FF"> my-app</span>
+              <p>ใช้ Stack ที่เหมาะสมกับโปรเจกต์ของคุณ (Astro/Vite เป็นเพียงตัวอย่าง):</p>
+              <pre><code><span style="color:#FFA657">npm</span><span style="color:#A5D6FF"> create</span><span style="color:#A5D6FF"> astro@latest</span><span style="color:#A5D6FF"> my-app</span>
 <span style="color:#79C0FF">cd</span><span style="color:#A5D6FF"> my-app</span>
-<span style="color:#FFA657">git</span><span style="color:#A5D6FF"> init</span></code></pre>
+<span style="color:#FFA657">git</span><span style="color:#A5D6FF"> init</span><span style="color:#8B949E"> # if the scaffolder did not create a repository</span></code></pre>
             
             </div>
           </div>
       
-          <div class="docs-step" id="step-2-install">
+          <div class="docs-step" id="2-install-blueprint">
             <div class="docs-step-number">2</div>
             <div>
-              <h3>ติดตั้ง Nexus-DevFlow Overlay</h3>
+              <h3>ติดตั้ง Nexus-DevFlow (Install Blueprint)</h3>
               
-              <p>รันตัวติดตั้งเพื่อ Overlay โครงสร้างโฟลเดอร์ <code>devflow/</code> และ AI Agent Skills เข้าสู่โปรเจกต์:</p>
-              <pre><code><span style="color:#FFA657">npx</span><span style="color:#A5D6FF"> -y</span><span style="color:#A5D6FF"> nexus-devflow</span><span style="color:#A5D6FF"> -y</span></code></pre>
-              <p>หรือสามารถใช้ <code>npm create @jakkrichm/nexus-devflow</code> ก็ได้ผลลัพธ์เหมือนกัน</p>
+              <p>รันตัวติดตั้งในไดเรกทอรีของแอปพลิเคชัน โดยเลือกคำสั่งตาม Package Manager ของโปรเจกต์คุณ:</p>
+              <pre><code><span style="color:#8B949E"># npm</span>
+<span style="color:#FFA657">npx</span><span style="color:#A5D6FF"> nexus-devflow</span>
+
+<span style="color:#8B949E"># pnpm</span>
+<span style="color:#FFA657">pnpm</span><span style="color:#A5D6FF"> dlx</span><span style="color:#A5D6FF"> nexus-devflow</span></code></pre>
+              <p>โปรเจกต์ที่บังคับใช้ pnpm ผ่าน <code>devEngines.packageManager</code> สามารถปฏิเสธ <code>npx</code> ด้วย <code>EBADDEVENGINES</code> ก่อนที่ DevFlow จะเริ่ม ให้ใช้ <code>pnpm dlx</code> ในโปรเจกต์ดังกล่าว โดยไม่ต้องลบข้อกำหนด package-manager ออก</p>
+              <p>ตัวอย่างคำสั่ง <code>npx nexus-devflow</code> ทั้งหมดยังใช้งานได้กับ <code>pnpm dlx nexus-devflow</code> เช่นกัน</p>
+              <p>ตัวติดตั้งแบบโต้ตอบ (Interactive Installer) จะแสดง OpenAI Codex, Claude Code, Google Antigravity, GitHub Copilot และ OpenCode เป็นรายการ Checkbox โดยเลือก Codex และ Claude Code/Antigravity เป็นค่าเริ่มต้น ตัวติดตั้งจะเพิ่มเฉพาะ Adapter Files ที่เข้ากันได้กับเครื่องมือที่คุณเลือก</p>
+              <p>ตัวติดตั้งจะสร้าง <code>devflow/.state/manifest.json</code> เพื่อให้การอัปเดตเวอร์ชันในภายหลังสามารถแยกแยะไฟล์ของ DevFlow ออกจากการปรับแต่งของโปรเจกต์ได้</p>
+              <p>ก่อนคัดลอกไฟล์ ตัวติดตั้งจะตรวจสอบโฟลเดอร์ปลายทางและหยุดทำงานหากพบ Symbolic Links, ประเภทไฟล์ที่ไม่เข้ากัน หรือเป้าหมายที่อยู่ใต้ไฟล์ปกติ เพื่อความปลอดภัยสูงสุด</p>
+              <p>การติดตั้งยังมีตัวเลือกติดตั้ง DevFlow CLI ซึ่งมีคำสั่ง <code>nexus-devflow</code> สำหรับตรวจสอบสถานะโปรเจกต์และเปิด Live Dashboard</p>
             
             </div>
           </div>
       
-          <div class="docs-step" id="step-3-onboard">
+          <div class="docs-step" id="3-onboard-the-project">
             <div class="docs-step-number">3</div>
             <div>
-              <h3>ปรับแต่งเวิร์กโฟลว์ด้วย /onboard</h3>
+              <h3>ปรับแต่งโปรเจกต์ด้วย Onboard (Onboard the project)</h3>
               
-              <p>ในหน้าต่างแชตของ AI assistant (เช่น Google Antigravity, Claude Code, Cursor) ให้รันคำสั่ง <code>/onboard</code>:</p>
-              <pre><code>/onboard</code></pre>
-              <p>AI จะทำการตรวจสอบ dependencies, คำสั่ง build/test และถามระดับการตรวจรับ (Review Cadence) ที่คุณต้องการ</p>
+              <p>รัน <code>$onboard</code> ใน Codex, <code>/onboard</code> ใน Claude Code / Antigravity หรือสั่งให้ Copilot / OpenCode รัน Onboard Skill</p>
+              <p>คำสั่งจะตรวจสอบ Stack จริง, คำสั่ง Build/Test, Coding Conventions, Adapters, Ignore rules, Project Configuration และระบบ CI ที่มีอยู่เดิม โดยจะรายงานการตรวจสอบปัจจุบันโดยไม่สร้าง CI ใหม่หรือเปิดใช้ Quality Gates อัตโนมัติโดยพลการ</p>
+              <p>การติดตั้งใหม่มีค่าเริ่มต้นเป็นการรีวิวระดับฟีเจอร์ 1 ครั้งและไม่มี Checkpoint Prompt หากต้องการการรีวิวทุกขั้นตอนย่อย ให้ตั้งค่า <code>workflow.stepReview</code> เป็น <code>every</code> และ <code>workflow.checkpointCommits</code> เป็น <code>enabled</code> ใน <code>devflow/config.json</code></p>
+              <p>Onboarding จะแสดงตัวเลือกนี้เป็น <strong>Efficient</strong> หรือ <strong>Guided</strong> พร้อมตัวเลือก <strong>Custom</strong> สำหรับปรับแต่งแยกกัน แต่ละรูปแบบยังคงมีตัวเลือก Read-only Code Walkthrough เมื่อพัฒนาเสร็จสิ้นเสมอ</p>
             
             </div>
           </div>
       
-          <div class="docs-step" id="step-4-plans">
+          <div class="docs-step" id="optional-add-automatic-github-checks">
+            <div class="docs-step-number">★</div>
+            <div>
+              <h3>ทางเลือกเสริม: เพิ่มการตรวจสอบอัตโนมัติบน GitHub (Optional: add automatic GitHub checks)</h3>
+              
+              <p>รัน <code>$ci</code> ใน Codex หรือ <code>/ci</code> ใน Claude Code / Antigravity เมื่อคุณต้องการคำสั่ง Verify หนึ่งคำสั่งเฉพาะสำหรับโปรเจกต์และ GitHub Actions Workflow ที่ตรงกัน</p>
+              <p>Skill นี้จะใช้เฉพาะการตรวจสอบที่มีอยู่จริงในโปรเจกต์ พิสูจน์สูตรการรันในเครื่องให้ผ่านก่อน และหยุดก่อนที่จะ push หรือแก้ไขกฎบน Remote Repository</p>
+              <p>คุณสามารถข้ามขั้นตอนนี้และดำเนินการวางแผนต่อได้ทันที ดูรายละเอียดระบบตรวจสอบทั้งหมดได้ที่ <a href="../testing/">Testing and CI</a></p>
+            
+            </div>
+          </div>
+      
+          <div class="docs-step" id="4-write-the-two-plans-you-own">
             <div class="docs-step-number">4</div>
             <div>
               <h3>เขียนแผนงานที่คุณเป็นเจ้าของ (Write the two plans you own)</h3>
               
-              <p>กรอกเป้าหมายผลิตภัณฑ์ใน <code>devflow/project-plan.md</code> และเขียนรายการฟีเจอร์ใน <code>devflow/build-plan.md</code>:</p>
-              <pre><code>## 🚀 Phase 1: MVP Core
-- [ ] 1. โครงสร้าง Database Schema และ Migrations
-- [ ] 2. ระบบยืนยันตัวตนผู้ใช้ (Auth & Session)
-- [ ] 3. แดชบอร์ดสรุปผลแบบเรียลไทม์</code></pre>
+              <p>กรอกข้อมูลใน <code>devflow/project-plan.md</code> ตามรายละเอียดผลิตภัณฑ์ที่โปรเจกต์ต้องการ จากนั้นเขียน <code>devflow/build-plan.md</code> เป็นรายการฟีเจอร์สั้นๆ ตามลำดับความสำคัญ (สามารถใช้ Plain Bullets หรือ Numbered Lines ได้ โดย Overview จะเพิ่ม Checkbox ให้อัตโนมัติ) ดูตัวอย่างได้ที่ <a href="../writing-your-plans/">Writing Your Plans</a></p>
+              <p>คุณสามารถเขียนแผนได้โดยตรงหรือพูดคุยผ่านการสนทนากับ AI หากต้องการความช่วยเหลือแบบมีคำแนะนำ ให้รัน <code>$discovery</code> ใน Codex หรือ <code>/discovery</code> ใน Claude Code / Antigravity ซึ่ง Discovery เป็นตัวเลือกเสริมและจะบันทึกไฟล์หลังจากคุณตรวจสอบและอนุมัติอย่างชัดเจนเท่านั้น</p>
             
             </div>
           </div>
       
-          <div class="docs-step" id="step-5-overview">
+          <div class="docs-step" id="5-generate-project-context">
             <div class="docs-step-number">5</div>
             <div>
-              <h3>คอมไพล์บริบทด้วย /overview</h3>
+              <h3>สร้างบริบทโปรเจกต์ด้วย Overview (Generate project context)</h3>
               
-              <p>รันคำสั่ง <code>/overview</code> เพื่อคอมไพล์สรุปบริบทลงใน <code>devflow/context/project-overview.md</code>:</p>
-              <pre><code>/overview</code></pre>
+              <p>รัน <code>$overview</code> ใน Codex หรือ <code>/overview</code> ใน Claude Code / Antigravity โดยคำสั่งจะจัดรูปแบบรายการฟีเจอร์ให้ชัดเจน รักษารายการและสถานะ และขออนุมัติก่อนแก้ไขแผน</p>
+              <p>ตรวจสอบ <code>devflow/context/project-overview.md</code> ที่ถูกสร้างขึ้นก่อนเริ่มสร้าง Overview จะรักษาขนาดบริบทให้ต่ำกว่า 20,000 ไบต์ เพื่อให้ AI โหลดได้รวดเร็วโดยไม่ต้องพกสำเนาแผนงานทั้งฉบับ ในการรันครั้งแรก Overview จะเสนอทำ Reviewed Local Commit สำหรับ DevFlow setup และแผนงานก่อนเริ่ม Feature 1</p>
             
             </div>
           </div>
       
         </section>
 
-        <!-- Section: วงจรการพัฒนาที่สั้นและปลอดภัยที่สุด (The Shortest Successful Loop) -->
+        <!-- Section: วงจรการพัฒนาที่สั้นและมีประสิทธิภาพที่สุด (The shortest successful loop) -->
         <section id="the-shortest-successful-loop">
-          <h2>วงจรการพัฒนาที่สั้นและปลอดภัยที่สุด (The Shortest Successful Loop)</h2>
+          <h2>วงจรการพัฒนาที่สั้นและมีประสิทธิภาพที่สุด (The shortest successful loop)</h2>
           
-          <p>หลังจากติดตั้งเสร็จสิ้น ทุกฟีเจอร์จะพัฒนาผ่านวงจร 4 ขั้นตอนที่รัดกุม:</p>
-          <pre><code><span style="color:#76a8ff;">/feature</span> ──▶ <span style="color:#e8bd72;">review</span> ──▶ <span style="color:#70d5a9;">/implement</span> ──▶ <span style="color:#76a8ff;">/check</span> ──▶ <span style="color:#0b7a53;">/complete</span></code></pre>
-          <table>
-            <thead><tr><th>คำสั่ง</th><th>คำอธิบายหน้าที่</th></tr></thead>
-            <tbody>
-              <tr><td><code>/feature 1</code></td><td>ดึงรายการที่ 1 มาร่าง Living Spec เฉพาะงาน (<code>devflow/context/001-xxx/spec.md</code>)</td></tr>
-              <tr><td><code>/implement 1</code></td><td>พัฒนาโค้ดด้วยวินัย Strict TDD บน branch <code>feature/001-xxx</code></td></tr>
-              <tr><td><code>/check 1</code></td><td>ตรวจรับคุณภาพหลายมิติและทดสอบฟังก์ชันจริง</td></tr>
-              <tr><td><code>/complete 1</code></td><td>จัดเก็บประวัติเข้า History Archive และทำ Git Squash-Merge เข้า main</td></tr>
-            </tbody>
-          </table>
+          <p>หลังจากติดตั้งเสร็จสิ้น ให้ทำตามลำดับนี้ในแต่ละฟีเจอร์:</p>
+          <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
+          <p>Agent Skills จะหยุดที่ขอบเขตสำคัญเสมอ จะไม่มีการ merge, push, deploy หรือส่งข้อมูลใดๆ โดยไม่ได้รับการอนุมัติตามข้อกำหนดของเวิร์กโฟลว์</p>
+          <p>เมื่อคุณต้องการให้ DevFlow ดำเนินการต่อจนจบ Build Plan ที่เหลือโดยอัตโนมัติ ให้รัน <code>$continuous</code> หรือ <code>/continuous</code> ซึ่งจะรันตามวงจรฟีเจอร์ด้วย 1 branch และ 1 local main commit ต่อฟีเจอร์ และไม่มีการ push อัตโนมัติ ดูรายละเอียดได้ที่ <a href="../commands/continuous/">Continuous</a> และ <a href="../project-configuration/">Project Configuration</a></p>
+          <p>เมื่อมีการตั้งค่าคำสั่ง Verify ไว้ ขั้นตอน implementation และ completion จะใช้สูตรเดียวกัน และ GitHub Actions จะรันโดยอัตโนมัติเมื่อเวิร์กโฟลว์ถูกเผยแพร่</p>
+          <p>หากต้องการนำฟีเจอร์ที่เสร็จสมบูรณ์แล้วออกในภายหลัง ให้ทำตามคำแนะนำของคำสั่ง <a href="../commands/rollback/">Rollback</a> แทนการเขียน Git History ใหม่หรือลบฟีเจอร์ด้วยตนเอง</p>
+        
+          
+        </section>
+
+        <!-- Section: มีโค้ดเบสเดิมอยู่แล้วใช่หรือไม่? (Already have a codebase?) -->
+        <section id="already-have-a-codebase">
+          <h2>มีโค้ดเบสเดิมอยู่แล้วใช่หรือไม่? (Already have a codebase?)</h2>
+          
+          <p>ใช้คู่มือ <a href="../existing-codebase/">Existing Codebase Adoption</a> แทนการ Onboard โปรเจกต์ใหม่ การ Adopt จะสำรวจ Repository ที่กำลังทำงานอยู่จริง และนับรวมฟีเจอร์ที่ถูกส่งมอบไปแล้วให้อัตโนมัติโดยไม่รบกวนประวัติเดิม</p>
+        
+          
+        </section>
+
+        <!-- Section: รักษาเวิร์กโฟลว์ให้ทันสมัยอยู่เสมอ (Keep the workflow current) -->
+        <section id="keep-the-workflow-current">
+          <h2>รักษาเวิร์กโฟลว์ให้ทันสมัยอยู่เสมอ (Keep the workflow current)</h2>
+          
+          <p>ใช้คู่มือ <a href="../updating-devflow/">Updating DevFlow</a> เมื่อคุณต้องการอัปเกรด Skills และเอกสารเวิร์กโฟลว์เวอร์ชันใหม่ ตัวอัปเดตจะรักษา Plans, Project Context, History และ Entry Files ของโปรเจกต์ไว้ 100%</p>
+        
+          
+        </section>
+
+        <!-- Section: เรียนรู้วงจรการทำงานประจำวัน (Learn the everyday loop) -->
+        <section id="learn-the-everyday-loop">
+          <h2>เรียนรู้วงจรการทำงานประจำวัน (Learn the everyday loop)</h2>
+          
+          <pre><code>/feature -> /implement -> /check -> /audit current -> /complete</code></pre>
+          <p>รันคำสั่งเหล่านี้ใน AI Chat (ใช้ <code>$</code> ใน Codex หรือ <code>/</code> ใน Claude Code / Antigravity) ให้รีวิว Feature Spec ก่อนเริ่ม Implement, คำสั่ง Check จะทดสอบพฤติกรรมที่สัญญาไว้ และ Audit จะรีวิวคุณภาพโค้ด การแสดง Audit ที่นี่ไม่ได้เปลี่ยนเกณฑ์ Review Gates ที่คุณตั้งค่าไว้</p>
+          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/status</code> เพื่อกลับมาทำงานต่อ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
         
           
         </section>
@@ -293,14 +350,18 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#what-devflow-adds">สิ่งที่ Nexus-DevFlow เพิ่มเข้ามา (What DevFlow Adds)</a>
-      <a href="#fresh-project-setup">ขั้นตอนการติดตั้งโปรเจกต์ใหม่ (5-Step Setup Loop)</a>
-      <a class="nested" href="#step-1-scaffold" style="padding-left:0.75rem;">1. สร้างโครงร่างแอปพลิเคชัน (Scaffold the application)</a>
-      <a class="nested" href="#step-2-install" style="padding-left:0.75rem;">2. ติดตั้ง Nexus-DevFlow Overlay</a>
-      <a class="nested" href="#step-3-onboard" style="padding-left:0.75rem;">3. ปรับแต่งเวิร์กโฟลว์ด้วย /onboard</a>
-      <a class="nested" href="#step-4-plans" style="padding-left:0.75rem;">4. เขียนแผนงานที่คุณเป็นเจ้าของ (Write the two plans you own)</a>
-      <a class="nested" href="#step-5-overview" style="padding-left:0.75rem;">5. คอมไพล์บริบทด้วย /overview</a>
-      <a href="#the-shortest-successful-loop">วงจรการพัฒนาที่สั้นและปลอดภัยที่สุด (The Shortest Successful Loop)</a>
+      <a href="#what-blueprint-adds">สิ่งที่ Nexus-DevFlow เพิ่มเข้ามา (What Blueprint adds)</a>
+      <a href="#fresh-project-setup">ขั้นตอนการติดตั้งโปรเจกต์ใหม่ (Fresh project setup)</a>
+      <a class="nested" href="#1-scaffold-the-application" style="padding-left:0.75rem;">1. สร้างโครงร่างแอปพลิเคชัน (Scaffold the application)</a>
+      <a class="nested" href="#2-install-blueprint" style="padding-left:0.75rem;">2. ติดตั้ง Nexus-DevFlow (Install Blueprint)</a>
+      <a class="nested" href="#3-onboard-the-project" style="padding-left:0.75rem;">3. ปรับแต่งโปรเจกต์ด้วย Onboard (Onboard the project)</a>
+      <a class="nested" href="#optional-add-automatic-github-checks" style="padding-left:0.75rem;">ทางเลือกเสริม: เพิ่มการตรวจสอบอัตโนมัติบน GitHub (Optional: add automatic GitHub checks)</a>
+      <a class="nested" href="#4-write-the-two-plans-you-own" style="padding-left:0.75rem;">4. เขียนแผนงานที่คุณเป็นเจ้าของ (Write the two plans you own)</a>
+      <a class="nested" href="#5-generate-project-context" style="padding-left:0.75rem;">5. สร้างบริบทโปรเจกต์ด้วย Overview (Generate project context)</a>
+      <a href="#the-shortest-successful-loop">วงจรการพัฒนาที่สั้นและมีประสิทธิภาพที่สุด (The shortest successful loop)</a>
+      <a href="#already-have-a-codebase">มีโค้ดเบสเดิมอยู่แล้วใช่หรือไม่? (Already have a codebase?)</a>
+      <a href="#keep-the-workflow-current">รักษาเวิร์กโฟลว์ให้ทันสมัยอยู่เสมอ (Keep the workflow current)</a>
+      <a href="#learn-the-everyday-loop">เรียนรู้วงจรการทำงานประจำวัน (Learn the everyday loop)</a>
     </aside>
   </div>
 

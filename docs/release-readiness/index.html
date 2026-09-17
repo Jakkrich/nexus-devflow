@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Release Readiness (ความพร้อมก่อนขึ้น Production) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="แนวปฏิบัติและชุดการตรวจสอบความพร้อมก่อนส่งมอบซอฟต์แวร์สู่ Production บนแพลตฟอร์ม Render, Vercel และ Docker">
+  <title>Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="เตรียมความพร้อมของโปรเจกต์ที่เสร็จสมบูรณ์สำหรับ Render หรือ Vercel โดยยังคงรักษาขอบเขตการอนุมัติความปลอดภัยก่อนการ Deployment ไว้อย่างเคร่งครัด">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/release-readiness/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,48 +146,86 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>SHIP</span> <span>/</span> <strong>Release Readiness (ความพร้อมก่อนขึ้น Production)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>SHIP</span> <span>/</span> <strong>Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production)</strong></div>
       
-      <h1 class="docs-title">Release Readiness (ความพร้อมก่อนขึ้น Production)</h1>
+      <h1 class="docs-title">Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production)</h1>
       
       <p class="docs-lead">
-        แนวปฏิบัติและชุดการตรวจสอบความพร้อมก่อนส่งมอบซอฟต์แวร์สู่ Production บนแพลตฟอร์ม Render, Vercel และ Docker
+        เตรียมความพร้อมของโปรเจกต์ที่เสร็จสมบูรณ์สำหรับ Render หรือ Vercel โดยยังคงรักษาขอบเขตการอนุมัติความปลอดภัยก่อนการ Deployment ไว้อย่างเคร่งครัด
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Ship</span>
+        <span class="docs-pill">Guide</span>
         <span class="docs-pill">Release</span>
-        <span class="docs-pill">Production</span>
-        <span class="docs-pill">Vercel</span>
         <span class="docs-pill">Render</span>
-        <span class="docs-pill">Docker</span>
+        <span class="docs-pill">Vercel</span>
+        <span class="docs-pill">Production</span>
         <span class="docs-pill">HealthCheck</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: จุดตรวจความพร้อม 5 ด้าน (Production Readiness Checklist) -->
-        <section id="readiness-checklist">
-          <h2>จุดตรวจความพร้อม 5 ด้าน (Production Readiness Checklist)</h2>
+        <!-- Section: เริ่มต้นจากสถานะโปรเจกต์ที่ผ่านการทดสอบสมบูรณ์ (Start from a green project) -->
+        <section id="start-from-a-green-project">
+          <h2>เริ่มต้นจากสถานะโปรเจกต์ที่ผ่านการทดสอบสมบูรณ์ (Start from a green project)</h2>
           
-          <p>ก่อนนำแอปพลิเคชันขึ้นสู่สภาพแวดล้อม Production ให้รันคำสั่ง <code>/release</code> เพื่อตรวจความพร้อมใน 5 ด้านหลัก:</p>
+          <p>ทำฟีเจอร์ที่เกี่ยวข้องให้เสร็จสมบูรณ์และแก้ไขข้อผิดพลาดจากการตรวจสอบ (Check Failures) ที่ทราบทั้งหมดก่อนเริ่มจัดเตรียมการตั้งค่าสำหรับ Cloud Provider</p>
+          <p>รันคำสั่ง Verify มาตรฐานที่บันทึกไว้ในโปรเจกต์ (เช่น <code>npm run check</code> หรือ <code>npm test</code>) หากโปรเจกต์ยังไม่ได้ตั้งค่า Verify ไว้ ให้รัน Production Build และชุดการทดสอบที่กำหนดค่าไว้แยกต่างหากเพื่อยืนยันว่าโปรเจกต์อยู่ในสถานะสีเขียว (Green)</p>
+        
+          
+        </section>
+
+        <!-- Section: รันคำสั่ง Release ในเครื่อง (Run release locally) -->
+        <section id="run-release-locally">
+          <h2>รันคำสั่ง Release ในเครื่อง (Run release locally)</h2>
+          
+          <p>เรียกใช้คำสั่งผ่านสัญลักษณ์ที่รองรับตามเครื่องมือ AI ของคุณ:</p>
+          <pre><code># Claude Code / Antigravity / Gemini CLI
+/release render
+/release vercel
+
+# OpenAI Codex CLI
+$release render
+$release vercel</code></pre>
+          <p>เวิร์กโฟลว์ของสกิล <code>/release</code> จะสแกนและตรวจสอบโครงสร้างโปรเจกต์ (Tech Stack, Framework, Runtime, Dependencies) และสร้างหรือปรับแต่งเฉพาะไฟล์ Configuration ในเครื่อง (Local Configuration) ที่ Provider นั้นต้องการ เช่น <code>render.yaml</code> หรือ <code>vercel.json</code> โดยไม่ส่งผลกระทบต่อสภาพแวดล้อมจริง</p>
+          <p><strong>ขอบเขตและอ็อปชันของคำสั่ง (Command Scopes):</strong></p>
           <ul>
-            <li><strong>1. Production Build Validation</strong>: คอมไพล์ Production Bundle ในเครื่องเพื่อยืนยันว่าไม่มี Error หรือ Type mismatch</li>
-            <li><strong>2. Platform Deployment Configs</strong>: ตรวจสอบความถูกต้องของ <code>vercel.json</code>, <code>render.yaml</code>, <code>Dockerfile</code>, หรือ <code>docker-compose.yml</code></li>
-            <li><strong>3. Environment Variables & Secret Scanning</strong>: ตรวจสอบความครบถ้วนของ <code>.env.example</code> และยืนยันว่าไม่มี Secrets หรือ API Keys รั่วไหลในโค้ด</li>
-            <li><strong>4. Health Check Probes</strong>: ยืนยันการมีอยู่ของ Health Endpoint (เช่น <code>/healthz</code> หรือ <code>/api/health</code>) สำหรับ Liveness / Readiness Probes</li>
-            <li><strong>5. Database Migrations & Rollback Plans</strong>: ตรวจสอบว่า Migration Scripts ผ่านการทดสอบแล้วและมีแผนสำรองในกรณีฉุกเฉิน</li>
+            <li><strong>ไม่ระบุอาร์กิวเมนต์ (<code>/release</code>)</strong>: AI จะสแกนโปรเจกต์และแนะนำ Provider ที่เหมาะสมที่สุด (Render หรือ Vercel) หรือสอบถามความต้องการหากรูปแบบไม่ชัดเจน</li>
+            <li><strong><code>/release render</code></strong>: จัดเตรียมความพร้อมและสร้างคอนฟิกสำหรับ Render (รองรับ Static Site, Web Service, Background Worker, Cron Job และ Database Pair)</li>
+            <li><strong><code>/release vercel</code></strong>: จัดเตรียมความพร้อมและสร้างคอนฟิกสำหรับ Vercel (รองรับ Frontend Framework, Serverless Functions, Static Output และ Monorepo)</li>
+            <li><strong><code>/release check</code></strong>: ออกรายงานประเมินความพร้อมในการ Deploy แบบ Read-Only โดยไม่แก้ไขไฟล์</li>
+            <li><strong><code>/release config</code></strong>: มุ่งเน้นการสร้างหรืออัปเดตไฟล์คอนฟิกในเครื่องโดยเฉพาะ</li>
           </ul>
         
           
         </section>
 
-        <!-- Section: การใช้งานคำสั่ง /release -->
-        <section id="release-command">
-          <h2>การใช้งานคำสั่ง /release</h2>
+        <!-- Section: ตรวจทานแพ็กเกจความพร้อม (Review the readiness packet) -->
+        <section id="review-the-readiness-packet">
+          <h2>ตรวจทานแพ็กเกจความพร้อม (Review the readiness packet)</h2>
           
-          <pre><code>/release</code></pre>
-          <p>AI จะทำการจำลองการ Build ตรวจสอบ Configs และรายงานผลความพร้อมเป็น Checklist ให้คุณทราบก่อนทำการ Deploy จริง</p>
+          <p>เมื่อรันคำสั่งสำเร็จ AI จะสรุปรายงาน <strong>Readiness Packet</strong> ให้คุณตรวจทานความถูกต้องในประเด็นสำคัญก่อนส่งมอบ:</p>
+          <ul>
+            <li><strong>คำสั่ง Production Build และ Start</strong>: ตรวจสอบความถูกต้องของคำสั่ง Build (เช่น <code>npm run build</code>) และ Start (เช่น <code>npm start</code>, Node หรือ Docker entrypoint)</li>
+            <li><strong>Output Directory หรือ Runtime Type</strong>: ตรวจสอบไดเรกทอรีผลลัพธ์ (เช่น <code>dist/</code>, <code>build/</code>, <code>out/</code>, <code>public/</code>) หรือเวอร์ชันของ Node/Python ที่ระบุ</li>
+            <li><strong>Environment Variable Names</strong>: ตรวจสอบรายชื่อตัวแปรสภาพแวดล้อมที่จำเป็นทั้งหมด (โดยจะระบุเฉพาะชื่อตัวแปร และไม่มีการพิมพ์หรือบันทึก Secret Values เด็ดขาด)</li>
+            <li><strong>Database Migration หรือ Release-Phase Commands</strong>: ตรวจสอบคำสั่ง Migration ฐานข้อมูลในขั้นตอน Release Phase เมื่อมีฐานข้อมูลเชื่อมต่อ</li>
+            <li><strong>Health Checks และ Routing Probes</strong>: ตรวจสอบเส้นทาง Health Path (เช่น <code>/healthz</code>, <code>/api/health</code>) และพฤติกรรมการทำงานของเซอร์วิส</li>
+            <li><strong>Manual Remote Setup</strong>: รายการขั้นตอนการตั้งค่าบน Cloud Dashboard ที่ยังคงต้องดำเนินการด้วยตนเอง</li>
+          </ul>
+        
+          
+        </section>
+
+        <!-- Section: การ Deploy ยังคงแยกออกจากการเตรียมความพร้อม (Deployment stays separate) -->
+        <section id="deployment-stays-separate">
+          <h2>การ Deploy ยังคงแยกออกจากการเตรียมความพร้อม (Deployment stays separate)</h2>
+          
+          <div class="note-box">
+            <strong>หลักการความปลอดภัย Zero-Deploy อัตโนมัติ:</strong> การเตรียมความพร้อม (Readiness) <strong>ไม่ได้เป็นการอนุญาตให้ทำการ Deploy</strong> แต่อย่างใด
+          </div>
+          <p>การสร้าง Cloud Services บนรีโมต, การเชื่อมโยง Git Repository กับ Provider, การตั้งค่าค่า Secret และ Environment Variables จริง และการสั่ง Publish โค้ดขึ้นสู่ Production จะต้องผ่านการตัดสินใจและอนุมัติอย่างชัดเจนจากนักพัฒนาเสมอ</p>
         
           
         </section>
@@ -209,8 +247,10 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#readiness-checklist">จุดตรวจความพร้อม 5 ด้าน (Production Readiness Checklist)</a>
-      <a href="#release-command">การใช้งานคำสั่ง /release</a>
+      <a href="#start-from-a-green-project">เริ่มต้นจากสถานะโปรเจกต์ที่ผ่านการทดสอบสมบูรณ์ (Start from a green project)</a>
+      <a href="#run-release-locally">รันคำสั่ง Release ในเครื่อง (Run release locally)</a>
+      <a href="#review-the-readiness-packet">ตรวจทานแพ็กเกจความพร้อม (Review the readiness packet)</a>
+      <a href="#deployment-stays-separate">การ Deploy ยังคงแยกออกจากการเตรียมความพร้อม (Deployment stays separate)</a>
     </aside>
   </div>
 
