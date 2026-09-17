@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-17 | `104` | Feature | Skill Token Budgets, Analytics & Mechanical Input Coverage Gates | `0f99838` | `Completed` | [`104-skill-token-budget-and-input-coverage-gates.md`](features/104-skill-token-budget-and-input-coverage-gates.md) |
 | 2026-09-16 | `103` | Fix | Align Docs: Testing and CI 8 Sections, Thai Headings & Skills | `PENDING` | `Completed` | [`103-align-docs-testing.md`](fixes/103-align-docs-testing.md) |
 | 2026-09-16 | `102` | Fix | Align Docs: Manual Review With Try 3 Sections & Skills | `PENDING` | `Completed` | [`102-align-docs-manual-review.md`](fixes/102-align-docs-manual-review.md) |
 | 2026-09-16 | `101` | Fix | Align Docs: Code Quality With Audit 7 Sections & Skills | `PENDING` | `Completed` | [`101-align-docs-code-quality.md`](fixes/101-align-docs-code-quality.md) |

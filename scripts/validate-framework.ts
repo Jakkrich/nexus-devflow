@@ -7,6 +7,7 @@ import {
   inspectAdapterSkillInventory,
   loadCoreSkillInventory
 } from "../packages/create-nexus-devflow/lib/core-skill-inventory.js";
+import { checkSkillBudgets } from "./check-skill-budgets.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
@@ -288,6 +289,21 @@ async function validateSkillMetadata(failures: string[]): Promise<void> {
   }
 }
 
+function validateSkillBudgets(failures: string[]): void {
+  for (const adapter of [".agents", ".claude"]) {
+    const skillsDir = path.join(projectRoot, adapter, "skills");
+    if (!fs.existsSync(skillsDir)) continue;
+    const res = checkSkillBudgets(skillsDir);
+    if (res.violations.length > 0) {
+      for (const v of res.violations) {
+        fail(`[${adapter}] Skill budget violation: ${v}`, failures);
+      }
+    } else {
+      ok(`[${adapter}] All skills within token byte budget ceilings (${res.stats.length} markdown instruction files)`);
+    }
+  }
+}
+
 async function main(): Promise<void> {
   const failures: string[] = [];
   const manifest = readJson<{
@@ -345,6 +361,7 @@ async function main(): Promise<void> {
   validateWorkflowNumbering(failures);
   await validateCoreSkillContract(failures);
   await validateSkillMetadata(failures);
+  validateSkillBudgets(failures);
   validateManifestSync(failures);
   validateSkillContracts(manifest?.skill_contracts || {}, failures);
 

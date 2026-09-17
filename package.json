@@ -7,6 +7,8 @@
   "scripts": {
     "check": "npm run typecheck && tsx scripts/check-devflow.ts",
     "check:static": "tsx scripts/validate-framework.ts",
+    "check:budgets": "node scripts/check-skill-budgets.mjs",
+    "token:usage": "node scripts/analyze-token-usage.mjs",
     "check:upstream": "tsx scripts/check-upstream-drift.ts",
     "overview": "tsx ./scripts/overview.ts --write",
     "typecheck": "tsc --noEmit",

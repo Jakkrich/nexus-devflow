@@ -198,7 +198,7 @@ Before the user reads it, turn on the spec yourself and try to break it. The
 cheapest place to catch a scope problem or an oversized step is here, before any
 code exists. Run the draft against these questions:
 
-- **Coverage.** What does this feature need that no step delivers? Push on the
+- **Coverage & Input Mapping.** What does this feature need that no step delivers? Run a mechanical **Input Coverage Test**: does every value this build produces, displays, or computes have a named source (input, DB column, formula, or settled decision) in the spec? Push on the
   unhappy paths the happy-path spec skipped: empty / missing / malformed input,
   the error / loading / empty states, the first-run case, failure of anything
   external it calls.

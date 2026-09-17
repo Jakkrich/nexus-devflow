@@ -247,4 +247,23 @@ All generated HTML artifacts across the framework (Contextual Help Playbooks `de
 - **Master Reference Template**:
   - Refer to `devflow/docs/playbooks/template.html` as the authoritative, reusable component reference for all playbook and HTML documentation generation.
 
+---
+
+## 13. Prompt Token Economy & Mechanical Input Coverage Standards
+
+- **Skill Byte Budgets & Prompt Hygiene**:
+  - **Size Ceilings**: `SKILL.md` must not exceed **32 KB**, support/reference markdown files must not exceed **24 KB**, and frontmatter `description` must not exceed **400 characters**.
+  - **Every Line Must Earn Its Keep**: If an agent naturally behaves correctly by default, avoid adding redundant prose. Instruct directly without philosophical justification.
+  - **Completion Summaries (Lead with Essentials)**:
+    - **Headline**: One-line summary of what was accomplished.
+    - **Next**: Exactly one next recommended command or action.
+    - **Heads up**: Active blockers, decision debt, or critical items needing user attention (omitted when empty).
+    - **Pointer**: Link to the detailed artifact rather than repeating large text blocks.
+    - **No Checklist Spam**: Avoid dumping lists of obvious successes (`Semantic HTML: OK`, `Keyboard: OK`).
+- **Mechanical Input Coverage Principle (Anti-Hallucination Gate)**:
+  - Before implementation, enumerate all values and states that the code must produce or display.
+  - Each value must have an explicitly named source (Database column, Input argument, Calculated derivation, or Settled architectural decision).
+  - Any required value lacking a named source represents an **Owed Decision**; agents are prohibited from making unrecorded architectural choices or guessing implementations under the guise of "just wiring". Stop and route to `/grill` or request user clarification.
+
+
 

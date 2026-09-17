@@ -93,7 +93,12 @@ feature was started earlier and interrupted (often a cleared context). The spec 
 its ticked steps are files, so pick up where it left off: read which steps are done,
 check the git branch and `git status`/log to see what is committed and what is still
 in the working tree, then continue from the **first unchecked step** instead of
-starting over.
+### Step 0 - Mechanical Input Coverage Pre-flight Gate
+
+Before touching code or executing build tasks, perform a positive **Input Coverage Test** against the active Living Spec:
+- Enumerate every value, state, or data field this implementation must produce, compute, or display (from the acceptance criteria and spec design).
+- For each required value, verify that the spec explicitly names where it comes from (e.g. database schema/column, API request parameter, calculated derivation from a named source, or explicit prior architectural decision).
+- **Anti-Hallucination Guard**: Any required value with no named source is an **Owed Decision**. Do NOT rationalize it as "just wiring" and do NOT silently invent an ad-hoc provider, schema field, or business rule. Stop and route to `/grill` or request user clarification before proceeding.
 
 ## Step 1 - branch
 
