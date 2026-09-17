@@ -7,6 +7,7 @@
 <p align="center"><strong>สถาปัตยกรรม 3 เสาหลัก และ Single Living Spec Model สำหรับการพัฒนาซอฟต์แวร์ระดับโปรดักชันร่วมกับ AI Coding Agents อย่างเป็นระบบและควบคุมได้จริง</strong></p>
 
 <p align="center">
+  <a href="https://jakkrich.github.io/nexus-devflow/"><img src="https://img.shields.io/badge/Docs-คู่มือออนไลน์-0f766e?style=flat-square&logo=gitbook&logoColor=white" alt="Online Documentation"></a>
   <a href="https://www.npmjs.com/package/nexus-devflow"><img src="https://img.shields.io/npm/v/nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
   <a href="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml"><img src="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg" alt="Validate DevFlow"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/nexus-devflow?style=flat-square&color=155eef" alt="MIT license"></a>
@@ -15,6 +16,7 @@
 <p align="center"><strong>ไทย</strong> | <a href="README.md">English</a></p>
 
 <p align="center">
+  <a href="https://jakkrich.github.io/nexus-devflow/">📖 เว็บไซต์คู่มือการใช้งาน</a> |
   <a href="https://github.com/Jakkrich/nexus-devflow">Repository</a> |
   <a href="https://www.npmjs.com/package/nexus-devflow">npm</a> |
   <a href="https://github.com/Jakkrich/nexus-devflow/releases">Releases</a> |
@@ -28,6 +30,9 @@
 ```bash
 npx -y nexus-devflow -y
 ```
+
+> [!TIP]
+> 📖 **เว็บไซต์คู่มือการใช้งานอย่างเป็นทางการ**: ดูคู่มือการใช้งานฉบับสมบูรณ์ ไดอะแกรมจำลองการทำงาน และสารบัญคำสั่ง/ทักษะทั้งหมดได้ที่ [https://jakkrich.github.io/nexus-devflow/](https://jakkrich.github.io/nexus-devflow/)
 
 > [!NOTE]
 > Nexus-DevFlow ถูกออกแบบเป็น Workflow Overlay Layer ที่ครอบอยู่บน codebase ของแอปพลิเคชันคุณ เพื่อนำทักษะมัลติเอเจนต์ (`.agents/skills` & `.claude/skills`), อาร์ติแฟกต์ 3 เสาหลัก (`devflow/`), และจุดตรวจ Senior QA ไปยัง AI IDE ที่คุณชื่นชอบ (**Google Antigravity**, **Claude Code**, **OpenAI Codex**, **Cursor**, **GitHub Copilot**, **Gemini CLI**, **Aider**, **OpenCode** และอื่นๆ)

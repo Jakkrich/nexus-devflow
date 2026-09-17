@@ -2,12 +2,13 @@
 
 Install and manage **Nexus-DevFlow** — an enterprise-grade agentic workflow layer supporting **The 3-Pillars Model & Single Living Spec Model** into any web app, backend, or existing codebase.
 
+[![Documentation](https://img.shields.io/badge/Docs-Online_Manual-0f766e?style=flat-square&logo=gitbook&logoColor=white)](https://jakkrich.github.io/nexus-devflow/)
 [![npm version](https://img.shields.io/npm/v/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef)](https://www.npmjs.com/package/@jakkrichm/create-nexus-devflow)
 [![Validate DevFlow](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg)](https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml)
 [![MIT license](https://img.shields.io/npm/l/@jakkrichm/create-nexus-devflow?style=flat-square&color=155eef)](LICENSE)
 
+[📖 Documentation Website](https://jakkrich.github.io/nexus-devflow/) |
 [GitHub Repository](https://github.com/Jakkrich/nexus-devflow) |
-[Documentation](https://github.com/Jakkrich/nexus-devflow#readme) |
 [Changelog](https://github.com/Jakkrich/nexus-devflow/blob/main/CHANGELOG.md)
 
 ---

@@ -7,6 +7,7 @@
 <p align="center"><strong>A file-backed, spec-driven workflow layer with The 3-Pillars Architecture & Single Living Spec Model for building production software with AI while staying in control.</strong></p>
 
 <p align="center">
+  <a href="https://jakkrich.github.io/nexus-devflow/"><img src="https://img.shields.io/badge/Docs-Online_Manual-0f766e?style=flat-square&logo=gitbook&logoColor=white" alt="Online Documentation"></a>
   <a href="https://www.npmjs.com/package/nexus-devflow"><img src="https://img.shields.io/npm/v/nexus-devflow?style=flat-square&color=155eef" alt="npm version"></a>
   <a href="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml"><img src="https://github.com/Jakkrich/nexus-devflow/actions/workflows/validate.yml/badge.svg" alt="Validate DevFlow"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/nexus-devflow?style=flat-square&color=155eef" alt="MIT license"></a>
@@ -15,6 +16,7 @@
 <p align="center"><strong>English</strong> | <a href="README.th.md">ไทย</a></p>
 
 <p align="center">
+  <a href="https://jakkrich.github.io/nexus-devflow/">📖 Documentation Website</a> |
   <a href="https://github.com/Jakkrich/nexus-devflow">Repository</a> |
   <a href="https://www.npmjs.com/package/nexus-devflow">npm</a> |
   <a href="https://github.com/Jakkrich/nexus-devflow/releases">Releases</a> |
@@ -28,6 +30,9 @@ Install it inside an already scaffolded or existing Git repository in seconds:
 ```bash
 npx -y nexus-devflow -y
 ```
+
+> [!TIP]
+> 📖 **Official Documentation**: Explore our interactive guides, architectural maps, and complete command reference at [https://jakkrich.github.io/nexus-devflow/](https://jakkrich.github.io/nexus-devflow/).
 
 > [!NOTE]
 > Nexus-DevFlow is designed as a non-intrusive workflow layer that overlays on top of your application codebase, bringing multi-agent skills (`.agents/skills` & `.claude/skills`), structured context (`devflow/`), and senior QA gates to your favorite AI IDE (**Google Antigravity**, **Claude Code**, **OpenAI Codex**, **Cursor**, **GitHub Copilot**, **Gemini CLI**, **Aider**, **OpenCode**, and others).
