@@ -82,6 +82,12 @@ that evidence path is unavailable, mark the claim unverifiable instead of
 passing it from build output. With `when-available`, use the strongest available
 evidence and report any gap plainly.
 
+### AC-to-Test Traceability Verification:
+Cross-reference each Acceptance Criterion (`- [ ] **AC-N**`) in `spec.md` against the test suite's executed assertions and observable evidence:
+- Match tagged test cases (e.g. `it('AC-1: ...')`) to their respective criteria.
+- Ensure 100% of defined acceptance criteria have empirical proof before issuing a `verified` status.
+
+
 ## Step 4 - report
 
 Give a short, honest verdict, one line per checklist item:

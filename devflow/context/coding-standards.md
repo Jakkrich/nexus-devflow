@@ -281,6 +281,21 @@ All generated HTML artifacts across the framework (Contextual Help Playbooks `de
   - Every assumed decision MUST specify `Assumption`, `Risk Level & Blast Radius`, and `Ratification Plan`.
   - Untracked architectural assumptions are strictly prohibited.
 
+---
+
+## 15. Test File Classification & AC Traceability Standards
+
+- **5-Tier Test Classification**:
+  - **Tier 1: Pure Logic & Algorithms** (`src/utils/`, `services/`, `lib/`): Fast in-memory Unit Tests, 100% boundary & edge cases coverage. Use TDD.
+  - **Tier 2: UI Components** (`src/components/`, `src/pages/`): Component mounting & event interaction, visual verification via Playwright / BrowserOS Neo. Prohibit trivial unit tests for static HTML markup.
+  - **Tier 3: API & Data Integration** (`src/api/`, route handlers, DB models): Contract tests, schema validation (Zod), status codes, payload shapes.
+  - **Tier 4: Config & Build Tooling** (`*.json`, `*.yaml`, `scripts/`): Static contract validation (`npm run check:static`), budget linters (`npm run check:budgets`), smoke tests.
+  - **Tier 5: Documentation & Prose** (`*.md`, `devflow/docs/`): Structural checks, markdown contract scans, link integrity verification.
+- **Acceptance Criteria (`AC-N`) Traceability**:
+  - All automated test suites and assertion descriptions must explicitly include the target Acceptance Criterion tag (e.g. `it('AC-1: ...')`).
+  - During `/check`, verify that 100% of defined acceptance criteria in the active living spec have matching passing empirical proof.
+
+
 
 
 

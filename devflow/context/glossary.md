@@ -40,3 +40,9 @@
 - **Constraints**: ต้องระบุ Assumption, Risk Level, และ Ratification Plan กำกับเสมอ และต้องได้รับการตรวจทาน/ยืนยัน (Ratified) ก่อนปล่อยสู่ Production
 - **Aliases / Related**: Assumed ADR, Decision Debt, Fast-track Assumption
 
+### AC-to-Test Traceability Matrix
+- **Definition**: ตารางเชื่อมโยงระหว่างข้อกำหนด Acceptance Criteria (`AC-N`) ใน Living Spec กับ Automated Test Cases และหลักฐานเชิงประจักษ์ เพื่อให้มั่นใจว่าทุกข้อกำหนดได้รับการทดสอบและพิสูจน์จริงแบบ 1-to-1
+- **Constraints**: ใช้ระบุใน Living Spec (`spec.md`), ตรวจทานใน `/check`, และกำกับด้วย `AC-N` Tag ในโค้ดทดสอบ
+- **Aliases / Related**: Traceability Matrix, AC Mapping, Spec Verification Trace
+
+

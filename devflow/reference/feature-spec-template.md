@@ -71,6 +71,14 @@
 - [ ] **AC-1**: {Empirical proof for AC-1}
 - [ ] **AC-2**: {Empirical proof for AC-2}
 
+### 🔗 Axis 3: AC-to-Test Traceability Matrix
+
+| Acceptance Criterion | File Tier | Automated Test Case / Assertion | Verification Command | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **AC-1** | Tier 1 (Logic) / Tier 2 (UI) | `it('AC-1: ...')` | `npm test` | ⏳ Pending |
+| **AC-2** | Tier 3 (API) / Tier 4 (Tooling) | `it('AC-2: ...')` | `npm run check:static` | ⏳ Pending |
+
+
 ---
 
 ## 5. Delivery Verification & Independent Receipt

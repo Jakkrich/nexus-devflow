@@ -87,6 +87,32 @@ When generating or logging test runs during `/implement` or `/check`:
 
 ---
 
+## 7. 5-Tier Test File Classification Strategy
+
+Do not write identical test patterns for all file types. Classify files into 5 distinct tiers:
+
+| Tier | Category / File Paths | Recommended Test Strategy | What NOT to do |
+| :--- | :--- | :--- | :--- |
+| 🧠 **Tier 1** | **Pure Logic & Algorithms**<br>`src/utils/`, `src/services/`, `lib/` | Fast in-memory Unit Tests with 100% boundary & edge cases coverage. Use TDD (Red-Green-Refactor). | Do not over-mock pure mathematical or transformation functions. |
+| 🎨 **Tier 2** | **UI Components**<br>`src/components/`, `src/pages/` | Component rendering, event dispatching, visual verification via Playwright / BrowserOS Neo. | **Prohibited**: Do not write trivial unit tests that merely assert static HTML tags exist. |
+| 🔌 **Tier 3** | **API & Data Integration**<br>`src/api/`, route handlers, DB models | Contract tests, schema validation (Zod), HTTP status codes, error payload shapes. | Do not test external third-party network APIs without isolated fakes. |
+| ⚙️ **Tier 4** | **Config & Build Tooling**<br>`*.json`, `*.yaml`, `scripts/` | Static contract validation (`npm run check:static`), budget linters (`npm run check:budgets`), smoke tests. | Do not skip static validation on build tool modifications. |
+| 📝 **Tier 5** | **Documentation & Prose**<br>`*.md`, `devflow/docs/` | Structural checks, markdown contract scans, and link integrity verification. | Do not write artificial unit test suites for documentation files. |
+
+---
+
+## 8. Acceptance Criteria (`AC-N`) Traceability Protocol
+
+To guarantee 100% spec fidelity, every automated test suite must trace back to the active Living Spec:
+- **Test Title Tagging**: Prefix test titles or describe blocks with the target Acceptance Criterion:
+  ```typescript
+  it('AC-1: enforces 32KB byte budget on SKILL.md files', async () => { ... });
+  it('AC-2: returns exit code 1 when budget violation occurs', async () => { ... });
+  ```
+- **Traceability Verification**: During `/check`, cross-reference every `- [ ] AC-N` against the passing test assertion name to ensure zero untracked requirements.
+
+---
+
 ## Relationship To DevFlow 2.6.x
 
 - **Classification**: Companion command & Engineering standard
