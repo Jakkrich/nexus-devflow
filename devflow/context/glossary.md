@@ -45,4 +45,7 @@
 - **Constraints**: ใช้ระบุใน Living Spec (`spec.md`), ตรวจทานใน `/check`, และกำกับด้วย `AC-N` Tag ในโค้ดทดสอบ
 - **Aliases / Related**: Traceability Matrix, AC Mapping, Spec Verification Trace
 
-
+### Prompt Caching Rate & Billed-Equivalent Cost
+- **Definition**: ดัชนีวัดประสิทธิภาพการใช้ Token ของ AI Coding Agent โดยแยกแยะระหว่าง Fresh Input Tokens, Cache Creation (Write), Cache Read (Prompt Caching Hits), และ Output Tokens เพื่อคำนวณต้นทุนจริง (USD) และ % ส่วนลดที่ประหยัดได้จาก Prompt Caching
+- **Constraints**: วิเคราะห์ผ่าน `scripts/analyze-token-usage.ts` และคำสั่ง `npm run analyze:tokens`
+- **Aliases / Related**: Token Economics, Cost Units, Cache Hit Rate

@@ -164,6 +164,8 @@ Gather these, then summarize. Do not dump file contents.
      last commit subject, and whether the branch is ahead of upstream.
    - If the directory is not a git repo, report that as a setup issue and keep
      going.
+9. **Token Economics & Session Cost Audit**
+   - When session transcript is available, report token efficiency, cache hit rate, and estimated model costs using `npm run analyze:tokens` or `scripts/analyze-token-usage.ts`.
 
 ## Output
 

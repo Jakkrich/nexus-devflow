@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-17 | `107` | Feature | Session Token Usage & Cost Analytics CLI Tool & Insights | `19fa71e` | `Completed` | [`107-token-usage-and-cost-analytics.md`](features/107-token-usage-and-cost-analytics.md) |
 | 2026-09-17 | `106` | Feature | 5-Tier Test File Classification & AC Traceability Matrix Protocol | `def8bc6` | `Completed` | [`106-test-file-classification-and-ac-traceability.md`](features/106-test-file-classification-and-ac-traceability.md) |
 | 2026-09-17 | `105` | Feature | 4 Slicing Archetypes Framework & Assumed Decision Debt Governance | `d29192f` | `Completed` | [`105-four-slicing-archetypes-and-assumed-decision-debt.md`](features/105-four-slicing-archetypes-and-assumed-decision-debt.md) |
 | 2026-09-17 | `104` | Feature | Skill Token Budgets, Analytics & Mechanical Input Coverage Gates | `d4d3759` | `Completed` | [`104-skill-token-budget-and-input-coverage-gates.md`](features/104-skill-token-budget-and-input-coverage-gates.md) |

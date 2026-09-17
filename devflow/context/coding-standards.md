@@ -295,7 +295,16 @@ All generated HTML artifacts across the framework (Contextual Help Playbooks `de
   - All automated test suites and assertion descriptions must explicitly include the target Acceptance Criterion tag (e.g. `it('AC-1: ...')`).
   - During `/check`, verify that 100% of defined acceptance criteria in the active living spec have matching passing empirical proof.
 
+---
 
+## 16. Token Economy & Cost Optimization Standards
 
-
-
+- **Token Economics Visibility**:
+  - Leverage `npm run analyze:tokens` (or `scripts/analyze-token-usage.ts`) to audit session token usage across Main Thread vs Subagents.
+  - Track the 4 token dimensions: **Fresh Input Tokens**, **Prompt Cache Write Tokens**, **Prompt Cache Read Tokens (Hits)**, and **Output Tokens**.
+- **Prompt Caching Optimization**:
+  - Structure documentation and context files with immutable headers first so LLM providers can achieve high prompt cache hit rates (>60%).
+  - Ensure living specs and references stay compact (under byte budgets) to prevent prompt cache misses and unnecessary token churn.
+- **Cost Metrics & Savings**:
+  - Track estimated model costs (USD) against model pricing catalogs (Claude 3.7/3.5 Sonnet, Gemini 2.5 Pro/Flash, GPT-4o).
+  - Aim for >50% cost savings through effective prompt caching reuse.
