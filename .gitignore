@@ -18,6 +18,8 @@ out/
 *.tar.gz
 graphify-out/
 .astro/
+packages/create-nexus-devflow/template/
+
 
 # OS & Editor generated files
 .DS_Store
