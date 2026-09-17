@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="เตรียมความพร้อมของโปรเจกต์ที่เสร็จสมบูรณ์สำหรับ Render หรือ Vercel โดยยังคงรักษาขอบเขตการอนุมัติความปลอดภัยก่อนการ Deployment ไว้อย่างเคร่งครัด">
+  <title>Release Readiness & Framework Process (การเตรียมความพร้อมและการ Release) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="เตรียมความพร้อมของโปรเจกต์สำหรับ Render / Vercel และคู่มือขั้นตอนการ Release สำหรับ Framework Maintainers ตามหลัก Semver">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/release-readiness/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,6 +69,8 @@
         <div class="docs-nav-group">
           <div class="docs-nav-title">WORKFLOW</div>
           <a class="docs-nav-link" href="../core-workflow/">Core Workflow</a>
+          <a class="docs-nav-link" href="../workflow-surface-map/">Workflow Surface Map</a>
+          <a class="docs-nav-link" href="../skill-selection-policy/">Skill Selection Policy</a>
         </div>
 
         <!-- COMMANDS -->
@@ -113,25 +115,29 @@
           <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
+          <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
         <!-- REFERENCE -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">REFERENCE</div>
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
+          <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
+          <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
           <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
           <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
-          <a class="docs-nav-link" href="../commands/try/">Try migration</a>
-          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests migration</a>
+          <a class="docs-nav-link" href="../commands/try/">Try Guide Reference</a>
+          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests Reference</a>
         </div>
 
         <!-- QUALITY -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">QUALITY</div>
           <a class="docs-nav-link" href="../testing/">Testing and CI</a>
-          <a class="docs-nav-link" href="../manual-review/">Manual Review With Try</a>
-          <a class="docs-nav-link" href="../code-quality/">Code Quality With Audit</a>
+          <a class="docs-nav-link" href="../manual-review/">Manual Review & Quality Gates</a>
+          <a class="docs-nav-link" href="../code-quality/">Code Quality & Token Budgets</a>
           <a class="docs-nav-link" href="../findings-ledger/">The Findings Ledger</a>
         </div>
 
@@ -146,32 +152,63 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>SHIP</span> <span>/</span> <strong>Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>SHIP</span> <span>/</span> <strong>Release Readiness & Framework Process (การเตรียมความพร้อมและการ Release)</strong></div>
       
-      <h1 class="docs-title">Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production)</h1>
+      <h1 class="docs-title">Release Readiness & Framework Process (การเตรียมความพร้อมและการ Release)</h1>
       
       <p class="docs-lead">
-        เตรียมความพร้อมของโปรเจกต์ที่เสร็จสมบูรณ์สำหรับ Render หรือ Vercel โดยยังคงรักษาขอบเขตการอนุมัติความปลอดภัยก่อนการ Deployment ไว้อย่างเคร่งครัด
+        เตรียมความพร้อมของโปรเจกต์สำหรับ Render / Vercel และคู่มือขั้นตอนการ Release สำหรับ Framework Maintainers ตามหลัก Semver
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Ship</span>
         <span class="docs-pill">Guide</span>
         <span class="docs-pill">Release</span>
+        <span class="docs-pill">Maintainers</span>
+        <span class="docs-pill">Validation</span>
         <span class="docs-pill">Render</span>
         <span class="docs-pill">Vercel</span>
         <span class="docs-pill">Production</span>
-        <span class="docs-pill">HealthCheck</span>
       </div>
 
       <div class="docs-prose">
+
+        <!-- Section: Framework Release Process (ขั้นตอนการ Release สำหรับ Maintainers) -->
+        <section id="framework-release-process">
+          <h2>Framework Release Process (ขั้นตอนการ Release สำหรับ Maintainers)</h2>
+          
+          <p>คู่มือสำหรับ Maintainer ในการตรวจสอบและเตรียม Release เวอร์ชันใหม่ของ Nexus-DevFlow:</p>
+          <pre><code># 1. รันชุดการทดสอบและตรวจสอบความสมบูรณ์ 100% จาก Root
+npm run check
+npm run check:static
+npm test
+npm run test:package
+
+# 2. ทดสอบความสะอาดของการอัปเดต Overlay Package
+npx @jakkrichm/create-nexus-devflow update --dry-run</code></pre>
+          <table>
+            <thead><tr><th>ประเภทการ Release (Semver)</th><th>นโยบายการ Commit & Git Tags</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Internal Maintenance / Doc Tweaks</strong></td>
+                <td>Commit ตรงเข้า <code>main</code> โดย<strong>ไม่ต้องสร้าง Git Tag</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Package Release (<code>v2.x.x</code>)</strong></td>
+                <td>สร้าง Annotated Git Tag (เช่น <code>git tag -a v2.17.6 -m "Release v2.17.6"</code>) และ Push ขึ้น <code>origin main --tags</code> เพื่อทริกเกอร์ GitHub Actions NPM Publishing</td>
+              </tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
 
         <!-- Section: เริ่มต้นจากสถานะโปรเจกต์ที่ผ่านการทดสอบสมบูรณ์ (Start from a green project) -->
         <section id="start-from-a-green-project">
           <h2>เริ่มต้นจากสถานะโปรเจกต์ที่ผ่านการทดสอบสมบูรณ์ (Start from a green project)</h2>
           
           <p>ทำฟีเจอร์ที่เกี่ยวข้องให้เสร็จสมบูรณ์และแก้ไขข้อผิดพลาดจากการตรวจสอบ (Check Failures) ที่ทราบทั้งหมดก่อนเริ่มจัดเตรียมการตั้งค่าสำหรับ Cloud Provider</p>
-          <p>รันคำสั่ง Verify มาตรฐานที่บันทึกไว้ในโปรเจกต์ (เช่น <code>npm run check</code> หรือ <code>npm test</code>) หากโปรเจกต์ยังไม่ได้ตั้งค่า Verify ไว้ ให้รัน Production Build และชุดการทดสอบที่กำหนดค่าไว้แยกต่างหากเพื่อยืนยันว่าโปรเจกต์อยู่ในสถานะสีเขียว (Green)</p>
+          <p>รันคำสั่ง Verify มาตรฐานที่บันทึกไว้ในโปรเจกต์ (เช่น <code>npm run check</code> หรือ <code>npm test</code>) เพื่อยืนยันว่าโปรเจกต์อยู่ในสถานะสีเขียว (Green)</p>
         
           
         </section>
@@ -189,14 +226,6 @@
 $release render
 $release vercel</code></pre>
           <p>เวิร์กโฟลว์ของสกิล <code>/release</code> จะสแกนและตรวจสอบโครงสร้างโปรเจกต์ (Tech Stack, Framework, Runtime, Dependencies) และสร้างหรือปรับแต่งเฉพาะไฟล์ Configuration ในเครื่อง (Local Configuration) ที่ Provider นั้นต้องการ เช่น <code>render.yaml</code> หรือ <code>vercel.json</code> โดยไม่ส่งผลกระทบต่อสภาพแวดล้อมจริง</p>
-          <p><strong>ขอบเขตและอ็อปชันของคำสั่ง (Command Scopes):</strong></p>
-          <ul>
-            <li><strong>ไม่ระบุอาร์กิวเมนต์ (<code>/release</code>)</strong>: AI จะสแกนโปรเจกต์และแนะนำ Provider ที่เหมาะสมที่สุด (Render หรือ Vercel) หรือสอบถามความต้องการหากรูปแบบไม่ชัดเจน</li>
-            <li><strong><code>/release render</code></strong>: จัดเตรียมความพร้อมและสร้างคอนฟิกสำหรับ Render (รองรับ Static Site, Web Service, Background Worker, Cron Job และ Database Pair)</li>
-            <li><strong><code>/release vercel</code></strong>: จัดเตรียมความพร้อมและสร้างคอนฟิกสำหรับ Vercel (รองรับ Frontend Framework, Serverless Functions, Static Output และ Monorepo)</li>
-            <li><strong><code>/release check</code></strong>: ออกรายงานประเมินความพร้อมในการ Deploy แบบ Read-Only โดยไม่แก้ไขไฟล์</li>
-            <li><strong><code>/release config</code></strong>: มุ่งเน้นการสร้างหรืออัปเดตไฟล์คอนฟิกในเครื่องโดยเฉพาะ</li>
-          </ul>
         
           
         </section>
@@ -207,25 +236,11 @@ $release vercel</code></pre>
           
           <p>เมื่อรันคำสั่งสำเร็จ AI จะสรุปรายงาน <strong>Readiness Packet</strong> ให้คุณตรวจทานความถูกต้องในประเด็นสำคัญก่อนส่งมอบ:</p>
           <ul>
-            <li><strong>คำสั่ง Production Build และ Start</strong>: ตรวจสอบความถูกต้องของคำสั่ง Build (เช่น <code>npm run build</code>) และ Start (เช่น <code>npm start</code>, Node หรือ Docker entrypoint)</li>
-            <li><strong>Output Directory หรือ Runtime Type</strong>: ตรวจสอบไดเรกทอรีผลลัพธ์ (เช่น <code>dist/</code>, <code>build/</code>, <code>out/</code>, <code>public/</code>) หรือเวอร์ชันของ Node/Python ที่ระบุ</li>
-            <li><strong>Environment Variable Names</strong>: ตรวจสอบรายชื่อตัวแปรสภาพแวดล้อมที่จำเป็นทั้งหมด (โดยจะระบุเฉพาะชื่อตัวแปร และไม่มีการพิมพ์หรือบันทึก Secret Values เด็ดขาด)</li>
-            <li><strong>Database Migration หรือ Release-Phase Commands</strong>: ตรวจสอบคำสั่ง Migration ฐานข้อมูลในขั้นตอน Release Phase เมื่อมีฐานข้อมูลเชื่อมต่อ</li>
-            <li><strong>Health Checks และ Routing Probes</strong>: ตรวจสอบเส้นทาง Health Path (เช่น <code>/healthz</code>, <code>/api/health</code>) และพฤติกรรมการทำงานของเซอร์วิส</li>
-            <li><strong>Manual Remote Setup</strong>: รายการขั้นตอนการตั้งค่าบน Cloud Dashboard ที่ยังคงต้องดำเนินการด้วยตนเอง</li>
+            <li><strong>คำสั่ง Production Build และ Start</strong>: ตรวจสอบความถูกต้องของคำสั่ง Build (เช่น <code>npm run build</code>) และ Start</li>
+            <li><strong>Output Directory หรือ Runtime Type</strong>: ตรวจสอบไดเรกทอรีผลลัพธ์ (เช่น <code>dist/</code>, <code>build/</code>, <code>out/</code>, <code>public/</code>)</li>
+            <li><strong>Environment Variable Names</strong>: ตรวจสอบรายชื่อตัวแปรสภาพแวดล้อมที่จำเป็นทั้งหมด (โดยจะไม่มีการบันทึก Secret Values เด็ดขาด)</li>
+            <li><strong>Health Checks</strong>: ตรวจสอบเส้นทาง Health Path (เช่น <code>/healthz</code>, <code>/api/health</code>)</li>
           </ul>
-        
-          
-        </section>
-
-        <!-- Section: การ Deploy ยังคงแยกออกจากการเตรียมความพร้อม (Deployment stays separate) -->
-        <section id="deployment-stays-separate">
-          <h2>การ Deploy ยังคงแยกออกจากการเตรียมความพร้อม (Deployment stays separate)</h2>
-          
-          <div class="note-box">
-            <strong>หลักการความปลอดภัย Zero-Deploy อัตโนมัติ:</strong> การเตรียมความพร้อม (Readiness) <strong>ไม่ได้เป็นการอนุญาตให้ทำการ Deploy</strong> แต่อย่างใด
-          </div>
-          <p>การสร้าง Cloud Services บนรีโมต, การเชื่อมโยง Git Repository กับ Provider, การตั้งค่าค่า Secret และ Environment Variables จริง และการสั่ง Publish โค้ดขึ้นสู่ Production จะต้องผ่านการตัดสินใจและอนุมัติอย่างชัดเจนจากนักพัฒนาเสมอ</p>
         
           
         </section>
@@ -247,10 +262,10 @@ $release vercel</code></pre>
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
+      <a href="#framework-release-process">Framework Release Process (ขั้นตอนการ Release สำหรับ Maintainers)</a>
       <a href="#start-from-a-green-project">เริ่มต้นจากสถานะโปรเจกต์ที่ผ่านการทดสอบสมบูรณ์ (Start from a green project)</a>
       <a href="#run-release-locally">รันคำสั่ง Release ในเครื่อง (Run release locally)</a>
       <a href="#review-the-readiness-packet">ตรวจทานแพ็กเกจความพร้อม (Review the readiness packet)</a>
-      <a href="#deployment-stays-separate">การ Deploy ยังคงแยกออกจากการเตรียมความพร้อม (Deployment stays separate)</a>
     </aside>
   </div>
 

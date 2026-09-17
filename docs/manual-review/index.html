@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="มอบแนวทางและขั้นตอนการตรวจรับงานอย่างแม่นยำให้แก่ผู้ตรวจทานที่เป็นมนุษย์ สำหรับงานปัจจุบันหรืองานที่เพิ่งเสร็จสมบูรณ์ โดยไม่ต้องเสียเวลาเปิดดูโค้ดก่อน">
+  <title>Manual Review & Quality Gates (การตรวจทานและ 4 Human Review Gates) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ทำความเข้าใจประตูด่านตรวจทั้ง 4 ระดับ (Human Review Gates) ที่โปร่งใส และการสร้างคู่มือตรวจรับระบบด้วยตนเอง (Try Guide)">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/manual-review/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,6 +69,8 @@
         <div class="docs-nav-group">
           <div class="docs-nav-title">WORKFLOW</div>
           <a class="docs-nav-link" href="../core-workflow/">Core Workflow</a>
+          <a class="docs-nav-link" href="../workflow-surface-map/">Workflow Surface Map</a>
+          <a class="docs-nav-link" href="../skill-selection-policy/">Skill Selection Policy</a>
         </div>
 
         <!-- COMMANDS -->
@@ -113,25 +115,29 @@
           <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
+          <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
         <!-- REFERENCE -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">REFERENCE</div>
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
+          <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
+          <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
           <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
           <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
-          <a class="docs-nav-link" href="../commands/try/">Try migration</a>
-          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests migration</a>
+          <a class="docs-nav-link" href="../commands/try/">Try Guide Reference</a>
+          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests Reference</a>
         </div>
 
         <!-- QUALITY -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">QUALITY</div>
           <a class="docs-nav-link" href="../testing/">Testing and CI</a>
-          <a class="docs-nav-link active" href="../manual-review/">Manual Review With Try</a>
-          <a class="docs-nav-link" href="../code-quality/">Code Quality With Audit</a>
+          <a class="docs-nav-link active" href="../manual-review/">Manual Review & Quality Gates</a>
+          <a class="docs-nav-link" href="../code-quality/">Code Quality & Token Budgets</a>
           <a class="docs-nav-link" href="../findings-ledger/">The Findings Ledger</a>
         </div>
 
@@ -146,12 +152,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>QUALITY</span> <span>/</span> <strong>Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>QUALITY</span> <span>/</span> <strong>Manual Review & Quality Gates (การตรวจทานและ 4 Human Review Gates)</strong></div>
       
-      <h1 class="docs-title">Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try)</h1>
+      <h1 class="docs-title">Manual Review & Quality Gates (การตรวจทานและ 4 Human Review Gates)</h1>
       
       <p class="docs-lead">
-        มอบแนวทางและขั้นตอนการตรวจรับงานอย่างแม่นยำให้แก่ผู้ตรวจทานที่เป็นมนุษย์ สำหรับงานปัจจุบันหรืองานที่เพิ่งเสร็จสมบูรณ์ โดยไม่ต้องเสียเวลาเปิดดูโค้ดก่อน
+        ทำความเข้าใจประตูด่านตรวจทั้ง 4 ระดับ (Human Review Gates) ที่โปร่งใส และการสร้างคู่มือตรวจรับระบบด้วยตนเอง (Try Guide)
       </p>
 
       <div class="docs-meta">
@@ -159,6 +165,7 @@
         <span class="docs-pill">Guide</span>
         <span class="docs-pill">Try</span>
         <span class="docs-pill">ManualReview</span>
+        <span class="docs-pill">HumanGates</span>
         <span class="docs-pill">QA</span>
         <span class="docs-pill">UAT</span>
         <span class="docs-pill">Walkthrough</span>
@@ -166,55 +173,53 @@
 
       <div class="docs-prose">
 
-        <!-- Section: สร้างเส้นทางการทดสอบ (Generate the path) -->
-        <section id="generate-the-path">
-          <h2>สร้างเส้นทางการทดสอบ (Generate the path)</h2>
+        <!-- Section: The 4 Essential Human Review Gates (ด่านตรวจคุณภาพโดยมนุษย์ 4 ระดับ) -->
+        <section id="four-human-review-gates">
+          <h2>The 4 Essential Human Review Gates (ด่านตรวจคุณภาพโดยมนุษย์ 4 ระดับ)</h2>
           
-          <p>รันคำสั่ง <strong><code>$check guide</code></strong> ใน OpenAI Codex CLI หรือ <strong><code>/check guide</code></strong> / <strong><code>/try</code></strong> ใน Claude Code, Google Antigravity และ Gemini CLI ภายหลังการ Implement เสร็จสิ้น</p>
+          <p>ในสถาปัตยกรรม Living Spec ของ Nexus-DevFlow การควบคุมคุณภาพไม่ใช่เรื่องของการปล่อยให้ AI เขียนโค้ดไปเรื่อยๆ แต่มีประตูด่านตรวจของมนุษย์ (Non-bypassable Gates) กำกับไว้ 4 จุดสำคัญ:</p>
+          <pre><code>/feature (or /fix) ──▶ [🚪 Gate 1: Spec Gate] ──▶ /implement ──▶ [🚪 Gate 2: TDD Checkpoint] 
+                    ──▶ /check ──▶ [🚪 Gate 3: Senior QA Gate] ──▶ /complete ──▶ [🚪 Gate 4: Delivery Gate]</code></pre>
+          <table>
+            <thead><tr><th>ประตูด่านตรวจ</th><th>จุดที่ทริกเกอร์</th><th>เกณฑ์การตรวจสอบของมนุษย์ (Verification Checklist)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>🚪 Gate 1: The Spec Review Gate</strong></td>
+                <td>หลังรัน <code>/feature</code> หรือ <code>/fix</code> ทันที</td>
+                <td>• ขอบเขตชัดเจน ไม่เกินตัว (Scope Boundaries)<br>• ระบุสิ่งที่ห้ามพัง (Invariants Protected)<br>• ผ่าน Mechanical Input Coverage Test (มี Data Source ทุกค่า)</td>
+              </tr>
+              <tr>
+                <td><strong>🚪 Gate 2: TDD Implementation Checkpoint</strong></td>
+                <td>ระหว่างรัน <code>/implement</code> ในแต่ละ Task</td>
+                <td>• มี failing test ก่อนเขียน logic (Red-Green-Refactor)<br>• โค้ดส่วนต่าง (Diff) กระชับ ตรงตาม coding-standards.md</td>
+              </tr>
+              <tr>
+                <td><strong>🚪 Gate 3: Senior QA Verification Gate</strong></td>
+                <td>เมื่อรัน <code>/check</code> จบทุก Task</td>
+                <td>• ผลการทดสอบทุก Lane ใน Verification Matrix เป็น PASS<br>• มีหลักฐานพฤติกรรมจริง (Behavioral proof) จาก Browser/Terminal</td>
+              </tr>
+              <tr>
+                <td><strong>🚪 Gate 4: Findings & Git Delivery Gate</strong></td>
+                <td>ก่อนการรัน <code>/complete</code> ปิดงาน</td>
+                <td>• ข้อค้นพบระดับ P0/P1 ใน <code>findings.md</code> ได้รับการแก้ไข (closed) หรือยอมรับเหตุผล (accepted)<br>• ยืนยันการ Squash-Merge เข้าสู่ <code>main</code></td>
+              </tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+
+        <!-- Section: การสร้างคู่มือตรวจรับด้วยตนเอง (Generate Try Guide) -->
+        <section id="generate-the-path">
+          <h2>การสร้างคู่มือตรวจรับด้วยตนเอง (Generate Try Guide)</h2>
+          
+          <p>รันคำสั่ง <strong><code>/try</code></strong> (หรือ <code>/check guide</code>) เพื่อให้ AI สร้างคู่มือคลิกทดสอบหน้าจอทีละขั้นตอน:</p>
           <pre><code># สร้างคู่มือสำหรับงานปัจจุบัน
-/check guide
 /try
 
-# สร้างคู่มือสำหรับงานล่าสุดที่ส่งมอบแล้ว
-/try latest
-
-# กำหนดเป้าหมายเฉพาะสเต็ปหรือเส้นทาง
-/try step-2
-/try src/api/auth</code></pre>
-          <p>สกิลจะอ่านข้อมูลจากฟีเจอร์ปัจจุบัน, บั๊กฟิกซ์, หรือการ Rollback ใน <code>devflow/context/{xxx-slug}/spec.md</code> (หรือชิ้นงานล่าสุดใน <code>devflow/history/</code>) และดึงคำสั่งรันระบบจาก <code>AGENTS.md</code> มาสร้างเป็นแนวทางการทดสอบที่กระชับ</p>
-          <p>สำหรับงาน <strong>Rollback</strong>: สกิลจะอธิบายขั้นตอนการพิสูจน์ว่าเส้นทางการทำงานที่ถูกถอดถอนนั้นหายไปจริง พร้อมชี้จุดตรวจสอบเพื่อยืนยันว่าจะไม่มีปัญหาถดถอย (Regression) ในฟังก์ชันส่วนอื่นที่ไม่เกี่ยวข้อง</p>
-        
-          
-        </section>
-
-        <!-- Section: คู่มือการตรวจทานที่มีประโยชน์ควรประกอบด้วย (A useful review guide includes) -->
-        <section id="a-useful-review-guide-includes">
-          <h2>คู่มือการตรวจทานที่มีประโยชน์ควรประกอบด้วย (A useful review guide includes)</h2>
-          
-          <p>คู่มือ Try Guide ที่สมบูรณ์จะจัดโครงสร้างเป็น 5 ขั้นตอนหลักที่กระชับและปฏิบัติได้จริง:</p>
-          <ul>
-            <li><strong>1. Start (คำสั่งเริ่มต้นระบบ)</strong>: คำสั่งรัน Dev Server, Backend หรือ CLI พร้อมตำแหน่งโฟลเดอร์ที่ต้องรัน</li>
-            <li><strong>2. Open (จุดเข้าถึงระบบ)</strong>: URL, หน้าจอ, แท็บเมนู, API Endpoint หรือคำสั่ง CLI ที่ต้องเปิดใช้งาน</li>
-            <li><strong>3. Do (ลำดับการกระทำ)</strong>: ลำดับขั้นตอนการป้อนข้อมูล การคลิกปุ่ม การเลือกอ็อปชัน หรือการส่งพารามิเตอร์</li>
-            <li><strong>4. Expect (ผลลัพธ์ที่คาดหวัง)</strong>: สิ่งที่ต้องมองเห็นบนหน้าจอ การเปลี่ยนแปลงสถานะ โครงสร้าง Response หรือไฟล์ที่ถูกสร้างขึ้น</li>
-            <li><strong>5. Watch For (สัญญาณข้อผิดพลาดที่ต้องระวัง)</strong>: ผลลัพธ์ที่ไม่ถูกต้อง ข้อผิดพลาดบน Console/Network ข้อมูลค้างไม่อัปเดต ฟิลด์ที่ขาดหาย สภาวะข้อมูลว่าง (Bad Empty State) หรือ Layout ที่ผิดเพี้ยน</li>
-          </ul>
-        
-          
-        </section>
-
-        <!-- Section: การรีวิวไม่ใช่แค่การแสดงหลักฐานซ้ำซ้อน (Review is not proof theater) -->
-        <section id="review-is-not-proof-theater">
-          <h2>การรีวิวไม่ใช่แค่การแสดงหลักฐานซ้ำซ้อน (Review is not proof theater)</h2>
-          
-          <p>เป้าหมายของคู่มือ Try **ไม่ใช่การให้มนุษย์มานั่งคลิกทำซ้ำทุกข้อที่ Automated Test ตรวจไปแล้ว**</p>
-          <p>แต่เป็นการมุ่งเน้นความใส่ใจของมนุษย์ไปยังจุดที่การทดสอบอัตโนมัติไม่สามารถประเมินได้ดี เช่น:</p>
-          <ul>
-            <li><strong>คุณภาพเชิงภาพและความประณีตของ UI (Visual Quality & Aesthetics)</strong></li>
-            <li><strong>สำนวนและการใช้ภาษา (Wording & Copywriting)</strong></li>
-            <li><strong>ความรู้สึกในการโต้ตอบและความลื่นไหล (Interaction Feel & Responsiveness)</strong></li>
-            <li><strong>พฤติกรรมในมุมมองของผู้ใช้งานจริง (Holistic Product Behavior)</strong></li>
-          </ul>
+# หรือสร้างสำหรับฟีเจอร์ที่ระบุ
+/try 1</code></pre>
+          <p>คู่มือจะสรุป 5 ขั้นตอนหลัก: <strong>1. Start (คำสั่งรัน)</strong> ➔ <strong>2. Open (หน้าจอ/URL)</strong> ➔ <strong>3. Do (ลำดับการคลิก/กรอก)</strong> ➔ <strong>4. Expect (ผลลัพธ์ที่ต้องเห็น)</strong> ➔ <strong>5. Watch For (จุดที่ต้องระวังบั๊ก)</strong></p>
         
           
         </section>
@@ -228,7 +233,7 @@
         </a>
         <a class="next" href="../code-quality/">
           <span>ถัดไป (Next)</span>
-          <strong>Code Quality With Audit</strong>
+          <strong>Code Quality & Token Budgets</strong>
         </a>
       </nav>
     </main>
@@ -236,9 +241,8 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#generate-the-path">สร้างเส้นทางการทดสอบ (Generate the path)</a>
-      <a href="#a-useful-review-guide-includes">คู่มือการตรวจทานที่มีประโยชน์ควรประกอบด้วย (A useful review guide includes)</a>
-      <a href="#review-is-not-proof-theater">การรีวิวไม่ใช่แค่การแสดงหลักฐานซ้ำซ้อน (Review is not proof theater)</a>
+      <a href="#four-human-review-gates">The 4 Essential Human Review Gates (ด่านตรวจคุณภาพโดยมนุษย์ 4 ระดับ)</a>
+      <a href="#generate-the-path">การสร้างคู่มือตรวจรับด้วยตนเอง (Generate Try Guide)</a>
     </aside>
   </div>
 

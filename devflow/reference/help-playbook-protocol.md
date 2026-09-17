@@ -5,14 +5,14 @@
    - **Execution Safety Gate**: DO NOT execute the skill's primary or mutating actions (do not launch scans/attacks, do not modify source code, and do not initialize new task runs).
    - **Dynamic Workspace Inspection**: Read the target skill in the active adapter. Inspect only workspace files and selected references needed to tailor its examples; reuse current context.
    - **Persistent HTML Playbook & Token-Saving Cache**:
-     - **Output Location & Light Theme Mandate**: Compile and persist the tailored playbook as a standalone, styled HTML report at `devflow/docs/playbooks/{skill}.html` adhering to the **Paper/Ink Light Theme Standard** (`data-theme="light"`, teal accent, ruler corner, terminal mockup UI, and a real diagram). Reuse `devflow/docs/playbooks/template.html` when present; otherwise build the standalone page using these conventions.
-     - **First Run**: Render the comprehensive 5W1H playbook in chat and write the complete HTML report to `devflow/docs/playbooks/{skill}.html`.
-     - **Subsequent Invocations (Delta Updates & Zero Token Bloat)**: If `devflow/docs/playbooks/{skill}.html` already exists:
-       - Inspect the existing HTML file and compute the diff/delta against the current repository state (e.g., new file paths, modified endpoints, or newly installed vendor assets).
-       - DO NOT repeat unchanged boilerplate or full static content in chat.
-       - Provide a concise **Delta Summary** in chat (highlighting what changed, new recommendations, or newly available commands).
-       - In-place update `devflow/docs/playbooks/{skill}.html` with the fresh timestamp and state.
-       - Provide a clickable link to the actual resolved output file using the active client's supported local-file link format.
+      - **Output Location & Light Theme Mandate**: Compile and persist the tailored playbook as a standalone, styled HTML report at `devflow/reference/playbooks/{skill}.html` adhering to the **Paper/Ink Light Theme Standard** (`data-theme="light"`, teal accent, ruler corner, terminal mockup UI, and a real diagram). Build the standalone page using these conventions.
+      - **First Run**: Render the comprehensive 5W1H playbook in chat and write the complete HTML report to `devflow/reference/playbooks/{skill}.html`.
+      - **Subsequent Invocations (Delta Updates & Zero Token Bloat)**: If `devflow/reference/playbooks/{skill}.html` already exists:
+        - Inspect the existing HTML file and compute the diff/delta against the current repository state (e.g., new file paths, modified endpoints, or newly installed vendor assets).
+        - DO NOT repeat unchanged boilerplate or full static content in chat.
+        - Provide a concise **Delta Summary** in chat (highlighting what changed, new recommendations, or newly available commands).
+        - In-place update `devflow/reference/playbooks/{skill}.html` with the fresh timestamp and state.
+        - Provide a clickable link to the actual resolved output file using the active client's supported local-file link format.
    - **Render the User-Friendly 5W1H Playbook**: Emit an easy-to-read, practical guide organized around the **5W 1H Framework** (rendered on initial run or updated in the HTML playbook):
       1. **What (Concept & Capabilities)**: Clear, jargon-free summary of what this skill does, its core concept, and its bundled tools/capabilities.
       2. **Why (Problems Solved & Key Benefits)**: The problems it solves, key advantages, and why you should use it instead of ad-hoc manual work.

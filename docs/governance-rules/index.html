@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLI Overview (ภาพรวมเครื่องมือ CLI) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/cli/">
+  <title>Governance Rules (กฎการกำกับดูแลและพัฒนา Framework) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="กฎและข้อตกลงในการพัฒนา ดูแล และขยายขีดความสามารถของ Nexus-DevFlow สำหรับ Maintainers และ Developers">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/governance-rules/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,7 +112,7 @@
         <!-- CLI -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">CLI</div>
-          <a class="docs-nav-link active" href="../cli/">CLI Overview</a>
+          <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
           <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
@@ -122,7 +122,7 @@
         <div class="docs-nav-group">
           <div class="docs-nav-title">REFERENCE</div>
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
-          <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
+          <a class="docs-nav-link active" href="../governance-rules/">Governance Rules</a>
           <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
           <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
@@ -152,63 +152,64 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>CLI</span> <span>/</span> <strong>CLI Overview (ภาพรวมเครื่องมือ CLI)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>REFERENCE</span> <span>/</span> <strong>Governance Rules (กฎการกำกับดูแลและพัฒนา Framework)</strong></div>
       
-      <h1 class="docs-title">CLI Overview (ภาพรวมเครื่องมือ CLI)</h1>
+      <h1 class="docs-title">Governance Rules (กฎการกำกับดูแลและพัฒนา Framework)</h1>
       
       <p class="docs-lead">
-        ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง
+        กฎและข้อตกลงในการพัฒนา ดูแล และขยายขีดความสามารถของ Nexus-DevFlow สำหรับ Maintainers และ Developers
       </p>
 
       <div class="docs-meta">
-        <span class="docs-pill">CLI</span>
-        <span class="docs-pill">Overview</span>
-        <span class="docs-pill">Terminal</span>
-        <span class="docs-pill">ZeroLatency</span>
-        <span class="docs-pill">Dashboard</span>
-        <span class="docs-pill">Commands</span>
+        <span class="docs-pill">Reference</span>
+        <span class="docs-pill">Governance</span>
+        <span class="docs-pill">Rules</span>
+        <span class="docs-pill">Architecture</span>
+        <span class="docs-pill">Maintainers</span>
+        <span class="docs-pill">Policy</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: ภาพรวมคำสั่ง CLI ทั้งหมด -->
-        <section id="overview">
-          <h2>ภาพรวมคำสั่ง CLI ทั้งหมด</h2>
+        <!-- Section: 1. กฎการควบคุม Public Surface (Public Surface Rule) -->
+        <section id="public-surface-rule">
+          <h2>1. กฎการควบคุม Public Surface (Public Surface Rule)</h2>
           
-          <p>Nexus-DevFlow มาพร้อมกับ CLI Helper ในตัวที่คุณสามารถเรียกใช้งานได้ผ่าน <code>npx nexus-devflow</code> หรือคำสั่งในโปรเจกต์:</p>
-          <pre><code># ติดตั้งหรือ Overlay DevFlow เข้าสู่โปรเจกต์
-npx nexus-devflow
-
-# ดูสถานะความคืบหน้าของงานปัจจุบันผ่าน Terminal
-npx nexus-devflow status
-
-# เปิด Live Web Dashboard สำหรับมอนิเตอร์สถานะและ Run Activity
-npx nexus-devflow dashboard
-
-# วิเคราะห์การใช้งานและต้นทุน Token (Session Token Analytics)
-npm run analyze:tokens
-
-# ตรวจสอบขนาด Byte-budget ของ Skill ทุกตัว
-npm run check:budgets
-
-# ตรวจสอบความสมบูรณ์ของโครงสร้าง DevFlow ในโปรเจกต์
-npm run check</code></pre>
+          <ul>
+            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับชุดทักษะสนับสนุน (Companion Skills เช่น <code>/idea</code>, <code>/grill</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/doctor</code>, <code>/audit</code>, <code>/rollback</code>)</li>
+            <li><strong>ห้ามเพิ่มคำสั่งสาธารณะโดยไม่จำเป็น</strong>: หากฟังก์ชันใหม่สามารถทำเป็น Internal Helper หรือต่อยอดจากคำสั่งเดิมได้ ให้เลือกทำภายในก่อน จนกว่าจะมีการอนุมัติและเลื่อนขั้น (Promotion) เข้าสู่ <code>agent-bundle.manifest.json#core_skills</code> อย่างเป็นทางการ</li>
+          </ul>
         
           
         </section>
 
-        <!-- Section: Options และ Flags ที่รองรับ -->
-        <section id="cli-flags">
-          <h2>Options และ Flags ที่รองรับ</h2>
+        <!-- Section: 2. กฎการวางตำแหน่งโค้ดและส่วนประกอบ (Placement Rules) -->
+        <section id="placement-rules">
+          <h2>2. กฎการวางตำแหน่งโค้ดและส่วนประกอบ (Placement Rules)</h2>
           
           <table>
-            <thead><tr><th>Flag</th><th>ความหมาย</th><th>ตัวอย่างการใช้งาน</th></tr></thead>
+            <thead><tr><th>ประเภทส่วนประกอบ</th><th>ตำแหน่งที่ต้องบันทึก</th><th>เกณฑ์การพิจารณา</th></tr></thead>
             <tbody>
-              <tr><td><code>-y, --yes</code></td><td>ตอบรับการยืนยันอัตโนมัติ (Non-interactive mode)</td><td><code>npx nexus-devflow -y</code></td></tr>
-              <tr><td><code>--port &lt;number&gt;</code></td><td>กำหนดหมายเลข Port สำหรับ Live Dashboard (ค่าเริ่มต้น: 4173)</td><td><code>npx nexus-devflow dashboard --port 3000</code></td></tr>
-              <tr><td><code>--json</code></td><td>ส่งออกผลลัพธ์ของคำสั่งในรูปแบบ JSON สำหรับ CI/CD</td><td><code>npx nexus-devflow status --json</code></td></tr>
+              <tr><td><strong>Workflow Stage</strong></td><td><code>devflow/context/{xxx-slug}/</code></td><td>เมื่อพฤติกรรมนั้นมีสถานะ State Machine ของตนเอง หรือต้องบันทึกอาร์ติแฟกต์ใน Living Spec</td></tr>
+              <tr><td><strong>Reusable Skill</strong></td><td><code>.agents/skills/</code> และ <code>.claude/skills/</code></td><td>เมื่อเป็นทักษะที่สามารถนำไปใช้ซ้ำข้าม AI Assistant หลายค่ายได้</td></tr>
+              <tr><td><strong>Utility Script</strong></td><td><code>scripts/</code></td><td>เมื่อเป็นการลดความซ้ำซ้อน งานตรวจสอบ หรือคำสั่งเสริมที่ไม่เปลี่ยนโมเดลเวิร์กโฟลว์</td></tr>
+              <tr><td><strong>Static Validation</strong></td><td><code>scripts/validate-framework.ts</code></td><td>เมื่อเป็นกฎข้อบังคับที่ต้องป้องกันการ Drift ใน CI</td></tr>
             </tbody>
           </table>
+        
+          
+        </section>
+
+        <!-- Section: 3. Assumed Decision Debt Governance (การควบคุมหนี้การตัดสินใจ) -->
+        <section id="assumed-decision-debt">
+          <h2>3. Assumed Decision Debt Governance (การควบคุมหนี้การตัดสินใจ)</h2>
+          
+          <p>เมื่อต้องทำการตัดสินใจเชิงสถาปัตยกรรมในสภาวะที่มีความไม่แน่นอน แต่ต้องการให้งานเดินหน้าต่อได้โดยไม่สะดุด:</p>
+          <ul>
+            <li>สามารถบันทึก ADR ใน <code>devflow/decisions/ADR-xxx.md</code> ด้วยสถานะ <code>Status: Assumed</code></li>
+            <li>ต้องระบุ 3 หัวข้อบังคับ: <strong>Assumption</strong> (สมมติฐาน), <strong>Risk Level & Blast Radius</strong> (ระดับความเสี่ยงและผลกระทบ), และ <strong>Ratification Plan</strong> (แผนการทวนสอบยืนยัน)</li>
+            <li>ขั้นตอน <code>/audit</code> และ <code>/complete</code> มีด่านตรวจเช็ค Assumed Decision Debt เสมอเพื่อเตือนให้มีการ Ratify ให้เป็น <code>Accepted</code> หรือ <code>Rejected</code> ก่อนส่งมอบงานจริง</li>
+          </ul>
         
           
         </section>
@@ -216,13 +217,13 @@ npm run check</code></pre>
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../commands/report-html/">
+        <a class="prev" href="../file-reference/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Report HTML</strong>
+          <strong>File Reference</strong>
         </a>
-        <a class="next" href="../cli/status/">
+        <a class="next" href="../markdown-metadata-contract/">
           <span>ถัดไป (Next)</span>
-          <strong>Status</strong>
+          <strong>Markdown Metadata Contract</strong>
         </a>
       </nav>
     </main>
@@ -230,8 +231,9 @@ npm run check</code></pre>
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#overview">ภาพรวมคำสั่ง CLI ทั้งหมด</a>
-      <a href="#cli-flags">Options และ Flags ที่รองรับ</a>
+      <a href="#public-surface-rule">1. กฎการควบคุม Public Surface (Public Surface Rule)</a>
+      <a href="#placement-rules">2. กฎการวางตำแหน่งโค้ดและส่วนประกอบ (Placement Rules)</a>
+      <a href="#assumed-decision-debt">3. Assumed Decision Debt Governance (การควบคุมหนี้การตัดสินใจ)</a>
     </aside>
   </div>
 

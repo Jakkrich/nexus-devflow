@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Complete (/complete) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="สรุปผลงาน จัดเก็บประวัติเข้า History Archive ทำความสะอาด Task Workspace และรวมโค้ดเข้าสู่ Branch หลัก (Squash-Merge)">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/complete/">
+  <title>Token & Cost Analytics CLI (เครื่องมือวิเคราะห์ต้นทุน Token) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="คำสั่งวิเคราะห์ปริมาณการใช้งาน Token 4 มิติหลัก (Fresh Input, Prompt Cache Write, Cache Read, Output) พร้อมประเมินต้นทุนค่าใช้จ่ายจริง ($ USD) ต่อโมเดล">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/cli/tokens/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,7 +84,7 @@
           <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../../commands/check/">Check</a>
-          <a class="docs-nav-link active" href="../../commands/complete/">Complete</a>
+          <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
           <a class="docs-nav-link" href="../../commands/status/">Status</a>
           <a class="docs-nav-link" href="../../commands/doctor/">Doctor</a>
           <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
@@ -115,7 +115,7 @@
           <a class="docs-nav-link" href="../../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../../cli/status/">Status</a>
           <a class="docs-nav-link" href="../../cli/dashboard/">Live Dashboard</a>
-          <a class="docs-nav-link" href="../../cli/tokens/">Token & Cost Analytics</a>
+          <a class="docs-nav-link active" href="../../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
         <!-- REFERENCE -->
@@ -152,69 +152,79 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Complete (/complete)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>CLI</span> <span>/</span> <strong>Token & Cost Analytics CLI (เครื่องมือวิเคราะห์ต้นทุน Token)</strong></div>
       
-      <h1 class="docs-title">Complete (/complete)</h1>
+      <h1 class="docs-title">Token & Cost Analytics CLI (เครื่องมือวิเคราะห์ต้นทุน Token)</h1>
       
       <p class="docs-lead">
-        สรุปผลงาน จัดเก็บประวัติเข้า History Archive ทำความสะอาด Task Workspace และรวมโค้ดเข้าสู่ Branch หลัก (Squash-Merge)
+        คำสั่งวิเคราะห์ปริมาณการใช้งาน Token 4 มิติหลัก (Fresh Input, Prompt Cache Write, Cache Read, Output) พร้อมประเมินต้นทุนค่าใช้จ่ายจริง ($ USD) ต่อโมเดล
       </p>
 
       <div class="docs-meta">
-        <span class="docs-pill">Command</span>
-        <span class="docs-pill">Complete</span>
-        <span class="docs-pill">Archive</span>
-        <span class="docs-pill">ReleaseDigest</span>
-        <span class="docs-pill">SquashMerge</span>
-        <span class="docs-pill">HistorySync</span>
+        <span class="docs-pill">CLI</span>
+        <span class="docs-pill">TokenAnalytics</span>
+        <span class="docs-pill">Cost</span>
+        <span class="docs-pill">PromptCaching</span>
+        <span class="docs-pill">ROI</span>
+        <span class="docs-pill">Pricing</span>
+        <span class="docs-pill">Feature107</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: เมื่อไหร่ที่ควรใช้ (When to use it) -->
-        <section id="when-to-use-it">
-          <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
+        <!-- Section: การเรียกใช้งาน Token Analytics CLI -->
+        <section id="token-analytics-usage">
+          <h2>การเรียกใช้งาน Token Analytics CLI</h2>
           
-          <p>ใช้คำสั่ง <code>/complete</code> เป็นขั้นตอนสุดท้ายของการพัฒนา เมื่อฟีเจอร์ผ่านการ Implement และ Check ครบถ้วนแล้ว:</p>
-          <pre><code>/complete
-/complete 1</code></pre>
+          <p>สามารถรันเครื่องมือวิเคราะห์ Token ได้ทันทีจากโปรเจกต์:</p>
+          <pre><code># วิเคราะห์ Session ล่าสุดและแสดงผลตาราง Terminal
+npm run analyze:tokens
+
+# ระบุโมเดลเฉพาะเจาะจง (เช่น Claude 3.7 Sonnet, Gemini 2.5 Pro, GPT-4o)
+npm run analyze:tokens -- --model claude-3-7-sonnet
+
+# ส่งออกผลลัพธ์เป็น JSON สำหรับรายงานและ CI Analytics
+npm run analyze:tokens -- --json</code></pre>
         
           
         </section>
 
-        <!-- Section: ลำดับขั้นตอนการปิดงานอัตโนมัติ (Execution Pipeline) -->
-        <section id="complete-execution-pipeline">
-          <h2>ลำดับขั้นตอนการปิดงานอัตโนมัติ (Execution Pipeline)</h2>
+        <!-- Section: มิติการแจกแจง Token 4 มิติ และการคำนวณ Cache Savings -->
+        <section id="token-dimensions">
+          <h2>มิติการแจกแจง Token 4 มิติ และการคำนวณ Cache Savings</h2>
           
-          <p>เมื่อรัน Complete ระบบจะดำเนินการตามลำดับอย่างปลอดภัย:</p>
-          <ol>
-            <li><strong>Release Digest Synthesis</strong>: สรุปสิ่งที่ส่งมอบ การเปลี่ยนแปลงสำคัญ และผลการทดสอบทั้งหมด</li>
-            <li><strong>Archive to History</strong>: บันทึก Living Spec และหลักฐานการตรวจรับไปเก็บถาวรที่ <code>devflow/history/features/{xxx-slug}.md</code></li>
-            <li><strong>Clean Workspace</strong>: ลบโฟลเดอร์ <code>devflow/context/{xxx-slug}/</code> ออกอย่างหมดจด</li>
-            <li><strong>Update Build Plan & History</strong>: ติ๊กถูก <code>- [x]</code> ใน <code>devflow/build-plan.md</code> และเพิ่มรายการใน <code>devflow/history/HISTORY.md</code></li>
-            <li><strong>Mandatory User Gate (Git Merge)</strong>: ถามความประสงค์ของผู้ใช้ว่าจะทำ <strong>Git Squash-Merge เข้าสู่ branch main</strong> หรือต้องการเปิด Pull Request / Merge Request</li>
-          </ol>
-        
-          
-        </section>
-
-        <!-- Section: สิ่งที่ไม่ทำโดยเด็ดขาด (What it never does) -->
-        <section id="what-it-never-does">
-          <h2>สิ่งที่ไม่ทำโดยเด็ดขาด (What it never does)</h2>
-          
-          <div class="docs-callout note">
-            <div class="docs-callout-label">Zero-Push Safety</div>
-            <p>ระบบจะ<strong>ไม่มีวันรัน <code>git push</code></strong> ไปยังเซิร์ฟเวอร์ปลายทางโดยเด็ดขาด คุณยังคงเป็นผู้ถือสิทธิ์ขาดในการ Push โค้ดขึ้น Remote เสมอ</p>
+          <p>เครื่องมือจะแจกแจง Token ออกเป็น 4 ประเภทที่มีอัตราค่าบริการต่างกันอย่างสิ้นเชิง:</p>
+          <table>
+            <thead><tr><th>ประเภท Token</th><th>น้ำหนักต้นทุน</th><th>คำอธิบาย</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Fresh Input Tokens</strong></td><td>1.0x (เต็มราคา)</td><td>Token คำสั่งและบริบทใหม่ที่ยังไม่มีใน Cache</td></tr>
+              <tr><td><strong>Prompt Cache Write</strong></td><td>1.25x (ค่าเขียน)</td><td>Token ข้อมูลที่ถูกนำไปสร้างแคชสำหรับการใช้งานซ้ำ</td></tr>
+              <tr><td><strong>Prompt Cache Read (Hits)</strong></td><td>0.1x (ประหยัด 90%)</td><td>Token ที่อ่านซ้ำจากแคชเดิม ช่วยประหยัดต้นทุนมหาศาล</td></tr>
+              <tr><td><strong>Output Tokens</strong></td><td>5.0x</td><td>Token ผลลัพธ์ที่ AI สร้างและส่งกลับมา</td></tr>
+            </tbody>
+          </table>
+          <div class="note-box">
+            <strong>Prompt Caching ROI:</strong> DevFlow ออกแบบให้มีอัตรา <strong>Cache Hit Rate สูงกว่า 85%</strong> ด้วยสถาปัตยกรรม Living Source of Truth (<code>project-overview.md</code>) และ Task-Isolated Contexts ทำให้ประหยัดค่าใช้จ่าย API ได้ถึง 60–80% เมื่อเทียบกับการส่งไฟล์ทั้งหมดซ้ำๆ
           </div>
         
           
         </section>
 
-        <!-- Section: ขั้นตอนถัดไป (Next steps) -->
-        <section id="next-steps">
-          <h2>ขั้นตอนถัดไป (Next steps)</h2>
+        <!-- Section: ตารางราคาเปรียบเทียบใน Model Pricing Catalog -->
+        <section id="pricing-catalog">
+          <h2>ตารางราคาเปรียบเทียบใน Model Pricing Catalog</h2>
           
-          <p>ดูสถานะภาพรวมของโปรเจกต์ด้วย <code>/status</code> หรือเริ่มฟีเจอร์ถัดไปด้วย <code>/feature</code></p>
+          <table>
+            <thead><tr><th>โมเดล</th><th>Input ($/M)</th><th>Cache Write ($/M)</th><th>Cache Read ($/M)</th><th>Output ($/M)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Claude 3.7 / 3.5 Sonnet</strong></td><td>$3.00</td><td>$3.75</td><td>$0.30</td><td>$15.00</td></tr>
+              <tr><td><strong>Claude 3.5 Haiku</strong></td><td>$0.80</td><td>$1.00</td><td>$0.08</td><td>$4.00</td></tr>
+              <tr><td><strong>Gemini 2.5 Pro</strong></td><td>$1.25</td><td>$1.25</td><td>$0.31</td><td>$5.00</td></tr>
+              <tr><td><strong>Gemini 2.5 Flash</strong></td><td>$0.075</td><td>$0.075</td><td>$0.01875</td><td>$0.30</td></tr>
+              <tr><td><strong>GPT-4o</strong></td><td>$2.50</td><td>$2.50</td><td>$1.25</td><td>$10.00</td></tr>
+              <tr><td><strong>DeepSeek V3</strong></td><td>$0.14</td><td>$0.14</td><td>$0.014</td><td>$0.28</td></tr>
+            </tbody>
+          </table>
         
           
         </section>
@@ -222,13 +232,13 @@
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../../commands/check/">
+        <a class="prev" href="../../cli/dashboard/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Check</strong>
+          <strong>Live Dashboard</strong>
         </a>
-        <a class="next" href="../../commands/status/">
+        <a class="next" href="../../file-reference/">
           <span>ถัดไป (Next)</span>
-          <strong>Status</strong>
+          <strong>File Reference</strong>
         </a>
       </nav>
     </main>
@@ -236,10 +246,9 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#when-to-use-it">เมื่อไหร่ที่ควรใช้ (When to use it)</a>
-      <a href="#complete-execution-pipeline">ลำดับขั้นตอนการปิดงานอัตโนมัติ (Execution Pipeline)</a>
-      <a href="#what-it-never-does">สิ่งที่ไม่ทำโดยเด็ดขาด (What it never does)</a>
-      <a href="#next-steps">ขั้นตอนถัดไป (Next steps)</a>
+      <a href="#token-analytics-usage">การเรียกใช้งาน Token Analytics CLI</a>
+      <a href="#token-dimensions">มิติการแจกแจง Token 4 มิติ และการคำนวณ Cache Savings</a>
+      <a href="#pricing-catalog">ตารางราคาเปรียบเทียบใน Model Pricing Catalog</a>
     </aside>
   </div>
 

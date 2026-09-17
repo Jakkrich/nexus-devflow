@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Testing and CI (การทดสอบและการรวมศูนย์ CI) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="เพิ่มการทดสอบอย่างมีจุดประสงค์, ใช้คำสั่ง Verify หนึ่งเดียวร่วมกันทุกที่, และรันการตรวจสอบชุดเดียวกันทั้งในเครื่อง Local และบน GitHub Actions">
+  <meta name="description" content="เพิ่มการทดสอบอย่างมีจุดประสงค์ตาม 5-Tier File Classification, ตรวจสอบความสอดคล้องด้วย AC Traceability Matrix และรันคำสั่ง Verify หนึ่งเดียวร่วมกันทั้งในเครื่องและบน CI">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/testing/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,6 +69,8 @@
         <div class="docs-nav-group">
           <div class="docs-nav-title">WORKFLOW</div>
           <a class="docs-nav-link" href="../core-workflow/">Core Workflow</a>
+          <a class="docs-nav-link" href="../workflow-surface-map/">Workflow Surface Map</a>
+          <a class="docs-nav-link" href="../skill-selection-policy/">Skill Selection Policy</a>
         </div>
 
         <!-- COMMANDS -->
@@ -113,25 +115,29 @@
           <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
+          <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
         <!-- REFERENCE -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">REFERENCE</div>
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
+          <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
+          <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
           <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
           <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
-          <a class="docs-nav-link" href="../commands/try/">Try migration</a>
-          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests migration</a>
+          <a class="docs-nav-link" href="../commands/try/">Try Guide Reference</a>
+          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests Reference</a>
         </div>
 
         <!-- QUALITY -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">QUALITY</div>
           <a class="docs-nav-link active" href="../testing/">Testing and CI</a>
-          <a class="docs-nav-link" href="../manual-review/">Manual Review With Try</a>
-          <a class="docs-nav-link" href="../code-quality/">Code Quality With Audit</a>
+          <a class="docs-nav-link" href="../manual-review/">Manual Review & Quality Gates</a>
+          <a class="docs-nav-link" href="../code-quality/">Code Quality & Token Budgets</a>
           <a class="docs-nav-link" href="../findings-ledger/">The Findings Ledger</a>
         </div>
 
@@ -151,7 +157,7 @@
       <h1 class="docs-title">Testing and CI (การทดสอบและการรวมศูนย์ CI)</h1>
       
       <p class="docs-lead">
-        เพิ่มการทดสอบอย่างมีจุดประสงค์, ใช้คำสั่ง Verify หนึ่งเดียวร่วมกันทุกที่, และรันการตรวจสอบชุดเดียวกันทั้งในเครื่อง Local และบน GitHub Actions
+        เพิ่มการทดสอบอย่างมีจุดประสงค์ตาม 5-Tier File Classification, ตรวจสอบความสอดคล้องด้วย AC Traceability Matrix และรันคำสั่ง Verify หนึ่งเดียวร่วมกันทั้งในเครื่องและบน CI
       </p>
 
       <div class="docs-meta">
@@ -159,13 +165,77 @@
         <span class="docs-pill">Guide</span>
         <span class="docs-pill">Testing</span>
         <span class="docs-pill">UnitTests</span>
+        <span class="docs-pill">5Tier</span>
+        <span class="docs-pill">ACTraceability</span>
         <span class="docs-pill">BrowserTests</span>
         <span class="docs-pill">CI</span>
         <span class="docs-pill">Verify</span>
-        <span class="docs-pill">GitHubActions</span>
       </div>
 
       <div class="docs-prose">
+
+        <!-- Section: 5-Tier Test File Classification Standard (มาตรฐานการทดสอบตามประเภทไฟล์) -->
+        <section id="five-tier-classification">
+          <h2>5-Tier Test File Classification Standard (มาตรฐานการทดสอบตามประเภทไฟล์)</h2>
+          
+          <p>เพื่อป้องกันการเขียน Unit Tests ที่รกและไม่เกิดประโยชน์ (Artificial Tests) Nexus-DevFlow กำหนดมาตรฐานการทดสอบตามประเภทไฟล์ออกเป็น 5 ระดับ (Tiers):</p>
+          <table>
+            <thead><tr><th>ระดับ (Tier)</th><th>สัญลักษณ์</th><th>ประเภทไฟล์ (File Scope)</th><th>กลยุทธ์และระดับการทดสอบที่จำเป็น (Testing Strategy)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Tier 1: Pure Logic & Algorithms</strong></td>
+                <td>🧠</td>
+                <td>Core business logic, Parsers, Tokenizers, State machines, Calculators, Pure utility functions</td>
+                <td><strong>Unit Tests 100%</strong> พร้อมครอบคลุม Happy path, Boundary, และ Error edge cases อย่างละเอียด</td>
+              </tr>
+              <tr>
+                <td><strong>Tier 2: UI & Visual Components</strong></td>
+                <td>🎨</td>
+                <td>Components, Layouts, CSS styles, Screen templates, Design tokens</td>
+                <td><strong>Visual & Interaction QA</strong>: Component rendering, User flow interaction, และ Browser screenshot proof (ผ่าน Playwright / BrowserOS Neo)</td>
+              </tr>
+              <tr>
+                <td><strong>Tier 3: API & Data Integration</strong></td>
+                <td>🔌</td>
+                <td>API routes, Database queries, Server actions, External SDK clients</td>
+                <td><strong>Contract & Integration Tests</strong>: HTTP status codes, Schema validation (Zod), Payload responses, Error handling</td>
+              </tr>
+              <tr>
+                <td><strong>Tier 4: Configuration & Tooling</strong></td>
+                <td>⚙️</td>
+                <td>Build scripts, Package configs, Bundlers, Environment configs</td>
+                <td><strong>Static Contract & Smoke Tests</strong>: Contract verification, Typecheck, CLI smoke tests</td>
+              </tr>
+              <tr>
+                <td><strong>Tier 5: Documentation & Prose</strong></td>
+                <td>📝</td>
+                <td>Markdown documentation, Prompts, Specification templates</td>
+                <td><strong>Lint & Integrity Scans</strong>: Markdown metadata validation, Link integrity, YAML frontmatter syntax check</td>
+              </tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+
+        <!-- Section: Acceptance Criteria Traceability Matrix Protocol (การสืบย้อนผลการทดสอบ) -->
+        <section id="ac-traceability-matrix">
+          <h2>Acceptance Criteria Traceability Matrix Protocol (การสืบย้อนผลการทดสอบ)</h2>
+          
+          <p>ทุก Acceptance Criteria (<code>AC-1</code>, <code>AC-2</code>, ...) ที่กำหนดไว้ใน Living Spec (<code>spec.md</code>) จะต้องถูกเชื่อมโยง (Traceable) เข้ากับชื่อของ Automated Test Cases อย่างเป็นรูปธรรม:</p>
+          <pre><code>describe('Session Token Analytics Engine', () => {
+  it('AC-1: calculates token breakdown and costs accurately', () => {
+    // Assert AC-1 requirement
+  });
+
+  it('AC-2: formats table and json outputs according to contract', () => {
+    // Assert AC-2 requirement
+  });
+});</code></pre>
+          <p>ในขั้นตอน <code>/check</code> และ <code>/complete</code> ระบบจะประเมินผลผ่านตาราง <strong>AC-to-Test Traceability Matrix</strong> เพื่อยืนยันว่าไม่มีข้อกำหนดใดตกหล่นก่อนส่งมอบงานจริง</p>
+        
+          
+        </section>
 
         <!-- Section: ห้าเลเยอร์ที่แยกจากกันอย่างชัดเจน (Five separate layers) -->
         <section id="five-separate-layers">
@@ -182,43 +252,6 @@
               <tr><td><strong>GitHub ruleset</strong></td><td>(ตัวเลือกเสริมบน GitHub) ป้องกันการ Merge โค้ดจนกว่าผลการตรวจสอบบน GitHub Actions จะผ่านเขียว</td></tr>
             </tbody>
           </table>
-          <p>สกิลที่เกี่ยวข้องในการติดตั้งและตั้งค่า:</p>
-          <ul>
-            <li><strong><code>/setup-tests</code></strong> (หรือ <code>/tests</code>): ติดตั้งและกำหนดค่า Unit Testing ประจำสแตก</li>
-            <li><strong><code>/browser-tests</code></strong> (หรือ <code>/tests browser</code>): ติดตั้งและกำหนดค่า Browser Test Harness เสริม</li>
-            <li><strong><code>/ci</code></strong>: กำหนดค่าสูตรคำสั่ง Verify และไฟล์เวิร์กโฟลว์ GitHub Actions</li>
-            <li><strong>GitHub ruleset</strong>: การตั้งค่า Remote Protection บนหน้าต่าง Settings ของ GitHub Repository</li>
-          </ul>
-        
-          
-        </section>
-
-        <!-- Section: การทดสอบเป็นแบบ Opt-in ตามความพร้อมของโปรเจกต์ (Testing is opt-in) -->
-        <section id="testing-is-opt-in">
-          <h2>การทดสอบเป็นแบบ Opt-in ตามความพร้อมของโปรเจกต์ (Testing is opt-in)</h2>
-          
-          <p>เนื่องจาก DevFlow ไม่สามารถคาดเดา Test Runner ที่เหมาะสมสำหรับทุกๆ เทคโนโลยีสแตก จึงไม่มีการติดตั้ง Test Runner มาให้ตั้งแต่เริ่มต้น</p>
-          <p>เมื่อโปรเจกต์พร้อมที่จะผสานการทดสอบ Unit Tests เข้าสู่วงจรการทำงาน ให้รันคำสั่ง <strong><code>$tests</code></strong> ใน OpenAI Codex CLI หรือ <strong><code>/setup-tests</code></strong> / <strong><code>/tests</code></strong> ใน Claude Code, Google Antigravity และ Gemini CLI</p>
-          <pre><code># ติดตั้งหรือจัดระเบียบ Unit Test Runner ประจำสแตก
-/setup-tests
-/tests</code></pre>
-          <p>เมื่อมีคำสั่งทดสอบจริงระบุไว้ในหัวข้อ <code>Commands</code> ของ <code>AGENTS.md</code> การทดสอบจะกลายเป็น Gate บังคับทันที: ทุกสเต็ปการ Implement ที่มีการเปลี่ยน Logic จำเป็นต้องเพิ่ม Test Coverage เฉพาะจุดและดูแลให้ชุดการทดสอบผ่านเขียวเสมอ ส่วนงาน UI และ Integration ยังคงต้องมีหลักฐานตรงจาก Browser, Build, หรือ API เพิ่มเติม</p>
-          <p>หากโปรเจกต์มีคำสั่ง Verify อยู่แล้ว สกิล <code>/setup-tests</code> จะแทรกคำสั่ง Test เข้าไประหว่างขั้นตอน Typecheck และ Build ให้อัตโนมัติ โดยจะไม่สร้างไฟล์ CI ขึ้นมาโดยพลการหากยังไม่ได้สั่ง</p>
-        
-          
-        </section>
-
-        <!-- Section: การทดสอบ Browser ก็เป็นแบบ Opt-in เช่นกัน (Browser testing is also opt-in) -->
-        <section id="browser-testing-is-also-opt-in">
-          <h2>การทดสอบ Browser ก็เป็นแบบ Opt-in เช่นกัน (Browser testing is also opt-in)</h2>
-          
-          <p>รันคำสั่ง <strong><code>$tests browser</code></strong> ใน Codex หรือ <strong><code>/browser-tests</code></strong> / <strong><code>/tests browser</code></strong> ใน Claude Code, Google Antigravity และ Gemini CLI เมื่อโปรเจกต์ต้องการระบบตรวจสอบ Browser อัตโนมัติที่ทำซ้ำได้</p>
-          <pre><code># ติดตั้ง Browser Test Harness
-/browser-tests
-/tests browser</code></pre>
-          <p>สกิลจะเลือกใช้ Runner ที่มีอยู่แล้ว หรือติดตั้ง <strong>Playwright</strong> สำหรับโปรเจกต์เว็บและ Extension พร้อมสร้างตัวอย่าง Smoke Flow เริ่มต้น 1 ตัวอย่าง และบันทึกคำสั่ง <code>Browser tests: npm run test:browser</code> ลงใน <code>AGENTS.md</code></p>
-          <p>คำสั่งนี้จะแยกต่างหากจากสูตร Verify/CI ปกติ โดยสเต็ป <code>/feature</code> และ <code>/implement</code> สามารถเขียน Browser Test เพิ่มเติมได้ ส่วน <code>/check</code> และ <strong>Continuous Mode</strong> สามารถเรียกใช้ Harness นี้ได้เมื่อต้องการหลักฐานการทำงานเชิงประจักษ์</p>
-          <p>นอกจากนี้ยังรองรับสถาปัตยกรรม Hybrid ร่วมกับ <strong>MCP browseros-neo</strong> (<code>http://127.0.0.1:9010/mcp</code>) เพื่อให้ AI Agent สามารถตรวจสอบ Live DOM, Visual QA และบันทึกภาพหน้าจอจริงได้ในแบบ Interactive</p>
         
           
         </section>
@@ -236,43 +269,6 @@
             <li><strong>Tests</strong> (เมื่อมีการตั้งค่า Runner และคำสั่งที่ใช้งานได้จริง)</li>
             <li><strong>Build</strong></li>
           </ol>
-          <p>หากขั้นตอนใดไม่มีอยู่ จะถูกข้ามไปอย่างปลอดภัย สำหรับโปรเจกต์ JavaScript/TypeScript มักจะเป็น Script ชื่อ <code>npm run verify</code> หรือ <code>npm run check</code> ส่วนสแตกอื่นจะใช้ Task Runner ประจำภาษา</p>
-          <div class="tip-box">
-            <code>/onboard หรือ /adopt ➔ /ci ➔ Verify ในเครื่อง Local ➔ GitHub Actions รัน Verify เดียวกัน</code>
-          </div>
-          <p>การรัน Verify ในเครื่อง Local ยืนยันความถูกต้องของ Working Copy ปัจจุบัน และ CI จะได้รับการยืนยันสมบูรณ์เมื่อ GitHub รันสูตรเดียวกันนี้ผ่านบน Clean Checkout</p>
-          <p>คำสั่ง <code>/implement</code>, <code>/complete</code>, <code>/autopilot</code> และทุกฟีเจอร์ใน <code>/continuous</code> จะใช้คำสั่ง Verify ที่บันทึกไว้ และคำสั่ง <code>/doctor</code> จะคอยแจ้งเตือนเมื่อเกิด Drift ระหว่าง <code>AGENTS.md</code>, Package Script และ GitHub Workflow</p>
-        
-          
-        </section>
-
-        <!-- Section: คงสภาพ CI เดิมที่มีอยู่อย่างปลอดภัย (Existing CI stays intact) -->
-        <section id="existing-ci-stays-intact">
-          <h2>คงสภาพ CI เดิมที่มีอยู่อย่างปลอดภัย (Existing CI stays intact)</h2>
-          
-          <p>สกิล <code>/ci</code> จะตรวจสอบเวิร์กโฟลว์ GitHub Actions เดิมและ CI ภายนอกทั้งหมดก่อนที่จะแก้ไขไฟล์ใดๆ โดยจะคงสภาพ Custom Checks เดิมไว้, แจ้งเตือนหากมีส่วนที่ทับซ้อนกัน, และถามการยืนยันจากผู้ใช้ก่อนที่จะแก้ไขไฟล์ <code>verify.yml</code> ที่มีอยู่</p>
-          <p>โครงสร้างเริ่มต้นจะใช้ Runtime ที่ตรวจจับได้, คำสั่ง Install ที่ปลอดภัยตาม Lockfile, ตรวจจับ Default Branch, ทริกเกอร์ <code>pull_request</code> และ <code>push</code>, พร้อมกำหนดสิทธิ์ <code>contents: read</code></p>
-          <p>การตั้งค่านี้จะไม่แอบใส่ Lint, Formatting, Test Coverage Threshold, Browser Tests, Security Scans, Dependency Audits, Version Matrices หรือ GitHub Rulesets โดยไม่ได้รับอนุญาต</p>
-          <p>มีตัวเลือกเสริมให้เปิดใช้งาน <strong>Local Pre-push Hook</strong> ที่รันคำสั่ง Verify ก่อน Push ออกไป (สามารถใช้ <code>git push --no-verify</code> เพื่อข้ามได้หากจำเป็น) และสกิลจะหยุดก่อนทำ Git Push เสมอ เวิร์กโฟลว์ในเครื่องจะไม่มีผลกระทบต่อ GitHub จนกว่าคุณจะสั่งเผยแพร่</p>
-        
-          
-        </section>
-
-        <!-- Section: จับคู่หลักฐานให้ตรงกับประเภทของงาน (Match proof to the work) -->
-        <section id="match-proof-to-the-work">
-          <h2>จับคู่หลักฐานให้ตรงกับประเภทของงาน (Match proof to the work)</h2>
-          
-          <p>เลือกใช้หลักฐานเชิงประจักษ์ให้เหมาะสมกับชนิดของโค้ดที่สร้างหรือแก้ไข:</p>
-          <table>
-            <thead><tr><th>ประเภทงาน (Work)</th><th>หลักฐานที่ดีที่สุด (Best Evidence)</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Parser, Validator, Formatter หรือ Action</strong></td><td>Focused Unit Test พร้อมครอบคลุม Edge Cases</td></tr>
-              <tr><td><strong>Responsive UI หรือ Visual Component</strong></td><td>Production Build สำเร็จ และบันทึก Screenshot จาก Browser</td></tr>
-              <tr><td><strong>Form, Navigation หรือ Download Flow</strong></td><td>การทดสอบปฏิสัมพันธ์จริงบน Browser พร้อมตรวจสอบ Console Logs</td></tr>
-              <tr><td><strong>API Endpoint</strong></td><td>ตัวอย่าง Request, Response Body และเส้นทาง Error Path</td></tr>
-              <tr><td><strong>Repository-wide Automated Gate</strong></td><td>การรันคำสั่ง Verify เดียวกันที่ระบุไว้ในเอกสารผ่านฉลุย</td></tr>
-            </tbody>
-          </table>
         
           
         </section>
@@ -282,23 +278,7 @@
           <h2>หลักฐานการทำงานบน Browser (Browser evidence)</h2>
           
           <p>การตรวจสอบ UI และ User Flow ต้องมีหลักฐานจาก Browser โดยตรง เมื่อ <code>AGENTS.md</code> มีการระบุคำสั่ง <code>Browser tests</code> สกิล <code>/check</code> จะรันคำสั่งดังกล่าวและตรวจสอบผลลัพธ์</p>
-          <p>แต่สำหรับการประเมินที่ชุดทดสอบอัตโนมัติมองไม่เห็น เช่น ความถูกต้องของสีและสไตล์ (Visual Fidelity), Browser Chrome, หรือพฤติกรรมภายใต้ Authenticated Session ของผู้ใช้จริง AI จะใช้การสังเกตผ่าน Live Browser (เช่น ผ่าน MCP browseros-neo หรือเปิดหน้าจอจริง) เพื่อตรวจรับงาน</p>
-        
-          
-        </section>
-
-        <!-- Section: หลีกเลี่ยงความมั่นใจแบบหลอกตา (Avoid false confidence) -->
-        <section id="avoid-false-confidence">
-          <h2>หลีกเลี่ยงความมั่นใจแบบหลอกตา (Avoid false confidence)</h2>
-          
-          <p>อย่าหลงเชื่อความมั่นใจที่ปราศจากหลักฐานที่แท้จริง:</p>
-          <ul>
-            <li>ชุดทดสอบที่ว่างเปล่า (Empty Suite) ต้องไม่ถูกนับว่าเป็นการทดสอบที่ประสบความสำเร็จ</li>
-            <li>การ Build ผ่าน ไม่ได้แปลว่าคลิกปุ่มแล้วจะทำงานได้ถูกต้อง</li>
-            <li>รูป Screenshot ภาพเดียว ไม่ได้พิสูจน์ว่า Validator รองรับ Input ที่ผิดรูปแบบ (Malformed Data)</li>
-            <li>การย้ายชุดทดสอบที่อ่อนแอขึ้นไปรันบน CI ไม่ได้ทำให้คุณภาพโค้ดดีขึ้น</li>
-          </ul>
-          <p>จงเลือกใช้หลักฐานที่กระชับและตรงจุดที่สุดในการพิสูจน์ข้อกล่าวอ้างแต่ละข้อเสมอ</p>
+          <p>นอกจากนี้ยังรองรับสถาปัตยกรรม Hybrid ร่วมกับ <strong>MCP browseros-neo</strong> (<code>http://127.0.0.1:9010/mcp</code>) เพื่อให้ AI Agent สามารถตรวจสอบ Live DOM, Visual QA และบันทึกภาพหน้าจอจริงได้ในแบบ Interactive</p>
         
           
         </section>
@@ -308,11 +288,11 @@
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
         <a class="prev" href="../commands/browser-tests/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Browser Tests migration</strong>
+          <strong>Browser Tests Reference</strong>
         </a>
         <a class="next" href="../manual-review/">
           <span>ถัดไป (Next)</span>
-          <strong>Manual Review With Try</strong>
+          <strong>Manual Review & Quality Gates</strong>
         </a>
       </nav>
     </main>
@@ -320,14 +300,11 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
+      <a href="#five-tier-classification">5-Tier Test File Classification Standard (มาตรฐานการทดสอบตามประเภทไฟล์)</a>
+      <a href="#ac-traceability-matrix">Acceptance Criteria Traceability Matrix Protocol (การสืบย้อนผลการทดสอบ)</a>
       <a href="#five-separate-layers">ห้าเลเยอร์ที่แยกจากกันอย่างชัดเจน (Five separate layers)</a>
-      <a href="#testing-is-opt-in">การทดสอบเป็นแบบ Opt-in ตามความพร้อมของโปรเจกต์ (Testing is opt-in)</a>
-      <a href="#browser-testing-is-also-opt-in">การทดสอบ Browser ก็เป็นแบบ Opt-in เช่นกัน (Browser testing is also opt-in)</a>
       <a href="#one-shared-verify-recipe">สูตรการ Verify หนึ่งเดียวที่ใช้ร่วมกันทุกที่ (One shared Verify recipe)</a>
-      <a href="#existing-ci-stays-intact">คงสภาพ CI เดิมที่มีอยู่อย่างปลอดภัย (Existing CI stays intact)</a>
-      <a href="#match-proof-to-the-work">จับคู่หลักฐานให้ตรงกับประเภทของงาน (Match proof to the work)</a>
       <a href="#browser-evidence">หลักฐานการทำงานบน Browser (Browser evidence)</a>
-      <a href="#avoid-false-confidence">หลีกเลี่ยงความมั่นใจแบบหลอกตา (Avoid false confidence)</a>
     </aside>
   </div>
 

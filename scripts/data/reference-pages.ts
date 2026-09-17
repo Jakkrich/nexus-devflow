@@ -6,37 +6,41 @@ export const REFERENCE_PAGES: DocPage[] = [
     slug: 'file-reference',
     category: 'REFERENCE',
     title: 'File Reference (โครงสร้างไฟล์และหน้าที่)',
-    lead: 'เอกสารอธิบายโครงสร้างไฟล์และโฟลเดอร์ทั้งหมดภายใต้ devflow/ และหน้าที่ของแต่ละไฟล์ในระบบอย่างละเอียด',
+    lead: 'เอกสารอธิบายโครงสร้างไฟล์และโฟลเดอร์ทั้งหมดภายใต้ devflow/ และหน้าที่ของแต่ละไฟล์ในระบบอย่างละเอียดตามหลัก The 3-Pillars Model',
     pills: ['Reference', 'Files', 'Structure', 'Pillars', 'Architecture', 'Schema'],
     sections: [
       {
         id: 'directory-tree',
-        title: 'โครงสร้างไดเรกทอรี devflow/ ทั้งหมด',
+        title: 'โครงสร้างไดเรกทอรี devflow/ ทั้งหมด (The 3-Pillars Workspace)',
         contentHtml: `
-          <p>Nexus-DevFlow จัดเก็บไฟล์การวางแผน บริบท และประวัติทั้งหมดไว้ในโฟลเดอร์ <code>devflow/</code> ที่ Root ของโปรเจกต์:</p>
+          <p>Nexus-DevFlow จัดเก็บไฟล์การวางแผน บริบท และประวัติทั้งหมดไว้ในโฟลเดอร์ <code>devflow/</code> ที่ Root ของโปรเจกต์อย่างเป็นระเบียบ:</p>
           <pre><code>devflow/
 ├── config.json              # นโยบายเวิร์กโฟลว์, Review Cadence และ Quality Gates
-├── project-plan.md          # เป้าหมายผลิตภัณฑ์, สถาปัตยกรรม, Non-functional Requirements
-├── build-plan.md            # รายการฟีเจอร์ตามลำดับการสร้างจริง (Checklist)
-├── ideas.md                 # กล่องรับไอเดียและการประเมินคะแนนความเป็นไปได้
-├── context/                 # Living Source of Truth และ Task Workspaces
+├── project-plan.md          # 🔮 Future (Backlog): เป้าหมายผลิตภัณฑ์, สถาปัตยกรรม
+├── build-plan.md            # 🔮 Future (Backlog): รายการฟีเจอร์ตามลำดับการสร้างจริง (Checklist)
+├── ideas.md                 # 🔮 Future (Backlog): กล่องรับไอเดียและการประเมินคะแนนความเป็นไปได้
+├── context/                 # ⚡ Present (Active Context): Global Truth และ Task Workspaces
 │   ├── project-overview.md  # สรุปบริบทโปรเจกต์ที่คอมไพล์แล้ว (<20KB)
-│   ├── coding-standards.md  # มาตรฐานและข้อตกลงในการเขียนโค้ด
+│   ├── coding-standards.md  # มาตรฐานและข้อตกลงในการเขียนโค้ด (รวม Section 15 & 16)
 │   ├── ai-interaction.md    # กฎการสื่อสารและการรีวิวของ AI
 │   ├── glossary.md          # พจนานุกรมศัพท์เฉพาะทางและโมเดลข้อมูล
 │   └── {xxx-slug}/          # Task-Isolated Workspace ปัจจุบัน (ถูกลบเมื่อปิดงาน)
 │       ├── spec.md          # Living Spec ประจำฟีเจอร์
 │       ├── stage.md         # ตัวชี้ขั้นตอนการทำงาน (feature, implement, check, complete)
 │       └── findings.md      # Findings Ledger สำหรับบันทึกข้อค้นพบ
-├── discoveries/             # รายงานการสำรวจระดับ Pre-Flight (DISC-ID)
-├── decisions/               # Architecture Decision Records (ADR-NNN)
+├── discoveries/             # 🔍 Discoveries: รายงานการสำรวจระดับ Pre-Flight (DISC-ID)
+├── decisions/               # 🏛️ Decisions: Architecture Decision Records (ADR-NNN)
 ├── inbox/                   # เอกสารความต้องการและสเปกดิบ (PDF, Word, Excel, Images)
 ├── analysis/                # ผลการแปลงเอกสารและการสแกนผลกระทบต่อโค้ดเบส
-├── history/                 # คลังประวัติการส่งมอบงานถาวร
+├── reference/               # 📑 Templates และ System Protocols ภายในสำหรับ AI Runtime
+│   ├── slicing-archetypes.md # คู่มือ 4 Slicing Archetypes Framework
+│   ├── feature-spec-template.md # แม่แบบ Living Spec พร้อม Input Coverage & AC Matrix
+│   └── help-playbook-protocol.md # กฎการสร้าง Contextual Help Playbooks
+├── history/                 # 📦 Past (History Archive): คลังประวัติการส่งมอบงานถาวร
 │   ├── features/            # เอกสารสรุปฟีเจอร์ที่ส่งมอบแล้ว ({xxx-slug}.md)
 │   ├── fixes/               # เอกสารสรุปบั๊กที่แก้ไขแล้ว
 │   ├── rollbacks/           # เอกสารการย้อนคืนฟีเจอร์
-│   └── HISTORY.md           # Release Changelog ภาพรวมทั้งหมด
+│   └── HISTORY.md           # Master Release History Ledger
 └── .state/                  # Generated Local State (ไม่ commit ขึ้น Git)
     ├── run.json             # แดชบอร์ด Activity State
     └── manifest.json        # ตัวติดตามเวอร์ชันของ DevFlow</code></pre>
@@ -54,6 +58,7 @@ export const REFERENCE_PAGES: DocPage[] = [
               <tr><td><code>devflow/config.json</code></td><td>นโยบายเวิร์กโฟลว์และประตูด่านตรวจคุณภาพ (Quality Gates)</td><td>ผู้ใช้และคำสั่ง <code>/onboard</code></td></tr>
               <tr><td><code>devflow/context/project-overview.md</code></td><td>สรุปบริบทหลักให้ AI ทุกตัวอ่านตรงกัน (<20KB)</td><td>คำสั่ง <code>/overview</code></td></tr>
               <tr><td><code>devflow/context/{id}/spec.md</code></td><td>Living Spec ประจำฟีเจอร์ แยกขาดตาม Task</td><td>คำสั่ง <code>/feature</code> และ <code>/implement</code></td></tr>
+              <tr><td><code>devflow/history/HISTORY.md</code></td><td>บันทึก Release Log รวมทุกฟีเจอร์พร้อม Commit Hash</td><td>คำสั่ง <code>/complete</code></td></tr>
             </tbody>
           </table>
         `
@@ -61,7 +66,190 @@ export const REFERENCE_PAGES: DocPage[] = [
     ]
   },
 
-  // 2. Tool Adapters
+  // 2. Governance Rules (New)
+  {
+    slug: 'governance-rules',
+    category: 'REFERENCE',
+    title: 'Governance Rules (กฎการกำกับดูแลและพัฒนา Framework)',
+    lead: 'กฎและข้อตกลงในการพัฒนา ดูแล และขยายขีดความสามารถของ Nexus-DevFlow สำหรับ Maintainers และ Developers',
+    pills: ['Reference', 'Governance', 'Rules', 'Architecture', 'Maintainers', 'Policy'],
+    sections: [
+      {
+        id: 'public-surface-rule',
+        title: '1. กฎการควบคุม Public Surface (Public Surface Rule)',
+        contentHtml: `
+          <ul>
+            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับชุดทักษะสนับสนุน (Companion Skills เช่น <code>/idea</code>, <code>/grill</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/doctor</code>, <code>/audit</code>, <code>/rollback</code>)</li>
+            <li><strong>ห้ามเพิ่มคำสั่งสาธารณะโดยไม่จำเป็น</strong>: หากฟังก์ชันใหม่สามารถทำเป็น Internal Helper หรือต่อยอดจากคำสั่งเดิมได้ ให้เลือกทำภายในก่อน จนกว่าจะมีการอนุมัติและเลื่อนขั้น (Promotion) เข้าสู่ <code>agent-bundle.manifest.json#core_skills</code> อย่างเป็นทางการ</li>
+          </ul>
+        `
+      },
+      {
+        id: 'placement-rules',
+        title: '2. กฎการวางตำแหน่งโค้ดและส่วนประกอบ (Placement Rules)',
+        contentHtml: `
+          <table>
+            <thead><tr><th>ประเภทส่วนประกอบ</th><th>ตำแหน่งที่ต้องบันทึก</th><th>เกณฑ์การพิจารณา</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Workflow Stage</strong></td><td><code>devflow/context/{xxx-slug}/</code></td><td>เมื่อพฤติกรรมนั้นมีสถานะ State Machine ของตนเอง หรือต้องบันทึกอาร์ติแฟกต์ใน Living Spec</td></tr>
+              <tr><td><strong>Reusable Skill</strong></td><td><code>.agents/skills/</code> และ <code>.claude/skills/</code></td><td>เมื่อเป็นทักษะที่สามารถนำไปใช้ซ้ำข้าม AI Assistant หลายค่ายได้</td></tr>
+              <tr><td><strong>Utility Script</strong></td><td><code>scripts/</code></td><td>เมื่อเป็นการลดความซ้ำซ้อน งานตรวจสอบ หรือคำสั่งเสริมที่ไม่เปลี่ยนโมเดลเวิร์กโฟลว์</td></tr>
+              <tr><td><strong>Static Validation</strong></td><td><code>scripts/validate-framework.ts</code></td><td>เมื่อเป็นกฎข้อบังคับที่ต้องป้องกันการ Drift ใน CI</td></tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        id: 'assumed-decision-debt',
+        title: '3. Assumed Decision Debt Governance (การควบคุมหนี้การตัดสินใจ)',
+        contentHtml: `
+          <p>เมื่อต้องทำการตัดสินใจเชิงสถาปัตยกรรมในสภาวะที่มีความไม่แน่นอน แต่ต้องการให้งานเดินหน้าต่อได้โดยไม่สะดุด:</p>
+          <ul>
+            <li>สามารถบันทึก ADR ใน <code>devflow/decisions/ADR-xxx.md</code> ด้วยสถานะ <code>Status: Assumed</code></li>
+            <li>ต้องระบุ 3 หัวข้อบังคับ: <strong>Assumption</strong> (สมมติฐาน), <strong>Risk Level & Blast Radius</strong> (ระดับความเสี่ยงและผลกระทบ), และ <strong>Ratification Plan</strong> (แผนการทวนสอบยืนยัน)</li>
+            <li>ขั้นตอน <code>/audit</code> และ <code>/complete</code> มีด่านตรวจเช็ค Assumed Decision Debt เสมอเพื่อเตือนให้มีการ Ratify ให้เป็น <code>Accepted</code> หรือ <code>Rejected</code> ก่อนส่งมอบงานจริง</li>
+          </ul>
+        `
+      }
+    ]
+  },
+
+  // 3. Markdown Metadata Contract (New)
+  {
+    slug: 'markdown-metadata-contract',
+    category: 'REFERENCE',
+    title: 'Markdown Metadata Contract (สัญญาโครงสร้าง Markdown)',
+    lead: 'ข้อกำหนดมาตรฐาน Frontmatter และ Heading Tags สำหรับไฟล์ Markdown ทุกไฟล์ที่สร้างโดย Nexus-DevFlow เพื่อรองรับ Obsidian และ Agent Indexing',
+    pills: ['Reference', 'Markdown', 'Metadata', 'Frontmatter', 'Obsidian', 'YAML', 'Schema'],
+    sections: [
+      {
+        id: 'core-yaml-frontmatter',
+        title: '1. Shared YAML Frontmatter Core',
+        contentHtml: `
+          <p>ไฟล์ Markdown ที่สร้างขึ้นทุกไฟล์จะต้องมี YAML Frontmatter ส่วนหัวที่เป็นมาตรฐานเดียวกัน:</p>
+          <pre><code>---
+id: "001-user-auth"
+title: "User Authentication & Session Management"
+doc_type: "spec"
+category: "planning"
+status: "in-progress"
+created: "2026-09-17"
+updated: "2026-09-17"
+owner: "DevFlow Core Framework Team & AI"
+source_workflow: "/feature"
+related_task: "001"
+related_files:
+  - "src/auth/session.ts"
+  - "src/auth/jwt.ts"
+tags:
+  - nexus-devflow
+  - authentication
+  - security
+aliases: []
+summary: "Living Spec สำหรับระบบพิสูจน์ตัวตนผู้ใช้งานด้วย JWT Session"
+metadata_version: 1
+---</code></pre>
+        `
+      },
+      {
+        id: 'heading-tags-contract',
+        title: '2. Obsidian-Compatible Heading Tags Contract',
+        contentHtml: `
+          <p>เพื่อรองรับการสืบค้นและทำความเข้าใจแบบเชิงความหมาย (Semantic Heading Tags) ใน Obsidian และ AI Search ให้ใส่ Tag ไว้ท้ายหัวข้อบรรทัด:</p>
+          <pre><code># Living Spec: User Authentication #doc/spec
+
+## 🎯 1. Define & Boundaries #section/scope
+
+## 📐 2. Technical Spec & Contracts #section/contracts
+
+## 📋 3. Execution Plan & TDD Checklist #section/tasks
+
+## ⚡ 4. Implementation Log & Evidence #section/evidence
+
+## 🧪 5. Multi-Lane Verification Matrix #section/verification
+
+## 📦 6. Release Digest & Retrospective #section/summary</code></pre>
+        `
+      }
+    ]
+  },
+
+  // 4. Living Spec Examples (New)
+  {
+    slug: 'living-spec-examples',
+    category: 'REFERENCE',
+    title: 'Living Spec Examples (ตัวอย่างเอกสารมาตรฐาน)',
+    lead: 'รวมตัวอย่างไฟล์ Living Spec, Discovery Record, Architecture Decision Record (ADR) และ Idea Inbox ของจริง',
+    pills: ['Reference', 'Examples', 'LivingSpec', 'Discovery', 'ADR', 'Ideas', 'Templates'],
+    sections: [
+      {
+        id: 'living-spec-example',
+        title: '1. ตัวอย่าง Task-Isolated Living Spec (spec.md)',
+        contentHtml: `
+          <p>โครงสร้างของ <code>devflow/context/{xxx-slug}/spec.md</code> แบบสมบูรณ์ 6 ส่วนหลัก:</p>
+          <pre><code># Feature: 001-user-auth
+
+**From build-plan:** feature 1
+**Build attempt:** 1
+**Branch:** feature/001-user-auth
+**Quality Gates Policy:** qualityGates.regular.independentReview = when-sensitive
+**Status:** In-Progress
+
+## 🎯 1. Specification & Scope
+### 1.1 Problem Statement
+ผู้ใช้ต้องการระบบ Login ด้วย Email/Password พร้อม Session Token
+
+### 1.2 Acceptance Criteria
+- [ ] **AC-1**: POST /api/auth/login คืนค่า JWT token เมื่อข้อมูลถูกต้อง
+- [ ] **AC-2**: คืนค่า HTTP 401 เมื่อรหัสผ่านไม่ถูกต้อง
+
+## 📐 2. Technical Spec & Data Contracts
+### 2.1 Mechanical Input Coverage Test
+| Target Field | Named Data Source | Pre-condition |
+| :--- | :--- | :--- |
+| email, password | Request Body | Settled: User Form Input |
+| token | Generated JWT | Settled: HMAC-SHA256 |
+
+## 📋 3. Implementation Checklist (Strict TDD)
+- [ ] **Task 1: JWT Session Signer**
+  - [ ] 1.1 [TDD-Red]: เขียน test คาดหวัง token จาก payload
+  - [ ] 1.2 [TDD-Green]: สร้างฟังก์ชัน signSessionToken()
+  - [ ] 1.3 [TDD-Refactor]: ปรับปรุง security parameters
+
+## 🧪 5. Multi-Lane Verification Matrix
+| Lane | Command / Verification | Expected Result | Status |
+| :--- | :--- | :--- | :---: |
+| Typecheck | npm run typecheck | 0 errors | ⏳ Pending |
+| Unit Tests | npm test | 100% tests passing | ⏳ Pending |</code></pre>
+        `
+      },
+      {
+        id: 'adr-example',
+        title: '2. ตัวอย่าง Architecture Decision Record (ADR)',
+        contentHtml: `
+          <p>ตัวอย่างการบันทึกการตัดสินใจทางสถาปัตยกรรมใน <code>devflow/decisions/ADR-001.md</code>:</p>
+          <pre><code># ADR-001: Use SQLite with WAL Mode for Local Storage
+
+- **Status**: Accepted
+- **Date**: 2026-09-17
+- **Deciders**: Lead Architect, Full-Stack Developer
+
+## Context & Problem Statement
+ต้องการระบบจัดเก็บข้อมูลแบบ Local-First ที่รวดเร็ว ไร้ Dependency ภายนอก และรองรับ Concurrent Reads
+
+## Considered Options
+1. SQLite (better-sqlite3) with WAL mode (Recommended)
+2. JSON Flat Files
+3. Embedded LevelDB
+
+## Decision Outcome
+เลือกตัวเลือกที่ 1 เพราะมี Transaction Integrity และ Performance สูงสุดในสภาพแวดล้อม Local-Only</code></pre>
+        `
+      }
+    ]
+  },
+
+  // 5. Tool Adapters
   {
     slug: 'tool-adapters',
     category: 'REFERENCE',
@@ -96,7 +284,7 @@ export const REFERENCE_PAGES: DocPage[] = [
     ]
   },
 
-  // 3. Local-Only Mode
+  // 6. Local-Only Mode
   {
     slug: 'local-only-mode',
     category: 'REFERENCE',
@@ -120,7 +308,7 @@ export const REFERENCE_PAGES: DocPage[] = [
     ]
   },
 
-  // 4. Project Configuration
+  // 7. Project Configuration
   {
     slug: 'project-configuration',
     category: 'REFERENCE',
@@ -179,7 +367,7 @@ export const REFERENCE_PAGES: DocPage[] = [
     ]
   },
 
-  // 5. Try migration
+  // 8. Try migration
   {
     slug: 'commands/try',
     category: 'REFERENCE',
@@ -214,7 +402,7 @@ export const REFERENCE_PAGES: DocPage[] = [
     ]
   },
 
-  // 6. Browser Tests migration
+  // 9. Browser Tests migration
   {
     slug: 'commands/browser-tests',
     category: 'REFERENCE',

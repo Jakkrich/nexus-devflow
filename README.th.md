@@ -283,7 +283,7 @@ Nexus-DevFlow จัดระเบียบการพัฒนาด้วย
 
 Skills มี JIT guides ภาษาอังกฤษสำหรับ root-cause tracing, defense-in-depth,
 condition-based waiting, TDD anti-patterns และ two-stage review พร้อมสำเนาตรงกัน
-ใน `.agents/` และ `.claude/` ดู [วิธีเลือกใช้ guides](devflow/docs/USAGE.md#debugging-tdd--review-reference-guides)
+ใน `.agents/` และ `.claude/` ดู [วิธีเลือกใช้ guides](https://jakkrich.github.io/nexus-devflow/workflow-surface-map/)
 สำหรับสถานการณ์ใช้งาน, 3-Strike Rule และ review gates ที่ยังต้องปฏิบัติตาม
 
 ---
@@ -336,8 +336,8 @@ AI:   บันทึก Release Digest ลงใน Living Spec
 
 สำรวจแผนผังสถาปัตยกรรมระบบและวงจรชีวิต Living Spec แบบ Interactive ที่สร้างขึ้นด้วย **Archify**:
 
-- 🌐 **[แผนผังสถาปัตยกรรมระบบ Nexus-DevFlow (Interactive HTML)](devflow/docs/diagrams/nexus-devflow-architecture.html)** — ดูความเชื่อมโยงของ 3 เสาหลัก (3-Pillars), การผสาน Multi-Agent Adapters และ QA Gates
-- ⚡ **[วงจรชีวิตและ State Machine ของ Living Spec (Interactive HTML)](devflow/docs/diagrams/nexus-devflow-lifecycle.html)** — แสดงขั้นตอนการส่งมอบ 4 ขั้นตอน (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), จุดตรวจ Blocker และการย้อนคืนระบบ
+- 🌐 **[แผนผังสถาปัตยกรรมระบบ Nexus-DevFlow (Interactive HTML)](docs/diagrams/nexus-devflow-architecture.html)** — ดูความเชื่อมโยงของ 3 เสาหลัก (3-Pillars), การผสาน Multi-Agent Adapters และ QA Gates
+- ⚡ **[วงจรชีวิตและ State Machine ของ Living Spec (Interactive HTML)](docs/diagrams/nexus-devflow-lifecycle.html)** — แสดงขั้นตอนการส่งมอบ 4 ขั้นตอน (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), จุดตรวจ Blocker และการย้อนคืนระบบ
 
 ![Nexus-DevFlow Workflow](assets/nexus-devflow-workflow.png)
 
@@ -842,13 +842,13 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 
 ## เอกสารอ้างอิงและกติกากำกับ (Documentation and governance)
 
-- [คู่มือการใช้งานฉบับเต็ม](devflow/docs/USAGE.md) — วิธีปฏิบัติงานและ Core Skill inventory
-- [แผนผัง Workflow Surface](devflow/docs/workflow-surface-map.md) — คำสั่ง หมวดหมู่ และอาร์ติแฟกต์มาตรฐาน
-- [นโยบายเลือกใช้ Skill](devflow/docs/skill-selection-policy.md) — เลือก workflow หรือ companion skill ที่เล็กและตรงงาน
-- [กติกา Governance](devflow/docs/governance-rules.md) — ขอบเขต public surface และตำแหน่งเอกสารสำหรับ maintainer
-- [Markdown Metadata Contract](devflow/docs/markdown-metadata-contract.md) — ข้อกำหนด frontmatter และ semantic heading
-- [Manual Review Workflow](devflow/docs/manual-review-workflow-spec.md) — Human review gates ตั้งแต่สเปกถึงการส่งมอบ
-- [ตัวอย่าง Living Spec](devflow/docs/examples/living-spec/) — ตัวอย่าง spec, discovery, ADR และ idea artifacts
+- [เว็บไซต์เอกสารคู่มืออย่างเป็นทางการ (Web Documentation)](https://jakkrich.github.io/nexus-devflow/) — คู่มือฉบับเต็ม ระบบค้นหาอัจฉริยะ และ Live Manuals
+- [แผนผัง Workflow Surface](https://jakkrich.github.io/nexus-devflow/workflow-surface-map/) — คำสั่ง หมวดหมู่ และอาร์ติแฟกต์มาตรฐาน
+- [นโยบายเลือกใช้ Skill](https://jakkrich.github.io/nexus-devflow/skill-selection-policy/) — เลือก workflow หรือ companion skill ที่เล็กและตรงงาน
+- [กติกา Governance](https://jakkrich.github.io/nexus-devflow/governance-rules/) — ขอบเขต public surface และตำแหน่งเอกสารสำหรับ maintainer
+- [Markdown Metadata Contract](https://jakkrich.github.io/nexus-devflow/markdown-metadata-contract/) — ข้อกำหนด frontmatter และ semantic heading
+- [Manual Review Workflow](https://jakkrich.github.io/nexus-devflow/manual-review/) — Human review gates ตั้งแต่สเปกถึงการส่งมอบ
+- [ตัวอย่าง Living Spec](https://jakkrich.github.io/nexus-devflow/living-spec-examples/) — ตัวอย่าง spec, discovery, ADR และ idea artifacts
 
 ---
 

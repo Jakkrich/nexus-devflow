@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/workflow-surface-map/">
+  <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Local Standalone Style (Zero External Dependencies) -->
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="docs-body">
+  <a class="skip-link" href="#docs-content">ข้ามไปยังเนื้อหาหลัก</a>
+
+  <!-- Docs Header -->
+  <header class="docs-header">
+    <div class="docs-header-inner">
+      <div class="docs-brand">
+        <a href="../" aria-label="Nexus-DevFlow หน้าแรก">
+          <img src="../brand/logo-light.svg" alt="Nexus-DevFlow" class="site-logo">
+        </a>
+        <span class="docs-badge">คู่มือ</span>
+      </div>
+
+      <div class="docs-header-actions">
+        <!-- Instant Search Button -->
+        <button class="docs-search" type="button" data-search-open aria-label="เปิดหน้าต่างค้นหาเอกสาร">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>ค้นหาเอกสาร...</span>
+          <span class="docs-key">⌘ K</span>
+        </button>
+
+        <a class="docs-header-link" href="../">หน้าแรก</a>
+        <a class="docs-header-link" href="../updates/">อัปเดต</a>
+        <a class="docs-header-link" href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.27-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <button class="docs-mobile-menu" type="button" aria-expanded="false" aria-controls="docs-sidebar" data-docs-menu>เมนู</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Docs Shell (3 Columns) -->
+  <div class="docs-shell">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation sidebar" data-docs-sidebar>
+      <nav>
+        <!-- START -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">START</div>
+          <a class="docs-nav-link" href="../getting-started/">Getting Started</a>
+          <a class="docs-nav-link" href="../existing-codebase/">Existing Codebase Adoption</a>
+          <a class="docs-nav-link" href="../command-guide/">Command Guide</a>
+          <a class="docs-nav-link" href="../writing-your-plans/">Writing Your Plans</a>
+          <a class="docs-nav-link" href="../updating-devflow/">Updating DevFlow</a>
+        </div>
+
+        <!-- WORKFLOW -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">WORKFLOW</div>
+          <a class="docs-nav-link" href="../core-workflow/">Core Workflow</a>
+          <a class="docs-nav-link active" href="../workflow-surface-map/">Workflow Surface Map</a>
+          <a class="docs-nav-link" href="../skill-selection-policy/">Skill Selection Policy</a>
+        </div>
+
+        <!-- COMMANDS -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">COMMANDS</div>
+          <a class="docs-nav-link" href="../commands/onboard/">Onboard</a>
+          <a class="docs-nav-link" href="../commands/adopt/">Adopt</a>
+          <a class="docs-nav-link" href="../commands/discovery/">Discovery</a>
+          <a class="docs-nav-link" href="../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../commands/overview/">Overview</a>
+          <a class="docs-nav-link" href="../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../commands/implement/">Implement</a>
+          <a class="docs-nav-link" href="../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../commands/complete/">Complete</a>
+          <a class="docs-nav-link" href="../commands/status/">Status</a>
+          <a class="docs-nav-link" href="../commands/doctor/">Doctor</a>
+          <a class="docs-nav-link" href="../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../commands/fix/">Fix</a>
+          <a class="docs-nav-link" href="../commands/brief/">Brief</a>
+          <a class="docs-nav-link" href="../commands/audit/">Audit</a>
+          <a class="docs-nav-link" href="../commands/tests/">Tests</a>
+          <a class="docs-nav-link" href="../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
+          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot</a>
+          <a class="docs-nav-link" href="../commands/continuous/">Continuous</a>
+          <a class="docs-nav-link" href="../commands/release/">Release</a>
+          <a class="docs-nav-link" href="../commands/rollback/">Rollback</a>
+          <a class="docs-nav-link" href="../commands/analyze/">Analyze (SA Suite)</a>
+          <a class="docs-nav-link" href="../commands/grill/">Grill (Domain & ADR)</a>
+          <a class="docs-nav-link" href="../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../commands/archify/">Archify (Diagrams)</a>
+          <a class="docs-nav-link" href="../commands/diagram-design/">Diagram Design</a>
+          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD</a>
+          <a class="docs-nav-link" href="../commands/vendor/">Vendor</a>
+          <a class="docs-nav-link" href="../commands/ponytail/">Ponytail (Simplifier)</a>
+          <a class="docs-nav-link" href="../commands/report-html/">Report HTML</a>
+        </div>
+
+        <!-- CLI -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">CLI</div>
+          <a class="docs-nav-link" href="../cli/">CLI Overview</a>
+          <a class="docs-nav-link" href="../cli/status/">Status</a>
+          <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
+          <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
+        </div>
+
+        <!-- REFERENCE -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">REFERENCE</div>
+          <a class="docs-nav-link" href="../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
+          <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
+          <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
+          <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
+          <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
+          <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
+          <a class="docs-nav-link" href="../commands/try/">Try Guide Reference</a>
+          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests Reference</a>
+        </div>
+
+        <!-- QUALITY -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">QUALITY</div>
+          <a class="docs-nav-link" href="../testing/">Testing and CI</a>
+          <a class="docs-nav-link" href="../manual-review/">Manual Review & Quality Gates</a>
+          <a class="docs-nav-link" href="../code-quality/">Code Quality & Token Budgets</a>
+          <a class="docs-nav-link" href="../findings-ledger/">The Findings Ledger</a>
+        </div>
+
+        <!-- SHIP -->
+        <div class="docs-nav-group">
+          <div class="docs-nav-title">SHIP</div>
+          <a class="docs-nav-link" href="../release-readiness/">Release Readiness</a>
+          <a class="docs-nav-link" href="../troubleshooting/">Troubleshooting</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-main" id="docs-content">
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>WORKFLOW</span> <span>/</span> <strong>Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)</strong></div>
+      
+      <h1 class="docs-title">Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)</h1>
+      
+      <p class="docs-lead">
+        แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant
+      </p>
+
+      <div class="docs-meta">
+        <span class="docs-pill">Workflow</span>
+        <span class="docs-pill">Surface</span>
+        <span class="docs-pill">CoreSkills</span>
+        <span class="docs-pill">Taxonomy</span>
+        <span class="docs-pill">Commands</span>
+        <span class="docs-pill">Adapters</span>
+      </div>
+
+      <div class="docs-prose">
+
+        <!-- Section: รูปแบบการเรียกใช้คำสั่ง (Universal Invocation) -->
+        <section id="universal-invocations">
+          <h2>รูปแบบการเรียกใช้คำสั่ง (Universal Invocation)</h2>
+          
+          <p>Nexus-DevFlow กำหนดให้แต่ละคำสั่งมี <strong>ชื่อมาตรฐานหนึ่งเดียว (One Canonical Name)</strong> และสามารถเรียกใช้ได้ตามไวยากรณ์ของ AI Assistant แต่ละค่าย:</p>
+          <table>
+            <thead><tr><th>สไตล์การเรียกคำสั่ง</th><th>เครื่องมือที่รองรับ</th><th>ตัวอย่างการเรียกใช้</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Slash Prefix (<code>/</code>)</strong></td><td>Google Antigravity, Claude Code, Gemini CLI</td><td><code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code></td></tr>
+              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$continuous</code>, <code>$devflow</code></td></tr>
+              <tr><td><strong>Plain Canonical Name</strong></td><td>GitHub Copilot, Generic Terminals, OpenCode, Aider</td><td><code>feature 1</code>, <code>implement</code>, <code>check</code></td></tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+
+        <!-- Section: 1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills) -->
+        <section id="lifecycle-skills">
+          <h2>1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills)</h2>
+          
+          <table>
+            <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
+            <tbody>
+              <tr><td><strong><code>feature</code></strong></td><td>Spec & Plan</td><td>จัดสรร ID, สร้าง Task-Isolated Workspace และร่าง Living Spec</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>fix</code></strong></td><td>Spec & Plan</td><td>ร่าง Fix Spec สำหรับการแก้ไขบั๊กหรือการปรับปรุงเร่งด่วน</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>implement</code></strong></td><td>Execution</td><td>ดำเนินการพัฒนาตาม Task Checklist ด้วยวินัย Strict TDD</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>check</code></strong></td><td>Quality Gate</td><td>Senior QA Dual-Axis Verification ตรวจสอบพฤติกรรมจริง</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>complete</code></strong></td><td>Delivery</td><td>สรุป Release Digest, ย้ายเข้า History Archive และ Squash-Merge</td><td><code>history/features/</code></td></tr>
+              <tr><td><strong><code>continuous</code></strong></td><td>Delivery</td><td>รันคิวฟีเจอร์ใน Build Plan ต่อเนื่องอัตโนมัติในเครื่อง</td><td><code>history/features/</code></td></tr>
+              <tr><td><strong><code>rollback</code></strong></td><td>Delivery</td><td>วางแผนและย้อนคืนฟีเจอร์ที่ส่งมอบแล้วโดยรักษาประวัติอย่างปลอดภัย</td><td><code>history/rollbacks/</code></td></tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+
+        <!-- Section: 2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills) -->
+        <section id="preflight-skills">
+          <h2>2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills)</h2>
+          
+          <table>
+            <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
+            <tbody>
+              <tr><td><strong><code>analyze</code></strong></td><td>SA Ingestion</td><td>แปลงเอกสารทุกฟอร์แมต (PDF, Word, Excel, รูปภาพ) สแกนผลกระทบโค้ดเบส</td><td><code>inbox/</code> & <code>analysis/</code></td></tr>
+              <tr><td><strong><code>idea</code></strong></td><td>Backlog</td><td>บันทึกไอเดียพร้อมประเมิน AI Feasibility Score & Value</td><td><code>devflow/ideas.md</code></td></tr>
+              <tr><td><strong><code>grill</code> / <code>align</code></strong></td><td>Alignment</td><td>Socratic Alignment Interview, สกัด Glossary และบันทึก ADR</td><td><code>decisions/</code> & <code>glossary.md</code></td></tr>
+              <tr><td><strong><code>brainstorm</code></strong></td><td>Ideation</td><td>ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม</td><td>Interactive Session</td></tr>
+              <tr><td><strong><code>discovery</code></strong></td><td>Exploration</td><td>สำรวจเจาะลึกภาพรวมโปรเจกต์หรือฟีเจอร์ก่อนเริ่มเขียนสเปก</td><td><code>discoveries/DISC-xxx.md</code></td></tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+
+        <!-- Section: 3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills) -->
+        <section id="governance-skills">
+          <h2>3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills)</h2>
+          
+          <table>
+            <thead><tr><th>คำสั่ง</th><th>หน้าที่</th><th>คำสั่ง</th><th>หน้าที่</th></tr></thead>
+            <tbody>
+              <tr><td><strong><code>devflow</code></strong></td><td>ผู้ช่วยแนะนำเส้นทางและตรวจสอบสถานะงาน</td><td><strong><code>doctor</code></strong></td><td>วินิจฉัยสุขภาพโปรเจกต์และการตั้งค่าระบบ</td></tr>
+              <tr><td><strong><code>explore</code></strong></td><td>ตอบคำถามและทำความเข้าใจโค้ดเบสแบบ Read-Only</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
+              <tr><td><strong><code>brief</code></strong></td><td>สรุปขอบเขตและความเสี่ยงของฟีเจอร์ใน Build Plan</td><td><strong><code>debug</code></strong></td><td>วินิจฉัยหาสาเหตุของบั๊กอย่างเป็นระบบ</td></tr>
+              <tr><td><strong><code>onboard</code></strong></td><td>ติดตั้งและปรับแต่งค่าเริ่มต้นบนโปรเจกต์ใหม่</td><td><strong><code>adopt</code></strong></td><td>สำรวจและผนวก DevFlow เข้ากับโปรเจกต์เดิม</td></tr>
+              <tr><td><strong><code>try</code></strong></td><td>สร้างคู่มือ Manual QA Walkthrough ทีละขั้นตอน</td><td><strong><code>audit</code></strong></td><td>สแกนความปลอดภัยและคุณภาพโค้ดลง <code>findings.md</code></td></tr>
+              <tr><td><strong><code>bughunter</code></strong></td><td>สแกนช่องโหว่ความปลอดภัยเชิงรุกและ 83 CVE Patterns</td><td><strong><code>ci</code></strong></td><td>สร้างและปรับจูน GitHub Actions Verification Workflow</td></tr>
+              <tr><td><strong><code>test</code></strong></td><td>รันชุดทดสอบและวิเคราะห์ Test Coverage</td><td><strong><code>setup-tests</code></strong></td><td>ติดตั้ง Test Runner และชุดทดสอบเริ่มต้น</td></tr>
+              <tr><td><strong><code>browser-tests</code></strong></td><td>ติดตั้ง Playwright และเชื่อม BrowserOS Neo MCP</td><td><strong><code>autopilot</code></strong></td><td>รัน 1 ฟีเจอร์ต่อเนื่องตั้งแต่ Spec จนถึง Check</td></tr>
+              <tr><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td><td><strong><code>release</code></strong></td><td>ตรวจสอบความพร้อมก่อน Deploy ขึ้น Render/Vercel</td></tr>
+              <tr><td><strong><code>report-html</code></strong></td><td>สร้าง Standalone HTML Report Dashboard</td><td><strong><code>convert-any-to-md</code></strong></td><td>แปลงเอกสารภายนอกเป็น Markdown ใน <code>reference/</code></td></tr>
+              <tr><td><strong><code>vendor</code></strong></td><td>ติดตั้ง External Skill และสร้าง Custom Wrapper</td><td><strong><code>status</code></strong></td><td>สรุปความคืบหน้าของงานและขั้นตอนถัดไป</td></tr>
+            </tbody>
+          </table>
+        
+          
+        </section>
+      </div>
+
+      <!-- Bottom Page Navigation -->
+      <nav class="docs-page-nav" aria-label="Documentation page navigation">
+        <a class="prev" href="../core-workflow/">
+          <span>ก่อนหน้า (Previous)</span>
+          <strong>Core Workflow</strong>
+        </a>
+        <a class="next" href="../skill-selection-policy/">
+          <span>ถัดไป (Next)</span>
+          <strong>Skill Selection Policy</strong>
+        </a>
+      </nav>
+    </main>
+
+    <!-- Right Sidebar (TOC) -->
+    <aside class="docs-toc" aria-label="On this page">
+      <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
+      <a href="#universal-invocations">รูปแบบการเรียกใช้คำสั่ง (Universal Invocation)</a>
+      <a href="#lifecycle-skills">1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills)</a>
+      <a href="#preflight-skills">2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills)</a>
+      <a href="#governance-skills">3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills)</a>
+    </aside>
+  </div>
+
+  <!-- Instant Search Dialog Modal (Zero Dependency) -->
+  <dialog class="search-dialog" data-search-dialog aria-labelledby="search-title">
+    <div class="search-panel">
+      <div class="search-heading">
+        <div>
+          <span class="eyebrow" style="font-size:0.7rem; text-transform:uppercase; color:var(--blue-dark); font-family:var(--font-mono);">Nexus-DevFlow Docs</span>
+          <h2 id="search-title">ค้นหาเอกสารและคำสั่ง</h2>
+        </div>
+        <button type="button" data-search-close aria-label="ปิดหน้าต่างค้นหา">Esc</button>
+      </div>
+      <label class="search-input">
+        <span class="sr-only">ค้นหาเอกสาร</span>
+        <input type="search" placeholder="พิมพ์ชื่อคำสั่ง เช่น /feature, /audit, config, testing..." autocomplete="off" data-search-input>
+      </label>
+      <div class="search-results" data-search-results aria-live="polite">
+        <p>พิมพ์เพื่อค้นหาคำสั่ง คู่มือ และสถาปัตยกรรม...</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container site-footer-inner">
+      <div class="site-footer-brand">
+        <img src="../brand/logo-light.svg" alt="Nexus-DevFlow">
+        <span>เลเยอร์เวิร์กโฟลว์แบบโอเพนซอร์สสำหรับการพัฒนาซอฟต์แวร์ด้วย AI</span>
+      </div>
+      <div class="site-footer-links">
+        <a href="https://github.com/Jakkrich/nexus-devflow" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="../getting-started/">คู่มือ (Docs)</a>
+        <a href="../updates/">อัปเดต (Updates)</a>
+        <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">สัญญาอนุญาต MIT</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

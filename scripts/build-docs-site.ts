@@ -29,7 +29,9 @@ const SIDEBAR_ITEMS = [
   {
     category: 'WORKFLOW',
     items: [
-      { slug: 'core-workflow', title: 'Core Workflow' }
+      { slug: 'core-workflow', title: 'Core Workflow' },
+      { slug: 'workflow-surface-map', title: 'Workflow Surface Map' },
+      { slug: 'skill-selection-policy', title: 'Skill Selection Policy' }
     ]
   },
   {
@@ -73,26 +75,30 @@ const SIDEBAR_ITEMS = [
     items: [
       { slug: 'cli', title: 'CLI Overview' },
       { slug: 'cli/status', title: 'Status' },
-      { slug: 'cli/dashboard', title: 'Live Dashboard' }
+      { slug: 'cli/dashboard', title: 'Live Dashboard' },
+      { slug: 'cli/tokens', title: 'Token & Cost Analytics' }
     ]
   },
   {
     category: 'REFERENCE',
     items: [
       { slug: 'file-reference', title: 'File Reference' },
+      { slug: 'governance-rules', title: 'Governance Rules' },
+      { slug: 'markdown-metadata-contract', title: 'Markdown Metadata Contract' },
+      { slug: 'living-spec-examples', title: 'Living Spec Examples' },
       { slug: 'tool-adapters', title: 'Tool Adapters' },
       { slug: 'local-only-mode', title: 'Local-Only Mode' },
       { slug: 'project-configuration', title: 'Project Configuration' },
-      { slug: 'commands/try', title: 'Try migration' },
-      { slug: 'commands/browser-tests', title: 'Browser Tests migration' }
+      { slug: 'commands/try', title: 'Try Guide Reference' },
+      { slug: 'commands/browser-tests', title: 'Browser Tests Reference' }
     ]
   },
   {
     category: 'QUALITY',
     items: [
       { slug: 'testing', title: 'Testing and CI' },
-      { slug: 'manual-review', title: 'Manual Review With Try' },
-      { slug: 'code-quality', title: 'Code Quality With Audit' },
+      { slug: 'manual-review', title: 'Manual Review & Quality Gates' },
+      { slug: 'code-quality', title: 'Code Quality & Token Budgets' },
       { slug: 'findings-ledger', title: 'The Findings Ledger' }
     ]
   },

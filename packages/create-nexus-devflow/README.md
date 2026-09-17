@@ -68,11 +68,11 @@ red-capable feedback loop and does not modify source. Architecture review follow
 Deep Modules principles: small public interfaces, hidden implementation
 complexity, and stable seams.
 
-Maintainer contracts and examples are available in the repository:
-[governance rules](https://github.com/Jakkrich/nexus-devflow/blob/main/devflow/docs/governance-rules.md),
-[Markdown metadata](https://github.com/Jakkrich/nexus-devflow/blob/main/devflow/docs/markdown-metadata-contract.md),
-[manual review workflow](https://github.com/Jakkrich/nexus-devflow/blob/main/devflow/docs/manual-review-workflow-spec.md), and
-[Living Spec examples](https://github.com/Jakkrich/nexus-devflow/tree/main/devflow/docs/examples/living-spec).
+Maintainer contracts and examples are available in the official documentation:
+[governance rules](https://jakkrich.github.io/nexus-devflow/governance-rules/),
+[Markdown metadata](https://jakkrich.github.io/nexus-devflow/markdown-metadata-contract/),
+[manual review workflow](https://jakkrich.github.io/nexus-devflow/manual-review/), and
+[Living Spec examples](https://jakkrich.github.io/nexus-devflow/living-spec-examples/).
 
 ---
 

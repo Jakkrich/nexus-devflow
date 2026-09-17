@@ -1,12 +1,13 @@
 import type { DocPage } from '../build-docs-site.js';
 
 export const WORKFLOW_PAGES: DocPage[] = [
+  // 1. Core Workflow
   {
     slug: 'core-workflow',
     category: 'WORKFLOW',
     title: 'Core Workflow (วงจรเวิร์กโฟลว์หลัก)',
     lead: 'ทำความเข้าใจความเชื่อมโยงระหว่างการวางแผน (Planning), การลงมือพัฒนา (Implementation), หลักฐานการตรวจรับ (Evidence) และการส่งมอบงาน (Completion)',
-    pills: ['Workflow', 'Core-Loop', 'Living-Spec', 'TDD', 'Verification', 'Human-in-the-Loop', 'Continuous'],
+    pills: ['Workflow', 'Core-Loop', 'Living-Spec', 'TDD', 'Verification', 'Human-in-the-Loop', 'Continuous', 'Slicing', 'Input-Coverage'],
     sections: [
       {
         id: 'visual-overview',
@@ -21,6 +22,72 @@ export const WORKFLOW_PAGES: DocPage[] = [
             </picture>
             <figcaption>การวางแผน (Planning) และการคอมไพล์บริบท (Overview) จะรันเมื่อเริ่มต้นโปรเจกต์หรือเมื่อแผนงานหลักมีการเปลี่ยนแปลงอย่างมีนัยสำคัญ ส่วนวงจรพัฒนาหลักจะเริ่มต้นที่คำสั่ง Feature และหากผลการตรวจรับไม่ผ่าน จะย้อนกลับไปแก้ไขที่ Implement</figcaption>
           </figure>
+          <div class="note-box">
+            <strong>Interactive Architecture Diagrams:</strong> คุณสามารถเปิดดูแผนผังเชิงปฏิสัมพันธ์ได้โดยตรง:
+            <ul>
+              <li>🌐 <a href="../diagrams/nexus-devflow-architecture.html" target="_blank">Nexus-DevFlow System Architecture Map (Interactive HTML)</a> — แผนผังสถาปัตยกรรมระบบและ 3-Pillars Model</li>
+              <li>⚡ <a href="../diagrams/nexus-devflow-lifecycle.html" target="_blank">Living Spec Lifecycle & State Machine (Interactive HTML)</a> — แผนผัง State Machine และ 4-Stage Progressive Rail</li>
+            </ul>
+          </div>
+        `
+      },
+      {
+        id: 'slicing-archetypes',
+        title: '4 Slicing Archetypes Framework (การซอยฟีเจอร์อย่างมีประสิทธิภาพ)',
+        contentHtml: `
+          <p>เมื่อพบฟีเจอร์ขนาดใหญ่ใน <code>build-plan.md</code> หรือในขั้นตอน <code>/discovery</code> DevFlow มีแบบแผนมาตรฐานในการแบ่งย่อยงาน (Slicing) ออกเป็น 4 รูปแบบ เพื่อให้แต่ละฟีเจอร์สามารถสร้าง ทดสอบ และรีวิวได้จบในตัว:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Archetype</th>
+                <th>สัญลักษณ์</th>
+                <th>กลยุทธ์การแบ่งงาน (Strategy)</th>
+                <th>เมื่อไหร่ควรเลือกใช้ (When to use)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Skateboard</strong></td>
+                <td>🛹</td>
+                <td><strong>Minimal Functional Loop</strong>: พัฒนาเฉพาะแกน Logic/Algorithm หลักแบบ End-to-End ด้วย UI แบบ Minimal (หรือ CLI) เพื่อพิสูจน์การทำงานจริงก่อนทำ UI สวยงาม</td>
+                <td>ฟังก์ชันที่เน้นความถูกต้องของการคำนวณ, Logic ทางธุรกิจที่ซับซ้อน หรือระบบประมวลผลข้อมูล</td>
+              </tr>
+              <tr>
+                <td><strong>2. Facade</strong></td>
+                <td>🎭</td>
+                <td><strong>Rich UI/DX with Mock Backend</strong>: สร้างหน้าจอ ส่วนติดต่อผู้ใช้ และ Interaction ที่สมบูรณ์แบบโดยใช้ Mock Data ก่อนต่อระบบ Backend จริง</td>
+                <td>ฟีเจอร์ที่ต้องอาศัย Feedback ด้าน UX/UI จากผู้ใช้งานจริง, Dashboard, หรือ Form กรอกข้อมูลหลายขั้นตอน</td>
+              </tr>
+              <tr>
+                <td><strong>3. Tracer Bullet</strong></td>
+                <td>🎯</td>
+                <td><strong>Deep Vertical Slice</strong>: ผ่าตรงผ่านทุก Layer ของระบบ (Database ➔ API ➔ Business Logic ➔ UI) สำหรับ 1 Happy Path แรกที่ใช้งานได้จริง</td>
+                <td>เมื่อต้องการทดสอบการเชื่อมต่อสถาปัตยกรรมข้ามระบบครั้งแรก (Architecture Feasibility)</td>
+              </tr>
+              <tr>
+                <td><strong>4. Journey</strong></td>
+                <td>🧭</td>
+                <td><strong>Step-by-Step User Journey</strong>: แบ่งฟีเจอร์ตามลำดับขั้นตอนในเส้นทางของผู้ใช้ (เช่น Onboarding ➔ Creation ➔ Preview ➔ Export)</td>
+                <td>Workflow การทำงานที่มีหลายหน้าจอ หรือขั้นตอนที่ต้องทำต่อกันเป็นลำดับ</td>
+              </tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        id: 'mechanical-input-coverage',
+        title: 'Mechanical Input Coverage Spec Gate (การสกัดกั้น AI Hallucination)',
+        contentHtml: `
+          <p>เพื่อป้องกันไม่ให้ AI Coding Agent คิดเองเออเองหรือแอบตัดสินใจเชิงสถาปัตยกรรมระหว่างการเขียนโค้ด (Silent Architectural Drift) DevFlow กำหนดให้ทุก Living Spec ต้องผ่านเกณฑ์ <strong>Mechanical Input Coverage Test</strong> ก่อนเริ่มลงมือพัฒนา:</p>
+          <pre><code>ทุกค่า/ข้อมูลที่โค้ดต้องสร้างหรือแสดงผล (Produced Values)
+  └── ต้องระบุที่มา (Named Data Source) ไว้อย่างชัดเจนใน Spec เสมอ:
+        ├── Database Schema / Column
+        ├── Request Parameter / Input Argument
+        ├── External API Response Field
+        └── Prior Architectural Decision (ADR)</code></pre>
+          <div class="note-box warning">
+            <strong>Anti-Hallucination Guard:</strong> หากค่าหรือเงื่อนไขใดไม่มีที่มาของข้อมูลระบุไว้อย่างชัดเจน ให้ถือเป็น <strong>Owed Decision</strong> ซึ่ง AI จะไม่ได้รับอนุญาตให้คาดเดาเองเป็น "Wiring Code" โดยเด็ดขาด แต่ต้องหยุดถามผู้ใช้ หรือส่งเข้าขั้นตอน <code>/grill</code> เพื่อบันทึกข้อสรุปก่อน
+          </div>
         `
       },
       {
@@ -35,7 +102,6 @@ export const WORKFLOW_PAGES: DocPage[] = [
             <li><strong><code>/brainstorm</code></strong>: ระดมสมองและสังเคราะห์ทางเลือกในการออกแบบระบบ 2-3 แบบ พร้อมเปรียบเทียบข้อดีข้อเสียก่อนตัดสินใจเลือกแนวทาง</li>
             <li><strong><code>/grill</code> (หรือ <code>align</code>)</strong>: จัดเซสชันสัมภาษณ์เชิงลึกแบบ Socratic Interview เพื่อทดสอบความสมบูรณ์ของแผนงาน สกัด Glossary คำศัพท์ทางธุรกิจ และบันทึก Architecture Decision Records (ADRs) ลงใน <code>devflow/decisions/</code></li>
           </ul>
-          <p>ดูคู่มือการเลือกใช้คำสั่งที่เหมาะสมได้ที่หน้า <a href="../command-guide/">Command Guide</a></p>
         `
       },
       {
@@ -47,7 +113,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
 หรือรัน /discovery ──▶ ตรวจสอบและอนุมัติแผนงาน ───────▶ /overview</code></pre>
           <p>ทั้งสองแนวทางจะสร้างไฟล์แผนงานที่ผู้ใช้เป็นเจ้าของเหมือนกัน โดย <code>/discovery</code> จะไม่ถูกบังคับรันจากขั้นตอน Onboarding และไม่เป็น Gate ขัดขวางการรัน Overview</p>
           <div class="note-box">
-            <strong>Baseline Project Commit:</strong> ก่อนเริ่มพัฒนา Feature แรก เมื่อรัน <code>/overview</code> สำเร็จ ระบบจะเสนอทางเลือกในการสร้าง Commit ตั้งต้น <code>chore: establish DevFlow project baseline</code> โดย AI จะแสดง Diff ให้ตรวจสอบและรอการอนุมัติก่อนเสมอ เพื่อแยกส่วนการติดตั้งเวิร์กโฟลว์ออกจาก Commit ของฟีเจอร์แรกอย่างชัดเจน
+            <strong>Baseline Project Commit:</strong> ก่อนเริ่มพัฒนา Feature แรก เมื่อรัน <code>/overview</code> สำเร็จ ระบบจะเสนอทางเลือกในการสร้าง Commit ตั้งต้น <code>chore: establish DevFlow project baseline</code> โดย AI จะแสดง Diff ให้ตรวจสอบและรอการอนุมัติก่อนเสมอ
           </div>
         `
       },
@@ -62,17 +128,6 @@ export const WORKFLOW_PAGES: DocPage[] = [
             <li><strong>นโยบาย Quality Gates</strong>: ควบคุมการทำงานของ Audit, Check, Try Guide และ Independent Review ในโหมดปกติ (<code>qualityGates.regular</code>) และโหมดต่อเนื่อง (<code>qualityGates.continuous</code>)</li>
             <li><strong>Independent Review</strong>: มีค่าเริ่มต้นเป็น <code>"when-sensitive"</code> สำหรับงานที่มีความอ่อนไหวสูงหรือขอบเขตกว้าง โดยจะใช้ Subagent แบบแยกขาดอิสระ (Isolated Reviewer) เพื่อความโปร่งใสสูงสุด</li>
           </ul>
-          <p>ดูรายละเอียด Schema และข้อจำกัดทั้งหมดได้ที่หน้า <a href="../project-configuration/">Project Configuration</a></p>
-        `
-      },
-      {
-        id: 'set-up-shared-verification-separately',
-        title: 'การตั้งค่าระบบทดสอบและตรวจสอบแยกอิสระ (Set up shared verification separately)',
-        contentHtml: `
-          <p>การตั้งค่าระบบตรวจสอบอัตโนมัติบน GitHub Actions เป็นขั้นตอนเสริมแยกต่างหาก ไม่ได้ถูกบังคับให้รันใหม่ในทุกฟีเจอร์ คุณสามารถรันคำสั่ง <code>/ci</code> หรือ <code>$ci</code> หลัง Onboarding หรือ Adoption เพื่อกำหนดคำสั่ง Verify มาตรฐานเดียวที่ใช้งานทั้งในเครื่องและบน CI:</p>
-          <pre><code>/onboard หรือ /adopt ──▶ /ci ──▶ Verify ในเครื่อง ──▶ GitHub Actions รัน Verify แบบเดียวกัน</code></pre>
-          <p>คำสั่ง Verify จะจัดลำดับการตรวจสอบที่กำหนดค่าไว้อย่างเป็นระบบ: Typecheck ➔ Tests ➔ Build และหากคุณรันคำสั่ง <code>/tests</code> ในภายหลังเพื่อเพิ่มชุดทดสอบ ระบบจะนำคำสั่งทดสอบนั้นเข้าสู่กระบวนการ Verify เดิมโดยอัตโนมัติ</p>
-          <p>นอกจากนี้ คำสั่ง <code>/ci</code> ยังเสนอทางเลือกในการติดตั้ง <strong>Git pre-push hook</strong> ในเครื่อง เพื่อช่วยตรวจสอบโค้ดก่อนการ Push สู่ Remote ป้องกันโค้ดที่ผิดพลาดหลุดขึ้นสู่เซิร์ฟเวอร์</p>
         `
       },
       {
@@ -117,12 +172,6 @@ export const WORKFLOW_PAGES: DocPage[] = [
               </tr>
             </tbody>
           </table>
-          <p><strong>คำสั่งช่วยเหลือเมื่อพบสถานการณ์เฉพาะ:</strong></p>
-          <ul>
-            <li><strong><code>/check guide</code> (หรือ <code>try</code>)</strong>: สร้างคู่มือทดสอบ Manual Walkthrough สำหรับมนุษย์ตรวจทาน ระบุจุดคลิกและผลลัพธ์ที่ถูกต้อง</li>
-            <li><strong><code>/fix</code></strong>: ใช้สำหรับงานแก้ไขบั๊กหรือการเปลี่ยนแปลงย่อยที่ไม่ได้อยู่ใน Build Plan โดยจะสร้าง Fix Spec ที่กระชับและเข้าสู่วงจรเดียวกัน</li>
-            <li><strong><code>/debug</code></strong>: ใช้สืบหาสาเหตุของข้อผิดพลาดและแกะรอยปัญหาแบบ Read-Only เมื่อยืนยันสาเหตุได้แล้วจะส่งต่อให้ <code>/implement</code> หรือ <code>/fix</code> เพื่อแก้ไขต่อไป</li>
-          </ul>
         `
       },
       {
@@ -132,16 +181,6 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <p>คำสั่ง <code>/continuous</code> หรือ <code>$continuous</code> เป็นโหมดการทำงานอัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> แบบต่อเนื่องหลายรายการโดยไม่ต้องหยุดรอการอนุมัติระหว่างขั้นตอนย่อย:</p>
           <pre><code>/continuous ──▶ หยิบฟีเจอร์ถัดไป ──▶ รัน Spec/Implement/Check/Gates ──▶ Local Completion & Merge ──▶ ทำซ้ำ</code></pre>
           <p>Build Plan จะทำหน้าที่เป็นคิวงานโดยตรง แต่ละฟีเจอร์ยังคงแยก Branch, รันการทดสอบ TDD, บันทึกประวัติ และทำ Local Squash-Merge เข้าสู่ <code>main</code> อย่างปลอดภัย</p>
-          <p>ระบบจะหยุดการทำงานทันทีเมื่อพบการตัดสินใจสำคัญที่ต้องให้มนุษย์เลือก, ตรวจพบสถานะที่ไม่ปลอดภัย, การทดสอบไม่ผ่าน หรือมี Audit Finding ระดับร้ายแรงที่ยังไม่ได้รับการแก้ไข และที่สำคัญคือ<strong>ไม่มีการ Push โค้ดขึ้น Remote อย่างเด็ดขาด</strong> ดูรายละเอียดที่หน้า <a href="../commands/continuous/">Continuous Mode</a></p>
-        `
-      },
-      {
-        id: 'continue-after-the-initial-build',
-        title: 'การต่อยอดพัฒนาหลังการเปิดตัวเวอร์ชันแรก (Continue after the initial build)',
-        contentHtml: `
-          <p>ไฟล์ <code>devflow/build-plan.md</code> ยังคงทำหน้าที่เป็น Roadmap หลักของโปรเจกต์แม้ว่าจะส่งมอบเวอร์ชันแรก (MVP) ไปแล้วก็ตาม โดยให้คงรายการเดิมที่ติ๊กถูกแล้วไว้ และเพิ่มรายการฟีเจอร์ใหม่ที่ยังไม่ได้ติ๊กต่อท้าย หรือแยกหมวดหมู่เช่น <code>## Post-MVP</code></p>
-          <pre><code>เพิ่มฟีเจอร์ใน build-plan.md ──▶ /overview ──▶ /feature ──▶ /implement ──▶ /check ──▶ /complete</code></pre>
-          <p>หากคุณรันคำสั่ง <code>/feature "ชื่อความสามารถใหม่"</code> แล้วไม่พบรายการที่ตรงกันใน Build Plan สกิลจะเสนอเพิ่มรายการนั้นลงในแผนงานให้โดยอัตโนมัติ โดยจะแสดงรายการเปลี่ยนแปลงให้คุณตรวจสอบและอนุมัติก่อน จากนั้นจะรีเฟรช Overview และสร้าง Spec ให้ทันที</p>
         `
       },
       {
@@ -151,29 +190,142 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <p>เมื่อจำเป็นต้องถอดถอนฟีเจอร์ที่ส่งมอบไปแล้วออกจากระบบ ให้ใช้คำสั่ง <code>/rollback &lt;feature-id&gt;</code>:</p>
           <pre><code>/rollback 4 ──▶ วิเคราะห์ความเสี่ยงและสร้าง Rollback Spec ──▶ /implement ──▶ /check ──▶ /complete</code></pre>
           <p>คำสั่ง Rollback จะจับคู่รายการใน Build Plan กับประวัติใน <code>devflow/history/</code> และ Git Commit ที่ตรงกัน จากนั้นจะวิเคราะห์ความเสี่ยงของ Commit หลังจากนั้นและร่าง Rollback Spec ที่รัดกุม</p>
-          <p>การดำเนินการจะ Revert เฉพาะส่วนของโค้ดผลิตภัณฑ์บน Branch <code>rollback/{xxx-slug}</code> โดยจะปกป้องไฟล์แผนงานและประวัติของ DevFlow ไว้ และเมื่อ Complete สำเร็จ ระบบจะเพิ่มบันทึก Rollback Archive พร้อมยกเลิกการติ๊กถูกใน Build Plan เพื่อสะท้อนสถานะปัจจุบันของระบบอย่างแม่นยำ ดูรายละเอียดที่หน้า <a href="../commands/rollback/">Rollback Command</a></p>
+        `
+      }
+    ]
+  },
+
+  // 2. Workflow Surface Map (New)
+  {
+    slug: 'workflow-surface-map',
+    category: 'WORKFLOW',
+    title: 'Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)',
+    lead: 'แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant',
+    pills: ['Workflow', 'Surface', 'CoreSkills', 'Taxonomy', 'Commands', 'Adapters'],
+    sections: [
+      {
+        id: 'universal-invocations',
+        title: 'รูปแบบการเรียกใช้คำสั่ง (Universal Invocation)',
+        contentHtml: `
+          <p>Nexus-DevFlow กำหนดให้แต่ละคำสั่งมี <strong>ชื่อมาตรฐานหนึ่งเดียว (One Canonical Name)</strong> และสามารถเรียกใช้ได้ตามไวยากรณ์ของ AI Assistant แต่ละค่าย:</p>
+          <table>
+            <thead><tr><th>สไตล์การเรียกคำสั่ง</th><th>เครื่องมือที่รองรับ</th><th>ตัวอย่างการเรียกใช้</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Slash Prefix (<code>/</code>)</strong></td><td>Google Antigravity, Claude Code, Gemini CLI</td><td><code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code></td></tr>
+              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$continuous</code>, <code>$devflow</code></td></tr>
+              <tr><td><strong>Plain Canonical Name</strong></td><td>GitHub Copilot, Generic Terminals, OpenCode, Aider</td><td><code>feature 1</code>, <code>implement</code>, <code>check</code></td></tr>
+            </tbody>
+          </table>
         `
       },
       {
-        id: 'keep-human-gates-visible',
-        title: 'การคงด่านอนุมัติของมนุษย์ให้ชัดเจน (Keep human gates visible)',
+        id: 'lifecycle-skills',
+        title: '1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills)',
         contentHtml: `
-          <p>เวิร์กโฟลว์ของ Nexus-DevFlow ออกแบบมาโดยมีมนุษย์เป็นศูนย์กลางในการตัดสินใจ (Human-in-the-Loop) โดยจะหยุดรอการอนุมัติก่อนแตะต้องโค้ดผลิตภัณฑ์และก่อนการ Merge เสมอ เนื่องจากการปรับแก้สเปกมีต้นทุนถูกกว่าการแก้โค้ด และการแก้โค้ดใน Branch มีต้นทุนถูกกว่าการแก้ข้อผิดพลาดบน Branch หลัก</p>
+          <table>
+            <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
+            <tbody>
+              <tr><td><strong><code>feature</code></strong></td><td>Spec & Plan</td><td>จัดสรร ID, สร้าง Task-Isolated Workspace และร่าง Living Spec</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>fix</code></strong></td><td>Spec & Plan</td><td>ร่าง Fix Spec สำหรับการแก้ไขบั๊กหรือการปรับปรุงเร่งด่วน</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>implement</code></strong></td><td>Execution</td><td>ดำเนินการพัฒนาตาม Task Checklist ด้วยวินัย Strict TDD</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>check</code></strong></td><td>Quality Gate</td><td>Senior QA Dual-Axis Verification ตรวจสอบพฤติกรรมจริง</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>complete</code></strong></td><td>Delivery</td><td>สรุป Release Digest, ย้ายเข้า History Archive และ Squash-Merge</td><td><code>history/features/</code></td></tr>
+              <tr><td><strong><code>continuous</code></strong></td><td>Delivery</td><td>รันคิวฟีเจอร์ใน Build Plan ต่อเนื่องอัตโนมัติในเครื่อง</td><td><code>history/features/</code></td></tr>
+              <tr><td><strong><code>rollback</code></strong></td><td>Delivery</td><td>วางแผนและย้อนคืนฟีเจอร์ที่ส่งมอบแล้วโดยรักษาประวัติอย่างปลอดภัย</td><td><code>history/rollbacks/</code></td></tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        id: 'preflight-skills',
+        title: '2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills)',
+        contentHtml: `
+          <table>
+            <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
+            <tbody>
+              <tr><td><strong><code>analyze</code></strong></td><td>SA Ingestion</td><td>แปลงเอกสารทุกฟอร์แมต (PDF, Word, Excel, รูปภาพ) สแกนผลกระทบโค้ดเบส</td><td><code>inbox/</code> & <code>analysis/</code></td></tr>
+              <tr><td><strong><code>idea</code></strong></td><td>Backlog</td><td>บันทึกไอเดียพร้อมประเมิน AI Feasibility Score & Value</td><td><code>devflow/ideas.md</code></td></tr>
+              <tr><td><strong><code>grill</code> / <code>align</code></strong></td><td>Alignment</td><td>Socratic Alignment Interview, สกัด Glossary และบันทึก ADR</td><td><code>decisions/</code> & <code>glossary.md</code></td></tr>
+              <tr><td><strong><code>brainstorm</code></strong></td><td>Ideation</td><td>ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม</td><td>Interactive Session</td></tr>
+              <tr><td><strong><code>discovery</code></strong></td><td>Exploration</td><td>สำรวจเจาะลึกภาพรวมโปรเจกต์หรือฟีเจอร์ก่อนเริ่มเขียนสเปก</td><td><code>discoveries/DISC-xxx.md</code></td></tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        id: 'governance-skills',
+        title: '3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills)',
+        contentHtml: `
+          <table>
+            <thead><tr><th>คำสั่ง</th><th>หน้าที่</th><th>คำสั่ง</th><th>หน้าที่</th></tr></thead>
+            <tbody>
+              <tr><td><strong><code>devflow</code></strong></td><td>ผู้ช่วยแนะนำเส้นทางและตรวจสอบสถานะงาน</td><td><strong><code>doctor</code></strong></td><td>วินิจฉัยสุขภาพโปรเจกต์และการตั้งค่าระบบ</td></tr>
+              <tr><td><strong><code>explore</code></strong></td><td>ตอบคำถามและทำความเข้าใจโค้ดเบสแบบ Read-Only</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
+              <tr><td><strong><code>brief</code></strong></td><td>สรุปขอบเขตและความเสี่ยงของฟีเจอร์ใน Build Plan</td><td><strong><code>debug</code></strong></td><td>วินิจฉัยหาสาเหตุของบั๊กอย่างเป็นระบบ</td></tr>
+              <tr><td><strong><code>onboard</code></strong></td><td>ติดตั้งและปรับแต่งค่าเริ่มต้นบนโปรเจกต์ใหม่</td><td><strong><code>adopt</code></strong></td><td>สำรวจและผนวก DevFlow เข้ากับโปรเจกต์เดิม</td></tr>
+              <tr><td><strong><code>try</code></strong></td><td>สร้างคู่มือ Manual QA Walkthrough ทีละขั้นตอน</td><td><strong><code>audit</code></strong></td><td>สแกนความปลอดภัยและคุณภาพโค้ดลง <code>findings.md</code></td></tr>
+              <tr><td><strong><code>bughunter</code></strong></td><td>สแกนช่องโหว่ความปลอดภัยเชิงรุกและ 83 CVE Patterns</td><td><strong><code>ci</code></strong></td><td>สร้างและปรับจูน GitHub Actions Verification Workflow</td></tr>
+              <tr><td><strong><code>test</code></strong></td><td>รันชุดทดสอบและวิเคราะห์ Test Coverage</td><td><strong><code>setup-tests</code></strong></td><td>ติดตั้ง Test Runner และชุดทดสอบเริ่มต้น</td></tr>
+              <tr><td><strong><code>browser-tests</code></strong></td><td>ติดตั้ง Playwright และเชื่อม BrowserOS Neo MCP</td><td><strong><code>autopilot</code></strong></td><td>รัน 1 ฟีเจอร์ต่อเนื่องตั้งแต่ Spec จนถึง Check</td></tr>
+              <tr><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td><td><strong><code>release</code></strong></td><td>ตรวจสอบความพร้อมก่อน Deploy ขึ้น Render/Vercel</td></tr>
+              <tr><td><strong><code>report-html</code></strong></td><td>สร้าง Standalone HTML Report Dashboard</td><td><strong><code>convert-any-to-md</code></strong></td><td>แปลงเอกสารภายนอกเป็น Markdown ใน <code>reference/</code></td></tr>
+              <tr><td><strong><code>vendor</code></strong></td><td>ติดตั้ง External Skill และสร้าง Custom Wrapper</td><td><strong><code>status</code></strong></td><td>สรุปความคืบหน้าของงานและขั้นตอนถัดไป</td></tr>
+            </tbody>
+          </table>
+        `
+      }
+    ]
+  },
+
+  // 3. Skill Selection Policy (New)
+  {
+    slug: 'skill-selection-policy',
+    category: 'WORKFLOW',
+    title: 'Skill Selection Policy (นโยบายการเลือกใช้ทักษะ)',
+    lead: 'แนวทางการตัดสินใจเลือกใช้คำสั่งที่เหมาะสมและมีขอบเขตเล็กที่สุดตรงตามลักษณะงาน (Smallest Appropriate Surface)',
+    pills: ['Workflow', 'Policy', 'Selection', 'Decision-Tree', 'BestPractices'],
+    sections: [
+      {
+        id: 'lifecycle-decision-tree',
+        title: 'ผังการตัดสินใจเลือกวงจรการพัฒนา (Lifecycle Decision Tree)',
+        contentHtml: `
+          <p>เลือกใช้คำสั่งในวงจรหลักตามลักษณะของงานที่ต้องการทำ:</p>
           <ul>
-            <li><strong>Autopilot Mode</strong>: เป็นโหมดเลือกใช้งานเฉพาะคราว (Opt-in) สำหรับ 1 ฟีเจอร์หรือ 1 บั๊กฟิกซ์ โดยจะรันขั้นตอน Spec และ Implement ต่อเนื่องผ่าน Quality Gates และส่งมอบ Review Packet ให้มนุษย์ตรวจทานเมื่อจบรอบ แต่จะ<strong>ไม่รัน Rollback และไม่ทำการ Merge อัตโนมัติ</strong></li>
-            <li><strong>Continuous Mode</strong>: เป็นโหมดเลือกใช้งานสำหรับรันคิวฟีเจอร์ที่วางแผนไว้ใน Build Plan แบบต่อเนื่องในเครื่อง แต่ละฟีเจอร์จะถูกสร้างและทดสอบอย่างเข้มงวด</li>
+            <li><strong>ต้องการพัฒนาฟีเจอร์ใหม่ตามแผน หรือความสามารถใหม่</strong> ➔ ใช้ <code>/feature</code> (รองรับการดึงจาก Idea Inbox <code>/feature IDEA-xxx</code> หรือ Discovery <code>/feature DISC-xxx</code>)</li>
+            <li><strong>ต้องการแก้ไขบั๊ก ข้อผิดพลาด หรือปรับปรุงโค้ดย่อย</strong> ➔ ใช้ <code>/fix</code></li>
+            <li><strong>ต้องการลงมือเขียนโค้ดตามสเปกที่ผ่านการอนุมัติแล้ว</strong> ➔ ใช้ <code>/implement</code></li>
+            <li><strong>ต้องการตรวจสอบความถูกต้องและรันแอปพลิเคชันจริงก่อนส่งมอบ</strong> ➔ ใช้ <code>/check</code></li>
+            <li><strong>ต้องการส่งมอบงาน บันทึกประวัติ และ Squash-Merge</strong> ➔ ใช้ <code>/complete</code></li>
           </ul>
-          <div class="note-box">
-            <strong>ขอบเขตความปลอดภัยเด็ดขาด:</strong> ไม่ว่าจะเป็นโหมดใด AI จะไม่มีสิทธิ์ในการ Push โค้ด, Deploy สู่เซิร์ฟเวอร์จริง, สั่งลบข้อมูลสำคัญ, ข้ามขั้นตอนการทดสอบ หรือตัดสินใจทิศทางธุรกิจแทนคุณ
-          </div>
         `
       },
       {
-        id: 'resume-from-files',
-        title: 'การสานต่องานจากไฟล์สถานะ (Resume from files)',
+        id: 'preflight-decision-tree',
+        title: 'ผังการตัดสินใจในขั้นตอนเตรียมความพร้อม (Pre-Flight Discovery Tree)',
         contentHtml: `
-          <p>ความคืบหน้าของงานทั้งหมดจะถูกบันทึกไว้ในไฟล์ของระบบเสมอ: Checklist ใน <code>spec.md</code> บันทึกขั้นตอนที่เสร็จสิ้นแล้ว และ Git บันทึกประวัติโค้ดและ Checkpoint Commits</p>
-          <p>เมื่อเริ่มต้นวันใหม่หรือหลังจากล้างประวัติการสนทนา (Context Clear) คุณหรือ AI สามารถรันคำสั่ง <code>/status</code> หรือ <code>$status</code> เพื่อตรวจสอบสถานะปัจจุบันและระบุขั้นตอนถัดไปที่ต้องทำได้ทันที โดยไม่ต้องพึ่งพาประวัติการแชทเดิม</p>
+          <pre><code>มีไอเดียแต่ยังไม่ชัดเจน ────▶ /idea (บันทึกลง Inbox พร้อม AI Feasibility Score)
+ต้องการทางเลือกสถาปัตยกรรม ──▶ /brainstorm (สร้าง 2-3 Options พร้อม Trade-off Matrix)
+มีเอกสารสเปกดิบ (PDF/Doc) ──▶ /analyze (สแกนผลกระทบโค้ดเบส & Socratic Gap Check)
+ต้องการตกลงโมเดลข้อมูล/ADR ──▶ /grill (Socratic Interview บันทึกลง devflow/decisions/)
+ต้องการสำรวจเจาะลึก ────────▶ /discovery (สร้างบันทึกการสำรวจ DISC-xxx)</code></pre>
+        `
+      },
+      {
+        id: 'companion-tools-mapping',
+        title: 'ตารางเลือกเครื่องมือช่วยเหลือ (Companion Tools Matrix)',
+        contentHtml: `
+          <table>
+            <thead><tr><th>ความต้องการ</th><th>คำสั่งที่แนะนำ</th><th>พฤติกรรมหลัก</th></tr></thead>
+            <tbody>
+              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, และความสมบูรณ์ของเวิร์กโฟลว์</td></tr>
+              <tr><td>สืบหาสาเหตุของบั๊กที่แท้จริง</td><td><code>/debug</code></td><td>กระบวนการ Scientific Diagnosis 6 ขั้นตอนโดยไม่แก้โค้ดล่วงหน้า</td></tr>
+              <tr><td>ทำความเข้าใจโค้ดหรือสอบถามจุดทำงาน</td><td><code>/explore</code></td><td>สำรวจและตอบคำถามเชิงลึกแบบ Read-only</td></tr>
+              <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/try</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>
+              <tr><td>สแกนความปลอดภัยและคุณภาพโค้ด</td><td><code>/audit</code></td><td>ตรวจเช็คทั้ง Branch Delta หรือทั้งโปรเจกต์ บันทึกลง <code>findings.md</code></td></tr>
+              <tr><td>สร้าง Mockup หน้าจอจำลองก่อนเขียนโค้ด</td><td><code>/prototype</code></td><td>สร้าง Static HTML/CSS จำลองที่ใช้ Design Tokens ร่วมกัน</td></tr>
+              <tr><td>สร้างรายงาน HTML Dashboard สวยงาม</td><td><code>/report-html</code></td><td>คอมไพล์สเปกหรือประวัติเป็น Dashboard สำหรับนำเสนอ</td></tr>
+            </tbody>
+          </table>
         `
       }
     ]

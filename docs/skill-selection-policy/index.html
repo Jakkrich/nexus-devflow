@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLI Overview (ภาพรวมเครื่องมือ CLI) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/cli/">
+  <title>Skill Selection Policy (นโยบายการเลือกใช้ทักษะ) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="แนวทางการตัดสินใจเลือกใช้คำสั่งที่เหมาะสมและมีขอบเขตเล็กที่สุดตรงตามลักษณะงาน (Smallest Appropriate Surface)">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/skill-selection-policy/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,7 +70,7 @@
           <div class="docs-nav-title">WORKFLOW</div>
           <a class="docs-nav-link" href="../core-workflow/">Core Workflow</a>
           <a class="docs-nav-link" href="../workflow-surface-map/">Workflow Surface Map</a>
-          <a class="docs-nav-link" href="../skill-selection-policy/">Skill Selection Policy</a>
+          <a class="docs-nav-link active" href="../skill-selection-policy/">Skill Selection Policy</a>
         </div>
 
         <!-- COMMANDS -->
@@ -112,7 +112,7 @@
         <!-- CLI -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">CLI</div>
-          <a class="docs-nav-link active" href="../cli/">CLI Overview</a>
+          <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
           <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
@@ -152,61 +152,67 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>CLI</span> <span>/</span> <strong>CLI Overview (ภาพรวมเครื่องมือ CLI)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>WORKFLOW</span> <span>/</span> <strong>Skill Selection Policy (นโยบายการเลือกใช้ทักษะ)</strong></div>
       
-      <h1 class="docs-title">CLI Overview (ภาพรวมเครื่องมือ CLI)</h1>
+      <h1 class="docs-title">Skill Selection Policy (นโยบายการเลือกใช้ทักษะ)</h1>
       
       <p class="docs-lead">
-        ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง
+        แนวทางการตัดสินใจเลือกใช้คำสั่งที่เหมาะสมและมีขอบเขตเล็กที่สุดตรงตามลักษณะงาน (Smallest Appropriate Surface)
       </p>
 
       <div class="docs-meta">
-        <span class="docs-pill">CLI</span>
-        <span class="docs-pill">Overview</span>
-        <span class="docs-pill">Terminal</span>
-        <span class="docs-pill">ZeroLatency</span>
-        <span class="docs-pill">Dashboard</span>
-        <span class="docs-pill">Commands</span>
+        <span class="docs-pill">Workflow</span>
+        <span class="docs-pill">Policy</span>
+        <span class="docs-pill">Selection</span>
+        <span class="docs-pill">Decision-Tree</span>
+        <span class="docs-pill">BestPractices</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: ภาพรวมคำสั่ง CLI ทั้งหมด -->
-        <section id="overview">
-          <h2>ภาพรวมคำสั่ง CLI ทั้งหมด</h2>
+        <!-- Section: ผังการตัดสินใจเลือกวงจรการพัฒนา (Lifecycle Decision Tree) -->
+        <section id="lifecycle-decision-tree">
+          <h2>ผังการตัดสินใจเลือกวงจรการพัฒนา (Lifecycle Decision Tree)</h2>
           
-          <p>Nexus-DevFlow มาพร้อมกับ CLI Helper ในตัวที่คุณสามารถเรียกใช้งานได้ผ่าน <code>npx nexus-devflow</code> หรือคำสั่งในโปรเจกต์:</p>
-          <pre><code># ติดตั้งหรือ Overlay DevFlow เข้าสู่โปรเจกต์
-npx nexus-devflow
-
-# ดูสถานะความคืบหน้าของงานปัจจุบันผ่าน Terminal
-npx nexus-devflow status
-
-# เปิด Live Web Dashboard สำหรับมอนิเตอร์สถานะและ Run Activity
-npx nexus-devflow dashboard
-
-# วิเคราะห์การใช้งานและต้นทุน Token (Session Token Analytics)
-npm run analyze:tokens
-
-# ตรวจสอบขนาด Byte-budget ของ Skill ทุกตัว
-npm run check:budgets
-
-# ตรวจสอบความสมบูรณ์ของโครงสร้าง DevFlow ในโปรเจกต์
-npm run check</code></pre>
+          <p>เลือกใช้คำสั่งในวงจรหลักตามลักษณะของงานที่ต้องการทำ:</p>
+          <ul>
+            <li><strong>ต้องการพัฒนาฟีเจอร์ใหม่ตามแผน หรือความสามารถใหม่</strong> ➔ ใช้ <code>/feature</code> (รองรับการดึงจาก Idea Inbox <code>/feature IDEA-xxx</code> หรือ Discovery <code>/feature DISC-xxx</code>)</li>
+            <li><strong>ต้องการแก้ไขบั๊ก ข้อผิดพลาด หรือปรับปรุงโค้ดย่อย</strong> ➔ ใช้ <code>/fix</code></li>
+            <li><strong>ต้องการลงมือเขียนโค้ดตามสเปกที่ผ่านการอนุมัติแล้ว</strong> ➔ ใช้ <code>/implement</code></li>
+            <li><strong>ต้องการตรวจสอบความถูกต้องและรันแอปพลิเคชันจริงก่อนส่งมอบ</strong> ➔ ใช้ <code>/check</code></li>
+            <li><strong>ต้องการส่งมอบงาน บันทึกประวัติ และ Squash-Merge</strong> ➔ ใช้ <code>/complete</code></li>
+          </ul>
         
           
         </section>
 
-        <!-- Section: Options และ Flags ที่รองรับ -->
-        <section id="cli-flags">
-          <h2>Options และ Flags ที่รองรับ</h2>
+        <!-- Section: ผังการตัดสินใจในขั้นตอนเตรียมความพร้อม (Pre-Flight Discovery Tree) -->
+        <section id="preflight-decision-tree">
+          <h2>ผังการตัดสินใจในขั้นตอนเตรียมความพร้อม (Pre-Flight Discovery Tree)</h2>
+          
+          <pre><code>มีไอเดียแต่ยังไม่ชัดเจน ────▶ /idea (บันทึกลง Inbox พร้อม AI Feasibility Score)
+ต้องการทางเลือกสถาปัตยกรรม ──▶ /brainstorm (สร้าง 2-3 Options พร้อม Trade-off Matrix)
+มีเอกสารสเปกดิบ (PDF/Doc) ──▶ /analyze (สแกนผลกระทบโค้ดเบส & Socratic Gap Check)
+ต้องการตกลงโมเดลข้อมูล/ADR ──▶ /grill (Socratic Interview บันทึกลง devflow/decisions/)
+ต้องการสำรวจเจาะลึก ────────▶ /discovery (สร้างบันทึกการสำรวจ DISC-xxx)</code></pre>
+        
+          
+        </section>
+
+        <!-- Section: ตารางเลือกเครื่องมือช่วยเหลือ (Companion Tools Matrix) -->
+        <section id="companion-tools-mapping">
+          <h2>ตารางเลือกเครื่องมือช่วยเหลือ (Companion Tools Matrix)</h2>
           
           <table>
-            <thead><tr><th>Flag</th><th>ความหมาย</th><th>ตัวอย่างการใช้งาน</th></tr></thead>
+            <thead><tr><th>ความต้องการ</th><th>คำสั่งที่แนะนำ</th><th>พฤติกรรมหลัก</th></tr></thead>
             <tbody>
-              <tr><td><code>-y, --yes</code></td><td>ตอบรับการยืนยันอัตโนมัติ (Non-interactive mode)</td><td><code>npx nexus-devflow -y</code></td></tr>
-              <tr><td><code>--port &lt;number&gt;</code></td><td>กำหนดหมายเลข Port สำหรับ Live Dashboard (ค่าเริ่มต้น: 4173)</td><td><code>npx nexus-devflow dashboard --port 3000</code></td></tr>
-              <tr><td><code>--json</code></td><td>ส่งออกผลลัพธ์ของคำสั่งในรูปแบบ JSON สำหรับ CI/CD</td><td><code>npx nexus-devflow status --json</code></td></tr>
+              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, และความสมบูรณ์ของเวิร์กโฟลว์</td></tr>
+              <tr><td>สืบหาสาเหตุของบั๊กที่แท้จริง</td><td><code>/debug</code></td><td>กระบวนการ Scientific Diagnosis 6 ขั้นตอนโดยไม่แก้โค้ดล่วงหน้า</td></tr>
+              <tr><td>ทำความเข้าใจโค้ดหรือสอบถามจุดทำงาน</td><td><code>/explore</code></td><td>สำรวจและตอบคำถามเชิงลึกแบบ Read-only</td></tr>
+              <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/try</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>
+              <tr><td>สแกนความปลอดภัยและคุณภาพโค้ด</td><td><code>/audit</code></td><td>ตรวจเช็คทั้ง Branch Delta หรือทั้งโปรเจกต์ บันทึกลง <code>findings.md</code></td></tr>
+              <tr><td>สร้าง Mockup หน้าจอจำลองก่อนเขียนโค้ด</td><td><code>/prototype</code></td><td>สร้าง Static HTML/CSS จำลองที่ใช้ Design Tokens ร่วมกัน</td></tr>
+              <tr><td>สร้างรายงาน HTML Dashboard สวยงาม</td><td><code>/report-html</code></td><td>คอมไพล์สเปกหรือประวัติเป็น Dashboard สำหรับนำเสนอ</td></tr>
             </tbody>
           </table>
         
@@ -216,13 +222,13 @@ npm run check</code></pre>
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../commands/report-html/">
+        <a class="prev" href="../workflow-surface-map/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Report HTML</strong>
+          <strong>Workflow Surface Map</strong>
         </a>
-        <a class="next" href="../cli/status/">
+        <a class="next" href="../commands/onboard/">
           <span>ถัดไป (Next)</span>
-          <strong>Status</strong>
+          <strong>Onboard</strong>
         </a>
       </nav>
     </main>
@@ -230,8 +236,9 @@ npm run check</code></pre>
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#overview">ภาพรวมคำสั่ง CLI ทั้งหมด</a>
-      <a href="#cli-flags">Options และ Flags ที่รองรับ</a>
+      <a href="#lifecycle-decision-tree">ผังการตัดสินใจเลือกวงจรการพัฒนา (Lifecycle Decision Tree)</a>
+      <a href="#preflight-decision-tree">ผังการตัดสินใจในขั้นตอนเตรียมความพร้อม (Pre-Flight Discovery Tree)</a>
+      <a href="#companion-tools-mapping">ตารางเลือกเครื่องมือช่วยเหลือ (Companion Tools Matrix)</a>
     </aside>
   </div>
 

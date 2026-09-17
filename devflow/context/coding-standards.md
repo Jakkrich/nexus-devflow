@@ -203,7 +203,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
 ## 12. HTML Documentation & Theming Standards (Light Theme Mandate)
 
-All generated HTML artifacts across the framework (Contextual Help Playbooks `devflow/docs/playbooks/{skill}.html`, Standalone Reports `report-html`, Architecture & Workflow Diagrams `archify` / `diagram-design`, and UI Prototypes/Mockups) MUST strictly adhere to the **Paper/Ink Light Theme Design System**:
+All generated HTML artifacts across the framework (Contextual Help Playbooks `devflow/reference/playbooks/{skill}.html`, Standalone Reports `report-html`, Architecture & Workflow Diagrams `archify` / `diagram-design`, and UI Prototypes/Mockups) MUST strictly adhere to the **Paper/Ink Light Theme Design System**:
 
 - **Mandatory Default `data-theme="light"`**:
   - All HTML documents must start with `<html lang="th" data-theme="light">`.
@@ -245,7 +245,7 @@ All generated HTML artifacts across the framework (Contextual Help Playbooks `de
   - Fonts: Google Sans (`'Google Sans'`, `'Google Sans Text'`) for display headers and body text, `'JetBrains Mono'` for code and monospaced data.
   - Full support for `prefers-reduced-motion: reduce` and clear `:focus-visible` outlines.
 - **Master Reference Template**:
-  - Refer to `devflow/docs/playbooks/template.html` as the authoritative, reusable component reference for all playbook and HTML documentation generation.
+  - Refer to `devflow/reference/playbooks/template.html` as the authoritative, reusable component reference for all playbook and HTML documentation generation.
 
 ---
 
@@ -290,7 +290,7 @@ All generated HTML artifacts across the framework (Contextual Help Playbooks `de
   - **Tier 2: UI Components** (`src/components/`, `src/pages/`): Component mounting & event interaction, visual verification via Playwright / BrowserOS Neo. Prohibit trivial unit tests for static HTML markup.
   - **Tier 3: API & Data Integration** (`src/api/`, route handlers, DB models): Contract tests, schema validation (Zod), status codes, payload shapes.
   - **Tier 4: Config & Build Tooling** (`*.json`, `*.yaml`, `scripts/`): Static contract validation (`npm run check:static`), budget linters (`npm run check:budgets`), smoke tests.
-  - **Tier 5: Documentation & Prose** (`*.md`, `devflow/docs/`): Structural checks, markdown contract scans, link integrity verification.
+  - **Tier 5: Documentation & Prose** (`*.md`, `docs/`, `scripts/data/`): Structural checks, markdown contract scans, link integrity verification.
 - **Acceptance Criteria (`AC-N`) Traceability**:
   - All automated test suites and assertion descriptions must explicitly include the target Acceptance Criterion tag (e.g. `it('AC-1: ...')`).
   - During `/check`, verify that 100% of defined acceptance criteria in the active living spec have matching passing empirical proof.

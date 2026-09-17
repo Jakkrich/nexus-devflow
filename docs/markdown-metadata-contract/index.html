@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLI Overview (ภาพรวมเครื่องมือ CLI) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/cli/">
+  <title>Markdown Metadata Contract (สัญญาโครงสร้าง Markdown) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ข้อกำหนดมาตรฐาน Frontmatter และ Heading Tags สำหรับไฟล์ Markdown ทุกไฟล์ที่สร้างโดย Nexus-DevFlow เพื่อรองรับ Obsidian และ Agent Indexing">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/markdown-metadata-contract/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,7 +112,7 @@
         <!-- CLI -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">CLI</div>
-          <a class="docs-nav-link active" href="../cli/">CLI Overview</a>
+          <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
           <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
@@ -123,7 +123,7 @@
           <div class="docs-nav-title">REFERENCE</div>
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
           <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
-          <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
+          <a class="docs-nav-link active" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
           <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
           <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
@@ -152,63 +152,75 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>CLI</span> <span>/</span> <strong>CLI Overview (ภาพรวมเครื่องมือ CLI)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>REFERENCE</span> <span>/</span> <strong>Markdown Metadata Contract (สัญญาโครงสร้าง Markdown)</strong></div>
       
-      <h1 class="docs-title">CLI Overview (ภาพรวมเครื่องมือ CLI)</h1>
+      <h1 class="docs-title">Markdown Metadata Contract (สัญญาโครงสร้าง Markdown)</h1>
       
       <p class="docs-lead">
-        ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง
+        ข้อกำหนดมาตรฐาน Frontmatter และ Heading Tags สำหรับไฟล์ Markdown ทุกไฟล์ที่สร้างโดย Nexus-DevFlow เพื่อรองรับ Obsidian และ Agent Indexing
       </p>
 
       <div class="docs-meta">
-        <span class="docs-pill">CLI</span>
-        <span class="docs-pill">Overview</span>
-        <span class="docs-pill">Terminal</span>
-        <span class="docs-pill">ZeroLatency</span>
-        <span class="docs-pill">Dashboard</span>
-        <span class="docs-pill">Commands</span>
+        <span class="docs-pill">Reference</span>
+        <span class="docs-pill">Markdown</span>
+        <span class="docs-pill">Metadata</span>
+        <span class="docs-pill">Frontmatter</span>
+        <span class="docs-pill">Obsidian</span>
+        <span class="docs-pill">YAML</span>
+        <span class="docs-pill">Schema</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: ภาพรวมคำสั่ง CLI ทั้งหมด -->
-        <section id="overview">
-          <h2>ภาพรวมคำสั่ง CLI ทั้งหมด</h2>
+        <!-- Section: 1. Shared YAML Frontmatter Core -->
+        <section id="core-yaml-frontmatter">
+          <h2>1. Shared YAML Frontmatter Core</h2>
           
-          <p>Nexus-DevFlow มาพร้อมกับ CLI Helper ในตัวที่คุณสามารถเรียกใช้งานได้ผ่าน <code>npx nexus-devflow</code> หรือคำสั่งในโปรเจกต์:</p>
-          <pre><code># ติดตั้งหรือ Overlay DevFlow เข้าสู่โปรเจกต์
-npx nexus-devflow
-
-# ดูสถานะความคืบหน้าของงานปัจจุบันผ่าน Terminal
-npx nexus-devflow status
-
-# เปิด Live Web Dashboard สำหรับมอนิเตอร์สถานะและ Run Activity
-npx nexus-devflow dashboard
-
-# วิเคราะห์การใช้งานและต้นทุน Token (Session Token Analytics)
-npm run analyze:tokens
-
-# ตรวจสอบขนาด Byte-budget ของ Skill ทุกตัว
-npm run check:budgets
-
-# ตรวจสอบความสมบูรณ์ของโครงสร้าง DevFlow ในโปรเจกต์
-npm run check</code></pre>
+          <p>ไฟล์ Markdown ที่สร้างขึ้นทุกไฟล์จะต้องมี YAML Frontmatter ส่วนหัวที่เป็นมาตรฐานเดียวกัน:</p>
+          <pre><code>---
+id: "001-user-auth"
+title: "User Authentication & Session Management"
+doc_type: "spec"
+category: "planning"
+status: "in-progress"
+created: "2026-09-17"
+updated: "2026-09-17"
+owner: "DevFlow Core Framework Team & AI"
+source_workflow: "/feature"
+related_task: "001"
+related_files:
+  - "src/auth/session.ts"
+  - "src/auth/jwt.ts"
+tags:
+  - nexus-devflow
+  - authentication
+  - security
+aliases: []
+summary: "Living Spec สำหรับระบบพิสูจน์ตัวตนผู้ใช้งานด้วย JWT Session"
+metadata_version: 1
+---</code></pre>
         
           
         </section>
 
-        <!-- Section: Options และ Flags ที่รองรับ -->
-        <section id="cli-flags">
-          <h2>Options และ Flags ที่รองรับ</h2>
+        <!-- Section: 2. Obsidian-Compatible Heading Tags Contract -->
+        <section id="heading-tags-contract">
+          <h2>2. Obsidian-Compatible Heading Tags Contract</h2>
           
-          <table>
-            <thead><tr><th>Flag</th><th>ความหมาย</th><th>ตัวอย่างการใช้งาน</th></tr></thead>
-            <tbody>
-              <tr><td><code>-y, --yes</code></td><td>ตอบรับการยืนยันอัตโนมัติ (Non-interactive mode)</td><td><code>npx nexus-devflow -y</code></td></tr>
-              <tr><td><code>--port &lt;number&gt;</code></td><td>กำหนดหมายเลข Port สำหรับ Live Dashboard (ค่าเริ่มต้น: 4173)</td><td><code>npx nexus-devflow dashboard --port 3000</code></td></tr>
-              <tr><td><code>--json</code></td><td>ส่งออกผลลัพธ์ของคำสั่งในรูปแบบ JSON สำหรับ CI/CD</td><td><code>npx nexus-devflow status --json</code></td></tr>
-            </tbody>
-          </table>
+          <p>เพื่อรองรับการสืบค้นและทำความเข้าใจแบบเชิงความหมาย (Semantic Heading Tags) ใน Obsidian และ AI Search ให้ใส่ Tag ไว้ท้ายหัวข้อบรรทัด:</p>
+          <pre><code># Living Spec: User Authentication #doc/spec
+
+## 🎯 1. Define & Boundaries #section/scope
+
+## 📐 2. Technical Spec & Contracts #section/contracts
+
+## 📋 3. Execution Plan & TDD Checklist #section/tasks
+
+## ⚡ 4. Implementation Log & Evidence #section/evidence
+
+## 🧪 5. Multi-Lane Verification Matrix #section/verification
+
+## 📦 6. Release Digest & Retrospective #section/summary</code></pre>
         
           
         </section>
@@ -216,13 +228,13 @@ npm run check</code></pre>
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../commands/report-html/">
+        <a class="prev" href="../governance-rules/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Report HTML</strong>
+          <strong>Governance Rules</strong>
         </a>
-        <a class="next" href="../cli/status/">
+        <a class="next" href="../living-spec-examples/">
           <span>ถัดไป (Next)</span>
-          <strong>Status</strong>
+          <strong>Living Spec Examples</strong>
         </a>
       </nav>
     </main>
@@ -230,8 +242,8 @@ npm run check</code></pre>
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#overview">ภาพรวมคำสั่ง CLI ทั้งหมด</a>
-      <a href="#cli-flags">Options และ Flags ที่รองรับ</a>
+      <a href="#core-yaml-frontmatter">1. Shared YAML Frontmatter Core</a>
+      <a href="#heading-tags-contract">2. Obsidian-Compatible Heading Tags Contract</a>
     </aside>
   </div>
 

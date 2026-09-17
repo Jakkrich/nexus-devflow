@@ -69,6 +69,8 @@
         <div class="docs-nav-group">
           <div class="docs-nav-title">WORKFLOW</div>
           <a class="docs-nav-link" href="../core-workflow/">Core Workflow</a>
+          <a class="docs-nav-link" href="../workflow-surface-map/">Workflow Surface Map</a>
+          <a class="docs-nav-link" href="../skill-selection-policy/">Skill Selection Policy</a>
         </div>
 
         <!-- COMMANDS -->
@@ -113,25 +115,29 @@
           <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
+          <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
         <!-- REFERENCE -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">REFERENCE</div>
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
+          <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
+          <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
           <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
           <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
-          <a class="docs-nav-link" href="../commands/try/">Try migration</a>
-          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests migration</a>
+          <a class="docs-nav-link" href="../commands/try/">Try Guide Reference</a>
+          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests Reference</a>
         </div>
 
         <!-- QUALITY -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">QUALITY</div>
           <a class="docs-nav-link" href="../testing/">Testing and CI</a>
-          <a class="docs-nav-link" href="../manual-review/">Manual Review With Try</a>
-          <a class="docs-nav-link" href="../code-quality/">Code Quality With Audit</a>
+          <a class="docs-nav-link" href="../manual-review/">Manual Review & Quality Gates</a>
+          <a class="docs-nav-link" href="../code-quality/">Code Quality & Token Budgets</a>
           <a class="docs-nav-link" href="../findings-ledger/">The Findings Ledger</a>
         </div>
 
@@ -174,106 +180,9 @@
           <ul>
             <li><strong>OpenAI Codex, Google Antigravity และ GitHub Copilot</strong>: ใช้โฟลเดอร์ทักษะ <code>.agents/skills/</code></li>
             <li><strong>Claude Code</strong>: ใช้โฟลเดอร์ทักษะ <code>.claude/skills/</code></li>
-            <li><strong>OpenCode</strong>: สามารถเรียกใช้ไฟล์ทักษะที่เข้ากันได้จาก <code>.agents/skills/</code> หรือ <code>.claude/skills/</code> ได้โดยตรง จึงไม่จำเป็นต้องสร้างโฟลเดอร์ <code>.opencode/skills/</code> ซ้ำซ้อน</li>
+            <li><strong>OpenCode</strong>: สามารถเรียกใช้ไฟล์ทักษะที่เข้ากันได้จาก <code>.agents/skills/</code> หรือ <code>.claude/skills/</code> ได้โดยตรง</li>
           </ul>
-          <p>หากคุณเพิ่งติดตั้งหรืออัปเดตชุดทักษะในขณะที่เซสชันของ AI เอเจนต์เปิดอยู่แล้ว ให้ทำการ <strong>Restart เซสชันของ AI เอเจนต์</strong> ในโปรเจกต์นั้น เพื่อให้ตัวโปรแกรมโหลดแค็ตตาล็อกคำสั่งและบริบทเริ่มต้นใหม่อีกครั้ง</p>
-        
-          
-        </section>
-
-        <!-- Section: คำสั่ง Update รายงานข้อขัดแย้งของไฟล์ Managed (Update reports managed file conflicts) -->
-        <section id="update-reports-managed-file-conflicts">
-          <h2>คำสั่ง Update รายงานข้อขัดแย้งของไฟล์ Managed (Update reports managed file conflicts)</h2>
-          
-          <p>ให้รันคำสั่งจำลองล่วงหน้าเพื่อตรวจสอบรายการเส้นทางไฟล์ที่มีข้อขัดแย้ง:</p>
-          <pre><code>npx nexus-devflow@latest update --dry-run</code></pre>
-          <p>ข้อขัดแย้ง (Conflict) หมายความว่าไฟล์ทักษะที่ DevFlow ดูแลมีเนื้อหาแตกต่างจากเวอร์ชันที่บันทึกไว้ใน <code>devflow/.state/manifest.json</code> (เช่น มีการแก้ไขโค้ดทักษะเอง) หรือโปรเจกต์เดิมไม่มีข้อมูล Baseline ใน Manifest</p>
-          <p>วิธีแก้ปัญหาคือให้รันคำสั่ง <code>update</code> ปกติใน Interactive Terminal เพื่อให้ระบบถามยืนยันการสำรองข้อมูลเก่าและแทนที่ด้วยเวอร์ชันใหม่ หรือหากรันในระบบอัตโนมัติ (Non-interactive) ให้ระบุแฟล็ก <code>--force</code> เฉพาะเมื่อคุณตั้งใจจะสำรองและเขียนทับไฟล์เหล่านั้นจริงๆ</p>
-          <div class="note-box">
-            <strong>ขอบเขตความปลอดภัย:</strong> ไฟล์แผนงาน (<code>project-plan.md</code>, <code>build-plan.md</code>), บริบท (<code>devflow/context/</code>), ประวัติ (<code>devflow/history/</code>), <code>AGENTS.md</code> และ <code>CLAUDE.md</code> อยู่นอกขอบเขตของตัวอัปเดตและจะไม่ถูกแตะต้อง 100%
-          </div>
-        
-          
-        </section>
-
-        <!-- Section: คำสั่ง Overview ปฏิเสธการทำงาน (Overview refuses to run) -->
-        <section id="overview-refuses-to-run">
-          <h2>คำสั่ง Overview ปฏิเสธการทำงาน (Overview refuses to run)</h2>
-          
-          <p>คำสั่ง <code>/overview</code> ทำหน้าที่เป็น Deterministic Compiler ที่เข้มงวด หากปฏิเสธการรัน ให้ตรวจสอบและแทนที่ข้อความตัวอย่าง (Template Placeholders) ใน <code>devflow/project-plan.md</code> ด้วยการตัดสินใจทางสถาปัตยกรรมและผลลัพธ์ฟีเจอร์จริงของโปรเจกต์</p>
-          <p>สกิล <code>/overview</code> จะจัดรูปแบบรายการฟีเจอร์ที่ชัดเจนให้กลายเป็น Checkbox ใน <code>devflow/build-plan.md</code> โดยอัตโนมัติ ทั้งนี้หากไฟล์ Build Plan ยังไม่มีอยู่หรือมีเพียงโครงสร้างว่าง ให้ตรวจสอบและอนุมัติร่าง Checklist ที่คำสั่งเสนอจาก Project Plan ก่อนดำเนินการต่อ</p>
-        
-          
-        </section>
-
-        <!-- Section: คำสั่ง Implement แจ้งว่าไม่พบไฟล์สเปก (Implement says there is no spec) -->
-        <section id="implement-says-there-is-no-spec">
-          <h2>คำสั่ง Implement แจ้งว่าไม่พบไฟล์สเปก (Implement says there is no spec)</h2>
-          
-          <p>คำสั่ง <code>/implement</code> ต้องการ Living Spec ที่ผ่านการอนุมัติแล้วก่อนลงมือเขียนโค้ดเสมอ หากพบข้อผิดพลาดนี้ ให้รันคำสั่งสร้างสเปกที่ตรงกับประเภทของงานก่อน:</p>
-          <ul>
-            <li><strong><code>/feature [id]</code></strong>: สำหรับฟีเจอร์ใหม่ตามแผนงานใน Build Plan (เช่น <code>/feature 1</code>)</li>
-            <li><strong><code>/fix</code></strong>: สำหรับงานแก้ไขบั๊กเร่งด่วนหรือการเปลี่ยนแปลงย่อยที่ไม่ได้อยู่ในแผนงาน</li>
-            <li><strong><code>/rollback &lt;id&gt;</code></strong>: สำหรับการย้อนกลับฟีเจอร์ที่เคยส่งมอบไปแล้ว</li>
-          </ul>
-          <p>เมื่อรันคำสั่งดังกล่าว AI จะสร้างไฟล์ <code>devflow/context/{xxx-slug}/spec.md</code> พร้อมเกณฑ์ Done-when และ Task Checklist ให้คุณตรวจสอบ เมื่ออนุมัติแล้วจึงค่อยรัน <code>/implement</code></p>
-        
-          
-        </section>
-
-        <!-- Section: Git ขัดขวางหรือบล็อกการทำงานของเวิร์กโฟลว์ (Git blocks the workflow) -->
-        <section id="git-blocks-the-workflow">
-          <h2>Git ขัดขวางหรือบล็อกการทำงานของเวิร์กโฟลว์ (Git blocks the workflow)</h2>
-          
-          <p>Nexus-DevFlow กำหนดให้การพัฒนาทำงานอยู่บน Git Repository และต้องอยู่บน Branch เฉพาะงาน เช่น <code>feature/{xxx-slug}</code>, <code>fix/{xxx-slug}</code> หรือ <code>rollback/{xxx-slug}</code></p>
-          <p>หากมี Working-tree changes ที่ไม่เกี่ยวข้องค้างอยู่ ให้ Commit, Stash หรือจัดการให้เรียบร้อยก่อนเริ่มรันงานเวิร์กโฟลว์อัตโนมัติ และ<strong>ห้ามสั่ง Discard หรือล้างการเปลี่ยนแปลงทิ้งเพียงเพื่อให้เวิร์กโฟลว์ทำงานได้เด็ดขาด</strong> เพื่อป้องกันการสูญหายของโค้ดที่มีค่า</p>
-        
-          
-        </section>
-
-        <!-- Section: คำสั่ง Rollback รายงานข้อขัดแย้งเรื่อง Dependency หรือ Patch (Rollback reports a dependency or patch conflict) -->
-        <section id="rollback-reports-a-dependency-or-patch-conflict">
-          <h2>คำสั่ง Rollback รายงานข้อขัดแย้งเรื่อง Dependency หรือ Patch (Rollback reports a dependency or patch conflict)</h2>
-          
-          <p>เมื่อคำสั่ง <code>/rollback</code> รายงานข้อขัดแย้ง ให้อ่านรายละเอียดของ Commit หลังจากนั้นและเส้นทางไฟล์ที่แชร์ร่วมกันตามที่ระบุในรายงานอย่างละเอียด</p>
-          <p><strong>ข้อควรระวัง:</strong> ห้ามบังคับ Force Patch, ห้ามสั่ง Git Reset และห้ามแอบรวบเอาฟีเจอร์อื่นเข้ามาร่วมใน Rollback โดยไม่ผ่านการวางแผน</p>
-          <p>แนวทางแก้ไขที่ถูกต้องคือ: ให้ตรวจสอบว่าการแก้ไขเพื่อความเข้ากันได้ (Compatibility Edit) มีระบุไว้ใน Rollback Spec แล้วหรือไม่ หากมีให้อนุมัติ แต่หากเป็นข้อขัดแย้งเชิงโครงสร้าง ให้หยุดการทำงานและวางแผนย้อนกลับฟีเจอร์ที่เกี่ยวเนื่องกันแยกต่างหาก</p>
-        
-          
-        </section>
-
-        <!-- Section: โค้ด Build ผ่านแต่พฤติกรรมการทำงานไม่ถูกต้อง (Build passes but behavior is wrong) -->
-        <section id="build-passes-but-behavior-is-wrong">
-          <h2>โค้ด Build ผ่านแต่พฤติกรรมการทำงานไม่ถูกต้อง (Build passes but behavior is wrong)</h2>
-          
-          <p>การที่โค้ดคอมไพล์หรือ Build ผ่าน ไม่ได้เป็นเครื่องยืนยันว่าฟีเจอร์ทำงานถูกต้องตาม Business Logic ที่ต้องการ</p>
-          <p>ให้รันคำสั่ง <strong><code>/check</code></strong> เพื่อทดสอบแอปพลิเคชันจริงเทียบกับเกณฑ์ Done-when ในสเปก โดยใช้หลักฐานเชิงประจักษ์ (Empirical Evidence) เช่น:</p>
-          <ul>
-            <li>การทดสอบบน Browser จริงผ่าน Playwright หรือ MCP <code>browseros-neo</code> (<code>/tests browser</code>)</li>
-            <li>การทดสอบเรียกคำสั่ง CLI หรือ API Endpoints จริง</li>
-          </ul>
-          <p>หากต้องการคู่มือสำหรับมนุษย์คลิกทดสอบทีละสเต็ป สามารถรัน <code>/check guide</code> (หรือ <code>/check guide latest</code>) เพื่อดูขั้นตอนการทดสอบอย่างละเอียด</p>
-        
-          
-        </section>
-
-        <!-- Section: คำสั่ง Verify ในเครื่องกับ GitHub Actions รันการทดสอบไม่ตรงกัน (Verify and GitHub run different checks) -->
-        <section id="verify-and-github-run-different-checks">
-          <h2>คำสั่ง Verify ในเครื่องกับ GitHub Actions รันการทดสอบไม่ตรงกัน (Verify and GitHub run different checks)</h2>
-          
-          <p>ให้รันคำสั่ง <strong><code>/doctor</code></strong> เพื่อตรวจสอบความสอดคล้องระหว่าง <code>AGENTS.md</code>, คำสั่ง Verify ของโปรเจกต์ และไฟล์ <code>.github/workflows/verify.yml</code></p>
-          <p>จากนั้นรันคำสั่ง <strong><code>/ci</code></strong> (หรือ <code>$ci</code>) เพื่อตรวจสอบและปรับให้คำสั่ง Verify ในเครื่องกับ GitHub Actions รันชุดการตรวจสอบเดียวกัน (Typecheck ➔ Tests ➔ Build) ทั้งนี้เวิร์กโฟลว์เดิมจะได้รับการปกป้อง และการเปลี่ยนแปลง CI จะต้องผ่านการรีวิวเสมอ</p>
-          <p>หากคำสั่ง Verify ล้มเหลวในเครื่อง ให้แก้ไข Typecheck, Unit Test หรือ Build ที่ผิดพลาด <strong>ห้ามลบคำสั่งตรวจสอบที่ถูกต้องออกเพียงเพื่อให้ CI บน GitHub เป็นสีเขียวเด็ดขาด</strong></p>
-        
-          
-        </section>
-
-        <!-- Section: การตรวจสอบบน GitHub ไม่ได้ถูกบังคับก่อนการ Merge (The GitHub check is not required before merge) -->
-        <section id="the-github-check-is-not-required-before-merge">
-          <h2>การตรวจสอบบน GitHub ไม่ได้ถูกบังคับก่อนการ Merge (The GitHub check is not required before merge)</h2>
-          
-          <p>คำสั่ง <code>/ci</code> ทำหน้าที่สร้างและจัดระเบียบไฟล์ GitHub Actions Workflow ในเครื่องเท่านั้น แต่จะ<strong>ไม่ Push ขึ้นรีโมตและไม่แก้ไขการตั้งค่า Repository บน GitHub</strong> โดยอัตโนมัติ</p>
-          <p>การนำ Workflow ขึ้นสู่ GitHub ต้องผ่านการอนุมัติและ Push โดยมนุษย์ และการตั้งค่าให้ระบบต้องผ่านการตรวจสอบ CI ก่อนอนุญาตให้ Merge (Required Status Checks) เป็นสิทธิ์ในการเลือกตั้งค่าผ่าน <strong>GitHub Rulesets</strong> หรือ <strong>Branch Protection Rules</strong> บนหน้าเว็บ GitHub ของคุณ</p>
+          <p>หากคุณเพิ่งติดตั้งหรืออัปเดตชุดทักษะในขณะที่เซสชันของ AI เอเจนต์เปิดอยู่แล้ว ให้ทำการ <strong>Restart เซสชันของ AI เอเจนต์</strong> ในโปรเจกต์นั้น</p>
         
           
         </section>
@@ -285,34 +194,6 @@
           <p>หากรู้สึกว่ามีบางอย่างผิดปกติหรือไม่แน่ใจในความสมบูรณ์ของระบบ ให้รันคำสั่ง <strong><code>/doctor</code></strong> เพื่อขอรับรายงานการตรวจสุขภาพระบบแบบ Read-Only:</p>
           <pre><code>/doctor</code></pre>
           <p>สกิล <code>/doctor</code> จะทำการสแกนไฟล์ทั้งหมด, ตรวจสอบความสมบูรณ์ของ Adapters, ตรวจสอบคำสั่งใน <code>AGENTS.md</code>, ยืนยันความสอดคล้องของ CI, ตรวจสอบความพร้อมของแผนงาน, ประเมินความสดใหม่และขนาดของ Overview (< 20KB) และแจ้งเตือน Workflow Drift พร้อมเสนอแนวทางแก้ไขที่ปลอดภัย</p>
-        
-          
-        </section>
-
-        <!-- Section: คำสั่ง npm แจ้งเตือนข้อผิดพลาด EBADDEVENGINES ในโปรเจกต์ pnpm (npm reports EBADDEVENGINES in a pnpm project) -->
-        <section id="npm-reports-ebaddevengines-in-a-pnpm-project">
-          <h2>คำสั่ง npm แจ้งเตือนข้อผิดพลาด EBADDEVENGINES ในโปรเจกต์ pnpm (npm reports EBADDEVENGINES in a pnpm project)</h2>
-          
-          <p>หากคุณพบข้อผิดพลาดที่ระบุว่าโปรเจกต์บังคับใช้ <code>pnpm</code> แต่คำสั่งปัจจุบันคือ <code>npm</code> หรือ <code>npx</code> แสดงว่าโครงสร้างโปรเจกต์ของคุณมีนโยบาย Dev Engines ปฏิเสธการทำงานของ <code>npx</code> ก่อนที่ DevFlow จะเริ่มทำงาน</p>
-          <p>วิธีแก้ปัญหาคือให้รันคำสั่งผ่านตัวรันของ pnpm แทน:</p>
-          <pre><code>pnpm dlx nexus-devflow@latest update</code></pre>
-          <p>คำสั่งและแฟล็กทั้งหมดสามารถใช้งานร่วมกับ <code>pnpm dlx</code> ได้อย่างสมบูรณ์แบบเช่นเดียวกับ <code>npx</code></p>
-        
-          
-        </section>
-
-        <!-- Section: คำสั่ง Update รันเวอร์ชันเก่าหรือไม่มีหน้าต่างเลือก Adapter (The update runs an older version or has no adapter picker) -->
-        <section id="the-update-runs-an-older-version-or-has-no-adapter-picker">
-          <h2>คำสั่ง Update รันเวอร์ชันเก่าหรือไม่มีหน้าต่างเลือก Adapter (The update runs an older version or has no adapter picker)</h2>
-          
-          <p>ให้เปรียบเทียบเลขเวอร์ชันที่แสดงในเทอร์มินัลกับ <a href="https://github.com/jakkrichm/nexus-devflow/releases" target="_blank" rel="noopener">GitHub Releases</a> ล่าสุด บางครั้งแคชของ Package Resolution อาจรันเวอร์ชันเก่าแม้จะระบุ <code>@latest</code></p>
-          <p>วิธีแก้ไขคือให้ระบุเลขเวอร์ชันที่แน่นอน (Pinned Version) เช่น:</p>
-          <pre><code># npm
-npx nexus-devflow@1.9.0 update
-
-# pnpm
-pnpm dlx nexus-devflow@1.9.0 update</code></pre>
-          <p>หน้าต่างเลือก Adapter (Interactive Adapter Picker) จะแสดงผลเมื่อรันใน Interactive Terminal โดยไม่ระบุแฟล็กและไม่มี <code>--yes</code> และหากตัวอัปเดตเวอร์ชันเก่าเสนอให้ Downgrade Global CLI ให้ตอบ <strong>No</strong> เสมอ</p>
         
           
         </section>
@@ -332,17 +213,7 @@ pnpm dlx nexus-devflow@1.9.0 update</code></pre>
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
       <a href="#a-skill-does-not-appear">ทักษะ (Skill) ไม่ปรากฏในรายการคำสั่ง (A skill does not appear)</a>
-      <a href="#update-reports-managed-file-conflicts">คำสั่ง Update รายงานข้อขัดแย้งของไฟล์ Managed (Update reports managed file conflicts)</a>
-      <a href="#overview-refuses-to-run">คำสั่ง Overview ปฏิเสธการทำงาน (Overview refuses to run)</a>
-      <a href="#implement-says-there-is-no-spec">คำสั่ง Implement แจ้งว่าไม่พบไฟล์สเปก (Implement says there is no spec)</a>
-      <a href="#git-blocks-the-workflow">Git ขัดขวางหรือบล็อกการทำงานของเวิร์กโฟลว์ (Git blocks the workflow)</a>
-      <a href="#rollback-reports-a-dependency-or-patch-conflict">คำสั่ง Rollback รายงานข้อขัดแย้งเรื่อง Dependency หรือ Patch (Rollback reports a dependency or patch conflict)</a>
-      <a href="#build-passes-but-behavior-is-wrong">โค้ด Build ผ่านแต่พฤติกรรมการทำงานไม่ถูกต้อง (Build passes but behavior is wrong)</a>
-      <a href="#verify-and-github-run-different-checks">คำสั่ง Verify ในเครื่องกับ GitHub Actions รันการทดสอบไม่ตรงกัน (Verify and GitHub run different checks)</a>
-      <a href="#the-github-check-is-not-required-before-merge">การตรวจสอบบน GitHub ไม่ได้ถูกบังคับก่อนการ Merge (The GitHub check is not required before merge)</a>
       <a href="#setup-still-feels-wrong">ยังรู้สึกว่าการตั้งค่าระบบมีความผิดปกติ (Setup still feels wrong)</a>
-      <a href="#npm-reports-ebaddevengines-in-a-pnpm-project">คำสั่ง npm แจ้งเตือนข้อผิดพลาด EBADDEVENGINES ในโปรเจกต์ pnpm (npm reports EBADDEVENGINES in a pnpm project)</a>
-      <a href="#the-update-runs-an-older-version-or-has-no-adapter-picker">คำสั่ง Update รันเวอร์ชันเก่าหรือไม่มีหน้าต่างเลือก Adapter (The update runs an older version or has no adapter picker)</a>
     </aside>
   </div>
 

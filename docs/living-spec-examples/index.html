@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLI Overview (ภาพรวมเครื่องมือ CLI) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/cli/">
+  <title>Living Spec Examples (ตัวอย่างเอกสารมาตรฐาน) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="รวมตัวอย่างไฟล์ Living Spec, Discovery Record, Architecture Decision Record (ADR) และ Idea Inbox ของจริง">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/living-spec-examples/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,7 +112,7 @@
         <!-- CLI -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">CLI</div>
-          <a class="docs-nav-link active" href="../cli/">CLI Overview</a>
+          <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
           <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
@@ -124,7 +124,7 @@
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
           <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
           <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
-          <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
+          <a class="docs-nav-link active" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
           <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
           <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
@@ -152,63 +152,90 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>CLI</span> <span>/</span> <strong>CLI Overview (ภาพรวมเครื่องมือ CLI)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>REFERENCE</span> <span>/</span> <strong>Living Spec Examples (ตัวอย่างเอกสารมาตรฐาน)</strong></div>
       
-      <h1 class="docs-title">CLI Overview (ภาพรวมเครื่องมือ CLI)</h1>
+      <h1 class="docs-title">Living Spec Examples (ตัวอย่างเอกสารมาตรฐาน)</h1>
       
       <p class="docs-lead">
-        ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง
+        รวมตัวอย่างไฟล์ Living Spec, Discovery Record, Architecture Decision Record (ADR) และ Idea Inbox ของจริง
       </p>
 
       <div class="docs-meta">
-        <span class="docs-pill">CLI</span>
-        <span class="docs-pill">Overview</span>
-        <span class="docs-pill">Terminal</span>
-        <span class="docs-pill">ZeroLatency</span>
-        <span class="docs-pill">Dashboard</span>
-        <span class="docs-pill">Commands</span>
+        <span class="docs-pill">Reference</span>
+        <span class="docs-pill">Examples</span>
+        <span class="docs-pill">LivingSpec</span>
+        <span class="docs-pill">Discovery</span>
+        <span class="docs-pill">ADR</span>
+        <span class="docs-pill">Ideas</span>
+        <span class="docs-pill">Templates</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: ภาพรวมคำสั่ง CLI ทั้งหมด -->
-        <section id="overview">
-          <h2>ภาพรวมคำสั่ง CLI ทั้งหมด</h2>
+        <!-- Section: 1. ตัวอย่าง Task-Isolated Living Spec (spec.md) -->
+        <section id="living-spec-example">
+          <h2>1. ตัวอย่าง Task-Isolated Living Spec (spec.md)</h2>
           
-          <p>Nexus-DevFlow มาพร้อมกับ CLI Helper ในตัวที่คุณสามารถเรียกใช้งานได้ผ่าน <code>npx nexus-devflow</code> หรือคำสั่งในโปรเจกต์:</p>
-          <pre><code># ติดตั้งหรือ Overlay DevFlow เข้าสู่โปรเจกต์
-npx nexus-devflow
+          <p>โครงสร้างของ <code>devflow/context/{xxx-slug}/spec.md</code> แบบสมบูรณ์ 6 ส่วนหลัก:</p>
+          <pre><code># Feature: 001-user-auth
 
-# ดูสถานะความคืบหน้าของงานปัจจุบันผ่าน Terminal
-npx nexus-devflow status
+**From build-plan:** feature 1
+**Build attempt:** 1
+**Branch:** feature/001-user-auth
+**Quality Gates Policy:** qualityGates.regular.independentReview = when-sensitive
+**Status:** In-Progress
 
-# เปิด Live Web Dashboard สำหรับมอนิเตอร์สถานะและ Run Activity
-npx nexus-devflow dashboard
+## 🎯 1. Specification & Scope
+### 1.1 Problem Statement
+ผู้ใช้ต้องการระบบ Login ด้วย Email/Password พร้อม Session Token
 
-# วิเคราะห์การใช้งานและต้นทุน Token (Session Token Analytics)
-npm run analyze:tokens
+### 1.2 Acceptance Criteria
+- [ ] **AC-1**: POST /api/auth/login คืนค่า JWT token เมื่อข้อมูลถูกต้อง
+- [ ] **AC-2**: คืนค่า HTTP 401 เมื่อรหัสผ่านไม่ถูกต้อง
 
-# ตรวจสอบขนาด Byte-budget ของ Skill ทุกตัว
-npm run check:budgets
+## 📐 2. Technical Spec & Data Contracts
+### 2.1 Mechanical Input Coverage Test
+| Target Field | Named Data Source | Pre-condition |
+| :--- | :--- | :--- |
+| email, password | Request Body | Settled: User Form Input |
+| token | Generated JWT | Settled: HMAC-SHA256 |
 
-# ตรวจสอบความสมบูรณ์ของโครงสร้าง DevFlow ในโปรเจกต์
-npm run check</code></pre>
+## 📋 3. Implementation Checklist (Strict TDD)
+- [ ] **Task 1: JWT Session Signer**
+  - [ ] 1.1 [TDD-Red]: เขียน test คาดหวัง token จาก payload
+  - [ ] 1.2 [TDD-Green]: สร้างฟังก์ชัน signSessionToken()
+  - [ ] 1.3 [TDD-Refactor]: ปรับปรุง security parameters
+
+## 🧪 5. Multi-Lane Verification Matrix
+| Lane | Command / Verification | Expected Result | Status |
+| :--- | :--- | :--- | :---: |
+| Typecheck | npm run typecheck | 0 errors | ⏳ Pending |
+| Unit Tests | npm test | 100% tests passing | ⏳ Pending |</code></pre>
         
           
         </section>
 
-        <!-- Section: Options และ Flags ที่รองรับ -->
-        <section id="cli-flags">
-          <h2>Options และ Flags ที่รองรับ</h2>
+        <!-- Section: 2. ตัวอย่าง Architecture Decision Record (ADR) -->
+        <section id="adr-example">
+          <h2>2. ตัวอย่าง Architecture Decision Record (ADR)</h2>
           
-          <table>
-            <thead><tr><th>Flag</th><th>ความหมาย</th><th>ตัวอย่างการใช้งาน</th></tr></thead>
-            <tbody>
-              <tr><td><code>-y, --yes</code></td><td>ตอบรับการยืนยันอัตโนมัติ (Non-interactive mode)</td><td><code>npx nexus-devflow -y</code></td></tr>
-              <tr><td><code>--port &lt;number&gt;</code></td><td>กำหนดหมายเลข Port สำหรับ Live Dashboard (ค่าเริ่มต้น: 4173)</td><td><code>npx nexus-devflow dashboard --port 3000</code></td></tr>
-              <tr><td><code>--json</code></td><td>ส่งออกผลลัพธ์ของคำสั่งในรูปแบบ JSON สำหรับ CI/CD</td><td><code>npx nexus-devflow status --json</code></td></tr>
-            </tbody>
-          </table>
+          <p>ตัวอย่างการบันทึกการตัดสินใจทางสถาปัตยกรรมใน <code>devflow/decisions/ADR-001.md</code>:</p>
+          <pre><code># ADR-001: Use SQLite with WAL Mode for Local Storage
+
+- **Status**: Accepted
+- **Date**: 2026-09-17
+- **Deciders**: Lead Architect, Full-Stack Developer
+
+## Context & Problem Statement
+ต้องการระบบจัดเก็บข้อมูลแบบ Local-First ที่รวดเร็ว ไร้ Dependency ภายนอก และรองรับ Concurrent Reads
+
+## Considered Options
+1. SQLite (better-sqlite3) with WAL mode (Recommended)
+2. JSON Flat Files
+3. Embedded LevelDB
+
+## Decision Outcome
+เลือกตัวเลือกที่ 1 เพราะมี Transaction Integrity และ Performance สูงสุดในสภาพแวดล้อม Local-Only</code></pre>
         
           
         </section>
@@ -216,13 +243,13 @@ npm run check</code></pre>
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../commands/report-html/">
+        <a class="prev" href="../markdown-metadata-contract/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Report HTML</strong>
+          <strong>Markdown Metadata Contract</strong>
         </a>
-        <a class="next" href="../cli/status/">
+        <a class="next" href="../tool-adapters/">
           <span>ถัดไป (Next)</span>
-          <strong>Status</strong>
+          <strong>Tool Adapters</strong>
         </a>
       </nav>
     </main>
@@ -230,8 +257,8 @@ npm run check</code></pre>
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#overview">ภาพรวมคำสั่ง CLI ทั้งหมด</a>
-      <a href="#cli-flags">Options และ Flags ที่รองรับ</a>
+      <a href="#living-spec-example">1. ตัวอย่าง Task-Isolated Living Spec (spec.md)</a>
+      <a href="#adr-example">2. ตัวอย่าง Architecture Decision Record (ADR)</a>
     </aside>
   </div>
 

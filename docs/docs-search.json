@@ -97,8 +97,43 @@
       "Verification",
       "Human-in-the-Loop",
       "Continuous",
+      "Slicing",
+      "Input-Coverage",
       "workflow",
       "core-workflow"
+    ]
+  },
+  {
+    "title": "Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)",
+    "description": "แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant",
+    "section": "WORKFLOW",
+    "slug": "workflow-surface-map",
+    "href": "../workflow-surface-map/",
+    "tags": [
+      "Workflow",
+      "Surface",
+      "CoreSkills",
+      "Taxonomy",
+      "Commands",
+      "Adapters",
+      "workflow",
+      "workflow-surface-map"
+    ]
+  },
+  {
+    "title": "Skill Selection Policy (นโยบายการเลือกใช้ทักษะ)",
+    "description": "แนวทางการตัดสินใจเลือกใช้คำสั่งที่เหมาะสมและมีขอบเขตเล็กที่สุดตรงตามลักษณะงาน (Smallest Appropriate Surface)",
+    "section": "WORKFLOW",
+    "slug": "skill-selection-policy",
+    "href": "../skill-selection-policy/",
+    "tags": [
+      "Workflow",
+      "Policy",
+      "Selection",
+      "Decision-Tree",
+      "BestPractices",
+      "workflow",
+      "skill-selection-policy"
     ]
   },
   {
@@ -693,8 +728,26 @@
     ]
   },
   {
+    "title": "Token & Cost Analytics CLI (เครื่องมือวิเคราะห์ต้นทุน Token)",
+    "description": "คำสั่งวิเคราะห์ปริมาณการใช้งาน Token 4 มิติหลัก (Fresh Input, Prompt Cache Write, Cache Read, Output) พร้อมประเมินต้นทุนค่าใช้จ่ายจริง ($ USD) ต่อโมเดล",
+    "section": "CLI",
+    "slug": "cli/tokens",
+    "href": "../cli/tokens/",
+    "tags": [
+      "CLI",
+      "TokenAnalytics",
+      "Cost",
+      "PromptCaching",
+      "ROI",
+      "Pricing",
+      "Feature107",
+      "cli",
+      "cli tokens"
+    ]
+  },
+  {
     "title": "File Reference (โครงสร้างไฟล์และหน้าที่)",
-    "description": "เอกสารอธิบายโครงสร้างไฟล์และโฟลเดอร์ทั้งหมดภายใต้ devflow/ และหน้าที่ของแต่ละไฟล์ในระบบอย่างละเอียด",
+    "description": "เอกสารอธิบายโครงสร้างไฟล์และโฟลเดอร์ทั้งหมดภายใต้ devflow/ และหน้าที่ของแต่ละไฟล์ในระบบอย่างละเอียดตามหลัก The 3-Pillars Model",
     "section": "REFERENCE",
     "slug": "file-reference",
     "href": "../file-reference/",
@@ -707,6 +760,59 @@
       "Schema",
       "reference",
       "file-reference"
+    ]
+  },
+  {
+    "title": "Governance Rules (กฎการกำกับดูแลและพัฒนา Framework)",
+    "description": "กฎและข้อตกลงในการพัฒนา ดูแล และขยายขีดความสามารถของ Nexus-DevFlow สำหรับ Maintainers และ Developers",
+    "section": "REFERENCE",
+    "slug": "governance-rules",
+    "href": "../governance-rules/",
+    "tags": [
+      "Reference",
+      "Governance",
+      "Rules",
+      "Architecture",
+      "Maintainers",
+      "Policy",
+      "reference",
+      "governance-rules"
+    ]
+  },
+  {
+    "title": "Markdown Metadata Contract (สัญญาโครงสร้าง Markdown)",
+    "description": "ข้อกำหนดมาตรฐาน Frontmatter และ Heading Tags สำหรับไฟล์ Markdown ทุกไฟล์ที่สร้างโดย Nexus-DevFlow เพื่อรองรับ Obsidian และ Agent Indexing",
+    "section": "REFERENCE",
+    "slug": "markdown-metadata-contract",
+    "href": "../markdown-metadata-contract/",
+    "tags": [
+      "Reference",
+      "Markdown",
+      "Metadata",
+      "Frontmatter",
+      "Obsidian",
+      "YAML",
+      "Schema",
+      "reference",
+      "markdown-metadata-contract"
+    ]
+  },
+  {
+    "title": "Living Spec Examples (ตัวอย่างเอกสารมาตรฐาน)",
+    "description": "รวมตัวอย่างไฟล์ Living Spec, Discovery Record, Architecture Decision Record (ADR) และ Idea Inbox ของจริง",
+    "section": "REFERENCE",
+    "slug": "living-spec-examples",
+    "href": "../living-spec-examples/",
+    "tags": [
+      "Reference",
+      "Examples",
+      "LivingSpec",
+      "Discovery",
+      "ADR",
+      "Ideas",
+      "Templates",
+      "reference",
+      "living-spec-examples"
     ]
   },
   {
@@ -796,7 +902,7 @@
   },
   {
     "title": "Testing and CI (การทดสอบและการรวมศูนย์ CI)",
-    "description": "เพิ่มการทดสอบอย่างมีจุดประสงค์, ใช้คำสั่ง Verify หนึ่งเดียวร่วมกันทุกที่, และรันการตรวจสอบชุดเดียวกันทั้งในเครื่อง Local และบน GitHub Actions",
+    "description": "เพิ่มการทดสอบอย่างมีจุดประสงค์ตาม 5-Tier File Classification, ตรวจสอบความสอดคล้องด้วย AC Traceability Matrix และรันคำสั่ง Verify หนึ่งเดียวร่วมกันทั้งในเครื่องและบน CI",
     "section": "QUALITY",
     "slug": "testing",
     "href": "../testing/",
@@ -805,17 +911,18 @@
       "Guide",
       "Testing",
       "UnitTests",
+      "5Tier",
+      "ACTraceability",
       "BrowserTests",
       "CI",
       "Verify",
-      "GitHubActions",
       "quality",
       "testing"
     ]
   },
   {
-    "title": "Manual Review With Try (การตรวจรับด้วยตนเองผ่านคู่มือ Try)",
-    "description": "มอบแนวทางและขั้นตอนการตรวจรับงานอย่างแม่นยำให้แก่ผู้ตรวจทานที่เป็นมนุษย์ สำหรับงานปัจจุบันหรืองานที่เพิ่งเสร็จสมบูรณ์ โดยไม่ต้องเสียเวลาเปิดดูโค้ดก่อน",
+    "title": "Manual Review & Quality Gates (การตรวจทานและ 4 Human Review Gates)",
+    "description": "ทำความเข้าใจประตูด่านตรวจทั้ง 4 ระดับ (Human Review Gates) ที่โปร่งใส และการสร้างคู่มือตรวจรับระบบด้วยตนเอง (Try Guide)",
     "section": "QUALITY",
     "slug": "manual-review",
     "href": "../manual-review/",
@@ -824,6 +931,7 @@
       "Guide",
       "Try",
       "ManualReview",
+      "HumanGates",
       "QA",
       "UAT",
       "Walkthrough",
@@ -832,8 +940,8 @@
     ]
   },
   {
-    "title": "Code Quality With Audit (การควบคุมคุณภาพโค้ดด้วยการ Audit)",
-    "description": "ใช้การตรวจสอบแบบ Read-Only เพื่อดักจับความเบี่ยงเบนด้านความสามารถในการบำรุงรักษา (Maintainability Drift) ก่อนที่มันจะกลายเป็นรูปแบบเริ่มต้นของโปรเจกต์",
+    "title": "Code Quality With Audit (การควบคุมคุณภาพโค้ดและ Token Budgets)",
+    "description": "ใช้การตรวจสอบแบบ Read-Only, การกำกับขนาด Token Budgets ของ Skill และระบบ Independent Review เพื่อรักษาคุณภาพสถาปัตยกรรมอย่างยั่งยืน",
     "section": "QUALITY",
     "slug": "code-quality",
     "href": "../code-quality/",
@@ -843,7 +951,7 @@
       "Audit",
       "Maintainability",
       "Security",
-      "Performance",
+      "TokenBudgets",
       "IndependentReview",
       "quality",
       "code-quality"
@@ -851,7 +959,7 @@
   },
   {
     "title": "The Findings Ledger (สมุดบัญชีข้อค้นพบ)",
-    "description": "ข้อค้นพบจากการ Audit จะได้รับรหัส ID ถาวรและสถานะกำกับในไฟล์ที่บันทึกร่วมกับ Git โดยข้อค้นพบระดับร้ายแรงจะบล็อกการ Merge จนกว่าจะได้รับการรีวิวซ้ำ, ยอมรับเหตุผลอย่างชัดเจน หรือพิสูจน์ว่าเป็นข้อผิดพลาดเท็จ",
+    "description": "ข้อค้นพบจากการ Audit จะได้รับรหัส ID ถาวรและสถานะกำกับในไฟล์ที่บันทึกร่วมกับ Git โดยข้อค้นพบระดับร้ายแรงจะบล็อกการ Merge จนกว่าจะได้รับการแก้ไขอย่างถูกต้อง",
     "section": "QUALITY",
     "slug": "findings-ledger",
     "href": "../findings-ledger/",
@@ -868,8 +976,8 @@
     ]
   },
   {
-    "title": "Release Readiness (การเตรียมความพร้อมก่อนขึ้น Production)",
-    "description": "เตรียมความพร้อมของโปรเจกต์ที่เสร็จสมบูรณ์สำหรับ Render หรือ Vercel โดยยังคงรักษาขอบเขตการอนุมัติความปลอดภัยก่อนการ Deployment ไว้อย่างเคร่งครัด",
+    "title": "Release Readiness & Framework Process (การเตรียมความพร้อมและการ Release)",
+    "description": "เตรียมความพร้อมของโปรเจกต์สำหรับ Render / Vercel และคู่มือขั้นตอนการ Release สำหรับ Framework Maintainers ตามหลัก Semver",
     "section": "SHIP",
     "slug": "release-readiness",
     "href": "../release-readiness/",
@@ -877,10 +985,11 @@
       "Ship",
       "Guide",
       "Release",
+      "Maintainers",
+      "Validation",
       "Render",
       "Vercel",
       "Production",
-      "HealthCheck",
       "ship",
       "release-readiness"
     ]

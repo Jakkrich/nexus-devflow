@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Findings Ledger (สมุดบัญชีข้อค้นพบ) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ข้อค้นพบจากการ Audit จะได้รับรหัส ID ถาวรและสถานะกำกับในไฟล์ที่บันทึกร่วมกับ Git โดยข้อค้นพบระดับร้ายแรงจะบล็อกการ Merge จนกว่าจะได้รับการรีวิวซ้ำ, ยอมรับเหตุผลอย่างชัดเจน หรือพิสูจน์ว่าเป็นข้อผิดพลาดเท็จ">
+  <meta name="description" content="ข้อค้นพบจากการ Audit จะได้รับรหัส ID ถาวรและสถานะกำกับในไฟล์ที่บันทึกร่วมกับ Git โดยข้อค้นพบระดับร้ายแรงจะบล็อกการ Merge จนกว่าจะได้รับการแก้ไขอย่างถูกต้อง">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/findings-ledger/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,6 +69,8 @@
         <div class="docs-nav-group">
           <div class="docs-nav-title">WORKFLOW</div>
           <a class="docs-nav-link" href="../core-workflow/">Core Workflow</a>
+          <a class="docs-nav-link" href="../workflow-surface-map/">Workflow Surface Map</a>
+          <a class="docs-nav-link" href="../skill-selection-policy/">Skill Selection Policy</a>
         </div>
 
         <!-- COMMANDS -->
@@ -113,25 +115,29 @@
           <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
           <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
+          <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
         <!-- REFERENCE -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">REFERENCE</div>
           <a class="docs-nav-link" href="../file-reference/">File Reference</a>
+          <a class="docs-nav-link" href="../governance-rules/">Governance Rules</a>
+          <a class="docs-nav-link" href="../markdown-metadata-contract/">Markdown Metadata Contract</a>
+          <a class="docs-nav-link" href="../living-spec-examples/">Living Spec Examples</a>
           <a class="docs-nav-link" href="../tool-adapters/">Tool Adapters</a>
           <a class="docs-nav-link" href="../local-only-mode/">Local-Only Mode</a>
           <a class="docs-nav-link" href="../project-configuration/">Project Configuration</a>
-          <a class="docs-nav-link" href="../commands/try/">Try migration</a>
-          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests migration</a>
+          <a class="docs-nav-link" href="../commands/try/">Try Guide Reference</a>
+          <a class="docs-nav-link" href="../commands/browser-tests/">Browser Tests Reference</a>
         </div>
 
         <!-- QUALITY -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">QUALITY</div>
           <a class="docs-nav-link" href="../testing/">Testing and CI</a>
-          <a class="docs-nav-link" href="../manual-review/">Manual Review With Try</a>
-          <a class="docs-nav-link" href="../code-quality/">Code Quality With Audit</a>
+          <a class="docs-nav-link" href="../manual-review/">Manual Review & Quality Gates</a>
+          <a class="docs-nav-link" href="../code-quality/">Code Quality & Token Budgets</a>
           <a class="docs-nav-link active" href="../findings-ledger/">The Findings Ledger</a>
         </div>
 
@@ -151,7 +157,7 @@
       <h1 class="docs-title">The Findings Ledger (สมุดบัญชีข้อค้นพบ)</h1>
       
       <p class="docs-lead">
-        ข้อค้นพบจากการ Audit จะได้รับรหัส ID ถาวรและสถานะกำกับในไฟล์ที่บันทึกร่วมกับ Git โดยข้อค้นพบระดับร้ายแรงจะบล็อกการ Merge จนกว่าจะได้รับการรีวิวซ้ำ, ยอมรับเหตุผลอย่างชัดเจน หรือพิสูจน์ว่าเป็นข้อผิดพลาดเท็จ
+        ข้อค้นพบจากการ Audit จะได้รับรหัส ID ถาวรและสถานะกำกับในไฟล์ที่บันทึกร่วมกับ Git โดยข้อค้นพบระดับร้ายแรงจะบล็อกการ Merge จนกว่าจะได้รับการแก้ไขอย่างถูกต้อง
       </p>
 
       <div class="docs-meta">
@@ -170,25 +176,14 @@
         <section id="why-findings-need-a-file">
           <h2>ทำไม Findings ถึงต้องบันทึกเป็นไฟล์ถาวร (Why findings need a file)</h2>
           
-          <p>ในอดีต ข้อค้นพบจากการตรวจสอบโค้ดมักจะปรากฏอยู่เพียงในบทสนทนาของแชท เมื่อมีการเคลียร์บริบท (Context Clear) หรือเริ่มเซสชันใหม่ ข้อค้นพบเหล่านั้นก็จะสูญหายไป: ไม่มีรหัสอ้างอิง ไม่มีสถานะที่ติดตามได้ และไม่มีสิ่งใดคอยตรวจจับว่าข้อบกพร่องร้ายแรงที่ถูกรายงานได้รับการแก้ไขแล้วหรือไม่</p>
-          <p>สมุดบัญชีใน <code>devflow/context/{xxx-slug}/findings.md</code> (หรือ <code>devflow/context/findings.md</code>) คือบันทึกที่คงทนถาวร เป็นไฟล์ Markdown ธรรมดาที่สกิลต่างๆ สามารถอ่านและเขียนได้โดยตรง โดยไม่ต้องพึ่งพาสคริปต์เสริม ภาระพึ่งพาภายนอก หรือคำสั่งใหม่ใดๆ</p>
-        
-          
-        </section>
+          <p>สมุดบัญชีใน <code>devflow/context/{xxx-slug}/findings.md</code> คือบันทึกที่คงทนถาวร เป็นไฟล์ Markdown ธรรมดาที่ติดตามสถานะข้อค้นพบได้อย่างโปร่งใส และป้องกันไม่ให้ข้อบกพร่องระดับร้ายแรง (P0/P1) หลุดรอดเข้าสู่ Branch หลัก</p>
+          <pre><code>### F-01 [P1] open - Missing authentication check on admin route
 
-        <!-- Section: รูปแบบโครงสร้างของรายการ (Entry format) -->
-        <section id="entry-format">
-          <h2>รูปแบบโครงสร้างของรายการ (Entry format)</h2>
-          
-          <p>บันทึกหนึ่งบล็อกต่อหนึ่งข้อค้นพบ โดยบรรทัดหัวข้อทำหน้าที่เป็น Machine-Readable Contract และเนื้อหาด้านล่างเป็นรายละเอียดสำหรับมนุษย์:</p>
-          <pre><code>### F-03 [P1] open - Retained auth volumes carry the run label
-
-**File:** ops/compose.yaml:86
-**Found:** 2026-07-21 by /audit (scope: current)
-**Why it matters:** Cleanup selects by label and now matches the credential volumes.
-**Suggested fix:** Give retained volumes a label the cleanup selector excludes.
+**File:** src/routes/admin.ts:42
+**Found:** 2026-09-17 by /audit (scope: current)
+**Why it matters:** Unauthenticated users can access internal metrics.
+**Suggested fix:** Add requireAuth middleware before handler.
 **Resolution:**</code></pre>
-          <p>รหัส ID จะเรียงลำดับแบบ Sequential (<code>F-01</code>, <code>F-02</code>, ...) และจะไม่มีการนำกลับมาใช้ซ้ำหรือเปลี่ยนเลขในระหว่างที่บันทึกยังอยู่ในสมุดบัญชี เมื่อส่งมอบงานสำเร็จ บันทึกที่ได้รับการแก้ไขแล้วจะถูกย้ายเข้าสู่คลังประวัติ (Archive) พร้อมคำนำหน้าชื่อฟีเจอร์ เช่น <code>F-03</code> ของฟีเจอร์ 12 จะกลายเป็น <code>12/F-03</code> อย่างถาวร และหากเป็นการ Build รอบที่สองจะใช้ <code>12-build-2/F-03</code> เพื่อให้ข้อมูลประวัติแยกขาดจากกันชัดเจน ระดับความรุนแรงใช้สเกล <code>P0-P3</code> ของการ Audit</p>
         
           
         </section>
@@ -198,137 +193,15 @@
           <h2>สถานะของรายการและการบล็อกการ Merge (Statuses)</h2>
           
           <table>
-            <thead>
-              <tr>
-                <th>สถานะ (Status)</th>
-                <th>ความหมาย (Meaning)</th>
-                <th>บล็อกการ Complete (P0/P1)</th>
-              </tr>
-            </thead>
+            <thead><tr><th>สถานะ (Status)</th><th>ความหมาย (Meaning)</th><th>บล็อกการ Complete (P0/P1)</th></tr></thead>
             <tbody>
-              <tr>
-                <td><code>unverified</code></td>
-                <td>มีข้อสงสัย แต่ยังไม่มีหลักฐานยืนยันแน่ชัด</td>
-                <td>❌ ไม่บล็อก</td>
-              </tr>
-              <tr>
-                <td><code>open</code></td>
-                <td>ยืนยันแล้วว่ามีปัญหาจริง และยังไม่ได้รับการแก้ไข</td>
-                <td>🚫 <strong>บล็อก</strong></td>
-              </tr>
-              <tr>
-                <td><code>fixed</code></td>
-                <td>ได้รับการแก้ไขโค้ดแล้ว แต่ยังไม่ผ่านการรีวิวซ้ำ</td>
-                <td>🚫 <strong>บล็อก</strong></td>
-              </tr>
-              <tr>
-                <td><code>closed</code></td>
-                <td>ได้รับการแก้ไขและผ่านการรีวิวซ้ำเทียบกับโค้ดใหม่แล้ว</td>
-                <td>❌ ไม่บล็อก</td>
-              </tr>
-              <tr>
-                <td><code>accepted</code></td>
-                <td>ตัดสินใจไม่แก้ไข โดยเป็นการตัดสินใจอย่างชัดเจนของคุณพร้อมระบุเหตุผล</td>
-                <td>❌ ไม่บล็อก</td>
-              </tr>
-              <tr>
-                <td><code>invalid</code></td>
-                <td>การตรวจสอบซ้ำพิสูจน์แล้วว่าข้อค้นพบนี้ไม่ถูกต้อง พร้อมบันทึกหลักฐาน</td>
-                <td>❌ ไม่บล็อก</td>
-              </tr>
+              <tr><td><code>open</code></td><td>ยืนยันแล้วว่ามีปัญหาจริง และยังไม่ได้รับการแก้ไข</td><td>🚫 <strong>บล็อก</strong></td></tr>
+              <tr><td><code>fixed</code></td><td>ได้รับการแก้ไขโค้ดแล้ว แต่ยังไม่ผ่านการรีวิวซ้ำ</td><td>🚫 <strong>บล็อก</strong></td></tr>
+              <tr><td><code>closed</code></td><td>ได้รับการแก้ไขและผ่านการรีวิวซ้ำเทียบกับโค้ดใหม่แล้ว</td><td>❌ ไม่บล็อก</td></tr>
+              <tr><td><code>accepted</code></td><td>ตัดสินใจไม่แก้ไข โดยเป็นการตัดสินใจอย่างชัดเจนของคุณพร้อมระบุเหตุผล</td><td>❌ ไม่บล็อก</td></tr>
+              <tr><td><code>invalid</code></td><td>การตรวจสอบซ้ำพิสูจน์แล้วว่าข้อค้นพบนี้ไม่ถูกต้อง</td><td>❌ ไม่บล็อก</td></tr>
             </tbody>
           </table>
-          <p><strong>ทำไมสถานะ <code>fixed</code> ถึงต้องบล็อกการ Merge?</strong> เพราะการซ่อมแซมไม่ได้สิ้นสุดลงเมื่อมีการแก้โค้ด แต่จะเสร็จสมบูรณ์เมื่อมีกระบวนการรีวิวเข้ามาตรวจสอบผลลัพธ์ของโค้ดใหม่ การแก้บั๊กจุดหนึ่งอาจสร้างข้อบกพร่องที่ร้ายแรงยิ่งกว่าเดิม และสิ่งเดียวที่จะดักจับปัญหานั้นได้คือการตรวจสอบโค้ดที่ได้รับการแก้ไขใหม่อย่างสดใหม่ (Fresh Look)</p>
-        
-          
-        </section>
-
-        <!-- Section: วงจรชีวิตของ Findings ในแต่ละคำสั่ง (The lifecycle) -->
-        <section id="the-lifecycle">
-          <h2>วงจรชีวิตของ Findings ในแต่ละคำสั่ง (The lifecycle)</h2>
-          
-          <table>
-            <thead>
-              <tr>
-                <th>คำสั่ง (Command)</th>
-                <th>พฤติกรรมต่อสมุดบัญชี (Ledger behavior)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>audit</code> (<code>/audit</code>, <code>$audit</code>)</td>
-                <td>เพิ่มข้อค้นพบใหม่พร้อมกำหนดรหัส ID, อัปเดตรายการที่ตรวจซ้ำ, และเปลี่ยนสถานะรายการที่เป็น <code>fixed</code> ให้เป็น <code>closed</code> หลังจากการรีวิวซ้ำสำเร็จ หากอยู่ใน Independent Mode จะบันทึกคำขอและใบรับรองลงใน <code>context/review.md</code> ด้วย</td>
-              </tr>
-              <tr>
-                <td><code>implement</code> (<code>/implement</code>)</td>
-                <td>ซ่อมแซมข้อค้นพบที่ <code>open</code> โดยเพิ่มเป็นขั้นตอนงานที่ผ่านการรีวิวในสเปก จากนั้นเปลี่ยนสถานะเป็น <code>fixed</code> (ไม่มีสิทธิ์เปลี่ยนเป็น <code>closed</code> เองเด็ดขาด)</td>
-              </tr>
-              <tr>
-                <td><code>fix</code> (<code>/fix</code>)</td>
-                <td>รันคำสั่ง <code>/fix F-03</code> ระหว่างรอบงาน เพื่อดึงปัญหาจากสมุดบัญชีมาสร้างสเปกแก้ไข พร้อมระบุ <code>Fixes: F-03</code> ลงในสเปก</td>
-              </tr>
-              <tr>
-                <td><code>complete</code> (<code>/complete</code>)</td>
-                <td>ปฏิเสธการ Merge หากมีข้อค้นพบระดับ P0 หรือ P1 ที่มีสถานะเป็น <code>open</code> หรือ <code>fixed</code> เมื่อผ่านจะย้ายข้อค้นพบที่เสร็จสิ้นเข้าคลังประวัติ และส่งต่อข้อค้นพบที่ยังไม่เสร็จสิ้นไปข้างหน้า</td>
-              </tr>
-              <tr>
-                <td><code>status</code> / <code>doctor</code></td>
-                <td>รายงานจำนวนและรายการข้อค้นพบที่กำลังบล็อกระบบ พร้อมแนะนำคำสั่งที่ถูกต้องในการแก้ไข</td>
-              </tr>
-              <tr>
-                <td><code>autopilot</code> / <code>continuous</code></td>
-                <td>บันทึกข้อค้นพบเมื่อถึงรอบ Audit Gate และจะไม่ส่งมอบงานว่าพร้อม (Ready) ตราบใดที่ยังมี P0 หรือ P1 บล็อกอยู่</td>
-              </tr>
-            </tbody>
-          </table>
-          <p>สำหรับ <strong>Independent Reviewer</strong>: ผู้ตรวจสอบอิสระจะใช้สมุดบัญชีเดียวกันนี้ โดยใบรับรอง (Receipt) จะบันทึกว่ามี Finding ID ใดถูกเปิดขึ้นมาบ้าง และหลังการซ่อมแซม ผู้ตรวจรอบถัดไปจะตรวจสอบความสมบูรณ์ของ Checkpoint ใหม่ทั้งหมด แทนที่จะมองแค่ลิสต์ข้อค้นพบเดิมเป็นขอบเขตจำกัด</p>
-        
-          
-        </section>
-
-        <!-- Section: การผ่านด่านตรวจสอบโดยไม่ต้องแก้โค้ด (Getting past the gate without code) -->
-        <section id="getting-past-the-gate-without-code">
-          <h2>การผ่านด่านตรวจสอบโดยไม่ต้องแก้โค้ด (Getting past the gate without code)</h2>
-          
-          <p>หาก Quality Gate ไม่มีทางออกฉุกเฉิน (Escape hatch) ผู้ใช้อาจเลือกที่จะปิด Gate ทิ้ง DevFlow จึงออกแบบ 2 ช่องทางในการผ่านด่านที่โปร่งใสและตรวจสอบย้อนหลังได้:</p>
-          <ul>
-            <li><strong><code>accepted</code></strong>: ตัดสินใจไม่แก้ไขอย่างตั้งใจ การตัดสินใจนี้ทำได้โดยคุณเท่านั้น และต้องระบุเหตุผลประกอบที่จำเป็น ซึ่งข้อความเหตุผลนี้จะถูกจัดเก็บเข้าสู่คลังประวัติตลอดไป</li>
-            <li><strong><code>invalid</code></strong>: การตรวจสอบซ้ำพิสูจน์ได้ว่าข้อค้นพบนั้นผิดพลาด สกิล Audit จะตั้งสถานะนี้หลังการรีวิวซ้ำพร้อมหลักฐานที่บันทึกไว้ หรือคุณสามารถระบุสถานะนี้ได้โดยตรง</li>
-          </ul>
-          <p>ทั้งสองวิธีมีความชัดเจนและได้รับการบันทึกหลักฐานเสมอ ไม่มีทางลัดที่เงียบงัน และ AI เอเจนต์จะไม่มีสิทธิ์ยกเว้นข้อค้นพบที่ตัวเองสร้างขึ้นได้โดยพลการ</p>
-        
-          
-        </section>
-
-        <!-- Section: ปลายทางในการจัดเก็บ Findings (Where findings end up) -->
-        <section id="where-findings-end-up">
-          <h2>ปลายทางในการจัดเก็บ Findings (Where findings end up)</h2>
-          
-          <p>เมื่อรันคำสั่ง <code>complete</code> สำเร็จ ระบบจะผนวกข้อค้นพบที่คลี่คลายแล้ว (<code>closed</code>, <code>accepted</code>, <code>invalid</code>) เข้าสู่ History Archive เดียวกันกับชิ้นงานนั้นใน <code>devflow/history/</code></p>
-          <p>สเปก, หลักฐานการตรวจรับ, และทุกประเด็นที่ถูกทักท้วงจะรวมอยู่ในเอกสารฉบับเดียว ส่วนข้อค้นพบระดับรองที่ยังไม่คลี่คลายจะคงอยู่ในสมุดบัญชีปัจจุบันพร้อมรหัส ID เดิม ทำให้ไม่มีข้อค้นพบใดถูกทิ้งหายไปโดยไม่รู้ตัว</p>
-        
-          
-        </section>
-
-        <!-- Section: กฎสำคัญที่ทำให้การรีวิวโปร่งใสและตรงไปตรงมา (The rule that keeps reviews honest) -->
-        <section id="the-rule-that-keeps-reviews-honest">
-          <h2>กฎสำคัญที่ทำให้การรีวิวโปร่งใสและตรงไปตรงมา (The rule that keeps reviews honest)</h2>
-          
-          <p>สมุดบัญชี (Ledger) ทำหน้าที่รายงานสถานะ แต่จะไม่เป็นตัวกำหนดขอบเขตการมองเห็นของการรีวิว</p>
-          <p>ทุกรอบของการรัน <code>/audit</code> จะทำการตรวจทานโค้ดอย่างสดใหม่ (Fresh Review) ทั่วทั้งขอบเขต จากนั้นจึงอัปเดตสมุดบัญชีตามสิ่งที่ค้นพบจริง</p>
-          <div class="note-box">
-            <strong>หลักการตรวจสอบ:</strong> การนำเฉพาะรายการข้อค้นพบที่เปิดอยู่มาเป็น Checklist แล้วตรวจเช็คเฉพาะจุดเหล่านั้น คือช่องโหว่ที่ทำให้บั๊กที่เกิดจากการแก้ไขโค้ดหลุดรอดสู่ Production ได้โดยไม่รู้ตัว
-          </div>
-        
-          
-        </section>
-
-        <!-- Section: การรองรับโปรเจกต์เดิม (Older installs) -->
-        <section id="older-installs">
-          <h2>การรองรับโปรเจกต์เดิม (Older installs)</h2>
-          
-          <p>ไฟล์สมุดบัญชีเป็นไฟล์ที่ผู้ใช้เป็นเจ้าของและได้รับการปกป้องโดยตัวอัปเดต สกิล <code>/audit</code> และ <code>/complete</code> สามารถสร้างไฟล์นี้ขึ้นมาใหม่โดยอัตโนมัติในการเรียกใช้งานครั้งแรกสำหรับโปรเจกต์เวอร์ชันเก่า</p>
-          <p>การไม่มีไฟล์สมุดบัญชีจะไม่บล็อกการ Complete แต่หากไฟล์มีรูปแบบที่เสียหาย (Malformed) หรือมี Path ที่ไม่ปลอดภัย จะบล็อกความพร้อมในการทำงานและนำทางไปที่คำสั่ง <code>/doctor</code> เพื่อวินิจฉัยแก้ไข</p>
         
           
         </section>
@@ -338,7 +211,7 @@
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
         <a class="prev" href="../code-quality/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Code Quality With Audit</strong>
+          <strong>Code Quality & Token Budgets</strong>
         </a>
         <a class="next" href="../release-readiness/">
           <span>ถัดไป (Next)</span>
@@ -351,13 +224,7 @@
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
       <a href="#why-findings-need-a-file">ทำไม Findings ถึงต้องบันทึกเป็นไฟล์ถาวร (Why findings need a file)</a>
-      <a href="#entry-format">รูปแบบโครงสร้างของรายการ (Entry format)</a>
       <a href="#statuses">สถานะของรายการและการบล็อกการ Merge (Statuses)</a>
-      <a href="#the-lifecycle">วงจรชีวิตของ Findings ในแต่ละคำสั่ง (The lifecycle)</a>
-      <a href="#getting-past-the-gate-without-code">การผ่านด่านตรวจสอบโดยไม่ต้องแก้โค้ด (Getting past the gate without code)</a>
-      <a href="#where-findings-end-up">ปลายทางในการจัดเก็บ Findings (Where findings end up)</a>
-      <a href="#the-rule-that-keeps-reviews-honest">กฎสำคัญที่ทำให้การรีวิวโปร่งใสและตรงไปตรงมา (The rule that keeps reviews honest)</a>
-      <a href="#older-installs">การรองรับโปรเจกต์เดิม (Older installs)</a>
     </aside>
   </div>
 

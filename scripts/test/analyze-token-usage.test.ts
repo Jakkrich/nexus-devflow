@@ -9,7 +9,7 @@ import {
   formatTokenTable,
   parseTranscriptUsage,
   MODEL_PRICING_CATALOG
-} from "../analyze-token-usage.ts";
+} from "../analyze-token-usage.js";
 
 test("AC-1: calculateCostUnits applies standard Anthropic/AI cost weights accurately", () => {
   const usage = {

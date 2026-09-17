@@ -283,7 +283,7 @@ When the root cause is unclear, investigate without modifying application state:
 
 The skills include English JIT guides for root-cause tracing, defense-in-depth,
 condition-based waiting, TDD anti-patterns, and two-stage review. See the
-[reference-guide usage map](devflow/docs/USAGE.md#debugging-tdd--review-reference-guides)
+[reference-guide usage map](https://jakkrich.github.io/nexus-devflow/workflow-surface-map/)
 for when to use each guide, the 3-Strike Rule, and the existing review gates.
 
 ---
@@ -336,8 +336,8 @@ AI:  Recorded Release Digest in living spec.
 
 Explore the interactive system architecture and living spec lifecycle generated with **Archify**:
 
-- 🌐 **[Nexus-DevFlow System Architecture Map (Interactive HTML)](devflow/docs/diagrams/nexus-devflow-architecture.html)** — Trace the 3-Pillars workspace, multi-agent adapters, and senior QA gates.
-- ⚡ **[Nexus-DevFlow Living Spec Lifecycle & State Machine (Interactive HTML)](devflow/docs/diagrams/nexus-devflow-lifecycle.html)** — Step through the 4-stage progressive rail (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), blocker gates, and reversals.
+- 🌐 **[Nexus-DevFlow System Architecture Map (Interactive HTML)](docs/diagrams/nexus-devflow-architecture.html)** — Trace the 3-Pillars workspace, multi-agent adapters, and senior QA gates.
+- ⚡ **[Nexus-DevFlow Living Spec Lifecycle & State Machine (Interactive HTML)](docs/diagrams/nexus-devflow-lifecycle.html)** — Step through the 4-stage progressive rail (`/feature` ➔ `/implement` ➔ `/check` ➔ `/complete`), blocker gates, and reversals.
 
 ![Nexus-DevFlow Workflow](assets/nexus-devflow-workflow.png)
 
@@ -843,13 +843,13 @@ When starting a new session or resuming after clearing context:
 
 ## Documentation and governance
 
-- [Comprehensive usage guide](devflow/docs/USAGE.md) — full operating instructions and Core Skill inventory.
-- [Workflow surface map](devflow/docs/workflow-surface-map.md) — canonical commands, categories, and artifacts.
-- [Skill selection policy](devflow/docs/skill-selection-policy.md) — choose the smallest appropriate workflow or companion skill.
-- [Governance rules](devflow/docs/governance-rules.md) — public-surface and documentation placement rules for maintainers.
-- [Markdown metadata contract](devflow/docs/markdown-metadata-contract.md) — frontmatter and semantic heading requirements.
-- [Manual review workflow](devflow/docs/manual-review-workflow-spec.md) — human review gates from spec through delivery.
-- [Living Spec examples](devflow/docs/examples/living-spec/) — reference artifacts for specs, discoveries, ADRs, and ideas.
+- [Official Web Documentation](https://jakkrich.github.io/nexus-devflow/) — comprehensive guides, interactive search, and live manuals.
+- [Workflow surface map](https://jakkrich.github.io/nexus-devflow/workflow-surface-map/) — canonical commands, categories, and artifacts.
+- [Skill selection policy](https://jakkrich.github.io/nexus-devflow/skill-selection-policy/) — choose the smallest appropriate workflow or companion skill.
+- [Governance rules](https://jakkrich.github.io/nexus-devflow/governance-rules/) — public-surface and documentation placement rules for maintainers.
+- [Markdown metadata contract](https://jakkrich.github.io/nexus-devflow/markdown-metadata-contract/) — frontmatter and semantic heading requirements.
+- [Manual review workflow](https://jakkrich.github.io/nexus-devflow/manual-review/) — human review gates from spec through delivery.
+- [Living Spec examples](https://jakkrich.github.io/nexus-devflow/living-spec-examples/) — reference artifacts for specs, discoveries, ADRs, and ideas.
 
 ---
 
