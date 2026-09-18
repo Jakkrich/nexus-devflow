@@ -1,6 +1,6 @@
 {
   "name": "@jakkrichm/create-nexus-devflow",
-  "version": "2.17.8",
+  "version": "2.17.9",
   "description": "Installer and workflow manager for Nexus-DevFlow agentic workflow layer.",
   "license": "MIT",
   "author": "Jakkrich",
@@ -40,7 +40,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "pretest": "npm run build",
-    "test": "tsx --test test/*.test.ts",
+    "test": "tsx --test --test-concurrency=1 test/*.test.ts",
     "check:pack": "npm pack --dry-run",
     "prepare-template": "tsx scripts/prepare-template.ts",
     "clean-template": "tsx scripts/clean-template.ts",
