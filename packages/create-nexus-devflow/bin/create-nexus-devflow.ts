@@ -67,7 +67,11 @@ import {
 } from "../lib/git-hooks.js";
 import {
   createSpinner,
-  createStyle
+  createStyle,
+  formatVersionTransition,
+  promptConfirm,
+  renderHeaderBox,
+  renderStepHeader
 } from "../lib/ui.js";
 import {
   applyPreparedUpdate,
@@ -757,6 +761,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   const version = readPackageVersion();
 
   if (options.command === "update") {
+    const style = createStyle();
     const spinner = createSpinner("Checking for DevFlow updates...").start();
     const prepared = await prepareUpdate({
       targetDir,
@@ -776,6 +781,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     const replaceConflicts =
       options.force || (await confirmUpdateConflicts(prepared, options));
 
+    console.log(renderStepHeader(2, 3, "⚡", "Applying Nexus-DevFlow updates...", style));
     spinner.start("Applying DevFlow updates...");
     const result = await applyPreparedUpdate(prepared, { replaceConflicts });
 
@@ -800,10 +806,12 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
 
     spinner.succeed("Nexus-DevFlow update successfully applied!");
+    await handleRecommendedSkillsSetup(targetDir, options, style, true);
     printUpdateSuccess(prepared, result);
     return;
   }
 
+  const style = createStyle();
   const spinner = createSpinner("Analyzing target project...").start();
   const prepared = await prepareUpdate({
     targetDir,
@@ -815,7 +823,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   await validateInstallDestinations(prepared.templateFiles, targetDir);
   spinner.stop();
 
-  printInstallPlan(prepared);
+  printInstallPlan(prepared, options.role);
 
   if (options.dryRun) {
     return;
@@ -829,6 +837,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
   }
 
+  console.log(renderStepHeader(2, 3, "⚡", "Installing Nexus-DevFlow overlay...", style));
   spinner.start("Installing Nexus-DevFlow overlay...");
   const result = await applyPreparedUpdate(prepared, {
     replaceConflicts: options.force || prepared.conflictList.length > 0
@@ -856,6 +865,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
   spinner.succeed("Nexus-DevFlow overlay successfully installed!");
 
+  await handleRecommendedSkillsSetup(targetDir, options, style, false);
   printInstallSuccess(targetDir, result);
 }
 
@@ -1536,12 +1546,78 @@ ${style.bold("Options:")}
 `);
 }
 
-function printInstallPlan(prepared: PreparedUpdate): void {
-  const style = createStyle();
-  console.log(`\n${style.bold(style.cyan("Nexus-DevFlow"))} ${style.bold(`v${readPackageVersion()}`)}`);
-  console.log(`  ${style.dim("Target Directory:")} ${style.bold(prepared.targetDir)}`);
-  console.log(`  ${style.dim("Active Adapters :")} ${style.cyan(prepared.activeAdapters.join(", "))}\n`);
+async function handleRecommendedSkillsSetup(
+  targetDir: string,
+  options: CliOptions,
+  style: ReturnType<typeof createStyle>,
+  isUpdate: boolean
+): Promise<void> {
+  if (options.json || options.dryRun) return;
 
+  const isInteractive = Boolean(process.stdin.isTTY && !process.env.CI);
+  if (!isInteractive && !options.recommended) {
+    return;
+  }
+
+  console.log(renderStepHeader(3, 3, "🔌", "Configuring Superpower Community Skills...", style));
+  console.log(`  ${style.dim("Recommended Skills Suite:")} ${style.bold(style.cyan("archify"))}, ${style.bold(style.cyan("diagram-design"))}, ${style.bold(style.cyan("bughunter"))}, ${style.bold(style.cyan("ponytail"))}`);
+
+  const actionText = isUpdate ? "update/install" : "install";
+  const promptText = `\n  ✨ Would you like to ${actionText} recommended skills now?`;
+
+  const proceed = options.recommended
+    ? true
+    : await promptConfirm(promptText, {
+      defaultYes: true,
+      bypass: false
+    });
+
+  if (proceed) {
+    const spinner = createSpinner(`${isUpdate ? "Updating" : "Installing"} recommended third-party skills...`).start();
+    try {
+      if (isUpdate) {
+        const updateResult = await updateRecommendedSkills(targetDir);
+        if (updateResult.totalUpdated > 0) {
+          spinner.succeed(`Successfully updated ${updateResult.totalUpdated} recommended skill(s): ${updateResult.updatedSkills.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
+        } else {
+          const installResult = await installRecommendedSkills(targetDir, { force: options.force });
+          spinner.succeed(`Successfully installed ${installResult.length} recommended skill(s): ${installResult.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
+        }
+      } else {
+        const installResult = await installRecommendedSkills(targetDir, { force: options.force });
+        spinner.succeed(`Successfully installed ${installResult.length} recommended skill(s): ${installResult.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
+      }
+    } catch (err: unknown) {
+      spinner.fail(`Could not configure recommended skills: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  } else {
+    console.log(`  ${style.dim("Skipped. You can install them anytime with:")} ${style.brightCyan("npx nexus-devflow skill add --recommended")}`);
+  }
+}
+
+function printInstallPlan(prepared: PreparedUpdate, role: DevFlowRole = "dev"): void {
+  const style = createStyle();
+  const versionTransition = formatVersionTransition(
+    prepared.previousManifest?.version,
+    prepared.nextManifest.version,
+    style
+  );
+
+  console.log(
+    renderHeaderBox({
+      title: `Nexus-DevFlow Installer v${readPackageVersion()}`,
+      subtitle: "Enterprise-grade Spec-Driven Multi-Agent Workflow Layer",
+      fields: [
+        { label: "Target Directory", value: prepared.targetDir },
+        { label: "Version Setup", value: versionTransition },
+        { label: "Active Adapters", value: prepared.activeAdapters.join(", ") },
+        { label: "Role Profile", value: role.toUpperCase() }
+      ],
+      style
+    })
+  );
+
+  console.log(renderStepHeader(1, 3, "🔍", "Analyzing workspace footprint...", style));
   console.log(`  ${style.dim("Files to create :")} ${style.bold(style.green(String(prepared.createList.length)))}`);
   console.log(`  ${style.dim("Files to update :")} ${style.bold(String(prepared.updateList.length))}`);
   console.log(`  ${style.dim("Conflicts found :")} ${prepared.conflictList.length > 0 ? style.bold(style.red(String(prepared.conflictList.length))) : style.green("0")}`);
@@ -1556,10 +1632,26 @@ function printInstallPlan(prepared: PreparedUpdate): void {
 
 function printUpdatePlan(prepared: PreparedUpdate): void {
   const style = createStyle();
-  console.log(`\n${style.bold(style.cyan("Nexus-DevFlow Update Plan"))} ${style.bold(`(v${readPackageVersion()})`)}`);
-  console.log(`  ${style.dim("Target Directory:")} ${style.bold(prepared.targetDir)}`);
-  console.log(`  ${style.dim("Active Adapters :")} ${style.cyan(prepared.activeAdapters.join(", "))}\n`);
+  const versionTransition = formatVersionTransition(
+    prepared.previousManifest?.version,
+    prepared.nextManifest.version,
+    style
+  );
 
+  console.log(
+    renderHeaderBox({
+      title: `Nexus-DevFlow Update Engine (v${readPackageVersion()})`,
+      subtitle: "Preserves local customizations and synchronizes core workflow",
+      fields: [
+        { label: "Target Directory", value: prepared.targetDir },
+        { label: "Version Upgrade", value: versionTransition },
+        { label: "Active Adapters", value: prepared.activeAdapters.join(", ") }
+      ],
+      style
+    })
+  );
+
+  console.log(renderStepHeader(1, 3, "🔍", "Inspecting update plan and file diffs...", style));
   console.log(`  ${style.dim("Files to create :")} ${style.bold(style.green(String(prepared.createList.length)))}`);
   console.log(`  ${style.dim("Files to update :")} ${style.bold(String(prepared.updateList.length))}`);
   console.log(`  ${style.dim("Orphaned files  :")} ${style.bold(String(prepared.orphanedFiles.length))}`);
@@ -1581,45 +1673,24 @@ function printUninstallPlan(prepared: PreparedUninstall): void {
 }
 
 async function confirmInstallConflicts(prepared: PreparedUpdate, options: CliOptions): Promise<boolean> {
-  if (options.yes) return true;
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  const answer = await rl.question(
-    `\nOverwrite ${prepared.conflictList.length} conflicting file(s)? [y/N] `
+  return promptConfirm(
+    `\nOverwrite ${prepared.conflictList.length} conflicting file(s)?`,
+    { defaultYes: true, bypass: options.yes || options.force }
   );
-  rl.close();
-  return answer.trim().toLowerCase() === "y";
 }
 
 async function confirmUpdateConflicts(prepared: PreparedUpdate, options: CliOptions): Promise<boolean> {
-  if (options.yes) return true;
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  const answer = await rl.question(
-    `\nOverwrite ${prepared.conflictList.length} customized file(s) with update? [y/N] `
+  return promptConfirm(
+    `\nOverwrite ${prepared.conflictList.length} customized file(s) with update?`,
+    { defaultYes: true, bypass: options.yes || options.force }
   );
-  rl.close();
-  return answer.trim().toLowerCase() === "y";
 }
 
 async function confirmUninstall(prepared: PreparedUninstall, options: CliOptions): Promise<boolean> {
-  if (options.yes) return true;
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  const answer = await rl.question(
-    `\nAre you sure you want to completely remove DevFlow from this project? [y/N] `
+  return promptConfirm(
+    `\nAre you sure you want to completely remove DevFlow from this project?`,
+    { defaultYes: true, bypass: options.yes || options.force }
   );
-  rl.close();
-  return answer.trim().toLowerCase() === "y";
 }
 
 function printNextSteps(): void {

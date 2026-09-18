@@ -357,7 +357,7 @@ export async function prepareUpdate({
   }
 
   const orphanedFiles: string[] = [];
-  if (previousManifest) {
+  if (previousManifest?.managedFiles) {
     for (const [relativePath, recordedHash] of Object.entries(
       previousManifest.managedFiles
     )) {

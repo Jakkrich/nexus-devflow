@@ -149,3 +149,140 @@ export class Spinner {
 export function createSpinner(text: string, options?: SpinnerOptions): Spinner {
   return new Spinner(text, options);
 }
+
+export interface PromptConfirmOptions {
+  defaultYes?: boolean;
+  bypass?: boolean;
+  input?: NodeJS.ReadableStream;
+  stream?: NodeJS.WriteStream;
+  style?: TextStyle;
+}
+
+export async function promptConfirm(
+  question: string,
+  options: PromptConfirmOptions = {}
+): Promise<boolean> {
+  const { defaultYes = true, bypass = false } = options;
+  if (bypass) return true;
+
+  const isInteractive = options.input
+    ? true
+    : Boolean(process.stdin.isTTY && !process.env.CI);
+
+  if (!isInteractive && !options.input) {
+    return defaultYes;
+  }
+
+  const rl = readline.createInterface({
+    input: (options.input as NodeJS.ReadableStream) || process.stdin,
+    output: options.stream || process.stdout
+  });
+
+  const promptHint = defaultYes ? "[Y/n]" : "[y/N]";
+  const query = `${question} ${promptHint} `;
+
+  return new Promise<boolean>((resolve) => {
+    rl.question(query, (answer) => {
+      rl.close();
+      const trimmed = answer.trim().toLowerCase();
+      if (trimmed === "") {
+        resolve(defaultYes);
+      } else if (trimmed === "y" || trimmed === "yes") {
+        resolve(true);
+      } else if (trimmed === "n" || trimmed === "no") {
+        resolve(false);
+      } else {
+        resolve(defaultYes);
+      }
+    });
+  });
+}
+
+export function stripAnsi(text: string): string {
+  return text.replace(/\x1b\[[0-9;]*m/g, "");
+}
+
+export function formatVersionTransition(
+  oldVersion: string | null | undefined,
+  newVersion: string,
+  style: TextStyle = createStyle(shouldUseColor())
+): string {
+  if (!oldVersion || oldVersion === "legacy") {
+    return `${style.bold(style.brightGreen(`v${newVersion}`))} ${style.dim("(Fresh Setup)")}`;
+  }
+  if (oldVersion === newVersion) {
+    return style.bold(style.cyan(`v${newVersion}`));
+  }
+  return `${style.dim(`v${oldVersion}`)} ${style.bold(style.cyan("➔"))} ${style.bold(style.brightGreen(`v${newVersion}`))}`;
+}
+
+export interface HeaderBoxField {
+  label: string;
+  value: string;
+}
+
+export interface HeaderBoxOptions {
+  title: string;
+  subtitle?: string;
+  fields?: HeaderBoxField[];
+  style?: TextStyle;
+  minWidth?: number;
+}
+
+export function renderHeaderBox(options: HeaderBoxOptions): string {
+  const style = options.style || createStyle(shouldUseColor());
+  const lines: string[] = [];
+
+  const rawTitle = `⚡ ${options.title}`;
+  const rawSubtitle = options.subtitle ? options.subtitle : "";
+  const rawFields = (options.fields || []).map((f) => `  ${f.label.padEnd(16)}: ${f.value}`);
+
+  const allRawLines = [rawTitle, ...(rawSubtitle ? [rawSubtitle] : []), ...rawFields];
+  const maxLen = Math.max(
+    options.minWidth || 64,
+    ...allRawLines.map((l) => stripAnsi(l).length + 4)
+  );
+
+  const topBorder = style.cyan(`┌${"─".repeat(maxLen)}┐`);
+  const bottomBorder = style.cyan(`└${"─".repeat(maxLen)}┘`);
+  const vertical = style.cyan("│");
+
+  lines.push(topBorder);
+
+  // Title Line
+  const titlePad = maxLen - stripAnsi(rawTitle).length - 2;
+  lines.push(`${vertical}  ${style.bold(style.brightCyan(rawTitle))}${" ".repeat(Math.max(0, titlePad))}${vertical}`);
+
+  // Subtitle Line
+  if (options.subtitle) {
+    const subPad = maxLen - stripAnsi(rawSubtitle).length - 2;
+    lines.push(`${vertical}  ${style.dim(rawSubtitle)}${" ".repeat(Math.max(0, subPad))}${vertical}`);
+  }
+
+  // Divider
+  if (options.fields && options.fields.length > 0) {
+    lines.push(style.cyan(`├${"─".repeat(maxLen)}┤`));
+    for (const field of options.fields) {
+      const rawLine = `  ${field.label.padEnd(16)}: ${field.value}`;
+      const styledLine = `  ${style.dim(field.label.padEnd(16))} : ${style.bold(field.value)}`;
+      const fieldPad = maxLen - stripAnsi(rawLine).length - 2;
+      lines.push(`${vertical}${styledLine}${" ".repeat(Math.max(0, fieldPad))}${vertical}`);
+    }
+  }
+
+  lines.push(bottomBorder);
+  return lines.join("\n");
+}
+
+export function renderStepHeader(
+  current: number,
+  total: number,
+  icon: string,
+  title: string,
+  style: TextStyle = createStyle(shouldUseColor())
+): string {
+  const badge = style.bold(style.cyan(`[${current}/${total}]`));
+  const heading = style.bold(title);
+  return `\n${badge} ${icon} ${heading}`;
+}
+

@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-09-18 | `109` | Feature | Improve Installer UX, Version Diff & Interactive Skills Setup | `5b0079f` | `Completed` | [`109-improve-installer-ux-and-interactive-skills.md`](features/109-improve-installer-ux-and-interactive-skills.md) |
 | 2026-09-17 | `108` | Feature | Migrate devflow/docs to Web Docs & Integrate Features 104–107 | `ce5f8fa` | `Completed` | [`108-migrate-devflow-docs-to-web-and-integrate-features-104-107.md`](features/108-migrate-devflow-docs-to-web-and-integrate-features-104-107.md) |
 | 2026-09-17 | `107` | Feature | Session Token Usage & Cost Analytics CLI Tool & Insights | `19fa71e` | `Completed` | [`107-token-usage-and-cost-analytics.md`](features/107-token-usage-and-cost-analytics.md) |
 | 2026-09-17 | `106` | Feature | 5-Tier Test File Classification & AC Traceability Matrix Protocol | `def8bc6` | `Completed` | [`106-test-file-classification-and-ac-traceability.md`](features/106-test-file-classification-and-ac-traceability.md) |
