@@ -1698,16 +1698,6 @@ function printNextSteps(): void {
   console.log(`\n${style.bold("Next steps in your AI IDE")} ${style.dim("(Antigravity, Claude Code, Codex, Cursor, etc.):")}`);
   console.log(`  - ${style.cyan("Existing project")} : Run ${style.bold(style.brightCyan("/adopt"))} ${style.dim("(or $adopt)")} to scan codebase and bootstrap context.`);
   console.log(`  - ${style.cyan("Fresh project")}    : Run ${style.bold(style.brightCyan("/onboard"))} ${style.dim("(or $onboard)")} to configure project baseline.`);
-  console.log(`\n${style.bold("Recommended Third-Party Skills")} ${style.dim("(Optional companion superpowers):")}`);
-  console.log(`  - ${style.cyan("Install all (Batch)")}:`);
-  console.log(`      ${style.bold(style.brightGreen("npx nexus-devflow skill add --recommended"))}`);
-  console.log(`  - ${style.cyan("Update all to latest (Batch)")}:`);
-  console.log(`      ${style.bold(style.brightCyan("npx nexus-devflow skill update --recommended"))}`);
-  console.log(`  - ${style.cyan("Or manage individually by name")}:`);
-  console.log(`      ${style.bold("npx nexus-devflow skill add archify")}        ${style.dim("# Technical architecture & trace diagrams")}`);
-  console.log(`      ${style.bold("npx nexus-devflow skill add diagram-design")} ${style.dim("# 39 editorial visual diagram templates & charts")}`);
-  console.log(`      ${style.bold("npx nexus-devflow skill add bughunter")}      ${style.dim("# Offensive security audit & vulnerability testing")}`);
-  console.log(`      ${style.bold("npx nexus-devflow skill add ponytail")}       ${style.dim("# Lazy senior dev mode - cuts code bloat & tokens")}`);
 }
 
 function printInstallSuccess(targetDir: string, result: { appliedCount: number }): void {
