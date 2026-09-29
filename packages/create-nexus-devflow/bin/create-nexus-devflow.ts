@@ -1219,6 +1219,23 @@ function parseArgs(args: readonly string[]): CliOptions {
 
   if (positional.length > 0) {
     const first = positional[0].toLowerCase();
+    const normalizedCmd = first.replace(/^[/$\\]+/, "");
+    const aiSkills = new Set([
+      "feature", "fix", "implement", "check", "complete", "continuous",
+      "explore", "discovery", "analyze", "brief", "audit", "grill",
+      "brainstorm", "bughunter", "ponytail", "try", "browser-tests",
+      "setup-tests", "ci", "rollback", "release", "overview",
+      "onboard", "adopt"
+    ]);
+
+    if (aiSkills.has(normalizedCmd)) {
+      const style = createStyle();
+      console.log(`\n${style.yellow("💡 Note:")} "${positional[0]}" is an AI workflow skill, not a terminal CLI command.`);
+      console.log(`To use this skill, open your project in an AI-powered assistant (Google Antigravity, Claude Code, Codex, or Cursor) and prompt:`);
+      console.log(`  ${style.cyan(`/${normalizedCmd}`)}${positional.slice(1).length > 0 ? " " + positional.slice(1).join(" ") : ""}\n`);
+      process.exit(0);
+    }
+
     if (first === "status") {
       command = "status";
       target = positional[1] || target || ".";

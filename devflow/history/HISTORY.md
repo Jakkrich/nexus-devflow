@@ -8,7 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| _No shipped runs yet_ | - | - | Run `/feature` or `/discovery` to start your first delivery run | - | - | - |
+| 2026-09-29 | 001-sync-upstream-ai-blueprint | features | Upstream AI Blueprint Synchronization & Zero-Regression Fusion | pending | Shipped | [001-sync-upstream-ai-blueprint.md](file:///d:/devtools/nexus-devflow/devflow/history/features/001-sync-upstream-ai-blueprint.md) |
 
 ---
 

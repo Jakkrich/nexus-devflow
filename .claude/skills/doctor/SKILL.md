@@ -100,6 +100,12 @@ Gather these, then summarize. Do not dump file contents.
      report it as an obsolete installer artifact. Its absence is healthy. An
      unchanged managed copy can be removed by the updater; a modified copy needs
      user review.
+   - Check whether `AGENTS.md` has substantive proportional-engineering guidance,
+     under `## Proportional engineering` or equivalent customized wording.
+     Accept equivalent guidance anywhere in the file; do not require exact prose.
+     Look for current requirements over hypothetical scale, reuse before new
+     machinery, smaller reversible defaults, questions for material unknowns,
+     and harmonization with `ponytail`.
    - Check whether `AGENTS.md` has a `## Commands` section with dev and build
      commands.
    - Report missing lint or test commands as informational unless the project has

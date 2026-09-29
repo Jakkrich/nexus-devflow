@@ -70,6 +70,7 @@ function main(): void {
 
   runNpm(["run", "build"]);
   runNpm(["run", "prepare-template"]);
+  runNpm(["rm", "--global", packageName]);
   runNpm(["link"]);
 
   console.log(`

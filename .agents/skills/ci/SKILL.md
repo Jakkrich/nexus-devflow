@@ -107,6 +107,18 @@ before writing the push trigger instead of guessing. Preserve all other workflow
 files. When another workflow overlaps, report the overlap and ask whether to
 reuse, align, or leave it alone.
 
+## Step 3b - offer a local pre-push hook (opt-in)
+
+After the workflow exists, ask one question and default to no:
+
+    Also add a local pre-push hook that runs Verify before every push? [y/N]
+
+Skip the question when the request already answered it (for example "/ci with hook" or "no hook"). When the answer is no, write nothing and move on. When it is yes:
+
+1. Use `npx nexus-devflow hook install pre-push` or configure `.githooks/pre-push` running the exact `Verify` command with `git config core.hooksPath .githooks`.
+2. Run the hook once to verify it passes cleanly. If it fails, revert the hook setup and report the failure. Never leave a hook the project cannot pass.
+3. Note that `git push --no-verify` bypasses the hook if an emergency push is ever needed.
+
 ## Step 4 - prove the setup locally
 
 Run the exact documented `Verify` command locally. The individual build, test,

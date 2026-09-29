@@ -20,6 +20,17 @@ To start a new project, scaffold the application first in an empty folder, then 
 - `devflow/context/glossary.md` - domain terms & architecture definitions
 - `devflow/context/{xxx-slug}/` - active task living spec, stage, findings ledger, and independent review receipt
 
+## Proportional engineering
+
+Build for established requirements, not hypothetical scale, threats, or future flexibility. Reuse existing code, the standard library, native platform features, and installed dependencies before adding machinery. Harmonize with DevFlow's `ponytail` skill for operational bloat reduction and YAGNI discipline.
+
+- Unknown scale or extensibility defaults to the smaller reversible design. Do not infer enterprise, multi-tenant, hostile-user, or compliance requirements.
+- Derive trust and data-integrity boundaries from actual reachability: untrusted input, auth/session/ownership, shared persisted data, destructive operations, payments, secrets, and sensitive data.
+- Ask only when an unknown materially changes behavior, architecture, persisted data, interoperability, a real security boundary, or cost. Otherwise choose the simplest repository-native implementation.
+- Add an abstraction, dependency, service, configuration surface, compatibility layer, or security mechanism only for a current requirement.
+- Simplicity never removes real trust-boundary validation, data-loss prevention, accessibility, explicit security requirements, configured tests, or project rules.
+- Stack-specific template standards apply only when the project uses that stack.
+
 ## Project configuration
 
 `devflow/config.json` is the user-owned, machine-readable workflow policy for this project. Workflow skills read the relevant settings before acting. A missing file means built-in defaults. An invalid file falls back to defaults for read-only status reporting, but mutating workflow commands stop and point to `/doctor` instead of guessing.
@@ -42,7 +53,7 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### Universal Invocation & Agent Directives:
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `continuous`, `analyze`, `discovery`, `idea`, `grill`, `brainstorm`, `bughunter`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `setup-tests`, `browser-tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `convert-any-to-md`, `publish-devflow`, `vendor`). The way you invoke commands depends on your AI Provider / Tool:
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `continuous`, `analyze`, `discovery`, `explore`, `idea`, `grill`, `brainstorm`, `bughunter`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `setup-tests`, `browser-tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `convert-any-to-md`, `publish-devflow`, `vendor`). The way you invoke commands depends on your AI Provider / Tool:
    - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `implement`, `continuous`, `devflow`, `discovery`, `analyze`).
    - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/continuous`, `/devflow`, `/discovery`, `/analyze`.
    - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$continuous`, `$devflow`, `$discovery`, `$analyze`.

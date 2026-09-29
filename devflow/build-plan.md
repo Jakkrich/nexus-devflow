@@ -8,7 +8,7 @@
 
 ## 🚀 Phase 1: Core Foundation & Data Layer
 
-- [ ] 1. **Core Schema & Data Models** - สร้าง Data Models, Schemas (Zod) และ Database Migrations เบื้องต้น
+- [x] 1. **Upstream AI Blueprint Synchronization & Zero-Regression Fusion** - ผสานฟีเจอร์เด่นจาก Upstream (explore skill, proportional engineering, update adapter switcher, CI pre-push hook) ตัด dark mode ออก และปกป้องสถาปัตยกรรมของ DevFlow (Ref: DISC-20260929-001)
 - [ ] 2. **Base Layout & Main UI Shell** - วางโครงสร้างหน้าจอหลัก, Navigation Shell และ Design Tokens
 - [ ] 3. **Primary Feature Flow** - พัฒนาฟังก์ชันการทำงานหลัก พร้อม Input Form และ Validation
 

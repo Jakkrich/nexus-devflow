@@ -7,6 +7,36 @@ export const CONTROL_DIR = ".nexus";
 export const MANIFEST_PATH = `${CONTROL_DIR}/nexus-devflow.json`;
 export const MANIFEST_SCHEMA_VERSION = 1;
 
+export const VALID_ADAPTERS = [
+  "antigravity",
+  "codex",
+  "claude",
+  "copilot",
+  "opencode"
+] as const;
+export type ValidAdapter = typeof VALID_ADAPTERS[number];
+
+export const DEVFLOW_PROTECTED_SKILLS = new Set([
+  "analyze",
+  "archify",
+  "brainstorm",
+  "bughunter",
+  "convert-any-to-md",
+  "devflow",
+  "diagram-design",
+  "explore",
+  "grill",
+  "idea",
+  "ponytail",
+  "publish-devflow",
+  "report-html",
+  "vendor",
+  "browser-tests",
+  "try",
+  "setup-tests",
+  "test"
+]);
+
 export const MANAGED_ROOTS: Record<string, string[]> = {
   common: ["AGENTS.md", "CLAUDE.md", "devflow", "LICENSE"],
   codex: [".agents/skills"],
@@ -262,26 +292,57 @@ export async function readManifest(targetDir: string): Promise<Manifest | null> 
   }
 }
 
+export async function readInstalledAdapters(targetDir: string): Promise<string[]> {
+  const manifest = await readManifest(targetDir);
+  if (manifest?.adapters && manifest.adapters.length > 0) {
+    return manifest.adapters;
+  }
+  const detected = new Set<string>();
+  try {
+    const agentsStat = await fs.stat(path.join(targetDir, ".agents", "skills"));
+    if (agentsStat.isDirectory()) {
+      detected.add("antigravity");
+      detected.add("codex");
+      detected.add("copilot");
+      detected.add("opencode");
+    }
+  } catch {}
+  try {
+    const claudeStat = await fs.stat(path.join(targetDir, ".claude", "skills"));
+    if (claudeStat.isDirectory()) {
+      detected.add("claude");
+    }
+  } catch {}
+  return [...detected].sort();
+}
+
 export async function prepareUpdate({
   targetDir,
   templateRoot,
   version,
   adapter,
+  adapters: requestedAdaptersList,
   role
 }: {
   targetDir: string;
   templateRoot: string;
   version: string;
   adapter?: string;
+  adapters?: string[];
   role?: DevFlowRole;
 }): Promise<PreparedUpdate> {
-  const requestedAdapters = new Set(adapterListFromMode(adapter));
   const previousManifest = await readManifest(targetDir);
+  let activeAdapters: Set<string>;
 
-  const activeAdapters = new Set([
-    ...requestedAdapters,
-    ...(previousManifest?.adapters || [])
-  ]);
+  if (requestedAdaptersList && requestedAdaptersList.length > 0) {
+    activeAdapters = new Set(requestedAdaptersList);
+  } else if (adapter) {
+    activeAdapters = new Set(adapterListFromMode(adapter));
+  } else if (previousManifest?.adapters && previousManifest.adapters.length > 0) {
+    activeAdapters = new Set(previousManifest.adapters);
+  } else {
+    activeAdapters = new Set(["codex", "claude", "copilot", "antigravity", "opencode"]);
+  }
 
   const templateFiles = await collectManagedTemplateFiles(
     templateRoot,
@@ -372,6 +433,18 @@ export async function prepareUpdate({
         previousManifest.customVendorSkills?.some((s) => s.name && relativePath.includes(s.name))
       ) {
         continue;
+      }
+
+      // Safeguard: DevFlow unique skills and vendor skills are protected from accidental pruning
+      const skillMatch = relativePath.match(/^\.(?:agents|claude)\/skills\/([^/]+)/);
+      if (skillMatch && DEVFLOW_PROTECTED_SKILLS.has(skillMatch[1])) {
+        const isClaude = relativePath.startsWith(".claude");
+        const hasRootActive = isClaude
+          ? activeAdapters.has("claude")
+          : (activeAdapters.has("antigravity") || activeAdapters.has("codex") || activeAdapters.has("copilot") || activeAdapters.has("opencode"));
+        if (hasRootActive) {
+          continue;
+        }
       }
 
       await assertNoSymlinkParents(targetDir, relativePath);
