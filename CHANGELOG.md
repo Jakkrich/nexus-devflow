@@ -5,6 +5,19 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.18.0] - 2026-10-05
+
+### Added
+- New Core Skill `/explore`: Socratic conversational idea and architecture exploration against real codebase without changing files or writing specs.
+- Proportional Engineering & Dual Compatibility: Embedded proportional engineering principles into `AGENTS.md`, `devflow/context/coding-standards.md`, and `/doctor` health checks while harmonizing with `ponytail`.
+- Upstream reference guides: Integrated `check/reference/guide.md` (`/check guide`) and `setup-tests/reference/browser.md` (`/setup-tests browser`) while maintaining dual compatibility with `/try` and `/browser-tests`.
+- Opt-in `.githooks/pre-push` verification hook support in `/ci`.
+
+### Changed
+- Dynamic Adapter Reconfiguration in `packages/create-nexus-devflow/lib/update.ts`: Supports adding or switching adapters (`--claude`, `--antigravity`, `--codex`) with Vendor Protection Shield to preserve 16 unique skills and `devflow/.vendor/`.
+- Cross-platform Windows path normalization in History/Git with forward slashes.
+- Synchronized across 33 Core Skills and both `.agents/` and `.claude/` adapters with zero regressions.
+
 ## [2.17.3] - 2026-09-11
 
 ### Changed
