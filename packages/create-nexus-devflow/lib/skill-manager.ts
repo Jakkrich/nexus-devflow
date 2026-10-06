@@ -19,7 +19,8 @@ import {
   parseSkillFrontmatter,
   type DiscoveredSkill,
   discoverSkillsInDirectory,
-  findSkillSourceDirectory
+  findSkillSourceDirectory,
+  isAntivirusSafeVendorPath
 } from "./skill-registry-engine.js";
 
 export {
@@ -43,7 +44,8 @@ export {
   parseSkillFrontmatter,
   type DiscoveredSkill,
   discoverSkillsInDirectory,
-  findSkillSourceDirectory
+  findSkillSourceDirectory,
+  isAntivirusSafeVendorPath
 };
 
 export interface InstallRecommendedOptions {

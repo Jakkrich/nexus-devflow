@@ -9,6 +9,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | 2026-09-29 | 001-sync-upstream-ai-blueprint | features | Upstream AI Blueprint Synchronization & Zero-Regression Fusion | `f3ccdee` | Shipped | [001-sync-upstream-ai-blueprint.md](file:///d:/devtools/nexus-devflow/devflow/history/features/001-sync-upstream-ai-blueprint.md) |
+| 2026-10-06 | 002-fix-antivirus-vendor-exclusion | fixes | Exclude Malicious PoCs and Disclosed Reports from Vendor Skills to Prevent Antivirus Triggers | `c6b10d4` | Shipped | [002-fix-antivirus-vendor-exclusion.md](file:///d:/devtools/nexus-devflow/devflow/history/fixes/002-fix-antivirus-vendor-exclusion.md) |
 
 ---
 

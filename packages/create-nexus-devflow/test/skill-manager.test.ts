@@ -14,7 +14,8 @@ import {
   removeThirdPartySkill,
   syncSkills,
   updateRecommendedSkills,
-  updateThirdPartySkills
+  updateThirdPartySkills,
+  isAntivirusSafeVendorPath
 } from "../lib/skill-manager.js";
 
 test("parseSkillFrontmatter extracts name, description, and version", () => {
@@ -579,9 +580,43 @@ test("updateThirdPartySkills compound fallback extracts package.json version and
       "utf8"
     );
 
+    const dangerousReport = path.join(tempSource, "docs", "disclosed-reports", "hunt-lfi.md");
+    await fs.mkdir(path.dirname(dangerousReport), { recursive: true });
+    await fs.writeFile(dangerousReport, "# Simulated Disclosed Report\n", "utf8");
+
+    const safeDoc = path.join(tempSource, "docs", "superpowers", "guide.md");
+    await fs.mkdir(path.dirname(safeDoc), { recursive: true });
+    await fs.writeFile(safeDoc, "# Safe Guide\n", "utf8");
+
+    const dangerousLab = path.join(tempSource, "docs", "verification", "phase2e-lab", "app.py");
+    await fs.mkdir(path.dirname(dangerousLab), { recursive: true });
+    await fs.writeFile(dangerousLab, "# Simulated test lab script\n", "utf8");
+
     const updateResult = await updateThirdPartySkills(tempProject, "bughunter");
     assert.equal(updateResult.totalUpdated, 1);
     assert.equal(updateResult.updatedSkills[0].version, "3.5.0");
+
+    const vendorDir = path.join(tempProject, "devflow", ".vendor", "bughunter");
+    assert.equal(
+      await fs.stat(path.join(vendorDir, "docs", "superpowers", "guide.md")).then(() => true).catch(() => false),
+      true,
+      "safe doc should be copied"
+    );
+    assert.equal(
+      await fs.stat(path.join(vendorDir, "docs", "disclosed-reports")).then(() => true).catch(() => false),
+      false,
+      "docs/disclosed-reports should be excluded to prevent antivirus false positives"
+    );
+    assert.equal(
+      await fs.stat(path.join(vendorDir, "disclosed-reports")).then(() => true).catch(() => false),
+      false,
+      "root disclosed-reports should not be created"
+    );
+    assert.equal(
+      await fs.stat(path.join(vendorDir, "docs", "verification")).then(() => true).catch(() => false),
+      false,
+      "docs/verification lab files should be excluded"
+    );
 
     const listing = await listInstalledSkills(tempProject);
     assert.equal(listing.thirdPartySkills[0].version, "3.5.0");
@@ -601,5 +636,16 @@ test("KNOWN_SKILL_ALIASES defines bughunter with compound-knowledge type", () =>
 test("KNOWN_SKILL_ALIASES does not define purged matt-pocock", () => {
   assert.equal((KNOWN_SKILL_ALIASES as Record<string, unknown>)["matt-pocock"], undefined);
   assert.equal((KNOWN_SKILL_ALIASES as Record<string, unknown>)["mattpocock"], undefined);
+});
+
+test("isAntivirusSafeVendorPath excludes disclosed-reports and verification labs", () => {
+  assert.equal(isAntivirusSafeVendorPath("docs/disclosed-reports/hunt-lfi.md"), false);
+  assert.equal(isAntivirusSafeVendorPath("devflow/.vendor/bughunter/docs/disclosed-reports"), false);
+  assert.equal(isAntivirusSafeVendorPath("devflow\\.vendor\\bughunter\\docs\\disclosed-reports\\hunt-lfi.md"), false);
+  assert.equal(isAntivirusSafeVendorPath("docs/verification/phase2e-lab/app.py"), false);
+  assert.equal(isAntivirusSafeVendorPath("docs\\verification\\phase2e-lab\\app.py"), false);
+  assert.equal(isAntivirusSafeVendorPath("docs/superpowers/guide.md"), true);
+  assert.equal(isAntivirusSafeVendorPath("skills/hunt-oauth/SKILL.md"), true);
+  assert.equal(isAntivirusSafeVendorPath("ENGAGEMENTS.md"), true);
 });
 
