@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.18.1] - 2026-10-06
+
+### Fixed
+- Bundle `/explore` into npm package template: Registered `/explore` in `agent-bundle.manifest.json`, `DEV_ROLE_SKILLS`, `SA_ROLE_SKILLS`, and `FULL_ROLE_SKILLS` so it is packaged into published artifacts.
+
+### Changed
+- Default role profile is now `full` (was `dev`): All 33 Core Skills (including SA `/analyze` and `/explore`) and SA workspace folders (`devflow/inbox`, `devflow/analysis`, `devflow/blueprints`) are installed by default on fresh setup.
+
 ## [2.18.0] - 2026-10-05
 
 ### Added
