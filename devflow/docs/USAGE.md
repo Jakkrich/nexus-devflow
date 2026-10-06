@@ -57,9 +57,9 @@ Before committing to delivery, use specialized companion skills:
 
 ---
 
-## 4. Core Skills Inventory (32 Skills)
+## 4. Core Skills Inventory (33 Skills)
 
-DevFlow ships **32 bundled Core Skills** from the ordered `core_skills` inventory
+DevFlow ships **33 bundled Core Skills** from the ordered `core_skills` inventory
 in `agent-bundle.manifest.json`, synchronized 1:1 across `.agents/skills/`
 (Codex / Antigravity / Copilot) and `.claude/skills/` (Claude Code). Local or
 Personal Skills may coexist in a workspace, but are excluded from the Core count
@@ -75,9 +75,10 @@ and package template until explicitly promoted.
 - `continuous`: Autonomous serial multi-feature delivery loop completing build-plan items with quality gates.
 - `rollback`: Plan a safe reversal of a completed feature preserving history.
 
-### B. Pre-Flight Discovery, SA & Alignment Skills (5 Skills)
+### B. Pre-Flight Discovery, SA & Alignment Skills (6 Skills)
 - `analyze`: Multi-format requirement ingestion (PDF, Word, Excel, Images), Codebase Impact scan & Socratic Gap checklist.
 - `discovery`: Inception exploration and deep multi-turn planning (`devflow/discoveries/`).
+- `explore`: Read-only codebase exploration to investigate an idea and compare options without changing files or writing a spec.
 - `idea`: Quick idea capture and AI feasibility scoring (`devflow/ideas.md`).
 - `grill` / `align`: Socratic alignment, domain modeling, and ADR recording (`devflow/decisions/`).
 - `brainstorm`: Structured divergent & convergent ideation with trade-off matrices.

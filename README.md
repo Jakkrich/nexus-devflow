@@ -507,7 +507,7 @@ Inspects the archived feature spec, identifies the exact commit, reviews later c
 
 ## Command reference
 
-Nexus-DevFlow ships **32 bundled Core Skills**, defined by the canonical
+Nexus-DevFlow ships **33 bundled Core Skills**, defined by the canonical
 `core_skills` inventory in `agent-bundle.manifest.json`. A workspace may also
 contain Local or Personal Skills, but those extensions are not part of the Core
 count and are excluded from the published package unless explicitly promoted.
@@ -531,6 +531,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **devflow** | `/devflow` / `$devflow` | Router | Flagship state inspector, stage router, and workflow guide. |
 | **discovery** | `/discovery` / `$discovery` | Companion | Pre-delivery multi-turn exploration and domain research. |
 | **doctor** | `/doctor` / `$doctor` | Health | Read-only workspace health check, adapter validation, and overview byte size guard (>= 20KB). |
+| **explore** | `/explore` / `$explore` | Companion | Explore an idea against codebase without changing files or writing specs. |
 | **feature** | `/feature` / `$feature` | Delivery | Transform feature request into Task-Isolated Living Spec in `devflow/context/{xxx-slug}/spec.md`. |
 | **fix** | `/fix` / `$fix` | Delivery | Document and spec an ad-hoc bug fix or patch. |
 | **grill** | `/grill` / `/align` | Companion | Socratic alignment, domain modeling, and ADR generation. |
@@ -730,7 +731,7 @@ npx nexus-devflow update [--check]
 
 ## Recommended Third-Party Skills & Extensions
 
-Nexus-DevFlow ships with **32 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/status` / `/complete`).
+Nexus-DevFlow ships with **33 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/status` / `/complete`).
 
 For specialized visual architecture and offensive security workflows, you can extend your setup with community skills using `nexus-devflow skill add`:
 

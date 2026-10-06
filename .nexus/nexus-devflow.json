@@ -59,7 +59,8 @@
       "grill",
       "continuous",
       "browser-tests",
-      "convert-any-to-md"
+      "convert-any-to-md",
+      "explore"
     ]
   },
   "installedAt": "2026-08-17T00:00:00.000Z",

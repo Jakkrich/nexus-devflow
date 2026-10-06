@@ -884,7 +884,7 @@ function parseArgs(args: readonly string[]): CliOptions {
   let deprecatedUi = false;
   let target: string | null = null;
   let adapter = "both";
-  let role: DevFlowRole = "dev";
+  let role: DevFlowRole = "full";
   let force = false;
   let dryRun = false;
   let help = false;
@@ -1540,7 +1540,7 @@ ${style.bold("Options:")}
   ${style.cyan("--fix")}              Automatically repair/create missing context files in doctor
   ${style.cyan("--stats")}            Display history summary statistics only
   ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, opencode, both, all
-  ${style.cyan("--role <role>")}       Workspace role profile: dev (default), sa, full
+  ${style.cyan("--role <role>")}       Workspace role profile: full (default), dev, sa
   ${style.cyan("--no-open")}          Start local dashboard without opening a browser
   ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
   ${style.cyan("--json")}             Print output as structured JSON object

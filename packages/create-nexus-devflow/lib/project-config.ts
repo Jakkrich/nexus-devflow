@@ -72,7 +72,7 @@ function createDefaultProjectConfig(): ProjectConfig {
   return {
     schemaVersion: PROJECT_CONFIG_SCHEMA_VERSION,
     workflow: {
-      role: "dev",
+      role: "full",
       stepReview: "feature",
       checkpointCommits: "disabled"
     },

@@ -14,7 +14,7 @@ import {
 import { collectManagedTemplateFiles } from "../lib/update.js";
 
 test("parseArgs parses role flags correctly", () => {
-  assert.equal(parseArgs([]).role, "dev");
+  assert.equal(parseArgs([]).role, "full");
   assert.equal(parseArgs(["--role", "sa"]).role, "sa");
   assert.equal(parseArgs(["--role=sa"]).role, "sa");
   assert.equal(parseArgs(["--role", "full"]).role, "full");
@@ -38,6 +38,7 @@ test("getSkillsForRole maps skills to role profiles accurately", () => {
   assert.ok(saSkills.includes("overview"));
   assert.ok(saSkills.includes("discovery"));
   assert.ok(saSkills.includes("doctor"));
+  assert.ok(saSkills.includes("explore"));
   assert.ok(!saSkills.includes("implement"));
   assert.ok(!saSkills.includes("check"));
   assert.ok(!saSkills.includes("complete"));
@@ -46,6 +47,7 @@ test("getSkillsForRole maps skills to role profiles accurately", () => {
   assert.ok(devSkills.includes("implement"));
   assert.ok(devSkills.includes("check"));
   assert.ok(devSkills.includes("complete"));
+  assert.ok(devSkills.includes("explore"));
   assert.ok(!devSkills.includes("analyze"));
 
   const fullSkills = getSkillsForRole("full");
@@ -53,12 +55,13 @@ test("getSkillsForRole maps skills to role profiles accurately", () => {
   assert.ok(fullSkills.includes("implement"));
   assert.ok(fullSkills.includes("check"));
   assert.ok(fullSkills.includes("complete"));
+  assert.ok(fullSkills.includes("explore"));
   assert.equal(fullSkills.length, DEV_ROLE_SKILLS.length + 1);
 });
 
 test("parseProjectConfig validates and parses workflow.role correctly", () => {
   const defaults = parseProjectConfig({ schemaVersion: 1 });
-  assert.equal(defaults.workflow.role, "dev");
+  assert.equal(defaults.workflow.role, "full");
 
   const saConfig = parseProjectConfig({
     schemaVersion: 1,

@@ -195,7 +195,8 @@ export function createManifest(
         "audit",
         "release",
         "brainstorm",
-        "grill"
+        "grill",
+        "explore"
       ]
     },
     managedFiles
