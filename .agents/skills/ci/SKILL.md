@@ -123,9 +123,9 @@ Skip the question when the request already answered it (for example "/ci with
 hook" or "no hook"). When the answer is no, write nothing and move on. When it
 is yes:
 
-1. Write `.githooks/pre-push` (mode 755) that announces itself and then runs
-   the exact `Verify` command from `AGENTS.md` with `exec`, so the command's
-   exit code is the hook's exit code.
+1. Use `npx nexus-devflow hook install pre-push` or manually write `.githooks/pre-push`
+   (mode 755) that announces itself and runs the exact `Verify` command from `AGENTS.md`
+   with `exec`, so the command's exit code is the hook's exit code.
 2. Point git at the folder: `git config core.hooksPath .githooks`.
 3. For JavaScript and TypeScript projects, add a `prepare` script,
    `git config core.hooksPath .githooks 2>/dev/null || true`, so a fresh

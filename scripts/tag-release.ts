@@ -142,8 +142,8 @@ export function tagRelease(options: VersionBumpOptions = {}): { oldVersion: stri
 
   // 8. Git push
   if (options.push !== false) {
-    console.log(`\n🚀 Pushing to origin main --tags...`);
-    execSync(`git push origin main --tags`, {
+    console.log(`\n🚀 Pushing to origin main ${tag}...`);
+    execSync(`git push origin main ${tag}`, {
       cwd: projectRoot,
       stdio: "inherit"
     });

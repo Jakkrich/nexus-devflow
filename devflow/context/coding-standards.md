@@ -62,7 +62,19 @@
 
 ---
 
-## 3. Stable API & Interface Design Standards
+## 3. Proportional Engineering & YAGNI Standards
+
+Build for established requirements, not hypothetical scale, threats, or future flexibility. Reuse existing code, the standard library, native platform features, and installed dependencies before adding machinery. Harmonize with DevFlow's `ponytail` skill for operational bloat reduction and YAGNI discipline.
+
+- **Proportional Scope**: Build for the immediate task. Unknown scale or extensibility defaults to the smaller reversible design. Do not infer enterprise, multi-tenant, hostile-user, or compliance requirements.
+- **Reachability-Derived Boundaries**: Derive trust and data-integrity boundaries from actual reachability: untrusted input, auth/session/ownership, shared persisted data, destructive operations, payments, secrets, and sensitive data.
+- **Material Unknowns Only**: Ask questions only when an unknown materially changes behavior, architecture, persisted data, interoperability, a real security boundary, or cost. Otherwise choose the simplest repository-native implementation.
+- **Just-In-Time Abstractions**: Add an abstraction, dependency, service, configuration surface, compatibility layer, or security mechanism only for a current requirement.
+- **Non-Negotiable Boundaries**: Simplicity never removes real trust-boundary validation, data-loss prevention, accessibility, explicit security requirements, configured tests, or project rules.
+
+---
+
+## 4. Stable API & Interface Design Standards
 
 - **Contract Stability**: Public exports, CLI options, and stage artifact schemas form immutable delivery contracts. Never break contracts without a major version bump.
 - **Explicit Parameter Objects**: For functions with more than 2 arguments, use an options object interface with descriptive property names.

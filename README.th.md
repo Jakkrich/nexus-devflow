@@ -536,6 +536,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **devflow** | `/devflow` / `$devflow` | Router | ตัวตรวจสถานะหลัก, เราเตอร์นำทางขั้นตอน และคู่มือช่วยทำงาน |
 | **discovery** | `/discovery` / `$discovery` | Companion | สำรวจและค้นคว้าความต้องการของระบบเชิงลึกก่อนเริ่มพัฒนา |
 | **doctor** | `/doctor` / `$doctor` | Health | ตรวจสุขภาพ Workspace, Adapters, และรายงานขนาดไบต์ Overview (เตือนเมื่อ >= 20KB) |
+| **explore** | `/explore` / `$explore` | Companion | สนทนาวิเคราะห์ไอเดียเทียบกับโค้ดจริงแบบ Read-only โดยไม่แก้โค้ดและไม่ต้องเขียนสเปก |
 | **feature** | `/feature` / `$feature` | Delivery | สร้าง Living Spec ใน `devflow/context/{xxx-slug}/spec.md` พร้อม 20KB Overview Guard |
 | **fix** | `/fix` / `$fix` | Delivery | กำหนดสเปกและขั้นตอนการแก้บั๊กหรือ Patch ขนาดเล็ก |
 | **grill** | `/grill` / `/align` | Companion | Socratic Alignment, สกัดคำศัพท์เฉพาะ และสร้างเอกสาร ADR |

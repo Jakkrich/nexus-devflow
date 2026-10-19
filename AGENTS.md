@@ -39,6 +39,17 @@ Build for established requirements, not hypothetical scale, threats, or future f
 - Simplicity never removes real trust-boundary validation, data-loss prevention, accessibility, explicit security requirements, configured tests, or project rules.
 - Stack-specific template standards apply only when the project uses that stack.
 
+## Proportional engineering
+
+Build for established requirements, not hypothetical scale, threats, or future flexibility. Reuse existing code, the standard library, native platform features, and installed dependencies before adding machinery. Harmonize with DevFlow's `ponytail` skill for operational bloat reduction and YAGNI discipline.
+
+- Unknown scale or extensibility defaults to the smaller reversible design. Do not infer enterprise, multi-tenant, hostile-user, or compliance requirements.
+- Derive trust and data-integrity boundaries from actual reachability: untrusted input, auth/session/ownership, shared persisted data, destructive operations, payments, secrets, and sensitive data.
+- Ask only when an unknown materially changes behavior, architecture, persisted data, interoperability, a real security boundary, or cost. Otherwise choose the simplest repository-native implementation.
+- Add an abstraction, dependency, service, configuration surface, compatibility layer, or security mechanism only for a current requirement.
+- Simplicity never removes real trust-boundary validation, data-loss prevention, accessibility, explicit security requirements, configured tests, or project rules.
+- Stack-specific template standards apply only when the project uses that stack.
+
 ## Project configuration
 
 `devflow/config.json` is the user-owned, machine-readable workflow policy for this project. Workflow skills read the relevant settings before acting. A missing file means built-in defaults. An invalid file falls back to defaults for read-only status reporting, but mutating workflow commands stop and point to `/doctor` instead of guessing.

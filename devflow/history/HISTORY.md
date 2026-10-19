@@ -8,6 +8,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-10-06 | `002` | Fix | Exclude Malicious PoCs and Disclosed Reports from Vendor Skills to Prevent Antivirus Triggers | `c6b10d4` | `Completed` | [`002-fix-antivirus-vendor-exclusion.md`](fixes/002-fix-antivirus-vendor-exclusion.md) |
+| 2026-09-29 | `001` | Feature | Upstream AI Blueprint Synchronization & Zero-Regression Fusion | `f3ccdee` | `Completed` | [`001-sync-upstream-ai-blueprint.md`](features/001-sync-upstream-ai-blueprint.md) |
 | 2026-09-18 | `110` | Feature | Remove Redundant Recommended Skills Printout from Next Steps | `PENDING` | `Completed` | [`110-remove-redundant-recommended-skills-printout.md`](features/110-remove-redundant-recommended-skills-printout.md) |
 | 2026-09-18 | `109` | Feature | Improve Installer UX, Version Diff & Interactive Skills Setup | `5b0079f` | `Completed` | [`109-improve-installer-ux-and-interactive-skills.md`](features/109-improve-installer-ux-and-interactive-skills.md) |
 | 2026-09-17 | `108` | Feature | Migrate devflow/docs to Web Docs & Integrate Features 104–107 | `ce5f8fa` | `Completed` | [`108-migrate-devflow-docs-to-web-and-integrate-features-104-107.md`](features/108-migrate-devflow-docs-to-web-and-integrate-features-104-107.md) |

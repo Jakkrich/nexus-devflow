@@ -82,11 +82,11 @@ export function getSkillsForRole(role: DevFlowRole, allCoreSkills?: readonly str
   switch (role) {
     case "sa":
       return SA_ROLE_SKILLS;
-    case "full":
-      return allCoreSkills || FULL_ROLE_SKILLS;
     case "dev":
-    default:
       return DEV_ROLE_SKILLS;
+    case "full":
+    default:
+      return allCoreSkills || FULL_ROLE_SKILLS;
   }
 }
 
@@ -236,6 +236,19 @@ export async function discoverSkillsInDirectory(
 
   await walk(searchDir);
   return discovered;
+}
+
+/**
+ * Filter function to exclude exploit payloads, webshells, and vulnerable test labs
+ * that trigger Windows Defender or Antivirus false positives (e.g. Trojan:Script/Wacatac, Backdoor:PHP/Perhetshell).
+ */
+export function isAntivirusSafeVendorPath(sourcePath: string): boolean {
+  const normalized = sourcePath.replace(/\\/g, "/");
+  const dangerousPatterns = [
+    /(^|\/)disclosed-reports(\/|$)/i,
+    /(^|\/)verification(\/|$)/i
+  ];
+  return !dangerousPatterns.some((pattern) => pattern.test(normalized));
 }
 
 export async function findSkillSourceDirectory(
@@ -539,9 +552,23 @@ export class SkillRegistryEngine {
           await fs.cp(srcCommands, path.join(targetRefDir, "commands"), { recursive: true });
         }
 
+        const legacyDangerousPaths = [
+          path.join(targetRefDir, "disclosed-reports"),
+          path.join(targetRefDir, "docs", "disclosed-reports"),
+          path.join(targetRefDir, "docs", "verification")
+        ];
+        for (const badPath of legacyDangerousPaths) {
+          if (fsSync.existsSync(badPath)) {
+            await fs.rm(badPath, { recursive: true, force: true }).catch(() => {});
+          }
+        }
+
         const srcDocs = path.join(sourceDirectory, "docs");
         if (fsSync.existsSync(srcDocs)) {
-          await fs.cp(srcDocs, path.join(targetRefDir, "docs"), { recursive: true });
+          await fs.cp(srcDocs, path.join(targetRefDir, "docs"), {
+            recursive: true,
+            filter: (src) => isAntivirusSafeVendorPath(src)
+          });
         }
 
         const srcExamples = path.join(sourceDirectory, "examples");
@@ -924,14 +951,23 @@ export class SkillRegistryEngine {
                   await fs.cp(srcCommands, path.join(targetRefDir, "commands"), { recursive: true });
                 }
 
-                const srcReports = path.join(sourceDir, "docs", "disclosed-reports");
-                if (fsSync.existsSync(srcReports)) {
-                  await fs.cp(srcReports, path.join(targetRefDir, "disclosed-reports"), { recursive: true });
+                const legacyDangerousPaths = [
+                  path.join(targetRefDir, "disclosed-reports"),
+                  path.join(targetRefDir, "docs", "disclosed-reports"),
+                  path.join(targetRefDir, "docs", "verification")
+                ];
+                for (const badPath of legacyDangerousPaths) {
+                  if (fsSync.existsSync(badPath)) {
+                    await fs.rm(badPath, { recursive: true, force: true }).catch(() => {});
+                  }
                 }
 
                 const srcDocs = path.join(sourceDir, "docs");
                 if (fsSync.existsSync(srcDocs)) {
-                  await fs.cp(srcDocs, path.join(targetRefDir, "docs"), { recursive: true });
+                  await fs.cp(srcDocs, path.join(targetRefDir, "docs"), {
+                    recursive: true,
+                    filter: (src) => isAntivirusSafeVendorPath(src)
+                  });
                 }
 
                 const srcExamples = path.join(sourceDir, "examples");

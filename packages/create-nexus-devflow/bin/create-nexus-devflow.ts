@@ -894,7 +894,7 @@ function parseArgs(args: readonly string[]): CliOptions {
   let deprecatedUi = false;
   let target: string | null = null;
   let adapter = "both";
-  let role: DevFlowRole = "dev";
+  let role: DevFlowRole = "full";
   let force = false;
   let dryRun = false;
   let help = false;
@@ -1229,6 +1229,23 @@ function parseArgs(args: readonly string[]): CliOptions {
 
   if (positional.length > 0) {
     const first = positional[0].toLowerCase();
+    const normalizedCmd = first.replace(/^[/$\\]+/, "");
+    const aiSkills = new Set([
+      "feature", "fix", "implement", "check", "complete", "continuous",
+      "explore", "discovery", "analyze", "brief", "audit", "grill",
+      "brainstorm", "bughunter", "ponytail", "try", "browser-tests",
+      "setup-tests", "ci", "rollback", "release", "overview",
+      "onboard", "adopt"
+    ]);
+
+    if (aiSkills.has(normalizedCmd)) {
+      const style = createStyle();
+      console.log(`\n${style.yellow("💡 Note:")} "${positional[0]}" is an AI workflow skill, not a terminal CLI command.`);
+      console.log(`To use this skill, open your project in an AI-powered assistant (Google Antigravity, Claude Code, Codex, or Cursor) and prompt:`);
+      console.log(`  ${style.cyan(`/${normalizedCmd}`)}${positional.slice(1).length > 0 ? " " + positional.slice(1).join(" ") : ""}\n`);
+      process.exit(0);
+    }
+
     if (first === "status") {
       command = "status";
       target = positional[1] || target || ".";
@@ -1533,7 +1550,7 @@ ${style.bold("Options:")}
   ${style.cyan("--fix")}              Automatically repair/create missing context files in doctor
   ${style.cyan("--stats")}            Display history summary statistics only
   ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, opencode, both, all
-  ${style.cyan("--role <role>")}       Workspace role profile: dev (default), sa, full
+  ${style.cyan("--role <role>")}       Workspace role profile: full (default), dev, sa
   ${style.cyan("--no-open")}          Start local dashboard without opening a browser
   ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
   ${style.cyan("--json")}             Print output as structured JSON object

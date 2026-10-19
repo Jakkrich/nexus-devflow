@@ -4,11 +4,10 @@
 
 Where this sits in the workflow:
 
-    /implement or /complete  ->  [check guide]  ->  human review
-    (work exists)                (manual           (where to go,
-                                  path)             what to click)
+    /implement or /complete  ->  [check guide / try]  ->  human review
+    (work exists)                (manual walkthrough)     (where to go, what to click)
 
-`/check` proves behavior from the agent side. `/check guide` gives the user a practical
+`/check` proves behavior from the agent side. `/check guide` (and its alias `/try`) gives the user a practical
 manual walkthrough: start this command, open this route, click these controls,
 expect this result, and watch for these failure signs.
 
@@ -18,7 +17,7 @@ produce verification receipts. Reading files and git status is allowed. A guide
 never counts as acceptance evidence or proof that any check passed.
 
 The quality-gate config controls when another workflow generates this guide
-automatically. An explicit `/check guide` or `$check guide` request always runs.
+automatically. An explicit `/check guide`, `$check guide`, or `/try` request always runs.
 A generated guide never counts as evidence that the user performed the walkthrough.
 
 ## Input
@@ -40,14 +39,12 @@ Read:
 
 - `AGENTS.md`
 - `devflow/config.json`
-- `devflow/context/{xxx-slug}/spec.md`
+- `devflow/context/{xxx-slug}/spec.md` (or latest archive)
 - `devflow/context/project-overview.md`
 - `devflow/context/coding-standards.md`
 - `devflow/build-plan.md`
-- latest files under `devflow/history/features/`,
-  `devflow/history/fixes/`, and `devflow/history/rollbacks/`, if the current
-  feature is reset
-- git branch and working tree status
+- latest files under `devflow/history/features/`, `devflow/history/fixes/`, and `devflow/history/rollbacks/`, if the current feature is reset
+- Git branch and working tree status
 
 For `latest`, use the most recent archive even when an active spec exists.
 Otherwise prefer the active spec. If the active spec is missing, use
@@ -64,27 +61,23 @@ include one unaffected regression path from the rollback spec.
 Use the Commands section in `AGENTS.md`. Match the project type:
 
 - **Web app** - dev server command, URL, and the route or screen to open.
-- **Server/API** - server command, base URL, endpoint, method, and expected
-  response shape.
+- **Server/API** - server command, base URL, endpoint, method, and expected response shape.
 - **CLI** - exact command(s), arguments, and expected output.
 - **Library** - example command, test fixture, REPL snippet, or sample call.
-- **Hybrid app** - list the smallest set of commands needed, such as backend plus
-  web dev server.
+- **Hybrid app** - list the smallest set of commands needed, such as backend plus web dev server.
 
 If the app may already be running, say how to reuse it. If a command is missing
 from `AGENTS.md`, report that as a gap rather than inventing certainty.
 
 ## Step 3 - write the manual guide
 
-Produce a short guide with these sections:
+Produce a concise guide with these 5 sections (respond in Thai per project convention):
 
 1. **Start** - commands to run and where to run them.
 2. **Open** - URLs, screens, tabs, API endpoints, or CLI commands.
 3. **Do** - clicks, inputs, selections, or command arguments.
-4. **Expect** - visible result, output, response, state change, file, or lack of
-   error.
-5. **Watch For** - common wrong outcomes, console or network errors, stale data,
-   missing fields, bad empty states, layout issues, or safety warnings.
+4. **Expect** - visible result, output, response, state change, file, or lack of error.
+5. **Watch For** - common wrong outcomes, console or network errors, stale data, missing fields, bad empty states, layout issues, or safety warnings.
 
 Keep it concrete. Prefer:
 
@@ -102,8 +95,7 @@ End with:
 
 - **Best signal** - the one thing the user should try first.
 - **Optional deeper checks** - only if useful.
-- **Gaps** - anything the guide cannot know from the docs, such as missing route
-  names, seed data, credentials, or external services.
+- **Gaps** - anything the guide cannot know from the docs, such as missing route names, seed data, credentials, or external services.
 
 If the feature is not user-visible, say so and provide the closest manual signal,
 such as an API response, CLI output, log line, or unit test command.
@@ -118,6 +110,10 @@ such as an API response, CLI output, log line, or unit test command.
   likely path and label uncertainty.
 - Keep the guide short enough to follow while the app is open.
 - Match the project's commands from `AGENTS.md`.
+
+## Dual Compatibility with `/try`
+
+In Nexus-DevFlow, `/try` and `/check guide` serve the same user purpose and can be used interchangeably.
 
 ## Formatting
 

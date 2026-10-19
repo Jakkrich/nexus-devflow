@@ -4,17 +4,20 @@ description: "[devflow] Explore an idea against the actual codebase without chan
 argument-hint: "[<idea or question>]"
 ---
 
-# explore - investigate an idea before deciding to build
+# explore - investigate an idea before deciding to build (Read-Only)
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
 Explore is a read-only conversation grounded in the actual project. It can help
-with questions such as whether caching would help a dashboard, whether teams
-belong in the product, or which upload approach fits existing code.
+with questions such as whether caching would help a dashboard, which upload approach
+fits existing code, or how to architect a new capability within the current system.
 
 No plans or active feature are required. Do not require `/overview`, invent a
 plan, or treat missing DevFlow context as a blocker to discussing the idea.
 This command never writes activity state, including `devflow/.state/run.json`.
+
+Per DevFlow rules, communicate and respond in Thai (`th`) while keeping code,
+technical terms, file paths, and identifiers in English.
 
 ## Start from the question
 
@@ -69,10 +72,12 @@ let the discussion continue as long as useful.
   size. Explore can discuss an unplanned idea or question a planned approach.
 - `/discovery` develops broader product direction and reviewed planning drafts.
   Explore does not draft either planning file.
+- `/grill` stress-tests plans, extracts domain glossary, and records ADRs.
+- `/ponytail` applies YAGNI discipline and cuts bloat/dependencies.
 - `/debug` reproduces and isolates an actual failure. Explore discusses options
   without executing code to diagnose or verify them.
-- `/feature` writes a buildable spec; `/fix` specifies a confirmed small change.
+- `/feature` writes a buildable task-isolated spec; `/fix` specifies a confirmed small change.
   Suggest the appropriate command only when the user is ready to proceed.
 
 Do not force a handoff at the end of every response. Keep discussing the idea
-when that is what the user wants, and leave the project unchanged.
+until the user decides what to do next.
