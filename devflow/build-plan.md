@@ -10,6 +10,9 @@
 
 - [x] 1. **Upstream AI Blueprint Synchronization & Zero-Regression Fusion** - ผสานฟีเจอร์เด่นจาก Upstream (explore skill, proportional engineering, update adapter switcher, CI pre-push hook) ตัด dark mode ออก และปกป้องสถาปัตยกรรมของ DevFlow (Ref: DISC-20260929-001)
 - [x] 111. **Code-Modernization Recommended Third-Party Skill & Master Orchestrator** - เพิ่ม code-modernization เข้าเป็น Recommended Third-Party Skill พร้อม Master Front-Door Orchestrator Skill (/code-modernization) และ Subdirectory Sparse Ingestion Engine (Ref: DISC-20261027-001)
+- [x] 112. **In-IDE Interactive Choice & Predictive Follow-Up Gate** - ระบบเลือกตัวเลือกและการคาดเดาคำถามถัดไปแบบ In-App Modal ภายใน Google Antigravity IDE (Zero Copy-Paste Friction) (Ref: DISC-20261027-002, ADR-002)
+
+
 - [ ] 2. **Base Layout & Main UI Shell** - วางโครงสร้างหน้าจอหลัก, Navigation Shell และ Design Tokens
 - [ ] 3. **Primary Feature Flow** - พัฒนาฟังก์ชันการทำงานหลัก พร้อม Input Form และ Validation
 
