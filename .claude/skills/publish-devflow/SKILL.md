@@ -38,7 +38,7 @@ Reads current version from `package.json` and updates the following files in loc
 - `packages/create-nexus-devflow/package.json` -> `"version": "<new-version>"`
 - `packages/nexus-devflow/package.json` -> `"version": "<new-version>"` and dependency update
 - `.nexus/nexus-devflow.json` -> `"version": "<new-version>"`
-- `CHANGELOG.md` -> Inserts `## [<new-version>] - YYYY-MM-DD` release section.
+- `CHANGELOG.md` -> Prepares and inserts comprehensive release notes following Keep a Changelog format (`### Added`, `### Changed`, `### Fixed`) detailing all completed features, fixes, and architectural enhancements. Never write a generic single-line release note.
 
 ### Step 3: Multi-Lane Verification
 Runs full automated test and framework contract validation:

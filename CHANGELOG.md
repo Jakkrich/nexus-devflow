@@ -7,18 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.19.2] - 2026-10-27
 
+### Added
+- **Thai-First Artifact Standards for Code Modernization**: Enforced mandatory Thai language default (`th`) across all generated analysis artifacts under `analysis/<system>/` (`INTENT.md`, `PREFLIGHT.md`, `ASSESSMENT.md`, `MAP.md`, `RULES.md`, `BRIEF.md`, `PROOF.md`, `DELTA_CATALOG.md`, `SECURITY_FINDINGS.md`, `HARDENING.md`). Technical identifiers (function names, CVE IDs, SQL, Given/When/Then, and Severities) remain in English for precision.
+- **Auto-Translation for Existing Artifacts**: Built-in automated translation engine in `/code-modernization` and `/modernize` that detects existing English artifacts in `analysis/<system>/`, translates and updates them into Thai, and re-compiles `REPORT.html` via `build_report.py`.
+- **Dedicated Web Documentation Subpage (`/commands/code-modernization/`)**: Added full 59th documentation subpage to the web documentation site (`docs/commands/code-modernization/index.html`) with interactive sidebar navigation, instant search indexing, and 2-stage governance guide.
+- **CLI Ingestion Engine Synthesis (`getCodeModernizationMasterSkill`)**: Updated `skill-registry-engine.ts` so that installing or updating `code-modernization` in any project automatically synthesizes the full, rich Master Orchestrator with Thai-first standards and upgrades old stubs.
+
 ### Changed
-- Release v2.19.2
+- **Documentation Alignment**: Updated `README.md` and `README.th.md` with detailed Code Modernization guides, Two-Stage Governance (Phase 0–5 Discovery ➔ Phase 6–8 DevFlow TDD Lifecycle), and Python verification engine commands.
+- **Test Suite Expansion**: Added unit test assertions in `packages/create-nexus-devflow/test/skill-manager.test.ts` verifying Thai-first directives in installed skills.
 
 ## [2.19.1] - 2026-10-27
 
-### Changed
-- Release v2.19.1
+### Added
+- **Anthropic Official Code Modernization Integration (Feature 111)**: Integrated Anthropic's official `code-modernization` plugin (`https://github.com/anthropics/claude-plugins-official`) as a Recommended Third-Party Skill.
+- **Master Front-Door Orchestrator Skill (`/code-modernization`, `/modernize`)**: Synthesized cross-IDE orchestrator skill (`.agents/skills/code-modernization/SKILL.md` and `.claude/skills/code-modernization/SKILL.md`) providing an autonomous state machine across 8 modernization phases (`INTENT` ➔ `PREFLIGHT` ➔ `ASSESS` ➔ `MAP` ➔ `RULES` ➔ `BRIEF` ➔ `BUILD` ➔ `VERIFY` ➔ `HARDEN`), removing the need for users to remember 13 individual sub-commands.
+- **Monorepo Subdirectory Sparse Ingestion**: Enhanced `skill-registry-engine.ts` to support extracting monorepo subpaths (`plugins/code-modernization`) and copying vendor assets (`scripts/`, `agents/`, `commands/`, `hooks/`) into `devflow/.vendor/code-modernization/`.
+- **Python Verification Engine Integration**: Connected Python 3 standard library scripts (`build_report.py`, `proof_pack.py`, `compare.py`, `render_rules.py`) for byte-for-byte comparison and empirical proof generation (`analysis/<system>/REPORT.html`).
+- **6 Human Decision Gates**: Embedded interactive user approval checkpoints via `ask_question` for Intent, Rule Validation, Modernization Brief Approval, Target Stack Selection, Behavioral Differences Acceptance, and Security Hardening Sign-off.
+- **Framework Update Immunity Shield**: Added `"code-modernization"` to `DEVFLOW_PROTECTED_SKILLS` in `update.ts` to prevent accidental removal during `npx nexus-devflow update`.
 
 ## [2.19.0] - 2026-10-19
 
+### Added
+- **Comprehensive Delivery Runs Consolidation (Runs 104–110)**:
+  - **Feature 110 (Installer Next Steps)**: Cleaned up post-installation next-steps output to keep CLI focused on primary setup actions (`/adopt` & `/onboard`).
+  - **Feature 109 (Interactive Installer UX)**: Revamped installer UX, added interactive version transition display (`vX.Y.Z -> vA.B.C`), default `Y` confirmation prompts, and interactive skills onboarding.
+  - **Feature 108 (Web Docs Migration)**: Migrated full framework documentation from `devflow/docs/` to static web docs in `docs/` (52 pages) with local search index and zero external CDN dependencies.
+  - **Feature 107 (Token & Cost Analytics)**: Added Token Usage & Cost Analytics CLI Tool (`npm run analyze:tokens`, `scripts/analyze-token-usage.ts`) tracking session token economics and USD catalogs (Claude 3.7, Gemini 2.5, GPT-4o).
+  - **Feature 106 (5-Tier Test Classification)**: Established 5-Tier Test Classification (Tiers 1–5) and mandatory Acceptance Criteria (`AC-N`) Traceability Matrix Protocol.
+  - **Feature 105 (4 Slicing Archetypes)**: Standardized 4 Slicing Archetypes Framework (Skateboard, Facade, Tracer Bullet, Journey) and Assumed Decision Debt governance.
+  - **Feature 104 (Skill Token Budgets)**: Introduced Skill Token Budget Guard Linter (`npm run check:budgets`) enforcing strict 32KB/24KB byte ceiling and 400-char description limits.
+
 ### Changed
-- Integrate Features 104-110, Token Analytics, 52-page Web Docs, Slicing Archetypes & Installer UX
+- **Role Profiles Harmonization**: Unified role configurations across Full, Dev, and SA profiles to ensure seamless skill discovery across all AI IDEs.
 
 ## [2.18.2] - 2026-10-06
 
@@ -54,8 +76,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.17.8] - 2026-09-18
 
-### Changed
-- Release v2.17.8
+### Added
+- **Installer UX & Interactive Skills Setup (Feature 109)**: Enhanced `create-nexus-devflow` with clear version transition banners (`vX.Y.Z -> vA.B.C`), single-key confirmation defaults (`[Y/n]`), and interactive multi-select skill installation during fresh onboarding and upgrade flows.
+- **Documentation Site Badges**: Added live documentation badges and official web links across English and Thai README files.
 
 ## [2.17.7] - 2026-09-17
 
@@ -78,8 +101,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.17.5] - 2026-09-14
 
-### Changed
-- Release v2.17.5
+### Fixed
+- **Clean Installer Footprint (Fix 087)**: Excluded transient `devflow/runs/` and scratch directories from client installation packages to prevent empty residue folders during fresh installs.
 
 ## [2.17.4] - 2026-09-14
 
