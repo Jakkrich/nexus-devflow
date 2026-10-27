@@ -44,8 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.18.2] - 2026-10-06
 
-### Changed
-- Release v2.18.2: exclude exploit PoCs and verification labs from vendor skills to prevent antivirus false positives
+### Fixed
+- **Antivirus False Positive Protection for Vendor Skills (Fix #002)**: Excluded exploit PoCs, raw vulnerability payloads, and verification lab scripts during vendor skill ingestion and packaging to prevent endpoint security / antivirus false alarms while preserving defensive remediation and detection capabilities.
+- **Git Tag Push Targeting**: Hardened maintainer release process to push only the exact version tag instead of pushing all local git tags (`git push origin <tag>`).
 
 ## [2.18.1] - 2026-10-06
 
@@ -129,7 +130,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.16.4] - 2026-09-10
 
 ### Changed
-- Release v2.16.4
+- **CLI Discovery Commands Alignment**: Updated CLI discovery command mappings to use the unified `nexus-devflow` wrapper executable.
+- **Recommended Skills Catalog Refinement**: Streamlined third-party skills recommendations in dashboard snapshot generator and documentation.
+- **Documentation Updates**: Updated English and Thai README guides with latest command invocations and skill aliases.
 
 ## [2.16.3] - 2026-09-10
 
@@ -149,32 +152,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.16.1] - 2026-09-09
 
 ### Changed
-- Release v2.16.1: Standardize Paper/Ink light theme playbooks, Thai diagram typography & English agent prompts
+- **Visual Design & Typography**: Standardized Paper/Ink light theme playbooks, Thai diagram typography, and English agent prompts.
 
 ## [2.16.0] - 2026-09-09
 
 ### Changed
-- Release v2.16.0: Unscoped CLI packages (nexus-devflow & create-nexus-devflow), Ponytail YAGNI skill & third-party recommendations
+- **Unscoped CLI Packages**: Migrated CLI packaging to unscoped `nexus-devflow` & `create-nexus-devflow`.
+- **YAGNI Architecture Governance**: Added Ponytail YAGNI complexity reduction skill and expanded recommended third-party catalog.
 
 ## [2.15.3] - 2026-09-08
 
-### Changed
-- Release v2.15.3: Implement Archify diagramming tool, offline font embedding & repository evidence validation
+### Added
+- **Archify Diagramming Engine**: Implemented Archify diagramming tool with offline font embedding and repository evidence validation.
 
 ## [2.15.2] - 2026-09-08
 
 ### Changed
-- Consolidate 9arm-skills into DevFlow core (/debug, /audit, /status, /complete) & purge extension (#082)
+- **Skill Core Consolidation (#082)**: Consolidated 9arm-skills into DevFlow core (`/debug`, `/audit`, `/status`, `/complete`) and purged extension directory.
 
 ## [2.15.1] - 2026-09-08
 
 ### Changed
-- Release v2.15.1: Purge Matt Pocock vendor, unify debug skill & support headless ticket ingestion (#081)
+- **Headless Ticket Ingestion (#081)**: Added support for headless ticket ingestion and unified debug skill while purging legacy vendor trees.
 
 ## [2.15.0] - 2026-09-07
 
-### Changed
-- Release v2.15.0: Modernize Web Dashboard with Dynamic Archify Visualizer, Recommended Skills & Playwright Test Harness
+### Added
+- **Web Dashboard Modernization**: Modernized Web Dashboard with Dynamic Archify Visualizer, Recommended Skills catalog, and Playwright E2E test harness.
 
 ## [2.14.0] - 2026-09-07
 
