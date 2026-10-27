@@ -756,6 +756,27 @@ For specialized visual architecture and offensive security workflows, you can ex
 | **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
 | **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
 | **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide indexed to HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
+| **ponytail** | YAGNI / Bloat-Cut | Senior dev mode: cuts ~54% unnecessary bloat and dependencies via YAGNI ladder | `npx nexus-devflow skill add https://github.com/DietrichGebert/ponytail` |
+
+### 🚀 Code Modernization Guide (`/code-modernization`, `/modernize`)
+
+Nexus-DevFlow integrates Anthropic's **Official Code Modernization Plugin** with an intelligent **Master Front-Door Orchestrator** and **Thai-First Artifact Standards**:
+
+```bash
+# 1. Install skill
+npx nexus-devflow skill add code-modernization
+
+# 2. Invoke Master Orchestrator in your AI IDE
+/code-modernization
+# or
+/modernize
+```
+
+- **Thai-First Artifact Standards (`th`)**: All generated markdown files under `analysis/<system>/` (`INTENT.md`, `PREFLIGHT.md`, `ASSESSMENT.md`, `MAP.md`, `RULES.md`, `BRIEF.md`, `PROOF.md`, `DELTA_CATALOG.md`, `SECURITY_FINDINGS.md`) default to **Thai** for clear stakeholder and team communication.
+- **Auto-Translation for Existing Artifacts**: If existing English artifacts are detected, invoking `/modernize` offers to translate and update them to Thai, automatically refreshing `REPORT.html`.
+- **Two-Stage Governance**:
+  1. *Phase 0–5 (Discovery & Business Rules Mining)*: Handled by `code-modernization` reverse-engineering tools.
+  2. *Phase 6–8 (Build & Proof)*: Slices `BRIEF.md` into `devflow/build-plan.md` and hands off execution to **DevFlow Core Lifecycle** (`/feature` ➔ `/implement` with strict TDD ➔ `/check` with `proof_pack.py` ➔ `/complete`).
 
 > [!NOTE]
 > **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/status`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.

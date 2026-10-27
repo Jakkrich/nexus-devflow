@@ -681,6 +681,12 @@ test("installThirdPartySkill supports monorepo subpath and copies scripts and ag
     const detail = Array.isArray(result) ? result[0] : result;
     assert.equal(detail.name, "code-modernization");
 
+    const installedSkillPath = path.join(tempProject, ".agents", "skills", "code-modernization", "SKILL.md");
+    const installedSkillContent = await fs.readFile(installedSkillPath, "utf8");
+    assert.match(installedSkillContent, /มาตรฐานภาษา: บังคับใช้ภาษาไทย \(Thai First\)/);
+    assert.match(installedSkillContent, /INTENT\.md/);
+    assert.match(installedSkillContent, /PREFLIGHT\.md/);
+
     const vendorDir = path.join(tempProject, "devflow", ".vendor", "code-modernization");
     assert.equal(
       await fs.stat(path.join(vendorDir, "scripts", "proof_pack.py")).then(() => true).catch(() => false),

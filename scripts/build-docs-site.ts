@@ -67,7 +67,8 @@ const SIDEBAR_ITEMS = [
       { slug: 'commands/convert-any-to-md', title: 'Convert Any to MD' },
       { slug: 'commands/vendor', title: 'Vendor' },
       { slug: 'commands/ponytail', title: 'Ponytail (Simplifier)' },
-      { slug: 'commands/report-html', title: 'Report HTML' }
+      { slug: 'commands/report-html', title: 'Report HTML' },
+      { slug: 'commands/code-modernization', title: 'Code Modernization' }
     ]
   },
   {

@@ -1531,6 +1531,80 @@ $onboard
         `
       }
     ]
+  },
+
+  // 32. Code Modernization
+  {
+    slug: 'commands/code-modernization',
+    category: 'COMMANDS',
+    title: 'Code Modernization (/code-modernization, /modernize)',
+    lead: 'ปรับปรุง Legacy Codebase ขนานใหญ่ด้วยขุมพลัง Anthropic Code Modernization Plugin พร้อมระบบ Master Orchestrator นำทาง State Machine อัตโนมัติและเอกสารภาษาไทย (Thai First)',
+    pills: ['Command', 'Modernize', 'Legacy', 'Uplift', 'Transform', 'Reimagine', 'ThaiFirst', 'EquivalenceProof'],
+    sections: [
+      {
+        id: 'overview',
+        title: 'ภาพรวมของ Code Modernization',
+        contentHtml: `
+          <p>Nexus-DevFlow ผสานพลังของ Official Code Modernization Plugin จาก Anthropic เข้าสู่ระบบ ทำให้ทีมพัฒนาสามารถชุบชีวิตระบบเก่า (Legacy Codebase) ได้โดยไม่ต้องจดจำ 13 คำสั่งย่อยด้วยตนเอง สกิลนี้ทำหน้าที่เป็น Front-Door Orchestrator ที่คอยตรวจจับสถานะของระบบ นำทางขั้นตอน และสอบถามการตัดสินใจผ่าน 6 Human Decision Gates</p>
+          <pre><code># ติดตั้งสกิลเข้าสู่โปรเจกต์
+npx nexus-devflow skill add code-modernization
+
+# เรียกใช้งาน Master Orchestrator ใน AI IDE
+/code-modernization
+# หรือใช้ชื่อย่อ
+/modernize</code></pre>
+        `
+      },
+      {
+        id: 'thai-first-artifacts',
+        title: 'มาตรฐานเอกสารภาษาไทย (Thai First Artifacts)',
+        contentHtml: `
+          <p>เอกสารผลลัพธ์ (Artifacts) ทั้งหมดที่ถูกสร้างขึ้นใน <code>analysis/&lt;system&gt;/</code> จะถูกสร้างเป็น<strong>ภาษาไทย</strong>โดยค่าเริ่มต้น เพื่อให้ทีมงานและผู้บริหารอ่านเข้าใจได้ทันที:</p>
+          <ul>
+            <li><code>INTENT.md</code>: เป้าหมายหลัก, ขอบเขต และข้อจำกัดทางธุรกิจ</li>
+            <li><code>PREFLIGHT.md</code>: ผลการตรวจสภาพแวดล้อมก่อนเริ่ม และสรุป 5 คำถามมนุษย์</li>
+            <li><code>ASSESSMENT.md</code>: การประเมินโค้ดเบสเดิม, หนี้ทางเทคนิค (Technical Debt) และความซับซ้อน</li>
+            <li><code>MAP.md</code>: แผนผังสถาปัตยกรรมและกระแสข้อมูล (Dataflows)</li>
+            <li><code>RULES.md</code>: กฎทางธุรกิจพร้อมเงื่อนไข <code>Given / When / Then</code> และคำอธิบายภาษาไทย</li>
+            <li><code>BRIEF.md</code>: แผนงาน Modernization แบบแบ่งระยะ (Phased Milestone Plan)</li>
+            <li><code>PROOF.md</code>: ผลการพิสูจน์ความถูกต้องและความเทียบเคียงแบบ Byte-for-byte</li>
+            <li><code>DELTA_CATALOG.md</code>: แคตตาล็อกความแตกต่างพฤติกรรมเดิม vs ใหม่</li>
+            <li><code>SECURITY_FINDINGS.md</code>: รายการข้อตรวจพบความปลอดภัยและคำแนะนำแก้ไข</li>
+            <li><code>REPORT.html</code>: แดชบอร์ดสรุปผลภาพรวมแบบ Interactive สวยงามในไฟล์เดียว</li>
+          </ul>
+          <p><em>หมายเหตุ: หากตรวจพบว่ามีไฟล์เดิมที่เป็นภาษาอังกฤษอยู่แล้ว เมื่อสั่ง <code>/modernize</code> ระบบจะเสนอแปลและแปลงโครงสร้างให้เป็นภาษาไทยให้อัตโนมัติ พร้อมรัน <code>build_report.py</code> ซ้ำเพื่ออัปเดตหน้า HTML ให้เป็นภาษาไทย</em></p>
+        `
+      },
+      {
+        id: 'devflow-lifecycle-integration',
+        title: 'การควบคุมขั้นตอนการแก้ไขโค้ดด้วย DevFlow (Build Governance)',
+        contentHtml: `
+          <p>ขั้นตอนการปรับปรุงแบ่งออกเป็น 2 ท่อนชัดเจนเพื่อความปลอดภัยสูงสุดของโค้ดในองค์กร:</p>
+          <ol>
+            <li><strong>ท่อนที่ 1: การสำรวจและสกัดกฎธุรกิจ (Phase 0–5)</strong>: ใช้ความสามารถของ <code>code-modernization</code> ในการทำ Reverse-Engineering ขุดคุ้ยโค้ดเก่า สกัดกฎทางธุรกิจ และเขียนแผนงาน <code>BRIEF.md</code></li>
+            <li><strong>ท่อนที่ 2: การลงมือแก้ไขโค้ดจริง (Phase 6–8)</strong>: เมื่อแผนงานผ่านการอนุมัติ แผนงานจะถูกย่อยเข้า <code>devflow/build-plan.md</code> และส่งให้ <strong>DevFlow Core Lifecycle</strong> เข้าควบคุมการแก้โค้ดทีละโมดูลด้วย <code>/feature</code> &rarr; <code>/implement</code> (TDD Red-Green-Refactor บน Git Branch แยก) &rarr; <code>/check</code> (รัน Unit Tests ร่วมกับ <code>proof_pack.py</code>) &rarr; <code>/complete</code> ทำให้ระบบเดิมไม่มีวันพังและมีความปลอดภัยสูงสุด</li>
+          </ol>
+        `
+      },
+      {
+        id: 'python-automation-engine',
+        title: 'ชุดคำสั่ง Python Verification Engine',
+        contentHtml: `
+          <p>สกิลนี้เชื่อมโยงกับ Python 3 Standard Library Scripts เพื่อยืนยันความถูกต้องทางวิศวกรรมแบบ Empirical Proof:</p>
+          <pre><code># สร้าง Single-page Interactive Report (REPORT.html)
+python devflow/.vendor/code-modernization/scripts/build_report.py analysis/&lt;system&gt;
+
+# เปรียบเทียบความแตกต่างระดับไบต์ระหว่างระบบเดิมและระบบใหม่
+python devflow/.vendor/code-modernization/scripts/compare.py --old &lt;legacy_out&gt; --new &lt;modern_out&gt;
+
+# คำนวณผลการพิสูจน์ความถูกต้อง (PROVEN / PARTLY PROVEN / NOT PROVEN)
+python devflow/.vendor/code-modernization/scripts/proof_pack.py --analysis analysis/&lt;system&gt;
+
+# เรนเดอร์การ์ดกฎธุรกิจ (Business Rules Cards)
+python devflow/.vendor/code-modernization/scripts/render_rules.py analysis/&lt;system&gt;/RULES.md</code></pre>
+        `
+      }
+    ]
   }
 ];
 
