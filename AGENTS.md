@@ -81,7 +81,7 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` to automatically inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md`.
 5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 6. **Contextual Help**: When a DevFlow command is invoked with `help`, `--help`, `-h`, or `?`, read [the playbook protocol](devflow/reference/help-playbook-protocol.md). Produce its help deliverable without running the command's primary action or creating a task run.
-7. **Interactive Choice & Predictive Follow-Up Gate**: When offering choices, next actions, or anticipating follow-up questions in Antigravity IDE, agents MUST NOT dump raw numbered lists in markdown chat for manual typing or copy-pasting. Always call the interactive `ask_question` tool to pop up a native selection modal for immediate one-click interaction.
+7. **Interactive Choice & Predictive Follow-Up Gate (Summary First)**: In every step or command, agents MUST ALWAYS provide a comprehensive, structured markdown summary of completed actions, verified evidence, and current status in the chat response FIRST. When offering choices, next actions, or anticipating follow-up questions in Antigravity IDE, agents MUST NOT dump raw numbered lists in markdown chat for manual typing or copy-pasting; instead, call the interactive `ask_question` tool with a concise context snapshot so the user has full clarity before selecting.
 
 
 ---
