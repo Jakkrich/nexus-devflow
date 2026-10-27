@@ -5,7 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.19.3] - 2026-10-27
+
+### Added
+- **In-IDE Interactive Choice & Predictive Follow-Up Gate (Feature 112)**: Enforced a Zero Copy-Paste interaction model across Antigravity IDE and Nexus-DevFlow agents. When formulating decisions, next actions, or anticipated questions, agents automatically invoke the in-app interactive selection modal (`ask_question`) with radio/checkbox choices and integrated write-in feedback.
+- **Context-First "Summary First, Modal Second" Protocol**: Mandated that agents always provide a comprehensive, structured markdown summary of completed tasks, test evidence, and diffs in the chat response FIRST, while embedding a concise context snapshot in the modal prompt, ensuring full user clarity before choosing.
+- **Workspace & Agent Directives Integration**: Added Directive 7 to `AGENTS.md`, updated `devflow/context/ai-interaction.md` (Section 2), created `.agents/rules/interactive-selection.md`, and published the protocol guide in `devflow/reference/interactive-picker.md`.
+
 ## [2.19.2] - 2026-10-27
+
 
 ### Added
 - **Thai-First Artifact Standards for Code Modernization**: Enforced mandatory Thai language default (`th`) across all generated analysis artifacts under `analysis/<system>/` (`INTENT.md`, `PREFLIGHT.md`, `ASSESSMENT.md`, `MAP.md`, `RULES.md`, `BRIEF.md`, `PROOF.md`, `DELTA_CATALOG.md`, `SECURITY_FINDINGS.md`, `HARDENING.md`). Technical identifiers (function names, CVE IDs, SQL, Given/When/Then, and Severities) remain in English for precision.
