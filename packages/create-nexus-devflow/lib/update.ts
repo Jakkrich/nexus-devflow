@@ -21,6 +21,7 @@ export const DEVFLOW_PROTECTED_SKILLS = new Set([
   "archify",
   "brainstorm",
   "bughunter",
+  "code-modernization",
   "convert-any-to-md",
   "devflow",
   "diagram-design",

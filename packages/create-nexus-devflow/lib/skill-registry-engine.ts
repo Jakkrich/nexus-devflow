@@ -101,6 +101,7 @@ export const KNOWN_SKILL_ALIASES: Record<
   string,
   {
     source: string;
+    subpath?: string;
     name?: string;
     all?: boolean;
     type?: "git" | "local" | "compound-knowledge";
@@ -127,6 +128,21 @@ export const KNOWN_SKILL_ALIASES: Record<
     type: "compound-knowledge",
     referencePath: "devflow/.vendor/ponytail",
     description: "Lazy senior dev mode for AI agents - cuts code bloat & tokens via YAGNI ladder (Backend/Logic/Fixes)"
+  },
+  "code-modernization": {
+    source: "https://github.com/anthropics/claude-plugins-official",
+    subpath: "plugins/code-modernization",
+    type: "compound-knowledge",
+    referencePath: "devflow/.vendor/code-modernization",
+    description: "[devflow] Guided legacy codebase modernization (Assessment, Business Rules mining, Uplift, Rewrite & Byte-for-byte Proof)"
+  },
+  modernize: {
+    source: "https://github.com/anthropics/claude-plugins-official",
+    subpath: "plugins/code-modernization",
+    name: "code-modernization",
+    type: "compound-knowledge",
+    referencePath: "devflow/.vendor/code-modernization",
+    description: "[devflow] Guided legacy codebase modernization (Assessment, Business Rules mining, Uplift, Rewrite & Byte-for-byte Proof)"
   }
 };
 
@@ -150,6 +166,11 @@ export const RECOMMENDED_THIRD_PARTY_SKILLS: readonly RecommendedSkillPreset[] =
     source: "https://github.com/DietrichGebert/ponytail",
     name: "ponytail",
     description: "Lazy senior dev mode & YAGNI optimization orchestrator (cuts ~54% bloat & tokens)"
+  },
+  {
+    source: "https://github.com/anthropics/claude-plugins-official",
+    name: "code-modernization",
+    description: "Guided legacy codebase modernization (Assessment, Business Rules mining, Uplift, Rewrite & Byte-for-byte Proof)"
   }
 ]);
 
@@ -518,6 +539,10 @@ export class SkillRegistryEngine {
       isCompound = true;
       compoundName = "ponytail";
       compoundRefPath = "devflow/.vendor/ponytail";
+    } else if (source.includes("claude-plugins-official") || source.includes("code-modernization") || opts.name === "code-modernization") {
+      isCompound = true;
+      compoundName = "code-modernization";
+      compoundRefPath = "devflow/.vendor/code-modernization";
     }
 
     let tempCloneDir: string | null = null;
@@ -532,7 +557,14 @@ export class SkillRegistryEngine {
     try {
       tempCloneDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-skill-fetch-"));
       await this.repositoryAdapter.fetchPackage(effectiveSource, tempCloneDir);
-      const sourceDirectory = tempCloneDir;
+      let sourceDirectory = tempCloneDir;
+      const targetSubpath = alias?.subpath || (compoundName === "code-modernization" ? "plugins/code-modernization" : undefined);
+      if (targetSubpath) {
+        const potentialSubpath = path.join(tempCloneDir, targetSubpath);
+        if (fsSync.existsSync(potentialSubpath)) {
+          sourceDirectory = potentialSubpath;
+        }
+      }
 
       const recordedSource = opts.overrideSource || effectiveSource;
       const isGitUrl = /^https?:\/\/|^git@|^ssh:\/\/|\.git$/.test(effectiveSource);
@@ -550,6 +582,26 @@ export class SkillRegistryEngine {
         const srcCommands = path.join(sourceDirectory, "commands");
         if (fsSync.existsSync(srcCommands)) {
           await fs.cp(srcCommands, path.join(targetRefDir, "commands"), { recursive: true });
+        }
+
+        const srcScripts = path.join(sourceDirectory, "scripts");
+        if (fsSync.existsSync(srcScripts)) {
+          await fs.cp(srcScripts, path.join(targetRefDir, "scripts"), { recursive: true });
+        }
+
+        const srcAgents = path.join(sourceDirectory, "agents");
+        if (fsSync.existsSync(srcAgents)) {
+          await fs.cp(srcAgents, path.join(targetRefDir, "agents"), { recursive: true });
+        }
+
+        const srcWorkflows = path.join(sourceDirectory, "workflows");
+        if (fsSync.existsSync(srcWorkflows)) {
+          await fs.cp(srcWorkflows, path.join(targetRefDir, "workflows"), { recursive: true });
+        }
+
+        const srcHooks = path.join(sourceDirectory, "hooks");
+        if (fsSync.existsSync(srcHooks)) {
+          await fs.cp(srcHooks, path.join(targetRefDir, "hooks"), { recursive: true });
         }
 
         const legacyDangerousPaths = [
@@ -592,10 +644,14 @@ export class SkillRegistryEngine {
         }
 
         let compoundDesc = "[devflow] Offensive security orchestrator & bug hunting guide";
-        if (compoundName === "matt-pocock") {
+        if (alias?.description) {
+          compoundDesc = alias.description;
+        } else if (compoundName === "matt-pocock") {
           compoundDesc = "Master Matt Pocock's 6 AI-engineering flows (Getting Started, Main Flow, Shaping, Upkeep, Productivity, Reference)";
         } else if (compoundName === "ponytail") {
           compoundDesc = "Lazy senior dev mode for AI agents - cuts code bloat & tokens via YAGNI ladder";
+        } else if (compoundName === "code-modernization") {
+          compoundDesc = "[devflow] Guided legacy codebase modernization (Assessment, Business Rules mining, Uplift, Rewrite & Byte-for-byte Proof)";
         }
 
         let compoundVer = "1.0.0";
@@ -605,6 +661,20 @@ export class SkillRegistryEngine {
             const pkgRaw = await fs.readFile(pkgPath, "utf8");
             const pkg = JSON.parse(pkgRaw) as { version?: string };
             if (pkg.version) compoundVer = pkg.version;
+          }
+          if (compoundVer === "1.0.0") {
+            const candidateSkillMd = path.join(sourceDirectory, "skills", compoundName, "SKILL.md");
+            const rootSkillMd = path.join(sourceDirectory, "SKILL.md");
+            const skillFile = fsSync.existsSync(candidateSkillMd)
+              ? candidateSkillMd
+              : fsSync.existsSync(rootSkillMd)
+              ? rootSkillMd
+              : null;
+            if (skillFile) {
+              const skillRaw = await fs.readFile(skillFile, "utf8");
+              const parsed = parseSkillFrontmatter(skillRaw);
+              if (parsed.version) compoundVer = parsed.version;
+            }
           }
         } catch {
           // ignore

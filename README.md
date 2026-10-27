@@ -752,6 +752,7 @@ For specialized visual architecture and offensive security workflows, you can ex
 
 | Skill | Category | Description | Installation Command |
 | :--- | :--- | :--- | :--- |
+| **code-modernization** | Migration / Legacy | Guided legacy codebase modernization (Assessment, Business Rules mining, Uplift, Rewrite & Byte-for-byte Proof) | `npx nexus-devflow skill add code-modernization` |
 | **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
 | **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
 | **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide indexed to HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |

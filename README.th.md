@@ -751,6 +751,7 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **33 Core Skil
 
 | สกิล (Skill) | หมวดหมู่ | หน้าที่และความสามารถ | คำสั่งติดตั้ง |
 | :--- | :--- | :--- | :--- |
+| **code-modernization** | Migration / Legacy | ระบบนำทางการปรับปรุง Legacy Codebase (ประเมินระบบ, ขุด Business Rules, Uplift, Rewrite และพิสูจน์ผล Byte-for-byte) | `npx nexus-devflow skill add code-modernization` |
 | **archify** | Visual Architecture | แผนผังสถาปัตยกรรมระบบ Interactive HTML (สลับธีม Dark/Light, มี Animation, ตรวจสอบความถูกต้องได้) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
 | **diagram-design** | Editorial Diagram | ไดอะแกรมสาย Editorial 39 รูปแบบ (Business Quadrant, Timeline, Mindmap, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
 | **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |

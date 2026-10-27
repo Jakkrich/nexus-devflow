@@ -324,15 +324,16 @@ test("updateThirdPartySkills updates installed third-party skills from original 
   }
 });
 
-test("RECOMMENDED_THIRD_PARTY_SKILLS defines archify, diagram-design, bughunter, and ponytail", () => {
+test("RECOMMENDED_THIRD_PARTY_SKILLS defines archify, diagram-design, bughunter, ponytail, and code-modernization", () => {
   assert.ok(Array.isArray(RECOMMENDED_THIRD_PARTY_SKILLS));
-  assert.equal(RECOMMENDED_THIRD_PARTY_SKILLS.length, 4);
+  assert.equal(RECOMMENDED_THIRD_PARTY_SKILLS.length, 5);
 
   const sources = RECOMMENDED_THIRD_PARTY_SKILLS.map((p) => p.source);
   assert.ok(sources.some((s) => s.includes("archify")));
   assert.ok(sources.some((s) => s.includes("diagram-design")));
   assert.ok(sources.some((s) => s.includes("Claude-BugHunter")));
   assert.ok(sources.some((s) => s.includes("ponytail")));
+  assert.ok(sources.some((s) => s.includes("claude-plugins-official")));
 });
 
 test("installRecommendedSkills and updateRecommendedSkills batch-install and refresh preset skills", async () => {
@@ -633,6 +634,13 @@ test("KNOWN_SKILL_ALIASES defines bughunter with compound-knowledge type", () =>
   assert.equal(KNOWN_SKILL_ALIASES.archify.source, "https://github.com/tt-a1i/archify");
 });
 
+test("KNOWN_SKILL_ALIASES defines code-modernization with compound-knowledge type and subpath", () => {
+  assert.equal(KNOWN_SKILL_ALIASES["code-modernization"].type, "compound-knowledge");
+  assert.equal(KNOWN_SKILL_ALIASES["code-modernization"].referencePath, "devflow/.vendor/code-modernization");
+  assert.equal(KNOWN_SKILL_ALIASES["code-modernization"].subpath, "plugins/code-modernization");
+  assert.equal(KNOWN_SKILL_ALIASES["code-modernization"].source, "https://github.com/anthropics/claude-plugins-official");
+});
+
 test("KNOWN_SKILL_ALIASES does not define purged matt-pocock", () => {
   assert.equal((KNOWN_SKILL_ALIASES as Record<string, unknown>)["matt-pocock"], undefined);
   assert.equal((KNOWN_SKILL_ALIASES as Record<string, unknown>)["mattpocock"], undefined);
@@ -647,5 +655,51 @@ test("isAntivirusSafeVendorPath excludes disclosed-reports and verification labs
   assert.equal(isAntivirusSafeVendorPath("docs/superpowers/guide.md"), true);
   assert.equal(isAntivirusSafeVendorPath("skills/hunt-oauth/SKILL.md"), true);
   assert.equal(isAntivirusSafeVendorPath("ENGAGEMENTS.md"), true);
+});
+
+test("installThirdPartySkill supports monorepo subpath and copies scripts and agents", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-subpath-project-"));
+  const tempMonorepo = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-monorepo-"));
+
+  try {
+    const pluginDir = path.join(tempMonorepo, "plugins", "code-modernization");
+    await fs.mkdir(path.join(pluginDir, "scripts"), { recursive: true });
+    await fs.mkdir(path.join(pluginDir, "agents"), { recursive: true });
+    await fs.mkdir(path.join(pluginDir, "commands"), { recursive: true });
+
+    await fs.writeFile(path.join(pluginDir, "scripts", "proof_pack.py"), "# proof pack script\n", "utf8");
+    await fs.writeFile(path.join(pluginDir, "agents", "legacy-analyst.md"), "# legacy analyst\n", "utf8");
+    await fs.writeFile(path.join(pluginDir, "commands", "modernize.md"), "# modernize command\n", "utf8");
+    await fs.writeFile(path.join(pluginDir, "README.md"), "# Code Modernization\n", "utf8");
+
+    const result = await installThirdPartySkill(tempProject, tempMonorepo, {
+      name: "code-modernization",
+      overrideSource: "code-modernization"
+    });
+
+    assert.ok(result);
+    const detail = Array.isArray(result) ? result[0] : result;
+    assert.equal(detail.name, "code-modernization");
+
+    const vendorDir = path.join(tempProject, "devflow", ".vendor", "code-modernization");
+    assert.equal(
+      await fs.stat(path.join(vendorDir, "scripts", "proof_pack.py")).then(() => true).catch(() => false),
+      true,
+      "scripts/proof_pack.py should be copied"
+    );
+    assert.equal(
+      await fs.stat(path.join(vendorDir, "agents", "legacy-analyst.md")).then(() => true).catch(() => false),
+      true,
+      "agents/legacy-analyst.md should be copied"
+    );
+    assert.equal(
+      await fs.stat(path.join(vendorDir, "commands", "modernize.md")).then(() => true).catch(() => false),
+      true,
+      "commands/modernize.md should be copied"
+    );
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempMonorepo, { recursive: true, force: true });
+  }
 });
 

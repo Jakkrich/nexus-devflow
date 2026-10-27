@@ -118,6 +118,7 @@ npx @jakkrichm/create-nexus-devflow update [--check]
 # Recommended Third-Party Companion Skills
 npx nexus-devflow skill add --recommended
 npx nexus-devflow skill update --recommended
+npx nexus-devflow skill add code-modernization # Guided legacy modernization, rule mining & proof
 npx nexus-devflow skill add archify        # Architecture & trace diagrams
 npx nexus-devflow skill add diagram-design # 39 visual charts & presentation templates
 npx nexus-devflow skill add bughunter      # Security audit & vulnerability testing
