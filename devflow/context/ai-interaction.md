@@ -24,7 +24,6 @@ Format every response for fast scanning and readability:
 - **Backticks for Code References**: Wrap file paths, variable names, functions, CLI flags, and commands in backticks (e.g. `devflow/context/{xxx-slug}/spec.md`, `npm run check`).
 - **Clickable File Links**: Use the active client's supported local-file link format with the actual resolved path.
 - **Lead With the Result**: State pass/fail status or completed action before presenting logs.
-- **Interactive Choice & Predictive Follow-Up Gate (Summary First)**: In every command or workflow step, ALWAYS present a clear, structured markdown summary of what was accomplished, verified, or changed in the chat response FIRST. When offering 2 or more choices or anticipating follow-up actions in Antigravity IDE, NEVER dump raw numbered lists in chat for manual copy-pasting; call the interactive `ask_question` tool with a concise context snapshot in `question` so the user has full clarity before selecting.
 
 
 ---

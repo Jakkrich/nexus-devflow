@@ -5,6 +5,11 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.19.4] - 2026-10-30
+
+### Removed
+- **In-IDE Interactive Choice & Predictive Follow-Up Gate (Feature 112 / Fix 113)**: Removed mandatory modal prompting rules, `.agents/rules/interactive-selection.md`, and `devflow/reference/interactive-picker.md`. Removed Directive 7 from `AGENTS.md` and Section 2 of `devflow/context/ai-interaction.md` to restore natural conversational workflow and prevent disruptive modal overlays.
+
 ## [2.19.3] - 2026-10-27
 
 ### Added
