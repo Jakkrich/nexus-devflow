@@ -36,9 +36,9 @@ The installer overlays the DevFlow workflow layer into your workspace:
 - `devflow/context/` (Living spec & active delivery context)
 - `devflow/history/` (Categorized delivery archives)
 
-The 24 names come from the canonical bundled inventory. Local or Personal Skills
+The 15 Core Skill names come from the canonical bundled inventory. Local or Personal Skills
 may coexist in a maintainer workspace, but the package builder excludes them
-unless they are explicitly promoted into that inventory.
+unless they are explicitly promoted into that inventory. During interactive `install` or `update`, Step `[3/3]` also lets you pick bundled Opt-in Extras Skills via a multi-select checkbox (`--yes` / non-interactive skips extras cleanly).
 
 ---
 

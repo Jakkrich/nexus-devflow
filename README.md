@@ -203,6 +203,8 @@ npx nexus-devflow update
 
 DevFlow updates only managed workflow skills under `.agents/skills/` and `.claude/skills/`. Your project plans, living specs, context, history, and source code are never overwritten.
 
+In interactive terminals, Step `[3/3]` (`Configuring Extras Skills...`) displays a multi-select checkbox (`↑`/`↓`, `Space`, `a`, `Enter`, `Esc`) for the 7 bundled opt-in extras skills (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`), pre-checking already-installed skills on `update` without removing unticked ones (skipped automatically under `--yes`, `--dry-run`, or non-interactive runs).
+
 ---
 
 ### Check project status

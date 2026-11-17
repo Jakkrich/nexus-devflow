@@ -17,16 +17,19 @@ Official Unscoped CLI for **Nexus-DevFlow** — Enterprise-Grade Agentic Workflo
 Run directly without prior installation using `npx`:
 
 ```bash
-# 1. Overlay Nexus-DevFlow into your project directory
+# 1. Overlay Nexus-DevFlow into your project directory (includes Step [3/3] interactive Extras checkbox)
 npx nexus-devflow
 
 # 2. Launch local real-time Web Dashboard (http://127.0.0.1:4318)
 npx nexus-devflow dashboard
 
-# 3. Install all recommended companion skills (archify, diagram-design, bughunter, ponytail)
+# 3. Install an individual bundled Opt-in Extras skill anytime (offline-safe)
+npx nexus-devflow skill add setup-tests   # or ci, release, rollback, vendor, convert-any-to-md, browseros-neo
+
+# 4. Or install recommended third-party companion skills (archify, diagram-design, bughunter, ponytail, code-modernization)
 npx nexus-devflow skill add --recommended
 
-# 4. Check active workspace status, living specs, and findings
+# 5. Check active workspace status, living specs, and findings
 npx nexus-devflow status
 ```
 

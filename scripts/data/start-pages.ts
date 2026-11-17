@@ -77,6 +77,7 @@ export const START_PAGES: DocPage[] = [
               <p>โปรเจกต์ที่บังคับใช้ pnpm ผ่าน <code>devEngines.packageManager</code> สามารถปฏิเสธ <code>npx</code> ด้วย <code>EBADDEVENGINES</code> ก่อนที่ DevFlow จะเริ่ม ให้ใช้ <code>pnpm dlx</code> ในโปรเจกต์ดังกล่าว โดยไม่ต้องลบข้อกำหนด package-manager ออก</p>
               <p>ตัวอย่างคำสั่ง <code>npx nexus-devflow</code> ทั้งหมดยังใช้งานได้กับ <code>pnpm dlx nexus-devflow</code> เช่นกัน</p>
               <p>ตัวติดตั้งแบบโต้ตอบ (Interactive Installer) จะแสดง OpenAI Codex, Claude Code, Google Antigravity, GitHub Copilot และ OpenCode เป็นรายการ Checkbox โดยเลือก Codex และ Claude Code/Antigravity เป็นค่าเริ่มต้น ตัวติดตั้งจะเพิ่มเฉพาะ Adapter Files ที่เข้ากันได้กับเครื่องมือที่คุณเลือก</p>
+              <p>ในขั้นตอนที่ 3 (<code>[3/3] 🧩 Configuring Extras Skills...</code>) เมื่อรันใน Interactive Terminal ตัวติดตั้งจะแสดง <strong>Extras Skills Checkbox</strong> (<code>↑</code>/<code>↓</code> เลื่อน, <code>Space</code> เลือก, <code>a</code> เลือกทั้งหมด, <code>Enter</code> ยืนยัน, <code>Esc</code> ข้าม) ให้เลือกติดตั้ง Opt-in Extensions จากแพ็กเกจแบบ offline-safe ได้ทันที ได้แก่ <code>setup-tests</code>, <code>ci</code>, <code>release</code>, <code>rollback</code>, <code>vendor</code>, <code>convert-any-to-md</code> และ <code>browseros-neo</code></p>
               <p>ตัวติดตั้งจะสร้าง <code>devflow/.state/manifest.json</code> เพื่อให้การอัปเดตเวอร์ชันในภายหลังสามารถแยกแยะไฟล์ของ DevFlow ออกจากการปรับแต่งของโปรเจกต์ได้</p>
               <p>ก่อนคัดลอกไฟล์ ตัวติดตั้งจะตรวจสอบโฟลเดอร์ปลายทางและหยุดทำงานหากพบ Symbolic Links, ประเภทไฟล์ที่ไม่เข้ากัน หรือเป้าหมายที่อยู่ใต้ไฟล์ปกติ เพื่อความปลอดภัยสูงสุด</p>
               <p>การติดตั้งยังมีตัวเลือกติดตั้ง DevFlow CLI ซึ่งมีคำสั่ง <code>nexus-devflow</code> สำหรับตรวจสอบสถานะโปรเจกต์และเปิด Live Dashboard</p>
@@ -826,6 +827,7 @@ pnpm dlx nexus-devflow@latest update</code></pre>
               <li><code>devflow/reference/</code> และ <code>prototypes/</code> (เอกสารอ้างอิงและหน้าจอต้นแบบ)</li>
             </ul>
           </div>
+          <p>เมื่อรันใน Interactive Terminal หลังอัปเดตไฟล์หลักเสร็จแล้ว ขั้นตอนที่ 3 (<code>[3/3] 🧩 Configuring Extras Skills...</code>) จะแสดง <strong>Extras Skills Checkbox</strong> โดยติ๊กเลือก (<code>[x]</code>) ให้ล่วงหน้าพร้อมป้าย <code>[installed]</code> สำหรับสกิลเสริมที่โปรเจกต์เคยติดตั้งไว้แล้วเพื่ออัปเดตแบบ offline-safe จากแพ็กเกจ (การเอาติ๊กออกในขั้นตอนนี้จะข้ามไม่อัปเดต โดยไม่ลบสกิลเดิมออก และเมื่อรันด้วย <code>--yes</code> หรือโหมด non-interactive จะข้ามขั้นตอนนี้โดยอัตโนมัติ)</p>
           <p>การอัปเดตเวอร์ชันล่าสุดได้เพิ่มหลักการ <strong>Proportional Engineering</strong> ลงใน Managed Skills, เพิ่มข้อเสนอติดตั้ง Git pre-push hook ในคำสั่ง <code>/ci</code>, ปรับปรุงระบบกู้คืนการทำงาน (Completion recovery), รองรับ Local-only review snapshots และการจัดรูปแบบ Feature List ใน Overview ให้กระชับอัตโนมัติ</p>
         `
       },

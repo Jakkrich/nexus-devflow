@@ -203,6 +203,8 @@ npx nexus-devflow update
 
 DevFlow จะอัปเดตเฉพาะไฟล์ Skill ภายใต้ `.agents/skills/` และ `.claude/skills/` เท่านั้น โดย **ไม่มีการเขียนทับ** แผนงาน, Living Spec, บริบทใน `devflow/`, ประวัติงาน หรือซอร์สโค้ดของแอปพลิเคชันคุณเด็ดขาด
 
+เมื่อรันใน Interactive Terminal ขั้นตอนที่ 3 (`[3/3] 🧩 Configuring Extras Skills...`) จะแสดง Checkbox (`↑`/`↓`, `Space`, `a`, `Enter`, `Esc`) สำหรับเลือกติดตั้ง 7 Opt-in Extras Skills จากแพ็กเกจแบบ offline-safe (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`) โดยติ๊กเลือกให้อัตโนมัติสำหรับตัวที่ติดตั้งแล้วตอน `update` และไม่ลบตัวที่เอาติ๊กออก (ข้ามอัตโนมัติเมื่อใช้ `--yes`, `--dry-run`, หรือโหมด non-interactive)
+
 ---
 
 ### ตรวจสอบสถานะโปรเจกต์ (Check project status)
