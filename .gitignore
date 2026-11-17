@@ -27,6 +27,7 @@ out/
 graphify-out/
 .astro/
 packages/create-nexus-devflow/template/
+packages/create-nexus-devflow/extras/
 
 
 # OS & Editor generated files

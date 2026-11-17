@@ -41,6 +41,7 @@
 - [ ] 122. **(Tracer Bullet) IDE Sidecar Pilot** - เชื่อม editor หนึ่งตัวกับ dashboard/status API เพื่อเปิด task, อ่าน spec และติดตาม stage แบบ real-time โดยไม่ให้ sidecar แก้ source of truth โดยตรง
 - [ ] 123. **(Journey) Multi-IDE Continuation & Handoff** - พิสูจน์การรับช่วงงานระหว่าง adapters ด้วย task เดียวกัน พร้อม compatibility tests และคู่มือ recovery เมื่อ context หรือ tool เปลี่ยน
 - [x] 126. **(Tracer Bullet) Opt-in `browseros-neo` Team Skill (E2E Testing & Evidence)** - เพิ่ม custom `extras/skills/browseros-neo/` ต่อยอดจาก `browserclaw` สำหรับทดสอบและแก้ปัญหาแบบ E2E ผ่าน BrowserOS neo MCP, สร้าง test plan + evidence รายเคสใน `devflow/reports/{run-id}/` (ไม่ขึ้น Git) และผูก `name_session` ย้อนดูวิดีโอใน BrowserOS neo ตาม DevFlow ID (Ref: DISC-20261117-003)
+- [x] 127. **(Tracer Bullet) Interactive Extras Skills Checkbox Setup** - ถอด Superpower Community Skills ออกจาก Step `[3/3]` ของ `install`/`update` และแทนที่ด้วย zero-dep checkbox เลือกติดตั้ง/อัปเดต `extras/skills/` จาก local bundle (Ref: DISC-20261118-001)
 
 ---
 

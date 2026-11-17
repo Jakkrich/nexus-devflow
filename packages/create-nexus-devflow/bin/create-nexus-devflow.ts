@@ -69,6 +69,7 @@ import {
   createSpinner,
   createStyle,
   formatVersionTransition,
+  promptCheckbox,
   promptConfirm,
   renderHeaderBox,
   renderStepHeader
@@ -86,6 +87,8 @@ import {
 } from "../lib/uninstall.js";
 import {
   type DevFlowRole,
+  getExtrasSkillCatalog,
+  installExtrasSkills,
   installRecommendedSkills,
   installThirdPartySkill,
   listInstalledSkills,
@@ -806,7 +809,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
 
     spinner.succeed("Nexus-DevFlow update successfully applied!");
-    await handleRecommendedSkillsSetup(targetDir, options, style, true);
+    await handleExtrasSkillsSetup(targetDir, options, style, true);
     printUpdateSuccess(prepared, result);
     return;
   }
@@ -865,7 +868,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
   spinner.succeed("Nexus-DevFlow overlay successfully installed!");
 
-  await handleRecommendedSkillsSetup(targetDir, options, style, false);
+  await handleExtrasSkillsSetup(targetDir, options, style, false);
   printInstallSuccess(targetDir, result);
 }
 
@@ -1562,52 +1565,81 @@ ${style.bold("Options:")}
 `);
 }
 
-async function handleRecommendedSkillsSetup(
-  targetDir: string,
-  options: CliOptions,
-  style: ReturnType<typeof createStyle>,
-  isUpdate: boolean
-): Promise<void> {
-  if (options.json || options.dryRun) return;
+export interface ExtrasSetupIoOptions {
+  input?: NodeJS.ReadableStream;
+  stream?: NodeJS.WriteStream;
+  isInteractive?: boolean;
+  extrasRoot?: string;
+}
 
-  const isInteractive = Boolean(process.stdin.isTTY && !process.env.CI);
-  if (!isInteractive && !options.recommended) {
-    return;
+function isExtraSkillInstalled(targetDir: string, skillName: string): boolean {
+  return (
+    fsSync.existsSync(path.join(targetDir, ".agents", "skills", skillName, "SKILL.md")) ||
+    fsSync.existsSync(path.join(targetDir, ".claude", "skills", skillName, "SKILL.md"))
+  );
+}
+
+async function handleExtrasSkillsSetup(
+  targetDir: string,
+  options: Pick<CliOptions, "json" | "dryRun" | "yes" | "force">,
+  style: ReturnType<typeof createStyle>,
+  isUpdate: boolean,
+  io: ExtrasSetupIoOptions = {}
+): Promise<string[]> {
+  if (options.json || options.dryRun || options.yes) return [];
+
+  const isInteractive = io.isInteractive ?? Boolean(process.stdin.isTTY && !process.env.CI);
+  if (!isInteractive) {
+    return [];
   }
 
-  console.log(renderStepHeader(3, 3, "🔌", "Configuring Superpower Community Skills...", style));
-  console.log(`  ${style.dim("Recommended Skills Suite:")} ${style.bold(style.cyan("archify"))}, ${style.bold(style.cyan("diagram-design"))}, ${style.bold(style.cyan("bughunter"))}, ${style.bold(style.cyan("ponytail"))}`);
+  const out = io.stream || process.stdout;
+  out.write(`${renderStepHeader(3, 3, "🧩", "Configuring Extras Skills...", style)}\n`);
 
-  const actionText = isUpdate ? "update/install" : "install";
-  const promptText = `\n  ✨ Would you like to ${actionText} recommended skills now?`;
+  const catalog = getExtrasSkillCatalog();
+  const choices = catalog.map((item) => {
+    const installed = isExtraSkillInstalled(targetDir, item.name);
+    return {
+      label: item.name,
+      value: item.name,
+      description: item.description.replace(/^\[devflow\]\s*/i, ""),
+      checked: isUpdate ? installed : false,
+      badge: installed ? "installed" : undefined
+    };
+  });
 
-  const proceed = options.recommended
-    ? true
-    : await promptConfirm(promptText, {
-      defaultYes: true,
-      bypass: false
+  const actionText = isUpdate ? "install/update" : "install";
+  const selected = await promptCheckbox(`Select extras skills to ${actionText}:`, {
+    choices,
+    input: io.input,
+    stream: out,
+    style,
+    isInteractive
+  });
+
+  if (selected.length === 0) {
+    out.write(
+      `  ${style.dim("Skipped. You can install extras anytime with:")} ${style.brightCyan("npx nexus-devflow skill add <name>")}\n`
+    );
+    return [];
+  }
+
+  const spinner = createSpinner(
+    `${isUpdate ? "Updating/installing" : "Installing"} ${selected.length} extras skill(s)...`,
+    { stream: out, enabled: out.isTTY === true && !process.env.CI }
+  ).start();
+
+  try {
+    const installed = await installExtrasSkills(targetDir, selected, {
+      force: options.force ?? true,
+      extrasRoot: io.extrasRoot
     });
-
-  if (proceed) {
-    const spinner = createSpinner(`${isUpdate ? "Updating" : "Installing"} recommended third-party skills...`).start();
-    try {
-      if (isUpdate) {
-        const updateResult = await updateRecommendedSkills(targetDir);
-        if (updateResult.totalUpdated > 0) {
-          spinner.succeed(`Successfully updated ${updateResult.totalUpdated} recommended skill(s): ${updateResult.updatedSkills.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
-        } else {
-          const installResult = await installRecommendedSkills(targetDir, { force: options.force });
-          spinner.succeed(`Successfully installed ${installResult.length} recommended skill(s): ${installResult.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
-        }
-      } else {
-        const installResult = await installRecommendedSkills(targetDir, { force: options.force });
-        spinner.succeed(`Successfully installed ${installResult.length} recommended skill(s): ${installResult.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
-      }
-    } catch (err: unknown) {
-      spinner.fail(`Could not configure recommended skills: ${err instanceof Error ? err.message : String(err)}`);
-    }
-  } else {
-    console.log(`  ${style.dim("Skipped. You can install them anytime with:")} ${style.brightCyan("npx nexus-devflow skill add --recommended")}`);
+    const names = installed.map((s) => style.bold(style.cyan(s.name))).join(", ");
+    spinner.succeed(`Configured ${installed.length} extras skill(s): ${names}`);
+    return installed.map((s) => s.name);
+  } catch (err: unknown) {
+    spinner.fail(`Could not configure extras skills: ${err instanceof Error ? err.message : String(err)}`);
+    return [];
   }
 }
 
@@ -1771,4 +1803,4 @@ if (
   });
 }
 
-export { findPackageRoot, formatMissingTemplateMessage, main, parseArgs };
+export { findPackageRoot, formatMissingTemplateMessage, handleExtrasSkillsSetup, main, parseArgs };

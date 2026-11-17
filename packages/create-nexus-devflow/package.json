@@ -50,6 +50,7 @@
   "files": [
     "dist/",
     "template/",
+    "extras/",
     "README.md",
     "LICENSE",
     "package.json"

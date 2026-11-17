@@ -792,3 +792,68 @@ test("installThirdPartySkill installs non-compound extras/skills/* subpath with 
   }
 });
 
+test("getExtrasSkillCatalog returns the 7 user/team extras skills and excludes publish-devflow by default", async () => {
+  const mod = await import("../lib/skill-manager.js");
+  assert.equal(typeof (mod as Record<string, unknown>).getExtrasSkillCatalog, "function");
+  const getExtrasSkillCatalog = (mod as {
+    getExtrasSkillCatalog: (opts?: { includeMaintainer?: boolean }) => Array<{ name: string; subpath: string; description: string }>;
+  }).getExtrasSkillCatalog;
+
+  const userExtras = getExtrasSkillCatalog();
+  const names = userExtras.map((s) => s.name);
+  assert.deepEqual(names, [
+    "setup-tests",
+    "ci",
+    "release",
+    "rollback",
+    "vendor",
+    "convert-any-to-md",
+    "browseros-neo"
+  ]);
+  assert.ok(!names.includes("publish-devflow"), "publish-devflow should be excluded by default");
+  assert.ok(!names.includes("browser-tests"), "alias duplicate browser-tests should not appear");
+
+  const withMaintainer = getExtrasSkillCatalog({ includeMaintainer: true });
+  assert.ok(withMaintainer.some((s) => s.name === "publish-devflow"));
+});
+
+test("installExtrasSkills installs selected extras skills offline from bundled extrasRoot", async () => {
+  const mod = await import("../lib/skill-manager.js");
+  assert.equal(typeof (mod as Record<string, unknown>).installExtrasSkills, "function");
+  const installExtrasSkills = (mod as {
+    installExtrasSkills: (
+      projectRoot: string,
+      names: readonly string[],
+      options?: { force?: boolean; extrasRoot?: string }
+    ) => Promise<Array<{ name: string }>>;
+  }).installExtrasSkills;
+
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-extras-offline-"));
+  const repoExtrasRoot = path.resolve(import.meta.dirname, "..", "..", "..", "extras");
+
+  try {
+    await fs.mkdir(path.join(tempProject, ".agents", "skills"), { recursive: true });
+    await fs.mkdir(path.join(tempProject, ".claude", "skills"), { recursive: true });
+
+    const installed = await installExtrasSkills(tempProject, ["setup-tests", "browseros-neo"], {
+      force: true,
+      extrasRoot: repoExtrasRoot
+    });
+
+    assert.deepEqual(installed.map((d) => d.name), ["setup-tests", "browseros-neo"]);
+
+    for (const adapter of [".agents", ".claude"]) {
+      await assert.doesNotReject(fs.stat(path.join(tempProject, adapter, "skills", "setup-tests", "SKILL.md")));
+      await assert.doesNotReject(fs.stat(path.join(tempProject, adapter, "skills", "browseros-neo", "SKILL.md")));
+      await assert.doesNotReject(
+        fs.stat(path.join(tempProject, adapter, "skills", "browseros-neo", "reference", "e2e-templates.md"))
+      );
+    }
+
+    const emptyInstall = await installExtrasSkills(tempProject, [], { extrasRoot: repoExtrasRoot });
+    assert.deepEqual(emptyInstall, []);
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+  }
+});
+

@@ -94,6 +94,14 @@ export interface RecommendedSkillPreset {
   description?: string;
 }
 
+export interface ExtrasSkillPreset {
+  name: string;
+  source: string;
+  subpath: string;
+  description: string;
+  maintainerOnly?: boolean;
+}
+
 export const KNOWN_SKILL_ALIASES: Record<
   string,
   {
@@ -104,6 +112,7 @@ export const KNOWN_SKILL_ALIASES: Record<
     type?: "git" | "local" | "compound-knowledge";
     referencePath?: string;
     description?: string;
+    maintainerOnly?: boolean;
   }
 > = {
   archify: {
@@ -193,9 +202,64 @@ export const KNOWN_SKILL_ALIASES: Record<
     source: "https://github.com/Jakkrich/nexus-devflow",
     subpath: "extras/skills/publish-devflow",
     name: "publish-devflow",
-    description: "[maintainer] Opt-in release, semver bump, tag, and NPM publish automation for nexus-devflow"
+    description: "[maintainer] Opt-in release, semver bump, tag, and NPM publish automation for nexus-devflow",
+    maintainerOnly: true
   }
 };
+
+export function getExtrasSkillCatalog(options?: { includeMaintainer?: boolean }): ExtrasSkillPreset[] {
+  const includeMaintainer = Boolean(options?.includeMaintainer);
+  const catalog: ExtrasSkillPreset[] = [];
+  for (const [key, entry] of Object.entries(KNOWN_SKILL_ALIASES)) {
+    if (!entry.subpath?.startsWith("extras/skills/")) continue;
+    const canonicalName = entry.name || key;
+    if (canonicalName !== key) continue;
+    if (entry.maintainerOnly && !includeMaintainer) continue;
+    catalog.push({
+      name: canonicalName,
+      source: entry.source,
+      subpath: entry.subpath,
+      description: entry.description || "",
+      ...(entry.maintainerOnly ? { maintainerOnly: true } : {})
+    });
+  }
+  return catalog;
+}
+
+export function resolveBundledExtrasSkillDir(
+  skillName: string,
+  options?: { extrasRoot?: string }
+): string | null {
+  const alias = KNOWN_SKILL_ALIASES[skillName.toLowerCase()];
+  if (!alias?.subpath?.startsWith("extras/skills/")) {
+    return null;
+  }
+  const canonicalName = alias.name || skillName.toLowerCase();
+  const candidates: string[] = [];
+
+  if (options?.extrasRoot) {
+    candidates.push(
+      path.join(options.extrasRoot, "skills", canonicalName),
+      path.join(options.extrasRoot, canonicalName)
+    );
+  } else {
+    const thisDir = import.meta.dirname;
+    // Works from both source (packages/create-nexus-devflow/lib) and compiled (dist/lib)
+    candidates.push(
+      path.resolve(thisDir, "..", "extras", "skills", canonicalName),
+      path.resolve(thisDir, "..", "..", "extras", "skills", canonicalName),
+      path.resolve(thisDir, "..", "..", "..", "extras", "skills", canonicalName),
+      path.resolve(thisDir, "..", "..", "..", "..", "extras", "skills", canonicalName)
+    );
+  }
+
+  for (const dir of candidates) {
+    if (fsSync.existsSync(path.join(dir, "SKILL.md"))) {
+      return dir;
+    }
+  }
+  return null;
+}
 
 export const RECOMMENDED_THIRD_PARTY_SKILLS: readonly RecommendedSkillPreset[] = Object.freeze([
   {
@@ -607,13 +671,25 @@ export class SkillRegistryEngine {
 
     try {
       tempCloneDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-skill-fetch-"));
-      await this.repositoryAdapter.fetchPackage(effectiveSource, tempCloneDir);
+      let bundledDir: string | null = null;
+      if (
+        alias?.subpath?.startsWith("extras/skills/") &&
+        this.repositoryAdapter instanceof DefaultGitRepositoryAdapter
+      ) {
+        bundledDir = resolveBundledExtrasSkillDir(opts.name || source);
+      }
+
       let sourceDirectory = tempCloneDir;
-      const targetSubpath = alias?.subpath || (compoundName === "code-modernization" ? "plugins/code-modernization" : undefined);
-      if (targetSubpath) {
-        const potentialSubpath = path.join(tempCloneDir, targetSubpath);
-        if (fsSync.existsSync(potentialSubpath)) {
-          sourceDirectory = potentialSubpath;
+      if (bundledDir) {
+        await fs.cp(bundledDir, tempCloneDir, { recursive: true });
+      } else {
+        await this.repositoryAdapter.fetchPackage(effectiveSource, tempCloneDir);
+        const targetSubpath = alias?.subpath || (compoundName === "code-modernization" ? "plugins/code-modernization" : undefined);
+        if (targetSubpath) {
+          const potentialSubpath = path.join(tempCloneDir, targetSubpath);
+          if (fsSync.existsSync(potentialSubpath)) {
+            sourceDirectory = potentialSubpath;
+          }
         }
       }
 
@@ -1046,8 +1122,13 @@ export class SkillRegistryEngine {
       let tempCloneDir: string | null = null;
 
       try {
+        const allBundledLocal =
+          isGit &&
+          this.repositoryAdapter instanceof DefaultGitRepositoryAdapter &&
+          skills.every((s) => Boolean(resolveBundledExtrasSkillDir(s.name)));
+
         let sourceDir = source;
-        if (isGit) {
+        if (isGit && !allBundledLocal) {
           tempCloneDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-skill-update-"));
           await this.repositoryAdapter.fetchPackage(source, tempCloneDir);
           sourceDir = tempCloneDir;
@@ -1165,7 +1246,12 @@ export class SkillRegistryEngine {
                 });
               }
             } else {
-              const res = await this.install(sourceDir, {
+              const bundledSkillDir =
+                this.repositoryAdapter instanceof DefaultGitRepositoryAdapter
+                  ? resolveBundledExtrasSkillDir(skill.name)
+                  : null;
+              const installSource = bundledSkillDir || sourceDir;
+              const res = await this.install(installSource, {
                 name: skill.name,
                 force: true,
                 overrideSource: isGit ? source : undefined

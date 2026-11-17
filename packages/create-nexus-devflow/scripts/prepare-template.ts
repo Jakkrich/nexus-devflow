@@ -18,6 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
 const repoRoot = path.resolve(packageRoot, "..", "..");
 const templateRoot = path.join(packageRoot, "template");
+const extrasRoot = path.join(packageRoot, "extras");
 
 const entries = [
   "AGENTS.md",
@@ -149,12 +150,28 @@ export function shouldCopyTemplateEntry(
     return false;
   }
 
+  return isTrackedEntry(normalized, isDirectory, trackedIndex);
+}
+
+function isTrackedEntry(
+  normalized: string,
+  isDirectory: boolean,
+  trackedIndex: TrackedIndex | null
+): boolean {
   if (trackedIndex && normalized !== "") {
     return isDirectory
       ? trackedIndex.dirs.has(normalized)
       : trackedIndex.files.has(normalized);
   }
   return true;
+}
+
+export function shouldCopyExtrasEntry(
+  normalized: string,
+  isDirectory: boolean,
+  trackedIndex: TrackedIndex | null
+): boolean {
+  return isTrackedEntry(normalized, isDirectory, trackedIndex);
 }
 
 async function copyEntry(
@@ -294,18 +311,39 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
   await fs.writeFile(path.join(templateRoot, "devflow", "context", "project-overview.md"), starterOverview, "utf8");
 }
 
+async function copyExtrasSkills(trackedIndex: TrackedIndex | null): Promise<void> {
+  const source = path.join(repoRoot, "extras", "skills");
+  const target = path.join(extrasRoot, "skills");
+  try {
+    await fs.cp(source, target, {
+      recursive: true,
+      filter: (src) => {
+        const normalized = path.relative(repoRoot, src).replace(/\\/g, "/");
+        const isDirectory = fsSync.lstatSync(src).isDirectory();
+        return shouldCopyExtrasEntry(normalized, isDirectory, trackedIndex);
+      }
+    });
+  } catch (err: unknown) {
+    if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
+      throw err;
+    }
+  }
+}
+
 async function main() {
   const inventory = await loadCoreSkillInventory(
     path.join(repoRoot, "agent-bundle.manifest.json")
   );
   const trackedIndex = loadTrackedRepoIndex(repoRoot);
   await fs.rm(templateRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  await fs.rm(extrasRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   await fs.mkdir(templateRoot, { recursive: true });
 
   for (const entry of entries) {
     await copyEntry(entry, inventory, trackedIndex);
   }
 
+  await copyExtrasSkills(trackedIndex);
   await ensureEmptyDirectories();
   await sanitizeStarterFiles();
 }

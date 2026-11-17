@@ -5,9 +5,11 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
 const templateRoot = path.join(packageRoot, "template");
+const extrasRoot = path.join(packageRoot, "extras");
 
 async function main() {
   await fs.rm(templateRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  await fs.rm(extrasRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
 }
 
 main().catch((error: unknown) => {

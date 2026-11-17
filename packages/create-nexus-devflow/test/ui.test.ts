@@ -143,3 +143,103 @@ test("renderStepHeader formats step with icon and description", async () => {
   assert.ok(step.includes("Analyzing workspace footprint..."));
 });
 
+test("promptCheckbox toggles items with Space, navigates with arrows/jk, and submits on Enter", async () => {
+  const { promptCheckbox, createStyle } = await import("../lib/ui.js");
+  const inputStream = new PassThrough();
+  const outputStream = new PassThrough();
+
+  const promise = promptCheckbox("Select extras skills:", {
+    choices: [
+      { label: "setup-tests", value: "setup-tests", description: "Test harness", checked: false },
+      { label: "ci", value: "ci", description: "CI workflow", checked: true },
+      { label: "browseros-neo", value: "browseros-neo", description: "BrowserOS E2E", checked: false }
+    ],
+    input: inputStream,
+    stream: outputStream as unknown as NodeJS.WriteStream,
+    style: createStyle(false),
+    isInteractive: true
+  });
+
+  // Space toggles item 0 (setup-tests -> true), Down arrow moves to item 1 (ci),
+  // Space toggles item 1 (ci -> false), 'j' moves to item 2 (browseros-neo),
+  // Space toggles item 2 (browseros-neo -> true), Enter confirms.
+  inputStream.write(" ");
+  inputStream.write("\x1b[B");
+  inputStream.write(" ");
+  inputStream.write("j");
+  inputStream.write(" ");
+  inputStream.write("\r");
+
+  const result = await promise;
+  assert.deepEqual(result, ["setup-tests", "browseros-neo"]);
+});
+
+test("promptCheckbox toggles all with 'a' and wraps navigation with 'k' / Up arrow", async () => {
+  const { promptCheckbox, createStyle } = await import("../lib/ui.js");
+  const inputStream = new PassThrough();
+  const outputStream = new PassThrough();
+
+  const promise = promptCheckbox("Select extras skills:", {
+    choices: [
+      { label: "setup-tests", value: "setup-tests", checked: false },
+      { label: "ci", value: "ci", checked: false }
+    ],
+    input: inputStream,
+    stream: outputStream as unknown as NodeJS.WriteStream,
+    style: createStyle(false),
+    isInteractive: true
+  });
+
+  // 'a' selects all, 'k' wraps from 0 to 1 (ci), Space unchecks item 1, Enter submits
+  inputStream.write("a");
+  inputStream.write("k");
+  inputStream.write(" ");
+  inputStream.write("\r");
+
+  const result = await promise;
+  assert.deepEqual(result, ["setup-tests"]);
+});
+
+test("promptCheckbox returns empty array on Escape or Ctrl+C cancel", async () => {
+  const { promptCheckbox, createStyle } = await import("../lib/ui.js");
+  const inputStream = new PassThrough();
+  const outputStream = new PassThrough();
+
+  const escPromise = promptCheckbox("Select extras skills:", {
+    choices: [{ label: "ci", value: "ci", checked: true }],
+    input: inputStream,
+    stream: outputStream as unknown as NodeJS.WriteStream,
+    style: createStyle(false),
+    isInteractive: true
+  });
+  inputStream.write("\x1b");
+  assert.deepEqual(await escPromise, []);
+
+  const inputStream2 = new PassThrough();
+  const ctrlCPromise = promptCheckbox("Select extras skills:", {
+    choices: [{ label: "ci", value: "ci", checked: true }],
+    input: inputStream2,
+    stream: outputStream as unknown as NodeJS.WriteStream,
+    style: createStyle(false),
+    isInteractive: true
+  });
+  inputStream2.write("\x03");
+  assert.deepEqual(await ctrlCPromise, []);
+});
+
+test("promptCheckbox returns pre-checked defaults immediately when non-interactive", async () => {
+  const { promptCheckbox, createStyle } = await import("../lib/ui.js");
+  const outputStream = new PassThrough();
+
+  const result = await promptCheckbox("Select extras skills:", {
+    choices: [
+      { label: "setup-tests", value: "setup-tests", checked: false },
+      { label: "ci", value: "ci", checked: true }
+    ],
+    stream: outputStream as unknown as NodeJS.WriteStream,
+    style: createStyle(false),
+    isInteractive: false
+  });
+  assert.deepEqual(result, ["ci"]);
+});
+

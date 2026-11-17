@@ -14,6 +14,9 @@ import {
   FULL_ROLE_SKILLS,
   getSkillsForRole,
   type RecommendedSkillPreset,
+  type ExtrasSkillPreset,
+  getExtrasSkillCatalog,
+  resolveBundledExtrasSkillDir,
   KNOWN_SKILL_ALIASES,
   RECOMMENDED_THIRD_PARTY_SKILLS,
   parseSkillFrontmatter,
@@ -39,6 +42,9 @@ export {
   FULL_ROLE_SKILLS,
   getSkillsForRole,
   type RecommendedSkillPreset,
+  type ExtrasSkillPreset,
+  getExtrasSkillCatalog,
+  resolveBundledExtrasSkillDir,
   KNOWN_SKILL_ALIASES,
   RECOMMENDED_THIRD_PARTY_SKILLS,
   parseSkillFrontmatter,
@@ -160,4 +166,37 @@ export async function updateRecommendedSkills(
     failedSkills,
     totalUpdated: updatedSkills.length
   };
+}
+
+export interface InstallExtrasOptions {
+  force?: boolean;
+  extrasRoot?: string;
+}
+
+export async function installExtrasSkills(
+  projectRoot: string,
+  skillNames: readonly string[],
+  options?: InstallExtrasOptions
+): Promise<SkillDetail[]> {
+  const uniqueNames = Array.from(new Set(skillNames.map((n) => n.trim()).filter(Boolean)));
+  const installedList: SkillDetail[] = [];
+
+  for (const name of uniqueNames) {
+    const alias = KNOWN_SKILL_ALIASES[name.toLowerCase()];
+    const bundledDir = resolveBundledExtrasSkillDir(name, { extrasRoot: options?.extrasRoot });
+    const source = bundledDir || name;
+    const result = await installThirdPartySkill(projectRoot, source, {
+      name: alias?.name || name,
+      force: options?.force ?? true,
+      ...(bundledDir && alias ? { overrideSource: alias.source } : {})
+    });
+
+    if (Array.isArray(result)) {
+      installedList.push(...result);
+    } else {
+      installedList.push(result);
+    }
+  }
+
+  return installedList;
 }

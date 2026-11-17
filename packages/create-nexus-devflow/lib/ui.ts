@@ -286,3 +286,189 @@ export function renderStepHeader(
   return `\n${badge} ${icon} ${heading}`;
 }
 
+export interface CheckboxOption<T = string> {
+  label: string;
+  value: T;
+  description?: string;
+  checked?: boolean;
+  badge?: string;
+}
+
+export interface PromptCheckboxOptions<T = string> {
+  choices: readonly CheckboxOption<T>[];
+  input?: NodeJS.ReadableStream;
+  stream?: NodeJS.WriteStream;
+  style?: TextStyle;
+  isInteractive?: boolean;
+}
+
+function truncateText(text: string, maxLen: number): string {
+  if (maxLen <= 3 || text.length <= maxLen) return text;
+  return `${text.slice(0, maxLen - 3)}...`;
+}
+
+function renderCheckboxBlock<T>(
+  question: string,
+  choices: readonly CheckboxOption<T>[],
+  selected: readonly boolean[],
+  cursor: number,
+  style: TextStyle,
+  columns?: number
+): string[] {
+  const hint = style.dim("(↑/↓ move, Space toggle, a all, Enter confirm, Esc skip)");
+  const maxWidth = columns && columns > 20 ? columns - 1 : Number.POSITIVE_INFINITY;
+  const headerRaw = `  ${question} (↑/↓ move, Space toggle, a all, Enter confirm, Esc skip)`;
+  const headerLine =
+    headerRaw.length > maxWidth ? `  ${style.bold(truncateText(question, maxWidth - 2))}` : `  ${style.bold(question)} ${hint}`;
+  const lines: string[] = [headerLine];
+  const labelWidth = Math.max(...choices.map((c) => c.label.length), 12);
+
+  for (let i = 0; i < choices.length; i++) {
+    const item = choices[i];
+    const isFocused = i === cursor;
+    const isChecked = selected[i];
+    const pointer = isFocused ? style.brightCyan("❯") : " ";
+    const box = isChecked ? style.brightGreen("[x]") : style.dim("[ ]");
+    const paddedLabel = item.label.padEnd(labelWidth);
+    const labelText = isFocused
+      ? style.bold(style.brightCyan(paddedLabel))
+      : isChecked
+      ? style.bold(paddedLabel)
+      : paddedLabel;
+    const badgeRaw = item.badge ? ` [${item.badge}]` : "";
+    const badgeText = item.badge ? ` ${style.cyan(`[${item.badge}]`)}` : "";
+    const prefixPlainLen = `  ❯ [x] ${paddedLabel}${badgeRaw}`.length;
+    const availableForDesc = maxWidth - prefixPlainLen - 3;
+    const descText =
+      item.description && availableForDesc > 8
+        ? ` ${style.dim(`- ${truncateText(item.description, availableForDesc)}`)}`
+        : "";
+    lines.push(`  ${pointer} ${box} ${labelText}${badgeText}${descText}`);
+  }
+
+  return lines;
+}
+
+export async function promptCheckbox<T = string>(
+  question: string,
+  options: PromptCheckboxOptions<T>
+): Promise<T[]> {
+  const { choices } = options;
+  if (choices.length === 0) return [];
+
+  const isInteractive =
+    options.isInteractive ??
+    (options.input ? true : Boolean(process.stdin.isTTY && !process.env.CI));
+
+  if (!isInteractive && !options.input) {
+    return choices.filter((c) => c.checked).map((c) => c.value);
+  }
+
+  const input = (options.input || process.stdin) as NodeJS.ReadStream;
+  const stream = options.stream || process.stdout;
+  const style = options.style || createStyle(shouldUseColor(stream.isTTY));
+  const selected = choices.map((c) => Boolean(c.checked));
+  let cursor = 0;
+  let renderedLineCount = 0;
+
+  const writeLines = (lines: string[]) => {
+    if (renderedLineCount > 0 && stream.isTTY) {
+      stream.write(`\x1b[${renderedLineCount}A\r\x1b[J`);
+    }
+    if (renderedLineCount === 0 || stream.isTTY) {
+      stream.write(`${lines.join("\n")}\n`);
+      renderedLineCount = lines.length;
+    }
+  };
+
+  if (stream.isTTY) {
+    stream.write("\x1b[?25l");
+  }
+  writeLines(renderCheckboxBlock(question, choices, selected, cursor, style, stream.columns));
+
+  readline.emitKeypressEvents(input);
+  const previousRawMode = typeof input.isRaw === "boolean" ? input.isRaw : undefined;
+  if (typeof input.setRawMode === "function") {
+    input.setRawMode(true);
+  }
+  if (typeof input.resume === "function") {
+    input.resume();
+  }
+
+  return new Promise<T[]>((resolve) => {
+    let settled = false;
+
+    const cleanup = () => {
+      input.removeListener("keypress", onKeypress);
+      input.removeListener("end", onEnd);
+      if (typeof input.setRawMode === "function") {
+        input.setRawMode(Boolean(previousRawMode));
+      }
+      if (typeof input.pause === "function" && !options.input) {
+        input.pause();
+      }
+      if (stream.isTTY) {
+        stream.write("\x1b[?25h");
+      }
+    };
+
+    const finish = (cancelled: boolean) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+
+      const result = cancelled
+        ? []
+        : choices.filter((_, index) => selected[index]).map((item) => item.value);
+
+      if (stream.isTTY && renderedLineCount > 0) {
+        stream.write(`\x1b[${renderedLineCount}A\r\x1b[J`);
+        const summary =
+          result.length > 0
+            ? choices
+                .filter((_, index) => selected[index])
+                .map((item) => style.cyan(item.label))
+                .join(", ")
+            : style.dim("none");
+        stream.write(`  ${style.bold(question)} ${summary}\n`);
+      }
+
+      resolve(result);
+    };
+
+    const onEnd = () => finish(true);
+
+    const onKeypress = (str: string, key: readline.Key = {}) => {
+      if ((key.ctrl && key.name === "c") || key.name === "escape" || str === "\x03") {
+        finish(true);
+        return;
+      }
+
+      if (key.name === "return" || key.name === "enter" || str === "\r" || str === "\n") {
+        finish(false);
+        return;
+      }
+
+      if (key.name === "up" || key.name === "k" || str === "k") {
+        cursor = (cursor - 1 + choices.length) % choices.length;
+      } else if (key.name === "down" || key.name === "j" || str === "j") {
+        cursor = (cursor + 1) % choices.length;
+      } else if (key.name === "space" || str === " ") {
+        selected[cursor] = !selected[cursor];
+      } else if (key.name === "a" || str === "a") {
+        const allSelected = selected.every(Boolean);
+        for (let i = 0; i < selected.length; i++) {
+          selected[i] = !allSelected;
+        }
+      } else {
+        return;
+      }
+
+      writeLines(renderCheckboxBlock(question, choices, selected, cursor, style, stream.columns));
+    };
+
+    input.on("keypress", onKeypress);
+    input.on("end", onEnd);
+  });
+}
+

@@ -152,3 +152,26 @@ test("loadTrackedRepoIndex tracks only committed/staged files inside a real git 
     await fs.rm(gitDir, { recursive: true, force: true });
   }
 });
+
+test("shouldCopyExtrasEntry bundles only tracked extras/skills files and package.json declares extras/", async () => {
+  const mod = await import("../scripts/prepare-template.js");
+  assert.equal(typeof (mod as Record<string, unknown>).shouldCopyExtrasEntry, "function");
+  const shouldCopyExtrasEntry = (mod as {
+    shouldCopyExtrasEntry: (normalized: string, isDir: boolean, tracked: ReturnType<typeof buildTrackedIndex> | null) => boolean;
+  }).shouldCopyExtrasEntry;
+
+  const tracked = buildTrackedIndex([
+    "extras/skills/setup-tests/SKILL.md",
+    "extras/skills/browseros-neo/reference/e2e-templates.md"
+  ]);
+
+  assert.equal(shouldCopyExtrasEntry("extras/skills/setup-tests/SKILL.md", false, tracked), true);
+  assert.equal(shouldCopyExtrasEntry("extras/skills/setup-tests", true, tracked), true);
+  assert.equal(shouldCopyExtrasEntry("extras/skills/setup-tests/untracked.md", false, tracked), false);
+
+  const pkgJson = JSON.parse(await fs.readFile(path.join(packageRoot, "package.json"), "utf8")) as { files?: string[] };
+  assert.ok(Array.isArray(pkgJson.files) && pkgJson.files.includes("extras/"), "package.json files must include extras/");
+
+  const gitignore = await fs.readFile(path.join(repoRoot, ".gitignore"), "utf8");
+  assert.match(gitignore, /packages\/create-nexus-devflow\/extras\//);
+});

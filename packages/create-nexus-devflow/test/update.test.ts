@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { PassThrough } from "node:stream";
 import test from "node:test";
 import {
   adapterListFromMode,
@@ -299,6 +300,98 @@ test("applyPreparedUpdate prunes consolidated 115c skills from existing installa
         await assert.rejects(fs.stat(path.join(targetDir, adapter, "skills", name)), { code: "ENOENT" });
       }
     }
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("handleExtrasSkillsSetup replaces Superpower Community prompt with interactive extras checkbox", async () => {
+  const cliMod = await import("../bin/create-nexus-devflow.js");
+  const { createStyle } = await import("../lib/ui.js");
+  assert.equal(typeof (cliMod as Record<string, unknown>).handleExtrasSkillsSetup, "function");
+
+  const handleExtrasSkillsSetup = (cliMod as {
+    handleExtrasSkillsSetup: (
+      targetDir: string,
+      options: { json: boolean; dryRun: boolean; yes: boolean; force: boolean },
+      style: ReturnType<typeof createStyle>,
+      isUpdate: boolean,
+      io?: { input?: NodeJS.ReadableStream; stream?: NodeJS.WriteStream; isInteractive?: boolean; extrasRoot?: string }
+    ) => Promise<string[]>;
+  }).handleExtrasSkillsSetup;
+
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-extras-step3-"));
+  const repoExtrasRoot = path.resolve(import.meta.dirname, "..", "..", "..", "extras");
+  try {
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".claude", "skills"), { recursive: true });
+
+    // 1. Fresh install: starts unchecked; Space selects first item (setup-tests), Enter confirms
+    const installInput = new PassThrough();
+    const installOut = new PassThrough();
+    const installChunks: string[] = [];
+    installOut.on("data", (chunk) => installChunks.push(chunk.toString()));
+
+    const installPromise = handleExtrasSkillsSetup(
+      tempDir,
+      { json: false, dryRun: false, yes: false, force: false },
+      createStyle(false),
+      false,
+      {
+        input: installInput,
+        stream: installOut as unknown as NodeJS.WriteStream,
+        isInteractive: true,
+        extrasRoot: repoExtrasRoot
+      }
+    );
+    installInput.write(" ");
+    installInput.write("\r");
+    const installed = await installPromise;
+    const installText = installChunks.join("");
+
+    assert.deepEqual(installed, ["setup-tests"]);
+    assert.ok(!installText.includes("Superpower Community"));
+    assert.ok(installText.includes("Configuring Extras Skills..."));
+    assert.ok(!installText.includes("publish-devflow"));
+    await assert.doesNotReject(fs.stat(path.join(tempDir, ".agents", "skills", "setup-tests", "SKILL.md")));
+
+    // 2. Update: pre-checks installed skills; unticking setup-tests does NOT delete it, while keeping Space off + Enter skips cleanly
+    const updateInput = new PassThrough();
+    const updateOut = new PassThrough();
+    const updateChunks: string[] = [];
+    updateOut.on("data", (chunk) => updateChunks.push(chunk.toString()));
+
+    const updatePromise = handleExtrasSkillsSetup(
+      tempDir,
+      { json: false, dryRun: false, yes: false, force: false },
+      createStyle(false),
+      true,
+      {
+        input: updateInput,
+        stream: updateOut as unknown as NodeJS.WriteStream,
+        isInteractive: true,
+        extrasRoot: repoExtrasRoot
+      }
+    );
+    // setup-tests is index 0 and pre-checked -> Space unchecks it, Enter skips without deleting
+    updateInput.write(" ");
+    updateInput.write("\r");
+    const updated = await updatePromise;
+    const updateText = updateChunks.join("");
+
+    assert.deepEqual(updated, []);
+    assert.ok(updateText.includes("[installed]"));
+    await assert.doesNotReject(fs.stat(path.join(tempDir, ".agents", "skills", "setup-tests", "SKILL.md")));
+
+    // 3. --yes skips interactive extras setup cleanly
+    const yesResult = await handleExtrasSkillsSetup(
+      tempDir,
+      { json: false, dryRun: false, yes: true, force: false },
+      createStyle(false),
+      false,
+      { isInteractive: true, extrasRoot: repoExtrasRoot }
+    );
+    assert.deepEqual(yesResult, []);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
