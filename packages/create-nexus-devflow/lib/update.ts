@@ -17,15 +17,8 @@ export const VALID_ADAPTERS = [
 export type ValidAdapter = typeof VALID_ADAPTERS[number];
 
 export const DEVFLOW_PROTECTED_SKILLS = new Set([
-  "analyze",
   "archify",
-  "brainstorm",
-  "devflow",
-  "diagram-design",
-  "explore",
-  "grill",
-  "idea",
-  "test"
+  "diagram-design"
 ]);
 
 export const MANAGED_ROOTS: Record<string, string[]> = {

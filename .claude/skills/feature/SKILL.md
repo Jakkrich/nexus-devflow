@@ -1,7 +1,7 @@
 ---
 name: feature
-description: "[devflow] Turn a build-plan item into a task-isolated living spec (devflow/context/{xxx-slug}/spec.md), splitting oversized work and checking contracts and tests before review. Use for /feature, starting the next feature, or drafting a spec."
-argument-hint: "[{number, name, DISC-id, or IDEA-id}] [--check]"
+description: "[devflow] Preview scope (--preview), run adaptive pre-flight clarification, and write a task-isolated living spec (devflow/context/{xxx-slug}/spec.md) before review. Use for /feature, /feature --preview, or /brief."
+argument-hint: "[{number, name, DISC-id, IDEA-id, or REQ-id}] [--preview] [--check]"
 ---
 
 # feature - turn a build-plan feature into a buildable spec
@@ -25,10 +25,16 @@ buildable in `devflow/context/{xxx-slug}/spec.md`.
 
 `/feature` supports drafting multiple specs ahead of time. Creating a spec creates a dedicated workspace directory at `devflow/context/{xxx-slug}/` and does **not block** drafting subsequent features.
 
+## Preview Mode (`--preview`)
+
+When invoked with `--preview` (or legacy `/brief`), perform a strictly **read-only scope & impact preview** without creating files, touching `build-plan.md`, or allocating a Running ID:
+1. Resolve the named or next unchecked item from `devflow/build-plan.md` plus relevant sections of `project-overview.md`, `glossary.md`, and affected source files/routes.
+2. Summarize: Goal, dependencies (prior completed vs. missing blockers), likely affected files/modules, estimated size (`Small` / `Medium` / `Needs Split` with candidate sub-features), and key open risks.
+3. End with exact recommendation (`/feature {id}` to spec now, or `/discovery {id}` if major architecture remains open) and stop.
+
 ## Input
 
-A feature from `build-plan.md`, by number or name - e.g. `/feature 3` or
-`/feature "typing engine"` or `/feature DISC-20260826-001`.
+A feature from `build-plan.md`, by number or name - e.g. `/feature 3`, `/feature 3 --preview`, `/feature "typing engine"`, or `/feature DISC-20260826-001`.
 
 The request may also describe a genuinely new feature that is not in the build
 plan yet. That goes through the new-feature intake in Step 1. Never silently add
@@ -123,6 +129,17 @@ steps, not separate features.
 
 This sizing call is the skill's job, not the build plan's - that's exactly why the
 build plan starts high-level.
+
+## Adaptive Pre-Flight Clarification (Before Writing Spec)
+
+Before creating `spec.md`, inspect the gathered context (`project-overview.md`, `glossary.md`, `devflow/decisions/`, codebase search results, and any linked `DISC-*` or `REQ-*` artifacts) for material unknowns across 4 gates:
+1. **Domain Language & Boundaries**: Ambiguous entity definitions or conflicting state meanings.
+2. **Data Contracts & Ownership**: Missing input/output fields, schemas, state owners, or sync vs. async flows.
+3. **Scope & Boundaries**: Unclear In-Scope vs. Out-of-Scope limits or edge cases / failure modes.
+4. **Auth, Data Integrity & Irreversible Trade-offs**: Trust boundaries, destructive mutations, or schema changes needing an ADR.
+
+- **Fast Path (Context Complete)**: If codebase + planning docs + `DISC`/`REQ` already answer all 4 gates cleanly, skip questions and proceed straight to Step 3 with zero ceremony.
+- **Clarify Path (Gaps Detected)**: Never guess silently. Ask **1–2 focused Socratic questions maximum per round** with recommended defaults and concise rationale. Wait for user answers, persist settled terms to `devflow/context/glossary.md` and irreversible architecture decisions to `devflow/decisions/ADR-xxx-{slug}.md`, then proceed to Step 3. Keep **Spec-first**: always present `spec.md` for review and stop before implementation unless running inside explicit `/autopilot`.
 
 ## Step 3 - write the spec
 

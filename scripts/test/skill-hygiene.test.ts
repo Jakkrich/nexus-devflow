@@ -123,3 +123,21 @@ test("skills use consistent npx nexus-devflow skill add/update CLI command", () 
   }
   assert.deepEqual(inconsistent, [], `Inconsistent skill CLI in: ${inconsistent.join(", ")}`);
 });
+
+test("115c consolidated skills expose Adaptive /feature, 2-Track /debug, unified /devflow, and /autopilot --all", () => {
+  const feature = fs.readFileSync(path.join(agentsSkillsRoot, "feature", "SKILL.md"), "utf8");
+  assert.match(feature, /--preview/);
+  assert.match(feature, /Adaptive Pre-Flight Clarification/i);
+
+  const debug = fs.readFileSync(path.join(agentsSkillsRoot, "debug", "SKILL.md"), "utf8");
+  assert.match(debug, /Track A/i);
+  assert.match(debug, /Track B/i);
+
+  const devflow = fs.readFileSync(path.join(agentsSkillsRoot, "devflow", "SKILL.md"), "utf8");
+  assert.match(devflow, /doctor/);
+  assert.match(devflow, /Legacy Command Routing/i);
+
+  const autopilot = fs.readFileSync(path.join(agentsSkillsRoot, "autopilot", "SKILL.md"), "utf8");
+  assert.match(autopilot, /--all/);
+  assert.match(autopilot, /continuous-loop\.md/);
+});

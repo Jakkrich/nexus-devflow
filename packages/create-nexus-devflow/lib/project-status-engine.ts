@@ -744,7 +744,7 @@ function selectNextAction(
 ): StatusNextAction {
   if (currentWork.state === "malformed") {
     return {
-      command: "/devflow-doctor",
+      command: "/devflow doctor",
       reason: "Repair the stage or spec contract before continuing."
     };
   }
@@ -752,7 +752,7 @@ function selectNextAction(
   if (currentWork.state === "active" && evidence) {
     if (evidence.recordFaults.length > 0) {
       return {
-        command: "/devflow-doctor",
+        command: "/devflow doctor",
         reason: `Diagnose ${evidence.recordFaults.map((fault) => fault.path).join(" and ")} before continuing: ${evidence.recordFaults.map((fault) => fault.blocker).join("; ")}.`
       };
     }
@@ -834,7 +834,7 @@ function selectNextAction(
 
     if (completion && completion.state !== "ready") {
       return {
-        command: "/devflow-doctor",
+        command: "/devflow doctor",
         reason: `Resolve completion blockers before continuing: ${completion.blockers.join("; ")}.`
       };
     }

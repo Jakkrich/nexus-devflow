@@ -57,24 +57,22 @@ export interface SkillUpdateResult {
 export type DevFlowRole = "dev" | "sa" | "full";
 
 export const DEV_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "adopt", "audit", "autopilot", "brainstorm", "brief",
-  "check", "complete", "continuous",
-  "debug", "devflow", "devflow-doctor", "devflow-status", "discovery", "explore", "feature", "fix", "grill",
-  "idea", "implement", "onboard", "overview", "prototype",
-  "test"
+  "audit", "autopilot",
+  "check", "complete",
+  "debug", "devflow", "explore", "feature", "fix",
+  "idea", "implement", "onboard", "overview", "prototype"
 ]);
 
 export const SA_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "analyze", "audit", "brainstorm", "brief",
-  "devflow", "devflow-doctor", "devflow-status", "discovery", "explore", "grill", "idea", "overview", "prototype"
+  "audit",
+  "devflow", "discovery", "explore", "feature", "idea", "overview", "prototype"
 ]);
 
 export const FULL_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "adopt", "analyze", "audit", "autopilot", "brainstorm", "brief",
-  "check", "complete", "continuous",
-  "debug", "devflow", "devflow-doctor", "devflow-status", "discovery", "explore", "feature", "fix", "grill",
-  "idea", "implement", "onboard", "overview", "prototype",
-  "test"
+  "audit", "autopilot",
+  "check", "complete",
+  "debug", "devflow", "discovery", "explore", "feature", "fix",
+  "idea", "implement", "onboard", "overview", "prototype"
 ]);
 
 export function getSkillsForRole(role: DevFlowRole, allCoreSkills?: readonly string[]): readonly string[] {

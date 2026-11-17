@@ -3,16 +3,20 @@ name: debug
 description: "[devflow] Diagnose a failing test, build, crash, regression, or unexpected behavior without editing source. Reproduce the symptom, test hypotheses, identify the supported root cause, and hand off a repair. Use for /debug or root-cause investigation."
 ---
 
-# debug - 6-Phase Scientific Debugging Protocol
+# debug - 2-Track Adaptive Debugging Protocol
 
 Where this sits in the workflow:
 
     reported failure  ->  [debug]  ->  /fix or /implement
-    (test, build,          (reproduce,    (spec a new fix, or
-     crash, behavior)       isolate,       repair active work)
-                            explain)
+    (test, build,          (Track A: fast repro & trace, OR
+     crash, behavior)       Track B: 6-phase isolation)
 
-`/debug` separates diagnosis from repair. It gathers empirical evidence, narrows the failure to a specific root cause using scientific method, and stops with an actionable repair handoff. It does not guess, assume, or perform ad-hoc "vibe debugging".
+`/debug` separates diagnosis from repair when invoked standalone. It selects Track A for clear deterministic failures or Track B for complex/flaky issues, gathers empirical evidence without guessing, and hands off an actionable repair target. Inside an active `/implement` or `/fix` run, diagnosis feeds directly into TDD repair without requiring a separate `/debug` invocation.
+
+## Track Selection (2-Track Adaptive)
+
+- **Track A (Fast-Track Deterministic Repro)**: Use when a deterministic failing test, CLI command, or stack trace already points to a specific file/line. Run the single reproduction command once to confirm red, inspect the call seam and triggering input directly, verify root cause, and hand off immediately to `/fix` or `/implement` (no mandatory multi-hypothesis ceremony). Switch to **Track B** if the initial seam check does not explain the failure.
+- **Track B (Scientific Isolation — Phases 0–7)**: Use for multi-layer, intermittent/flaky, state-corruption, build/environment, or unclear root-cause bugs. Execute the full 6-phase scientific debugging loop below.
 
 ---
 

@@ -512,7 +512,7 @@ Inspects the archived feature spec, identifies the exact commit, reviews later c
 
 ## Command reference
 
-Nexus-DevFlow ships **24 bundled Core Skills**, defined by the canonical
+Nexus-DevFlow ships **15 bundled Core Skills**, defined by the canonical
 `core_skills` inventory in `agent-bundle.manifest.json`. A workspace may also
 contain Local or Personal Skills, but those extensions are not part of the Core
 count and are excluded from the published package unless explicitly promoted.
@@ -737,7 +737,7 @@ npx nexus-devflow update [--check]
 
 ## Recommended Third-Party Skills & Extensions
 
-Nexus-DevFlow ships with **24 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/devflow-status` / `/complete`).
+Nexus-DevFlow ships with **15 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/devflow --exec` / `/complete`).
 
 For specialized visual architecture and offensive security workflows, you can extend your setup with community skills using `nexus-devflow skill add`:
 

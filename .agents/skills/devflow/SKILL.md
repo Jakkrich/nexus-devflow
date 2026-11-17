@@ -1,103 +1,72 @@
 ---
 name: devflow
-description: "[devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows."
+description: "[devflow] Unified status, health check (doctor), intent router, and legacy command guide for DevFlow workflows. Use for /devflow, /devflow doctor, /devflow --exec, or asking where the project stands."
+argument-hint: "[status | doctor | --exec | \"<request>\"]"
 ---
 
-# devflow - Interactive Workflow Guide & Intent Router for Nexus-DevFlow
+# devflow - Unified Status, Doctor & Intent Router (Read-Only)
 
-Use this skill to guide the user on what to do next, inspect current workspace state, map their natural language intent to the matching Nexus-DevFlow stage or companion command, or display a sitemap of available DevFlow skills.
+**Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
-## Input
+Where this sits in the workflow:
 
-- **No argument (`devflow`, `/devflow`, `$devflow`, or `status`)**: Inspect current workspace state (active tasks in `devflow/context/{xxx-slug}/`, active discovery in `devflow/discoveries/`, pending ideas in `devflow/ideas.md`, and project overview in `devflow/context/project-overview.md`) and recommend the exact next action.
-- **With user request (`devflow "<request>"`)**: Classify the user's intent and guide them to the matching DevFlow workflow stage or companion command path.
+    any time  ->  [devflow]  ->  status + drift + next action (default)
+                             ->  doctor health diagnostics (/devflow doctor)
+                             ->  intent & legacy command routing ("<request>")
 
-## The Task-Isolated Living Spec Architecture
-
-Nexus-DevFlow uses a **Task-Isolated Living Spec Model**:
-- **The 4-Stage Lifecycle**: `/feature` (or `/fix`) ➔ `/implement` ➔ `/check` ➔ `/complete`
-- Driven by a **Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)** that integrates architectural depth (Define, Spec, Plan, Execution Log, Multi-Lane QA, and Release Digest) into dedicated task workspaces without root bottleneck.
-- **Pre-Flight Inception Engine**: Companion skills (`/discovery`, `/idea`, `/grill`, `/brainstorm`) feed directly into `/feature`.
+`/devflow` is purely read-only (its only repair is an approved `reset` of malformed generated `devflow/.state/run.json` in `doctor` mode). It never edits product code, commits, installs, runs tests/builds, or switches branches.
 
 ---
 
-## Workspace State Inspection
+## Mode Selection
 
-When invoked without an argument (or when determining the next step), inspect:
-
-1. **Project Setup Baseline**: Read `devflow/context/project-overview.md` and `devflow/context/coding-standards.md`. If empty or default placeholders, recommend `onboard` (for fresh projects) or `adopt` (for existing codebases).
-2. **Active Delivery Runs**: Scan `devflow/context/{xxx-slug}/` subdirectories.
-   - If active `spec.md` has incomplete checklist tasks (`- [ ]`) -> Recommend `/implement [id]`.
-   - If all tasks are completed (`- [x]`) but no passing verification evidence in Section 5 -> Recommend `/check [id]`.
-   - If verification evidence passed in Section 5 -> Recommend `/complete [id]`.
-3. **Active Discovery**: Check `devflow/discoveries/` for open discovery notes.
-4. **Pending Ideas Inbox**: Check `devflow/ideas.md`. If items exist under `## 📌 Pending Ideas`, summarize them in a **💡 Pending Ideas (Inbox)** list with their IDs (`[IDEA-xxx]`), feasibility, and mention that they can be started with `/feature IDEA-xxx` or `/discovery IDEA-xxx`.
-5. **Audit Findings Ledger**: Check `devflow/context/{xxx-slug}/findings.md` for open high-severity findings.
-
-### Default State Recommendations
-- If no run is active and user wants to start a feature -> Recommend `/feature <name>`.
-- If the user requests a bugfix plan -> Recommend `/fix <bug>`.
-- If the user requests a completed fix -> preserve the implementation and verification scope; draft the required spec internally and continue to `/implement` using existing authorization.
-- If no run is active and user has pending ideas in `devflow/ideas.md` -> Highlight `/feature IDEA-xxx` or `/discovery IDEA-xxx`.
-- If no run is active and user wants deep architectural exploration -> Recommend `/discovery`.
-- If user asks to check system health -> Recommend `devflow-doctor`.
+- **No argument or `status` (`/devflow`, `/devflow status`, `/devflow --exec`)**: Report project progress, active specs, findings, `review.md` gate, overview freshness, git/worktree drift, dashboard activity, and the single exact next action.
+- **`doctor` (`/devflow doctor`)**: Read and execute `reference/doctor.md` for full DevFlow setup, adapter, `devflow/scripts/run-state.mjs`, `AGENTS.md`, config, and `project-overview.md` diagnostics. At or above 20,000 bytes, call it oversized. If `devflow/.state/run.json` is malformed, ask `Reset the malformed dashboard state now?` before running `reset`.
+- **Natural-language request or legacy command (`/devflow "<request>"`)**: Classify intent using the Core Sitemap and Legacy Routing tables below.
 
 ---
 
-## Intent Classification & Skill Routing
+## Status Mode (Default)
 
-| User Intent / Request Type | Recommended Skill | Normal Name / Alias | Lifecycle Path |
-| :--- | :--- | :--- | :--- |
-| **"Spec new feature / living spec"** | `feature` | `/feature` / `/spec` | **Unified**: `/feature` -> `/implement` -> `/check` -> `/complete` |
-| **"Draft a bugfix / small-change plan"** | `fix` | `/fix` | **Unified**: `/fix` -> `/implement` -> `/check` -> `/complete` |
-| **"Capture quick idea / thought"** | `idea` | `/idea` | **Companion**: Enriches & saves to `devflow/ideas.md` |
-| **"Pre-delivery exploration / research"**| `discovery`| `/discovery` | **Pre-Flight**: `discovery` -> `/feature` |
-| **"Socratic alignment / ADR / glossary"**| `grill` | `/grill` / `/align` | **Pre-Flight**: `grill` -> `/feature` |
-| **"Execute implementation tasks"** | `implement` | `/implement` | **Core Loop**: `/implement` -> `/check` |
-| **"Run QA verification & check"** | `check` | `/check` | **Core Loop**: `/check` -> `/complete` |
-| **"Complete run & git merge"** | `complete` | `/complete` | **Core Loop**: `/complete` |
-| **"Generate HTML dashboard report"**| `report-html` | `/report:html` | **Standalone**: Converts living spec or archive to HTML |
-| **"Create editorial diagram / flowchart"**| `diagram-design`| `/diagram-design` | **Third-Party**: 39 visual diagrams (HTML/SVG) |
-| "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `/feature` |
-| "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `/feature` |
-| "Check setup health & diagnostics" | `devflow-doctor` | `devflow-doctor` / `health` | `devflow-doctor` |
-| "Human manual QA walkthrough guide" | `try` | `try` | Companion (after implement or check) |
-| "Safely plan feature or run reversal"| `rollback` | `rollback` | Companion |
-| "Set up automatic GitHub Actions CI" | `ci` | `ci` | Companion |
-| "Pre-check scope & risks before spec"| `brief` | `brief` | Companion |
-| "Run autonomous bounded delivery loop"| `autopilot` | `autopilot` | Companion |
-| "Brainstorm ideas without ID" | `brainstorm` | `brainstorm` | Companion |
-| "Investigate failure or root cause" | `debug` | `debug` | Companion |
+Gather without dumping full files:
+1. **Onboarding & Config**: Read `devflow/config.json` (report `qualityGates.regular`, `qualityGates.continuous`, and `review.independentExecution`; if invalid, `Repair order:` -> `/devflow doctor`). If `AGENTS.md` still contains `<!-- devflow:onboarding-required -->`, recommend `/onboard`.
+2. **Build Plan & Overview**: Summarize checked vs. total items in `devflow/build-plan.md` and next unchecked leaf. Check `devflow/context/project-overview.md` freshness via `/overview`'s normalized `devflow:source-hash` contract (or size `>= 20,000` bytes -> `/overview`).
+3. **Active Runs (`devflow/context/{xxx-slug}/`)**: Report `spec.md` step progress, open/fixed P0/P1 findings in `findings.md`, and `qualityGates.regular.independentReview` (`when-sensitive` / `always` -> `review.md` state, verdict, freshness; missing/stale/pending routes to `audit independent current`, never `/complete`). Note whether spec requires browser proof, `npm run test:browser`, and active interactive browser MCP availability without executing browser tools.
+4. **Pending Ideas & Discoveries**: Summarize `devflow/ideas.md` pending items and open `devflow/discoveries/` if present.
+5. **Git, Worktrees & Activity**: Current branch, dirty files, last commit, linked worktree / advanced-main drift, and `devflow/.state/run.json` summary.
+
+### Executive Mode (`/devflow --exec` or `leadership`)
+Keep product names, ticket keys, and business impact; strip file paths and code minutiae (Slack TL;DR <80 words, Async Standup 1-2 lines, or Written Status).
+
+### Output Shape & Next-Action Priority
+Print concise labels (`Status`, `Plans`, `Current work`, `Findings`, `Git`, optional `Watch:`, `Next action:`). Pick one exact next action in order:
+1. Invalid `devflow/config.json` or malformed `run.json` -> `/devflow doctor` (or `point to /devflow doctor instead of guessing`)
+2. Missing/stale/oversized overview with no active run -> `/overview`
+3. Active spec with unchecked steps -> `/implement [id]` (name step)
+4. All steps checked: `/check [id]` if proof missing; `/implement [id]` for `open` P0/P1; `/audit` for `fixed` P0/P1; `/audit independent current` if gate unsatisfied; otherwise `/complete [id]`
+5. No active run and unchecked build-plan items remain -> `/feature` (name next item)
+6. All items checked -> milestone complete; `/feature "<new capability>"` to add scope.
 
 ---
 
-## Available Skills Sitemap
+## Core Skills Sitemap (15 Core Skills)
 
-### 1. Mainline Living Spec Loop (4 Steps)
-- `feature` (`/feature`, `/spec`) - Define, spec, and plan in `devflow/context/{xxx-slug}/spec.md`
-- `fix` (`/fix`) - Document an ad-hoc bug or change in `devflow/context/{xxx-slug}/spec.md`
-- `implement` (`/implement`) - Execute planned checklist tasks with TDD
-- `check` (`/check`) - Senior QA review, multi-lane verification, record evidence
-- `complete` (`/complete`) - Safety pass, release digest, git merge, close run
+- **Setup & Hub**: `onboard` (fresh + brownfield), `overview`, `devflow` (status + doctor + router)
+- **Pre-Flight**: `idea`, `explore` (read-only options), `discovery` (macro/micro + doc intake + ADR/glossary)
+- **4-Stage Delivery**: `feature` (`--preview`, `--check`, adaptive clarification), `fix`, `implement`, `check` (`guide` for manual walkthrough), `complete`
+- **Quality & Auto**: `audit` (`independent` + YAGNI), `debug` (2-track), `autopilot` (`--all` / `--merge` for continuous loop)
+- **UI Mockup**: `prototype`
 
-### 2. Pre-Flight Discovery Engine
-- `discovery` - Project roadmap planning or feature exploration before delivery commitment
-- `idea` - Quick idea capture with AI feasibility scoring
-- `grill` (or `align`) - Socratic alignment, domain modeling, and ADR recording
-- `brainstorm` - Multi-option ideation with trade-off analysis
+## Legacy Command Routing (A1 Compatibility)
 
-### 3. Verification & Diagnostic Companions
-- `devflow-doctor` - Health check for setup, adapters, and workspace state
-- `audit` - Branch-aware or full-project code, security, and quality review
-- `test` / `tests` - Test suite runner and unit test scaffolding
-- `ci` - Set up or normalize GitHub Actions checks
-- `devflow-status` - Read-only progress summary and next action suggestion
-- `try` - Human manual QA walkthrough guide
-- `report-html` - Standalone interactive HTML report dashboard
-- `debug` - Root-cause investigation without editing code
-- `rollback` - Safe reversal of completed features
-- `release` - Deployment readiness check
-
-### 4. Installed Third-Party Skills & Extensions
-- `diagram-design` (`/diagram-design`) - 39 editorial visual diagram types (HTML/SVG) for system architecture, sequence flows, ER models, data platform pipelines, and journeys.
-- *Use `nexus-devflow skill add <url>` to install more third-party skills.*
+| Legacy Command | Replacement | Action |
+| :--- | :--- | :--- |
+| `/adopt` | `/onboard` | Auto-detects brownfield codebase and surveys existing features |
+| `/try` | `/check guide` | Generates the same read-only manual walkthrough |
+| `/devflow-status` | `/devflow` | Default status & next-action report |
+| `/devflow-doctor` | `/devflow doctor` | Full setup, config, and workflow diagnostics |
+| `/continuous` | `/autopilot --all` | Serial multi-feature loop with local squash-merge |
+| `/analyze`, `/grill` | `/discovery` or `/feature` | Multi-format intake & Socratic alignment (auto inside `/feature` when starting delivery) |
+| `/brainstorm` | `/explore` | Read-only option comparison & trade-off matrix |
+| `/brief` | `/feature --preview` | Read-only scope/dependency preview before writing `spec.md` |
+| `/setup-tests`, `/browser-tests`, `/ci`, `/release`, `/rollback`, `/vendor`, `/convert-any-to-md`, `/bughunter`, `/code-modernization` | `npx nexus-devflow skill add <name>` | Opt-in extensions outside Core |

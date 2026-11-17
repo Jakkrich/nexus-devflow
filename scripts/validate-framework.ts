@@ -384,7 +384,7 @@ function validateAgentsBudget(failures: string[]): void {
     "## Verification & Commands",
     "<!-- devflow:onboarding-required -->",
     "devflow/workflow.md",
-    "devflow-doctor/scripts/run-state.mjs"
+    "devflow/scripts/run-state.mjs"
   ]) {
     if (!content.includes(required)) {
       fail(`AGENTS.md is missing required contract text: ${required}`, failures);

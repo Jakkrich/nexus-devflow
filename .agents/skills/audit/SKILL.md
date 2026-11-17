@@ -14,7 +14,7 @@ Where this sits in the workflow:
     (code exists)                 (review +    (repair quality issues
                                    ledger)      or close the feature)
 
-`/check` proves behavior against the spec. `/devflow-doctor` checks Blueprint setup and
+`/check` proves behavior against the spec. `/devflow doctor` checks Blueprint setup and
 workflow health. This skill checks the code itself through either a broad review
 or one focused lens: quality, security, performance, or tests.
 
@@ -32,7 +32,7 @@ A selected `independentReview` gate invokes independent mode instead of letting
 the builder satisfy its own review. When both audit and independent review are
 selected, one passing independent review satisfies the audit gate.
 A missing config means built-in defaults. If it exists but is invalid, stop and
-point to `/devflow-doctor` before writing the findings ledger.
+point to `/devflow doctor` before writing the findings ledger.
 
 ## Input
 
@@ -164,9 +164,10 @@ review covered the other lenses.
 For all lenses, ground findings in reachable code and project-specific
 expectations. Apply only the selected lens or lenses:
 
-- **Quality:** duplicated logic, dead or unused code, unreachable paths,
-  oversized modules, abstractions that do not pay for themselves, risky missing
-  abstractions, inconsistent patterns, and drift from the standards or spec.
+- **Quality (incl. YAGNI & Proportionality):** duplicated logic, dead or unused code,
+  unreachable paths, oversized modules, unnecessary wrappers/abstractions/config flags
+  lacking a current requirement (YAGNI), risky missing abstractions, inconsistent patterns,
+  and drift from the standards or spec.
 - **Security:** missing authentication or authorization, client-controlled
   ownership, injection, unsafe parsing or deserialization, sensitive-data
   exposure, secret handling, insecure defaults, and trust-boundary mistakes.

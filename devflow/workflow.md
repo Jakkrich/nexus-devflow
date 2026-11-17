@@ -71,13 +71,13 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 The dashboard and status reporting can show the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit.
 
-Substantial mutating or multi-step workflow commands (`onboard`, `adopt`, `overview`, `feature`, `fix`, `rollback`, `implement`, `check` verification mode, `autopilot`, `continuous`, `complete`) may publish progress on a best-effort basis when `devflow/.state/` or the helper exists. Read-only, diagnostic, and lightweight commands (`audit`, `debug`, `discovery`, `analyze`, `brief`, `try`, `explore`, `idea`, `brainstorm`, `grill`, `vendor`, `ci`, `release`, `prototype`, `setup-tests`, `browser-tests`, `devflow`, `devflow-status`, `devflow-doctor`, and `/check guide`) do not need to write activity state.
+Substantial mutating or multi-step workflow commands (`onboard`, `overview`, `feature`, `fix`, `rollback`, `implement`, `check` verification mode, `autopilot`, `complete`) may publish progress on a best-effort basis when `devflow/.state/` or the helper exists. Read-only, diagnostic, and lightweight commands (`audit`, `debug`, `discovery`, `explore`, `idea`, `prototype`, `devflow`, `/feature --preview`, and `/check guide`) do not need to write activity state.
 
 Never create or edit `run.json` directly. When recording best-effort activity from the project root, use the first helper that exists:
 
 ```text
-node .agents/skills/devflow-doctor/scripts/run-state.mjs <action> <options>
-node .claude/skills/devflow-doctor/scripts/run-state.mjs <action> <options>
+node .agents/skills/devflow/scripts/run-state.mjs <action> <options>
+node .claude/skills/devflow/scripts/run-state.mjs <action> <options>
 ```
 
 Start with `start --command <skill> --summary <truthful-summary> --boundary <boundary>`. Use `update` at meaningful milestones or for a blocker, with `--status blocked` and `--resume <exact-command>` when recovery is needed. End with `finish --status ready|completed --summary <truthful-summary>`. The helper validates every field before atomically replacing the generated file. If it is missing or fails, report the activity warning and continue the workflow without writing a manual fallback.

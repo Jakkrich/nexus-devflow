@@ -30,8 +30,8 @@ npx @jakkrichm/create-nexus-devflow@latest
 
 The installer overlays the DevFlow workflow layer into your workspace:
 - `AGENTS.md` & `CLAUDE.md` (Universal AI guidelines & cross-tool entry point)
-- `.agents/skills/` (24 Core Skills for Google Antigravity, OpenAI Codex, Cursor, Copilot)
-- `.claude/skills/` (24 Core Skills for Claude Code)
+- `.agents/skills/` (15 Core Skills for Google Antigravity, OpenAI Codex, Cursor, Copilot)
+- `.claude/skills/` (15 Core Skills for Claude Code)
 - `devflow/ideas.md` (Idea inbox with AI feasibility scoring)
 - `devflow/context/` (Living spec & active delivery context)
 - `devflow/history/` (Categorized delivery archives)

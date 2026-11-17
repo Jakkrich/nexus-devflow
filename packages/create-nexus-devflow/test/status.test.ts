@@ -605,7 +605,7 @@ test("readProjectStatus blocks completion and suggests doctor on findings fault"
     const status = await readProjectStatus(tempDir);
     assert.equal(status.completion.state, "blocked");
     assert.ok(status.completion.blockers.includes("findings record is malformed"));
-    assert.equal(status.nextAction.command, "/devflow-doctor");
+    assert.equal(status.nextAction.command, "/devflow doctor");
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

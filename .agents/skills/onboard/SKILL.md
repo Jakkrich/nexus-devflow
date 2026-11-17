@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: "[devflow] Onboard a fresh or early scaffold after DevFlow is overlaid by tuning commands, standards, adapters, visibility, review cadence, and context loading. Use for /onboard or fresh installation setup."
+description: "[devflow] Set up DevFlow for a fresh scaffold or adopt an existing brownfield codebase: tune commands, standards, adapters, visibility, and review cadence. Use for /onboard, /onboard --adopt, or /adopt."
 ---
 
 # onboard - finish the Blueprint overlay setup
@@ -12,15 +12,12 @@ Where this sits in the workflow:
     scaffold app  ->  overlay Blueprint  ->  [onboard]  ->  project-plan + build-plan  ->  /overview
     (user/tool)       (copied files)          (tune setup)   (user-owned inputs)       (generated context)
 
-`/onboard` is the fresh-project on-ramp. It assumes the app was scaffolded first
-and the Blueprint files were overlaid after. Run it before filling in plans or
-running `/overview`. Its job is to make the Blueprint fit the real project before
-planning starts: commands, project title, conventions, ignore rules, and tool
-adapters. It also asks whether the Blueprint workflow files should be committed
-with the repo or kept local-only through `.gitignore`.
-
-Use `/adopt` instead when the app is brownfield: real routes, shipped features,
-and project behavior already exist and need to be reflected into the plans.
+`/onboard` is the single project setup entry point. For a fresh scaffold, it runs
+before filling in plans or running `/overview` to tune commands, conventions,
+ignore rules, and tool adapters, and chooses whether DevFlow workflow files are
+committed or kept local-only. For a brownfield repo (auto-detected when real
+routes/shipped features already exist, or via `/onboard --adopt`), it switches
+to brownfield adoption mode using [`reference/brownfield.md`](reference/brownfield.md).
 
 ## Input
 
@@ -68,14 +65,17 @@ If there is no safe scaffold candidate, stop with the exact blocker rather than
 creating an empty or mixed root commit. Never create the commit without explicit
 approval.
 
-Then confirm this is onboarding, not adoption.
+Then determine whether this repo needs fresh onboarding or brownfield adoption.
 
 Inspect the repository and the two planning docs:
 
 - If `devflow/project-plan.md` and `devflow/build-plan.md` are mostly empty or
-  worksheet-like, proceed.
-- If the app already has substantial shipped features, stop and recommend
-  `/adopt` instead.
+  worksheet-like and the repo has no substantial shipped features, proceed with
+  fresh onboarding below.
+- If the app already has substantial shipped features (or `--adopt` / `/adopt` was
+  passed), switch cleanly to **Brownfield Adoption Mode** by following
+  [`reference/brownfield.md`](reference/brownfield.md) (do not run Steps 1-3 of
+  fresh onboarding as if the repo were empty).
 - If the plans already contain real user-owned content, do not overwrite them.
   Continue only with setup files such as `AGENTS.md`, `coding-standards.md`,
   `.gitignore`, and optional notes.
@@ -335,7 +335,7 @@ Then report which selected tools and adapter folders are needed:
   it does not mean all four tools were selected.
 - Do not ask the user to select adapters again when that valid manifest exists.
   Keep and report the exact selection. If a required adapter tree is missing,
-  report the mismatch and point to `/devflow-doctor` instead of guessing or deleting
+  report the mismatch and point to `/devflow doctor` instead of guessing or deleting
   another tree.
 - Without a valid manifest, explain that folder detection cannot distinguish
   Codex, Antigravity, GitHub Copilot, and OpenCode, then ask which tools the user actually

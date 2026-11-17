@@ -1,16 +1,17 @@
 ---
 name: discovery
-description: "[devflow] Unified discovery and exploration stage in DevFlow 2.5.0 - conducts project-level roadmap discovery (project-plan.md/build-plan.md) or feature-level pre-delivery exploration before the Single Living Spec lifecycle."
-argument-hint: "[{title, request, IDEA-xxx, or discovery-id}]"
+description: "[devflow] Unified discovery, SA requirement intake (docs/images/REQ-ID), Socratic alignment (glossary/ADR), and roadmap or pre-delivery exploration before /feature. Use for /discovery, /analyze, or /grill."
+argument-hint: "[--project | --grill | {title, file-path, IDEA-xxx, REQ-id, or discovery-id}]"
 ---
 
 # discovery - Unified Discovery & Pre-Delivery Exploration
 
 $ARGUMENTS
 
-`/discovery` is the central discovery entry point in Nexus-DevFlow. It operates in two adaptive modes based on input scope:
+`/discovery` is the central discovery entry point in Nexus-DevFlow. It operates in three adaptive modes based on input scope:
 1. **🗺️ Macro Project Discovery**: Develops high-level product and build roadmap plans (`devflow/project-plan.md` & `devflow/build-plan.md`) through an adaptive conversation before `/overview`.
 2. **🔍 Micro Feature Exploration (Pre-Flight)**: Explores a specific feature, request, or idea before committing to delivery, routes through supporting lenses, and finishes with a visible `Proceed`, `Defer`, or `Reject` decision before `/feature` or `/fix`.
+3. **📥 SA Requirement Ingestion & Socratic Grill**: Ingests raw documents/wireframes/chat requirements (`REQ-YYYYMMDD-NNN` or `--grill`), scans codebase blast radius, clarifies ambiguities 1–2 questions at a time, and persists settled domain terms and ADRs ([`reference/intake-and-grill.md`](reference/intake-and-grill.md)).
 
 ---
 
@@ -24,7 +25,10 @@ $ARGUMENTS
 # 2. Micro Feature Exploration Mode (Pre-Flight)
 /discovery {title or request}
 /discovery IDEA-xxx
-/discovery {discovery-id}
+# 3. SA Requirement Ingestion / Socratic Alignment (--grill, file paths, REQ-ID)
+/discovery ./customer-spec.pdf ./mockup.png
+/discovery REQ-20260903-001
+/discovery --grill "Loyalty point expiration rules"
 ```
 
 ---
@@ -69,9 +73,8 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
    - Problem Statement, Target Persona, Core User Stories, and In-Scope vs. Out-of-Scope boundaries.
 4. **Issue & Bug Triage Lens**:
    - Classify severity (`Critical/Blocker`, `Major`, `Minor`) and determine whether root-cause analysis (`debug`) is required.
-5. **Socratic Grilling & Domain Alignment Lens (`grill`)**:
-   - Codebase-grounded interactive inquiry to clarify entity boundaries, data flows, and edge cases.
-   - Record agreed terminology in `devflow/context/glossary.md` and major architecture decisions in `devflow/decisions/ADR-xxx-{slug}.md`.
+5. **Socratic Grilling & Domain Alignment Lens**:
+   - Codebase-grounded interactive inquiry (1–2 questions/turn) to clarify entity boundaries, data flows, and edge cases; persist settled terms to `devflow/context/glossary.md` and hard-to-reverse decisions to `devflow/decisions/ADR-xxx-{slug}.md` (see [`reference/intake-and-grill.md`](reference/intake-and-grill.md)).
 6. **🎨 Visual Architecture & Diagram Design Lens (`archify` / `diagram-design`)**:
    - When exploring system topologies, legacy IT modernizations, sequence flows, data platform pipelines, state machines, or user journeys, check for `archify` or `diagram-design` in `.agents/skills/`.
    - **For interactive system architecture, dataflows, state transitions, and sequence traces**: Use `archify` (`.agents/skills/archify/SKILL.md`) to compile validated interactive HTML artifacts with dark/light themes, motion, and route probes.
@@ -96,8 +99,15 @@ Set one visible decision:
 
 ---
 
+## Mode 3: SA Requirement Ingestion & Socratic Grill
+
+Use when the input supplies raw files (PDF, DOCX, XLSX, images, or pending files in `devflow/inbox/`), stakeholder requirement text, an existing `REQ-YYYYMMDD-NNN`, or `--grill` (including legacy `/analyze` & `/grill` invocations).
+Read and follow [`reference/intake-and-grill.md`](reference/intake-and-grill.md) to allocate/resume `devflow/inbox/{REQ-ID}/`, parse and normalize requirements, inspect codebase blast radius (`devflow/analysis/{REQ-ID}/codebase-impact.md`), and run a codebase-grounded Socratic interview (1–2 questions per round) persisting directly to `devflow/context/glossary.md` and `devflow/decisions/ADR-xxx-{slug}.md`.
+
+---
+
 ## Next Workflow Recommendations
 
 - **From Macro Project Mode**: Run `/overview` to compile context into `devflow/context/project-overview.md`.
-- **From Micro Pre-Flight (Approved Proceed)**: Run `/feature {discovery_id}` or `/fix {discovery_id}` to start the Task-Isolated Living Spec lifecycle.
+- **From Micro Pre-Flight / Mode 3 (Approved Proceed)**: Run `/feature {discovery_id}` / `/feature {REQ-ID}` or `/fix {discovery_id}` to start the Task-Isolated Living Spec lifecycle.
 - **From Micro Pre-Flight (Defer / Reject)**: No next command needed.

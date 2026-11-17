@@ -2,30 +2,21 @@
   "source_bundle": ".agents",
   "description": "Single-source manifest for the active Nexus-DevFlow agent adapters.",
   "core_skills": [
-    "adopt",
-    "analyze",
     "audit",
     "autopilot",
-    "brainstorm",
-    "brief",
     "check",
     "complete",
-    "continuous",
     "debug",
     "devflow",
-    "devflow-doctor",
-    "devflow-status",
     "discovery",
     "explore",
     "feature",
     "fix",
-    "grill",
     "idea",
     "implement",
     "onboard",
     "overview",
-    "prototype",
-    "test"
+    "prototype"
   ],
   "required_paths": [
     ".agents/skills",
@@ -37,8 +28,8 @@
     ".agents/skills/complete/reference/completion-archive.md",
     ".claude/skills/complete/reference/completion-screen.md",
     ".claude/skills/complete/reference/completion-archive.md",
-    ".agents/skills/devflow-doctor/scripts/run-state.mjs",
-    ".claude/skills/devflow-doctor/scripts/run-state.mjs",
+    ".agents/skills/devflow/scripts/run-state.mjs",
+    ".claude/skills/devflow/scripts/run-state.mjs",
     ".agents/skills/check/reference/guide.md",
     ".agents/skills/check/reference/try-it-now.md",
     ".agents/skills/check/reference/verify.md",
@@ -75,19 +66,17 @@
       "git merge --ff-only",
       "overview must remain below 20,000 bytes"
     ],
-    "devflow-doctor": [
+    "devflow": [
       "At or above 20,000 bytes, call it oversized",
-      "devflow-doctor/scripts/run-state.mjs",
-      "Reset the malformed dashboard state now?"
-    ],
-    "implement": [
+      "devflow/scripts/run-state.mjs",
+      "Reset the malformed dashboard state now?",
       "qualityGates.regular.independentReview",
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
       "interactive browser"
     ],
-    "devflow-status": [
+    "implement": [
       "qualityGates.regular.independentReview",
       "when-sensitive",
       "audit independent current",
@@ -109,16 +98,10 @@
       "authoritative installer selection",
       "does not mean all four tools were selected",
       "Do not ask the user to select adapters again",
-      "point to `/devflow-doctor` instead of guessing"
+      "point to `/devflow doctor` instead of guessing"
     ],
     "autopilot": [
       "qualityGates.regular.independentReview",
-      "when-sensitive",
-      "audit independent current",
-      "npm run test:browser",
-      "interactive browser"
-    ],
-    "continuous": [
       "qualityGates.continuous.independentReview",
       "when-sensitive",
       "audit independent current",

@@ -1,6 +1,6 @@
 ---
 name: explore
-description: "[devflow] Explore an idea against the actual codebase without changing files. Investigate whether a change would help, compare alternatives and tradeoffs, and discuss uncertainty before deciding whether to plan anything. Use for /explore, considering an idea, or weighing options without writing a spec."
+description: "[devflow] Explore an idea against the actual codebase without changing files. Investigate tradeoffs, compare 2-3 structured options (brainstorm mode), and discuss uncertainty before planning. Use for /explore or /brainstorm."
 argument-hint: "[<idea or question>]"
 ---
 
@@ -54,6 +54,12 @@ clearer. Do not create diagram files. There is no mandatory output template,
 report, question count, or next-step checklist. Follow the user's responses and
 let the discussion continue as long as useful.
 
+### Option Comparison Mode (Brainstorm)
+
+When the request has multiple viable implementation paths or asks to brainstorm options:
+- Formulate **2–3 materially distinct options** (Conservative / Balanced / Fast-Feedback) and, when slicing scope, reference the **Slicing Archetypes** (`devflow/reference/slicing-archetypes.md`: *Skateboard*, *Facade*, *Tracer Bullet*, *Journey*).
+- Render a concise Markdown comparison table (`Option`, `Pros`, `Cons`, `Effort & Complexity`, `Verdict / Status`) plus your recommendation directly in the chat response without creating research files.
+
 ## Keep the boundaries clear
 
 - Never create, edit, or delete files, including specs, plans, notes, generated
@@ -68,12 +74,10 @@ let the discussion continue as long as useful.
 
 ## Neighbors and handoff
 
-- `/brief` explains an existing build-plan item, its scope, dependencies, and
-  size. Explore can discuss an unplanned idea or question a planned approach.
-- `/discovery` develops broader product direction and reviewed planning drafts.
-  Explore does not draft either planning file.
-- `/grill` stress-tests plans, extracts domain glossary, and records ADRs.
-- `/ponytail` applies YAGNI discipline and cuts bloat/dependencies.
+- `/feature --preview` explains an existing build-plan item's scope, dependencies,
+  and size. Explore discusses an unplanned idea or questions an approach.
+- `/discovery` develops broader product direction, ingests raw specs/docs, aligns
+  domain glossary/ADRs, and produces reviewed planning drafts.
 - `/debug` reproduces and isolates an actual failure. Explore discusses options
   without executing code to diagnose or verify them.
 - `/feature` writes a buildable task-isolated spec; `/fix` specifies a confirmed small change.

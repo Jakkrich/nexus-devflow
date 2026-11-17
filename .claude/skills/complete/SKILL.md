@@ -29,7 +29,7 @@ passes.
 ## Before you start
 
 Read `devflow/config.json`. A missing file means the built-in defaults apply.
-If the file exists but is invalid, stop and point the user to `/devflow-doctor`.
+If the file exists but is invalid, stop and point the user to `/devflow doctor`.
 
 Before requiring a real active spec, screen for pending completion using
 `reference/completion-screen.md`. Only when a matching archive or recovery candidate

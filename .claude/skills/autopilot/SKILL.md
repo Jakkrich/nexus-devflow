@@ -1,6 +1,7 @@
 ---
 name: autopilot
-description: "[devflow] Run one explicit bounded DevFlow spec and implementation pass through configured quality gates, then stop before completion or external actions. Use only when the user directly invokes /autopilot, $autopilot, or asks for Autopilot."
+description: "[devflow] Run bounded spec-and-build execution for one feature or continuously across the build plan (--all / --max / --merge) through configured quality gates. Use only when the user invokes /autopilot or /continuous."
+argument-hint: "[<number|name|resume|fix \"...\">] [--all] [--max <N>] [--merge]"
 ---
 
 # autopilot - optional Blueprint loop
@@ -9,9 +10,9 @@ description: "[devflow] Run one explicit bounded DevFlow spec and implementation
 
 Where this sits in the workflow:
 
-    /devflow-status  ->  [autopilot]  ->  review packet  ->  /complete
-    (where       (spec, build,      (human review,    (log, commit,
-     are we?)     check, audit)      fixes if needed)  merge with approval)
+    /devflow  ->  [autopilot]  ->  review packet  ->  /complete (or local squash-merge with --all/--merge)
+    (status)      (spec, build,    (human review,      (log, archive,
+                   check, audit)    fixes if needed)    merge locally)
 
 Autopilot is an explicit opt-in path. It uses the same Blueprint files and the
 same quality gates, but it does not stop after every normal review point. A
@@ -43,6 +44,13 @@ Common forms:
   `$autopilot "directory listing"`.
 - `fix "<issue>"`: write and build an ad-hoc fix spec.
 - `resume`: continue the current feature on its existing branch.
+- `--all` / `--max <N>` / `--merge` (Continuous Queue Mode): Execute planned build-plan features serially in local isolation and squash-merge each verified, independently reviewed feature onto local `main` (never pushing to remote). See Continuous Queue Mode below and [`reference/continuous-loop.md`](reference/continuous-loop.md).
+
+## Continuous Queue Mode (`--all` / `--max <N>` / `--merge`)
+
+When invoked with `--all`, `--max <N>`, `--merge`, or legacy `/continuous`:
+- Follow [`reference/continuous-loop.md`](reference/continuous-loop.md) instead of stopping before `/complete`.
+- Evaluate `qualityGates.continuous.independentReview` (alongside `audit`, `check`, and `tryGuide` in `qualityGates.continuous`), obtain a fresh isolated `passed` receipt when active, archive via `../complete/reference/completion-archive.md`, squash-merge onto local `main`, and delete the local feature branch while keeping hard boundaries against remote pushes or deployments.
 
 If the requested target conflicts with a feature already in progress, stop and
 ask which one should win. Do not overwrite task workspaces
@@ -53,9 +61,9 @@ or active spec is marked `Type: Rollback`, stop and direct the user to
 the reviewed `/implement` path. Reversing completed work requires the explicit
 dependency and conflict gates in `/rollback` and `/implement`.
 
-## Step 1 - preflight like /devflow-status
+## Step 1 - preflight like /devflow
 
-Read the same state `/devflow-status` reads:
+Read the same state `/devflow` reads:
 
 - `AGENTS.md`
 - `devflow/project-plan.md`

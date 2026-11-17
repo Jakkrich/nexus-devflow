@@ -44,8 +44,8 @@ Build for established requirements, not hypothetical scale, threats, or future f
 - **Activity State**: Never create or edit `devflow/.state/run.json` directly. Tracked commands record activity via the first helper that exists (see `devflow/workflow.md` for schema and field rules):
 
 ```text
-node .agents/skills/devflow-doctor/scripts/run-state.mjs <action> <options>
-node .claude/skills/devflow-doctor/scripts/run-state.mjs <action> <options>
+node .agents/skills/devflow/scripts/run-state.mjs <action> <options>
+node .claude/skills/devflow/scripts/run-state.mjs <action> <options>
 ```
 
 ## Verification & Commands
