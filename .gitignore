@@ -1,5 +1,13 @@
 # Nexus-DevFlow - Git Ignore
 
+# Craft Anything local session artifacts
+/craft.json
+/feed.json
+/usage.json
+/capture/
+/inbox/
+/investigation.cany/
+
 # Node.js dependencies & package manager locks / logs
 node_modules/
 npm-debug.log*
@@ -125,6 +133,15 @@ __pycache__/
 *$py.class
 .venv/
 venv/
+
+# Craft Anything Runtime & Session Artifacts (root-scoped)
+/craft.json
+/feed.json
+/usage.json
+/capture/
+/checks/
+/inbox/
+/investigation.cany/
 env/
 
 # Matt Pocock Workflow (Local scratchpad & issue tracking)
