@@ -8,13 +8,9 @@
     "autopilot",
     "brainstorm",
     "brief",
-    "browser-tests",
-    "bughunter",
     "check",
-    "ci",
     "complete",
     "continuous",
-    "convert-any-to-md",
     "debug",
     "devflow",
     "devflow-doctor",
@@ -29,12 +25,7 @@
     "onboard",
     "overview",
     "prototype",
-    "release",
-    "report-html",
-    "rollback",
-    "setup-tests",
-    "test",
-    "try"
+    "test"
   ],
   "required_paths": [
     ".agents/skills",

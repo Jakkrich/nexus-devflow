@@ -686,6 +686,7 @@ test("installThirdPartySkill supports monorepo subpath and copies scripts and ag
     assert.match(installedSkillContent, /มาตรฐานภาษา: บังคับใช้ภาษาไทย \(Thai First\)/);
     assert.match(installedSkillContent, /INTENT\.md/);
     assert.match(installedSkillContent, /PREFLIGHT\.md/);
+    assert.doesNotMatch(installedSkillContent, /\*\*First action:\*\*/);
 
     const vendorDir = path.join(tempProject, "devflow", ".vendor", "code-modernization");
     assert.equal(
@@ -707,5 +708,14 @@ test("installThirdPartySkill supports monorepo subpath and copies scripts and ag
     await fs.rm(tempProject, { recursive: true, force: true });
     await fs.rm(tempMonorepo, { recursive: true, force: true });
   }
+});
+
+test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops and convert-any-to-md presets", () => {
+  for (const name of ["setup-tests", "ci", "release", "rollback", "vendor", "convert-any-to-md"]) {
+    const alias = KNOWN_SKILL_ALIASES[name];
+    assert.ok(alias, `Missing KNOWN_SKILL_ALIASES entry for ${name}`);
+    assert.equal(alias.subpath, `extras/skills/${name}`);
+  }
+  assert.equal(KNOWN_SKILL_ALIASES["browser-tests"]?.subpath, "extras/skills/setup-tests");
 });
 

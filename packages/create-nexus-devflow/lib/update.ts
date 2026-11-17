@@ -20,21 +20,11 @@ export const DEVFLOW_PROTECTED_SKILLS = new Set([
   "analyze",
   "archify",
   "brainstorm",
-  "bughunter",
-  "code-modernization",
-  "convert-any-to-md",
   "devflow",
   "diagram-design",
   "explore",
   "grill",
   "idea",
-  "ponytail",
-  "publish-devflow",
-  "report-html",
-  "vendor",
-  "browser-tests",
-  "try",
-  "setup-tests",
   "test"
 ]);
 

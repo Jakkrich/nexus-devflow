@@ -233,8 +233,8 @@ When explicitly generating standalone HTML artifacts (Standalone Reports, Archit
   - Sequential animation (`step-in`) is reserved strictly for ordered sequential pipelines or decision ladders.
 - **Interactive Terminal Mockup UI**:
   - Represent realistic CLI execution using a dark macOS-style terminal card with window dots (`.terminal-dot`), prompt symbol (`❯`), and blinking cursor (`.cursor`) to make command recipes feel alive and tangible.
-- **Real Diagram Mandate in Section 07 (Strictly No Placeholder Text)**:
-  - Section 07 (Diagram Slot & Architecture Flow) in every playbook MUST contain a **real, fully-formed interactive or vector SVG diagram** with concrete architectural data, flow nodes, and verified lifecycle steps specific to that skill.
+- **Real Diagram Mandate in Standalone HTML Reports (Strictly No Placeholder Text)**:
+  - Any Diagram Slot in a standalone HTML report MUST contain a **real, fully-formed interactive or vector SVG diagram** with concrete architectural data, flow nodes, and verified lifecycle steps specific to that target.
   - **Strictly prohibit placeholder text or generic instructional notices** (such as *"when invoking archify... render with data-theme='light'... connect diagram..."*).
   - All embedded diagrams must render with `data-theme="light"` matching the Paper/Ink palette (`--surface: #ffffff`, `--bg: #f5f6f8`, `--border: #e1e4ea`, `--accent: #0f766e`).
 - **Thai Language & Legible Typography Mandate for Architecture Diagrams (Vector SVG)**:
@@ -248,7 +248,7 @@ When explicitly generating standalone HTML artifacts (Standalone Reports, Archit
       - **Code / Badges**: Minimum **10px – 10.5px**
       - **Line Spacing (Y-Offset)**: Maintain at least **18px – 22px** line spacing between stacked text elements to render Thai tone marks and vowels cleanly without crowding.
 - **Safety, Guardrails & Precaution Standards**:
-  - Every playbook must explicitly specify **Safety & Guardrails**, **Operational Boundaries**, and **Precautions**.
+  - Generated standalone HTML reports should explicitly specify **Safety & Guardrails**, **Operational Boundaries**, and **Precautions** when documenting operational workflows.
   - Detail specific safety constraints, such as safe operational boundaries (Read-Only vs. Mutating), credential/secret hygiene, and hard stops (e.g., no unauthorized auto-merge, no bypassing verification).
   - Surface these critical notices using high-visibility UI Alert Cards, such as `.alert.alert-danger` (for critical security constraints and operational hard stops) and `.alert.alert-warning` (for essential conditions and operational precautions).
 - **Diagram Tooling Integration Contract (`archify` & `diagram-design`)**:

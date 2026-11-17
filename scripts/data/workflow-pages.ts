@@ -199,8 +199,8 @@ export const WORKFLOW_PAGES: DocPage[] = [
   {
     slug: 'workflow-surface-map',
     category: 'WORKFLOW',
-    title: 'Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)',
-    lead: 'แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant',
+    title: 'Workflow Surface Map (แผนผังคำสั่ง 24 Core Skills)',
+    lead: 'แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 24 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant',
     pills: ['Workflow', 'Surface', 'CoreSkills', 'Taxonomy', 'Commands', 'Adapters'],
     sections: [
       {

@@ -6,7 +6,7 @@ does not replace live browser inspection, install during another workflow
 command, or make browser testing mandatory for every DevFlow project.
 
 > 💡 **Nexus-DevFlow Integration**:
-> Nexus-DevFlow also provides `/browser-tests` for Playwright test harnesses and pairs with any active interactive browser MCP (such as Playwright MCP, Chrome DevTools MCP, or `browseros-neo`) for live visual inspection.
+> Invoke via `/setup-tests --browser` to configure Playwright test harnesses and pair with any active interactive browser MCP (such as Playwright MCP, Chrome DevTools MCP, or `browseros-neo`) for live visual inspection.
 
 ## Input
 

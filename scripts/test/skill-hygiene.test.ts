@@ -39,10 +39,14 @@ test("skills do not leak developer local file:///d:/ paths", () => {
 });
 
 test("skills do not reference phantom /design or defuddle commands", () => {
-  const analyzePath = path.join(agentsSkillsRoot, "analyze", "SKILL.md");
-  const content = fs.readFileSync(analyzePath, "utf8");
-  assert.doesNotMatch(content, /\/design\s+\{REQ-ID\}/);
-  assert.doesNotMatch(content, /\bdefuddle\b/);
+  const leaks: string[] = [];
+  for (const file of collectSkillMarkdownFiles(agentsSkillsRoot)) {
+    const content = fs.readFileSync(file, "utf8");
+    if (/\/design\s+\{REQ-ID\}/.test(content) || /\bdefuddle\b/.test(content)) {
+      leaks.push(path.relative(repoRoot, file));
+    }
+  }
+  assert.deepEqual(leaks, [], `Phantom commands found in: ${leaks.join(", ")}`);
 });
 
 test("read-only and lightweight skills do not require blocking First action run-state writes", () => {
@@ -51,20 +55,23 @@ test("read-only and lightweight skills do not require blocking First action run-
     "debug",
     "discovery",
     "analyze",
-    "vendor",
     "ci",
     "release",
     "rollback",
     "prototype",
     "setup-tests",
-    "browser-tests"
+    "vendor"
   ];
+  const extrasSkillsRoot = path.join(repoRoot, "extras", "skills");
   const offenders: string[] = [];
   for (const skill of nonBlockingSkills) {
-    const file = path.join(agentsSkillsRoot, skill, "SKILL.md");
-    const content = fs.readFileSync(file, "utf8");
-    if (/\*\*First action:\*\*/.test(content)) {
-      offenders.push(skill);
+    for (const base of [agentsSkillsRoot, extrasSkillsRoot]) {
+      const file = path.join(base, skill, "SKILL.md");
+      if (!fs.existsSync(file)) continue;
+      const content = fs.readFileSync(file, "utf8");
+      if (/\*\*First action:\*\*/.test(content)) {
+        offenders.push(path.relative(repoRoot, file));
+      }
     }
   }
   assert.deepEqual(offenders, [], `Blocking First action found in: ${offenders.join(", ")}`);
@@ -78,8 +85,11 @@ test("contextual help protocol uses lightweight chat markdown without mandatory 
   assert.doesNotMatch(helpProtocol, /playbooks\/\{skill\}\.html/);
   assert.doesNotMatch(helpProtocol, /Real Diagram Mandate/);
 
-  const ponytail = fs.readFileSync(path.join(agentsSkillsRoot, "ponytail", "SKILL.md"), "utf8");
-  assert.doesNotMatch(ponytail, /devflow\/docs\/playbooks\/ponytail\.html/);
+  const codingStandards = fs.readFileSync(
+    path.join(repoRoot, "devflow", "context", "coding-standards.md"),
+    "utf8"
+  );
+  assert.doesNotMatch(codingStandards, /every playbook/i);
 });
 
 test("agent-bundle.manifest.json does not hardcode browseros-neo in skill_contracts", () => {
@@ -96,23 +106,20 @@ test("agent-bundle.manifest.json does not hardcode browseros-neo in skill_contra
   assert.deepEqual(offenders, [], `browseros-neo hardcoded in skill_contracts: ${offenders.join(", ")}`);
 });
 
-test("overview and report-html skills do not assume nexus-devflow repo npm scripts exist in user projects", () => {
+test("overview skill guards npm run overview behind project package.json presence", () => {
   const overview = fs.readFileSync(path.join(agentsSkillsRoot, "overview", "SKILL.md"), "utf8");
   assert.match(overview, /package\.json.*overview|overview.*script/is);
   assert.match(overview, /project-overview-template\.md/);
   assert.doesNotMatch(overview, /^Run:\s*\r?\n\r?\n```bash\r?\nnpm run overview\r?\n```/m);
-
-  const reportHtml = fs.readFileSync(path.join(agentsSkillsRoot, "report-html", "SKILL.md"), "utf8");
-  assert.match(reportHtml, /package\.json|declared/i);
 });
 
-test("skills use consistent npx nexus-devflow skill add CLI command", () => {
+test("skills use consistent npx nexus-devflow skill add/update CLI command", () => {
   const inconsistent: string[] = [];
   for (const file of collectSkillMarkdownFiles(agentsSkillsRoot)) {
     const content = fs.readFileSync(file, "utf8");
-    if (/npx\s+(?:@jakkrichm\/)?create-nexus-devflow\s+skill\s+add/.test(content)) {
+    if (/npx\s+(?:@jakkrichm\/)?create-nexus-devflow\s+skill\s+(?:add|update)/.test(content)) {
       inconsistent.push(path.relative(repoRoot, file));
     }
   }
-  assert.deepEqual(inconsistent, [], `Inconsistent skill add CLI in: ${inconsistent.join(", ")}`);
+  assert.deepEqual(inconsistent, [], `Inconsistent skill CLI in: ${inconsistent.join(", ")}`);
 });

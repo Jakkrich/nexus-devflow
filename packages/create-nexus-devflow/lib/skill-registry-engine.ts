@@ -57,25 +57,24 @@ export interface SkillUpdateResult {
 export type DevFlowRole = "dev" | "sa" | "full";
 
 export const DEV_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "adopt", "audit", "autopilot", "brainstorm", "brief", "browser-tests",
-  "bughunter", "check", "ci", "complete", "continuous", "convert-any-to-md",
+  "adopt", "audit", "autopilot", "brainstorm", "brief",
+  "check", "complete", "continuous",
   "debug", "devflow", "devflow-doctor", "devflow-status", "discovery", "explore", "feature", "fix", "grill",
-  "idea", "implement", "onboard", "overview", "prototype", "release",
-  "report-html", "rollback", "setup-tests", "test", "try"
+  "idea", "implement", "onboard", "overview", "prototype",
+  "test"
 ]);
 
 export const SA_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "analyze", "audit", "brainstorm", "brief", "bughunter", "convert-any-to-md",
-  "devflow", "devflow-doctor", "devflow-status", "discovery", "explore", "grill", "idea", "overview", "prototype",
-  "report-html"
+  "analyze", "audit", "brainstorm", "brief",
+  "devflow", "devflow-doctor", "devflow-status", "discovery", "explore", "grill", "idea", "overview", "prototype"
 ]);
 
 export const FULL_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "adopt", "analyze", "audit", "autopilot", "brainstorm", "brief", "browser-tests",
-  "bughunter", "check", "ci", "complete", "continuous", "convert-any-to-md",
+  "adopt", "analyze", "audit", "autopilot", "brainstorm", "brief",
+  "check", "complete", "continuous",
   "debug", "devflow", "devflow-doctor", "devflow-status", "discovery", "explore", "feature", "fix", "grill",
-  "idea", "implement", "onboard", "overview", "prototype", "release",
-  "report-html", "rollback", "setup-tests", "test", "try"
+  "idea", "implement", "onboard", "overview", "prototype",
+  "test"
 ]);
 
 export function getSkillsForRole(role: DevFlowRole, allCoreSkills?: readonly string[]): readonly string[] {
@@ -143,6 +142,48 @@ export const KNOWN_SKILL_ALIASES: Record<
     type: "compound-knowledge",
     referencePath: "devflow/.vendor/code-modernization",
     description: "[devflow] Guided legacy codebase modernization (Assessment, Business Rules mining, Uplift, Rewrite & Byte-for-byte Proof)"
+  },
+  "setup-tests": {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/setup-tests",
+    name: "setup-tests",
+    description: "[devflow] Opt-in unit & browser test harness setup (Vitest/pytest/Playwright)"
+  },
+  "browser-tests": {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/setup-tests",
+    name: "setup-tests",
+    description: "[devflow] Alias for setup-tests browser E2E harness setup"
+  },
+  ci: {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/ci",
+    name: "ci",
+    description: "[devflow] Opt-in Verify command and GitHub Actions CI setup"
+  },
+  release: {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/release",
+    name: "release",
+    description: "[devflow] Opt-in Render/Vercel deployment readiness preparation"
+  },
+  rollback: {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/rollback",
+    name: "rollback",
+    description: "[devflow] Opt-in history-preserving feature reversal planner"
+  },
+  vendor: {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/vendor",
+    name: "vendor",
+    description: "[devflow] Opt-in external Git skill ingestion and wrapper synthesizer"
+  },
+  "convert-any-to-md": {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/convert-any-to-md",
+    name: "convert-any-to-md",
+    description: "[devflow] Opt-in bulk Office/PDF/spreadsheet to Markdown converter"
   }
 };
 
@@ -1166,9 +1207,7 @@ $ARGUMENTS
 
 **Aliases:** \`/code-modernization\`, \`/modernize\`
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish \`running\` to \`devflow/.state/run.json\` using the dashboard activity
-contract in \`AGENTS.md\`.
+**Activity tracking (best-effort):** When \`devflow/.state/\` and \`run-state.mjs\` exist, publish \`running\` to \`devflow/.state/run.json\` per \`AGENTS.md\`; never block execution if unavailable.
 
 \`code-modernization\` is the flagship modernization orchestrator in Nexus-DevFlow, bringing the complete power of Anthropic's **Official Code Modernization Plugin** directly into your project with **Zero Cognitive Load**.
 

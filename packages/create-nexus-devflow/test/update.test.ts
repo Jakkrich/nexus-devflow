@@ -206,3 +206,55 @@ test("applyPreparedUpdate removes retired status and doctor skill folders and in
   }
 });
 
+test("applyPreparedUpdate prunes retired 115b skills from existing installations", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-115b-prune-"));
+  const templateRoot1 = path.join(tempDir, "template1");
+  const templateRoot2 = path.join(tempDir, "template2");
+  const targetDir = path.join(tempDir, "target");
+
+  try {
+    const retired = ["try", "report-html", "ponytail", "setup-tests", "ci", "release", "rollback", "vendor"];
+    for (const adapter of [".agents", ".claude"]) {
+      await fs.mkdir(path.join(templateRoot1, adapter, "skills", "feature"), { recursive: true });
+      await fs.writeFile(path.join(templateRoot1, adapter, "skills", "feature", "SKILL.md"), "# feature\n");
+      for (const name of retired) {
+        await fs.mkdir(path.join(templateRoot1, adapter, "skills", name), { recursive: true });
+        await fs.writeFile(path.join(templateRoot1, adapter, "skills", name, "SKILL.md"), `# ${name}\n`);
+      }
+
+      await fs.mkdir(path.join(templateRoot2, adapter, "skills", "feature"), { recursive: true });
+      await fs.writeFile(path.join(templateRoot2, adapter, "skills", "feature", "SKILL.md"), "# feature\n");
+    }
+    await fs.mkdir(path.join(templateRoot1, "devflow"), { recursive: true });
+    await fs.mkdir(path.join(templateRoot2, "devflow"), { recursive: true });
+    await fs.writeFile(path.join(templateRoot1, "AGENTS.md"), "# AGENTS\n");
+    await fs.writeFile(path.join(templateRoot2, "AGENTS.md"), "# AGENTS\n");
+    await fs.mkdir(targetDir, { recursive: true });
+
+    const prep1 = await prepareUpdate({
+      targetDir,
+      templateRoot: templateRoot1,
+      version: "2.19.4",
+      adapter: "both"
+    });
+    await applyPreparedUpdate(prep1);
+
+    const prep2 = await prepareUpdate({
+      targetDir,
+      templateRoot: templateRoot2,
+      version: "2.20.0",
+      adapter: "both"
+    });
+    await applyPreparedUpdate(prep2);
+
+    for (const adapter of [".agents", ".claude"]) {
+      await assert.doesNotReject(fs.stat(path.join(targetDir, adapter, "skills", "feature", "SKILL.md")));
+      for (const name of retired) {
+        await assert.rejects(fs.stat(path.join(targetDir, adapter, "skills", name)), { code: "ENOENT" });
+      }
+    }
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

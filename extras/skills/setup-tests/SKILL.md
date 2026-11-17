@@ -1,19 +1,20 @@
 ---
 name: setup-tests
-description: "[devflow] Add or normalize unit testing for a DevFlow project. Reuses an existing runner or installs stack-native unit tests, adds an example test, updates commands, and verifies the setup. Use for /setup-tests or adding unit tests."
+description: "[devflow] Add or normalize unit or browser testing (--browser) for a DevFlow project. Reuses an existing runner or installs stack-native unit/Playwright tests, adds an example test, and verifies the setup."
+argument-hint: "[--browser | runner]"
 ---
 
-# setup-tests - add unit testing to the project
+# setup-tests - add unit or browser testing to the project
 
 Where this sits in the workflow:
 
     any time  ->  [setup-tests]  ->  test command in AGENTS.md  ->  /feature + /implement use it
-                  (setup)            (the opt-in testing gate)      (logic steps get tests)
+                  (setup)            (the opt-in testing gate)      (logic/browser steps get tests)
 
 Testing is optional in the Blueprint until the project declares a real test
-command in `AGENTS.md`. This skill is the explicit setup path. It adds or
-normalizes **unit testing** only; browser automation and end-to-end testing are
-separate optional setup through `/browser-tests`.
+command in `AGENTS.md`. By default this skill adds or normalizes **unit testing**;
+pass `--browser` (or `browser`) to set up Playwright/E2E browser testing per
+`reference/browser.md`.
 
 ## Input
 
