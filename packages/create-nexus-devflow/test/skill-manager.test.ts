@@ -710,13 +710,45 @@ test("installThirdPartySkill supports monorepo subpath and copies scripts and ag
   }
 });
 
-test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops and convert-any-to-md presets", () => {
-  for (const name of ["setup-tests", "ci", "release", "rollback", "vendor", "convert-any-to-md"]) {
+test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops, convert-any-to-md, and browseros-neo presets", () => {
+  for (const name of ["setup-tests", "ci", "release", "rollback", "vendor", "convert-any-to-md", "browseros-neo"]) {
     const alias = KNOWN_SKILL_ALIASES[name];
     assert.ok(alias, `Missing KNOWN_SKILL_ALIASES entry for ${name}`);
     assert.equal(alias.subpath, `extras/skills/${name}`);
   }
   assert.equal(KNOWN_SKILL_ALIASES["browser-tests"]?.subpath, "extras/skills/setup-tests");
+});
+
+test("installThirdPartySkill installs extras/skills/browseros-neo with reference/e2e-templates.md", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-browseros-project-"));
+  const tempRepo = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-browseros-repo-"));
+  const repoExtraSkillDir = path.resolve(import.meta.dirname, "..", "..", "..", "extras", "skills", "browseros-neo");
+
+  try {
+    await fs.mkdir(path.join(tempProject, ".agents", "skills"), { recursive: true });
+    await fs.mkdir(path.join(tempProject, ".claude", "skills"), { recursive: true });
+
+    const extraSkillDir = path.join(tempRepo, "extras", "skills", "browseros-neo");
+    await fs.cp(repoExtraSkillDir, extraSkillDir, { recursive: true });
+
+    const result = await installThirdPartySkill(tempProject, extraSkillDir, {
+      name: "browseros-neo",
+      overrideSource: "browseros-neo"
+    });
+
+    assert.ok(result);
+    const detail = Array.isArray(result) ? result[0] : result;
+    assert.equal(detail.name, "browseros-neo");
+
+    for (const adapter of [".agents", ".claude"]) {
+      const targetDir = path.join(tempProject, adapter, "skills", "browseros-neo");
+      await assert.doesNotReject(fs.stat(path.join(targetDir, "SKILL.md")));
+      await assert.doesNotReject(fs.stat(path.join(targetDir, "reference", "e2e-templates.md")));
+    }
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempRepo, { recursive: true, force: true });
+  }
 });
 
 test("installThirdPartySkill installs non-compound extras/skills/* subpath with reference files", async () => {

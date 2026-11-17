@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-11-17 | `126` | Feature | (Tracer Bullet) Opt-in `browseros-neo` Team Skill (E2E Testing & Evidence) | `PENDING` | `Completed` | [`126-browseros-neo-extra-skill.md`](features/126-browseros-neo-extra-skill.md) |
 | 2026-11-17 | `115d` | Feature | (Tracer Bullet) Validators, Role Profiles, Adapter Sync & Docs | `cf5d900` | `Completed` | [`115d-validators-roles-catalog-and-docs.md`](features/115d-validators-roles-catalog-and-docs.md) |
 | 2026-11-17 | `115c` | Feature | (Journey) Consolidate Core Skills & Upgrade Adaptive `/feature` + `/debug` | `1cfe421` | `Completed` | [`115c-consolidate-core-skills-and-adaptive-feature.md`](features/115c-consolidate-core-skills-and-adaptive-feature.md) |
 | 2026-11-17 | `115b` | Feature | (Skateboard) Retire Obsolete, Stub, Maintainer & Tier-2 Ops from Core | `bbccbde` | `Completed` | [`115b-retire-obsolete-stub-and-tier2-core-skills.md`](features/115b-retire-obsolete-stub-and-tier2-core-skills.md) |

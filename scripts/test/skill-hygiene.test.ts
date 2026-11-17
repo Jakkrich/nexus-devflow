@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
+import { checkSkillBudgets } from "../check-skill-budgets.mjs";
 
 const repoRoot = path.resolve(import.meta.dirname, "../..");
 const agentsSkillsRoot = path.join(repoRoot, ".agents", "skills");
@@ -151,4 +152,26 @@ test("115c consolidated skills expose Adaptive /feature, 2-Track /debug, unified
 
   const workflow = fs.readFileSync(path.join(repoRoot, "devflow", "workflow.md"), "utf8");
   assert.doesNotMatch(workflow, /\/devflow-doctor|\/devflow-status|\/continuous\b/);
+});
+
+test("extras/skills/browseros-neo satisfies skill budgets and E2E test-plan/evidence contracts", () => {
+  const budgetResult = checkSkillBudgets(extrasSkillsRoot);
+  assert.deepEqual(
+    budgetResult.violations,
+    [],
+    `extras/skills budget violations: ${budgetResult.violations.join("; ")}`
+  );
+
+  const skillPath = path.join(extrasSkillsRoot, "browseros-neo", "SKILL.md");
+  const templatePath = path.join(extrasSkillsRoot, "browseros-neo", "reference", "e2e-templates.md");
+  assert.equal(fs.existsSync(skillPath), true, "extras/skills/browseros-neo/SKILL.md must exist");
+  assert.equal(fs.existsSync(templatePath), true, "extras/skills/browseros-neo/reference/e2e-templates.md must exist");
+
+  const skill = fs.readFileSync(skillPath, "utf8");
+  assert.match(skill, /name_session/);
+  assert.match(skill, /devflow\/reports\/\{run-id\}\/browser-test-plan\.md/);
+  assert.match(skill, /devflow\/reports\/\{run-id\}\/evidence\.md/);
+  assert.match(skill, /E2E Test/i);
+  assert.match(skill, /E2E Debug/i);
+  assert.doesNotMatch(skill, /recordVideo/);
 });

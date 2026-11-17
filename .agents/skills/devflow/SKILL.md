@@ -69,4 +69,4 @@ Print concise labels (`Status`, `Plans`, `Current work`, `Findings`, `Git`, opti
 | `/analyze`, `/grill` | `/discovery` or `/feature` | Multi-format intake & Socratic alignment (auto inside `/feature` when starting delivery) |
 | `/brainstorm` | `/explore` | Read-only option comparison & trade-off matrix |
 | `/brief` | `/feature --preview` | Read-only scope/dependency preview before writing `spec.md` |
-| `/setup-tests`, `/browser-tests`, `/ci`, `/release`, `/rollback`, `/vendor`, `/convert-any-to-md`, `/bughunter`, `/code-modernization` | `npx nexus-devflow skill add <name>` | Opt-in extensions outside Core |
+| `/setup-tests`, `/browser-tests`, `/ci`, `/release`, `/rollback`, `/vendor`, `/convert-any-to-md`, `/browseros-neo`, `/bughunter`, `/code-modernization` | `npx nexus-devflow skill add <name>` | Opt-in extensions outside Core |

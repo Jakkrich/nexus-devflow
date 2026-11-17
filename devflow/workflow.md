@@ -28,7 +28,7 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### Universal Invocation & Agent Directives
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has **one Canonical Name across the 15 Core Skills** (`feature`, `fix`, `implement`, `check`, `complete`, `discovery`, `explore`, `idea`, `devflow`, `overview`, `debug`, `onboard`, `autopilot`, `prototype`, `audit`, plus optional opt-in extensions via `npx nexus-devflow skill add` such as `setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`). Invocation depends on your AI tool:
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has **one Canonical Name across the 15 Core Skills** (`feature`, `fix`, `implement`, `check`, `complete`, `discovery`, `explore`, `idea`, `devflow`, `overview`, `debug`, `onboard`, `autopilot`, `prototype`, `audit`, plus optional opt-in extensions via `npx nexus-devflow skill add` such as `setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`). Invocation depends on your AI tool:
    - **Canonical Name (Plain text)**: e.g., `feature`, `implement`, `autopilot`, `devflow`, `discovery`, `onboard`.
    - **Slash Prefix (`/`)**: Claude Code, Google Antigravity, Gemini CLI, e.g., `/feature`, `/fix`, `/implement`, `/autopilot --all`, `/devflow`, `/discovery`.
    - **Dollar Prefix (`$`)**: OpenAI Codex CLI, e.g., `$feature`, `$fix`, `$autopilot --all`, `$devflow`, `$discovery`.

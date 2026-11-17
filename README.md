@@ -535,7 +535,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **overview** | `/overview` / `$overview` | Setup | Generate compact `project-overview.md` (<= 20KB) and offer planning baseline commit. |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | Generate throwaway static HTML/CSS mockups in `prototypes/`. |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
 
 ---
 

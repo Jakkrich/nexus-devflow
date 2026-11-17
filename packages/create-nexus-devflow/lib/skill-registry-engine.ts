@@ -182,6 +182,12 @@ export const KNOWN_SKILL_ALIASES: Record<
     subpath: "extras/skills/convert-any-to-md",
     name: "convert-any-to-md",
     description: "[devflow] Opt-in bulk Office/PDF/spreadsheet to Markdown converter"
+  },
+  "browseros-neo": {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/browseros-neo",
+    name: "browseros-neo",
+    description: "[devflow] Opt-in BrowserOS neo MCP E2E testing, debugging, and ID-traceable evidence workflow"
   }
 };
 

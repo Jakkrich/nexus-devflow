@@ -535,7 +535,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **overview** | `/overview` / `$overview` | Setup | สังเคราะห์ `project-overview.md` ไม่เกิน 20KB พร้อมเสนอทำ Planning Baseline Commit |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | สร้าง Mockup แบบ Static HTML/CSS ในโฟลเดอร์ `prototypes/` |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
 
 ---
 
