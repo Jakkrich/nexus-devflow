@@ -5,6 +5,17 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.0] - 2026-11-17
+
+### Changed
+- **Core Skills Consolidation (33 -> 15 Core Skills) (Features 115a–115d)**: Consolidated framework core skills to 15 essential workflows (`onboard`, `overview`, `devflow`, `idea`, `explore`, `discovery`, `feature`, `fix`, `implement`, `check`, `complete`, `audit`, `debug`, `autopilot`, `prototype`) with legacy alias routing in `/devflow` and opt-in Tier-2 Ops / Utility extensions in `extras/skills/` (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`).
+- **Context Trimming & Reference Extraction (Feature 114b)**: Enforced strict instruction size discipline, moved optional procedures to on-demand `reference/` docs, and added cross-skill link validation.
+- **Web Documentation Rebuild (`docs/`)**: Regenerated 50 documentation subpages + `docs/docs-search.json`, retired 10 removed command pages, and aligned homepage banners, Getting Started, workflow SVGs, and release notes with the 15 Core Skills architecture.
+
+### Added
+- **Adaptive `/feature` & `--preview` / `--check` Gates (Features 114c, 115c)**: Added pre-flight adaptive clarification, read-only `--preview` scope summary, `--check` pre-implementation gate, `when-testable` try proof, and `/implement` interactive step review menu.
+- **2-Track `/debug`, YAGNI `/audit`, Unified `/devflow`, Parallel Worktree `/autopilot` (Features 114d, 115c)**: Added symptom/hypothesis 2-track debugging, YAGNI bloat auditing, unified status/doctor/router hub (`/devflow`), and parallel worktree detection + recovery + `--all` continuous execution.
+
 ## [2.19.4] - 2026-10-30
 
 ### Removed
