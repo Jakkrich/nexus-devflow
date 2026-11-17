@@ -188,6 +188,12 @@ export const KNOWN_SKILL_ALIASES: Record<
     subpath: "extras/skills/browseros-neo",
     name: "browseros-neo",
     description: "[devflow] Opt-in BrowserOS neo MCP E2E testing, debugging, and ID-traceable evidence workflow"
+  },
+  "publish-devflow": {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/publish-devflow",
+    name: "publish-devflow",
+    description: "[maintainer] Opt-in release, semver bump, tag, and NPM publish automation for nexus-devflow"
   }
 };
 

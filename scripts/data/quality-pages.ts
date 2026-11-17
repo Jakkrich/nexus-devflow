@@ -105,7 +105,7 @@ export const QUALITY_PAGES: DocPage[] = [
         title: 'หลักฐานการทำงานบน Browser (Browser evidence)',
         contentHtml: `
           <p>การตรวจสอบ UI และ User Flow ต้องมีหลักฐานจาก Browser โดยตรง เมื่อ <code>AGENTS.md</code> มีการระบุคำสั่ง <code>Browser tests</code> สกิล <code>/check</code> จะรันคำสั่งดังกล่าวและตรวจสอบผลลัพธ์</p>
-          <p>นอกจากนี้ยังรองรับสถาปัตยกรรม Hybrid ร่วมกับ <strong>MCP browseros-neo</strong> (<code>http://127.0.0.1:9010/mcp</code>) เพื่อให้ AI Agent สามารถตรวจสอบ Live DOM, Visual QA และบันทึกภาพหน้าจอจริงได้ในแบบ Interactive</p>
+          <p>นอกจากนี้ยังรองรับการติดตั้งส่วนเสริม Opt-in <a href="../commands/browseros-neo/"><code>browseros-neo</code></a> (<code>npx nexus-devflow skill add browseros-neo</code>) เพื่อใช้ร่วมกับ <strong>BrowserOS neo MCP</strong> ในการวางแผนทดสอบ (<code>browser-test-plan.md</code>), ตรวจ Live DOM / Console / Network, เก็บภาพและรายงานใน <code>devflow/reports/{run-id}/evidence.md</code> (gitignored) และผูก <code>name_session</code> สำหรับย้อนดูวิดีโอ replay ใน BrowserOS neo</p>
         `
       }
     ]

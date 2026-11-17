@@ -114,6 +114,16 @@ npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 # Framework Update & Safety Rollback
 npx @jakkrichm/create-nexus-devflow update [--check]
 
+# Opt-in Team & Ops Extensions
+npx nexus-devflow skill add browseros-neo     # E2E testing, debugging & ID-traceable evidence via BrowserOS neo MCP
+npx nexus-devflow skill add setup-tests       # Unit & Playwright browser test harness
+npx nexus-devflow skill add ci                # Verify command & GitHub Actions CI
+npx nexus-devflow skill add release           # Production release readiness checks
+npx nexus-devflow skill add rollback          # History-preserving feature reversal
+npx nexus-devflow skill add convert-any-to-md # Bulk Office/PDF to Markdown converter
+npx nexus-devflow skill add vendor            # Local git repo ingestion & wrapper synthesis
+npx nexus-devflow skill add publish-devflow   # Maintainer semver bump, tag & NPM release automation
+
 # Recommended Third-Party Companion Skills
 npx nexus-devflow skill add --recommended
 npx nexus-devflow skill update --recommended

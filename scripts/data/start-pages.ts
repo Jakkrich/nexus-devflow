@@ -406,6 +406,11 @@ export const START_PAGES: DocPage[] = [
                 <td>ติดตั้งส่วนเสริม <code>/setup-tests</code> สำหรับ Unit &amp; Browser test harness</td>
               </tr>
               <tr>
+                <td>ต้องการทดสอบหรือแก้ปัญหา E2E ผ่าน BrowserOS neo (Opt-in)</td>
+                <td><code>npx nexus-devflow skill add browseros-neo</code></td>
+                <td>ติดตั้งส่วนเสริม <code>/browseros-neo</code> สำหรับ E2E Test Plan, Evidence และ Session Replay</td>
+              </tr>
+              <tr>
                 <td>ต้องการเช็กสถานะ, สรุปผู้บริหาร หรือตรวจสุขภาพ</td>
                 <td><code>/devflow</code> / <code>/devflow doctor</code></td>
                 <td>ศูนย์รวมเช็กสถานะงาน (<code>--exec</code>), ตรวจสุขภาพ Adapters/Overview และเราเตอร์</td>
@@ -513,6 +518,10 @@ export const START_PAGES: DocPage[] = [
             <li>
               <strong><a href="../commands/tests/">setup-tests</a> (Opt-in Extension)</strong>: 
               ติดตั้งผ่าน <code>npx nexus-devflow skill add setup-tests</code> เพื่อจัดการและตั้งค่า Unit/Integration Tests รวมถึง Browser Testing (<code>/setup-tests browser</code>) ผ่าน Playwright และ Active Browser MCP
+            </li>
+            <li>
+              <strong><a href="../commands/browseros-neo/">browseros-neo</a> (Opt-in Extension)</strong>: 
+              ติดตั้งผ่าน <code>npx nexus-devflow skill add browseros-neo</code> เพื่อวางแผนทดสอบ E2E (<code>--verify</code>) หรือดีบักปัญหา E2E (<code>--debug</code>) ผ่าน BrowserOS neo MCP พร้อมบันทึก <code>browser-test-plan.md</code> และ <code>evidence.md</code> ใน <code>devflow/reports/{run-id}/</code> และผูก <code>name_session</code> ย้อนดูวิดีโอใน BrowserOS neo
             </li>
             <li>
               <strong><a href="../commands/ci/">ci</a> (Opt-in Extension)</strong>: 

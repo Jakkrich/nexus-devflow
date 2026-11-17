@@ -535,7 +535,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **overview** | `/overview` / `$overview` | Setup | สังเคราะห์ `project-overview.md` ไม่เกิน 20KB พร้อมเสนอทำ Planning Baseline Commit |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | สร้าง Mockup แบบ Static HTML/CSS ในโฟลเดอร์ `prototypes/` |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `publish-devflow`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
 
 ---
 
@@ -580,6 +580,16 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 ```
 
 ระบบจะเลือก Test Runner ที่เหมาะสม (Vitest, Jest, pytest, go test), เพิ่มเคสตัวอย่างเริ่มต้น และอัปเดตคำสั่งใน `AGENTS.md` ให้ทันที
+
+สำหรับทีมที่ใช้ **BrowserOS neo MCP** กับ browser session ที่ล็อกอินไว้แล้ว สามารถติดตั้งส่วนเสริม `browseros-neo` (`npx nexus-devflow skill add browseros-neo`) เพื่อทดสอบและแก้ปัญหาแบบ E2E:
+
+```text
+/browseros-neo --verify   # วางแผนทดสอบ E2E, รันยืนยันผ่าน MCP และบันทึกหลักฐาน
+/browseros-neo --debug    # เข้าไป reproduce และแก้ปัญหา E2E บน session จริง
+```
+
+- บังคับสร้าง `devflow/reports/{run-id}/browser-test-plan.md` ก่อนทดสอบ และบันทึกผลที่ `devflow/reports/{run-id}/evidence.md` + `screenshots/` ทุกครั้ง (ถูก gitignore ภายใต้ `devflow/reports/*`)
+- ตั้ง `name_session` ขึ้นต้นด้วย `{run-id}` เพื่อให้ค้นย้อนดูวิดีโอ/session replay ใน BrowserOS neo cockpit ได้ตรงกัน โดยไม่เก็บไฟล์วิดีโอลงใน `devflow/`
 
 การรีวิวสถาปัตยกรรมยึดหลัก **Deep Modules**: ทำ public interface ให้เล็ก,
 ซ่อนความซับซ้อนไว้หลัง seam ที่เสถียร และหลีกเลี่ยงการกระจายการแก้ไขหนึ่งเรื่องไปหลาย caller

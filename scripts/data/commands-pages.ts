@@ -1102,6 +1102,58 @@ npx nexus-devflow skill add setup-tests
     ]
   },
 
+  // 30. BrowserOS neo
+  {
+    slug: 'commands/browseros-neo',
+    category: 'COMMANDS',
+    title: 'BrowserOS neo (/browseros-neo - Opt-in Extension)',
+    lead: 'ส่วนเสริม Opt-in ของทีม (ต่อยอดจาก browserclaw) สำหรับทดสอบและแก้ปัญหา E2E ผ่าน BrowserOS neo MCP พร้อม Test Plan, Evidence รายเคส และการผูก Session ย้อนดูวิดีโอตาม DevFlow ID',
+    pills: ['Command', 'OptIn', 'BrowserOS', 'MCP', 'E2E', 'Testing', 'Debugging', 'Evidence'],
+    sections: [
+      {
+        id: 'install-and-modes',
+        title: 'การติดตั้งและ 2 โหมดการทำงาน E2E',
+        contentHtml: `
+          <p>ติดตั้งส่วนเสริม Opt-in เข้าโปรเจกต์ด้วย CLI จากนั้นเรียกใช้งานผ่าน AI IDE ที่เชื่อมต่อ <strong>BrowserOS neo MCP</strong> ไว้แล้ว:</p>
+          <pre><code># ติดตั้งสกิลลง .agents/skills/browseros-neo/ และ .claude/skills/browseros-neo/
+npx nexus-devflow skill add browseros-neo
+
+# Mode A: วางแผนทดสอบและรันยืนยัน E2E (ใช้เดี่ยวๆ หรือคู่กับ /check)
+/browseros-neo --verify --id 126
+
+# Mode B: เข้าไป reproduce และแก้ปัญหา E2E บน session ที่ล็อกอินค้างไว้
+/browseros-neo --debug "Checkout submit returns 500"</code></pre>
+          <ul>
+            <li><strong>Mode A (E2E Test &amp; Verify)</strong>: แปลง <code>AC-N</code> / <code>Done When</code> ใน <code>spec.md</code> (หรือเป้าหมายที่ระบุ) เป็นเคสทดสอบ, รันผ่าน MCP (<code>run</code>, <code>snapshot</code>, <code>act</code>, <code>screenshot</code>, <code>pdf</code>, <code>read</code>, <code>grep</code>) และตรวจ console errors / network failures (<code>4xx</code>/<code>5xx</code>)</li>
+            <li><strong>Mode B (E2E Debug &amp; Fix Verification)</strong>: reproduce ปัญหาบน browser session จริงที่มี cookie/login เดิม, เก็บหลักฐาน DOM/console/network/screenshot เพื่อหาต้นตอ และรันยืนยันซ้ำหลังแก้โค้ด</li>
+          </ul>
+        `
+      },
+      {
+        id: 'test-plan-and-evidence',
+        title: 'แผนการทดสอบ, หลักฐาน และ Traceability ตาม DevFlow ID',
+        contentHtml: `
+          <p>เพื่อแก้ปัญหาการรันทดสอบแล้วไม่มีบันทึกสม่ำเสมอ สกิลนี้บังคับผูกทุกอย่างด้วย <code>{run-id}</code> (จาก <code>--id</code>, active <code>devflow/context/{xxx-slug}/</code>, หรือ <code>adhoc-YYYYMMDD-HHMMSS</code>):</p>
+          <table>
+            <thead><tr><th>สิ่งที่ระบบบันทึก / ผูก</th><th>ตำแหน่ง / กลไก</th><th>นโยบาย Git &amp; การย้อนดู</th></tr></thead>
+            <tbody>
+              <tr><td><code>browser-test-plan.md</code></td><td><code>devflow/reports/{run-id}/browser-test-plan.md</code></td><td>สร้างก่อนเริ่มรัน browser ทุกครั้ง (gitignored ภายใต้ <code>devflow/reports/*</code>)</td></tr>
+              <tr><td><code>evidence.md</code> + <code>screenshots/</code></td><td><code>devflow/reports/{run-id}/evidence.md</code></td><td>บันทึก/ต่อท้ายผลรายเคส (<code>[pass]</code>/<code>[fail]</code>/<code>[blocked]</code>), console/network และภาพหน้าจอ</td></tr>
+              <tr><td>Video / Session Replay</td><td><code>name_session</code> ขึ้นต้นด้วย <code>{run-id}</code></td><td>เก็บและเปิดดูวิดีโอบน BrowserOS neo cockpit โดยตรง (ไม่เก็บไฟล์วิดีโอใน <code>devflow/</code>)</td></tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        id: 'failure-guard',
+        title: 'ข้อกำหนด MCP และ Failure Guard',
+        contentHtml: `
+          <p>ตัวไฟล์สกิลเป็นคู่มือปฏิบัติการของ Agent และไม่รวมตัว MCP Server หากยังไม่ได้เชื่อมต่อ BrowserOS neo MCP หรือได้รับ <code>browser session not connected</code> สกิลจะหยุดแจ้งให้เปิด/เชื่อม BrowserOS neo cockpit โดย<strong>ไม่ silently fallback</strong> ไปยัง browser tool อื่น</p>
+        `
+      }
+    ]
+  },
+
   // 32. Code Modernization
   {
     slug: 'commands/code-modernization',

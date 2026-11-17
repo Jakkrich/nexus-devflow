@@ -521,6 +521,25 @@
     ]
   },
   {
+    "title": "BrowserOS neo (/browseros-neo - Opt-in Extension)",
+    "description": "ส่วนเสริม Opt-in ของทีม (ต่อยอดจาก browserclaw) สำหรับทดสอบและแก้ปัญหา E2E ผ่าน BrowserOS neo MCP พร้อม Test Plan, Evidence รายเคส และการผูก Session ย้อนดูวิดีโอตาม DevFlow ID",
+    "section": "COMMANDS",
+    "slug": "commands/browseros-neo",
+    "href": "../commands/browseros-neo/",
+    "tags": [
+      "Command",
+      "OptIn",
+      "BrowserOS",
+      "MCP",
+      "E2E",
+      "Testing",
+      "Debugging",
+      "Evidence",
+      "commands",
+      "commands browseros-neo"
+    ]
+  },
+  {
     "title": "Code Modernization (/code-modernization, /modernize)",
     "description": "ปรับปรุง Legacy Codebase ขนานใหญ่ด้วยขุมพลัง Anthropic Code Modernization Plugin พร้อมระบบ Master Orchestrator นำทาง State Machine อัตโนมัติและเอกสารภาษาไทย (Thai First)",
     "section": "COMMANDS",

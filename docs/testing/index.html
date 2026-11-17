@@ -96,6 +96,7 @@
           <a class="docs-nav-link" href="../commands/rollback/">Rollback (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/vendor/">Vendor (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/browseros-neo/">BrowserOS neo (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../commands/diagram-design/">Diagram Design</a>
           <a class="docs-nav-link" href="../commands/code-modernization/">Code Modernization</a>
@@ -270,7 +271,7 @@
           <h2>หลักฐานการทำงานบน Browser (Browser evidence)</h2>
           
           <p>การตรวจสอบ UI และ User Flow ต้องมีหลักฐานจาก Browser โดยตรง เมื่อ <code>AGENTS.md</code> มีการระบุคำสั่ง <code>Browser tests</code> สกิล <code>/check</code> จะรันคำสั่งดังกล่าวและตรวจสอบผลลัพธ์</p>
-          <p>นอกจากนี้ยังรองรับสถาปัตยกรรม Hybrid ร่วมกับ <strong>MCP browseros-neo</strong> (<code>http://127.0.0.1:9010/mcp</code>) เพื่อให้ AI Agent สามารถตรวจสอบ Live DOM, Visual QA และบันทึกภาพหน้าจอจริงได้ในแบบ Interactive</p>
+          <p>นอกจากนี้ยังรองรับการติดตั้งส่วนเสริม Opt-in <a href="../commands/browseros-neo/"><code>browseros-neo</code></a> (<code>npx nexus-devflow skill add browseros-neo</code>) เพื่อใช้ร่วมกับ <strong>BrowserOS neo MCP</strong> ในการวางแผนทดสอบ (<code>browser-test-plan.md</code>), ตรวจ Live DOM / Console / Network, เก็บภาพและรายงานใน <code>devflow/reports/{run-id}/evidence.md</code> (gitignored) และผูก <code>name_session</code> สำหรับย้อนดูวิดีโอ replay ใน BrowserOS neo</p>
         
           
         </section>

@@ -57,6 +57,7 @@ const SIDEBAR_ITEMS = [
       { slug: 'commands/rollback', title: 'Rollback (Opt-in)' },
       { slug: 'commands/convert-any-to-md', title: 'Convert Any to MD (Opt-in)' },
       { slug: 'commands/vendor', title: 'Vendor (Opt-in)' },
+      { slug: 'commands/browseros-neo', title: 'BrowserOS neo (Opt-in)' },
       { slug: 'commands/archify', title: 'Archify (Diagrams)' },
       { slug: 'commands/diagram-design', title: 'Diagram Design' },
       { slug: 'commands/code-modernization', title: 'Code Modernization' }

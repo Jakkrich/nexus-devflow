@@ -535,7 +535,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **overview** | `/overview` / `$overview` | Setup | Generate compact `project-overview.md` (<= 20KB) and offer planning baseline commit. |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | Generate throwaway static HTML/CSS mockups in `prototypes/`. |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `publish-devflow`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
 
 ---
 
@@ -580,6 +580,16 @@ To configure or normalize unit and browser testing in your repository, install t
 ```
 
 Configures the stack-native runner (Vitest, Jest, pytest, go test), adds an initial example test, and updates `AGENTS.md` commands.
+
+For teams using **BrowserOS neo MCP** with real signed-in sessions, install the opt-in `browseros-neo` extension (`npx nexus-devflow skill add browseros-neo`):
+
+```text
+/browseros-neo --verify   # Plan E2E tests, verify via MCP, record evidence
+/browseros-neo --debug    # Reproduce & debug E2E issues in a live signed-in session
+```
+
+- Writes `devflow/reports/{run-id}/browser-test-plan.md` before execution and `devflow/reports/{run-id}/evidence.md` + `screenshots/` afterward (gitignored under `devflow/reports/*`).
+- Tags `name_session` with `{run-id}` so native video/session replays remain searchable in BrowserOS neo without storing video files in `devflow/`.
 
 Architecture review follows the **Deep Modules** principle: keep public
 interfaces small, hide complexity behind stable seams, and avoid spreading one

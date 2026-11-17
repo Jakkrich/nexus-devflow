@@ -710,8 +710,8 @@ test("installThirdPartySkill supports monorepo subpath and copies scripts and ag
   }
 });
 
-test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops, convert-any-to-md, and browseros-neo presets", () => {
-  for (const name of ["setup-tests", "ci", "release", "rollback", "vendor", "convert-any-to-md", "browseros-neo"]) {
+test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops, convert-any-to-md, browseros-neo, and publish-devflow presets", () => {
+  for (const name of ["setup-tests", "ci", "release", "rollback", "vendor", "convert-any-to-md", "browseros-neo", "publish-devflow"]) {
     const alias = KNOWN_SKILL_ALIASES[name];
     assert.ok(alias, `Missing KNOWN_SKILL_ALIASES entry for ${name}`);
     assert.equal(alias.subpath, `extras/skills/${name}`);
