@@ -186,7 +186,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
         id: 'reverse-a-completed-feature',
         title: 'การย้อนกลับฟีเจอร์ที่ส่งมอบแล้ว (Reverse a completed feature)',
         contentHtml: `
-          <p>เมื่อจำเป็นต้องถอดถอนฟีเจอร์ที่ส่งมอบไปแล้วออกจากระบบ ให้ใช้คำสั่ง <code>/rollback &lt;feature-id&gt;</code>:</p>
+          <p>เมื่อจำเป็นต้องถอดถอนฟีเจอร์ที่ส่งมอบไปแล้วออกจากระบบ ให้ติดตั้งส่วนเสริม Opt-in <code>rollback</code> (<code>npx nexus-devflow skill add rollback</code>) แล้วใช้คำสั่ง <code>/rollback &lt;feature-id&gt;</code>:</p>
           <pre><code>/rollback 4 ──▶ วิเคราะห์ความเสี่ยงและสร้าง Rollback Spec ──▶ /implement ──▶ /check ──▶ /complete</code></pre>
           <p>คำสั่ง Rollback จะจับคู่รายการใน Build Plan กับประวัติใน <code>devflow/history/</code> และ Git Commit ที่ตรงกัน จากนั้นจะวิเคราะห์ความเสี่ยงของ Commit หลังจากนั้นและร่าง Rollback Spec ที่รัดกุม</p>
         `

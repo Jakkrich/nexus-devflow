@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CI (/ci) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="รวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook">
+  <title>CI (/ci - Opt-in Extension) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ส่วนเสริม Opt-in สำหรับรวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/ci/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,12 +144,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>CI (/ci)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>CI (/ci - Opt-in Extension)</strong></div>
       
-      <h1 class="docs-title">CI (/ci)</h1>
+      <h1 class="docs-title">CI (/ci - Opt-in Extension)</h1>
       
       <p class="docs-lead">
-        รวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook
+        ส่วนเสริม Opt-in สำหรับรวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook
       </p>
 
       <div class="docs-meta">
@@ -167,8 +167,9 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>ใช้คำสั่ง <code>/ci</code> เพื่อตั้งค่าระบบ Continuous Integration ที่ตรงตามมาตรฐานของโปรเจกต์:</p>
-          <pre><code>/ci</code></pre>
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/ci</code> เพื่อตั้งค่าระบบ Continuous Integration ที่ตรงตามมาตรฐานของโปรเจกต์:</p>
+          <pre><code>npx nexus-devflow skill add ci
+/ci</code></pre>
         
           
         </section>

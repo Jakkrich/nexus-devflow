@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vendor (/vendor) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity">
+  <title>Vendor (/vendor - Opt-in Extension) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ส่วนเสริม Opt-in สำหรับดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/vendor/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,12 +144,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Vendor (/vendor)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Vendor (/vendor - Opt-in Extension)</strong></div>
       
-      <h1 class="docs-title">Vendor (/vendor)</h1>
+      <h1 class="docs-title">Vendor (/vendor - Opt-in Extension)</h1>
       
       <p class="docs-lead">
-        ดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity
+        ส่วนเสริม Opt-in สำหรับดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity
       </p>
 
       <div class="docs-meta">
@@ -167,8 +167,9 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>ใช้คำสั่ง <code>/vendor</code> (หรือ <code>/equip</code>, <code>/skill-add</code>) เมื่อต้องการนำไลบรารีหรือ Repositories ภายนอกมาเป็นทักษะเสริมในโปรเจกต์:</p>
-          <pre><code>/vendor https://github.com/example/special-toolkit.git</code></pre>
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/vendor</code> (หรือ <code>/equip</code>, <code>/skill-add</code>) เมื่อต้องการนำไลบรารีหรือ Repositories ภายนอกมาเป็นทักษะเสริมในโปรเจกต์:</p>
+          <pre><code>npx nexus-devflow skill add vendor
+/vendor https://github.com/example/special-toolkit.git</code></pre>
         
           
         </section>

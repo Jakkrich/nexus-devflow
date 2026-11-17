@@ -797,16 +797,17 @@ npx nexus-devflow skill add setup-tests
   {
     slug: 'commands/ci',
     category: 'COMMANDS',
-    title: 'CI (/ci)',
-    lead: 'รวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook',
+    title: 'CI (/ci - Opt-in Extension)',
+    lead: 'ส่วนเสริม Opt-in สำหรับรวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook',
     pills: ['Command', 'CI', 'GitHubActions', 'VerifyCommand', 'PrePushHook', 'Automation'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/ci</code> เพื่อตั้งค่าระบบ Continuous Integration ที่ตรงตามมาตรฐานของโปรเจกต์:</p>
-          <pre><code>/ci</code></pre>
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/ci</code> เพื่อตั้งค่าระบบ Continuous Integration ที่ตรงตามมาตรฐานของโปรเจกต์:</p>
+          <pre><code>npx nexus-devflow skill add ci
+/ci</code></pre>
         `
       },
       {
@@ -911,16 +912,17 @@ npx nexus-devflow skill add setup-tests
   {
     slug: 'commands/release',
     category: 'COMMANDS',
-    title: 'Release (/release)',
-    lead: 'ตรวจสอบความพร้อมก่อนส่งมอบสู่ Production (Render, Vercel, Docker) ตรวจสอบ Secrets, Health Check Probes และ Database Migrations',
+    title: 'Release (/release - Opt-in Extension)',
+    lead: 'ส่วนเสริม Opt-in สำหรับตรวจสอบความพร้อมก่อนส่งมอบสู่ Production (Render, Vercel, Docker) ตรวจสอบ Secrets, Health Check Probes และ Database Migrations',
     pills: ['Command', 'Release', 'ProductionReadiness', 'Vercel', 'Render', 'Docker', 'SecretAudit'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/release</code> ก่อนนำแอปพลิเคชันขึ้นเซิร์ฟเวอร์ Production จริง:</p>
-          <pre><code>/release</code></pre>
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/release</code> ก่อนนำแอปพลิเคชันขึ้นเซิร์ฟเวอร์ Production จริง:</p>
+          <pre><code>npx nexus-devflow skill add release
+/release</code></pre>
         `
       },
       {
@@ -950,16 +952,17 @@ npx nexus-devflow skill add setup-tests
   {
     slug: 'commands/rollback',
     category: 'COMMANDS',
-    title: 'Rollback (/rollback)',
-    lead: 'วางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)',
+    title: 'Rollback (/rollback - Opt-in Extension)',
+    lead: 'ส่วนเสริม Opt-in สำหรับวางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)',
     pills: ['Command', 'Rollback', 'ReversalSpec', 'SafeUndo', 'ForwardDependency', 'HistoryPreserving'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/rollback</code> เมื่อต้องการยกเลิกฟีเจอร์ที่เคยส่งมอบและรวมเข้า main ไปแล้วอย่างปลอดภัย:</p>
-          <pre><code>/rollback 3
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/rollback</code> เมื่อต้องการยกเลิกฟีเจอร์ที่เคยส่งมอบและรวมเข้า main ไปแล้วอย่างปลอดภัย:</p>
+          <pre><code>npx nexus-devflow skill add rollback
+/rollback 3
 /rollback "003-stripe-payment"</code></pre>
         `
       },
@@ -1048,16 +1051,17 @@ npx nexus-devflow skill add setup-tests
   {
     slug: 'commands/convert-any-to-md',
     category: 'COMMANDS',
-    title: 'Convert Any to MD (/convert-any-to-md)',
-    lead: 'แปลงเอกสารทุกรูปแบบ (.pdf, .docx, .xlsx, .csv, .json, .yaml, รูปภาพ) ให้กลายเป็น Clean Markdown ภายใต้ devflow/reference/',
+    title: 'Convert Any to MD (/convert-any-to-md - Opt-in Extension)',
+    lead: 'ส่วนเสริม Opt-in สำหรับแปลงเอกสารทุกรูปแบบ (.pdf, .docx, .xlsx, .csv, .json, .yaml, รูปภาพ) ให้กลายเป็น Clean Markdown ภายใต้ devflow/reference/',
     pills: ['Command', 'Converter', 'Markdown', 'PDF', 'Word', 'Excel', 'DataExtraction'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/convert-any-to-md</code> เมื่อคุณมีเอกสารความต้องการจากลูกค้าหรือสเปกจากฝ่ายธุรกิจที่ต้องการแปลงเป็น Markdown เพื่อให้ AI อ่านเข้าใจง่ายและนำไปใช้วิเคราะห์:</p>
-          <pre><code>/convert-any-to-md C:\\Users\\...\\Downloads\\requirements.pdf
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/convert-any-to-md</code> เมื่อคุณมีเอกสารความต้องการจากลูกค้าหรือสเปกจากฝ่ายธุรกิจที่ต้องการแปลงเป็น Markdown เพื่อให้ AI อ่านเข้าใจง่ายและนำไปใช้วิเคราะห์:</p>
+          <pre><code>npx nexus-devflow skill add convert-any-to-md
+/convert-any-to-md C:\\Users\\...\\Downloads\\requirements.pdf
 /convert-any-to-md ./specs-folder/</code></pre>
         `
       },
@@ -1075,16 +1079,17 @@ npx nexus-devflow skill add setup-tests
   {
     slug: 'commands/vendor',
     category: 'COMMANDS',
-    title: 'Vendor (/vendor)',
-    lead: 'ดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity',
+    title: 'Vendor (/vendor - Opt-in Extension)',
+    lead: 'ส่วนเสริม Opt-in สำหรับดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity',
     pills: ['Command', 'Vendor', 'Equip', 'GitSubtree', 'CustomSkill', 'UpdateImmunity'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/vendor</code> (หรือ <code>/equip</code>, <code>/skill-add</code>) เมื่อต้องการนำไลบรารีหรือ Repositories ภายนอกมาเป็นทักษะเสริมในโปรเจกต์:</p>
-          <pre><code>/vendor https://github.com/example/special-toolkit.git</code></pre>
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/vendor</code> (หรือ <code>/equip</code>, <code>/skill-add</code>) เมื่อต้องการนำไลบรารีหรือ Repositories ภายนอกมาเป็นทักษะเสริมในโปรเจกต์:</p>
+          <pre><code>npx nexus-devflow skill add vendor
+/vendor https://github.com/example/special-toolkit.git</code></pre>
         `
       },
       {

@@ -96,7 +96,7 @@ export const START_PAGES: DocPage[] = [
             id: 'optional-add-automatic-github-checks',
             title: 'ทางเลือกเสริม: เพิ่มการตรวจสอบอัตโนมัติบน GitHub (Optional: add automatic GitHub checks)',
             contentHtml: `
-              <p>รัน <code>$ci</code> ใน Codex หรือ <code>/ci</code> ใน Claude Code / Antigravity เมื่อคุณต้องการคำสั่ง Verify หนึ่งคำสั่งเฉพาะสำหรับโปรเจกต์และ GitHub Actions Workflow ที่ตรงกัน</p>
+              <p>ติดตั้งส่วนเสริม Opt-in <code>ci</code> ด้วย <code>npx nexus-devflow skill add ci</code> แล้วรัน <code>$ci</code> ใน Codex หรือ <code>/ci</code> ใน Claude Code / Antigravity เมื่อคุณต้องการคำสั่ง Verify หนึ่งคำสั่งเฉพาะสำหรับโปรเจกต์และ GitHub Actions Workflow ที่ตรงกัน</p>
               <p>Skill นี้จะใช้เฉพาะการตรวจสอบที่มีอยู่จริงในโปรเจกต์ พิสูจน์สูตรการรันในเครื่องให้ผ่านก่อน และหยุดก่อนที่จะ push หรือแก้ไขกฎบน Remote Repository</p>
               <p>คุณสามารถข้ามขั้นตอนนี้และดำเนินการวางแผนต่อได้ทันที ดูรายละเอียดระบบตรวจสอบทั้งหมดได้ที่ <a href="../testing/">Testing and CI</a></p>
             `
@@ -268,7 +268,7 @@ export const START_PAGES: DocPage[] = [
         id: 'align-automatic-checks-when-needed',
         title: 'ปรับปรุงระบบตรวจสอบอัตโนมัติเมื่อจำเป็น (Align automatic checks when needed)',
         contentHtml: `
-          <p>หากโปรเจกต์เดิมมีชุดทดสอบหรือระบบ Lint อยู่แล้ว คุณสามารถใช้ Skill <code>/ci</code> เพื่อเชื่อมโยงการตรวจสอบเข้ากับเวิร์กโฟลว์อัตโนมัติ:</p>
+          <p>หากโปรเจกต์เดิมมีชุดทดสอบหรือระบบ Lint อยู่แล้ว คุณสามารถติดตั้งส่วนเสริม Opt-in <code>ci</code> (<code>npx nexus-devflow skill add ci</code>) แล้วรัน <code>/ci</code> เพื่อเชื่อมโยงการตรวจสอบเข้ากับเวิร์กโฟลว์อัตโนมัติ:</p>
           <pre><code>/ci</code></pre>
           
           <h4>กลไกการทำงานเชิงลึกของ Skill /ci</h4>
@@ -532,12 +532,12 @@ export const START_PAGES: DocPage[] = [
               สร้าง Task-Isolated Spec สำหรับแก้ไขบั๊กเร่งด่วนหรืองานเล็กนอกแผน พร้อมวงจร TDD และบันทึกเข้าสู่ History Archive
             </li>
             <li>
-              <strong><a href="../commands/rollback/">/rollback</a></strong>: 
-              วางแผนถอนฟีเจอร์ที่เสร็จสมบูรณ์แล้วอย่างปลอดภัย โดยอ้างอิงจาก History Archive และ Git Commit โดยรักษาประวัติ Git ไว้อย่างถูกต้อง
+              <strong><a href="../commands/rollback/">rollback</a> (Opt-in Extension)</strong>: 
+              ติดตั้งผ่าน <code>npx nexus-devflow skill add rollback</code> แล้วรัน <code>/rollback</code> เพื่อวางแผนถอนฟีเจอร์ที่เสร็จสมบูรณ์แล้วอย่างปลอดภัย โดยอ้างอิงจาก History Archive และ Git Commit โดยรักษาประวัติ Git ไว้อย่างถูกต้อง
             </li>
             <li>
-              <strong><a href="../commands/release/">/release</a></strong>: 
-              ตรวจสอบความพร้อมสำหรับการ Deploy ขึ้น Production (Render / Vercel), เช็ค Build, Environment Variables, และ Health-Check Endpoint
+              <strong><a href="../commands/release/">release</a> (Opt-in Extension)</strong>: 
+              ติดตั้งผ่าน <code>npx nexus-devflow skill add release</code> แล้วรัน <code>/release</code> เพื่อตรวจสอบความพร้อมสำหรับการ Deploy ขึ้น Production (Render / Vercel), เช็ค Build, Environment Variables, และ Health-Check Endpoint
             </li>
           </ul>
         `

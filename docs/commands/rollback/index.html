@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rollback (/rollback) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="วางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)">
+  <title>Rollback (/rollback - Opt-in Extension) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ส่วนเสริม Opt-in สำหรับวางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/rollback/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,12 +144,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Rollback (/rollback)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Rollback (/rollback - Opt-in Extension)</strong></div>
       
-      <h1 class="docs-title">Rollback (/rollback)</h1>
+      <h1 class="docs-title">Rollback (/rollback - Opt-in Extension)</h1>
       
       <p class="docs-lead">
-        วางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)
+        ส่วนเสริม Opt-in สำหรับวางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)
       </p>
 
       <div class="docs-meta">
@@ -167,8 +167,9 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>ใช้คำสั่ง <code>/rollback</code> เมื่อต้องการยกเลิกฟีเจอร์ที่เคยส่งมอบและรวมเข้า main ไปแล้วอย่างปลอดภัย:</p>
-          <pre><code>/rollback 3
+          <p>ติดตั้งส่วนเสริม Opt-in แล้วใช้คำสั่ง <code>/rollback</code> เมื่อต้องการยกเลิกฟีเจอร์ที่เคยส่งมอบและรวมเข้า main ไปแล้วอย่างปลอดภัย:</p>
+          <pre><code>npx nexus-devflow skill add rollback
+/rollback 3
 /rollback "003-stripe-payment"</code></pre>
         
           

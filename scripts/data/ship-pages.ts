@@ -31,7 +31,7 @@ npx @jakkrichm/create-nexus-devflow update --dry-run</code></pre>
               </tr>
               <tr>
                 <td><strong>Package Release (<code>v2.x.x</code>)</strong></td>
-                <td>สร้าง Annotated Git Tag (เช่น <code>git tag -a v2.17.6 -m "Release v2.17.6"</code>) และ Push ขึ้น <code>origin main --tags</code> เพื่อทริกเกอร์ GitHub Actions NPM Publishing</td>
+                <td>สร้าง Annotated Git Tag (เช่น <code>git tag -a v2.20.0 -m "Release v2.20.0"</code>) และ Push ขึ้น <code>origin main --tags</code> เพื่อทริกเกอร์ GitHub Actions NPM Publishing</td>
               </tr>
             </tbody>
           </table>
@@ -49,7 +49,7 @@ npx @jakkrichm/create-nexus-devflow update --dry-run</code></pre>
         id: 'run-release-locally',
         title: 'รันคำสั่ง Release ในเครื่อง (Run release locally)',
         contentHtml: `
-          <p>เรียกใช้คำสั่งผ่านสัญลักษณ์ที่รองรับตามเครื่องมือ AI ของคุณ:</p>
+          <p>ติดตั้งส่วนเสริม Opt-in <code>release</code> ด้วย <code>npx nexus-devflow skill add release</code> จากนั้นเรียกใช้คำสั่งผ่านสัญลักษณ์ที่รองรับตามเครื่องมือ AI ของคุณ:</p>
           <pre><code># Claude Code / Antigravity / Gemini CLI
 /release render
 /release vercel

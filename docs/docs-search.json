@@ -365,8 +365,8 @@
     ]
   },
   {
-    "title": "CI (/ci)",
-    "description": "รวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook",
+    "title": "CI (/ci - Opt-in Extension)",
+    "description": "ส่วนเสริม Opt-in สำหรับรวมศูนย์คำสั่ง Verify กลางของโปรเจกต์ ตั้งค่า GitHub Actions Workflows และติดตั้ง Local Pre-push Hook",
     "section": "COMMANDS",
     "slug": "commands/ci",
     "href": "../commands/ci/",
@@ -416,8 +416,8 @@
     ]
   },
   {
-    "title": "Release (/release)",
-    "description": "ตรวจสอบความพร้อมก่อนส่งมอบสู่ Production (Render, Vercel, Docker) ตรวจสอบ Secrets, Health Check Probes และ Database Migrations",
+    "title": "Release (/release - Opt-in Extension)",
+    "description": "ส่วนเสริม Opt-in สำหรับตรวจสอบความพร้อมก่อนส่งมอบสู่ Production (Render, Vercel, Docker) ตรวจสอบ Secrets, Health Check Probes และ Database Migrations",
     "section": "COMMANDS",
     "slug": "commands/release",
     "href": "../commands/release/",
@@ -434,8 +434,8 @@
     ]
   },
   {
-    "title": "Rollback (/rollback)",
-    "description": "วางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)",
+    "title": "Rollback (/rollback - Opt-in Extension)",
+    "description": "ส่วนเสริม Opt-in สำหรับวางแผนย้อนกลับฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัยโดยยังคงรักษาประวัติ Git และประเมินความเสี่ยงต่อฟีเจอร์อื่น (Forward Dependency Risk)",
     "section": "COMMANDS",
     "slug": "commands/rollback",
     "href": "../commands/rollback/",
@@ -486,8 +486,8 @@
     ]
   },
   {
-    "title": "Convert Any to MD (/convert-any-to-md)",
-    "description": "แปลงเอกสารทุกรูปแบบ (.pdf, .docx, .xlsx, .csv, .json, .yaml, รูปภาพ) ให้กลายเป็น Clean Markdown ภายใต้ devflow/reference/",
+    "title": "Convert Any to MD (/convert-any-to-md - Opt-in Extension)",
+    "description": "ส่วนเสริม Opt-in สำหรับแปลงเอกสารทุกรูปแบบ (.pdf, .docx, .xlsx, .csv, .json, .yaml, รูปภาพ) ให้กลายเป็น Clean Markdown ภายใต้ devflow/reference/",
     "section": "COMMANDS",
     "slug": "commands/convert-any-to-md",
     "href": "../commands/convert-any-to-md/",
@@ -504,8 +504,8 @@
     ]
   },
   {
-    "title": "Vendor (/vendor)",
-    "description": "ดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity",
+    "title": "Vendor (/vendor - Opt-in Extension)",
+    "description": "ส่วนเสริม Opt-in สำหรับดึง External Git Repositories เข้าสู่ devflow/.vendor/ และสร้าง Custom Wrapper Skill อัตโนมัติพร้อมการป้องกัน Update Immunity",
     "section": "COMMANDS",
     "slug": "commands/vendor",
     "href": "../commands/vendor/",
