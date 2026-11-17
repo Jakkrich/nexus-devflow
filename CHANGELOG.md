@@ -5,6 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.2] - 2026-11-18
+
+### Added
+- **Zero-Dependency Interactive Checkbox (`promptCheckbox`)**: Added `promptCheckbox()` in `packages/create-nexus-devflow/lib/ui.ts` supporting arrow/`j`/`k` navigation, `Space` toggle, `a` toggle-all, `Enter` confirm, `Esc`/`Ctrl+C` skip with terminal raw-mode/cursor cleanup, and non-TTY fallbacks.
+- **Bundled Offline-Safe Extras Skills (`extras/skills/`)**: Updated `prepare-template.ts`, `clean-template.ts`, `package.json` (`files`), and `.gitignore` to package Git-tracked `extras/skills/*` separately from `template/`, plus added `getExtrasSkillCatalog()`, `resolveBundledExtrasSkillDir()`, and `installExtrasSkills()` for instant offline installation and updates.
+
+### Changed
+- **Installer/Updater Step `[3/3]` Replaced With Extras Checkbox (Feature 127)**: Removed `Configuring Superpower Community Skills...` (`[Y/n]` batch prompt) from `install` and `update` in `create-nexus-devflow.ts` and replaced it with `[3/3] 🧩 Configuring Extras Skills...` offering the 7 user/team opt-in skills (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, hiding maintainer-only `publish-devflow`), pre-checking already-installed skills on `update` without removing unticked skills, skipping cleanly under `--yes`/`--dry-run`/`--json`/non-TTY, and preserving `nexus-devflow skill add --recommended` compatibility.
+
 ## [2.20.1] - 2026-11-18
 
 ### Added
