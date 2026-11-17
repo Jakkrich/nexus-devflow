@@ -11,6 +11,8 @@ interface GitStatusSummary {
   upstream: string | null;
   ahead: number | null;
   behind: number | null;
+  isWorktree: boolean;
+  mainWorktreeRoot: string | null;
 }
 
 interface GitStatusCacheEntry {
@@ -86,11 +88,12 @@ async function computeGitStatus(
     return unavailableSummary();
   }
 
-  const [porcelain, branch, lastCommit, upstream] = await Promise.all([
+  const [porcelain, branch, lastCommit, upstream, gitDirsRaw] = await Promise.all([
     gitRunner(projectRoot, ["status", "--porcelain=v1", "--untracked-files=all"]),
     readBranch(projectRoot, gitRunner),
     runOptionalGit(projectRoot, ["log", "-1", "--format=%s"], gitRunner),
-    runOptionalGit(projectRoot, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"], gitRunner)
+    runOptionalGit(projectRoot, ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"], gitRunner),
+    runOptionalGit(projectRoot, ["rev-parse", "--git-dir", "--git-common-dir"], gitRunner)
   ]);
 
   const changedFiles = porcelain
@@ -102,6 +105,8 @@ async function computeGitStatus(
     ? await readDivergence(projectRoot, gitRunner)
     : { ahead: null, behind: null };
 
+  const worktreeInfo = resolveWorktreeInfo(projectRoot, gitDirsRaw);
+
   const value: GitStatusSummary = {
     available: true,
     branch,
@@ -110,10 +115,40 @@ async function computeGitStatus(
     lastCommit,
     upstream,
     ahead: divergence.ahead,
-    behind: divergence.behind
+    behind: divergence.behind,
+    isWorktree: worktreeInfo.isWorktree,
+    mainWorktreeRoot: worktreeInfo.mainWorktreeRoot
   };
 
   return value;
+}
+
+function resolveWorktreeInfo(
+  projectRoot: string,
+  gitDirsRaw: string | null
+): { isWorktree: boolean; mainWorktreeRoot: string | null } {
+  if (!gitDirsRaw) {
+    return { isWorktree: false, mainWorktreeRoot: null };
+  }
+  const lines = gitDirsRaw
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+  if (lines.length < 2) {
+    return { isWorktree: false, mainWorktreeRoot: null };
+  }
+  const resolvedGitDir = path.resolve(projectRoot, lines[0]!);
+  const resolvedCommonDir = path.resolve(projectRoot, lines[1]!);
+  const norm = (value: string): string =>
+    process.platform === "win32" ? path.normalize(value).toLowerCase() : path.normalize(value);
+  if (norm(resolvedGitDir) === norm(resolvedCommonDir)) {
+    return { isWorktree: false, mainWorktreeRoot: null };
+  }
+  const mainWorktreeRoot =
+    path.basename(resolvedCommonDir).toLowerCase() === ".git"
+      ? path.dirname(resolvedCommonDir)
+      : resolvedCommonDir;
+  return { isWorktree: true, mainWorktreeRoot };
 }
 
 async function isGitRepository(
@@ -185,7 +220,9 @@ function unavailableSummary(): GitStatusSummary {
     lastCommit: null,
     upstream: null,
     ahead: null,
-    behind: null
+    behind: null,
+    isWorktree: false,
+    mainWorktreeRoot: null
   };
 }
 

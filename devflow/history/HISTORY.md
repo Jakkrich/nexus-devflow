@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-11-17 | `114d` | Feature | Parallel Worktree Workflows & Recovery | `d5895af` | `Completed` | [`114d-parallel-worktree-workflows-recovery.md`](features/114d-parallel-worktree-workflows-recovery.md) |
 | 2026-11-17 | `114c` | Feature | Spec Check Gate (`--check`), `when-testable` Proof & Implement Step Menu | `d269093` | `Completed` | [`114c-spec-check-when-testable-step-menu.md`](features/114c-spec-check-when-testable-step-menu.md) |
 | 2026-11-17 | `114b` | Feature | Context Trimming, On-Demand References & Cross-Skill Link Validator | `e691645` | `Completed` | [`114b-context-trimming-on-demand-references.md`](features/114b-context-trimming-on-demand-references.md) |
 | 2026-11-17 | `114a` | Feature | Rename `/status` & `/doctor` to `/devflow-status` & `/devflow-doctor` + Git/Pack Hardening | `c1ca922` | `Completed` | [`114a-rename-devflow-status-doctor-hardening.md`](features/114a-rename-devflow-status-doctor-hardening.md) |

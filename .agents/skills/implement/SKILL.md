@@ -107,10 +107,9 @@ Before touching code or executing build tasks, perform a positive **Input Covera
 
 ## Step 1 - branch
 
-Create or select the branch for the spec using `git.featureBranchPrefix`, `git.fixBranchPrefix`, or `git.rollbackBranchPrefix` from config (defaults: `feature/`, `fix/`, `rollback/`). Preserve unrelated working-tree changes before switching. If the
+Inspect `git worktree list --porcelain` alongside `git.featureBranchPrefix`, `git.fixBranchPrefix`, or `git.rollbackBranchPrefix` from config (defaults: `feature/`, `fix/`, `rollback/`). If already inside the linked worktree (or checkout) whose `HEAD` is the spec's pre-created/resumed branch, continue directly there. If that branch is already checked out in a *sibling* worktree, stop and report its exact worktree path instead of running `git checkout`. Otherwise preserve unrelated working-tree changes and create or check out the branch normally. If the
 project isn't a git repo yet, say so and ask the user to run `git init` first;
-the loop needs branches. On resume, the branch already exists - check it out
-instead of creating a new one.
+the loop needs branches. On resume inside the owning checkout, switch back to the existing branch instead of creating a new one.
 
 ### Type: Rollback safeguard
 

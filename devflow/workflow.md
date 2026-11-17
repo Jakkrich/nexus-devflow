@@ -59,6 +59,12 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 - `grill` (or `align`): Socratic alignment, domain modeling, and ADR recording (`devflow/decisions/`).
 - `brainstorm`: Divergent/convergent ideation with trade-off analysis.
 
+### 🌿 Parallel Worktree Workflows & Recovery
+
+- **One work item per worktree / clone**: Keep each active feature, fix, or rollback isolated in its own Git worktree (or separate clone) with its own `devflow/context/{xxx-slug}/` workspace. Never modify or remove sibling worktrees automatically.
+- **Pre-created worktree branch start**: `/feature` and `/implement` allow starting on an empty branch already checked out in the *current* linked worktree (for example via `git worktree add ../wt -b feature/xxx-slug`) when it has no commits ahead of local default and no conflicting archive in `devflow/history/`, while refusing branches locked by another worktree.
+- **Worktree-safe landing & `main`-advanced recovery**: Inside a linked worktree (`--git-dir` != `--git-common-dir`), `git checkout <main/master>` fails if `<main/master>` is open in the primary checkout — Option 1 runs squash-merge from the primary checkout (or uses Option 2 PR/MR). When parallel merges advance `main`, sync additively (`devflow/build-plan.md`, `devflow/history/HISTORY.md`), regenerate `/overview`, re-verify, and refresh any stale independent review receipt (`HEAD` changed).
+
 ---
 
 ## 📊 Dashboard Activity State Contract

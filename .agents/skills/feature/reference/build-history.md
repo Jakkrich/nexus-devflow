@@ -20,8 +20,11 @@ while a later attempt 2 titled `Export` uses `04-export--build-2.md`.
 Before freezing a new spec, check its exact planned archive path in `devflow/history/features/` and branch.
 Require `lstat` to return `ENOENT` for the archive leaf; any existing entry,
 including a dangling symlink, blocks it. Present parents must be ordinary
-directories. Require a valid branch name and no existing or namespace-conflicting
-local branch ref (inspect `git for-each-ref refs/heads/`, including packed refs).
+directories. Require a valid branch name and inspect `git for-each-ref refs/heads/`
+(including packed refs) plus `git worktree list --porcelain`. Refuse any branch already
+checked out in a *sibling* worktree. A pre-created branch checked out in the
+*current* worktree (`HEAD` matches the planned branch) is allowed only when it has
+zero commits ahead of the local default branch and no prior archive/history collision.
 Also require no prior use of the archive path in available Git history:
 
 ```bash

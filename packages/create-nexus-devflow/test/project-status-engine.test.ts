@@ -55,5 +55,14 @@ describe("ProjectStatusEngine Seam & Snapshot", () => {
     const formatted = engine.formatHuman(status, { color: false });
     assert.match(formatted, /Quality gates\s+spec always.*try guide when-testable/);
   });
+
+  it("displays Worktree row in formatHuman when running inside a linked worktree", async () => {
+    const engine = new ProjectStatusEngine(projectRoot);
+    const status = await engine.getStatus();
+    status.git.isWorktree = true;
+    status.git.mainWorktreeRoot = "/repo/main-checkout";
+    const formatted = engine.formatHuman(status, { color: false });
+    assert.match(formatted, /Worktree\s+linked worktree \(main: \/repo\/main-checkout\)/);
+  });
 });
 

@@ -56,6 +56,18 @@ async function resolveGitHooksDir(projectRoot: string): Promise<string | null> {
         const gitDir = path.isAbsolute(rawGitDir)
           ? rawGitDir
           : path.resolve(projectRoot, rawGitDir);
+        const commonDirPath = path.join(gitDir, "commondir");
+        try {
+          const commonDirRaw = (await fs.readFile(commonDirPath, "utf8")).trim();
+          if (commonDirRaw) {
+            const commonDir = path.isAbsolute(commonDirRaw)
+              ? commonDirRaw
+              : path.resolve(gitDir, commonDirRaw);
+            return path.join(commonDir, "hooks");
+          }
+        } catch {
+          // Non-linked or synthetic worktree .git file pointing directly to the common dir
+        }
         return path.join(gitDir, "hooks");
       }
     }

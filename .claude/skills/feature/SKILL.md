@@ -132,7 +132,7 @@ Before review, allocate the selected feature ID's build attempt using
 `reference/build-history.md`: first build 1, otherwise one greater than
 the maximum proven prior attempt after all prior builds were reversed. For attempt N > 1, append `--build-N` to the slug and archive path (e.g. `086-export--build-2.md`).
 
-For the one (sub-)feature being built now, allocate sequential ID (`xxx-slug`) and create a dedicated workspace at `devflow/context/{xxx-slug}/`. Write the full living spec to
+For the one (sub-)feature being built now, allocate sequential ID (`xxx-slug`) and create a dedicated workspace at `devflow/context/{xxx-slug}/`. Keep one work item per worktree/clone; if running inside a linked worktree pre-created on `feature/{xxx-slug}`, allow that empty current-worktree branch when it passes `reference/build-history.md` collision checks (zero sibling checkout lock, zero prior commits/archives). Write the full living spec to
 `devflow/context/{xxx-slug}/spec.md`, following `reference/feature-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. The first heading and build-plan identity must use this canonical form:
 
 ```markdown

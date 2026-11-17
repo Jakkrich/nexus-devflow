@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
+import { execFile as execFileCb } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
 import { readGitStatus, readGitStatusSafe, clearGitStatusCache } from "../lib/git-status.js";
+
+const execFile = promisify(execFileCb);
 
 test("readGitStatus handles non-git directory gracefully", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-git-non-"));
@@ -13,6 +17,8 @@ test("readGitStatus handles non-git directory gracefully", async () => {
     assert.equal(status.branch, null);
     assert.equal(status.clean, null);
     assert.equal(status.changedFiles, 0);
+    assert.equal(status.isWorktree, false);
+    assert.equal(status.mainWorktreeRoot, null);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }
@@ -65,11 +71,11 @@ test("readGitStatus coalesces concurrent misses and starts TTL after completion"
 
   const results = await Promise.all(concurrentReads);
   assert.ok(results.every((result) => result.available));
-  assert.equal(commands.length, 5, "expected one shared five-command Git computation");
+  assert.equal(commands.length, 6, "expected one shared six-command Git computation");
 
   now = 6_000;
   await readGitStatus(projectRoot, options);
-  assert.equal(commands.length, 5, "expected a full TTL measured from completion");
+  assert.equal(commands.length, 6, "expected a full TTL measured from completion");
 });
 
 test("readGitStatus clears a failed in-flight computation so the next call can retry", async () => {
@@ -114,8 +120,43 @@ test("readGitStatusSafe returns unavailable summary when git status fails or exc
   assert.equal(status.changedFiles, 0);
 });
 
+test("readGitStatus detects linked git worktree and resolves mainWorktreeRoot", async () => {
+  clearGitStatusCache();
+  const baseDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-worktree-"));
+  const primaryDir = path.join(baseDir, "primary");
+  const worktreeDir = path.join(baseDir, "wt-114d");
+  try {
+    await fs.mkdir(primaryDir, { recursive: true });
+    await execFile("git", ["init", "-b", "main", primaryDir]);
+    await execFile("git", ["-C", primaryDir, "config", "user.name", "DevFlow Test"]);
+    await execFile("git", ["-C", primaryDir, "config", "user.email", "test@nexus.local"]);
+    await fs.writeFile(path.join(primaryDir, "README.md"), "# test\n", "utf8");
+    await execFile("git", ["-C", primaryDir, "add", "README.md"]);
+    await execFile("git", ["-C", primaryDir, "commit", "-m", "init"]);
+    await execFile("git", ["-C", primaryDir, "worktree", "add", worktreeDir, "-b", "feature/wt-test"]);
+
+    const primaryStatus = await readGitStatus(primaryDir, { forceFresh: true });
+    assert.equal(primaryStatus.available, true);
+    assert.equal(primaryStatus.isWorktree, false);
+    assert.equal(primaryStatus.mainWorktreeRoot, null);
+
+    const wtStatus = await readGitStatus(worktreeDir, { forceFresh: true });
+    assert.equal(wtStatus.available, true);
+    assert.equal(wtStatus.branch, "feature/wt-test");
+    assert.equal(wtStatus.isWorktree, true);
+    assert.equal(
+      wtStatus.mainWorktreeRoot?.toLowerCase(),
+      (await fs.realpath(primaryDir)).toLowerCase()
+    );
+  } finally {
+    await execFile("git", ["-C", primaryDir, "worktree", "remove", "--force", worktreeDir]).catch(() => {});
+    await fs.rm(baseDir, { recursive: true, force: true });
+  }
+});
+
 function fakeGitOutput(args: readonly string[]): string {
   if (args[0] === "rev-parse" && args[1] === "--is-inside-work-tree") return "true";
+  if (args[0] === "rev-parse" && args[1] === "--git-dir") return ".git\n.git";
   if (args[0] === "symbolic-ref") return "2.5.0";
   if (args[0] === "log") return "test commit";
   if (args[0] === "rev-parse") return "";

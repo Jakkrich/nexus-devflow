@@ -173,3 +173,11 @@ approval is missing. Never repeat archival, the work commit, or the squash merge
 and never create a cleanup commit on the default branch. If nothing remains,
 report the verified local merge once and leave Git unchanged. Push still needs
 its separate approval. A repeated resume follows this same no-op path.
+
+## Recovery when default branch advances (parallel worktrees)
+
+When a parallel worktree or pull request advances local `<main/master>` while this work branch is in progress or awaiting landing (`git merge-base <main/master> HEAD` != `<main/master>` tip):
+
+1. Inspect `git worktree list --porcelain` before switching or landing so a primary-checkout branch never causes a failing checkout inside a linked worktree.
+2. Sync cleanly with `<main/master>` (merge or rebase on `<main/master>`), resolving `devflow/build-plan.md` and `devflow/history/HISTORY.md` additively so parallel completed entries on `<main/master>` are never overwritten.
+3. Regenerate `devflow/context/project-overview.md` via `/overview` (`devflow:source-hash`), re-run `Verify`, and obtain a fresh checkpoint/independent review receipt if `HEAD` or `Base commit` changed while an independent review gate applies.

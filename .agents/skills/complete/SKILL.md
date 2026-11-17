@@ -162,11 +162,12 @@ Present the user with two clear delivery options:
 ### 🔀 Option 1: Direct Local Squash-Merge / Direct Commit (Solo Mode - For Solo Development)
 - **When to choose**: When working alone (Solo Developer) or possessing direct merge/commit authority to `main` or `master` locally.
 - **Execution Actions**:
-  1. If on a feature branch: Switch to `main` or `master` (`git checkout <main/master>`), squash-merge the branch (`git merge --squash <feature-branch>`), and commit the work.
-  2. If working directly on local `main`/`master`: Commit the changes directly to the active branch.
-  3. Delete the local feature branch only upon explicit user confirmation.
-  4. **Always stop and ask separately** before pushing local `main`/`master` to the remote upstream repository. Merge approval never implies push approval.
-  5. Run `git push origin <main/master>` only after separate explicit confirmation.
+  1. If on a feature branch in the primary checkout: Switch to `main` or `master` (`git checkout <main/master>`), squash-merge the branch (`git merge --squash <feature-branch>`), and commit the work. If running inside a **linked worktree** (`git rev-parse --git-dir` != `--git-common-dir`) where `<main/master>` is already checked out in the main checkout (`git worktree list --porcelain`), run the squash-merge from that clean primary checkout instead of `git checkout <main/master>` inside the linked worktree (or choose Option 2).
+  2. When local `<main/master>` has advanced while parallel worktrees ran (`git merge-base <main/master> HEAD` != `<main/master>`), sync the branch additively before landing (keep parallel `devflow/build-plan.md` & `devflow/history/HISTORY.md` entries, regenerate `devflow/context/project-overview.md` via `/overview`, rerun `Verify`, and renew independent review if `HEAD` changed).
+  3. If working directly on local `main`/`master`: Commit the changes directly to the active branch.
+  4. Delete the local feature branch or linked worktree only upon explicit separate user confirmation.
+  5. **Always stop and ask separately** before pushing local `main`/`master` to the remote upstream repository. Merge approval never implies push approval.
+  6. Run `git push origin <main/master>` only after separate explicit confirmation.
 
 ### 🔀 Option 2: Team MR / PR Flow (Team Mode - For Teams / Multi-Developer)
 - **When to choose**: When collaborating in a team with more than one person where code changes require peer review via GitLab Merge Request (MR) or GitHub Pull Request (PR), or where developers lack direct write access to protected `main`/`master` branches.

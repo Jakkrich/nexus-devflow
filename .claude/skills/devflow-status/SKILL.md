@@ -43,13 +43,13 @@ Read these, distill them into a few lines, then stop. Do not dump file contents.
    as current for backward compatibility. Recommend `/overview` only when the
    recorded hash matches neither value. Do not use filesystem timestamps;
    `/complete` legitimately makes `build-plan.md` newer when it checks off work.
-5. **Git** - current branch, whether the working tree is clean or has uncommitted
+5. **Git** - current branch, linked worktree status (`mainWorktreeRoot` when active), whether the working tree is clean or has uncommitted
    changes, roughly how many files changed, last commit subject, and whether the
-   branch is ahead of its remote. If the directory is not a git repo, say so and
+   branch is ahead of its remote or behind an advanced local `<main/master>`. If the directory is not a git repo, say so and
    skip this part rather than failing.
 6. **Progress drift** - flag active task on `main`, a spec in progress but no
    matching `feature/{xxx-slug}`, `fix/{xxx-slug}`, or `rollback/{xxx-slug}` branch, all spec steps checked but
-   not completed, or disagreement between `build-plan.md` and active specs.
+   not completed, parallel drift when local `<main/master>` advanced past merge-base, or disagreement between `build-plan.md` and active specs.
 7. **Dashboard activity** - read `devflow/.state/run.json` when it exists.
    Report the command, mode, status, progress, boundary, and safe resume command.
    A missing file simply means no activity has been recorded. Invalid activity

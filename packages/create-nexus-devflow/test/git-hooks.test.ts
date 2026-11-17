@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
+import { execFile as execFileCb } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
 import { installGitHook, uninstallGitHooks } from "../lib/git-hooks.js";
+
+const execFile = promisify(execFileCb);
 
 test("installGitHook and uninstallGitHooks manage git hooks properly", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-hooks-"));
@@ -71,6 +75,39 @@ test("installGitHook handles Git worktrees properly", async () => {
     assert.equal(uninsRes.removed.length, 1);
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("installGitHook resolves commondir inside a real git worktree add checkout", async () => {
+  const baseDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-real-wt-hook-"));
+  const primaryDir = path.join(baseDir, "primary");
+  const worktreeDir = path.join(baseDir, "linked-wt");
+  try {
+    await fs.mkdir(primaryDir, { recursive: true });
+    await execFile("git", ["init", "-b", "main", primaryDir]);
+    await execFile("git", ["-C", primaryDir, "config", "user.name", "DevFlow Test"]);
+    await execFile("git", ["-C", primaryDir, "config", "user.email", "test@nexus.local"]);
+    await fs.writeFile(path.join(primaryDir, "README.md"), "# hook\n", "utf8");
+    await execFile("git", ["-C", primaryDir, "add", "README.md"]);
+    await execFile("git", ["-C", primaryDir, "commit", "-m", "init"]);
+    await execFile("git", ["-C", primaryDir, "worktree", "add", worktreeDir, "-b", "feature/hook-wt"]);
+
+    const installRes = await installGitHook(worktreeDir, "pre-commit");
+    assert.equal(installRes.success, true);
+    assert.equal(
+      installRes.path.toLowerCase(),
+      path.join(await fs.realpath(primaryDir), ".git", "hooks", "pre-commit").toLowerCase()
+    );
+
+    const exists = await fs.lstat(installRes.path).then(() => true).catch(() => false);
+    assert.equal(exists, true);
+
+    const uninsRes = await uninstallGitHooks(worktreeDir);
+    assert.equal(uninsRes.success, true);
+    assert.equal(uninsRes.removed.length, 1);
+  } finally {
+    await execFile("git", ["-C", primaryDir, "worktree", "remove", "--force", worktreeDir]).catch(() => {});
+    await fs.rm(baseDir, { recursive: true, force: true });
   }
 });
 

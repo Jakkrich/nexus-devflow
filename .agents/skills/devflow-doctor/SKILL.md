@@ -166,6 +166,7 @@ Gather these, then summarize. Do not dump file contents.
 8. **Git**
    - Report current branch, clean vs dirty working tree, rough changed-file count,
      last commit subject, and whether the branch is ahead of upstream.
+   - Check `git worktree list --porcelain` when linked worktrees exist: report linked worktree status, warn if another worktree holds a conflicting feature branch or if local `<main/master>` has advanced ahead of the active branch's merge-base, and confirm hooks resolve via the common git directory (`commondir`).
    - If the directory is not a git repo, report that as a setup issue and keep
      going.
 9. **Token Economics & Session Cost Audit**

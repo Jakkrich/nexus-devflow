@@ -579,6 +579,15 @@ function appendGitLines(
 
   lines.push(
     formatRow("Branch", git.branch || "unknown", style),
+    ...(git.isWorktree
+      ? [
+          formatRow(
+            "Worktree",
+            git.mainWorktreeRoot ? `linked worktree (main: ${git.mainWorktreeRoot})` : "linked worktree",
+            style
+          )
+        ]
+      : []),
     formatRow("Working tree", workingTree, style),
     formatRow("Remote", coloredRemote, style)
   );

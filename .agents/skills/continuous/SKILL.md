@@ -188,9 +188,9 @@ Apply the `/complete` safety, logging, and archive behavior without asking commi
 4. Place the archive at `devflow/history/features/{xxx-slug}.md`.
 5. Update checkboxes in `devflow/build-plan.md` and append entry to `devflow/history/HISTORY.md`.
 6. Remove the active run directory `devflow/context/{xxx-slug}/`.
-7. Switch to the local default branch, squash-merge the feature branch, and create one
+7. Switch to the local default branch (or execute from the clean primary checkout owning `<main/master>` when running inside a linked worktree; if `<main/master>` advanced during parallel runs, sync additively on `build-plan.md` + `HISTORY.md`, run `/overview`, re-verify, and renew independent review if `HEAD` changed), squash-merge the feature branch, and create one
    conventional commit containing product work, tests, and DevFlow history.
-8. Delete the merged local feature branch.
+8. Delete the merged local feature branch (only delete a linked worktree directory when explicitly authorized).
 9. Confirm the default branch is clean before selecting the next feature.
 
 ---

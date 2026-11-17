@@ -202,7 +202,7 @@ A receipt is current only when all of these hold:
   record the actual value.
 
 Any other code, test, configuration, spec, or acceptance-criteria change makes
-the receipt stale. A stale receipt never proves the new state. Product changes
+the receipt stale. Syncing, merging, or rebasing onto an advanced `main` in a parallel worktree also changes `HEAD` (and `Base commit`), intentionally marking the prior receipt stale until verified and re-reviewed at the new checkpoint. A stale receipt never proves the new state. Product changes
 need a new approved checkpoint. A local-spec-only revision may reuse the same
 approved product HEAD after normal spec and verification gates, with a new
 snapshot, a new request, and a full fresh review. Never create an empty commit
