@@ -245,7 +245,7 @@ Stop and produce a concise review packet:
 - changed files and why each changed
 - build/test/check commands run, with pass or fail
 - screenshots or output paths, when relevant
-- how to try it manually, or a pointer to `/try` for the full walkthrough
+- `## Try it now` proof (1–3 concrete steps per `../check/reference/try-it-now.md` when `qualityGates.regular.tryGuide` is `always`, `when-user-facing`, or `when-testable` and active), or how to try it manually / pointer to `/try`
 - checkpoint commits created
 - self-review findings
 - targeted audit scope and findings

@@ -59,7 +59,8 @@ Read these, distill them into a few lines, then stop. Do not dump file contents.
    Report effective regular and Continuous quality gates, plus `review.independentExecution`.
    Explain that independent review defaults to `when-sensitive` for both workflows and
    execution defaults to `automatic`, which uses an isolated reviewer only when
-   the current adapter supports it. Audit, check, and try guide default to `manual`.
+   the current adapter supports it. `specCheck`, audit, check, and try guide default to `manual`
+   (`tryGuide` supports `manual`, `when-user-facing`, `when-testable`, `always`).
    Before recommending `/overview`, check whether `AGENTS.md`
    still contains the `<!-- devflow:onboarding-required -->` marker or standard template commands.
    When it does, onboarding is incomplete and `/onboard` is the next action.

@@ -387,7 +387,7 @@ function formatConfigValue(state: ProjectConfigState): string {
 }
 
 function formatQualityGates(gates: QualityGatePolicy): string {
-  return `audit ${gates.audit}, review ${gates.independentReview}, check ${gates.check}, try guide ${gates.tryGuide}`;
+  return `spec ${gates.specCheck}, audit ${gates.audit}, review ${gates.independentReview}, check ${gates.check}, try guide ${gates.tryGuide}`;
 }
 
 function shouldUseColor(

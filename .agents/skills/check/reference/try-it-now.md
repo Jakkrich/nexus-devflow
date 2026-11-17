@@ -1,6 +1,6 @@
 # Try It Now - manual observation guide
 
-Use this reference for Steps 2–4 of `/check guide` (and `/try`), or when extracting a concise human-review path.
+Use this reference for Steps 2–4 of `/check guide` (and `/try`), or when extracting a concise `## Try it now` proof path (1–3 concrete steps for `tryGuide` policies `when-testable`, `when-user-facing`, or `always`).
 
 ## Missing-detail & removed-behavior rules
 

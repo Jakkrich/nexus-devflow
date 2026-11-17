@@ -1,7 +1,7 @@
 ---
 name: feature
 description: "[devflow] Turn a build-plan item into a task-isolated living spec (devflow/context/{xxx-slug}/spec.md), splitting oversized work and checking contracts and tests before review. Use for /feature, starting the next feature, or drafting a spec."
-argument-hint: "[{number, name, DISC-id, or IDEA-id}]"
+argument-hint: "[{number, name, DISC-id, or IDEA-id}] [--check]"
 ---
 
 # feature - turn a build-plan feature into a buildable spec
@@ -225,10 +225,17 @@ code exists. Run the draft against these questions:
   test when a `test` command is declared in `AGENTS.md`, UI/integration rides on
   screenshot + build?
 
-Apply the fixes to `devflow/context/{xxx-slug}/spec.md`. Then stop and present the spec, leading
-with a short **"what the critique changed"** note - the splits, gaps, or scope
-cuts you made (or "nothing - the draft held up"). That note is the point: it shows
-the gate working before a line of code is written.
+Apply the fixes to `devflow/context/{xxx-slug}/spec.md`.
+
+### Optional Spec Check Gate (`--check` / `specCheck`)
+
+Read `qualityGates.regular.specCheck` from `devflow/config.json` (default `"manual"`).
+When `--check` is passed or `specCheck` is `"always"`, run a focused verification pass against the real repository before presenting the spec:
+- Confirm every existing file, symbol, script, and contract referenced in the draft exists cleanly (and mark genuinely new artifacts `[NEW]`).
+- Confirm step ordering has no forward dependency, AC-to-step coverage is complete, and no Owed Decisions remain.
+- Fix concrete mismatches directly in `spec.md`, then include a short **Spec Check** verdict right under **"what the critique changed"**.
+
+Stop and present the spec, leading with a short **"what the critique changed"** note - the splits, gaps, or scope cuts you made (or "nothing - the draft held up"). That note is the point: it shows the gate working before a line of code is written.
 
 Tell the user to review and adjust. This skill plans; it never starts building.
 

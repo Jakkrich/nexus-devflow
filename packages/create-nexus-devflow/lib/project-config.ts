@@ -16,10 +16,16 @@ type UiEvidencePolicy = "required" | "when-available";
 type AuditGatePolicy = "always" | "manual" | "when-sensitive";
 type IndependentReviewGatePolicy = "always" | "manual" | "when-sensitive";
 type CheckGatePolicy = "always" | "manual" | "when-behavioral";
-type TryGuideGatePolicy = "always" | "manual" | "when-user-facing";
+type SpecCheckGatePolicy = "always" | "manual";
+type TryGuideGatePolicy =
+  | "always"
+  | "manual"
+  | "when-user-facing"
+  | "when-testable";
 type ProjectConfigState = "defaults" | "invalid" | "project";
 
 interface QualityGatePolicy {
+  specCheck: SpecCheckGatePolicy;
   audit: AuditGatePolicy;
   independentReview: IndependentReviewGatePolicy;
   check: CheckGatePolicy;
@@ -90,12 +96,14 @@ function createDefaultProjectConfig(): ProjectConfig {
     },
     qualityGates: {
       regular: {
+        specCheck: "manual",
         audit: "manual",
         independentReview: "when-sensitive",
         check: "manual",
         tryGuide: "manual"
       },
       continuous: {
+        specCheck: "manual",
         audit: "manual",
         independentReview: "when-sensitive",
         check: "manual",
@@ -221,12 +229,12 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   assertKnownKeys(qualityGates, ["regular", "continuous"], "qualityGates");
   assertKnownKeys(
     regularGates,
-    ["audit", "independentReview", "check", "tryGuide"],
+    ["specCheck", "audit", "independentReview", "check", "tryGuide"],
     "qualityGates.regular"
   );
   assertKnownKeys(
     continuousGates,
-    ["audit", "independentReview", "check", "tryGuide"],
+    ["specCheck", "audit", "independentReview", "check", "tryGuide"],
     "qualityGates.continuous"
   );
   assertKnownKeys(
@@ -336,6 +344,12 @@ function parseQualityGatePolicy(
   label: string
 ): QualityGatePolicy {
   return {
+    specCheck: optionalEnum(
+      value.specCheck,
+      ["always", "manual"],
+      defaults.specCheck,
+      `${label}.specCheck`
+    ),
     audit: optionalEnum(
       value.audit,
       ["always", "manual", "when-sensitive"],
@@ -356,7 +370,7 @@ function parseQualityGatePolicy(
     ),
     tryGuide: optionalEnum(
       value.tryGuide,
-      ["always", "manual", "when-user-facing"],
+      ["always", "manual", "when-user-facing", "when-testable"],
       defaults.tryGuide,
       `${label}.tryGuide`
     )
@@ -508,6 +522,7 @@ export type {
   ProjectConfigWarning,
   QualityGatePolicy,
   RolePolicy,
+  SpecCheckGatePolicy,
   StepReviewPolicy,
   TryGuideGatePolicy,
   UiEvidencePolicy

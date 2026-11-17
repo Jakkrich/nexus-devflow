@@ -62,7 +62,7 @@ Use `qualityGates.regular` for this work item:
 - **Audit:** `manual` runs only when the user explicitly requests `/audit`; `when-sensitive` runs for sensitive categories; `always` runs for every work item.
 - **Independent review:** `manual` runs only when explicitly requested (`/audit independent current`); `when-sensitive` requires it for sensitive domains; `always` requires it for every work item.
 - **Check:** `manual` runs only when explicitly requested; `when-behavioral` runs when done-whens need observed runtime behavior; `always` runs for every work item.
-- **Try guide:** `manual` runs only when explicitly requested; `when-user-facing` generates guide when change affects UI/UX; `always` generates one for every work item.
+- **Try guide:** `manual` runs only when explicitly requested; `when-user-facing` generates guide when change affects UI/UX; `when-testable` generates a concise 1–3 step `## Try it now` proof per `../check/reference/try-it-now.md` when the change has testable/observable behavior; `always` generates one for every work item.
 
 ### Independent review execution
 
@@ -186,7 +186,7 @@ Present the user with two clear delivery options:
 ## Step 4 - Finish & Try Path
 
 Point the user at `/feature`, `/fix`, or `/rollback` for the next task.
-Finish with a concise **How to try it** note for the completed work.
+Finish with a concise **How to try it** note (or the archived `## Try it now` proof from `../check/reference/try-it-now.md` when active) for the completed work.
 
 ### 📢 Leadership & Stakeholder Summary (Channel-Ready)
 

@@ -27,7 +27,10 @@ Build the selected spec through its acceptance criteria and required verificatio
 Read `workflow.stepReview` and `workflow.checkpointCommits` from `devflow/config.json` independently; defaults are `feature` and `disabled`.
 
 - `stepReview: "feature"`: continue through all authorized steps without asking Continue after each step. Record evidence as work proceeds and present one final review packet.
-- `stepReview: "every"`: after a working step, show its diff and evidence, then wait for approval before the next step. A walkthrough is available on request.
+- `stepReview: "every"`: after each working step, show its concise diff summary, done-when proof, and optional checkpoint candidate (when `checkpointCommits: "enabled"`), then present these numbered choices and wait before moving on:
+  1. **Continue to next step** (create the step checkpoint first only when `checkpointCommits: "enabled"` and explicitly approved).
+  2. **Walk me through this step** (read-only explanation of what changed and why).
+  3. **Request changes on this step**.
 - `checkpointCommits: "disabled"`: omit ordinary checkpoint offers.
 - `checkpointCommits: "enabled"`: offer an optional checkpoint at the configured review boundary (per-step for `every`, final packet for `feature`). Show the exact candidate and obtain commit authorization before committing. The setting itself is not authorization.
 
@@ -87,6 +90,8 @@ receipt. After the final Verify pass, an active gate routes to
 its own work or rewrites receipt evidence.
 
 For browser-facing changes, run focused browser tests during iteration when available. Run the required `npm run test:browser` gate once before handoff if the spec or project requires it. Use `browseros-neo` for visual or behavioral evidence when available and relevant. Record missing tooling accurately; install a runner only when setup is in the authorized scope.
+
+Also read `qualityGates.regular.tryGuide` from `devflow/config.json` (default `"manual"`). When `tryGuide` is `"always"`, `"when-user-facing"` (for UI work), or `"when-testable"` (for testable/observable UI, API, CLI, or script changes), prepare a concise 1–3 step `## Try it now` proof per `../check/reference/try-it-now.md`.
 
 **Resuming?** If the spec already has some build steps checked off (`- [x]`), this
 feature was started earlier and interrupted (often a cleared context). The spec and
@@ -176,7 +181,7 @@ When every step is built and `Verify`, or the fallback build and tests, passes
 - branch name
 - what changed, grouped by file or area
 - checks run, with the exact command or proof used
-- how to try it manually, or a pointer to `/try`
+- `## Try it now` proof (1–3 concrete steps per `../check/reference/try-it-now.md` when `qualityGates.regular.tryGuide` is active for this feature), or how to try it manually / pointer to `/try`
 - ledger state: any findings still `open` or `fixed`, by ID
 - known risks, skipped checks, or follow-up notes
 - next action, usually `/complete`

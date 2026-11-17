@@ -46,5 +46,14 @@ describe("ProjectStatusEngine Seam & Snapshot", () => {
     assert.ok(formatted.includes("Next action"));
     assert.ok(formatted.includes("git status failed") || formatted.includes("git_status_unavailable") || formatted.includes("unavailable"));
   });
+
+  it("includes specCheck and when-testable tryGuide policy in Quality gates line", async () => {
+    const engine = new ProjectStatusEngine(projectRoot);
+    const status = await engine.getStatus();
+    status.configuration.values.qualityGates.regular.specCheck = "always";
+    status.configuration.values.qualityGates.regular.tryGuide = "when-testable";
+    const formatted = engine.formatHuman(status, { color: false });
+    assert.match(formatted, /Quality gates\s+spec always.*try guide when-testable/);
+  });
 });
 

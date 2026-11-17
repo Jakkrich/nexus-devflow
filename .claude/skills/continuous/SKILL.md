@@ -151,7 +151,9 @@ Evaluate `qualityGates.continuous` in `devflow/config.json`:
 - **Check**: `manual` skips automatic `/check`; `when-behavioral` runs it when a done-when
   needs observed runtime behavior (UI, CLI, API, background job); `always` checks every feature.
 - **Try Guide**: `manual` skips automatic generation; `when-user-facing` generates a guide
-  for UI, CLI, or user-facing workflows; `always` generates one for every feature.
+  for UI work; `when-testable` generates a concise 1–3 step `## Try it now` proof per
+  `../check/reference/try-it-now.md` whenever the feature produces testable/observable behavior;
+  `always` generates one for every feature (and archives it with `/complete`).
 
 Run required gates in order: check, review, then try guide. When independent review is
 selected, ensure application code is in a clean immutable checkpoint. First rerun final

@@ -14,6 +14,7 @@ import {
 test("default config configures independent review execution and quality gates", () => {
   const defaults = createDefaultProjectConfig();
   const defaultGates = {
+    specCheck: "manual",
     audit: "manual",
     independentReview: "when-sensitive",
     check: "manual",
@@ -48,9 +49,11 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
     },
     qualityGates: {
       regular: {
+        specCheck: "always",
         audit: "when-sensitive",
         independentReview: "always",
-        check: "always"
+        check: "always",
+        tryGuide: "when-testable"
       },
       continuous: {
         tryGuide: "when-user-facing"
@@ -67,10 +70,12 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
   assert.equal(result.values.git.featureBranchPrefix, "feat/");
   assert.equal(result.values.git.fixBranchPrefix, "fix/");
   assert.equal(result.values.review.independentExecution, "automatic");
+  assert.equal(result.values.qualityGates.regular.specCheck, "always");
   assert.equal(result.values.qualityGates.regular.audit, "when-sensitive");
   assert.equal(result.values.qualityGates.regular.independentReview, "always");
   assert.equal(result.values.qualityGates.regular.check, "always");
-  assert.equal(result.values.qualityGates.regular.tryGuide, "manual");
+  assert.equal(result.values.qualityGates.regular.tryGuide, "when-testable");
+  assert.equal(result.values.qualityGates.continuous.specCheck, "manual");
   assert.equal(
     result.values.qualityGates.continuous.tryGuide,
     "when-user-facing"
@@ -150,6 +155,24 @@ test("readProjectConfig rejects unknown and invalid values", async (t) => {
       }
     }),
     /qualityGates\.regular\.independentReview must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      qualityGates: {
+        regular: { specCheck: "when-sensitive" }
+      }
+    }),
+    /qualityGates\.regular\.specCheck must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      qualityGates: {
+        continuous: { tryGuide: "when-unknown" }
+      }
+    }),
+    /qualityGates\.continuous\.tryGuide must be one of/
   );
   assert.throws(
     () => parseProjectConfig({

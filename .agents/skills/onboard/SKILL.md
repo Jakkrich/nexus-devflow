@@ -206,8 +206,7 @@ instead of guessing, such as:
   changing only `stepReview` restores the approval pauses, not checkpoint prompts
 - whether branches should use a different naming pattern
 - whether `/check` should require browser evidence for UI work
-- whether audit, independent review, check, or try guides should stay manual, run only for their
-  documented conditional case, or run for every regular or Continuous work item
+- whether spec checks (`specCheck`: `manual` / `always` via `/feature --check`), audit, independent review, check, or try guides (`manual`, `when-user-facing`, `when-testable`, `always`) should stay manual, run only for their documented conditional case, or run for every regular or Continuous work item
 - whether a selected independent review should use the default automatic
   isolated reviewer or `review.independentExecution: "manual"` for a
   fresh-session handoff. Explain that automatic execution uses a fresh isolated

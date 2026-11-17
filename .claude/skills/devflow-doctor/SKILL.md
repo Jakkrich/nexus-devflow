@@ -59,9 +59,10 @@ Gather these, then summarize. Do not dump file contents.
      built-in defaults. When present, require a regular non-symbolic-link JSON
      file with `schemaVersion: 1`. Reject unknown keys and unsupported values.
      Report the effective workflow, git, verification, review execution, regular
-     quality-gate, Continuous quality-gate, and Continuous Mode settings. Confirm each audit,
-     independent-review, check, and try-guide gate uses its supported values.
-     Independent review defaults to `when-sensitive` for both workflows; audit,
+     quality-gate, Continuous quality-gate, and Continuous Mode settings. Confirm each spec-check,
+     audit, independent-review, check, and try-guide gate uses its supported values
+     (including `when-testable` or `when-user-facing` for try guides).
+     Independent review defaults to `when-sensitive` for both workflows; specCheck, audit,
      check, and try guide default to `manual`. Confirm
      `review.independentExecution` is `manual` or `automatic` and defaults to
      `automatic`. Do not claim automatic capability is available from installed
