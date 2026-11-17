@@ -5,6 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.1] - 2026-11-18
+
+### Added
+- **Opt-in `browseros-neo` Team Skill (Feature 126)**: Added custom `extras/skills/browseros-neo/` (`SKILL.md` + `reference/e2e-templates.md`, evolved from `browserclaw`) for BrowserOS neo MCP with `--verify` (E2E Test & Verify) and `--debug` (E2E Debug & Fix Verification) modes, mandatory gitignored `devflow/reports/{run-id}/browser-test-plan.md` + `evidence.md`, and `name_session` traceability to BrowserOS neo video/session replay.
+- **Registry & Web Docs for `browseros-neo` and `publish-devflow`**: Registered `browseros-neo` and `publish-devflow` in `KNOWN_SKILL_ALIASES` (`npx nexus-devflow skill add <name>`), restored `extras/skills/publish-devflow/SKILL.md`, and added `docs/commands/browseros-neo/index.html` (51 generated documentation subpages).
+
+### Changed
+- **Documentation & Landing Alignment**: Synchronized Opt-in Extensions and 15 Core Skills references across `README.md`, `README.th.md`, `packages/create-nexus-devflow/README.md`, `devflow/workflow.md`, `index.html`, and `docs/` (`getting-started`, `release-readiness`, `command-guide`, `testing`, `workflow-surface-map`), removing hardcoded local MCP endpoint references from `scripts/data/quality-pages.ts`.
+
 ## [2.20.0] - 2026-11-17
 
 ### Changed
