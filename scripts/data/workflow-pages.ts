@@ -123,10 +123,10 @@ export const WORKFLOW_PAGES: DocPage[] = [
         contentHtml: `
           <p>ไฟล์ <code>devflow/config.json</code> เป็นศูนย์กลางควบคุมนโยบายเวิร์กโฟลว์ที่ทำงานร่วมกันได้อย่างสอดคล้องข้ามทุก AI Adapter โดยควบคุมการตั้งค่าสำคัญ เช่น:</p>
           <ul>
-            <li><strong>จังหวะการรีวิว (Review Cadence)</strong>: ควบคุมผ่าน <code>workflow.stepReview</code> (ค่าเริ่มต้น <code>"feature"</code> สำหรับโหมดคล่องตัว หรือ <code>"every"</code> สำหรับการหยุดถามทุกสเต็ป)</li>
+            <li><strong>จังหวะการรีวิว (Review Cadence)</strong>: ควบคุมผ่าน <code>workflow.stepReview</code> (ค่าเริ่มต้น <code>"feature"</code> สำหรับโหมดคล่องตัว หรือ <code>"every"</code> สำหรับการหยุดถามพร้อมเมนู 3 ตัวเลือก <code>Continue / Walk me through / Request changes</code> หลังจบทุกสเต็ป)</li>
             <li><strong>Checkpoint Commits</strong>: ควบคุมผ่าน <code>workflow.checkpointCommits</code> (ค่าเริ่มต้น <code>"disabled"</code> หรือเปิดใช้งานเป็น <code>"enabled"</code>)</li>
-            <li><strong>นโยบาย Quality Gates</strong>: ควบคุมการทำงานของ Audit, Check, Try Guide และ Independent Review ในโหมดปกติ (<code>qualityGates.regular</code>) และโหมดต่อเนื่อง (<code>qualityGates.continuous</code>)</li>
-            <li><strong>Independent Review</strong>: มีค่าเริ่มต้นเป็น <code>"when-sensitive"</code> สำหรับงานที่มีความอ่อนไหวสูงหรือขอบเขตกว้าง โดยจะใช้ Subagent แบบแยกขาดอิสระ (Isolated Reviewer) เพื่อความโปร่งใสสูงสุด</li>
+            <li><strong>นโยบาย Quality Gates</strong>: ควบคุมการทำงานของ <code>specCheck</code> (<code>--check</code>), Audit, Check, Try Guide (<code>manual</code>, <code>when-user-facing</code>, <code>when-testable</code>, <code>always</code>) และ Independent Review ในโหมดปกติ (<code>qualityGates.regular</code>) และโหมดต่อเนื่อง (<code>qualityGates.continuous</code>)</li>
+            <li><strong>On-Demand Context & Independent Review</strong>: ข้อมูล Workflow Reference ถูกแยกไปไว้ที่ <code>devflow/workflow.md</code> (คง <code>AGENTS.md</code> ให้กะทัดรัด &lt;= 8KB) และ <code>independentReview</code> ใช้ค่าเริ่มต้น <code>"when-sensitive"</code> โดยโหลด Phase A/B แบบ On-Demand จาก <code>audit/reference/independent-review.md</code></li>
           </ul>
         `
       },

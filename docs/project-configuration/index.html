@@ -189,12 +189,14 @@
   },
   "qualityGates": {
     "regular": {
+      "specCheck": "manual",          // "manual" หรือ "always" (หรือ /feature --check)
       "audit": "manual",              // "manual", "when-sensitive", "always"
       "independentReview": "when-sensitive",
-      "check": "manual",
-      "tryGuide": "manual"
+      "check": "manual",              // "manual", "when-behavioral", "always"
+      "tryGuide": "manual"            // "manual", "when-user-facing", "when-testable", "always"
     },
     "continuous": {
+      "specCheck": "manual",
       "audit": "when-sensitive",
       "independentReview": "when-sensitive",
       "check": "when-behavioral",
@@ -214,10 +216,11 @@
           <h2>ความหมายของค่าใน Quality Gates</h2>
           
           <ul>
-            <li><strong><code>manual</code></strong>: รันเฉพาะเมื่อผู้ใช้สั่งการด้วยตนเอง (เช่น <code>/audit</code>)</li>
+            <li><strong><code>manual</code></strong>: รันเฉพาะเมื่อผู้ใช้สั่งการด้วยตนเอง (เช่น <code>/audit</code> หรือ <code>/feature --check</code>)</li>
             <li><strong><code>when-sensitive</code> (แนะนำ)</strong>: รันอัตโนมัติเฉพาะฟีเจอร์ที่แตะต้องความปลอดภัย, Auth, ข้อมูลผู้ใช้ หรือสถาปัตยกรรมหลัก</li>
-            <li><strong><code>always</code></strong>: บังคับรันในทุกๆ ฟีเจอร์ก่อนปิดงาน</li>
-            <li><strong><code>when-behavioral</code></strong>: รันเฉพาะฟีเจอร์ที่มีการเปลี่ยนแปลง Logic การทำงาน</li>
+            <li><strong><code>always</code></strong>: บังคับรันในทุกๆ ฟีเจอร์ก่อนปิดงาน (หรือทุกการร่างสเปกสำหรับ <code>specCheck</code>)</li>
+            <li><strong><code>when-behavioral</code></strong>: รันเฉพาะฟีเจอร์ที่มีการเปลี่ยนแปลง Logic/พฤติกรรม runtime ที่ต้องตรวจรับ</li>
+            <li><strong><code>when-user-facing</code> / <code>when-testable</code></strong>: สำหรับ <code>tryGuide</code> — สร้าง <code>## Try it now</code> proof แบบกระชับ 1–3 ขั้นตอนเมื่อมีผลลัพธ์ด้าน UI หรือพฤติกรรมที่ทดลองรัน/ตรวจสอบได้</li>
           </ul>
         
           

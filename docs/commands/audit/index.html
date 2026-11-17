@@ -194,7 +194,7 @@
         <section id="independent-reviewer-mode">
           <h2>โหมดผู้ตรวจรับอิสระ (Independent Reviewer Mode)</h2>
           
-          <p>เมื่อตั้งค่า <code>qualityGates.regular.independentReview</code> เป็น <code>when-sensitive</code> หรือสั่ง <code>/audit independent</code> AI จะจำลองการทำงานเป็น AI Reviewer แยกคนละ Session เพื่อตรวจทานโค้ดและออกใบรับรอง <strong>Review Receipt</strong> ใน <code>review.md</code> อย่างเป็นกลางและเข้มงวด</p>
+          <p>เมื่อตั้งค่า <code>qualityGates.regular.independentReview</code> เป็น <code>when-sensitive</code> หรือสั่ง <code>/audit independent</code> AI จะโหลดขั้นตอน Phase A/B แบบ On-Demand จาก <code>audit/reference/independent-review.md</code> เพื่อส่งต่อให้ AI Reviewer อิสระ (Fresh Session หรือ Isolated Subagent) ตรวจทานโค้ดและออกใบรับรอง <strong>Review Receipt</strong> ใน <code>review.md</code> อย่างเป็นกลางและเข้มงวด</p>
         
           
         </section>

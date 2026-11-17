@@ -185,8 +185,10 @@
 /feature 1
 /feature "ระบบชำระเงิน PromptPay QR"
 
-# 3. พัฒนาต่อยอดจากการสำรวจ Discovery
-/feature DISC-20260916-001</code></pre>
+# 3. พัฒนาต่อยอดจากการสำรวจ Discovery หรือรัน Spec Check Gate
+/feature DISC-20260916-001
+/feature 1 --check</code></pre>
+          <p>เมื่อใส่แฟล็ก <code>--check</code> หรือตั้งค่า <code>qualityGates.regular.specCheck: "always"</code> ระบบจะตรวจความถูกต้องของพาธไฟล์ คำสั่ง และ AC traceability เทียบกับโค้ดจริงก่อนหยุดรอให้ผู้ใช้ทบทวนสเปก</p>
         
           
         </section>

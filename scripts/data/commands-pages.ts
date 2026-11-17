@@ -409,8 +409,10 @@ $onboard
 /feature 1
 /feature "ระบบชำระเงิน PromptPay QR"
 
-# 3. พัฒนาต่อยอดจากการสำรวจ Discovery
-/feature DISC-20260916-001</code></pre>
+# 3. พัฒนาต่อยอดจากการสำรวจ Discovery หรือรัน Spec Check Gate
+/feature DISC-20260916-001
+/feature 1 --check</code></pre>
+          <p>เมื่อใส่แฟล็ก <code>--check</code> หรือตั้งค่า <code>qualityGates.regular.specCheck: "always"</code> ระบบจะตรวจความถูกต้องของพาธไฟล์ คำสั่ง และ AC traceability เทียบกับโค้ดจริงก่อนหยุดรอให้ผู้ใช้ทบทวนสเปก</p>
         `
       },
       {
@@ -502,6 +504,7 @@ $onboard
             <li>สร้างซอร์สโค้ดและชุดการทดสอบจริง</li>
             <li>อัปเดตสถานะ Checklist ใน <code>devflow/context/{xxx-slug}/spec.md</code></li>
             <li>บันทึก <strong>Diff Evidence</strong> สรุปการเปลี่ยนแปลงของแต่ละขั้นตอน</li>
+            <li>เมื่อตั้งค่า <code>workflow.stepReview: "every"</code> จะแสดงเมนู 3 ตัวเลือกหลังทุกสเต็ป (<code>Continue to next step</code>, <code>Walk me through this step</code>, <code>Request changes on this step</code>) และเมื่อ <code>tryGuide</code> เป็น <code>when-testable</code> / <code>always</code> จะแนบบล็อก <code>## Try it now</code> ในแพ็กเก็ตสุดท้าย</li>
           </ul>
         `
       },
@@ -557,7 +560,7 @@ $onboard
         id: 'check-guide-mode',
         title: 'โหมดคู่มือการทดสอบด้วยมือ (/check guide)',
         contentHtml: `
-          <p>หากคุณต้องการทดสอบฟังก์ชันด้วยตัวเองบนหน้าจอ ให้ใช้ <code>/check guide</code> AI จะสร้างคู่มือ Read-only อธิบายทีละสเต็ป: จุดที่ต้องคลิก, ข้อมูลที่ต้องกรอก, ผลลัพธ์ที่ถูกต้อง, และจุดสังเกตหากระบบทำงานผิดพลาด</p>
+          <p>หากคุณต้องการทดสอบฟังก์ชันด้วยตัวเองบนหน้าจอ ให้ใช้ <code>/check guide</code> (หรือ <code>/try</code>) โดยอ้างอิงแนวทางแบบ On-Demand จาก <code>check/reference/try-it-now.md</code> ซึ่งใช้สร้างทั้งคู่มือฉบับเต็มและบล็อก <code>## Try it now</code> 1–3 ขั้นตอนสำหรับนโยบาย <code>tryGuide: "when-testable"</code> ด้วย</p>
         `
       },
       {
@@ -604,7 +607,7 @@ $onboard
           <p>เมื่อรัน Complete ระบบจะดำเนินการตามลำดับอย่างปลอดภัย:</p>
           <ol>
             <li><strong>Release Digest Synthesis</strong>: สรุปสิ่งที่ส่งมอบ การเปลี่ยนแปลงสำคัญ และผลการทดสอบทั้งหมด</li>
-            <li><strong>Archive to History</strong>: บันทึก Living Spec และหลักฐานการตรวจรับไปเก็บถาวรที่ <code>devflow/history/features/{xxx-slug}.md</code></li>
+            <li><strong>Archive to History</strong>: คัดกรองสถานะและบันทึกสเปกที่ผ่านการรับรอง (พร้อม <code>## Try it now</code> proof เมื่อ <code>tryGuide</code> ทำงาน) เข้าคลังถาวร <code>devflow/history/features/{xxx-slug}.md</code> ตามมาตรฐาน On-Demand <code>completion-screen.md</code> และ <code>completion-archive.md</code></li>
             <li><strong>Clean Workspace</strong>: ลบโฟลเดอร์ <code>devflow/context/{xxx-slug}/</code> ออกอย่างหมดจด</li>
             <li><strong>Update Build Plan & History</strong>: ติ๊กถูก <code>- [x]</code> ใน <code>devflow/build-plan.md</code> และเพิ่มรายการใน <code>devflow/history/HISTORY.md</code></li>
             <li><strong>Mandatory User Gate (Git Merge)</strong>: ถามความประสงค์ของผู้ใช้ว่าจะทำ <strong>Git Squash-Merge เข้าสู่ branch main</strong> หรือต้องการเปิด Pull Request / Merge Request</li>
@@ -864,7 +867,7 @@ $onboard
         id: 'independent-reviewer-mode',
         title: 'โหมดผู้ตรวจรับอิสระ (Independent Reviewer Mode)',
         contentHtml: `
-          <p>เมื่อตั้งค่า <code>qualityGates.regular.independentReview</code> เป็น <code>when-sensitive</code> หรือสั่ง <code>/audit independent</code> AI จะจำลองการทำงานเป็น AI Reviewer แยกคนละ Session เพื่อตรวจทานโค้ดและออกใบรับรอง <strong>Review Receipt</strong> ใน <code>review.md</code> อย่างเป็นกลางและเข้มงวด</p>
+          <p>เมื่อตั้งค่า <code>qualityGates.regular.independentReview</code> เป็น <code>when-sensitive</code> หรือสั่ง <code>/audit independent</code> AI จะโหลดขั้นตอน Phase A/B แบบ On-Demand จาก <code>audit/reference/independent-review.md</code> เพื่อส่งต่อให้ AI Reviewer อิสระ (Fresh Session หรือ Isolated Subagent) ตรวจทานโค้ดและออกใบรับรอง <strong>Review Receipt</strong> ใน <code>review.md</code> อย่างเป็นกลางและเข้มงวด</p>
         `
       },
       {

@@ -190,7 +190,7 @@
           <p>เมื่อรัน Complete ระบบจะดำเนินการตามลำดับอย่างปลอดภัย:</p>
           <ol>
             <li><strong>Release Digest Synthesis</strong>: สรุปสิ่งที่ส่งมอบ การเปลี่ยนแปลงสำคัญ และผลการทดสอบทั้งหมด</li>
-            <li><strong>Archive to History</strong>: บันทึก Living Spec และหลักฐานการตรวจรับไปเก็บถาวรที่ <code>devflow/history/features/{xxx-slug}.md</code></li>
+            <li><strong>Archive to History</strong>: คัดกรองสถานะและบันทึกสเปกที่ผ่านการรับรอง (พร้อม <code>## Try it now</code> proof เมื่อ <code>tryGuide</code> ทำงาน) เข้าคลังถาวร <code>devflow/history/features/{xxx-slug}.md</code> ตามมาตรฐาน On-Demand <code>completion-screen.md</code> และ <code>completion-archive.md</code></li>
             <li><strong>Clean Workspace</strong>: ลบโฟลเดอร์ <code>devflow/context/{xxx-slug}/</code> ออกอย่างหมดจด</li>
             <li><strong>Update Build Plan & History</strong>: ติ๊กถูก <code>- [x]</code> ใน <code>devflow/build-plan.md</code> และเพิ่มรายการใน <code>devflow/history/HISTORY.md</code></li>
             <li><strong>Mandatory User Gate (Git Merge)</strong>: ถามความประสงค์ของผู้ใช้ว่าจะทำ <strong>Git Squash-Merge เข้าสู่ branch main</strong> หรือต้องการเปิด Pull Request / Merge Request</li>
