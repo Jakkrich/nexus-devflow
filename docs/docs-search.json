@@ -16,16 +16,16 @@
   },
   {
     "title": "นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption)",
-    "description": "ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม และเตรียมความพร้อมสำหรับการพัฒนาฟีเจอร์ถัดไป",
+    "description": "ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /onboard --adopt (หรือ /onboard ซึ่งตรวจจับ brownfield ให้อัตโนมัติ) โดยไม่รบกวนประวัติ Git เดิม",
     "section": "START",
     "slug": "existing-codebase",
     "href": "../existing-codebase/",
     "tags": [
+      "Onboard",
       "Adopt",
       "Brownfield",
       "Legacy",
       "Survey",
-      "Migration",
       "Reconciliation",
       "start",
       "existing-codebase"
@@ -33,7 +33,7 @@
   },
   {
     "title": "คู่มือรวมชุดคำสั่ง (Command Guide)",
-    "description": "เลือกคำสั่งของ Nexus-DevFlow ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานและหน้าที่ความรับผิดชอบของแต่ละ Skill อย่างละเอียด",
+    "description": "เลือกคำสั่งของ Nexus-DevFlow ทั้ง 15 Core Skills และส่วนเสริม Opt-in ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานอย่างละเอียด",
     "section": "START",
     "slug": "command-guide",
     "href": "../command-guide/",
@@ -43,7 +43,7 @@
       "Reference",
       "CheatSheet",
       "Skills",
-      "38-Skills",
+      "15-Core-Skills",
       "start",
       "command-guide"
     ]
@@ -104,8 +104,8 @@
     ]
   },
   {
-    "title": "Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)",
-    "description": "แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant",
+    "title": "Workflow Surface Map (แผนผังคำสั่ง 15 Core Skills)",
+    "description": "แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 15 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant",
     "section": "WORKFLOW",
     "slug": "workflow-surface-map",
     "href": "../workflow-surface-map/",
@@ -137,39 +137,22 @@
     ]
   },
   {
-    "title": "Onboard (/onboard)",
-    "description": "ปรับแต่งเวิร์กโฟลว์ให้เข้ากับสภาพแวดล้อมจริง ตรวจสอบ tech stack, คำสั่ง verify/test, มาตรฐานโค้ด และกำหนด Review Cadence",
+    "title": "Onboard (/onboard, /onboard --adopt)",
+    "description": "ปรับแต่งเวิร์กโฟลว์ทั้งโปรเจกต์ใหม่และโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (auto-detect brownfield / --adopt) พร้อมตั้งค่า Review Cadence",
     "section": "COMMANDS",
     "slug": "commands/onboard",
     "href": "../commands/onboard/",
     "tags": [
       "Command",
       "Onboard",
-      "Setup",
+      "Adopt",
+      "Brownfield",
       "Config",
       "Cadence",
       "Preset",
       "QualityGates",
       "commands",
       "commands onboard"
-    ]
-  },
-  {
-    "title": "Adopt (/adopt)",
-    "description": "นำ Nexus-DevFlow เข้าสู่โปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (Brownfield Codebase) สำรวจฟังก์ชันจริง และสร้างแผนงานต่อเนื่อง",
-    "section": "COMMANDS",
-    "slug": "commands/adopt",
-    "href": "../commands/adopt/",
-    "tags": [
-      "Command",
-      "Adopt",
-      "Brownfield",
-      "Legacy",
-      "Survey",
-      "Reconcile",
-      "ZeroRegression",
-      "commands",
-      "commands adopt"
     ]
   },
   {
@@ -296,52 +279,36 @@
     ]
   },
   {
-    "title": "DevFlow Status (/devflow-status)",
-    "description": "แสดงสถานะความคืบหน้าของโปรเจกต์ ฟีเจอร์ที่กำลังทำอยู่ สถานะ Git และคำสั่งถัดไปที่แนะนำ (Read-Only)",
+    "title": "DevFlow (/devflow, /devflow doctor)",
+    "description": "ศูนย์รวมรายงานสถานะงาน (Status & --exec), ตรวจสุขภาพ Adapters/Overview (/devflow doctor) และตารางนำทางคำสั่งเดิม (Read-Only)",
     "section": "COMMANDS",
-    "slug": "commands/devflow-status",
-    "href": "../commands/devflow-status/",
+    "slug": "commands/devflow",
+    "href": "../commands/devflow/",
     "tags": [
       "Command",
-      "DevFlowStatus",
-      "Dashboard",
-      "Read-Only",
-      "GitState",
-      "DriftCheck",
-      "commands",
-      "commands devflow-status"
-    ]
-  },
-  {
-    "title": "DevFlow Doctor (/devflow-doctor)",
-    "description": "ตรวจสุขภาพเวิร์กโฟลว์ ความสมบูรณ์ของ Adapters ความสดใหม่ของ Context และล้างสถานะผิดปกติ",
-    "section": "COMMANDS",
-    "slug": "commands/devflow-doctor",
-    "href": "../commands/devflow-doctor/",
-    "tags": [
-      "Command",
-      "DevFlowDoctor",
+      "DevFlow",
+      "Status",
+      "Doctor",
       "HealthCheck",
-      "Adapters",
-      "SelfHealing",
-      "Integrity",
+      "Router",
+      "Read-Only",
       "commands",
-      "commands devflow-doctor"
+      "commands devflow"
     ]
   },
   {
-    "title": "Debug (/debug)",
-    "description": "วินิจฉัยหาสาเหตุของบั๊ก อาการทดสอบตก หรือความผิดปกติของระบบตามหลักการทางวิทยาศาสตร์โดยไม่มีการแก้ไขโค้ด",
+    "title": "Debug (/debug - 2-Track Protocol)",
+    "description": "วินิจฉัยแบบ 2-Track (Track A สืบเร็วจาก deterministic stacktrace และ Track B 6-phase scientific isolation) โดยไม่แก้โค้ดล่วงหน้า",
     "section": "COMMANDS",
     "slug": "commands/debug",
     "href": "../commands/debug/",
     "tags": [
       "Command",
       "Debug",
+      "2-Track",
       "RootCause",
       "Hypothesis",
       "ZeroTouch",
-      "Reproduction",
       "commands",
       "commands debug"
     ]
@@ -364,23 +331,6 @@
     ]
   },
   {
-    "title": "Brief (/brief)",
-    "description": "บรรยายสรุปขอบเขตงาน ความซับซ้อน พื้นที่ที่ได้รับผลกระทบ และความเสี่ยงของฟีเจอร์ใน Build Plan ก่อนลงมือทำ (Read-Only)",
-    "section": "COMMANDS",
-    "slug": "commands/brief",
-    "href": "../commands/brief/",
-    "tags": [
-      "Command",
-      "Brief",
-      "PreFlight",
-      "Sizing",
-      "ScopeAnalysis",
-      "ReadOnly",
-      "commands",
-      "commands brief"
-    ]
-  },
-  {
     "title": "Audit (/audit)",
     "description": "ตรวจสอบคุณภาพโค้ด ความปลอดภัย ประสิทธิภาพ และการครอบคลุมของชุดการทดสอบ พร้อมบันทึกลง Findings Ledger",
     "section": "COMMANDS",
@@ -399,19 +349,17 @@
     ]
   },
   {
-    "title": "Tests (/test, /setup-tests, /browser-tests)",
-    "description": "จัดการชุดการทดสอบ รันการทดสอบ สร้าง Test Cases ที่ขาดหายไป และเชื่อมต่อ Browser E2E Automation",
+    "title": "Setup Tests (/setup-tests - Opt-in Extension)",
+    "description": "ส่วนเสริม Opt-in สำหรับติดตั้งและกำหนดค่า Test Runner (Unit/Integration และ Playwright Browser Testing) เข้าสู่โปรเจกต์",
     "section": "COMMANDS",
     "slug": "commands/tests",
     "href": "../commands/tests/",
     "tags": [
       "Command",
-      "Test",
       "SetupTests",
-      "BrowserTests",
+      "OptIn",
       "Playwright",
-      "BrowserOS",
-      "Coverage",
+      "Testing",
       "commands",
       "commands tests"
     ]
@@ -451,37 +399,20 @@
     ]
   },
   {
-    "title": "Autopilot (/autopilot)",
-    "description": "รันการพัฒนาฟีเจอร์เดี่ยวแบบอัตโนมัติต่อเนื่องตั้งแต่ Feature -> Implement -> Check ผ่านทุก Quality Gates และหยุดรอคำสั่ง Complete",
+    "title": "Autopilot (/autopilot, /autopilot --all)",
+    "description": "รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge",
     "section": "COMMANDS",
     "slug": "commands/autopilot",
     "href": "../commands/autopilot/",
     "tags": [
       "Command",
       "Autopilot",
-      "SingleFeature",
+      "Continuous",
       "Autonomous",
       "QualityGates",
       "ReviewGate",
       "commands",
       "commands autopilot"
-    ]
-  },
-  {
-    "title": "Continuous (/continuous)",
-    "description": "วงจรการส่งมอบอัตโนมัติหลายฟีเจอร์ต่อเนื่อง พัฒนาฟีเจอร์จาก Build Plan ทีละรายการพร้อมทำ Squash-Merge เข้าสู่ main",
-    "section": "COMMANDS",
-    "slug": "commands/continuous",
-    "href": "../commands/continuous/",
-    "tags": [
-      "Command",
-      "Continuous",
-      "AutonomousLoop",
-      "MultiFeature",
-      "SafetyBoundary",
-      "CircuitBreaker",
-      "commands",
-      "commands continuous"
     ]
   },
   {
@@ -517,59 +448,6 @@
       "HistoryPreserving",
       "commands",
       "commands rollback"
-    ]
-  },
-  {
-    "title": "Analyze (/analyze) - SA Suite",
-    "description": "ชุดเครื่องมือสำหรับ System Analyst (SA) นำเข้าเอกสารความต้องการทุกรูปแบบ (PDF, Word, Excel, รูปภาพ, ข้อความแชต) และวิเคราะห์ Codebase Impact",
-    "section": "COMMANDS",
-    "slug": "commands/analyze",
-    "href": "../commands/analyze/",
-    "tags": [
-      "Command",
-      "Analyze",
-      "SA",
-      "DocIngestion",
-      "OCR",
-      "CodebaseImpact",
-      "Clarifications",
-      "commands",
-      "commands analyze"
-    ]
-  },
-  {
-    "title": "Grill (/grill, /align)",
-    "description": "สัมภาษณ์เจาะลึกทางสถาปัตยกรรมแบบ Socratic เพื่อท้าทายสมมติฐาน สกัดคำศัพท์ลง Glossary และบันทึก ADR ก่อนเขียนสเปก",
-    "section": "COMMANDS",
-    "slug": "commands/grill",
-    "href": "../commands/grill/",
-    "tags": [
-      "Command",
-      "Grill",
-      "Align",
-      "Socratic",
-      "ADR",
-      "Glossary",
-      "DomainModeling",
-      "commands",
-      "commands grill"
-    ]
-  },
-  {
-    "title": "Bughunter (/bughunter)",
-    "description": "ค้นหาช่องโหว่ความปลอดภัย ตรวจสอบ Trust Boundaries และล่าบั๊กลึกด้วยหลักฐานเชิงประจักษ์และการจำลองการโจมตี",
-    "section": "COMMANDS",
-    "slug": "commands/bughunter",
-    "href": "../commands/bughunter/",
-    "tags": [
-      "Command",
-      "Bughunter",
-      "Security",
-      "Vulnerability",
-      "OWASP",
-      "EmpiricalProof",
-      "commands",
-      "commands bughunter"
     ]
   },
   {
@@ -640,40 +518,6 @@
       "UpdateImmunity",
       "commands",
       "commands vendor"
-    ]
-  },
-  {
-    "title": "Ponytail (/ponytail)",
-    "description": "โหมด Senior Developer ขี้เกียจ ตรวจจับ Code Bloat ตัดความซับซ้อนส่วนเกิน (Over-engineering) และลดการใช้ LLM Tokens",
-    "section": "COMMANDS",
-    "slug": "commands/ponytail",
-    "href": "../commands/ponytail/",
-    "tags": [
-      "Command",
-      "Ponytail",
-      "Simplification",
-      "KISS",
-      "YAGNI",
-      "TokenSaver",
-      "commands",
-      "commands ponytail"
-    ]
-  },
-  {
-    "title": "Report HTML (/report-html)",
-    "description": "สังเคราะห์แดชบอร์ดรายงานผลการส่งมอบงานแบบ Standalone Interactive HTML จาก Living Spec หรือ History Archive",
-    "section": "COMMANDS",
-    "slug": "commands/report-html",
-    "href": "../commands/report-html/",
-    "tags": [
-      "Command",
-      "ReportHTML",
-      "Dashboard",
-      "Standalone",
-      "HistoryVisualizer",
-      "ExecutiveReport",
-      "commands",
-      "commands report-html"
     ]
   },
   {
@@ -886,14 +730,14 @@
     ]
   },
   {
-    "title": "Manual Review With Try (/try)",
-    "description": "คู่มือการใช้งานคำสั่ง /try เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)",
+    "title": "Manual Review With /check guide (Legacy /try)",
+    "description": "คู่มือการใช้งานคำสั่ง /check guide (รวมความสามารถของ /try เดิม) เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)",
     "section": "REFERENCE",
     "slug": "commands/try",
     "href": "../commands/try/",
     "tags": [
       "Reference",
-      "Try",
+      "CheckGuide",
       "ManualReview",
       "Walkthrough",
       "QA",
@@ -903,16 +747,15 @@
     ]
   },
   {
-    "title": "Browser Tests (/browser-tests)",
-    "description": "การติดตั้ง Playwright Test Harness และเชื่อมต่อ MCP BrowserOS Neo สำหรับการทดสอบหน้าเว็บและ UI อัตโนมัติ",
+    "title": "Browser Testing with setup-tests Extension",
+    "description": "การติดตั้ง Playwright Test Harness และเชื่อมต่อ Browser Verification (รวมอยู่ในส่วนเสริม opt-in setup-tests)",
     "section": "REFERENCE",
     "slug": "commands/browser-tests",
     "href": "../commands/browser-tests/",
     "tags": [
       "Reference",
-      "BrowserTests",
+      "SetupTests",
       "Playwright",
-      "BrowserOS",
       "E2E",
       "VisualQA",
       "reference",

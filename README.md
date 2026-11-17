@@ -151,13 +151,13 @@ Inspect the generated configuration files:
 - `devflow/context/coding-standards.md` — customize code conventions, lint rules, and test gates.
 - `devflow/context/ai-interaction.md` — adjust AI operational preferences and communication rules.
 
-If something feels misconfigured, run `/devflow-doctor` for an instant read-only health check.
+If something feels misconfigured, run `/devflow doctor` for an instant read-only health check.
 
 ### 5. Plan & Capture Ideas
 Capture initial requirements, user stories, or raw thoughts:
 - Add high-level concepts into `devflow/ideas.md` or use `/idea` for AI feasibility scoring.
-- Run `/grill` (or `/align`) to stress-test architecture and record Decision Records (`devflow/decisions/`).
-- Run `/discovery` for deep multi-turn domain exploration.
+- Run `/discovery --grill` to stress-test architecture and record Decision Records (`devflow/decisions/`).
+- Run `/discovery` for deep multi-turn domain exploration or SA doc intake.
 
 ### 6. Generate the project overview
 Run `/overview` to distill your planning notes into `devflow/context/project-overview.md`, which serves as the AI's source of truth:
@@ -177,13 +177,13 @@ Once your overview is generated, deliver one feature or fix at a time:
 
 ### Already have a codebase?
 
-If you are bootstrapping DevFlow into an existing brownfield application with shipped features, use `/adopt` instead of `/onboard`:
+If you are bootstrapping DevFlow into an existing brownfield application with shipped features, `/onboard` automatically detects brownfield repositories (or invoke `/onboard --adopt`):
 
 ```text
-/adopt
+/onboard --adopt
 ```
 
-`/adopt` surveys your codebase, preserves your existing README, detects existing test runners and CI workflows, and generates baseline planning docs and coding standards from what is already running.
+Brownfield adoption in `/onboard` surveys your codebase, preserves your existing README, detects existing test runners and CI workflows, and generates baseline planning docs and coding standards from what is already running.
 
 ---
 
@@ -346,8 +346,8 @@ Explore the interactive system architecture and living spec lifecycle generated 
 
 ![Nexus-DevFlow Workflow](assets/nexus-devflow-workflow.png)
 
-1. **Pre-Flight Discovery**: Explore ideas (`/idea`), stress-test architectural decisions (`/grill`), and conduct deep domain research (`/discovery`).
-2. **Context Setup**: Run `/onboard` (or `/adopt`) followed by `/overview` to establish the living source of truth.
+1. **Pre-Flight Discovery**: Explore ideas (`/idea`, `/explore`) and conduct deep domain alignment, doc intake, and ADRs (`/discovery` / `/discovery --grill`).
+2. **Context Setup**: Run `/onboard` (fresh or brownfield `--adopt`) followed by `/overview` to establish the living source of truth.
 3. **Delivery Loop**: Execute `/feature` or `/fix`, build with `/implement`, verify with `/check`, audit with `/audit`, and close with `/complete`.
 4. **Permanent Archive**: Completed specs and findings are preserved permanently in `devflow/history/` and `devflow/decisions/`.
 
@@ -406,17 +406,17 @@ Every delivery task operates on `devflow/context/current-feature.md`, structured
 Before committing to code, use specialized companion skills to brainstorm, stress-test, and align on complex requirements:
 
 ```text
-/idea (Inbox) ──▶ /grill (Socratic ADR) ──▶ /discovery (Explore) ──▶ /feature (Deliver)
+/idea (Inbox) ──▶ /explore (Options) ──▶ /discovery (Explore & ADR) ──▶ /feature (Deliver)
 ```
 
 - **`/idea`**: Quick capture of raw ideas into `devflow/ideas.md` with automatic AI scoring across Feasibility, Effort, and Business Value.
-- **`/grill`** (or **`/align`**): Socratic alignment & domain modeling. Challenges assumptions, extracts domain terminology into `devflow/context/glossary.md`, and generates Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
-- **`/brainstorm`**: Structured divergent and convergent ideation, creating 2–3 viable options with trade-off matrices.
-- **`/discovery`**: Dual-mode exploration engine (Macro Roadmap Planning or Micro Feature Pre-Flight) producing structured discovery artifacts (`devflow/discoveries/DISC-xxx/discovery.md`).
+- **`/explore`**: Read-only exploration and structured option comparison (`brainstorm` mode: 2–3 options + trade-off matrix) grounded in existing code without modifying files.
+- **`/discovery`**: Unified discovery engine supporting Macro Roadmap Planning, Micro Pre-Flight (`devflow/discoveries/DISC-xxx/discovery.md`), SA multi-format doc intake (`REQ-ID`), and Socratic domain alignment (`--grill` -> `glossary.md` + `ADR-xxx.md`).
 
 ```text
 /discovery                     # Macro Mode: high-level roadmap & project planning
 /discovery "feature title"     # Micro Mode: explore & prove feature feasibility
+/discovery ./spec.pdf --grill  # SA doc intake & Socratic alignment (glossary/ADRs)
 /discovery IDEA-001            # Explore a pending idea from ideas.md
 /discovery DISC-20260910-001   # Resume an existing discovery artifact
 ```
@@ -431,7 +431,7 @@ Before committing to code, use specialized companion skills to brainstorm, stres
 | `devflow/context/{xxx-slug}/spec.md` | `/feature`, `/fix`, `/rollback` | Task-Isolated Living Spec for the active work item. |
 | `devflow/context/{xxx-slug}/findings.md` | `/audit` | Quality, security, and test findings ledger for the active task. |
 | `devflow/context/{xxx-slug}/stage.md` | Stage Skills | State tracking pointer showing active stage (`implement`, `check`, `complete`). |
-| `devflow/decisions/ADR-xxx.md` | `/grill` | Architecture Decision Record documenting context, choices, and consequences. |
+| `devflow/decisions/ADR-xxx.md` | `/discovery --grill`, `/feature` | Architecture Decision Record documenting context, choices, and consequences. |
 | `devflow/discoveries/DISC-xxx.md` | `/discovery` | Pre-delivery exploration and deep feasibility document. |
 | `devflow/history/features/xxx.md` | `/complete` | Archived feature spec with execution logs and verification evidence. |
 | `devflow/history/fixes/xxx.md` | `/complete` | Archived fix spec with regression proof. |
@@ -443,12 +443,12 @@ Before committing to code, use specialized companion skills to brainstorm, stres
 ## Using the workflow
 
 ### Step-by-Step Delivery
-1. **Briefing & Spec**: Run `/brief` to preview an upcoming feature, or run `/feature "feature name"` to generate the Task-Isolated Living Spec in `devflow/context/{xxx-slug}/spec.md`.
+1. **Preview & Spec**: Run `/feature --preview` to preview an upcoming feature, or run `/feature "feature name"` (with Adaptive Pre-Flight Clarification) to generate the Task-Isolated Living Spec in `devflow/context/{xxx-slug}/spec.md`.
 2. **Review Spec**: Verify scope boundaries, acceptance criteria, and task breakdown before approving code work.
 3. **Incremental Implementation**: Run `/implement`. The AI executes tasks sequentially under strict TDD with the review cadence configured in `devflow/config.json`.
 4. **Verification**: Run `/check` for empirical multi-lane QA verification.
-5. **Human Try Guide**: Run `/try` for a step-by-step manual test guide (routes, clicks, expected behavior).
-6. **Branch Audit**: Run `/audit current` to inspect changed code for security, performance, and standards compliance.
+5. **Human Walkthrough**: Run `/check guide` for a step-by-step manual test guide (routes, clicks, expected behavior).
+6. **Branch Audit**: Run `/audit current` to inspect changed code for YAGNI, quality, security, performance, and test coverage.
 7. **Complete & Deliver**: Run `/complete`. Performs safety checks, logs Release Digest, archives the spec to `devflow/history/`, and guides the git delivery gate.
 
 ---
@@ -472,7 +472,7 @@ The `/onboard` skill presents 3 implementation presets:
 - 🛠️ **Custom**: Tune review frequency and checkpoint commits independently.
 
 #### 🛡️ Overview & Context Compactness Guards
-- `devflow/context/project-overview.md` is strictly constrained to under 20,000 bytes (~4,000–5,000 tokens); `/devflow-doctor` reports exact byte size and `/feature` halts on oversized overviews.
+- `devflow/context/project-overview.md` is strictly constrained to under 20,000 bytes (~4,000–5,000 tokens); `/devflow doctor` reports exact byte size and `/feature` halts on oversized overviews.
 - `AGENTS.md` stays compact (`<= 8,000` bytes) by delegating long workflow schemas and activity tracking details to on-demand [`devflow/workflow.md`](devflow/workflow.md).
 - `validate-framework.ts` enforces cross-skill reference link resolution across `.agents/skills/` and `.claude/skills/`.
 
@@ -519,39 +519,23 @@ count and are excluded from the published package unless explicitly promoted.
 
 | Skill | Canonical Invocation | Category | Description |
 | :--- | :--- | :--- | :--- |
-| **adopt** | `/adopt` / `$adopt` | Setup | Bootstrap DevFlow into an existing codebase with shipped features. |
-| **analyze** | `/analyze` / `$analyze` | SA & Ingest | Ingest multi-format requirements (PDF, Word, Excel, Images), scan codebase impact, and generate Socratic clarification checklist. |
-| **audit** | `/audit` / `$audit` | Quality | Branch-aware or full-project code audit (Quality, Security, Perf, Tests). |
-| **autopilot** | `/autopilot` / `$autopilot` | Delivery | Bounded single-pass spec/build/check with self-review and safe repair. |
-| **brainstorm** | `/brainstorm` | Companion | Structured divergent/convergent ideation with trade-off analysis. |
-| **brief** | `/brief` / `$brief` | Planning | Read-only briefing on an upcoming feature before writing spec. |
-| **browser-tests** | `/browser-tests` / `$browser-tests` | Setup | Add or normalize Playwright browser test harness & connect with MCP browseros-neo. |
-| **bughunter** | `/bughunter` / `$bughunter` | Security | Offensive security orchestrator, 83 vulnerability patterns & CVE payloads. |
-| **check** | `/check` / `$check` | QA | Dual-Axis review: empirical spec fidelity plus standards, architecture, and quality gates. |
-| **ci** | `/ci` / `$ci` | DevOps | Configure Verify command and automated GitHub Actions workflow. |
-| **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and squash-merge gate. |
-| **continuous** | `/continuous` / `$continuous` | Delivery | Autonomous serial multi-feature delivery loop with local branches, quality gates, and squash-merges. |
-| **convert-any-to-md** | `/convert-any-to-md` | Utility | Convert PDF, XLSX, DOCX, CSV, logs into clean Markdown in `devflow/reference/`. |
-| **debug** | `/debug` / `$debug` | Diagnostics | Scientific six-phase diagnosis using a red-capable feedback loop without changing source. |
-| **devflow** | `/devflow` / `$devflow` | Router | Flagship state inspector, stage router, and workflow guide. |
-| **discovery** | `/discovery` / `$discovery` | Companion | Pre-delivery multi-turn exploration and domain research. |
-| **devflow-doctor** | `/devflow-doctor` / `$devflow-doctor` | Health | Read-only workspace health check, adapter validation, and overview byte size guard (>= 20KB). |
-| **explore** | `/explore` / `$explore` | Companion | Explore an idea against codebase without changing files or writing specs. |
-| **feature** | `/feature` / `$feature` | Delivery | Transform feature request into Task-Isolated Living Spec in `devflow/context/{xxx-slug}/spec.md`. |
+| **audit** | `/audit` / `$audit` | Quality | Branch-aware or full-project audit (Quality + YAGNI, Security, Perf, Tests) and `independent` review. |
+| **autopilot** | `/autopilot` / `$autopilot` | Delivery | Bounded single-pass execution or continuous multi-feature queue (`--all` / `--max` / `--merge`). |
+| **check** | `/check` / `$check` | QA | Dual-Axis empirical verification plus `/check guide` for manual human walkthroughs. |
+| **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and local squash-merge gate. |
+| **debug** | `/debug` / `$debug` | Diagnostics | 2-Track diagnosis (Track A fast repro & trace; Track B 6-phase scientific isolation). |
+| **devflow** | `/devflow` / `$devflow` | Hub | Unified status report (default / `--exec`), health check (`/devflow doctor`), and intent/legacy router. |
+| **discovery** | `/discovery` / `$discovery` | Pre-Flight | Macro/micro discovery, SA requirement intake (`REQ-ID`), and Socratic domain alignment (`--grill`). |
+| **explore** | `/explore` / `$explore` | Pre-Flight | Read-only codebase exploration and 2–3 option comparison (brainstorm mode) without writing specs. |
+| **feature** | `/feature` / `$feature` | Delivery | Preview (`--preview`), adaptive pre-flight clarification, and Task-Isolated Living Spec (`--check`). |
 | **fix** | `/fix` / `$fix` | Delivery | Document and spec an ad-hoc bug fix or patch. |
-| **grill** | `/grill` / `/align` | Companion | Socratic alignment, domain modeling, and ADR generation. |
-| **idea** | `/idea` | Companion | Quick idea capture in `devflow/ideas.md` with AI feasibility scoring. |
+| **idea** | `/idea` | Pre-Flight | Quick idea capture in `devflow/ideas.md` with AI feasibility scoring. |
 | **implement** | `/implement` / `$implement` | Delivery | Incrementally execute living spec tasks with strict TDD discipline per configured review cadence. |
-| **onboard** | `/onboard` / `$onboard` | Setup | Initial setup for freshly scaffolded projects with Implementation Style presets. |
-| **overview** | `/overview` / `$overview` | Planning | Generate compact `project-overview.md` (<= 20KB) and offer planning baseline commit. |
+| **onboard** | `/onboard` / `$onboard` | Setup | Unified fresh setup and auto-detected brownfield adoption (`--adopt`). |
+| **overview** | `/overview` / `$overview` | Setup | Generate compact `project-overview.md` (<= 20KB) and offer planning baseline commit. |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | Generate throwaway static HTML/CSS mockups in `prototypes/`. |
-| **release** | `/release` / `$release` | DevOps | Prepare deployment config and readiness checks for Render or Vercel. |
-| **report-html** | `/report-html` | Reporting | Render interactive standalone HTML delivery dashboard on demand. |
-| **rollback** | `/rollback` / `$rollback` | Delivery | Plan and safely execute reversal of a completed feature. |
-| **setup-tests** | `/setup-tests` / `$setup-tests` | Setup | Add or normalize stack-native unit test runner. |
-| **devflow-status** | `/devflow-status` / `$devflow-status` | Monitoring | Read-only progress summary, active work, and next suggested action. |
-| **test** | `/test` | Testing | Test execution, missing test generation, and coverage analysis. |
-| **try** | `/try` / `$try` | QA | Generate step-by-step human manual review and QA walkthrough. |
+
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
 
 ---
 
@@ -569,7 +553,7 @@ count and are excluded from the published package unless explicitly promoted.
 
 ## Automatic GitHub checks
 
-Automatic CI verification gives your team and AI agents a shared standard of truth:
+Automatic CI verification gives your team and AI agents a shared standard of truth (install the optional extension first with `npx nexus-devflow skill add ci`):
 
 ```text
 /ci
@@ -589,7 +573,7 @@ Testing in DevFlow is built on **Strict TDD Discipline**:
 [TDD-Red] Write failing test ──▶ [TDD-Green] Implement minimal code ──▶ [TDD-Refactor] Clean up & optimize
 ```
 
-To configure or normalize unit testing in your repository:
+To configure or normalize unit and browser testing in your repository, install the optional `setup-tests` extension (`npx nexus-devflow skill add setup-tests`):
 
 ```text
 /setup-tests
@@ -648,10 +632,10 @@ DevFlow supports configurable Quality Gates and Independent Code Review across r
 
 ## Manual try guides
 
-Run `/try` to generate a human-friendly manual review guide:
+Run `/check guide` to generate a human-friendly manual review guide:
 
 ```text
-/try
+/check guide
 ```
 
 Reads the active living spec or latest archived feature and provides:
@@ -780,7 +764,7 @@ npx nexus-devflow skill add code-modernization
   2. *Phase 6–8 (Build & Proof)*: Slices `BRIEF.md` into `devflow/build-plan.md` and hands off execution to **DevFlow Core Lifecycle** (`/feature` ➔ `/implement` with strict TDD ➔ `/check` with `proof_pack.py` ➔ `/complete`).
 
 > [!NOTE]
-> **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/devflow-status`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.
+> **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/devflow --exec`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.
 
 ---
 
@@ -807,7 +791,7 @@ Nexus-DevFlow maintains state in files, never in volatile AI context:
 - `devflow/history/` + Git — permanent delivery ledger.
 
 When starting a new session or resuming after clearing context:
-- Run `/devflow` or `/devflow-status` to inspect current state.
+- Run `/devflow` to inspect current state.
 - Run `/implement` to immediately resume the next unchecked living spec task.
 
 ---
@@ -819,35 +803,22 @@ When starting a new session or resuming after clearing context:
 ├── AGENTS.md                  (cross-tool agent instructions: Codex, Antigravity, Cursor, Copilot, OpenCode)
 ├── CLAUDE.md                  (Claude Code entry point; imports AGENTS.md)
 ├── .agents/
-│   └── skills/                (shared multi-agent skills for Antigravity, Codex, Copilot, OpenCode)
-│       ├── adopt/             ($adopt: bootstrap brownfield codebase)
-│       ├── audit/             ($audit: code quality, security, and test audit)
-│       ├── autopilot/         ($autopilot: bounded single-pass execution)
-│       ├── brainstorm/        ($brainstorm: ideation and trade-off analysis)
-│       ├── brief/             ($brief: preview upcoming feature)
-│       ├── check/             ($check: empirical QA verification)
-│       ├── ci/                ($ci: configure automated GitHub Actions checks)
+│   └── skills/                (15 Core Skills for Antigravity, Codex, Copilot, OpenCode)
+│       ├── audit/             ($audit: code quality, YAGNI, security, tests, and independent review)
+│       ├── autopilot/         ($autopilot: bounded single-pass or continuous --all/--merge loop)
+│       ├── check/             ($check: empirical QA verification & /check guide manual walkthrough)
 │       ├── complete/          ($complete: safety gate, archive spec, squash-merge)
-│       ├── convert-any-to-md/ ($convert-any-to-md: document ingestion utility)
-│       ├── debug/             ($debug: isolate failures without side-effects)
-│       ├── devflow/           ($devflow: state inspector & stage router)
-│       ├── discovery/         ($discovery: deep domain exploration)
-│       ├── devflow-doctor/    ($devflow-doctor: workspace health check)
-│       ├── feature/           ($feature: living spec generator)
+│       ├── debug/             ($debug: 2-track adaptive diagnosis)
+│       ├── devflow/           ($devflow: unified status, doctor diagnostics, & intent router)
+│       ├── discovery/         ($discovery: roadmap/micro exploration, doc intake, & Socratic ADRs)
+│       ├── explore/           ($explore: read-only option comparison & brainstorm matrix)
+│       ├── feature/           ($feature: --preview scope, adaptive clarification, & living spec)
 │       ├── fix/               ($fix: ad-hoc bug fix spec)
-│       ├── grill/             ($grill: Socratic ADR alignment)
 │       ├── idea/              ($idea: idea inbox capture & scoring)
 │       ├── implement/         ($implement: strict TDD build execution)
-│       ├── onboard/           ($onboard: fresh project onboarding)
+│       ├── onboard/           ($onboard: fresh setup & brownfield --adopt survey)
 │       ├── overview/          ($overview: generate project-overview.md)
-│       ├── prototype/         ($prototype: static UI mockups)
-│       ├── release/           ($release: Render & Vercel deployment prep)
-│       ├── report-html/       ($report-html: standalone HTML dashboard)
-│       ├── rollback/          ($rollback: safe feature reversal)
-│       ├── setup-tests/       ($setup-tests: setup stack-native test runner)
-│       ├── devflow-status/    ($devflow-status: progress and drift summary)
-│       ├── test/              ($test: test execution & missing test gen)
-│       └── try/               ($try: manual human QA guide)
+│       └── prototype/         ($prototype: static UI mockups)
 ├── .claude/
 │   └── skills/                (Claude Code skill mirrors)
 └── devflow/

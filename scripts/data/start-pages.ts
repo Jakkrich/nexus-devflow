@@ -126,7 +126,7 @@ export const START_PAGES: DocPage[] = [
           <p>หลังจากติดตั้งเสร็จสิ้น ให้ทำตามลำดับนี้ในแต่ละฟีเจอร์:</p>
           <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
           <p>Agent Skills จะหยุดที่ขอบเขตสำคัญเสมอ จะไม่มีการ merge, push, deploy หรือส่งข้อมูลใดๆ โดยไม่ได้รับการอนุมัติตามข้อกำหนดของเวิร์กโฟลว์</p>
-          <p>เมื่อคุณต้องการให้ DevFlow ดำเนินการต่อจนจบ Build Plan ที่เหลือโดยอัตโนมัติ ให้รัน <code>$continuous</code> หรือ <code>/continuous</code> ซึ่งจะรันตามวงจรฟีเจอร์ด้วย 1 branch และ 1 local main commit ต่อฟีเจอร์ และไม่มีการ push อัตโนมัติ ดูรายละเอียดได้ที่ <a href="../commands/continuous/">Continuous</a> และ <a href="../project-configuration/">Project Configuration</a></p>
+          <p>เมื่อคุณต้องการให้ DevFlow ดำเนินการต่อจนจบ Build Plan ที่เหลือโดยอัตโนมัติ ให้รัน <code>$autopilot --all</code> หรือ <code>/autopilot --all</code> ซึ่งจะรันตามวงจรฟีเจอร์ด้วย 1 branch และ 1 local main commit ต่อฟีเจอร์ และไม่มีการ push อัตโนมัติ ดูรายละเอียดได้ที่ <a href="../commands/autopilot/">Autopilot</a> และ <a href="../project-configuration/">Project Configuration</a></p>
           <p>เมื่อมีการตั้งค่าคำสั่ง Verify ไว้ ขั้นตอน implementation และ completion จะใช้สูตรเดียวกัน และ GitHub Actions จะรันโดยอัตโนมัติเมื่อเวิร์กโฟลว์ถูกเผยแพร่</p>
           <p>หากต้องการนำฟีเจอร์ที่เสร็จสมบูรณ์แล้วออกในภายหลัง ให้ทำตามคำแนะนำของคำสั่ง <a href="../commands/rollback/">Rollback</a> แทนการเขียน Git History ใหม่หรือลบฟีเจอร์ด้วยตนเอง</p>
         `
@@ -151,7 +151,7 @@ export const START_PAGES: DocPage[] = [
         contentHtml: `
           <pre><code>/feature -> /implement -> /check -> /audit current -> /complete</code></pre>
           <p>รันคำสั่งเหล่านี้ใน AI Chat (ใช้ <code>$</code> ใน Codex หรือ <code>/</code> ใน Claude Code / Antigravity) ให้รีวิว Feature Spec ก่อนเริ่ม Implement, คำสั่ง Check จะทดสอบพฤติกรรมที่สัญญาไว้ และ Audit จะรีวิวคุณภาพโค้ด การแสดง Audit ที่นี่ไม่ได้เปลี่ยนเกณฑ์ Review Gates ที่คุณตั้งค่าไว้</p>
-          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/devflow-status</code> เพื่อกลับมาทำงานต่อ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
+          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/devflow</code> เพื่อกลับมาทำงานต่อ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
         `
       }
     ]
@@ -162,17 +162,17 @@ export const START_PAGES: DocPage[] = [
     slug: 'existing-codebase',
     category: 'START',
     title: 'นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption)',
-    lead: 'ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม และเตรียมความพร้อมสำหรับการพัฒนาฟีเจอร์ถัดไป',
-    pills: ['Adopt', 'Brownfield', 'Legacy', 'Survey', 'Migration', 'Reconciliation'],
+    lead: 'ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /onboard --adopt (หรือ /onboard ซึ่งตรวจจับ brownfield ให้อัตโนมัติ) โดยไม่รบกวนประวัติ Git เดิม',
+    pills: ['Onboard', 'Adopt', 'Brownfield', 'Legacy', 'Survey', 'Reconciliation'],
     sections: [
       {
         id: 'when-to-adopt',
         title: 'เมื่อใดที่ควรใช้การ Adopt เข้าสู่โค้ดเบสเดิม (When to adopt)',
         contentHtml: `
           <p>ใช้คู่มือนี้แทน <a href="../getting-started/">เริ่มต้นใช้งาน (Getting Started)</a> เมื่อคุณมีแอปพลิเคชันที่ทำงานได้จริงอยู่แล้ว (Working Application) และต้องการนำเลเยอร์เวิร์กโฟลว์ของ Nexus-DevFlow เข้ามาช่วยวางแผนและพัฒนาฟีเจอร์ถัดไปอย่างเป็นระบบ</p>
-          <p>การ Adopt จะทำการสำรวจโค้ดเบสจริง (Codebase Survey) สร้างโครงร่างแผนงาน (Scaffold Plans) และบันทึกฟังก์ชันที่ส่งมอบไปแล้วให้อัตโนมัติ โดยไม่ส่งผลกระทบต่อ Git History เดิมและไม่แตะต้องซอร์สโค้ดเดิมของคุณเลยแม้แต่บรรทัดเดียว</p>
+          <p>การ Adopt ผ่าน <code>/onboard --adopt</code> (หรือ <code>/onboard</code> ซึ่งตรวจจับ brownfield อัตโนมัติ) จะทำการสำรวจโค้ดเบสจริง สร้างโครงร่างแผนงาน และบันทึกฟังก์ชันที่ส่งมอบไปแล้วโดยไม่กระทบ Git History เดิม</p>
           <blockquote>
-            <p><strong>ข้อแตกต่างหลักระหว่าง Onboard กับ Adopt:</strong> คำสั่ง <code>/onboard</code> มีไว้สำหรับโปรเจกต์เปล่าที่เพิ่งเริ่มต้นสร้างโครงร่าง (Fresh Scaffold) ในขณะที่ <code>/adopt</code> มีไว้สำหรับโปรเจกต์เดิมที่มีซอร์สโค้ดทำงานอยู่แล้ว (Brownfield Codebase) โดยจะอ่านโค้ดจริงเพื่อสรุปฟังก์ชันเดิมและวางแผนเฉพาะสิ่งที่ต้องทำต่อ</p>
+            <p><strong>คำสั่งเดียวทั้งโปรเจกต์ใหม่และเดิม:</strong> คำสั่ง <code>/onboard</code> จะตรวจสอบอัตโนมัติว่าโปรเจกต์เป็น Fresh Scaffold หรือมีซอร์สโค้ดทำงานอยู่แล้ว (Brownfield Codebase) หากพบโค้ดจริงจะสลับเข้าสู่โหมด Adoption ให้ทันที (หรือสั่ง <code>/onboard --adopt</code> โดยตรง)</p>
           </blockquote>
         `
       },
@@ -196,13 +196,13 @@ export const START_PAGES: DocPage[] = [
       },
       {
         id: 'run-the-adoption-survey',
-        title: 'รันการสำรวจโค้ดเบสด้วย /adopt (Run the adoption survey)',
+        title: 'รันการสำรวจโค้ดเบสด้วย /onboard --adopt (Run the adoption survey)',
         contentHtml: `
-          <p>สั่งการ AI ด้วยคำสั่ง <code>$adopt</code> ใน Codex, <code>/adopt</code> ใน Claude Code / Google Antigravity หรือสั่งให้ Copilot / OpenCode รัน Adopt Skill:</p>
-          <pre><code>/adopt</code></pre>
+          <p>สั่งการ AI ด้วยคำสั่ง <code>$onboard --adopt</code> ใน Codex หรือ <code>/onboard</code> (หรือ <code>/onboard --adopt</code>) ใน Claude Code / Google Antigravity / Copilot:</p>
+          <pre><code>/onboard --adopt</code></pre>
           
-          <h4>กลไกการทำงานเชิงลึกของ Skill /adopt</h4>
-          <p>Skill <code>/adopt</code> ทำงานแบบ Read-Only และดำเนินการสำรวจโปรเจกต์อย่างเป็นระบบผ่าน 5 ขั้นตอนหลัก:</p>
+          <h4>กลไกการทำงานเชิงลึกของโหมด Adoption</h4>
+          <p>โหมด brownfield ใน <code>/onboard</code> ทำงานแบบ Read-Only จนกว่าจะอนุมัติแผน ผ่าน 5 ขั้นตอนหลัก:</p>
           <ol>
             <li>
               <strong>การตรวจสอบความปลอดภัยเบื้องต้น (Safety & Baseline Check)</strong>: ตรวจสอบว่า <code>devflow/project-plan.md</code> มีอยู่แล้วหรือไม่ หากมีข้อมูลจริงอยู่แล้วจะหยุดเพื่อป้องกันการเขียนทับ พร้อมทั้งปกป้องไฟล์ <code>README.md</code> หลักของโปรเจกต์ไม่ให้ถูกแก้ไข
@@ -325,13 +325,13 @@ export const START_PAGES: DocPage[] = [
         contentHtml: `
           <p>เมื่อกระบวนการ Adopt เสร็จสมบูรณ์ โค้ดเบสเดิมของคุณจะมีความพร้อมเต็มที่สำหรับการพัฒนาฟีเจอร์ใหม่ตามวงจรมาตรฐาน 4 ขั้นตอน:</p>
           <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
-          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วยโหมด Continuous:</p>
-          <pre><code>/continuous</code></pre>
+          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วยโหมด Continuous ผ่าน <code>/autopilot --all</code>:</p>
+          <pre><code>/autopilot --all</code></pre>
           <p>ดูรายละเอียดและแนวทางปฏิบัติเพิ่มเติมได้ที่:</p>
           <ul>
-            <li><a href="../command-guide/">Command Guide</a> — คู่มือสรุปชุดคำสั่งทั้งหมดกว่า 38+ ทักษะ</li>
+            <li><a href="../command-guide/">Command Guide</a> — คู่มือสรุปชุดคำสั่ง 15 Core Skills + ส่วนเสริม</li>
             <li><a href="../writing-your-plans/">Writing Your Plans</a> — เทคนิคการเขียนและจัดระเบียบแผนงาน</li>
-            <li><a href="../commands/continuous/">Continuous Mode</a> — การรันลูปพัฒนาฟีเจอร์แบบอัตโนมัติ</li>
+            <li><a href="../commands/autopilot/">Autopilot &amp; Continuous Mode</a> — การรันลูปพัฒนาฟีเจอร์แบบอัตโนมัติ</li>
           </ul>
         `
       }
@@ -343,8 +343,8 @@ export const START_PAGES: DocPage[] = [
     slug: 'command-guide',
     category: 'START',
     title: 'คู่มือรวมชุดคำสั่ง (Command Guide)',
-    lead: 'เลือกคำสั่งของ Nexus-DevFlow ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานและหน้าที่ความรับผิดชอบของแต่ละ Skill อย่างละเอียด',
-    pills: ['Commands', 'Matrix', 'Reference', 'CheatSheet', 'Skills', '38-Skills'],
+    lead: 'เลือกคำสั่งของ Nexus-DevFlow ทั้ง 15 Core Skills และส่วนเสริม Opt-in ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานอย่างละเอียด',
+    pills: ['Commands', 'Matrix', 'Reference', 'CheatSheet', 'Skills', '15-Core-Skills'],
     sections: [
       {
         id: 'pick-a-starting-point',
@@ -361,24 +361,24 @@ export const START_PAGES: DocPage[] = [
             </thead>
             <tbody>
               <tr>
-                <td>มีไอเดียใหม่แต่ยังไม่แน่ใจว่าจะทำดีไหม</td>
+                <td>มีไอเดียใหม่และอยากเทียบ 2–3 ทางเลือก</td>
                 <td><code>/explore</code></td>
-                <td>สำรวจโค้ดเบสจริง เปรียบเทียบทางเลือกและข้อดีข้อเสียโดยไม่แก้ไขไฟล์ใดๆ</td>
+                <td>สำรวจโค้ดเบสจริงและเทียบ Option Trade-offs แบบ Read-only โดยไม่แก้ไขไฟล์</td>
               </tr>
               <tr>
                 <td>อยากรู้ขอบเขตของฟีเจอร์ถัดไปในแผนงาน</td>
-                <td><code>/brief</code></td>
-                <td>สรุปขนาด ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์โดยไม่อ่านไฟล์เกินจำเป็น</td>
+                <td><code>/feature --preview</code></td>
+                <td>พรีวิวขนาด ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์แบบ Read-only</td>
               </tr>
               <tr>
                 <td>พร้อมเริ่มพัฒนาฟีเจอร์ใหม่ตามแผนงาน</td>
                 <td><code>/feature</code></td>
-                <td>สร้าง Task-Isolated Living Spec และจัดเตรียมสภาพแวดล้อมสำหรับพัฒนา</td>
+                <td>Adaptive Clarification (ถามเสริมเมื่อข้อมูลขาด) + สร้าง Living Spec</td>
               </tr>
               <tr>
                 <td>เกิดข้อผิดพลาด บั๊ก หรือระบบไม่ทำงาน</td>
                 <td><code>/debug</code></td>
-                <td>วินิจฉัยหาสาเหตุที่แท้จริง (Root Cause) ผ่านการตั้งสมมติฐานและทดสอบจริง</td>
+                <td>วินิจฉัยแบบ 2-Track (Track A เร็วเมื่อมี trace / Track B 6-phase isolation)</td>
               </tr>
               <tr>
                 <td>ต้องการแก้บั๊กเล็กหรืองานด่วนนอกแผน</td>
@@ -392,28 +392,23 @@ export const START_PAGES: DocPage[] = [
               </tr>
               <tr>
                 <td>ต้องการคู่มือขั้นตอนสำหรับทดสอบด้วยตนเอง</td>
-                <td><code>/check guide</code> หรือ <code>/try</code></td>
+                <td><code>/check guide</code></td>
                 <td>สร้างคู่มือ Read-Only แนะนำจุดที่มนุษย์ควรคลิกทดสอบและผลลัพธ์ที่คาดหวัง</td>
               </tr>
               <tr>
-                <td>ต้องการตรวจสอบคุณภาพโค้ดของฟีเจอร์ปัจจุบัน</td>
+                <td>ต้องการตรวจสอบคุณภาพโค้ด + YAGNI</td>
                 <td><code>/audit current</code></td>
-                <td>สแกนหาข้อบกพร่อง ความปลอดภัย OWASP และบันทึกลง <code>findings.md</code></td>
+                <td>สแกนคุณภาพ, YAGNI, ความปลอดภัย, ประสิทธิภาพ, Test และบันทึกลง <code>findings.md</code></td>
               </tr>
               <tr>
-                <td>ต้องการรันหรือเพิ่มชุดทดสอบ Unit/Integration</td>
-                <td><code>/tests</code></td>
-                <td>จัดการชุดทดสอบ วิเคราะห์ Coverage และเพิ่มเคสทดสอบที่ขาดหายไป</td>
+                <td>ต้องการตั้งค่า Unit Test / Playwright (Opt-in)</td>
+                <td><code>npx nexus-devflow skill add setup-tests</code></td>
+                <td>ติดตั้งส่วนเสริม <code>/setup-tests</code> สำหรับ Unit &amp; Browser test harness</td>
               </tr>
               <tr>
-                <td>ต้องการทดสอบผ่านเบราว์เซอร์จริง (E2E)</td>
-                <td><code>/tests browser</code> หรือ <code>/browser-tests</code></td>
-                <td>ทดสอบ End-to-End บนเบราว์เซอร์จริงผ่าน Playwright และ MCP BrowserOS Neo</td>
-              </tr>
-              <tr>
-                <td>ต้องการตรวจสุขภาพของระบบ DevFlow ทั้งหมด</td>
-                <td><code>/devflow-doctor</code></td>
-                <td>ตรวจสอบความสอดคล้องของ Adapters, Plans, Config, และความสดใหม่ของ Overview</td>
+                <td>ต้องการเช็กสถานะ, สรุปผู้บริหาร หรือตรวจสุขภาพ</td>
+                <td><code>/devflow</code> / <code>/devflow doctor</code></td>
+                <td>ศูนย์รวมเช็กสถานะงาน (<code>--exec</code>), ตรวจสุขภาพ Adapters/Overview และเราเตอร์</td>
               </tr>
             </tbody>
           </table>
@@ -454,7 +449,7 @@ export const START_PAGES: DocPage[] = [
               ทำหน้าที่เป็น Senior QA Gatekeeper ตรวจสอบ Multi-Lane Verification Matrix (Typecheck, Lint, Test Suites, Manual Proof) และบันทึกผลการตรวจสอบเชิงประจักษ์ลงใน Living Spec
             </li>
             <li>
-              <strong>/check guide (หรือ /try)</strong>: 
+              <strong>/check guide</strong>: 
               สร้างคู่มือการทดสอบแบบแมนนวล (Read-Only Try Guide) ระบุขั้นตอนการรัน จุดที่ต้องคลิกบนหน้าจอ และสิ่งที่ควรสังเกต เพื่อให้ผู้ใช้สามารถทดสอบด้วยตนเองได้อย่างง่ายดาย
             </li>
             <li>
@@ -472,27 +467,23 @@ export const START_PAGES: DocPage[] = [
           <ul>
             <li>
               <strong><a href="../commands/explore/">/explore</a></strong>: 
-              สำรวจโค้ดเบสจริงเพื่อตอบคำถามทางเทคนิค เปรียบเทียบทางเลือกและข้อดีข้อเสียก่อนตัดสินใจวางแผน โดยไม่มีการแก้ไขไฟล์ใดๆ
+              สำรวจโค้ดเบสจริงและเปรียบเทียบ 2–3 ทางเลือก (Brainstorm mode) แบบ Read-Only โดยไม่มีการแก้ไขไฟล์ใดๆ
             </li>
             <li>
-              <strong><a href="../commands/brief/">/brief</a></strong>: 
-              สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่อ่านไฟล์เกินจำเป็น
+              <strong><a href="../commands/feature/">/feature --preview</a></strong>: 
+              สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่สร้างไฟล์เกินจำเป็น
             </li>
             <li>
-              <strong><a href="../commands/devflow-status/">/devflow-status</a></strong>: 
-              รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สถานะของฟีเจอร์ปัจจุบัน, Git State, และคำสั่งถัดไปที่ต้องทำ
+              <strong><a href="../commands/devflow/">/devflow</a></strong>: 
+              รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สรุปผู้บริหาร (<code>--exec</code>), ตรวจสุขภาพด้วย <code>/devflow doctor</code> และคำสั่งถัดไป
             </li>
             <li>
               <strong><a href="../commands/debug/">/debug</a></strong>: 
-              วินิจฉัยหาสาเหตุที่แท้จริงของข้อผิดพลาด (Root-Cause Tracing) ผ่านการตั้งสมมติฐานและทดสอบ โดยไม่แก้โค้ดแบบสุ่มสี่สุ่มห้า พร้อมส่งมอบแนวทางการแก้ไข
+              วินิจฉัยแบบ 2-Track (Track A เร็วเมื่อมี deterministic stacktrace หรือ Track B 6-phase isolation) โดยไม่แก้โค้ดสุ่มสี่สุ่มห้า
             </li>
             <li>
               <strong><a href="../commands/audit/">/audit</a></strong>: 
-              ตรวจสอบคุณภาพและความปลอดภัย 5 มิติ (Code Quality, OWASP Top 10 Security, Performance Bottlenecks, Architecture Drift, Test Integrity) และบันทึกลง <code>findings.md</code> (รองรับ <code>/audit current</code> สำหรับงานปัจจุบัน และ <code>/audit full</code> สำหรับทั้งโปรเจกต์)
-            </li>
-            <li>
-              <strong><a href="../commands/devflow-doctor/">/devflow-doctor</a></strong>: 
-              ตรวจสุขภาพของระบบ DevFlow ทั้งหมด ตรวจสอบ Adapter Sync, Config Drift, และความสดใหม่ของ <code>project-overview.md</code>
+              ตรวจสอบคุณภาพ + YAGNI, OWASP Security, Performance, Architecture และ Test Integrity พร้อมโหมด <code>independent</code>
             </li>
           </ul>
         `
@@ -505,11 +496,7 @@ export const START_PAGES: DocPage[] = [
           <ul>
             <li>
               <strong><a href="../commands/onboard/">/onboard</a></strong>: 
-              ปรับแต่งโปรเจกต์ใหม่ ตรวจจับ Stack, คำสั่ง Test, Coding Conventions, และระดับการ Review Cadence (Efficient vs Guided)
-            </li>
-            <li>
-              <strong><a href="../commands/adopt/">/adopt</a></strong>: 
-              สำรวจโค้ดเบสเดิม (Brownfield) 5 ขั้นตอนเชิงลึก สกัดฟังก์ชันที่มีอยู่แล้วลงใน <code>build-plan.md</code> เป็น <code>- [x]</code> โดยไม่กระทบ Git History เดิม
+              รองรับทั้งโปรเจกต์ใหม่และโค้ดเบสเดิม (<code>--adopt</code>) ตรวจจับ Stack, คำสั่ง Test, Conventions และ Review Cadence โดยไม่กระทบ Git History เดิม
             </li>
             <li>
               <strong><a href="../commands/discovery/">/discovery</a></strong>: 
@@ -524,12 +511,12 @@ export const START_PAGES: DocPage[] = [
               สร้าง UI Mockup (HTML/CSS Standalone) และ Design Tokens อย่างรวดเร็วก่อนลงมือพัฒนาจริง
             </li>
             <li>
-              <strong><a href="../commands/tests/">/tests</a></strong>: 
-              จัดการและรันชุดทดสอบ Unit/Integration Tests รวมถึงการทดสอบผ่านเบราว์เซอร์จริง (<code>/tests browser</code>) ผ่าน Playwright และ MCP BrowserOS Neo
+              <strong><a href="../commands/tests/">setup-tests</a> (Opt-in Extension)</strong>: 
+              ติดตั้งผ่าน <code>npx nexus-devflow skill add setup-tests</code> เพื่อจัดการและตั้งค่า Unit/Integration Tests รวมถึง Browser Testing (<code>/setup-tests browser</code>) ผ่าน Playwright และ Active Browser MCP
             </li>
             <li>
-              <strong><a href="../commands/ci/">/ci</a></strong>: 
-              สร้างคำสั่ง Verify หนึ่งคำสั่งเฉพาะสำหรับโปรเจกต์ และสร้างไฟล์ GitHub Actions Workflow (<code>devflow-verify.yml</code>) ให้ตรงกัน
+              <strong><a href="../commands/ci/">ci</a> (Opt-in Extension)</strong>: 
+              ติดตั้งผ่าน <code>npx nexus-devflow skill add ci</code> เพื่อสร้างคำสั่ง Verify และไฟล์ GitHub Actions Workflow (<code>devflow-verify.yml</code>)
             </li>
           </ul>
         `
@@ -563,11 +550,7 @@ export const START_PAGES: DocPage[] = [
           <ul>
             <li>
               <strong><a href="../commands/autopilot/">/autopilot</a></strong>: 
-              รันกระบวนการพัฒนา 1 ฟีเจอร์แบบอัตโนมัติตั้งแต่ต้นจนจบ (Spec -> Implement -> Check -> Audit) แล้วหยุดรอการอนุมัติก่อนทำ Complete
-            </li>
-            <li>
-              <strong><a href="../commands/continuous/">/continuous</a></strong>: 
-              Autonomous Multi-Feature Delivery Loop พัฒนาฟีเจอร์ใน <code>build-plan.md</code> ต่อเนื่องทีละรายการแบบอัตโนมัติ มีการสร้าง Branch แยก, รัน TDD, ตรวจสอบ Quality Gates, และ Squash-Merge ทีละฟีเจอร์จนจบแผน
+              รันกระบวนการพัฒนา 1 ฟีเจอร์แบบอัตโนมัติ (Spec -&gt; Implement -&gt; Check -&gt; Audit) หรือรันคิวต่อเนื่องทั้งหมดในเครื่องด้วย <code>/autopilot --all</code>
             </li>
           </ul>
         `
@@ -578,13 +561,13 @@ export const START_PAGES: DocPage[] = [
         contentHtml: `
           <p>คุณสามารถเรียกใช้คำสั่งได้ตามรูปแบบที่เครื่องมือ AI ของคุณรองรับ:</p>
           <ul>
-            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/tests browser</code>, <code>/check guide</code></li>
-            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$tests browser</code>, <code>$check guide</code></li>
+            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/devflow doctor</code>, <code>/check guide</code></li>
+            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$devflow doctor</code>, <code>$check guide</code></li>
             <li><strong>GitHub Copilot / OpenCode / Chat ทั่วไป</strong>: พิมพ์ชื่อคำสั่งหรือระบุความต้องการเป็นภาษาไทยหรืออังกฤษได้โดยตรง</li>
           </ul>
           
           <h4>การย้ายและเปลี่ยนผ่านคำสั่ง (Command Migration)</h4>
-          <p>ใน Nexus-DevFlow เวอร์ชันปัจจุบัน มีการปรับชื่อคำสั่งให้กระชับและเป็นหมวดหมู่มากขึ้น:</p>
+          <p>ใน Nexus-DevFlow เวอร์ชันปัจจุบัน มีการยุบรวมคำสั่งให้เหลือ 15 Core Skills และย้ายส่วนเสริม Setup/Ops เป็น Opt-in Extensions:</p>
           <table>
             <thead>
               <tr>
@@ -595,14 +578,14 @@ export const START_PAGES: DocPage[] = [
             </thead>
             <tbody>
               <tr>
-                <td><code>/browser-tests</code></td>
-                <td><code>/tests browser</code></td>
-                <td>รวมการทดสอบ Browser เข้าเป็นคำสั่งย่อยของ <code>/tests</code> (ยังคงรองรับคำสั่งเดิม)</td>
+                <td><code>/browser-tests</code>, <code>/setup-tests</code></td>
+                <td><code>/setup-tests browser</code> (Opt-in)</td>
+                <td>รวมการทดสอบ Browser เข้าในส่วนเสริม <code>setup-tests</code> (ติดตั้งด้วย <code>npx nexus-devflow skill add setup-tests</code>)</td>
               </tr>
               <tr>
                 <td><code>/try</code></td>
                 <td><code>/check guide</code></td>
-                <td>รวมคู่มือการทดสอบด้วยตนเองเข้าเป็นโหมด Guide ของ <code>/check</code> (ยังคงรองรับคำสั่งเดิม)</td>
+                <td>รวมคู่มือการทดสอบด้วยตนเองเข้าเป็นโหมด Guide ของ <code>/check</code> โดยตรง</td>
               </tr>
             </tbody>
           </table>
@@ -852,9 +835,9 @@ pnpm dlx nexus-devflow@latest update</code></pre>
             </thead>
             <tbody>
               <tr>
-                <td><code>/browser-tests</code></td>
-                <td><code>/tests browser</code></td>
-                <td>เพิ่มหรือปรับแต่ง Browser Test Harness (Playwright) และเชื่อมต่อกับ MCP browseros-neo</td>
+                <td><code>/browser-tests</code>, <code>/setup-tests</code></td>
+                <td><code>npx nexus-devflow skill add setup-tests</code></td>
+                <td>ติดตั้งส่วนเสริม Opt-in สำหรับตั้งค่า Test Harness &amp; Browser E2E</td>
               </tr>
               <tr>
                 <td><code>/try</code></td>
@@ -862,25 +845,23 @@ pnpm dlx nexus-devflow@latest update</code></pre>
                 <td>สร้างคู่มือการทดสอบ Manual Walkthrough ทีละขั้นตอนสำหรับมนุษย์ตรวจทาน</td>
               </tr>
               <tr>
-                <td><code>/try latest</code></td>
-                <td><code>/check guide latest</code></td>
-                <td>สร้างคู่มือการทดสอบเฉพาะสำหรับฟีเจอร์หรือขอบเขตงานล่าสุด</td>
+                <td><code>/adopt</code>, <code>/devflow-doctor</code>, <code>/continuous</code></td>
+                <td><code>/onboard --adopt</code>, <code>/devflow doctor</code>, <code>/autopilot --all</code></td>
+                <td>ควบรวมเป็นโหมดมาตรฐานภายใน 15 Core Skills เพื่อลดคำสั่งซ้ำซ้อน</td>
               </tr>
             </tbody>
           </table>
-          <p>สำหรับ OpenAI Codex ให้ใช้คำสั่ง <code>$tests browser</code> และ <code>$check guide</code> โดยที่คำสั่งหลัก <code>/tests</code> ยังคงใช้ติดตั้งและรัน Unit Test ตามปกติ และคำสั่ง <code>/check</code> ยังคงใช้ตรวจสอบพฤติกรรมของระบบจริงตามเดิม</p>
+          <p>สำหรับ OpenAI Codex ให้ใช้ <code>$check guide</code>, <code>$devflow doctor</code> และ <code>$autopilot --all</code></p>
           
-          <h4>กลไกการทำงานของ Skills สำคัญที่เกี่ยวข้อง (Core & Companion Skills)</h4>
+          <h4>กลไกการทำงานของ Core Skills สำคัญ (15 Core Skills)</h4>
           <ul>
-            <li><strong><code>/tests browser</code> (หรือ <code>browser-tests</code>)</strong>: วิเคราะห์สถาปัตยกรรมเว็บแอป ติดตั้งชุดทดสอบ Playwright E2E พร้อมสคริปต์รันทั้งแบบ Headless และ Interactive UI และเชื่อมต่อกับ MCP Server ของ <code>browseros-neo</code> (ที่พอร์ต <code>http://127.0.0.1:9010/mcp</code>) เพื่อให้เอเจนต์สามารถเปิดเบราว์เซอร์จริงที่ล็อกอินบัญชีจริงไว้แล้ว ตรวจสอบผลลัพธ์เชิงภาพ และบันทึกหลักฐานการทดสอบอัตโนมัติ</li>
-            <li><strong><code>/check guide</code> (หรือ <code>try</code>)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยจะระบุคำสั่งที่ต้องรัน ที่อยู่ URL จุดที่ต้องคลิกบนหน้าจอ ข้อมูลตัวอย่างที่ต้องกรอก ผลลัพธ์ที่ถูกต้อง และสัญญาณที่บ่งบอกว่าเกิดข้อผิดพลาด <em>(หมายเหตุ: โหมด guide เป็นเครื่องมือช่วยตรวจทานของมนุษย์ ไม่นับเป็นการยืนยันความถูกต้องเชิงคุณภาพอัตโนมัติ)</em></li>
-            <li><strong><code>/explore</code></strong>: สกิลสำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรมแบบ Read-Only เปรียบเทียบทางเลือกและข้อดีข้อเสีย (Trade-offs) กับโค้ดจริงในโปรเจกต์ โดยไม่มีการแก้ไขโค้ดหรือบังคับเขียนสเปก/แผนงานล่วงหน้า เหมาะสำหรับการศึกษาความเป็นไปได้ก่อนตัดสินใจ</li>
-            <li><strong><code>/devflow-doctor</code></strong>: สแกนตรวจสุขภาพและวินิจฉัยความพร้อมของระบบ DevFlow ตรวจสอบความสมบูรณ์ของ Adapters, ความสดใหม่ของ <code>project-overview.md</code>, ความถูกต้องของคำสั่งใน <code>AGENTS.md</code> และแจ้งเตือนหากไฟล์ Context มีขนาดใหญ่เกินเกณฑ์ 20KB</li>
-            <li><strong><code>/overview</code></strong>: ทำหน้าที่เป็น Deterministic Compiler ที่กลั่นกรองและรวบรวมข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code> เพื่อเป็น Single Living Source of Truth ที่กระชับและแม่นยำให้ AI Agent ทุกตัวอ่านก่อนเริ่มงานในแต่ละเซสชัน</li>
-            <li><strong><code>/ci</code></strong>: จัดระเบียบคำสั่ง Verify ของโปรเจกต์ สร้าง GitHub Actions CI Workflow ที่สอดคล้องกัน และเสนอการติดตั้ง Git pre-push hook ในเครื่องเพื่อป้องกันการ Push โค้ดที่ไม่ผ่านการทดสอบขึ้นสู่ Remote Repository</li>
+            <li><strong><code>/check guide</code> (รวม <code>/try</code> เดิม)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยระบุคำสั่งรัน URL จุดคลิก ผลลัพธ์ที่ถูกต้อง และสัญญาณข้อผิดพลาด</li>
+            <li><strong><code>/explore</code> (รวม <code>/brainstorm</code> เดิม)</strong>: วิเคราะห์ไอเดียและเปรียบเทียบ 2–3 ทางเลือก (Trade-offs) กับโค้ดจริงแบบ Read-Only โดยไม่แก้ไขไฟล์</li>
+            <li><strong><code>/devflow doctor</code> (รวม <code>/devflow-doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters ความสดใหม่และขนาดของ <code>project-overview.md</code> (&lt; 20KB) และคำสั่งใน <code>AGENTS.md</code></li>
+            <li><strong><code>/overview</code></strong>: Deterministic Compiler ที่กลั่นกรองข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code></li>
           </ul>
 
-          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow-doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ที่อาจยังไม่ได้อัปเดตใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
+          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
         `,
         subsections: [
           {

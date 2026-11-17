@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -236,9 +227,9 @@ pnpm dlx nexus-devflow@latest update</code></pre>
             </thead>
             <tbody>
               <tr>
-                <td><code>/browser-tests</code></td>
-                <td><code>/tests browser</code></td>
-                <td>เพิ่มหรือปรับแต่ง Browser Test Harness (Playwright) และเชื่อมต่อกับ MCP browseros-neo</td>
+                <td><code>/browser-tests</code>, <code>/setup-tests</code></td>
+                <td><code>npx nexus-devflow skill add setup-tests</code></td>
+                <td>ติดตั้งส่วนเสริม Opt-in สำหรับตั้งค่า Test Harness &amp; Browser E2E</td>
               </tr>
               <tr>
                 <td><code>/try</code></td>
@@ -246,25 +237,23 @@ pnpm dlx nexus-devflow@latest update</code></pre>
                 <td>สร้างคู่มือการทดสอบ Manual Walkthrough ทีละขั้นตอนสำหรับมนุษย์ตรวจทาน</td>
               </tr>
               <tr>
-                <td><code>/try latest</code></td>
-                <td><code>/check guide latest</code></td>
-                <td>สร้างคู่มือการทดสอบเฉพาะสำหรับฟีเจอร์หรือขอบเขตงานล่าสุด</td>
+                <td><code>/adopt</code>, <code>/devflow-doctor</code>, <code>/continuous</code></td>
+                <td><code>/onboard --adopt</code>, <code>/devflow doctor</code>, <code>/autopilot --all</code></td>
+                <td>ควบรวมเป็นโหมดมาตรฐานภายใน 15 Core Skills เพื่อลดคำสั่งซ้ำซ้อน</td>
               </tr>
             </tbody>
           </table>
-          <p>สำหรับ OpenAI Codex ให้ใช้คำสั่ง <code>$tests browser</code> และ <code>$check guide</code> โดยที่คำสั่งหลัก <code>/tests</code> ยังคงใช้ติดตั้งและรัน Unit Test ตามปกติ และคำสั่ง <code>/check</code> ยังคงใช้ตรวจสอบพฤติกรรมของระบบจริงตามเดิม</p>
+          <p>สำหรับ OpenAI Codex ให้ใช้ <code>$check guide</code>, <code>$devflow doctor</code> และ <code>$autopilot --all</code></p>
           
-          <h4>กลไกการทำงานของ Skills สำคัญที่เกี่ยวข้อง (Core & Companion Skills)</h4>
+          <h4>กลไกการทำงานของ Core Skills สำคัญ (15 Core Skills)</h4>
           <ul>
-            <li><strong><code>/tests browser</code> (หรือ <code>browser-tests</code>)</strong>: วิเคราะห์สถาปัตยกรรมเว็บแอป ติดตั้งชุดทดสอบ Playwright E2E พร้อมสคริปต์รันทั้งแบบ Headless และ Interactive UI และเชื่อมต่อกับ MCP Server ของ <code>browseros-neo</code> (ที่พอร์ต <code>http://127.0.0.1:9010/mcp</code>) เพื่อให้เอเจนต์สามารถเปิดเบราว์เซอร์จริงที่ล็อกอินบัญชีจริงไว้แล้ว ตรวจสอบผลลัพธ์เชิงภาพ และบันทึกหลักฐานการทดสอบอัตโนมัติ</li>
-            <li><strong><code>/check guide</code> (หรือ <code>try</code>)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยจะระบุคำสั่งที่ต้องรัน ที่อยู่ URL จุดที่ต้องคลิกบนหน้าจอ ข้อมูลตัวอย่างที่ต้องกรอก ผลลัพธ์ที่ถูกต้อง และสัญญาณที่บ่งบอกว่าเกิดข้อผิดพลาด <em>(หมายเหตุ: โหมด guide เป็นเครื่องมือช่วยตรวจทานของมนุษย์ ไม่นับเป็นการยืนยันความถูกต้องเชิงคุณภาพอัตโนมัติ)</em></li>
-            <li><strong><code>/explore</code></strong>: สกิลสำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรมแบบ Read-Only เปรียบเทียบทางเลือกและข้อดีข้อเสีย (Trade-offs) กับโค้ดจริงในโปรเจกต์ โดยไม่มีการแก้ไขโค้ดหรือบังคับเขียนสเปก/แผนงานล่วงหน้า เหมาะสำหรับการศึกษาความเป็นไปได้ก่อนตัดสินใจ</li>
-            <li><strong><code>/devflow-doctor</code></strong>: สแกนตรวจสุขภาพและวินิจฉัยความพร้อมของระบบ DevFlow ตรวจสอบความสมบูรณ์ของ Adapters, ความสดใหม่ของ <code>project-overview.md</code>, ความถูกต้องของคำสั่งใน <code>AGENTS.md</code> และแจ้งเตือนหากไฟล์ Context มีขนาดใหญ่เกินเกณฑ์ 20KB</li>
-            <li><strong><code>/overview</code></strong>: ทำหน้าที่เป็น Deterministic Compiler ที่กลั่นกรองและรวบรวมข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code> เพื่อเป็น Single Living Source of Truth ที่กระชับและแม่นยำให้ AI Agent ทุกตัวอ่านก่อนเริ่มงานในแต่ละเซสชัน</li>
-            <li><strong><code>/ci</code></strong>: จัดระเบียบคำสั่ง Verify ของโปรเจกต์ สร้าง GitHub Actions CI Workflow ที่สอดคล้องกัน และเสนอการติดตั้ง Git pre-push hook ในเครื่องเพื่อป้องกันการ Push โค้ดที่ไม่ผ่านการทดสอบขึ้นสู่ Remote Repository</li>
+            <li><strong><code>/check guide</code> (รวม <code>/try</code> เดิม)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยระบุคำสั่งรัน URL จุดคลิก ผลลัพธ์ที่ถูกต้อง และสัญญาณข้อผิดพลาด</li>
+            <li><strong><code>/explore</code> (รวม <code>/brainstorm</code> เดิม)</strong>: วิเคราะห์ไอเดียและเปรียบเทียบ 2–3 ทางเลือก (Trade-offs) กับโค้ดจริงแบบ Read-Only โดยไม่แก้ไขไฟล์</li>
+            <li><strong><code>/devflow doctor</code> (รวม <code>/devflow-doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters ความสดใหม่และขนาดของ <code>project-overview.md</code> (&lt; 20KB) และคำสั่งใน <code>AGENTS.md</code></li>
+            <li><strong><code>/overview</code></strong>: Deterministic Compiler ที่กลั่นกรองข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code></li>
           </ul>
 
-          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow-doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ที่อาจยังไม่ได้อัปเดตใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
+          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
         
           
           <div class="docs-step" id="if-latest-runs-an-older-version">

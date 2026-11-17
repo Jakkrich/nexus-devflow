@@ -13,31 +13,22 @@ interface CommandCatalogItem {
 }
 
 const FALLBACK_DESCRIPTIONS: Record<string, string> = {
-  devflow: "Inspect workflow state and route the request to the right next command.",
-  "devflow-doctor": "Run a read-only health check for setup, scripts, adapters, and workflow drift.",
-  "devflow-status": "Show where the project stands, build-plan progress, and the exact next action.",
+  devflow: "Inspect workflow state, run doctor diagnostics, or route requests to the right command.",
   overview: "Compile repository plans and context into the living project overview.",
   idea: "Capture and enrich a new idea in the centralized Idea Inbox.",
-  debug: "Investigate a bug and establish its root cause before implementation.",
-  brief: "Preview scope, dependencies, risks, and likely size before creating a run.",
-  onboard: "Detect the stack and establish baseline context for a fresh project.",
-  adopt: "Survey an existing codebase and bootstrap DevFlow context.",
-  try: "Guide a human through manual QA steps and expected results.",
-  rollback: "Plan a safe reversal with dependency and regression risk analysis.",
-  ci: "Set up project CI verification workflows.",
-  test: "Inspect test suites and verify test runner configuration.",
-  autopilot: "Run one bounded implementation and verification loop.",
+  debug: "Investigate a bug using 2-Track diagnosis and establish root cause before implementation.",
+  onboard: "Detect the stack and establish baseline context for fresh or existing brownfield projects.",
+  autopilot: "Run one bounded pass or continuous multi-feature queue (--all / --merge) with quality gates.",
   prototype: "Create a disposable UI mockup before production implementation.",
-  "report-html": "Generate the optional standalone interactive HTML report.",
-  brainstorm: "Explore vague requests and formulate option trade-offs without allocating a running ID.",
-  grill: "Conduct interactive Socratic alignment, extract domain glossary, and record architecture decision records (ADRs).",
-  discovery: "Conduct project-level roadmap discovery or feature-level exploration before delivery commitment."
+  audit: "Review code quality, YAGNI discipline, security, performance, and tests.",
+  discovery: "Conduct roadmap discovery, SA requirement intake, Socratic alignment (ADR/glossary), or exploration.",
+  explore: "Explore an idea and compare 2-3 option trade-offs without changing files."
 };
 
 async function readCommandCatalog(projectRoot: string): Promise<CommandCatalogItem[]> {
   const manifest = await readManifest(projectRoot);
   const fast = manifest?.lifecycle.fastTrackStages || ["feature", "fix", "implement", "check", "complete"];
-  const deep = manifest?.lifecycle.mainlineStages || ["idea", "grill", "brainstorm", "discovery"];
+  const deep = manifest?.lifecycle.mainlineStages || ["idea", "explore", "discovery"];
   const companion = manifest?.lifecycle.companionCommands || Object.keys(FALLBACK_DESCRIPTIONS);
   const families: Array<[CommandFamily, string[]]> = [["fast", fast], ["deep", deep], ["companion", companion]];
   const seen = new Set<string>();

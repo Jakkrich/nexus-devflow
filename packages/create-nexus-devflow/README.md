@@ -60,9 +60,8 @@ All development tasks execute through the 4-stage single living spec lifecycle:
 ## 🔮 Pre-Flight Discovery Suite
 
 - **`/idea`**: Capture raw ideas in `devflow/ideas.md` with instant AI feasibility scoring.
-- **`/grill`** (or **`/align`**): Socratic alignment & domain modeling; records Architecture Decision Records (`devflow/decisions/ADR-xxx.md`).
-- **`/brainstorm`**: Structured divergent/convergent ideation with trade-off analysis.
-- **`/discovery`**: Deep inception and exploratory discovery (`devflow/discoveries/DISC-xxx.md`).
+- **`/explore`**: Compare 2–3 architectural/implementation options with trade-offs without modifying files.
+- **`/discovery`**: Macro roadmap planning, SA requirement intake (`REQ-ID`), Socratic ADR alignment (`--grill`), and exploratory discovery (`devflow/discoveries/DISC-xxx.md`).
 
 For failures, `/debug` follows a scientific six-phase diagnosis built around a
 red-capable feedback loop and does not modify source. Architecture review follows

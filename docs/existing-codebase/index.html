@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม และเตรียมความพร้อมสำหรับการพัฒนาฟีเจอร์ถัดไป">
+  <meta name="description" content="ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /onboard --adopt (หรือ /onboard ซึ่งตรวจจับ brownfield ให้อัตโนมัติ) โดยไม่รบกวนประวัติ Git เดิม">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/existing-codebase/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -158,15 +149,15 @@
       <h1 class="docs-title">นำไปใช้กับโค้ดเบสเดิม (Existing Codebase Adoption)</h1>
       
       <p class="docs-lead">
-        ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /adopt โดยไม่รบกวนประวัติ Git เดิม และเตรียมความพร้อมสำหรับการพัฒนาฟีเจอร์ถัดไป
+        ติดตั้งและประยุกต์ใช้ Nexus-DevFlow เข้ากับโปรเจกต์ที่มีโค้ดเบสอยู่แล้วผ่านคำสั่ง /onboard --adopt (หรือ /onboard ซึ่งตรวจจับ brownfield ให้อัตโนมัติ) โดยไม่รบกวนประวัติ Git เดิม
       </p>
 
       <div class="docs-meta">
+        <span class="docs-pill">Onboard</span>
         <span class="docs-pill">Adopt</span>
         <span class="docs-pill">Brownfield</span>
         <span class="docs-pill">Legacy</span>
         <span class="docs-pill">Survey</span>
-        <span class="docs-pill">Migration</span>
         <span class="docs-pill">Reconciliation</span>
       </div>
 
@@ -177,9 +168,9 @@
           <h2>เมื่อใดที่ควรใช้การ Adopt เข้าสู่โค้ดเบสเดิม (When to adopt)</h2>
           
           <p>ใช้คู่มือนี้แทน <a href="../getting-started/">เริ่มต้นใช้งาน (Getting Started)</a> เมื่อคุณมีแอปพลิเคชันที่ทำงานได้จริงอยู่แล้ว (Working Application) และต้องการนำเลเยอร์เวิร์กโฟลว์ของ Nexus-DevFlow เข้ามาช่วยวางแผนและพัฒนาฟีเจอร์ถัดไปอย่างเป็นระบบ</p>
-          <p>การ Adopt จะทำการสำรวจโค้ดเบสจริง (Codebase Survey) สร้างโครงร่างแผนงาน (Scaffold Plans) และบันทึกฟังก์ชันที่ส่งมอบไปแล้วให้อัตโนมัติ โดยไม่ส่งผลกระทบต่อ Git History เดิมและไม่แตะต้องซอร์สโค้ดเดิมของคุณเลยแม้แต่บรรทัดเดียว</p>
+          <p>การ Adopt ผ่าน <code>/onboard --adopt</code> (หรือ <code>/onboard</code> ซึ่งตรวจจับ brownfield อัตโนมัติ) จะทำการสำรวจโค้ดเบสจริง สร้างโครงร่างแผนงาน และบันทึกฟังก์ชันที่ส่งมอบไปแล้วโดยไม่กระทบ Git History เดิม</p>
           <blockquote>
-            <p><strong>ข้อแตกต่างหลักระหว่าง Onboard กับ Adopt:</strong> คำสั่ง <code>/onboard</code> มีไว้สำหรับโปรเจกต์เปล่าที่เพิ่งเริ่มต้นสร้างโครงร่าง (Fresh Scaffold) ในขณะที่ <code>/adopt</code> มีไว้สำหรับโปรเจกต์เดิมที่มีซอร์สโค้ดทำงานอยู่แล้ว (Brownfield Codebase) โดยจะอ่านโค้ดจริงเพื่อสรุปฟังก์ชันเดิมและวางแผนเฉพาะสิ่งที่ต้องทำต่อ</p>
+            <p><strong>คำสั่งเดียวทั้งโปรเจกต์ใหม่และเดิม:</strong> คำสั่ง <code>/onboard</code> จะตรวจสอบอัตโนมัติว่าโปรเจกต์เป็น Fresh Scaffold หรือมีซอร์สโค้ดทำงานอยู่แล้ว (Brownfield Codebase) หากพบโค้ดจริงจะสลับเข้าสู่โหมด Adoption ให้ทันที (หรือสั่ง <code>/onboard --adopt</code> โดยตรง)</p>
           </blockquote>
         
           
@@ -205,15 +196,15 @@
           
         </section>
 
-        <!-- Section: รันการสำรวจโค้ดเบสด้วย /adopt (Run the adoption survey) -->
+        <!-- Section: รันการสำรวจโค้ดเบสด้วย /onboard --adopt (Run the adoption survey) -->
         <section id="run-the-adoption-survey">
-          <h2>รันการสำรวจโค้ดเบสด้วย /adopt (Run the adoption survey)</h2>
+          <h2>รันการสำรวจโค้ดเบสด้วย /onboard --adopt (Run the adoption survey)</h2>
           
-          <p>สั่งการ AI ด้วยคำสั่ง <code>$adopt</code> ใน Codex, <code>/adopt</code> ใน Claude Code / Google Antigravity หรือสั่งให้ Copilot / OpenCode รัน Adopt Skill:</p>
-          <pre><code>/adopt</code></pre>
+          <p>สั่งการ AI ด้วยคำสั่ง <code>$onboard --adopt</code> ใน Codex หรือ <code>/onboard</code> (หรือ <code>/onboard --adopt</code>) ใน Claude Code / Google Antigravity / Copilot:</p>
+          <pre><code>/onboard --adopt</code></pre>
           
-          <h4>กลไกการทำงานเชิงลึกของ Skill /adopt</h4>
-          <p>Skill <code>/adopt</code> ทำงานแบบ Read-Only และดำเนินการสำรวจโปรเจกต์อย่างเป็นระบบผ่าน 5 ขั้นตอนหลัก:</p>
+          <h4>กลไกการทำงานเชิงลึกของโหมด Adoption</h4>
+          <p>โหมด brownfield ใน <code>/onboard</code> ทำงานแบบ Read-Only จนกว่าจะอนุมัติแผน ผ่าน 5 ขั้นตอนหลัก:</p>
           <ol>
             <li>
               <strong>การตรวจสอบความปลอดภัยเบื้องต้น (Safety & Baseline Check)</strong>: ตรวจสอบว่า <code>devflow/project-plan.md</code> มีอยู่แล้วหรือไม่ หากมีข้อมูลจริงอยู่แล้วจะหยุดเพื่อป้องกันการเขียนทับ พร้อมทั้งปกป้องไฟล์ <code>README.md</code> หลักของโปรเจกต์ไม่ให้ถูกแก้ไข
@@ -346,13 +337,13 @@
           
           <p>เมื่อกระบวนการ Adopt เสร็จสมบูรณ์ โค้ดเบสเดิมของคุณจะมีความพร้อมเต็มที่สำหรับการพัฒนาฟีเจอร์ใหม่ตามวงจรมาตรฐาน 4 ขั้นตอน:</p>
           <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
-          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วยโหมด Continuous:</p>
-          <pre><code>/continuous</code></pre>
+          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วยโหมด Continuous ผ่าน <code>/autopilot --all</code>:</p>
+          <pre><code>/autopilot --all</code></pre>
           <p>ดูรายละเอียดและแนวทางปฏิบัติเพิ่มเติมได้ที่:</p>
           <ul>
-            <li><a href="../command-guide/">Command Guide</a> — คู่มือสรุปชุดคำสั่งทั้งหมดกว่า 38+ ทักษะ</li>
+            <li><a href="../command-guide/">Command Guide</a> — คู่มือสรุปชุดคำสั่ง 15 Core Skills + ส่วนเสริม</li>
             <li><a href="../writing-your-plans/">Writing Your Plans</a> — เทคนิคการเขียนและจัดระเบียบแผนงาน</li>
-            <li><a href="../commands/continuous/">Continuous Mode</a> — การรันลูปพัฒนาฟีเจอร์แบบอัตโนมัติ</li>
+            <li><a href="../commands/autopilot/">Autopilot &amp; Continuous Mode</a> — การรันลูปพัฒนาฟีเจอร์แบบอัตโนมัติ</li>
           </ul>
         
           
@@ -377,7 +368,7 @@
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
       <a href="#when-to-adopt">เมื่อใดที่ควรใช้การ Adopt เข้าสู่โค้ดเบสเดิม (When to adopt)</a>
       <a href="#install-the-overlay">ติดตั้ง Overlay เข้าสู่โปรเจกต์เดิม (Install the overlay)</a>
-      <a href="#run-the-adoption-survey">รันการสำรวจโค้ดเบสด้วย /adopt (Run the adoption survey)</a>
+      <a href="#run-the-adoption-survey">รันการสำรวจโค้ดเบสด้วย /onboard --adopt (Run the adoption survey)</a>
       <a href="#choose-workflow-visibility">เลือกรูปแบบการจัดเก็บเวิร์กโฟลว์ (Choose workflow visibility)</a>
       <a href="#align-automatic-checks-when-needed">ปรับปรุงระบบตรวจสอบอัตโนมัติเมื่อจำเป็น (Align automatic checks when needed)</a>
       <a href="#generate-the-overview">สร้างบริบทโปรเจกต์ด้วย /overview (Generate the overview)</a>

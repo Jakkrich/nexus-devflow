@@ -79,7 +79,7 @@ export const REFERENCE_PAGES: DocPage[] = [
         title: '1. กฎการควบคุม Public Surface (Public Surface Rule)',
         contentHtml: `
           <ul>
-            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับชุดทักษะสนับสนุน (Companion Skills เช่น <code>/idea</code>, <code>/grill</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/devflow-doctor</code>, <code>/audit</code>, <code>/rollback</code>)</li>
+            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับ Core Companion Skills (<code>/idea</code>, <code>/explore</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/debug</code>, <code>/audit</code>, <code>/autopilot</code>, <code>/onboard</code>, <code>/overview</code>, <code>/prototype</code>, <code>/fix</code>) รวม <strong>15 Core Skills</strong></li>
             <li><strong>ห้ามเพิ่มคำสั่งสาธารณะโดยไม่จำเป็น</strong>: หากฟังก์ชันใหม่สามารถทำเป็น Internal Helper หรือต่อยอดจากคำสั่งเดิมได้ ให้เลือกทำภายในก่อน จนกว่าจะมีการอนุมัติและเลื่อนขั้น (Promotion) เข้าสู่ <code>agent-bundle.manifest.json#core_skills</code> อย่างเป็นทางการ</li>
           </ul>
         `
@@ -370,29 +370,29 @@ metadata_version: 1
     ]
   },
 
-  // 8. Try migration
+  // 8. Check Guide migration (formerly Try)
   {
     slug: 'commands/try',
     category: 'REFERENCE',
-    title: 'Manual Review With Try (/try)',
-    lead: 'คู่มือการใช้งานคำสั่ง /try เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)',
-    pills: ['Reference', 'Try', 'ManualReview', 'Walkthrough', 'QA', 'UAT'],
+    title: 'Manual Review With /check guide (Legacy /try)',
+    lead: 'คู่มือการใช้งานคำสั่ง /check guide (รวมความสามารถของ /try เดิม) เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)',
+    pills: ['Reference', 'CheckGuide', 'ManualReview', 'Walkthrough', 'QA', 'UAT'],
     sections: [
       {
         id: 'try-usage',
-        title: 'การเรียกใช้คำสั่ง /try',
+        title: 'การเรียกใช้คำสั่ง /check guide',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/try</code> เมื่อต้องการคำแนะนำว่าต้องทดสอบฟีเจอร์ที่เพิ่งพัฒนาอย่างไรบนหน้าจอ:</p>
+          <p>ใช้คำสั่ง <code>/check guide</code> เมื่อต้องการคำแนะนำว่าต้องทดสอบฟีเจอร์ที่เพิ่งพัฒนาอย่างไรบนหน้าจอ:</p>
           <pre><code># สร้างคู่มือสำหรับงานปัจจุบัน
-/try
+/check guide
 
 # หรือสร้างสำหรับฟีเจอร์ที่ระบุ
-/try 1</code></pre>
+/check guide 1</code></pre>
         `
       },
       {
         id: 'try-structure',
-        title: 'โครงสร้างของ Manual Try Guide',
+        title: 'โครงสร้างของ Manual Review Guide',
         contentHtml: `
           <ul>
             <li><strong>Environment Preparation</strong>: คำสั่งรัน Dev Server และเตรียมบัญชีทดสอบ</li>
@@ -405,21 +405,22 @@ metadata_version: 1
     ]
   },
 
-  // 9. Browser Tests migration
+  // 9. Browser Tests Extension (merged into setup-tests)
   {
     slug: 'commands/browser-tests',
     category: 'REFERENCE',
-    title: 'Browser Tests (/browser-tests)',
-    lead: 'การติดตั้ง Playwright Test Harness และเชื่อมต่อ MCP BrowserOS Neo สำหรับการทดสอบหน้าเว็บและ UI อัตโนมัติ',
-    pills: ['Reference', 'BrowserTests', 'Playwright', 'BrowserOS', 'E2E', 'VisualQA'],
+    title: 'Browser Testing with setup-tests Extension',
+    lead: 'การติดตั้ง Playwright Test Harness และเชื่อมต่อ Browser Verification (รวมอยู่ในส่วนเสริม opt-in setup-tests)',
+    pills: ['Reference', 'SetupTests', 'Playwright', 'E2E', 'VisualQA'],
     sections: [
       {
         id: 'browser-tests-usage',
-        title: 'การตั้งค่าและใช้งาน Browser Tests',
+        title: 'การติดตั้งและใช้งาน Browser Tests Extension',
         contentHtml: `
-          <p>ติดตั้ง Test Harness สำหรับการทดสอบเบราว์เซอร์ด้วยคำสั่ง:</p>
-          <pre><code>/browser-tests</code></pre>
-          <p>ระบบจะทำการติดตั้ง Playwright, สร้างไฟล์ Config, เพิ่มคำสั่ง <code>npm run test:browser</code> และเชื่อมต่อกับ BrowserOS Neo MCP (<code>http://127.0.0.1:9010/mcp</code>) เพื่อให้ AI สามารถเปิดหน้าเว็บจริงและบันทึกภาพหน้าจอได้</p>
+          <p>ติดตั้งส่วนเสริม <code>setup-tests</code> (ซึ่งรวมการตั้งค่า Playwright แล้ว) จากนั้นสั่งใช้งาน:</p>
+          <pre><code>npx nexus-devflow skill add setup-tests
+/setup-tests browser</code></pre>
+          <p>ระบบจะทำการติดตั้ง Playwright, สร้างไฟล์ Config และเพิ่มคำสั่ง <code>npm run test:browser</code> เพื่อให้ AI สามารถเปิดตรวจสอบ UI จริงผ่าน Active Browser MCP หรือ Playwright ได้</p>
         `
       }
     ]

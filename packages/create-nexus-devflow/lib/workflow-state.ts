@@ -26,7 +26,7 @@ interface WorkflowState {
 }
 
 const FAST_STAGES = ["feature-fix", "implement", "check", "complete"] as const;
-const PREFLIGHT_STAGES = ["idea", "grill", "brainstorm", "discovery"] as const;
+const PREFLIGHT_STAGES = ["idea", "explore", "feature-preview", "discovery"] as const;
 
 async function readWorkflowState(
   projectRoot: string,
@@ -107,10 +107,12 @@ function nullableField(markdown: string, label: string): string | null {
 
 function normalizePreflightStage(value: string | null): string | null {
   if (!value) return null;
-  const match = value.match(/\b(idea|grill|brainstorm|discovery|explore)\b/i)?.[1];
+  const match = value.match(/\b(idea|explore|feature-preview|discovery|grill|brainstorm|brief)\b/i)?.[1];
   if (!match) return null;
   const raw = match.toLowerCase();
-  if (raw === "explore") return "discovery";
+  if (raw === "brainstorm") return "explore";
+  if (raw === "grill") return "discovery";
+  if (raw === "brief") return "feature-preview";
   return raw;
 }
 

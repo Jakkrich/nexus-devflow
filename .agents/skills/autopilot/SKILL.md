@@ -251,7 +251,7 @@ Stop and produce a concise review packet:
 - changed files and why each changed
 - build/test/check commands run, with pass or fail
 - screenshots or output paths, when relevant
-- `## Try it now` proof (1–3 concrete steps per `../check/reference/try-it-now.md` when `qualityGates.regular.tryGuide` is `always`, `when-user-facing`, or `when-testable` and active), or how to try it manually / pointer to `/try`
+- `## Try it now` proof (1–3 concrete steps per `../check/reference/try-it-now.md` when `qualityGates.regular.tryGuide` is `always`, `when-user-facing`, or `when-testable` and active), or how to try it manually / pointer to `/check guide`
 - checkpoint commits created
 - self-review findings
 - targeted audit scope and findings
@@ -263,11 +263,11 @@ Stop and produce a concise review packet:
 
 Always offer a read-only walkthrough of the completed code after the packet.
 Follow the spec's build steps, explain the key files, symbols, flow, and
-non-obvious decisions, then offer a focused deep dive. Keep `/try` distinct as
+non-obvious decisions, then offer a focused deep dive. Keep `/check guide` distinct as
 the manual product-review path.
 
 If everything is green, the next action is usually: review the diff, then run
-`/try` if you want a manual walkthrough, then `/complete`.
+`/check guide` if you want a manual walkthrough, then `/complete`.
 
 If something failed, name the failing check and the next fix target.
 

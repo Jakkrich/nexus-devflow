@@ -1,10 +1,10 @@
 {
   "skill": "discovery",
-  "description": "\"[devflow] Unified discovery and exploration stage in DevFlow 2.5.0 - conducts project-level roadmap discovery (project-plan.md/build-plan.md) or feature-level pre-delivery exploration before the Single Living Spec lifecycle.\"",
+  "description": "[devflow] Unified discovery, SA requirement intake (docs/images/REQ-ID), Socratic alignment (glossary/ADR), and roadmap or pre-delivery exploration before /feature. Use for /discovery, /analyze, or /grill.",
   "positive": [
     "run discovery skill",
     "invoke /discovery command",
-    "use discovery for devflow unified discovery exploration stage devflow conducts project",
+    "run /discovery --grill for Socratic domain alignment and ADRs",
     "apply discovery guidance"
   ],
   "negative": [

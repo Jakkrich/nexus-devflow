@@ -157,12 +157,12 @@ export const QUALITY_PAGES: DocPage[] = [
         id: 'generate-the-path',
         title: 'การสร้างคู่มือตรวจรับด้วยตนเอง (Generate Try Guide)',
         contentHtml: `
-          <p>รันคำสั่ง <strong><code>/try</code></strong> (หรือ <code>/check guide</code>) เพื่อให้ AI สร้างคู่มือคลิกทดสอบหน้าจอทีละขั้นตอน:</p>
+          <p>รันคำสั่ง <strong><code>/check guide</code></strong> เพื่อให้ AI สร้างคู่มือคลิกทดสอบหน้าจอทีละขั้นตอน:</p>
           <pre><code># สร้างคู่มือสำหรับงานปัจจุบัน
-/try
+/check guide
 
 # หรือสร้างสำหรับฟีเจอร์ที่ระบุ
-/try 1</code></pre>
+/check guide 1</code></pre>
           <p>คู่มือจะสรุป 5 ขั้นตอนหลัก: <strong>1. Start (คำสั่งรัน)</strong> ➔ <strong>2. Open (หน้าจอ/URL)</strong> ➔ <strong>3. Do (ลำดับการคลิก/กรอก)</strong> ➔ <strong>4. Expect (ผลลัพธ์ที่ต้องเห็น)</strong> ➔ <strong>5. Watch For (จุดที่ต้องระวังบั๊ก)</strong></p>
         `
       }

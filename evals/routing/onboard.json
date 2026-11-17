@@ -1,10 +1,10 @@
 {
   "skill": "onboard",
-  "description": "\"[devflow] Onboard a fresh or early scaffold after DevFlow is overlaid by tuning commands, standards, adapters, visibility, review cadence, and context loading. Use for /onboard or fresh installation setup.\"",
+  "description": "[devflow] Set up DevFlow for a fresh scaffold or adopt an existing brownfield codebase: tune commands, standards, adapters, visibility, and review cadence. Use for /onboard, /onboard --adopt, or /adopt.",
   "positive": [
     "run onboard skill",
     "invoke /onboard command",
-    "use onboard for devflow onboard fresh early scaffold after devflow overlaid",
+    "run /onboard --adopt for an existing brownfield codebase",
     "apply onboard guidance"
   ],
   "negative": [

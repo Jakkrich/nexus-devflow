@@ -1,10 +1,10 @@
 {
   "skill": "feature",
-  "description": "\"[devflow] Turn a build-plan item into a task-isolated living spec (devflow/context/{xxx-slug}/spec.md), splitting oversized work and checking contracts and tests before review. Use for /feature, starting the next feature, or drafting a spec.\"",
+  "description": "[devflow] Preview scope (--preview), run adaptive pre-flight clarification, and write a task-isolated living spec (devflow/context/{xxx-slug}/spec.md) before review. Use for /feature, /feature --preview, or /brief.",
   "positive": [
     "run feature skill",
     "invoke /feature command",
-    "use feature for devflow turn build plan item into task isolated",
+    "run /feature --preview for the next build-plan item",
     "apply feature guidance"
   ],
   "negative": [

@@ -431,7 +431,7 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
             if (detail.description) console.log(`  ${style.dim("Desc    :")} ${detail.description}`);
             console.log(`  ${style.dim("Source  :")} ${detail.source}`);
             console.log(`  ${style.dim("Adapters:")} ${detail.adapters.join(", ")}`);
-            console.log(`\n${style.green("✔")} Skill ready to use! Invocable as ${style.cyan(`/${detail.name}`)} or inside /discovery, /feature, /brainstorm.`);
+            console.log(`\n${style.green("✔")} Skill ready to use! Invocable as ${style.cyan(`/${detail.name}`)} or inside /discovery, /feature, /explore.`);
           }
         }
       } catch (err: unknown) {
@@ -1231,11 +1231,10 @@ function parseArgs(args: readonly string[]): CliOptions {
     const first = positional[0].toLowerCase();
     const normalizedCmd = first.replace(/^[/$\\]+/, "");
     const aiSkills = new Set([
-      "feature", "fix", "implement", "check", "complete", "continuous",
-      "explore", "discovery", "analyze", "brief", "audit", "grill",
-      "brainstorm", "bughunter", "ponytail", "try", "browser-tests",
-      "setup-tests", "ci", "rollback", "release", "overview",
-      "onboard", "adopt"
+      "audit", "autopilot", "check", "complete", "debug", "devflow",
+      "discovery", "explore", "feature", "fix", "implement",
+      "onboard", "overview", "prototype",
+      "ci", "convert-any-to-md", "release", "rollback", "setup-tests"
     ]);
 
     if (aiSkills.has(normalizedCmd)) {
@@ -1713,7 +1712,7 @@ async function confirmUninstall(prepared: PreparedUninstall, options: CliOptions
 function printNextSteps(): void {
   const style = createStyle();
   console.log(`\n${style.bold("Next steps in your AI IDE")} ${style.dim("(Antigravity, Claude Code, Codex, Cursor, etc.):")}`);
-  console.log(`  - ${style.cyan("Existing project")} : Run ${style.bold(style.brightCyan("/adopt"))} ${style.dim("(or $adopt)")} to scan codebase and bootstrap context.`);
+  console.log(`  - ${style.cyan("Existing project")} : Run ${style.bold(style.brightCyan("/onboard"))} ${style.dim("(auto-detects brownfield or /onboard --adopt)")} to scan codebase and bootstrap context.`);
   console.log(`  - ${style.cyan("Fresh project")}    : Run ${style.bold(style.brightCyan("/onboard"))} ${style.dim("(or $onboard)")} to configure project baseline.`);
 }
 

@@ -193,13 +193,16 @@ test("applyPreparedUpdate removes retired status and doctor skill folders and in
 
     const updatedManifest = await readManifest(targetDir);
     assert.ok(updatedManifest, "manifest should exist after update");
-    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-doctor"));
-    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-status"));
+    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow"));
+    assert.ok(!updatedManifest.lifecycle.companionCommands.includes("devflow-doctor"));
+    assert.ok(!updatedManifest.lifecycle.companionCommands.includes("devflow-status"));
+    assert.ok(!updatedManifest.lifecycle.companionCommands.includes("try"));
+    assert.ok(!updatedManifest.lifecycle.companionCommands.includes("report-html"));
     assert.ok(!updatedManifest.lifecycle.companionCommands.includes("doctor"));
 
     const catalog = await readCommandCatalog(targetDir);
-    assert.ok(catalog.some((item) => item.name === "devflow-doctor"));
-    assert.ok(catalog.some((item) => item.name === "devflow-status"));
+    assert.ok(catalog.some((item) => item.name === "devflow"));
+    assert.ok(!catalog.some((item) => item.name === "try"));
     assert.ok(!catalog.some((item) => item.name === "doctor"));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });

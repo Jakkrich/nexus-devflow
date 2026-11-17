@@ -1,10 +1,11 @@
 {
   "skill": "devflow",
-  "description": "[devflow] Flagship interactive guide, state inspector, and intent router for DevFlow workflows.",
+  "description": "[devflow] Unified status, health check (doctor), intent router, and legacy command guide for DevFlow workflows. Use for /devflow, /devflow doctor, /devflow --exec, or asking where the project stands.",
   "positive": [
     "run devflow skill",
     "invoke /devflow command",
-    "use devflow for devflow flagship interactive guide state inspector intent router",
+    "run /devflow doctor to check setup health",
+    "run /devflow --exec leadership summary",
     "apply devflow guidance"
   ],
   "negative": [

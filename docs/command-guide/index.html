@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>คู่มือรวมชุดคำสั่ง (Command Guide) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="เลือกคำสั่งของ Nexus-DevFlow ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานและหน้าที่ความรับผิดชอบของแต่ละ Skill อย่างละเอียด">
+  <meta name="description" content="เลือกคำสั่งของ Nexus-DevFlow ทั้ง 15 Core Skills และส่วนเสริม Opt-in ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานอย่างละเอียด">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/command-guide/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -158,7 +149,7 @@
       <h1 class="docs-title">คู่มือรวมชุดคำสั่ง (Command Guide)</h1>
       
       <p class="docs-lead">
-        เลือกคำสั่งของ Nexus-DevFlow ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานและหน้าที่ความรับผิดชอบของแต่ละ Skill อย่างละเอียด
+        เลือกคำสั่งของ Nexus-DevFlow ทั้ง 15 Core Skills และส่วนเสริม Opt-in ตามลักษณะงานที่คุณต้องการทำ พร้อมคำอธิบายกลไกการทำงานอย่างละเอียด
       </p>
 
       <div class="docs-meta">
@@ -167,7 +158,7 @@
         <span class="docs-pill">Reference</span>
         <span class="docs-pill">CheatSheet</span>
         <span class="docs-pill">Skills</span>
-        <span class="docs-pill">38-Skills</span>
+        <span class="docs-pill">15-Core-Skills</span>
       </div>
 
       <div class="docs-prose">
@@ -187,24 +178,24 @@
             </thead>
             <tbody>
               <tr>
-                <td>มีไอเดียใหม่แต่ยังไม่แน่ใจว่าจะทำดีไหม</td>
+                <td>มีไอเดียใหม่และอยากเทียบ 2–3 ทางเลือก</td>
                 <td><code>/explore</code></td>
-                <td>สำรวจโค้ดเบสจริง เปรียบเทียบทางเลือกและข้อดีข้อเสียโดยไม่แก้ไขไฟล์ใดๆ</td>
+                <td>สำรวจโค้ดเบสจริงและเทียบ Option Trade-offs แบบ Read-only โดยไม่แก้ไขไฟล์</td>
               </tr>
               <tr>
                 <td>อยากรู้ขอบเขตของฟีเจอร์ถัดไปในแผนงาน</td>
-                <td><code>/brief</code></td>
-                <td>สรุปขนาด ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์โดยไม่อ่านไฟล์เกินจำเป็น</td>
+                <td><code>/feature --preview</code></td>
+                <td>พรีวิวขนาด ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์แบบ Read-only</td>
               </tr>
               <tr>
                 <td>พร้อมเริ่มพัฒนาฟีเจอร์ใหม่ตามแผนงาน</td>
                 <td><code>/feature</code></td>
-                <td>สร้าง Task-Isolated Living Spec และจัดเตรียมสภาพแวดล้อมสำหรับพัฒนา</td>
+                <td>Adaptive Clarification (ถามเสริมเมื่อข้อมูลขาด) + สร้าง Living Spec</td>
               </tr>
               <tr>
                 <td>เกิดข้อผิดพลาด บั๊ก หรือระบบไม่ทำงาน</td>
                 <td><code>/debug</code></td>
-                <td>วินิจฉัยหาสาเหตุที่แท้จริง (Root Cause) ผ่านการตั้งสมมติฐานและทดสอบจริง</td>
+                <td>วินิจฉัยแบบ 2-Track (Track A เร็วเมื่อมี trace / Track B 6-phase isolation)</td>
               </tr>
               <tr>
                 <td>ต้องการแก้บั๊กเล็กหรืองานด่วนนอกแผน</td>
@@ -218,28 +209,23 @@
               </tr>
               <tr>
                 <td>ต้องการคู่มือขั้นตอนสำหรับทดสอบด้วยตนเอง</td>
-                <td><code>/check guide</code> หรือ <code>/try</code></td>
+                <td><code>/check guide</code></td>
                 <td>สร้างคู่มือ Read-Only แนะนำจุดที่มนุษย์ควรคลิกทดสอบและผลลัพธ์ที่คาดหวัง</td>
               </tr>
               <tr>
-                <td>ต้องการตรวจสอบคุณภาพโค้ดของฟีเจอร์ปัจจุบัน</td>
+                <td>ต้องการตรวจสอบคุณภาพโค้ด + YAGNI</td>
                 <td><code>/audit current</code></td>
-                <td>สแกนหาข้อบกพร่อง ความปลอดภัย OWASP และบันทึกลง <code>findings.md</code></td>
+                <td>สแกนคุณภาพ, YAGNI, ความปลอดภัย, ประสิทธิภาพ, Test และบันทึกลง <code>findings.md</code></td>
               </tr>
               <tr>
-                <td>ต้องการรันหรือเพิ่มชุดทดสอบ Unit/Integration</td>
-                <td><code>/tests</code></td>
-                <td>จัดการชุดทดสอบ วิเคราะห์ Coverage และเพิ่มเคสทดสอบที่ขาดหายไป</td>
+                <td>ต้องการตั้งค่า Unit Test / Playwright (Opt-in)</td>
+                <td><code>npx nexus-devflow skill add setup-tests</code></td>
+                <td>ติดตั้งส่วนเสริม <code>/setup-tests</code> สำหรับ Unit &amp; Browser test harness</td>
               </tr>
               <tr>
-                <td>ต้องการทดสอบผ่านเบราว์เซอร์จริง (E2E)</td>
-                <td><code>/tests browser</code> หรือ <code>/browser-tests</code></td>
-                <td>ทดสอบ End-to-End บนเบราว์เซอร์จริงผ่าน Playwright และ MCP BrowserOS Neo</td>
-              </tr>
-              <tr>
-                <td>ต้องการตรวจสุขภาพของระบบ DevFlow ทั้งหมด</td>
-                <td><code>/devflow-doctor</code></td>
-                <td>ตรวจสอบความสอดคล้องของ Adapters, Plans, Config, และความสดใหม่ของ Overview</td>
+                <td>ต้องการเช็กสถานะ, สรุปผู้บริหาร หรือตรวจสุขภาพ</td>
+                <td><code>/devflow</code> / <code>/devflow doctor</code></td>
+                <td>ศูนย์รวมเช็กสถานะงาน (<code>--exec</code>), ตรวจสุขภาพ Adapters/Overview และเราเตอร์</td>
               </tr>
             </tbody>
           </table>
@@ -284,7 +270,7 @@
               ทำหน้าที่เป็น Senior QA Gatekeeper ตรวจสอบ Multi-Lane Verification Matrix (Typecheck, Lint, Test Suites, Manual Proof) และบันทึกผลการตรวจสอบเชิงประจักษ์ลงใน Living Spec
             </li>
             <li>
-              <strong>/check guide (หรือ /try)</strong>: 
+              <strong>/check guide</strong>: 
               สร้างคู่มือการทดสอบแบบแมนนวล (Read-Only Try Guide) ระบุขั้นตอนการรัน จุดที่ต้องคลิกบนหน้าจอ และสิ่งที่ควรสังเกต เพื่อให้ผู้ใช้สามารถทดสอบด้วยตนเองได้อย่างง่ายดาย
             </li>
             <li>
@@ -304,27 +290,23 @@
           <ul>
             <li>
               <strong><a href="../commands/explore/">/explore</a></strong>: 
-              สำรวจโค้ดเบสจริงเพื่อตอบคำถามทางเทคนิค เปรียบเทียบทางเลือกและข้อดีข้อเสียก่อนตัดสินใจวางแผน โดยไม่มีการแก้ไขไฟล์ใดๆ
+              สำรวจโค้ดเบสจริงและเปรียบเทียบ 2–3 ทางเลือก (Brainstorm mode) แบบ Read-Only โดยไม่มีการแก้ไขไฟล์ใดๆ
             </li>
             <li>
-              <strong><a href="../commands/brief/">/brief</a></strong>: 
-              สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่อ่านไฟล์เกินจำเป็น
+              <strong><a href="../commands/feature/">/feature --preview</a></strong>: 
+              สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่สร้างไฟล์เกินจำเป็น
             </li>
             <li>
-              <strong><a href="../commands/devflow-status/">/devflow-status</a></strong>: 
-              รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สถานะของฟีเจอร์ปัจจุบัน, Git State, และคำสั่งถัดไปที่ต้องทำ
+              <strong><a href="../commands/devflow/">/devflow</a></strong>: 
+              รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สรุปผู้บริหาร (<code>--exec</code>), ตรวจสุขภาพด้วย <code>/devflow doctor</code> และคำสั่งถัดไป
             </li>
             <li>
               <strong><a href="../commands/debug/">/debug</a></strong>: 
-              วินิจฉัยหาสาเหตุที่แท้จริงของข้อผิดพลาด (Root-Cause Tracing) ผ่านการตั้งสมมติฐานและทดสอบ โดยไม่แก้โค้ดแบบสุ่มสี่สุ่มห้า พร้อมส่งมอบแนวทางการแก้ไข
+              วินิจฉัยแบบ 2-Track (Track A เร็วเมื่อมี deterministic stacktrace หรือ Track B 6-phase isolation) โดยไม่แก้โค้ดสุ่มสี่สุ่มห้า
             </li>
             <li>
               <strong><a href="../commands/audit/">/audit</a></strong>: 
-              ตรวจสอบคุณภาพและความปลอดภัย 5 มิติ (Code Quality, OWASP Top 10 Security, Performance Bottlenecks, Architecture Drift, Test Integrity) และบันทึกลง <code>findings.md</code> (รองรับ <code>/audit current</code> สำหรับงานปัจจุบัน และ <code>/audit full</code> สำหรับทั้งโปรเจกต์)
-            </li>
-            <li>
-              <strong><a href="../commands/devflow-doctor/">/devflow-doctor</a></strong>: 
-              ตรวจสุขภาพของระบบ DevFlow ทั้งหมด ตรวจสอบ Adapter Sync, Config Drift, และความสดใหม่ของ <code>project-overview.md</code>
+              ตรวจสอบคุณภาพ + YAGNI, OWASP Security, Performance, Architecture และ Test Integrity พร้อมโหมด <code>independent</code>
             </li>
           </ul>
         
@@ -339,11 +321,7 @@
           <ul>
             <li>
               <strong><a href="../commands/onboard/">/onboard</a></strong>: 
-              ปรับแต่งโปรเจกต์ใหม่ ตรวจจับ Stack, คำสั่ง Test, Coding Conventions, และระดับการ Review Cadence (Efficient vs Guided)
-            </li>
-            <li>
-              <strong><a href="../commands/adopt/">/adopt</a></strong>: 
-              สำรวจโค้ดเบสเดิม (Brownfield) 5 ขั้นตอนเชิงลึก สกัดฟังก์ชันที่มีอยู่แล้วลงใน <code>build-plan.md</code> เป็น <code>- [x]</code> โดยไม่กระทบ Git History เดิม
+              รองรับทั้งโปรเจกต์ใหม่และโค้ดเบสเดิม (<code>--adopt</code>) ตรวจจับ Stack, คำสั่ง Test, Conventions และ Review Cadence โดยไม่กระทบ Git History เดิม
             </li>
             <li>
               <strong><a href="../commands/discovery/">/discovery</a></strong>: 
@@ -358,12 +336,12 @@
               สร้าง UI Mockup (HTML/CSS Standalone) และ Design Tokens อย่างรวดเร็วก่อนลงมือพัฒนาจริง
             </li>
             <li>
-              <strong><a href="../commands/tests/">/tests</a></strong>: 
-              จัดการและรันชุดทดสอบ Unit/Integration Tests รวมถึงการทดสอบผ่านเบราว์เซอร์จริง (<code>/tests browser</code>) ผ่าน Playwright และ MCP BrowserOS Neo
+              <strong><a href="../commands/tests/">setup-tests</a> (Opt-in Extension)</strong>: 
+              ติดตั้งผ่าน <code>npx nexus-devflow skill add setup-tests</code> เพื่อจัดการและตั้งค่า Unit/Integration Tests รวมถึง Browser Testing (<code>/setup-tests browser</code>) ผ่าน Playwright และ Active Browser MCP
             </li>
             <li>
-              <strong><a href="../commands/ci/">/ci</a></strong>: 
-              สร้างคำสั่ง Verify หนึ่งคำสั่งเฉพาะสำหรับโปรเจกต์ และสร้างไฟล์ GitHub Actions Workflow (<code>devflow-verify.yml</code>) ให้ตรงกัน
+              <strong><a href="../commands/ci/">ci</a> (Opt-in Extension)</strong>: 
+              ติดตั้งผ่าน <code>npx nexus-devflow skill add ci</code> เพื่อสร้างคำสั่ง Verify และไฟล์ GitHub Actions Workflow (<code>devflow-verify.yml</code>)
             </li>
           </ul>
         
@@ -401,11 +379,7 @@
           <ul>
             <li>
               <strong><a href="../commands/autopilot/">/autopilot</a></strong>: 
-              รันกระบวนการพัฒนา 1 ฟีเจอร์แบบอัตโนมัติตั้งแต่ต้นจนจบ (Spec -> Implement -> Check -> Audit) แล้วหยุดรอการอนุมัติก่อนทำ Complete
-            </li>
-            <li>
-              <strong><a href="../commands/continuous/">/continuous</a></strong>: 
-              Autonomous Multi-Feature Delivery Loop พัฒนาฟีเจอร์ใน <code>build-plan.md</code> ต่อเนื่องทีละรายการแบบอัตโนมัติ มีการสร้าง Branch แยก, รัน TDD, ตรวจสอบ Quality Gates, และ Squash-Merge ทีละฟีเจอร์จนจบแผน
+              รันกระบวนการพัฒนา 1 ฟีเจอร์แบบอัตโนมัติ (Spec -&gt; Implement -&gt; Check -&gt; Audit) หรือรันคิวต่อเนื่องทั้งหมดในเครื่องด้วย <code>/autopilot --all</code>
             </li>
           </ul>
         
@@ -418,13 +392,13 @@
           
           <p>คุณสามารถเรียกใช้คำสั่งได้ตามรูปแบบที่เครื่องมือ AI ของคุณรองรับ:</p>
           <ul>
-            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/tests browser</code>, <code>/check guide</code></li>
-            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$tests browser</code>, <code>$check guide</code></li>
+            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/devflow doctor</code>, <code>/check guide</code></li>
+            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$devflow doctor</code>, <code>$check guide</code></li>
             <li><strong>GitHub Copilot / OpenCode / Chat ทั่วไป</strong>: พิมพ์ชื่อคำสั่งหรือระบุความต้องการเป็นภาษาไทยหรืออังกฤษได้โดยตรง</li>
           </ul>
           
           <h4>การย้ายและเปลี่ยนผ่านคำสั่ง (Command Migration)</h4>
-          <p>ใน Nexus-DevFlow เวอร์ชันปัจจุบัน มีการปรับชื่อคำสั่งให้กระชับและเป็นหมวดหมู่มากขึ้น:</p>
+          <p>ใน Nexus-DevFlow เวอร์ชันปัจจุบัน มีการยุบรวมคำสั่งให้เหลือ 15 Core Skills และย้ายส่วนเสริม Setup/Ops เป็น Opt-in Extensions:</p>
           <table>
             <thead>
               <tr>
@@ -435,14 +409,14 @@
             </thead>
             <tbody>
               <tr>
-                <td><code>/browser-tests</code></td>
-                <td><code>/tests browser</code></td>
-                <td>รวมการทดสอบ Browser เข้าเป็นคำสั่งย่อยของ <code>/tests</code> (ยังคงรองรับคำสั่งเดิม)</td>
+                <td><code>/browser-tests</code>, <code>/setup-tests</code></td>
+                <td><code>/setup-tests browser</code> (Opt-in)</td>
+                <td>รวมการทดสอบ Browser เข้าในส่วนเสริม <code>setup-tests</code> (ติดตั้งด้วย <code>npx nexus-devflow skill add setup-tests</code>)</td>
               </tr>
               <tr>
                 <td><code>/try</code></td>
                 <td><code>/check guide</code></td>
-                <td>รวมคู่มือการทดสอบด้วยตนเองเข้าเป็นโหมด Guide ของ <code>/check</code> (ยังคงรองรับคำสั่งเดิม)</td>
+                <td>รวมคู่มือการทดสอบด้วยตนเองเข้าเป็นโหมด Guide ของ <code>/check</code> โดยตรง</td>
               </tr>
             </tbody>
           </table>

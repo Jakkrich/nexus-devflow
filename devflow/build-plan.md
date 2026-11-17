@@ -2,58 +2,66 @@
 
 > **Document Type**: Build Plan (User-Owned)
 > **Purpose**: รายการฟีเจอร์ตามลำดับการพัฒนาจริง (Ordered Feature Roadmap Checklist)
-> **Workflow**: ใช้เครื่องหมาย Checkbox `- [ ]` เรียงลำดับ 1, 2, 3... เพื่อให้ `/feature` ดึงไปทำทีละงาน
+> **Workflow**: ทำงานจากบนลงล่างด้วย `/feature` -> `/implement` -> `/check` -> `/complete`; ห้ามข้ามงานที่เป็น dependency
+> **Planning Baseline**: 2026-11-17 — แทนที่รายการ UI template เดิมด้วยคิวงานที่ตรงกับผลิตภัณฑ์ Nexus-DevFlow
 
 ---
 
-## 🚀 Phase 1: Core Foundation & Data Layer
+## Phase 1: Foundation & Workflow Consolidation
 
-- [x] 1. **Upstream AI Blueprint Synchronization & Zero-Regression Fusion** - ผสานฟีเจอร์เด่นจาก Upstream (explore skill, proportional engineering, update adapter switcher, CI pre-push hook) ตัด dark mode ออก และปกป้องสถาปัตยกรรมของ DevFlow (Ref: DISC-20260929-001)
-- [x] 111. **Code-Modernization Recommended Third-Party Skill & Master Orchestrator** - เพิ่ม code-modernization เข้าเป็น Recommended Third-Party Skill พร้อม Master Front-Door Orchestrator Skill (/code-modernization) และ Subdirectory Sparse Ingestion Engine (Ref: DISC-20261027-001)
-- [x] 112. **(Deprecated & Removed) In-IDE Interactive Choice & Predictive Follow-Up Gate** - ถอดระบบ In-App Modal บังคับออกตามคำสั่งผู้ใช้เพื่อคืนความคล่องตัวในการสนทนา (Ref: DISC-20261030-001, Task 113)
-- [x] 114. **Upstream AI Blueprint Selective Sync (v1.11.0–v1.16.1) & Skill Rename** - ผสานความสามารถกลุ่มที่ 1 และ 2 จาก Upstream พร้อมเปลี่ยนชื่อ `/status` และ `/doctor` เป็น `/devflow-status` และ `/devflow-doctor` แบบ Zero-Regression (Ref: DISC-20261117-001)
-  - [x] 114a. **(Skateboard) Rename `/status` & `/doctor` to `/devflow-status` & `/devflow-doctor` + Git/Pack Hardening** - เปลี่ยนชื่อสกิลทั้ง 2 adapter, ย้าย `run-state.mjs`, กัน crash จาก `git status` buffer และแพ็คเฉพาะ tracked template files
-  - [x] 114b. **(Skateboard) Context Trimming, On-Demand References & Cross-Skill Link Validator** - เพิ่ม link validator ใน `validate-framework.ts`, แยก `devflow/workflow.md`, trim `ai-interaction.md`, แยก `independent-review.md` / `completion-screen.md` / `completion-archive.md` / `try-it-now.md`
-  - [x] 114c. **(Tracer Bullet) Spec Check Gate (`--check`), `when-testable` Proof & Implement Step Menu** - เพิ่ม `/feature --check` (`specCheck`), `when-testable` try-it-now proof และเมนูต่อ step เมื่อ `stepReview: "every"`
-  - [x] 114d. **(Tracer Bullet) Parallel Worktree Workflows & Recovery** - รองรับ 1 work item ต่อ 1 worktree/clone, pre-created worktree branch start และ recovery เมื่อ `main` เดินหน้า
-- [ ] 115. **Skill Audit, Consolidation & Anti-Bloat Architecture (Option B+)** - ผ่าตัดลดความซ้ำซ้อนของ Core Skills จาก 33 เหลือ 14 Daily Core (+ 5 Tier-2 Ops), ถอดตัว obsolete/stub, เพิ่ม Adaptive Clarification ใน `/feature` และลด ceremony (Ref: DISC-20261117-002)
-  - [x] 115a. **(Skateboard) Hygiene, Anti-Bloat & Contract Cleanup** - ปรับ `--help` เป็น Markdown สรุปสั้นในแชท, คลาย `run-state.mjs` เป็น best-effort, ล้าง hardcoded `d:/...` paths, `/design`, `defuddle`, `npm run overview`, และคลาย hardcode `browseros-neo` ใน `agent-bundle.manifest.json`
-  - [x] 115b. **(Skateboard) Retire Obsolete, Stub & Maintainer Skills** - ลบ `try`, `report-html`, `ponytail`, ย้าย `publish-devflow` ออกจาก `.agents/skills/`, และถอด `bughunter`, `convert-any-to-md`, `code-modernization` (+ Tier-2 Ops) ออกจาก `core_skills` ไปเป็น opt-in preset
-  - [x] 115c. **(Journey) Consolidate Core Skills & Upgrade Adaptive `/feature` + `/debug`** - ยุบรวม 6 กลุ่ม (`onboard+adopt`, `explore+brainstorm`, `discovery+analyze+grill`, `devflow+devflow-status+devflow-doctor`, `autopilot+continuous`, `setup-tests+browser-tests` และถอด `test`), เพิ่ม Adaptive Clarification & `--preview` ใน `/feature`, และปรับ `/debug` เป็น 2-Track
-  - [ ] 115d. **(Tracer Bullet) Validators, Role Profiles, Adapter Sync & Docs** - อัปเดต `agent-bundle.manifest.json`, `skill-registry-engine.ts`, `validate-framework.ts`, `routing.ts`, docs (`README*`, `workflow-pages.ts`), sync `.claude/skills/`, และผ่านทุก quality gate
-
-
-- [ ] 2. **Base Layout & Main UI Shell** - วางโครงสร้างหน้าจอหลัก, Navigation Shell และ Design Tokens
-- [ ] 3. **Primary Feature Flow** - พัฒนาฟังก์ชันการทำงานหลัก พร้อม Input Form และ Validation
+- [x] 1. **Upstream AI Blueprint Synchronization & Zero-Regression Fusion** - ผสาน `explore`, proportional engineering, adapter switching และ CI pre-push hook โดยรักษาสถาปัตยกรรม DevFlow (Ref: DISC-20260929-001)
+- [x] 111. **Code-Modernization Recommended Third-Party Skill & Master Orchestrator** - เพิ่ม code-modernization แบบ opt-in พร้อม sparse ingestion engine (Ref: DISC-20261027-001)
+- [x] 112. **(Deprecated & Removed) In-IDE Interactive Choice & Predictive Follow-Up Gate** - ถอด modal บังคับเพื่อคืน workflow สนทนาปกติ (Ref: DISC-20261030-001, Task 113)
+- [x] 114. **Upstream AI Blueprint Selective Sync (v1.11.0–v1.16.1)** - ผสาน upstream แบบเลือกเฉพาะส่วนและ harden Git/package workflow (Ref: DISC-20261117-001)
+  - [x] 114a. **(Skateboard) Command Rename & Git/Pack Hardening** - ปรับชื่อ skill, ย้าย state helper, กัน `git status` buffer overflow และแพ็กเฉพาะ tracked template files
+  - [x] 114b. **(Skateboard) Context Trimming & Link Validation** - แยก references ตามใช้จริงและเพิ่ม cross-skill link validator
+  - [x] 114c. **(Tracer Bullet) Spec Check Gate & Evidence Menu** - เพิ่ม `--check`, `when-testable` proof และ step review menu
+  - [x] 114d. **(Tracer Bullet) Parallel Worktree Recovery** - รองรับ task-isolated worktree และ recovery เมื่อ base branch เดินหน้า
+- [x] 115. **Skill Audit, Consolidation & Anti-Bloat Architecture (Option B+)** - ลด Core Skills จาก 33 เหลือ 15 Core Skills, ถอดตัวซ้ำซ้อน และลด ceremony (Ref: DISC-20261117-002)
+  - [x] 115a. **(Skateboard) Hygiene, Anti-Bloat & Contract Cleanup** - ลด help ceremony, ทำ activity tracking เป็น best-effort และล้าง hardcoded paths
+  - [x] 115b. **(Skateboard) Retire Obsolete, Stub & Maintainer Skills** - ย้ายความสามารถเฉพาะทางออกเป็น opt-in และถอด skills ที่ซ้ำซ้อน
+  - [x] 115c. **(Journey) Consolidate Core Skills & Adaptive Feature/Debug** - รวม command families และเพิ่ม adaptive clarification / 2-track debugging
+  - [x] 115d. **(Tracer Bullet) Validators, Roles, Docs & Review Closure** - ให้ independent review ยืนยันและปิด P2 findings ที่แก้แล้ว (`T-001`, `Q-001`, `Q-002`), ตรวจ adapter/docs sync แล้วจึง archive และ merge
 
 ---
 
-## ⚡ Phase 2: Interactivity & Core Capabilities
+## Phase 2: Ecosystem Reliability (Active Focus)
 
-- [ ] 4. **Live Preview / Action Pipeline** - เชื่อมต่อ Input เข้าสู่ระบบประมวลผลและการแสดงผลแบบ Real-time
-- [ ] 5. **Export / Output Engine** - พัฒนาระบบส่งออกข้อมูล เช่น Image Generation, PDF Download หรือ API Response
-- [ ] 6. **Local Persistence & Settings** - บันทึกการตั้งค่าและประวัติการใช้งานลงใน Local Storage หรือ Database
-  - [ ] 6a. **Settings Panel** - UI สำหรับปรับแต่งค่าและการจัดเก็บ State
-  - [ ] 6b. **History & Recall** - แสดงรายการประวัติย้อนหลังและปุ่มเรียกข้อมูลกลับมาใช้
-
----
-
-## 🚢 Phase 3: Polish, Quality & Production Hardening
-
-- [ ] 7. **Edge Cases & Input Polish** - จัดการ Loading States, Error Boundaries และ Responsive Layout
-- [ ] 8. **Deployment Readiness & Production Verification** - ตั้งค่า Environment Config, ตรวจสอบ Production Build และ Health Check
+- [ ] 116. **(Skateboard) Consolidation Release Baseline & Migration Contract** - ตัดสิน v2/v3 boundary, ทำ changelog และ migration guide สำหรับ retired commands, ตรวจ fresh install/update/uninstall และสร้าง release candidate ที่ย้อนกลับได้
+- [ ] 117. **(Tracer Bullet) Cross-Platform Installer & Update Confidence Matrix** - เพิ่ม CI/smoke matrix สำหรับ Windows, macOS, Linux และ Node.js รุ่นที่รองรับ ครอบคลุม fresh install, existing-project overlay, update, adapter switch และ path edge cases
+- [ ] 118. **(Journey) Bilingual Intent Routing Reliability** - ขยาย routing evals ภาษาไทย/อังกฤษด้วย positive, negative, legacy และ ambiguous prompts; รายงาน pass rate, false activation และ regression ownership แบบตรวจซ้ำได้
+- [ ] 119. **(Skateboard) Planning & Overview Integrity Gate** - ตรวจ placeholder/stale/mismatched plans ก่อนสร้าง overview, ให้ข้อความแก้ไขที่ทำตามได้ และเพิ่ม regression tests สำหรับ source hash กับ generated-state boundaries
+- [ ] 120. **(Tracer Bullet) Package Contract & Upgrade Resilience** - ทดสอบว่าการ update รักษา user-owned plans, custom config, protected skills และ task history พร้อมรายงาน drift ที่แก้ได้โดยไม่เขียนทับข้อมูลผู้ใช้
 
 ---
 
-## 🛠️ Architecture & Deployment Notes (Optional)
+## Phase 3: Integration & Operator Experience
 
-- **Key Technical Decisions**:
-  - [บันทึกการตัดสินใจทางเทคนิคที่สำคัญ]
-- **Environment & Hosting Constraints**:
-  - [ข้อกำหนดด้านสภาพแวดล้อมและการ Deploy]
+- [ ] 121. **(Facade) Evidence-First Workflow Dashboard** - ยกระดับ dashboard ปัจจุบันให้แสดง active run, gate status, open findings, drift และ next action จาก repository state โดยเริ่มแบบ read-only และมี browser tests สำหรับ critical views
+- [ ] 122. **(Tracer Bullet) IDE Sidecar Pilot** - เชื่อม editor หนึ่งตัวกับ dashboard/status API เพื่อเปิด task, อ่าน spec และติดตาม stage แบบ real-time โดยไม่ให้ sidecar แก้ source of truth โดยตรง
+- [ ] 123. **(Journey) Multi-IDE Continuation & Handoff** - พิสูจน์การรับช่วงงานระหว่าง adapters ด้วย task เดียวกัน พร้อม compatibility tests และคู่มือ recovery เมื่อ context หรือ tool เปลี่ยน
 
 ---
 
-## 🔮 Later / Post-MVP Backlog (Not in v1)
+## Phase 4: Adoption & Release Hardening
 
-- [ ] **Cloud Sync & User Accounts** - ระบบสมัครสมาชิกและซิงค์ข้อมูลบน Cloud
+- [ ] 124. **(Journey) Golden-Path Examples & Documentation Proof** - สร้างตัวอย่าง greenfield, brownfield และ bug-fix ที่รันได้จริง เชื่อมเอกสารกับ package smoke tests และตรวจ retired commands อัตโนมัติ
+- [ ] 125. **Production Release Readiness** - ตรวจ security hygiene, package contents, semantic version, release notes, rollback steps และ full quality matrix ก่อน publish (การ publish/push ต้องได้รับอนุญาตแยกต่างหาก)
+
+---
+
+## Project Architecture & Delivery Rules
+
+- ทำ 115d และ release baseline ให้เสร็จก่อนเริ่ม feature ใหม่
+- ทุก item ต้องมี acceptance criteria, evidence matrix และ rollback/compatibility note ตามระดับความเสี่ยง
+- Behavior changes ใช้ TDD; documentation-only changes ใช้ structural/link/contract checks
+- Dashboard และ sidecar อ่าน state จาก Markdown/JSON contracts เดิม ไม่สร้างฐานข้อมูลชุดที่สอง
+- ไม่เพิ่ม core skill, dependency หรือ hosted service โดยไม่มี current requirement และ trade-off record
+
+---
+
+## Later / Evidence Required
+
+- รองรับ editor เพิ่มเติมหลัง sidecar pilot มี usage evidence
+- Hosted collaboration, cloud sync, organization policy packs และ analytics ต้องผ่าน discovery แยกก่อนเข้าคิว
+- Automated publish หรือ deployment ยังอยู่นอก scope จนกว่าจะมี permission และ release governance ชัดเจน

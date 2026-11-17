@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant">
+  <title>Workflow Surface Map (แผนผังคำสั่ง 15 Core Skills) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 15 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/workflow-surface-map/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -153,12 +144,12 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>WORKFLOW</span> <span>/</span> <strong>Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)</strong></div>
+      <div class="docs-breadcrumb"><a href="../getting-started/">คู่มือ</a> <span>/</span> <span>WORKFLOW</span> <span>/</span> <strong>Workflow Surface Map (แผนผังคำสั่ง 15 Core Skills)</strong></div>
       
-      <h1 class="docs-title">Workflow Surface Map (แผนผังคำสั่ง 33 Core Skills)</h1>
+      <h1 class="docs-title">Workflow Surface Map (แผนผังคำสั่ง 15 Core Skills)</h1>
       
       <p class="docs-lead">
-        แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 33 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant
+        แผนผังและโครงสร้างคำสั่งมาตรฐานทั้ง 15 Core Skills ใน Nexus-DevFlow พร้อมรูปแบบการเรียกใช้งานข้ามทุก AI Assistant
       </p>
 
       <div class="docs-meta">
@@ -181,7 +172,7 @@
             <thead><tr><th>สไตล์การเรียกคำสั่ง</th><th>เครื่องมือที่รองรับ</th><th>ตัวอย่างการเรียกใช้</th></tr></thead>
             <tbody>
               <tr><td><strong>Slash Prefix (<code>/</code>)</strong></td><td>Google Antigravity, Claude Code, Gemini CLI</td><td><code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code></td></tr>
-              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$continuous</code>, <code>$devflow</code></td></tr>
+              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$autopilot --all</code>, <code>$devflow</code></td></tr>
               <tr><td><strong>Plain Canonical Name</strong></td><td>GitHub Copilot, Generic Terminals, OpenCode, Aider</td><td><code>feature 1</code>, <code>implement</code>, <code>check</code></td></tr>
             </tbody>
           </table>
@@ -189,64 +180,54 @@
           
         </section>
 
-        <!-- Section: 1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills) -->
+        <!-- Section: 1. กลุ่มคำสั่งวงจรชีวิตการพัฒนาและส่งมอบอัตโนมัติ (Delivery Core Skills - 6 Skills) -->
         <section id="lifecycle-skills">
-          <h2>1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills)</h2>
+          <h2>1. กลุ่มคำสั่งวงจรชีวิตการพัฒนาและส่งมอบอัตโนมัติ (Delivery Core Skills - 6 Skills)</h2>
           
           <table>
             <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>feature</code></strong></td><td>Spec & Plan</td><td>จัดสรร ID, สร้าง Task-Isolated Workspace และร่าง Living Spec</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
-              <tr><td><strong><code>fix</code></strong></td><td>Spec & Plan</td><td>ร่าง Fix Spec สำหรับการแก้ไขบั๊กหรือการปรับปรุงเร่งด่วน</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>feature</code></strong></td><td>Spec &amp; Plan</td><td>พรีวิวขอบเขต (<code>--preview</code>), Adaptive Pre-Flight Clarification และร่าง Living Spec (<code>--check</code>)</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>fix</code></strong></td><td>Spec &amp; Plan</td><td>ร่าง Fix Spec สำหรับการแก้ไขบั๊กหรือการปรับปรุงเร่งด่วน</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
               <tr><td><strong><code>implement</code></strong></td><td>Execution</td><td>ดำเนินการพัฒนาตาม Task Checklist ด้วยวินัย Strict TDD</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
-              <tr><td><strong><code>check</code></strong></td><td>Quality Gate</td><td>Senior QA Dual-Axis Verification ตรวจสอบพฤติกรรมจริง</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>check</code></strong></td><td>Quality Gate</td><td>Senior QA Dual-Axis Verification และ <code>/check guide</code> สำหรับคู่มือทดสอบด้วยตนเอง</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
               <tr><td><strong><code>complete</code></strong></td><td>Delivery</td><td>สรุป Release Digest, ย้ายเข้า History Archive และ Squash-Merge</td><td><code>history/features/</code></td></tr>
-              <tr><td><strong><code>continuous</code></strong></td><td>Delivery</td><td>รันคิวฟีเจอร์ใน Build Plan ต่อเนื่องอัตโนมัติในเครื่อง</td><td><code>history/features/</code></td></tr>
-              <tr><td><strong><code>rollback</code></strong></td><td>Delivery</td><td>วางแผนและย้อนคืนฟีเจอร์ที่ส่งมอบแล้วโดยรักษาประวัติอย่างปลอดภัย</td><td><code>history/rollbacks/</code></td></tr>
+              <tr><td><strong><code>autopilot</code></strong></td><td>Automation</td><td>รัน 1 ฟีเจอร์หรือคิวต่อเนื่องในเครื่อง (<code>--all</code> / <code>--max</code> / <code>--merge</code>)</td><td><code>history/features/</code></td></tr>
             </tbody>
           </table>
         
           
         </section>
 
-        <!-- Section: 2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills) -->
+        <!-- Section: 2. กลุ่มคำสั่งเตรียมความพร้อมและสำรวจ (Pre-Flight Suite - 3 Skills) -->
         <section id="preflight-skills">
-          <h2>2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills)</h2>
+          <h2>2. กลุ่มคำสั่งเตรียมความพร้อมและสำรวจ (Pre-Flight Suite - 3 Skills)</h2>
           
           <table>
             <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>analyze</code></strong></td><td>SA Ingestion</td><td>แปลงเอกสารทุกฟอร์แมต (PDF, Word, Excel, รูปภาพ) สแกนผลกระทบโค้ดเบส</td><td><code>inbox/</code> & <code>analysis/</code></td></tr>
-              <tr><td><strong><code>idea</code></strong></td><td>Backlog</td><td>บันทึกไอเดียพร้อมประเมิน AI Feasibility Score & Value</td><td><code>devflow/ideas.md</code></td></tr>
-              <tr><td><strong><code>grill</code> / <code>align</code></strong></td><td>Alignment</td><td>Socratic Alignment Interview, สกัด Glossary และบันทึก ADR</td><td><code>decisions/</code> & <code>glossary.md</code></td></tr>
-              <tr><td><strong><code>brainstorm</code></strong></td><td>Ideation</td><td>ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม</td><td>Interactive Session</td></tr>
-              <tr><td><strong><code>discovery</code></strong></td><td>Exploration</td><td>สำรวจเจาะลึกภาพรวมโปรเจกต์หรือฟีเจอร์ก่อนเริ่มเขียนสเปก</td><td><code>discoveries/DISC-xxx.md</code></td></tr>
+              <tr><td><strong><code>idea</code></strong></td><td>Backlog</td><td>บันทึกไอเดียพร้อมประเมิน AI Feasibility Score &amp; Value</td><td><code>devflow/ideas.md</code></td></tr>
+              <tr><td><strong><code>explore</code></strong></td><td>Ideation</td><td>วิเคราะห์โค้ดและเทียบทางเลือก 2–3 แบบ (Brainstorm mode) แบบ Read-Only</td><td>Session Read-Only</td></tr>
+              <tr><td><strong><code>discovery</code></strong></td><td>Exploration &amp; SA</td><td>สำรวจ Roadmap/ฟีเจอร์, แปลงสเปกหลายฟอร์แมต (<code>REQ-ID</code>), สัมภาษณ์ Socratic (<code>--grill</code>) &amp; ADR</td><td><code>discoveries/</code>, <code>decisions/</code></td></tr>
             </tbody>
           </table>
         
           
         </section>
 
-        <!-- Section: 3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills) -->
+        <!-- Section: 3. กลุ่มคำสั่งตั้งค่า, คุณภาพ และศูนย์กลาง (Setup, Quality & Hub - 6 Skills + Opt-in Extensions) -->
         <section id="governance-skills">
-          <h2>3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills)</h2>
+          <h2>3. กลุ่มคำสั่งตั้งค่า, คุณภาพ และศูนย์กลาง (Setup, Quality & Hub - 6 Skills + Opt-in Extensions)</h2>
           
           <table>
             <thead><tr><th>คำสั่ง</th><th>หน้าที่</th><th>คำสั่ง</th><th>หน้าที่</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>devflow</code></strong></td><td>ผู้ช่วยแนะนำเส้นทางและตรวจสอบสถานะงาน</td><td><strong><code>devflow-doctor</code></strong></td><td>วินิจฉัยสุขภาพโปรเจกต์และการตั้งค่าระบบ</td></tr>
-              <tr><td><strong><code>explore</code></strong></td><td>ตอบคำถามและทำความเข้าใจโค้ดเบสแบบ Read-Only</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
-              <tr><td><strong><code>brief</code></strong></td><td>สรุปขอบเขตและความเสี่ยงของฟีเจอร์ใน Build Plan</td><td><strong><code>debug</code></strong></td><td>วินิจฉัยหาสาเหตุของบั๊กอย่างเป็นระบบ</td></tr>
-              <tr><td><strong><code>onboard</code></strong></td><td>ติดตั้งและปรับแต่งค่าเริ่มต้นบนโปรเจกต์ใหม่</td><td><strong><code>adopt</code></strong></td><td>สำรวจและผนวก DevFlow เข้ากับโปรเจกต์เดิม</td></tr>
-              <tr><td><strong><code>try</code></strong></td><td>สร้างคู่มือ Manual QA Walkthrough ทีละขั้นตอน</td><td><strong><code>audit</code></strong></td><td>สแกนความปลอดภัยและคุณภาพโค้ดลง <code>findings.md</code></td></tr>
-              <tr><td><strong><code>bughunter</code></strong></td><td>สแกนช่องโหว่ความปลอดภัยเชิงรุกและ 83 CVE Patterns</td><td><strong><code>ci</code></strong></td><td>สร้างและปรับจูน GitHub Actions Verification Workflow</td></tr>
-              <tr><td><strong><code>test</code></strong></td><td>รันชุดทดสอบและวิเคราะห์ Test Coverage</td><td><strong><code>setup-tests</code></strong></td><td>ติดตั้ง Test Runner และชุดทดสอบเริ่มต้น</td></tr>
-              <tr><td><strong><code>browser-tests</code></strong></td><td>ติดตั้ง Playwright และเชื่อม BrowserOS Neo MCP</td><td><strong><code>autopilot</code></strong></td><td>รัน 1 ฟีเจอร์ต่อเนื่องตั้งแต่ Spec จนถึง Check</td></tr>
-              <tr><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td><td><strong><code>release</code></strong></td><td>ตรวจสอบความพร้อมก่อน Deploy ขึ้น Render/Vercel</td></tr>
-              <tr><td><strong><code>report-html</code></strong></td><td>สร้าง Standalone HTML Report Dashboard</td><td><strong><code>convert-any-to-md</code></strong></td><td>แปลงเอกสารภายนอกเป็น Markdown ใน <code>reference/</code></td></tr>
-              <tr><td><strong><code>vendor</code></strong></td><td>ติดตั้ง External Skill และสร้าง Custom Wrapper</td><td><strong><code>devflow-status</code></strong></td><td>สรุปความคืบหน้าของงานและขั้นตอนถัดไป</td></tr>
+              <tr><td><strong><code>devflow</code></strong></td><td>ศูนย์รวมตรวจสถานะ (<code>--exec</code>), <code>doctor</code>, และ Legacy Routing</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
+              <tr><td><strong><code>onboard</code></strong></td><td>ตั้งค่าโปรเจกต์ใหม่และ auto-detect brownfield (<code>--adopt</code>)</td><td><strong><code>debug</code></strong></td><td>วินิจฉัย 2-Track (Fast trace หรือ Scientific 6-phase)</td></tr>
+              <tr><td><strong><code>audit</code></strong></td><td>สแกน YAGNI, Quality, Security, Perf, Tests + <code>independent</code></td><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td></tr>
             </tbody>
           </table>
+          <p><strong>Opt-in Tier-2 Extensions</strong> (ติดตั้งเฉพาะเมื่อต้องการใช้ด้วย <code>npx nexus-devflow skill add &lt;name&gt;</code>): <code>setup-tests</code> (รวม Playwright browser), <code>ci</code>, <code>release</code>, <code>rollback</code>, <code>vendor</code>, <code>convert-any-to-md</code>, <code>archify</code>, <code>diagram-design</code></p>
         
           
         </section>
@@ -269,9 +250,9 @@
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
       <a href="#universal-invocations">รูปแบบการเรียกใช้คำสั่ง (Universal Invocation)</a>
-      <a href="#lifecycle-skills">1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills)</a>
-      <a href="#preflight-skills">2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills)</a>
-      <a href="#governance-skills">3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills)</a>
+      <a href="#lifecycle-skills">1. กลุ่มคำสั่งวงจรชีวิตการพัฒนาและส่งมอบอัตโนมัติ (Delivery Core Skills - 6 Skills)</a>
+      <a href="#preflight-skills">2. กลุ่มคำสั่งเตรียมความพร้อมและสำรวจ (Pre-Flight Suite - 3 Skills)</a>
+      <a href="#governance-skills">3. กลุ่มคำสั่งตั้งค่า, คุณภาพ และศูนย์กลาง (Setup, Quality & Hub - 6 Skills + Opt-in Extensions)</a>
     </aside>
   </div>
 

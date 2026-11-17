@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autopilot (/autopilot) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="รันการพัฒนาฟีเจอร์เดี่ยวแบบอัตโนมัติต่อเนื่องตั้งแต่ Feature -> Implement -> Check ผ่านทุก Quality Gates และหยุดรอคำสั่ง Complete">
+  <title>Autopilot (/autopilot, /autopilot --all) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/autopilot/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link active" href="../../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link active" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -153,18 +144,18 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Autopilot (/autopilot)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Autopilot (/autopilot, /autopilot --all)</strong></div>
       
-      <h1 class="docs-title">Autopilot (/autopilot)</h1>
+      <h1 class="docs-title">Autopilot (/autopilot, /autopilot --all)</h1>
       
       <p class="docs-lead">
-        รันการพัฒนาฟีเจอร์เดี่ยวแบบอัตโนมัติต่อเนื่องตั้งแต่ Feature -> Implement -> Check ผ่านทุก Quality Gates และหยุดรอคำสั่ง Complete
+        รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Command</span>
         <span class="docs-pill">Autopilot</span>
-        <span class="docs-pill">SingleFeature</span>
+        <span class="docs-pill">Continuous</span>
         <span class="docs-pill">Autonomous</span>
         <span class="docs-pill">QualityGates</span>
         <span class="docs-pill">ReviewGate</span>
@@ -176,9 +167,13 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>ใช้คำสั่ง <code>/autopilot</code> เมื่อต้องการให้ AI จัดการพัฒนาฟีเจอร์ 1 รายการตั้งแต่ต้นจนจบอย่างรวดเร็วและปลอดภัย:</p>
-          <pre><code>/autopilot 1
-/autopilot "ระบบส่งอีเมลยืนยันการสมัครสมาชิก"</code></pre>
+          <p>ใช้คำสั่ง <code>/autopilot</code> สำหรับรัน 1 ฟีเจอร์แล้วหยุดรอตรวจทาน หรือเพิ่มแฟล็ก <code>--all</code> / <code>--max &lt;N&gt;</code> / <code>--merge</code> เพื่อรันคิวต่อเนื่องจนจบและ Squash-Merge บนเครื่อง Local:</p>
+          <pre><code># 1 ฟีเจอร์แล้วหยุดรอรีวิว
+/autopilot 1
+
+# รันทั้งคิวใน build-plan.md ต่อเนื่อง + Auto Local Squash-Merge
+/autopilot --all
+/autopilot --max 3 --merge</code></pre>
         
           
         </section>
@@ -191,8 +186,8 @@
             <li><strong>Spec Formulation</strong>: ร่าง Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code></li>
             <li><strong>TDD Implementation</strong>: สร้าง Branch, เขียน Test และพัฒนาโค้ดให้ผ่าน 100%</li>
             <li><strong>Verification Matrix</strong>: รัน Typecheck, Lint, Test suites และบันทึกหลักฐาน</li>
-            <li><strong>Independent Review</strong>: รัน AI Reviewer ตรวจรับหากเป็นฟีเจอร์ที่มีความเสี่ยงสูง</li>
-            <li><strong>Mandatory Pause</strong>: หยุดรอหน้าประตูส่งมอบเพื่อให้คุณตรวจรับผลลัพธ์ขั้นสุดท้ายก่อนรัน <code>/complete</code></li>
+            <li><strong>Independent Review</strong>: รัน AI Reviewer อิสระเมื่อ Quality Gate กำหนด (<code>when-sensitive</code> / <code>always</code>)</li>
+            <li><strong>Boundary Pause or Local Complete</strong>: หยุดรอคุณตรวจทาน (default) หรือสรุป/Squash-Merge ลง <code>main</code> ในเครื่อง (เมื่อใช้ <code>--all</code> / <code>--merge</code>) โดย<strong>ไม่</strong> Push ขึ้น Remote</li>
           </ol>
         
           
@@ -202,7 +197,7 @@
         <section id="next-steps">
           <h2>ขั้นตอนถัดไป (Next steps)</h2>
           
-          <p>ตรวจดูผลงาน แล้วสั่ง <code>/complete</code> เพื่อรวมโค้ดเข้าสู่ main</p>
+          <p>ตรวจเช็กสถานะด้วย <code>/devflow</code> หรือดูประวัติการส่งมอบใน <code>devflow/history/HISTORY.md</code></p>
         
           
         </section>
@@ -214,9 +209,9 @@
           <span>ก่อนหน้า (Previous)</span>
           <strong>Prototype</strong>
         </a>
-        <a class="next" href="../../commands/continuous/">
+        <a class="next" href="../../commands/tests/">
           <span>ถัดไป (Next)</span>
-          <strong>Continuous</strong>
+          <strong>Setup Tests (Opt-in)</strong>
         </a>
       </nav>
     </main>

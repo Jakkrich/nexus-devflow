@@ -6,7 +6,7 @@
 
 ## Project configuration
 
-`devflow/config.json` is the user-owned, machine-readable workflow policy for this project. Workflow skills read the relevant settings before acting. A missing file means built-in defaults. An invalid file falls back to defaults for read-only status reporting, but mutating workflow commands stop and point to `/devflow-doctor` instead of guessing.
+`devflow/config.json` is the user-owned, machine-readable workflow policy for this project. Workflow skills read the relevant settings before acting. A missing file means built-in defaults. An invalid file falls back to defaults for read-only status reporting, but mutating workflow commands stop and point to `/devflow doctor` instead of guessing.
 
 `qualityGates.regular` controls automatic spec-check, audit, independent-review, check, and try-guide behavior for the normal workflow and Autopilot. `qualityGates.continuous` controls the same per-feature gates for Continuous Mode. Independent review defaults to `when-sensitive` in both workflows, while spec-check (`specCheck`), audit, check, and try guide default to `manual`. Sensitive or unusually broad work therefore selects independent review automatically; ordinary small work does not. Setting a workflow's independent review to `manual` disables that automatic selection, while an explicit `/audit independent current` remains available. The other conditional modes are `when-sensitive` for audit, `when-behavioral` for check, and `when-user-facing` or `when-testable` for try guides (`when-testable` emits a concise 1–3 step `## Try it now` proof for testable/observable changes; `when-user-facing` covers UI changes). `specCheck` accepts `manual` or `always` (opt-in `/feature --check`). `always` runs the gate for every work item in that workflow.
 
@@ -28,13 +28,13 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### Universal Invocation & Agent Directives
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `continuous`, `analyze`, `discovery`, `explore`, `idea`, `grill`, `brainstorm`, `bughunter`, `devflow`, `devflow-doctor`, `devflow-status`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `setup-tests`, `browser-tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `convert-any-to-md`, `publish-devflow`, `vendor`). Invocation depends on your AI tool:
-   - **Canonical Name (Plain text)**: e.g., `feature`, `implement`, `continuous`, `devflow`, `discovery`, `analyze`.
-   - **Slash Prefix (`/`)**: Claude Code, Google Antigravity, Gemini CLI, e.g., `/feature`, `/fix`, `/implement`, `/continuous`, `/devflow`, `/discovery`, `/analyze`.
-   - **Dollar Prefix (`$`)**: OpenAI Codex CLI, e.g., `$feature`, `$fix`, `$continuous`, `$devflow`, `$discovery`, `$analyze`.
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has **one Canonical Name across the 15 Core Skills** (`feature`, `fix`, `implement`, `check`, `complete`, `discovery`, `explore`, `idea`, `devflow`, `overview`, `debug`, `onboard`, `autopilot`, `prototype`, `audit`, plus optional opt-in extensions via `npx nexus-devflow skill add` such as `setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`). Invocation depends on your AI tool:
+   - **Canonical Name (Plain text)**: e.g., `feature`, `implement`, `autopilot`, `devflow`, `discovery`, `onboard`.
+   - **Slash Prefix (`/`)**: Claude Code, Google Antigravity, Gemini CLI, e.g., `/feature`, `/fix`, `/implement`, `/autopilot --all`, `/devflow`, `/discovery`.
+   - **Dollar Prefix (`$`)**: OpenAI Codex CLI, e.g., `$feature`, `$fix`, `$autopilot --all`, `$devflow`, `$discovery`.
 2. **OpenAI Codex & Non-Native CLI Tools**: In environments without automatic background skill discovery, inspect `.agents/skills/<skill>/SKILL.md` before executing the stage to follow its schema, artifact contract, and quality gates.
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover `.agents/skills/` and `.claude/skills/`.
-4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` or `devflow-status` to inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md`.
+4. **State-Aware Inspection**: When unsure what to do next, invoke `/devflow` to inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md` (or `/devflow doctor` for diagnostics).
 5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 6. **Contextual Help**: When a DevFlow command is invoked with `help`, `--help`, `-h`, or `?`, follow [the help protocol](devflow/reference/help-playbook-protocol.md) to render a concise Markdown cheat sheet in chat without running the command's primary action or creating a task run.
 
@@ -53,11 +53,10 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### 🔮 Pre-Flight Discovery, SA & Architectural Alignment (Companions)
 
-- `analyze`: Unified SA requirement ingestion, multi-format doc parsing, codebase impact scan (`devflow/inbox/`, `devflow/analysis/`).
-- `discovery`: Unified pre-delivery discovery & exploration (`devflow/discoveries/{DISC-ID}/discovery.md`).
+- `discovery`: Macro roadmap planning, micro pre-delivery exploration (`devflow/discoveries/{DISC-ID}/discovery.md`), SA multi-format requirement intake (`devflow/inbox/`, `devflow/analysis/`), and Socratic alignment (`glossary.md`, `devflow/decisions/`).
+- `explore`: Read-only codebase investigation and 2–3 option trade-off comparison (Brainstorm mode).
 - `idea`: Quick idea capture and AI feasibility scoring (`devflow/ideas.md`).
-- `grill` (or `align`): Socratic alignment, domain modeling, and ADR recording (`devflow/decisions/`).
-- `brainstorm`: Divergent/convergent ideation with trade-off analysis.
+- `feature --preview`: Read-only build-plan scope, dependency, and sizing preview before drafting `spec.md`.
 
 ### 🌿 Parallel Worktree Workflows & Recovery
 
@@ -87,14 +86,14 @@ The helper writes this schema:
 ```json
 {
   "schemaVersion": 1,
-  "command": "continuous",
+  "command": "autopilot",
   "status": "running",
   "summary": "Completing the remaining build plan",
   "detail": "Implementing feature 3.",
   "boundary": "local-only",
   "startedAt": "<ISO-8601 timestamp>",
   "updatedAt": "<ISO-8601 timestamp>",
-  "resumeCommand": "/continuous resume",
+  "resumeCommand": "/autopilot --all resume",
   "progress": { "current": 2, "total": 5, "label": "features" },
   "feature": { "id": "3", "title": "Export reports" }
 }

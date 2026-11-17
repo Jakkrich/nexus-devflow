@@ -127,7 +127,7 @@ const DEFAULT_PROJECT_PLAN_STUB = `# 🗺️ Project Plan (User-Owned Architectu
 const DEFAULT_BUILD_PLAN_STUB = `# 📋 Build Plan (User-Owned Feature Queue)
 
 > **Document Type**: Build Plan (User-Owned)  
-> **Purpose**: Master sequential feature build queue with dependencies and sizing. Inspected by \`/brief\` and consumed by \`/feature\`.
+> **Purpose**: Master sequential feature build queue with dependencies and sizing. Inspected by \`/feature --preview\` and consumed by \`/feature\`.
 
 ---
 

@@ -266,7 +266,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
   const starterOverview = `# Project Overview & Source of Truth
 
 > Living context artifact automatically synchronized with codebase reality and DevFlow delivery history.
-> Run \`/onboard\` (for new projects) or \`/adopt\` (for existing codebases) to populate this file.
+> Run \`/onboard\` (auto-detects brownfield or \`/onboard --adopt\` for existing codebases) to populate this file.
 
 ---
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Browser Tests (/browser-tests) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="การติดตั้ง Playwright Test Harness และเชื่อมต่อ MCP BrowserOS Neo สำหรับการทดสอบหน้าเว็บและ UI อัตโนมัติ">
+  <title>Browser Testing with setup-tests Extension - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="การติดตั้ง Playwright Test Harness และเชื่อมต่อ Browser Verification (รวมอยู่ในส่วนเสริม opt-in setup-tests)">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/browser-tests/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -153,32 +144,32 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>REFERENCE</span> <span>/</span> <strong>Browser Tests (/browser-tests)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>REFERENCE</span> <span>/</span> <strong>Browser Testing with setup-tests Extension</strong></div>
       
-      <h1 class="docs-title">Browser Tests (/browser-tests)</h1>
+      <h1 class="docs-title">Browser Testing with setup-tests Extension</h1>
       
       <p class="docs-lead">
-        การติดตั้ง Playwright Test Harness และเชื่อมต่อ MCP BrowserOS Neo สำหรับการทดสอบหน้าเว็บและ UI อัตโนมัติ
+        การติดตั้ง Playwright Test Harness และเชื่อมต่อ Browser Verification (รวมอยู่ในส่วนเสริม opt-in setup-tests)
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Reference</span>
-        <span class="docs-pill">BrowserTests</span>
+        <span class="docs-pill">SetupTests</span>
         <span class="docs-pill">Playwright</span>
-        <span class="docs-pill">BrowserOS</span>
         <span class="docs-pill">E2E</span>
         <span class="docs-pill">VisualQA</span>
       </div>
 
       <div class="docs-prose">
 
-        <!-- Section: การตั้งค่าและใช้งาน Browser Tests -->
+        <!-- Section: การติดตั้งและใช้งาน Browser Tests Extension -->
         <section id="browser-tests-usage">
-          <h2>การตั้งค่าและใช้งาน Browser Tests</h2>
+          <h2>การติดตั้งและใช้งาน Browser Tests Extension</h2>
           
-          <p>ติดตั้ง Test Harness สำหรับการทดสอบเบราว์เซอร์ด้วยคำสั่ง:</p>
-          <pre><code>/browser-tests</code></pre>
-          <p>ระบบจะทำการติดตั้ง Playwright, สร้างไฟล์ Config, เพิ่มคำสั่ง <code>npm run test:browser</code> และเชื่อมต่อกับ BrowserOS Neo MCP (<code>http://127.0.0.1:9010/mcp</code>) เพื่อให้ AI สามารถเปิดหน้าเว็บจริงและบันทึกภาพหน้าจอได้</p>
+          <p>ติดตั้งส่วนเสริม <code>setup-tests</code> (ซึ่งรวมการตั้งค่า Playwright แล้ว) จากนั้นสั่งใช้งาน:</p>
+          <pre><code>npx nexus-devflow skill add setup-tests
+/setup-tests browser</code></pre>
+          <p>ระบบจะทำการติดตั้ง Playwright, สร้างไฟล์ Config และเพิ่มคำสั่ง <code>npm run test:browser</code> เพื่อให้ AI สามารถเปิดตรวจสอบ UI จริงผ่าน Active Browser MCP หรือ Playwright ได้</p>
         
           
         </section>
@@ -200,7 +191,7 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#browser-tests-usage">การตั้งค่าและใช้งาน Browser Tests</a>
+      <a href="#browser-tests-usage">การติดตั้งและใช้งาน Browser Tests Extension</a>
     </aside>
   </div>
 

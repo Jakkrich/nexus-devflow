@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-11-17 | `115d` | Feature | (Tracer Bullet) Validators, Role Profiles, Adapter Sync & Docs | `cf5d900` | `Completed` | [`115d-validators-roles-catalog-and-docs.md`](features/115d-validators-roles-catalog-and-docs.md) |
 | 2026-11-17 | `115c` | Feature | (Journey) Consolidate Core Skills & Upgrade Adaptive `/feature` + `/debug` | `1cfe421` | `Completed` | [`115c-consolidate-core-skills-and-adaptive-feature.md`](features/115c-consolidate-core-skills-and-adaptive-feature.md) |
 | 2026-11-17 | `115b` | Feature | (Skateboard) Retire Obsolete, Stub, Maintainer & Tier-2 Ops from Core | `bbccbde` | `Completed` | [`115b-retire-obsolete-stub-and-tier2-core-skills.md`](features/115b-retire-obsolete-stub-and-tier2-core-skills.md) |
 | 2026-11-17 | `115a` | Feature | (Skateboard) Hygiene, Anti-Bloat & Contract Cleanup | `0606fd9` | `Completed` | [`115a-hygiene-anti-bloat-contract-cleanup.md`](features/115a-hygiene-anti-bloat-contract-cleanup.md) |

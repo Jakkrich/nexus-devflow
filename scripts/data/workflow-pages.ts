@@ -86,7 +86,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
         ├── External API Response Field
         └── Prior Architectural Decision (ADR)</code></pre>
           <div class="note-box warning">
-            <strong>Anti-Hallucination Guard:</strong> หากค่าหรือเงื่อนไขใดไม่มีที่มาของข้อมูลระบุไว้อย่างชัดเจน ให้ถือเป็น <strong>Owed Decision</strong> ซึ่ง AI จะไม่ได้รับอนุญาตให้คาดเดาเองเป็น "Wiring Code" โดยเด็ดขาด แต่ต้องหยุดถามผู้ใช้ หรือส่งเข้าขั้นตอน <code>/grill</code> เพื่อบันทึกข้อสรุปก่อน
+            <strong>Anti-Hallucination Guard:</strong> หากค่าหรือเงื่อนไขใดไม่มีที่มาของข้อมูลระบุไว้อย่างชัดเจน ให้ถือเป็น <strong>Owed Decision</strong> ซึ่ง AI จะไม่ได้รับอนุญาตให้คาดเดาเองเป็น "Wiring Code" โดยเด็ดขาด แต่ต้องหยุดถามผู้ใช้ หรือจัดแนวทางใน <code>/discovery --grill</code> / Adaptive Clarification ของ <code>/feature</code> เพื่อบันทึกข้อสรุปก่อน
           </div>
         `
       },
@@ -96,11 +96,10 @@ export const WORKFLOW_PAGES: DocPage[] = [
         contentHtml: `
           <p>เมื่อคุณมีไอเดียใหม่หรือข้อสงสัยเชิงเทคนิคแต่ยังไม่แน่ใจว่าจะทำหรือไม่ DevFlow มีชุดคำสั่งช่วยเหลือที่ทำงานแบบ <strong>Read-Only</strong> โดยไม่แก้ไขโค้ดหรือบังคับเขียนแผนงานล่วงหน้า:</p>
           <ul>
-            <li><strong><code>/explore</code></strong>: สำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรม เปรียบเทียบทางเลือกและข้อดีข้อเสีย (Trade-offs) กับโค้ดจริงในโปรเจกต์โดยตรง</li>
-            <li><strong><code>/brief</code></strong>: สรุปและอธิบายขอบเขต ความสัมพันธ์ พื้นที่ที่ได้รับผลกระทบ และขนาดของงานสำหรับฟีเจอร์ที่อยู่ใน <code>build-plan.md</code> เพื่อช่วยในการตัดสินใจลำดับการพัฒนา</li>
+            <li><strong><code>/explore</code></strong>: สำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรม พร้อมเทียบทางเลือก 2–3 แบบและตาราง Trade-offs กับโค้ดจริงในโปรเจกต์</li>
+            <li><strong><code>/feature --preview</code></strong>: พรีวิวขอบเขต ความสัมพันธ์ พื้นที่ที่ได้รับผลกระทบ และขนาดของงานสำหรับฟีเจอร์ที่อยู่ใน <code>build-plan.md</code> แบบ Read-Only</li>
             <li><strong><code>/idea</code></strong>: บันทึกไอเดียเข้าสู่ <code>devflow/ideas.md</code> พร้อมให้ AI วิเคราะห์ Feasibility Score, Value และ Key Points ให้โดยอัตโนมัติ</li>
-            <li><strong><code>/brainstorm</code></strong>: ระดมสมองและสังเคราะห์ทางเลือกในการออกแบบระบบ 2-3 แบบ พร้อมเปรียบเทียบข้อดีข้อเสียก่อนตัดสินใจเลือกแนวทาง</li>
-            <li><strong><code>/grill</code> (หรือ <code>align</code>)</strong>: จัดเซสชันสัมภาษณ์เชิงลึกแบบ Socratic Interview เพื่อทดสอบความสมบูรณ์ของแผนงาน สกัด Glossary คำศัพท์ทางธุรกิจ และบันทึก Architecture Decision Records (ADRs) ลงใน <code>devflow/decisions/</code></li>
+            <li><strong><code>/discovery</code></strong> (รวม <code>--grill</code> &amp; SA Intake): รับเอกสารความต้องการหลายฟอร์แมต, สัมภาษณ์ Socratic Interview เพื่อสกัด Glossary และบันทึก ADRs ลงใน <code>devflow/decisions/</code></li>
           </ul>
         `
       },
@@ -178,8 +177,8 @@ export const WORKFLOW_PAGES: DocPage[] = [
         id: 'run-the-remaining-plan-continuously',
         title: 'การรันแผนงานแบบต่อเนื่องอัตโนมัติ (Run the remaining plan continuously)',
         contentHtml: `
-          <p>คำสั่ง <code>/continuous</code> หรือ <code>$continuous</code> เป็นโหมดการทำงานอัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> แบบต่อเนื่องหลายรายการโดยไม่ต้องหยุดรอการอนุมัติระหว่างขั้นตอนย่อย:</p>
-          <pre><code>/continuous ──▶ หยิบฟีเจอร์ถัดไป ──▶ รัน Spec/Implement/Check/Gates ──▶ Local Completion & Merge ──▶ ทำซ้ำ</code></pre>
+          <p>คำสั่ง <code>/autopilot --all</code> (หรือ <code>/autopilot --max &lt;N&gt; --merge</code>) เป็นโหมดการทำงานอัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> แบบต่อเนื่องหลายรายการโดยไม่ต้องหยุดรอการอนุมัติระหว่างขั้นตอนย่อย:</p>
+          <pre><code>/autopilot --all ──▶ หยิบฟีเจอร์ถัดไป ──▶ รัน Spec/Implement/Check/Gates ──▶ Local Completion &amp; Merge ──▶ ทำซ้ำ</code></pre>
           <p>Build Plan จะทำหน้าที่เป็นคิวงานโดยตรง แต่ละฟีเจอร์ยังคงแยก Branch, รันการทดสอบ TDD, บันทึกประวัติ และทำ Local Squash-Merge เข้าสู่ <code>main</code> อย่างปลอดภัย</p>
         `
       },
@@ -212,7 +211,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
             <thead><tr><th>สไตล์การเรียกคำสั่ง</th><th>เครื่องมือที่รองรับ</th><th>ตัวอย่างการเรียกใช้</th></tr></thead>
             <tbody>
               <tr><td><strong>Slash Prefix (<code>/</code>)</strong></td><td>Google Antigravity, Claude Code, Gemini CLI</td><td><code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code></td></tr>
-              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$continuous</code>, <code>$devflow</code></td></tr>
+              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$autopilot --all</code>, <code>$devflow</code></td></tr>
               <tr><td><strong>Plain Canonical Name</strong></td><td>GitHub Copilot, Generic Terminals, OpenCode, Aider</td><td><code>feature 1</code>, <code>implement</code>, <code>check</code></td></tr>
             </tbody>
           </table>
@@ -220,58 +219,48 @@ export const WORKFLOW_PAGES: DocPage[] = [
       },
       {
         id: 'lifecycle-skills',
-        title: '1. กลุ่มคำสั่งวงจรชีวิตการพัฒนา (Lifecycle Delivery Skills - 7 Skills)',
+        title: '1. กลุ่มคำสั่งวงจรชีวิตการพัฒนาและส่งมอบอัตโนมัติ (Delivery Core Skills - 6 Skills)',
         contentHtml: `
           <table>
             <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>feature</code></strong></td><td>Spec & Plan</td><td>จัดสรร ID, สร้าง Task-Isolated Workspace และร่าง Living Spec</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
-              <tr><td><strong><code>fix</code></strong></td><td>Spec & Plan</td><td>ร่าง Fix Spec สำหรับการแก้ไขบั๊กหรือการปรับปรุงเร่งด่วน</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>feature</code></strong></td><td>Spec &amp; Plan</td><td>พรีวิวขอบเขต (<code>--preview</code>), Adaptive Pre-Flight Clarification และร่าง Living Spec (<code>--check</code>)</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>fix</code></strong></td><td>Spec &amp; Plan</td><td>ร่าง Fix Spec สำหรับการแก้ไขบั๊กหรือการปรับปรุงเร่งด่วน</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
               <tr><td><strong><code>implement</code></strong></td><td>Execution</td><td>ดำเนินการพัฒนาตาม Task Checklist ด้วยวินัย Strict TDD</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
-              <tr><td><strong><code>check</code></strong></td><td>Quality Gate</td><td>Senior QA Dual-Axis Verification ตรวจสอบพฤติกรรมจริง</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
+              <tr><td><strong><code>check</code></strong></td><td>Quality Gate</td><td>Senior QA Dual-Axis Verification และ <code>/check guide</code> สำหรับคู่มือทดสอบด้วยตนเอง</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
               <tr><td><strong><code>complete</code></strong></td><td>Delivery</td><td>สรุป Release Digest, ย้ายเข้า History Archive และ Squash-Merge</td><td><code>history/features/</code></td></tr>
-              <tr><td><strong><code>continuous</code></strong></td><td>Delivery</td><td>รันคิวฟีเจอร์ใน Build Plan ต่อเนื่องอัตโนมัติในเครื่อง</td><td><code>history/features/</code></td></tr>
-              <tr><td><strong><code>rollback</code></strong></td><td>Delivery</td><td>วางแผนและย้อนคืนฟีเจอร์ที่ส่งมอบแล้วโดยรักษาประวัติอย่างปลอดภัย</td><td><code>history/rollbacks/</code></td></tr>
+              <tr><td><strong><code>autopilot</code></strong></td><td>Automation</td><td>รัน 1 ฟีเจอร์หรือคิวต่อเนื่องในเครื่อง (<code>--all</code> / <code>--max</code> / <code>--merge</code>)</td><td><code>history/features/</code></td></tr>
             </tbody>
           </table>
         `
       },
       {
         id: 'preflight-skills',
-        title: '2. กลุ่มคำสั่งวิเคราะห์ความต้องการและการออกแบบ (Pre-Flight SA Suite - 5 Skills)',
+        title: '2. กลุ่มคำสั่งเตรียมความพร้อมและสำรวจ (Pre-Flight Suite - 3 Skills)',
         contentHtml: `
           <table>
             <thead><tr><th>คำสั่ง</th><th>หมวดหมู่</th><th>บทบาทหน้าที่</th><th>อาร์ติแฟกต์หลัก</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>analyze</code></strong></td><td>SA Ingestion</td><td>แปลงเอกสารทุกฟอร์แมต (PDF, Word, Excel, รูปภาพ) สแกนผลกระทบโค้ดเบส</td><td><code>inbox/</code> & <code>analysis/</code></td></tr>
-              <tr><td><strong><code>idea</code></strong></td><td>Backlog</td><td>บันทึกไอเดียพร้อมประเมิน AI Feasibility Score & Value</td><td><code>devflow/ideas.md</code></td></tr>
-              <tr><td><strong><code>grill</code> / <code>align</code></strong></td><td>Alignment</td><td>Socratic Alignment Interview, สกัด Glossary และบันทึก ADR</td><td><code>decisions/</code> & <code>glossary.md</code></td></tr>
-              <tr><td><strong><code>brainstorm</code></strong></td><td>Ideation</td><td>ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม</td><td>Interactive Session</td></tr>
-              <tr><td><strong><code>discovery</code></strong></td><td>Exploration</td><td>สำรวจเจาะลึกภาพรวมโปรเจกต์หรือฟีเจอร์ก่อนเริ่มเขียนสเปก</td><td><code>discoveries/DISC-xxx.md</code></td></tr>
+              <tr><td><strong><code>idea</code></strong></td><td>Backlog</td><td>บันทึกไอเดียพร้อมประเมิน AI Feasibility Score &amp; Value</td><td><code>devflow/ideas.md</code></td></tr>
+              <tr><td><strong><code>explore</code></strong></td><td>Ideation</td><td>วิเคราะห์โค้ดและเทียบทางเลือก 2–3 แบบ (Brainstorm mode) แบบ Read-Only</td><td>Session Read-Only</td></tr>
+              <tr><td><strong><code>discovery</code></strong></td><td>Exploration &amp; SA</td><td>สำรวจ Roadmap/ฟีเจอร์, แปลงสเปกหลายฟอร์แมต (<code>REQ-ID</code>), สัมภาษณ์ Socratic (<code>--grill</code>) &amp; ADR</td><td><code>discoveries/</code>, <code>decisions/</code></td></tr>
             </tbody>
           </table>
         `
       },
       {
         id: 'governance-skills',
-        title: '3. กลุ่มคำสั่งบริหารจัดการเวิร์กสเปซและคุณภาพ (Workspace Governance - 21 Skills)',
+        title: '3. กลุ่มคำสั่งตั้งค่า, คุณภาพ และศูนย์กลาง (Setup, Quality & Hub - 6 Skills + Opt-in Extensions)',
         contentHtml: `
           <table>
             <thead><tr><th>คำสั่ง</th><th>หน้าที่</th><th>คำสั่ง</th><th>หน้าที่</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>devflow</code></strong></td><td>ผู้ช่วยแนะนำเส้นทางและตรวจสอบสถานะงาน</td><td><strong><code>devflow-doctor</code></strong></td><td>วินิจฉัยสุขภาพโปรเจกต์และการตั้งค่าระบบ</td></tr>
-              <tr><td><strong><code>explore</code></strong></td><td>ตอบคำถามและทำความเข้าใจโค้ดเบสแบบ Read-Only</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
-              <tr><td><strong><code>brief</code></strong></td><td>สรุปขอบเขตและความเสี่ยงของฟีเจอร์ใน Build Plan</td><td><strong><code>debug</code></strong></td><td>วินิจฉัยหาสาเหตุของบั๊กอย่างเป็นระบบ</td></tr>
-              <tr><td><strong><code>onboard</code></strong></td><td>ติดตั้งและปรับแต่งค่าเริ่มต้นบนโปรเจกต์ใหม่</td><td><strong><code>adopt</code></strong></td><td>สำรวจและผนวก DevFlow เข้ากับโปรเจกต์เดิม</td></tr>
-              <tr><td><strong><code>try</code></strong></td><td>สร้างคู่มือ Manual QA Walkthrough ทีละขั้นตอน</td><td><strong><code>audit</code></strong></td><td>สแกนความปลอดภัยและคุณภาพโค้ดลง <code>findings.md</code></td></tr>
-              <tr><td><strong><code>bughunter</code></strong></td><td>สแกนช่องโหว่ความปลอดภัยเชิงรุกและ 83 CVE Patterns</td><td><strong><code>ci</code></strong></td><td>สร้างและปรับจูน GitHub Actions Verification Workflow</td></tr>
-              <tr><td><strong><code>test</code></strong></td><td>รันชุดทดสอบและวิเคราะห์ Test Coverage</td><td><strong><code>setup-tests</code></strong></td><td>ติดตั้ง Test Runner และชุดทดสอบเริ่มต้น</td></tr>
-              <tr><td><strong><code>browser-tests</code></strong></td><td>ติดตั้ง Playwright และเชื่อม BrowserOS Neo MCP</td><td><strong><code>autopilot</code></strong></td><td>รัน 1 ฟีเจอร์ต่อเนื่องตั้งแต่ Spec จนถึง Check</td></tr>
-              <tr><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td><td><strong><code>release</code></strong></td><td>ตรวจสอบความพร้อมก่อน Deploy ขึ้น Render/Vercel</td></tr>
-              <tr><td><strong><code>report-html</code></strong></td><td>สร้าง Standalone HTML Report Dashboard</td><td><strong><code>convert-any-to-md</code></strong></td><td>แปลงเอกสารภายนอกเป็น Markdown ใน <code>reference/</code></td></tr>
-              <tr><td><strong><code>vendor</code></strong></td><td>ติดตั้ง External Skill และสร้าง Custom Wrapper</td><td><strong><code>devflow-status</code></strong></td><td>สรุปความคืบหน้าของงานและขั้นตอนถัดไป</td></tr>
+              <tr><td><strong><code>devflow</code></strong></td><td>ศูนย์รวมตรวจสถานะ (<code>--exec</code>), <code>doctor</code>, และ Legacy Routing</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
+              <tr><td><strong><code>onboard</code></strong></td><td>ตั้งค่าโปรเจกต์ใหม่และ auto-detect brownfield (<code>--adopt</code>)</td><td><strong><code>debug</code></strong></td><td>วินิจฉัย 2-Track (Fast trace หรือ Scientific 6-phase)</td></tr>
+              <tr><td><strong><code>audit</code></strong></td><td>สแกน YAGNI, Quality, Security, Perf, Tests + <code>independent</code></td><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td></tr>
             </tbody>
           </table>
+          <p><strong>Opt-in Tier-2 Extensions</strong> (ติดตั้งเฉพาะเมื่อต้องการใช้ด้วย <code>npx nexus-devflow skill add &lt;name&gt;</code>): <code>setup-tests</code> (รวม Playwright browser), <code>ci</code>, <code>release</code>, <code>rollback</code>, <code>vendor</code>, <code>convert-any-to-md</code>, <code>archify</code>, <code>diagram-design</code></p>
         `
       }
     ]
@@ -304,9 +293,8 @@ export const WORKFLOW_PAGES: DocPage[] = [
         title: 'ผังการตัดสินใจในขั้นตอนเตรียมความพร้อม (Pre-Flight Discovery Tree)',
         contentHtml: `
           <pre><code>มีไอเดียแต่ยังไม่ชัดเจน ────▶ /idea (บันทึกลง Inbox พร้อม AI Feasibility Score)
-ต้องการทางเลือกสถาปัตยกรรม ──▶ /brainstorm (สร้าง 2-3 Options พร้อม Trade-off Matrix)
-มีเอกสารสเปกดิบ (PDF/Doc) ──▶ /analyze (สแกนผลกระทบโค้ดเบส & Socratic Gap Check)
-ต้องการตกลงโมเดลข้อมูล/ADR ──▶ /grill (Socratic Interview บันทึกลง devflow/decisions/)
+ต้องการเทียบทางเลือก ───────▶ /explore (สร้าง 2-3 Options พร้อม Trade-off Matrix แบบ Read-Only)
+มีสเปกดิบหรือต้องตกลง ADR ──▶ /discovery --grill (สกัด PDF/Doc &amp; Socratic Interview ลง devflow/decisions/)
 ต้องการสำรวจเจาะลึก ────────▶ /discovery (สร้างบันทึกการสำรวจ DISC-xxx)</code></pre>
         `
       },
@@ -317,13 +305,13 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <table>
             <thead><tr><th>ความต้องการ</th><th>คำสั่งที่แนะนำ</th><th>พฤติกรรมหลัก</th></tr></thead>
             <tbody>
-              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/devflow-doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, และความสมบูรณ์ของเวิร์กโฟลว์</td></tr>
-              <tr><td>สืบหาสาเหตุของบั๊กที่แท้จริง</td><td><code>/debug</code></td><td>กระบวนการ Scientific Diagnosis 6 ขั้นตอนโดยไม่แก้โค้ดล่วงหน้า</td></tr>
-              <tr><td>ทำความเข้าใจโค้ดหรือสอบถามจุดทำงาน</td><td><code>/explore</code></td><td>สำรวจและตอบคำถามเชิงลึกแบบ Read-only</td></tr>
-              <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/try</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>
-              <tr><td>สแกนความปลอดภัยและคุณภาพโค้ด</td><td><code>/audit</code></td><td>ตรวจเช็คทั้ง Branch Delta หรือทั้งโปรเจกต์ บันทึกลง <code>findings.md</code></td></tr>
+              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/devflow doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, และความสมบูรณ์ของเวิร์กโฟลว์</td></tr>
+              <tr><td>สืบหาสาเหตุของบั๊กที่แท้จริง</td><td><code>/debug</code></td><td>วินิจฉัยแบบ 2-Track (Fast trace หรือ Scientific 6-phase) โดยไม่แก้โค้ดล่วงหน้า</td></tr>
+              <tr><td>ทำความเข้าใจโค้ดหรือเทียบทางเลือก</td><td><code>/explore</code></td><td>สำรวจโค้ดและเทียบ Options 2–3 แบบแบบ Read-only</td></tr>
+              <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/check guide</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>
+              <tr><td>สแกนความปลอดภัยและคุณภาพโค้ด + YAGNI</td><td><code>/audit</code></td><td>ตรวจเช็คทั้ง Branch Delta หรือทั้งโปรเจกต์ บันทึกลง <code>findings.md</code></td></tr>
               <tr><td>สร้าง Mockup หน้าจอจำลองก่อนเขียนโค้ด</td><td><code>/prototype</code></td><td>สร้าง Static HTML/CSS จำลองที่ใช้ Design Tokens ร่วมกัน</td></tr>
-              <tr><td>สร้างรายงาน HTML Dashboard สวยงาม</td><td><code>/report-html</code></td><td>คอมไพล์สเปกหรือประวัติเป็น Dashboard สำหรับนำเสนอ</td></tr>
+              <tr><td>สร้างรายงาน HTML Dashboard บน CLI</td><td><code>npm run report:html</code></td><td>คอมไพล์สเปกหรือประวัติเป็น Dashboard สำหรับนำเสนอ</td></tr>
             </tbody>
           </table>
         `

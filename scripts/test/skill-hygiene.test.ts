@@ -6,20 +6,25 @@ import test from "node:test";
 const repoRoot = path.resolve(import.meta.dirname, "../..");
 const agentsSkillsRoot = path.join(repoRoot, ".agents", "skills");
 
-function collectSkillMarkdownFiles(rootDir: string): string[] {
+function collectSkillMarkdownFiles(...rootDirs: string[]): string[] {
   const results: string[] = [];
-  for (const entry of fs.readdirSync(rootDir, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    const skillDir = path.join(rootDir, entry.name);
-    const skillMd = path.join(skillDir, "SKILL.md");
-    if (fs.existsSync(skillMd)) {
-      results.push(skillMd);
-    }
-    const refDir = path.join(skillDir, "reference");
-    if (fs.existsSync(refDir)) {
-      for (const refEntry of fs.readdirSync(refDir)) {
-        if (refEntry.endsWith(".md")) {
-          results.push(path.join(refDir, refEntry));
+  for (const rootDir of rootDirs) {
+    if (!fs.existsSync(rootDir)) continue;
+    for (const entry of fs.readdirSync(rootDir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const skillDir = path.join(rootDir, entry.name);
+      const skillMd = path.join(skillDir, "SKILL.md");
+      if (fs.existsSync(skillMd)) {
+        results.push(skillMd);
+      }
+      for (const sub of ["reference", "references"]) {
+        const refDir = path.join(skillDir, sub);
+        if (fs.existsSync(refDir)) {
+          for (const refEntry of fs.readdirSync(refDir)) {
+            if (refEntry.endsWith(".md")) {
+              results.push(path.join(refDir, refEntry));
+            }
+          }
         }
       }
     }
@@ -27,9 +32,11 @@ function collectSkillMarkdownFiles(rootDir: string): string[] {
   return results;
 }
 
-test("skills do not leak developer local file:///d:/ paths", () => {
+const extrasSkillsRoot = path.join(repoRoot, "extras", "skills");
+
+test("skills (including extras) do not leak developer local file:///d:/ paths", () => {
   const leaks: string[] = [];
-  for (const file of collectSkillMarkdownFiles(agentsSkillsRoot)) {
+  for (const file of collectSkillMarkdownFiles(agentsSkillsRoot, extrasSkillsRoot)) {
     const content = fs.readFileSync(file, "utf8");
     if (/file:\/\/\/[a-z]:\//i.test(content)) {
       leaks.push(path.relative(repoRoot, file));
@@ -38,9 +45,9 @@ test("skills do not leak developer local file:///d:/ paths", () => {
   assert.deepEqual(leaks, [], `Found local drive URL leaks in: ${leaks.join(", ")}`);
 });
 
-test("skills do not reference phantom /design or defuddle commands", () => {
+test("skills (including extras) do not reference phantom /design or defuddle commands", () => {
   const leaks: string[] = [];
-  for (const file of collectSkillMarkdownFiles(agentsSkillsRoot)) {
+  for (const file of collectSkillMarkdownFiles(agentsSkillsRoot, extrasSkillsRoot)) {
     const content = fs.readFileSync(file, "utf8");
     if (/\/design\s+\{REQ-ID\}/.test(content) || /\bdefuddle\b/.test(content)) {
       leaks.push(path.relative(repoRoot, file));
@@ -113,9 +120,9 @@ test("overview skill guards npm run overview behind project package.json presenc
   assert.doesNotMatch(overview, /^Run:\s*\r?\n\r?\n```bash\r?\nnpm run overview\r?\n```/m);
 });
 
-test("skills use consistent npx nexus-devflow skill add/update CLI command", () => {
+test("skills (including extras) use consistent npx nexus-devflow skill add/update CLI command", () => {
   const inconsistent: string[] = [];
-  for (const file of collectSkillMarkdownFiles(agentsSkillsRoot)) {
+  for (const file of collectSkillMarkdownFiles(agentsSkillsRoot, extrasSkillsRoot)) {
     const content = fs.readFileSync(file, "utf8");
     if (/npx\s+(?:@jakkrichm\/)?create-nexus-devflow\s+skill\s+(?:add|update)/.test(content)) {
       inconsistent.push(path.relative(repoRoot, file));
@@ -140,4 +147,8 @@ test("115c consolidated skills expose Adaptive /feature, 2-Track /debug, unified
   const autopilot = fs.readFileSync(path.join(agentsSkillsRoot, "autopilot", "SKILL.md"), "utf8");
   assert.match(autopilot, /--all/);
   assert.match(autopilot, /continuous-loop\.md/);
+  assert.doesNotMatch(autopilot, /(?<![\w.])\/try(?![-\w])/);
+
+  const workflow = fs.readFileSync(path.join(repoRoot, "devflow", "workflow.md"), "utf8");
+  assert.doesNotMatch(workflow, /\/devflow-doctor|\/devflow-status|\/continuous\b/);
 });

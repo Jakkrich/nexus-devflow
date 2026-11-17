@@ -719,3 +719,44 @@ test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops and convert-any-to-md pres
   assert.equal(KNOWN_SKILL_ALIASES["browser-tests"]?.subpath, "extras/skills/setup-tests");
 });
 
+test("installThirdPartySkill installs non-compound extras/skills/* subpath with reference files", async () => {
+  const tempProject = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-extras-project-"));
+  const tempRepo = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-extras-repo-"));
+
+  try {
+    await fs.mkdir(path.join(tempProject, ".agents", "skills"), { recursive: true });
+    await fs.mkdir(path.join(tempProject, ".claude", "skills"), { recursive: true });
+
+    const extraSkillDir = path.join(tempRepo, "extras", "skills", "setup-tests");
+    await fs.mkdir(path.join(extraSkillDir, "reference"), { recursive: true });
+    await fs.writeFile(
+      path.join(extraSkillDir, "SKILL.md"),
+      "---\nname: setup-tests\ndescription: Configure tests\n---\n# Setup Tests\n",
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(extraSkillDir, "reference", "browser.md"),
+      "# Browser Testing Reference\n",
+      "utf8"
+    );
+
+    const result = await installThirdPartySkill(tempProject, tempRepo, {
+      name: "setup-tests",
+      overrideSource: "browser-tests"
+    });
+
+    assert.ok(result);
+    const detail = Array.isArray(result) ? result[0] : result;
+    assert.equal(detail.name, "setup-tests");
+
+    for (const adapter of [".agents", ".claude"]) {
+      const targetDir = path.join(tempProject, adapter, "skills", "setup-tests");
+      await assert.doesNotReject(fs.stat(path.join(targetDir, "SKILL.md")));
+      await assert.doesNotReject(fs.stat(path.join(targetDir, "reference", "browser.md")));
+    }
+  } finally {
+    await fs.rm(tempProject, { recursive: true, force: true });
+    await fs.rm(tempRepo, { recursive: true, force: true });
+  }
+});
+

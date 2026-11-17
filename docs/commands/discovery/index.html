@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link active" href="../../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link active" href="../../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -245,7 +236,7 @@
             <li><strong>Research & Empirical Proof Lens</strong>: ค้นคว้าแนวทางปฏิบัติระดับสากล (Best Practices), ตรวจสอบความเสถียรของไลบรารีโอเพนซอร์ส และทดสอบความเป็นไปได้ทางเทคนิค</li>
             <li><strong>PRD & Scoping Lens</strong>: กำหนด User Stories, ขอบเขตความรับผิดชอบ (Scope Boundaries), ปัญหาที่ต้องแก้ และ Acceptance Criteria</li>
             <li><strong>Issue & Bug Triage Lens</strong>: จัดระดับความรุนแรง (Critical, Major, Minor) และประเมินว่าต้องใช้ Root-Cause Diagnosis (<code>/debug</code>) หรือไม่</li>
-            <li><strong>Socratic Grilling & Domain Alignment Lens (<code>/grill</code>)</strong>: ซักถามท้าทายสมมติฐาน สกัดศัพท์เทคนิคลง <code>glossary.md</code> และบันทึกข้อตกลงสำคัญลง <code>devflow/decisions/ADR-xxx.md</code></li>
+            <li><strong>SA Intake &amp; Socratic Grilling Lens (<code>/discovery --grill</code> / <code>REQ-ID</code>)</strong>: นำเข้าเอกสารความต้องการหลายฟอร์แมต, สแกน Codebase Impact, สัมภาษณ์ 1–2 คำถามต่อรอบ, สกัดศัพท์ลง <code>glossary.md</code> และบันทึก <code>devflow/decisions/ADR-xxx.md</code></li>
             <li><strong>Visual Architecture Lens (<code>/archify</code>)</strong>: สร้างแผนภาพสถาปัตยกรรมแบบ Interactive HTML Diagrams เพื่อแสดง Data Flow และ State Transitions</li>
           </ol>
         
@@ -292,13 +283,13 @@
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../../commands/adopt/">
+        <a class="prev" href="../../commands/onboard/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Adopt</strong>
+          <strong>Onboard & Adopt</strong>
         </a>
         <a class="next" href="../../commands/explore/">
           <span>ถัดไป (Next)</span>
-          <strong>Explore</strong>
+          <strong>Explore & Brainstorm</strong>
         </a>
       </nav>
     </main>

@@ -112,11 +112,11 @@ test("run-state helper replaces malformed state on start and resets it safely", 
 
   await runHelper(projectRoot, [
     "start",
-    "--command", "devflow-doctor",
+    "--command", "devflow",
     "--summary", "Checking DevFlow health",
     "--boundary", "read-only"
   ]);
-  assert.equal((await readState(projectRoot)).command, "devflow-doctor");
+  assert.equal((await readState(projectRoot)).command, "devflow");
 
   await fs.writeFile(runPath(projectRoot), "not json\n");
   await runHelper(projectRoot, ["reset"]);

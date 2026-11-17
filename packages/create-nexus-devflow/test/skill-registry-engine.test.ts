@@ -153,4 +153,40 @@ describe("SkillRegistryEngine Seam & Lifecycle", () => {
       await fs.rm(tempDir, { recursive: true, force: true });
     }
   });
+
+  it("resolves KNOWN_SKILL_ALIASES['browser-tests'] subpath via InMemorySkillRepositoryAdapter", async () => {
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-extras-alias-"));
+    try {
+      await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+      await fs.mkdir(path.join(tempDir, ".claude", "skills"), { recursive: true });
+
+      const mockAdapter = new InMemorySkillRepositoryAdapter({
+        "https://github.com/Jakkrich/nexus-devflow": {
+          "extras/skills/setup-tests/SKILL.md": "---\nname: setup-tests\ndescription: Setup tests\n---\n# Setup Tests\n",
+          "extras/skills/setup-tests/reference/browser.md": "# Browser Reference\n",
+          ".agents/skills/unrelated/SKILL.md": "---\nname: unrelated\ndescription: Unrelated\n---\n# Unrelated\n"
+        }
+      });
+
+      const engine = new SkillRegistryEngine(tempDir, mockAdapter);
+      const res = await engine.install("browser-tests");
+
+      assert.deepEqual(res.installedSkills, ["setup-tests"]);
+      assert.equal(res.failedSkills.length, 0);
+
+      for (const adapter of [".agents", ".claude"]) {
+        assert.ok(fsSync.existsSync(path.join(tempDir, adapter, "skills", "setup-tests", "SKILL.md")));
+        assert.ok(fsSync.existsSync(path.join(tempDir, adapter, "skills", "setup-tests", "reference", "browser.md")));
+        assert.equal(fsSync.existsSync(path.join(tempDir, adapter, "skills", "unrelated")), false);
+      }
+
+      const manifest = JSON.parse(await fs.readFile(path.join(tempDir, ".nexus", "nexus-devflow.json"), "utf8"));
+      const entry = manifest.thirdPartySkills.find((s: { name: string }) => s.name === "setup-tests");
+      assert.ok(entry);
+      assert.equal(entry.source, "https://github.com/Jakkrich/nexus-devflow");
+      assert.equal(entry.type, "git");
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
 });

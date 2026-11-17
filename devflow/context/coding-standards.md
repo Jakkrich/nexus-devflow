@@ -116,7 +116,7 @@ nexus-devflow/
 ## 6. Naming Conventions
 
 - **Files & Directories**:
-  - Skills and command directories: `kebab-case` (e.g. `discovery`, `report-html`, `convert-any-to-md`).
+  - Skills and command directories: `kebab-case` (e.g. `discovery`, `autopilot`, `setup-tests`).
   - Source modules and scripts: `kebab-case.ts` / `kebab-case.mjs` (e.g. `current-work.ts`, `check-devflow.ts`).
   - Test files: `[module].test.ts` (e.g. `status.test.ts`, `uninstall.test.ts`).
 - **Identifiers**:
@@ -147,7 +147,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 - **Hybrid Browser Verification Protocol**:
   - **Dual-Layer Hierarchy**:
     1. *Code-Driven Automation (CI/Repeatable)*: Headless Playwright (`@playwright/test`) assertions executed via `npm run test:browser`.
-    2. *Interactive AI Visual QA (MCP)*: Live DOM and styling inspection via MCP `browseros-neo` (`http://127.0.0.1:9010/mcp`) during `/check` and `/try`.
+    2. *Interactive AI Visual QA (MCP)*: Live DOM and styling inspection via an active browser MCP (e.g., Playwright MCP, Chrome DevTools MCP, or `browseros-neo` if configured) during `/check`.
 - **Two-Stage Review Pattern (Verification Gate)**:
   - **Stage 1: Spec Fidelity & Acceptance Gate**:
     - Verify 100% conformance against the Single Living Spec (`devflow/context/{xxx-slug}/spec.md`).
@@ -273,7 +273,7 @@ When explicitly generating standalone HTML artifacts (Standalone Reports, Archit
 - **Mechanical Input Coverage Principle (Anti-Hallucination Gate)**:
   - Before implementation, enumerate all values and states that the code must produce or display.
   - Each value must have an explicitly named source (Database column, Input argument, Calculated derivation, or Settled architectural decision).
-  - Any required value lacking a named source represents an **Owed Decision**; agents are prohibited from making unrecorded architectural choices or guessing implementations under the guise of "just wiring". Stop and route to `/grill` or request user clarification.
+  - Any required value lacking a named source represents an **Owed Decision**; agents are prohibited from making unrecorded architectural choices or guessing implementations under the guise of "just wiring". Stop and align in `/discovery --grill` or request user clarification.
 
 ---
 

@@ -1,10 +1,10 @@
 {
   "skill": "autopilot",
-  "description": "\"[devflow] Run one explicit bounded DevFlow spec and implementation pass through configured quality gates, then stop before completion or external actions. Use only when the user directly invokes /autopilot, $autopilot, or asks for Autopilot.\"",
+  "description": "[devflow] Run bounded spec-and-build execution for one feature or continuously across the build plan (--all / --max / --merge) through configured quality gates. Use only when the user invokes /autopilot or /continuous.",
   "positive": [
     "run autopilot skill",
     "invoke /autopilot command",
-    "use autopilot for devflow explicit bounded devflow spec implementation pass through",
+    "run /autopilot --all continuously across build plan",
     "apply autopilot guidance"
   ],
   "negative": [

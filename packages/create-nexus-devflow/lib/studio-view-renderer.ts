@@ -606,9 +606,9 @@ const DASHBOARD_BASE_HTML = `<!doctype html>
     const list = (id, values, empty) => { const node = byId(id); if (!node) return; node.replaceChildren(); const rows = values.length ? values : [empty]; rows.forEach((value) => { const li = document.createElement('li'); li.textContent = value; if (!values.length) li.className = 'empty'; node.append(li); }); };
     const titleCase = (value) => String(value || '').replaceAll('_',' ').replace(/\b\w/g, (c) => c.toUpperCase());
     const FLOW_ICON_NAMES = ['target','code','shield','package'];
-    const EMOJI_ICONS = { compass:'🔎',discovery:'🔎',target:'🎯',document:'📄',list:'🧩',code:'⚙️',shield:'🧪',report:'📊',package:'📦',bulb:'💡',check:'✅',wrench:'🛠️',rollback:'↩️',search:'🔍',alert:'⚠️',grill:'🔥',brainstorm:'💭',idea:'💡' };
+    const EMOJI_ICONS = { compass:'🔎',discovery:'🔎',explore:'🧭',feature:'📐',target:'🎯',document:'📄',list:'🧩',code:'⚙️',shield:'🧪',report:'📊',package:'📦',bulb:'💡',check:'✅',wrench:'🛠️',rollback:'↩️',search:'🔍',alert:'⚠️',grill:'🔥',brainstorm:'💭',idea:'💡' };
     function iconImage(name) { const icon = document.createElement('span'); icon.className = 'icon-glyph'; icon.setAttribute('aria-hidden','true'); icon.textContent = EMOJI_ICONS[name] || '📄'; return icon; }
-    function decoratePipeline(id) { byId(id)?.querySelectorAll('.step').forEach((step,index) => { step.classList.add('flow-' + index); const icon = document.createElement('span'); icon.className = 'step-icon'; icon.setAttribute('aria-hidden','true'); const cmd = step.querySelector('.step-cmd')?.textContent?.replace('/','').split(' ')[0] || ''; const iconKey = id.includes('preflight') ? (cmd || ['idea','grill','brainstorm','discovery'][index] || 'search') : (FLOW_ICON_NAMES[index] || 'document'); icon.append(iconImage(iconKey)); const name = step.querySelector('.step-name'); step.insertBefore(icon,name || null); }); }
+    function decoratePipeline(id) { byId(id)?.querySelectorAll('.step').forEach((step,index) => { step.classList.add('flow-' + index); const icon = document.createElement('span'); icon.className = 'step-icon'; icon.setAttribute('aria-hidden','true'); const cmd = step.querySelector('.step-cmd')?.textContent?.replace('/','').split(' ')[0] || ''; const iconKey = id.includes('preflight') ? (cmd || ['idea','explore','discovery','feature'][index] || 'search') : (FLOW_ICON_NAMES[index] || 'document'); icon.append(iconImage(iconKey)); const name = step.querySelector('.step-name'); step.insertBefore(icon,name || null); }); }
     function richText(root,value) { const source = String(value || ''); let cursor = 0; const plain = (end) => { if (end > cursor) root.append(document.createTextNode(source.slice(cursor,end))); cursor = end; }; while (cursor < source.length) { if (source.startsWith('**',cursor)) { const end = source.indexOf('**',cursor + 2); if (end > cursor + 2) { const node = document.createElement('strong'); node.textContent = source.slice(cursor + 2,end); root.append(node); cursor = end + 2; continue; } } if (source[cursor] === '*') { const end = source.indexOf('*',cursor + 1); if (end > cursor + 1) { const node = document.createElement('em'); node.textContent = source.slice(cursor + 1,end); root.append(node); cursor = end + 1; continue; } } if (source.charCodeAt(cursor) === 96) { const end = source.indexOf(String.fromCharCode(96),cursor + 1); if (end > cursor + 1) { const node = document.createElement('code'); node.textContent = source.slice(cursor + 1,end); root.append(node); cursor = end + 1; continue; } } const next = [source.indexOf('**',cursor + 1),source.indexOf('*',cursor + 1),source.indexOf(String.fromCharCode(96),cursor + 1)].filter((index) => index >= 0).sort((a,b) => a-b)[0] ?? source.length; plain(next > cursor ? next : cursor + 1); } }
     function recordCard(options) { const card = document.createElement('article'); card.className = 'record-item tone-' + (options.tone || 'cyan'); const icon = document.createElement('span'); icon.className = 'record-icon'; icon.append(iconImage(options.icon || 'document')); const body = document.createElement('div'); body.className = 'record-body'; const meta = document.createElement('div'); meta.className = 'record-meta'; richText(meta,options.meta); const title = document.createElement('div'); title.className = 'record-title'; richText(title,options.title); const desc = document.createElement('div'); desc.className = 'record-desc'; richText(desc,options.description); body.append(meta,title,desc); card.append(icon,body); if (options.badge) { const badge = document.createElement('span'); badge.className = 'record-badge'; badge.textContent = options.badge; card.append(badge); } return card; }
     function renderRecords(id,items,empty,mapper) { const root = byId(id); root.replaceChildren(); if (!items?.length) { const node = document.createElement('div'); node.className = 'empty'; node.textContent = empty; root.append(node); return; } items.forEach((item,index) => root.append(recordCard(mapper(item,index)))); }
@@ -1124,7 +1124,7 @@ export class StudioViewRenderer {
    */
   renderDualTrackStepper(snapshot: DashboardSnapshot): string {
     const track = snapshot.workflow?.track || "fast";
-    const currentStage = (snapshot.workflow as any)?.stage || (snapshot.status?.currentWork?.status) || "feature";
+    const currentStage = snapshot.workflow?.currentStage || snapshot.status?.currentWork?.state || "feature";
 
     const fastSteps = [
       { name: "Discover & Spec", cmd: "/feature", id: "feature" },
@@ -1134,10 +1134,10 @@ export class StudioViewRenderer {
     ];
 
     const preflightSteps = [
-      { name: "SA Ingestion", cmd: "/analyze", id: "analyze" },
-      { name: "Align & ADR", cmd: "/grill", id: "grill" },
-      { name: "Brainstorm", cmd: "/brainstorm", id: "brainstorm" },
-      { name: "Exploration", cmd: "/discovery", id: "discovery" },
+      { name: "Idea Inbox", cmd: "/idea", id: "idea" },
+      { name: "Explore Options", cmd: "/explore", id: "explore" },
+      { name: "Discovery & ADR", cmd: "/discovery", id: "discovery" },
+      { name: "Scope Preview", cmd: "/feature --preview", id: "feature" },
     ];
 
     const steps = (track as string) === "pre-flight" || track === "deep" ? preflightSteps : fastSteps;
@@ -1648,7 +1648,7 @@ export class StudioViewRenderer {
       <button class="btn-action" onclick="dispatchCommand('/implement')">/implement</button>
       <button class="btn-action" onclick="dispatchCommand('/check')">/check</button>
       <button class="btn-action" onclick="dispatchCommand('/complete')">/complete</button>
-      <button class="btn-action" onclick="dispatchCommand('/continuous')">/continuous</button>
+      <button class="btn-action" onclick="dispatchCommand('/autopilot --all')">/autopilot --all</button>
       <button class="btn-action" onclick="dispatchCommand('nexus-devflow check-gate')">check-gate</button>
       <button class="btn-action" onclick="dispatchCommand('nexus-devflow drift')">drift</button>
       <button class="btn-action" onclick="dispatchCommand('nexus-devflow doctor')">doctor</button>

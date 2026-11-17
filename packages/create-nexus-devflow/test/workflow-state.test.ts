@@ -26,11 +26,11 @@ test("parseWorkflowState maps Active Discovery ID to active discovery stage", ()
 });
 
 test("parseWorkflowState maps Pre-Flight stage progression correctly", () => {
-  const state = parseWorkflowState("- **Current Stage**: `grill`\n- **Track**: `preflight`", idleWork);
+  const state = parseWorkflowState("- **Current Stage**: `explore`\n- **Track**: `preflight`", idleWork);
   assert.equal(state.track, "deep");
-  assert.equal(state.currentStage, "grill");
+  assert.equal(state.currentStage, "explore");
   assert.equal(state.deep.find((node) => node.id === "idea")?.state, "done");
-  assert.equal(state.deep.find((node) => node.id === "grill")?.state, "active");
+  assert.equal(state.deep.find((node) => node.id === "explore")?.state, "active");
 });
 
 test("parseWorkflowState maps active feature to Fast-Track implementation", () => {
@@ -47,7 +47,11 @@ test("parseWorkflowState maps active feature to Fast-Track implementation", () =
 test("parseWorkflowState respects explicit Track field and flexible markdown headers", () => {
   const deepState = parseWorkflowState("- Track: `preflight`\n- Current Stage: `brainstorm`", idleWork);
   assert.equal(deepState.track, "deep");
-  assert.equal(deepState.currentStage, "brainstorm");
+  assert.equal(deepState.currentStage, "explore");
+
+  const grillState = parseWorkflowState("- Track: `preflight`\n- Current Stage: `grill`", idleWork);
+  assert.equal(grillState.track, "deep");
+  assert.equal(grillState.currentStage, "discovery");
 
   const fastState = parseWorkflowState("- Active Running ID: `041-test`\n- Track: `fast`\n- Current Stage: `implement`", idleWork);
   assert.equal(fastState.track, "fast");

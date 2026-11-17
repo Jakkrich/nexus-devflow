@@ -1,27 +1,27 @@
 import type { DocPage } from '../build-docs-site.js';
 
 export const COMMANDS_PAGES: DocPage[] = [
-  // 1. Onboard
+  // 1. Onboard (Fresh + Auto Brownfield --adopt)
   {
     slug: 'commands/onboard',
     category: 'COMMANDS',
-    title: 'Onboard (/onboard)',
-    lead: 'ปรับแต่งเวิร์กโฟลว์ให้เข้ากับสภาพแวดล้อมจริง ตรวจสอบ tech stack, คำสั่ง verify/test, มาตรฐานโค้ด และกำหนด Review Cadence',
-    pills: ['Command', 'Onboard', 'Setup', 'Config', 'Cadence', 'Preset', 'QualityGates'],
+    title: 'Onboard (/onboard, /onboard --adopt)',
+    lead: 'ปรับแต่งเวิร์กโฟลว์ทั้งโปรเจกต์ใหม่และโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (auto-detect brownfield / --adopt) พร้อมตั้งค่า Review Cadence',
+    pills: ['Command', 'Onboard', 'Adopt', 'Brownfield', 'Config', 'Cadence', 'Preset', 'QualityGates'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>รันคำสั่ง <code>/onboard</code> (หรือ <code>$onboard</code>) ทันทีหลังจากติดตั้ง Nexus-DevFlow ลงในแอปพลิเคชันที่เพิ่ง Scaffold ขึ้นมาใหม่ หรือแอปพลิเคชันในระยะเริ่มต้น เพื่อให้ AI ทำการสำรวจสภาพแวดล้อมจริง ตรวจจับภาษา คำสั่ง Build/Test และปรับแต่งเวิร์กโฟลว์ให้เข้ากับสไตล์การพัฒนาของคุณ</p>
-          <pre><code># สำหรับ Google Antigravity IDE, Claude Code, Gemini CLI
+          <p>รันคำสั่ง <code>/onboard</code> (หรือ <code>$onboard</code>) ทันทีหลังจากติดตั้ง Nexus-DevFlow ทั้งโปรเจกต์เปล่าที่เพิ่งเริ่มต้น และโปรเจกต์เดิมที่มีโค้ดเบสทำงานอยู่แล้ว (ระบบจะตรวจจับ brownfield อัตโนมัติหรือใส่ <code>--adopt</code>):</p>
+          <pre><code># สำหรับโปรเจกต์ใหม่ (หรือตรวจจับ brownfield อัตโนมัติ)
 /onboard
 
-# สำหรับ OpenAI Codex CLI
-$onboard
+# บังคับโหมดสำรวจโค้ดเบสเดิม (legacy /adopt)
+/onboard --adopt
 
-# หรือสั่งการด้วยคำพูดทั่วไป
-"ช่วยรัน onboard เพื่อตั้งค่าโปรเจกต์นี้"</code></pre>
+# สำหรับ OpenAI Codex CLI
+$onboard</code></pre>
         `
       },
       {
@@ -110,7 +110,7 @@ $onboard
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>1. หากต้องการตั้งค่า GitHub Actions CI ให้รันคำสั่ง <code>/ci</code></p>
+          <p>1. หากต้องการตั้งค่า GitHub Actions CI ให้ติดตั้งส่วนเสริม <code>npx nexus-devflow skill add ci</code></p>
           <p>2. กรอกเป้าหมายผลิตภัณฑ์ลงใน <code>devflow/project-plan.md</code> และรายการฟีเจอร์ใน <code>devflow/build-plan.md</code></p>
           <p>3. รันคำสั่ง <code>/overview</code> เพื่อคอมไพล์ Living Source of Truth สำหรับโปรเจกต์</p>
         `
@@ -118,69 +118,7 @@ $onboard
     ]
   },
 
-  // 2. Adopt
-  {
-    slug: 'commands/adopt',
-    category: 'COMMANDS',
-    title: 'Adopt (/adopt)',
-    lead: 'นำ Nexus-DevFlow เข้าสู่โปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (Brownfield Codebase) สำรวจฟังก์ชันจริง และสร้างแผนงานต่อเนื่อง',
-    pills: ['Command', 'Adopt', 'Brownfield', 'Legacy', 'Survey', 'Reconcile', 'ZeroRegression'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/adopt</code> ทันทีหลังจากติดตั้ง Overlay ลงในโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (Brownfield) แทนที่จะมองเป็นโปรเจกต์ว่างเปล่า AI จะทำหน้าที่เป็น Senior Architect สำรวจโค้ดจริง บันทึกความสามารถที่ส่งมอบไปแล้ว และสร้างแผนงานส่วนต่อขยายได้อย่างแม่นยำ</p>
-          <pre><code>/adopt</code></pre>
-        `
-      },
-      {
-        id: 'what-it-inspects',
-        title: 'สิ่งที่ระบบตรวจสอบในโค้ดเบสเดิม (Deep Codebase Survey)',
-        contentHtml: `
-          <p>คำสั่ง <code>/adopt</code> จะดำเนินการสำรวจอย่างครอบคลุม:</p>
-          <ul>
-            <li><strong>Architecture & Modules</strong>: สแกนโครงสร้างไดเรกทอรี เลเยอร์ข้อมูล API Controllers และ UI Views</li>
-            <li><strong>Shipped Capabilities</strong>: ตรวจสอบความสามารถที่ใช้งานได้จริงในระบบ เพื่อไม่ให้ AI เข้าใจผิดว่าต้องสร้างซ้ำ</li>
-            <li><strong>Existing Test Harness & CI</strong>: ตรวจสอบ Unit Tests, Integration Tests, และ CI configuration ที่มีอยู่เดิม</li>
-            <li><strong>Dependencies & Configs</strong>: สำรวจไลบรารี ฐานข้อมูล และตัวแปร Environment Variables</li>
-          </ul>
-        `
-      },
-      {
-        id: 'how-it-works',
-        title: 'กระบวนการปรับสมดุลแผนงาน (Plan Reconciliation)',
-        contentHtml: `
-          <p>หลังจากการสำรวจโค้ดเบสเสร็จสิ้น AI จะสร้างเอกสารแผนงานที่สอดคล้องกับความเป็นจริง:</p>
-          <ul>
-            <li><strong><code>devflow/project-plan.md</code></strong>: บันทึกสถาปัตยกรรมและขอบเขตของระบบปัจจุบัน</li>
-            <li><strong><code>devflow/build-plan.md</code></strong>: จัดทำ Checklist รายการฟีเจอร์ โดยฟังก์ชันที่มีอยู่แล้วจะถูกติ๊กถูก <code>- [x]</code> และฟังก์ชันส่วนขยายที่เสนอแนะจะถูกบันทึกเป็น <code>- [ ]</code></li>
-            <li><strong><code>devflow/history/</code></strong>: บันทึกประวัติสถาปัตยกรรมและฟีเจอร์เดิมเป็น Baseline</li>
-            <li><strong><code>devflow/context/project-overview.md</code></strong>: รันการคอมไพล์ <code>overview</code> เพื่อให้ AI เข้าใจบริบทเริ่มต้นในทันที</li>
-          </ul>
-        `
-      },
-      {
-        id: 'what-it-never-does',
-        title: 'สิ่งที่ไม่ทำโดยเด็ดขาด (What it never does)',
-        contentHtml: `
-          <div class="docs-callout note">
-            <div class="docs-callout-label">Zero-Regression Guarantee</div>
-            <p><code>/adopt</code> จะ<strong>ไม่</strong>แตะต้อง ลบ หรือแก้ไขซอร์สโค้ดเดิมของคุณ ไม่เปลี่ยนแปลงประวัติ Git เดิม และไม่บังคับปรับโครงสร้างโฟลเดอร์ของโปรเจกต์เดิมเด็ดขาด</p>
-          </div>
-        `
-      },
-      {
-        id: 'next-steps',
-        title: 'ขั้นตอนถัดไป (Next steps)',
-        contentHtml: `
-          <p>ตรวจดูรายการฟีเจอร์ใน <code>devflow/build-plan.md</code> และเริ่มพัฒนาฟีเจอร์แรกของโปรเจกต์เดิมด้วยคำสั่ง <code>/feature 1</code> หรือแก้บั๊กด้วย <code>/fix</code></p>
-        `
-      }
-    ]
-  },
-
-  // 3. Discovery
+  // 2. Discovery (incl. SA Intake & Socratic Grill)
   {
     slug: 'commands/discovery',
     category: 'COMMANDS',
@@ -256,7 +194,7 @@ $onboard
             <li><strong>Research & Empirical Proof Lens</strong>: ค้นคว้าแนวทางปฏิบัติระดับสากล (Best Practices), ตรวจสอบความเสถียรของไลบรารีโอเพนซอร์ส และทดสอบความเป็นไปได้ทางเทคนิค</li>
             <li><strong>PRD & Scoping Lens</strong>: กำหนด User Stories, ขอบเขตความรับผิดชอบ (Scope Boundaries), ปัญหาที่ต้องแก้ และ Acceptance Criteria</li>
             <li><strong>Issue & Bug Triage Lens</strong>: จัดระดับความรุนแรง (Critical, Major, Minor) และประเมินว่าต้องใช้ Root-Cause Diagnosis (<code>/debug</code>) หรือไม่</li>
-            <li><strong>Socratic Grilling & Domain Alignment Lens (<code>/grill</code>)</strong>: ซักถามท้าทายสมมติฐาน สกัดศัพท์เทคนิคลง <code>glossary.md</code> และบันทึกข้อตกลงสำคัญลง <code>devflow/decisions/ADR-xxx.md</code></li>
+            <li><strong>SA Intake &amp; Socratic Grilling Lens (<code>/discovery --grill</code> / <code>REQ-ID</code>)</strong>: นำเข้าเอกสารความต้องการหลายฟอร์แมต, สแกน Codebase Impact, สัมภาษณ์ 1–2 คำถามต่อรอบ, สกัดศัพท์ลง <code>glossary.md</code> และบันทึก <code>devflow/decisions/ADR-xxx.md</code></li>
             <li><strong>Visual Architecture Lens (<code>/archify</code>)</strong>: สร้างแผนภาพสถาปัตยกรรมแบบ Interactive HTML Diagrams เพื่อแสดง Data Flow และ State Transitions</li>
           </ol>
         `
@@ -401,18 +339,19 @@ $onboard
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/feature</code> เพื่อเริ่มต้นพัฒนาฟีเจอร์ใหม่ โดยระบุหมายเลข ชื่อฟีเจอร์ หรือ Discovery ID:</p>
-          <pre><code># 1. พัฒนาฟีเจอร์ถัดไปที่ยังไม่ได้ทำใน Build Plan
-/feature
+          <p>ใช้คำสั่ง <code>/feature</code> เพื่อพรีวิวขอบเขต (<code>--preview</code>), ถามเสริมเฉพาะจุดที่ขาดอัตโนมัติ (Adaptive Pre-Flight Clarification) และร่าง Living Spec:</p>
+          <pre><code># 1. พรีวิวขอบเขตและความเสี่ยงของฟีเจอร์ถัดไป (Read-Only)
+/feature --preview
 
-# 2. พัฒนาฟีเจอร์ตามหมายเลขหรือชื่อ
+# 2. สร้าง Living Spec สำหรับฟีเจอร์ถัดไปหรือตามหมายเลข/ชื่อ
+/feature
 /feature 1
 /feature "ระบบชำระเงิน PromptPay QR"
 
-# 3. พัฒนาต่อยอดจากการสำรวจ Discovery หรือรัน Spec Check Gate
+# 3. พัฒนาต่อยอดจาก Discovery / REQ หรือรัน Spec Check Gate
 /feature DISC-20260916-001
 /feature 1 --check</code></pre>
-          <p>เมื่อใส่แฟล็ก <code>--check</code> หรือตั้งค่า <code>qualityGates.regular.specCheck: "always"</code> ระบบจะตรวจความถูกต้องของพาธไฟล์ คำสั่ง และ AC traceability เทียบกับโค้ดจริงก่อนหยุดรอให้ผู้ใช้ทบทวนสเปก</p>
+          <p>เมื่อใส่แฟล็ก <code>--check</code> หรือตั้งค่า <code>qualityGates.regular.specCheck: "always"</code> ระบบจะตรวจความถูกต้องของพาธไฟล์ คำสั่ง และ AC traceability เทียบกับโค้ดจริงก่อนหยุดรอให้ผู้ใช้ทบทวนสเปก (และหากข้อมูลไม่ครบจะถาม Socratic 1–2 ข้อ/รอบอัตโนมัติก่อนเขียน <code>spec.md</code>)</p>
         `
       },
       {
@@ -560,7 +499,7 @@ $onboard
         id: 'check-guide-mode',
         title: 'โหมดคู่มือการทดสอบด้วยมือ (/check guide)',
         contentHtml: `
-          <p>หากคุณต้องการทดสอบฟังก์ชันด้วยตัวเองบนหน้าจอ ให้ใช้ <code>/check guide</code> (หรือ <code>/try</code>) โดยอ้างอิงแนวทางแบบ On-Demand จาก <code>check/reference/try-it-now.md</code> ซึ่งใช้สร้างทั้งคู่มือฉบับเต็มและบล็อก <code>## Try it now</code> 1–3 ขั้นตอนสำหรับนโยบาย <code>tryGuide: "when-testable"</code> ด้วย</p>
+          <p>หากคุณต้องการทดสอบฟังก์ชันด้วยตัวเองบนหน้าจอ ให้ใช้ <code>/check guide</code> โดยอ้างอิงแนวทางแบบ On-Demand จาก <code>check/reference/try-it-now.md</code> ซึ่งใช้สร้างทั้งคู่มือฉบับเต็มและบล็อก <code>## Try it now</code> 1–3 ขั้นตอนสำหรับนโยบาย <code>tryGuide: "when-testable"</code> ด้วย</p>
         `
       },
       {
@@ -628,38 +567,44 @@ $onboard
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>ดูสถานะภาพรวมของโปรเจกต์ด้วย <code>/devflow-status</code> หรือเริ่มฟีเจอร์ถัดไปด้วย <code>/feature</code></p>
+          <p>ดูสถานะภาพรวมของโปรเจกต์ด้วย <code>/devflow</code> หรือเริ่มฟีเจอร์ถัดไปด้วย <code>/feature</code></p>
         `
       }
     ]
   },
 
-  // 10. Status
+  // 10. DevFlow Hub (Status + Doctor + Router)
   {
-    slug: 'commands/devflow-status',
+    slug: 'commands/devflow',
     category: 'COMMANDS',
-    title: 'DevFlow Status (/devflow-status)',
-    lead: 'แสดงสถานะความคืบหน้าของโปรเจกต์ ฟีเจอร์ที่กำลังทำอยู่ สถานะ Git และคำสั่งถัดไปที่แนะนำ (Read-Only)',
-    pills: ['Command', 'DevFlowStatus', 'Dashboard', 'Read-Only', 'GitState', 'DriftCheck'],
+    title: 'DevFlow (/devflow, /devflow doctor)',
+    lead: 'ศูนย์รวมรายงานสถานะงาน (Status & --exec), ตรวจสุขภาพ Adapters/Overview (/devflow doctor) และตารางนำทางคำสั่งเดิม (Read-Only)',
+    pills: ['Command', 'DevFlow', 'Status', 'Doctor', 'HealthCheck', 'Router', 'Read-Only'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>รันคำสั่ง <code>/devflow-status</code> เมื่อคุณกลับเข้ามาทำงานหลังจากพัก หรือต้องการตรวจเช็กว่าโปรเจกต์อยู่ในสถานะใด มีงานอะไรค้างอยู่:</p>
-          <pre><code>/devflow-status</code></pre>
+          <p>รันคำสั่ง <code>/devflow</code> เพื่อดูภาพรวมสถานะปัจจุบัน สรุปผู้บริหาร (<code>--exec</code>) ตรวจสุขภาพระบบ (<code>doctor</code>) หรือสอบถามเส้นทางคำสั่ง:</p>
+          <pre><code># รายงานสถานะปัจจุบันและขั้นตอนถัดไป (Default Status)
+/devflow
+
+# รายงานสรุปผู้บริหารแบบไม่เปิดเผย path โค้ด
+/devflow --exec
+
+# ตรวจสุขภาพ Adapters, Config, run.json และ Overview 20KB Guard
+/devflow doctor</code></pre>
         `
       },
       {
         id: 'what-it-inspects',
-        title: 'สิ่งที่ระบบรายงาน (What it reports)',
+        title: 'สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics)',
         contentHtml: `
           <ul>
-            <li><strong>Build Plan Progress</strong>: อัตราส่วนฟีเจอร์ที่เสร็จแล้วเทียบกับทั้งหมด (เช่น 4/10 features completed)</li>
-            <li><strong>Active Task Status</strong>: รายละเอียดฟีเจอร์ที่กำลังดำเนินการใน <code>devflow/context/</code> และขั้นตอนปัจจุบันใน <code>stage.md</code></li>
-            <li><strong>Git Working Tree</strong>: Branch ปัจจุบัน, Uncommitted changes, และสถานะการซิงค์</li>
-            <li><strong>Workflow Drift Warnings</strong>: แจ้งเตือนหากพบความไม่สอดคล้องกันระหว่างสเปกกับโค้ดจริง</li>
-            <li><strong>Exact Next Action</strong>: ระบุคำสั่งถัดไปที่ควรพิมพ์อย่างชัดเจน</li>
+            <li><strong>Build Plan &amp; Active Context</strong>: ความคืบหน้า Build Plan, Spec/Findings/Review Gate ใน <code>devflow/context/</code>, และ Exact Next Action</li>
+            <li><strong>Adapters &amp; Config Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code> และขนาดของ <code>project-overview.md</code> (&lt; 20KB)</li>
+            <li><strong>Run State Recovery</strong>: ตรวจสอบและช่วยรีเซ็ต <code>devflow/.state/run.json</code> เมื่อได้รับอนุมัติ</li>
+            <li><strong>Legacy Command Routing</strong>: แปลคำสั่งเดิม (เช่น <code>/adopt</code>, <code>/brief</code>, <code>/continuous</code>, <code>/try</code>, <code>/grill</code>) ไปยัง 15 Core Skills</li>
           </ul>
         `
       },
@@ -667,47 +612,7 @@ $onboard
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>พิมพ์คำสั่งถัดไปตามที่ระบบแนะนำ เช่น <code>/implement</code>, <code>/check</code> หรือ <code>/complete</code></p>
-        `
-      }
-    ]
-  },
-
-  // 11. Doctor
-  {
-    slug: 'commands/devflow-doctor',
-    category: 'COMMANDS',
-    title: 'DevFlow Doctor (/devflow-doctor)',
-    lead: 'ตรวจสุขภาพเวิร์กโฟลว์ ความสมบูรณ์ของ Adapters ความสดใหม่ของ Context และล้างสถานะผิดปกติ',
-    pills: ['Command', 'DevFlowDoctor', 'HealthCheck', 'Adapters', 'SelfHealing', 'Integrity'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>รันคำสั่ง <code>/devflow-doctor</code> เมื่อรู้สึกว่า AI ทำงานผิดปกติ คำสั่ง Slash Commands ไม่ตอบสนอง หรือต้องการตรวจสุขภาพระบบ DevFlow:</p>
-          <pre><code>/devflow-doctor</code></pre>
-        `
-      },
-      {
-        id: 'what-it-inspects',
-        title: 'สิ่งที่ระบบตรวจสุขภาพ (Health Check Checklist)',
-        contentHtml: `
-          <p>Doctor จะทำการวิเคราะห์ 6 จุดตรวจสุขภาพหลัก:</p>
-          <ul>
-            <li><strong>Tool Adapters Integrity</strong>: ตรวจสอบความถูกต้องของโฟลเดอร์ <code>.agents/skills/</code> และ <code>.claude/skills/</code></li>
-            <li><strong>Configuration Validity</strong>: ตรวจสอบ Syntax และ Schema ของ <code>devflow/config.json</code></li>
-            <li><strong>Context Token Weight</strong>: ตรวจสอบว่า <code>project-overview.md</code> มีขนาดเกิน 20KB หรือไม่</li>
-            <li><strong>Orphan Context Workspaces</strong>: ตรวจหาโฟลเดอร์ค้างใน <code>devflow/context/</code> ที่ไม่มีสเปกสมบูรณ์</li>
-            <li><strong>Run State Health</strong>: ตรวจสอบความถูกต้องของ <code>devflow/.state/run.json</code> พร้อมตัวเลือกล้างสถานะที่ค้าง</li>
-          </ul>
-        `
-      },
-      {
-        id: 'next-steps',
-        title: 'ขั้นตอนถัดไป (Next steps)',
-        contentHtml: `
-          <p>หากพบปัญหา Doctor จะแสดงคำแนะนำในการแก้ไข เช่น รัน <code>/overview</code> เพื่อลดขนาดบริบท หรือรันคำสั่งแก้ไขสถานะอัตโนมัติ</p>
+          <p>ทำตามคำสั่งถัดไปที่ระบบแนะนำ เช่น <code>/overview</code>, <code>/implement</code>, <code>/check</code> หรือ <code>/complete</code></p>
         `
       }
     ]
@@ -717,9 +622,9 @@ $onboard
   {
     slug: 'commands/debug',
     category: 'COMMANDS',
-    title: 'Debug (/debug)',
-    lead: 'วินิจฉัยหาสาเหตุของบั๊ก อาการทดสอบตก หรือความผิดปกติของระบบตามหลักการทางวิทยาศาสตร์โดยไม่มีการแก้ไขโค้ด',
-    pills: ['Command', 'Debug', 'RootCause', 'Hypothesis', 'ZeroTouch', 'Reproduction'],
+    title: 'Debug (/debug - 2-Track Protocol)',
+    lead: 'วินิจฉัยแบบ 2-Track (Track A สืบเร็วจาก deterministic stacktrace และ Track B 6-phase scientific isolation) โดยไม่แก้โค้ดล่วงหน้า',
+    pills: ['Command', 'Debug', '2-Track', 'RootCause', 'Hypothesis', 'ZeroTouch'],
     sections: [
       {
         id: 'when-to-use-it',
@@ -800,46 +705,6 @@ $onboard
     ]
   },
 
-  // 14. Brief
-  {
-    slug: 'commands/brief',
-    category: 'COMMANDS',
-    title: 'Brief (/brief)',
-    lead: 'บรรยายสรุปขอบเขตงาน ความซับซ้อน พื้นที่ที่ได้รับผลกระทบ และความเสี่ยงของฟีเจอร์ใน Build Plan ก่อนลงมือทำ (Read-Only)',
-    pills: ['Command', 'Brief', 'PreFlight', 'Sizing', 'ScopeAnalysis', 'ReadOnly'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/brief</code> เพื่อดูภาพรวมก่อนเริ่มฟีเจอร์ถัดไป หรือต้องการตัดสินใจจัดลำดับความสำคัญของงาน:</p>
-          <pre><code>/brief
-/brief 2
-/brief "ระบบรายงาน PDF"</code></pre>
-        `
-      },
-      {
-        id: 'what-it-reports',
-        title: 'สิ่งที่ระบบรายงาน (What it reports)',
-        contentHtml: `
-          <ul>
-            <li><strong>Scope Definition</strong>: ขอบเขตงานและความรับผิดชอบของฟีเจอร์</li>
-            <li><strong>Dependencies & Pre-requisites</strong>: ฟีเจอร์ก่อนหน้าที่ต้องมีก่อน</li>
-            <li><strong>Affected Files & Modules</strong>: รายชื่อไฟล์และโมดูลที่จะต้องสร้างหรือแก้ไข</li>
-            <li><strong>Sizing & Splitting Recommendation</strong>: คำแนะนำว่าควรสร้างเป็นชิ้นเดียวหรือควรแบ่งเป็นบทย่อย</li>
-          </ul>
-        `
-      },
-      {
-        id: 'next-steps',
-        title: 'ขั้นตอนถัดไป (Next steps)',
-        contentHtml: `
-          <p>เมื่อพร้อมเริ่มพัฒนา ให้สั่งรัน <code>/feature {number}</code></p>
-        `
-      }
-    ]
-  },
-
   // 15. Audit
   {
     slug: 'commands/audit',
@@ -890,41 +755,39 @@ $onboard
     ]
   },
 
-  // 16. Tests
+  // 16. Setup Tests (Opt-in Extension)
   {
     slug: 'commands/tests',
     category: 'COMMANDS',
-    title: 'Tests (/test, /setup-tests, /browser-tests)',
-    lead: 'จัดการชุดการทดสอบ รันการทดสอบ สร้าง Test Cases ที่ขาดหายไป และเชื่อมต่อ Browser E2E Automation',
-    pills: ['Command', 'Test', 'SetupTests', 'BrowserTests', 'Playwright', 'BrowserOS', 'Coverage'],
+    title: 'Setup Tests (/setup-tests - Opt-in Extension)',
+    lead: 'ส่วนเสริม Opt-in สำหรับติดตั้งและกำหนดค่า Test Runner (Unit/Integration และ Playwright Browser Testing) เข้าสู่โปรเจกต์',
+    pills: ['Command', 'SetupTests', 'OptIn', 'Playwright', 'Testing'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ชุดคำสั่งด้านการทดสอบครอบคลุมทั้ง Unit, Integration และ E2E Browser Testing:</p>
-          <pre><code># 1. รันและวิเคราะห์ความครอบคลุมของ Test
-/test
+          <p>ติดตั้งส่วนเสริม <code>setup-tests</code> ด้วย CLI จากนั้นเรียกใช้งานเมื่อต้องการวางโครงสร้าง Test Harness หรือ Playwright Browser Tests:</p>
+          <pre><code># 1. ติดตั้งส่วนเสริมเข้าโปรเจกต์
+npx nexus-devflow skill add setup-tests
 
-# 2. ติดตั้งและตั้งค่า Test Runner เริ่มต้นสำหรับโปรเจกต์ใหม่
+# 2. ตั้งค่า Unit/Integration Test Runner หรือ Browser Testing
 /setup-tests
-
-# 3. ติดตั้งและเชื่อมต่อ Playwright Browser Tests + BrowserOS Neo
-/browser-tests</code></pre>
+/setup-tests browser</code></pre>
         `
       },
       {
         id: 'browser-tests-integration',
-        title: 'การเชื่อมต่อ Playwright & BrowserOS Neo MCP',
+        title: 'การตั้งค่า Playwright &amp; Browser Verification',
         contentHtml: `
-          <p>คำสั่ง <code>/browser-tests</code> จะติดตั้ง Playwright Test Harness และเชื่อมต่อกับ MCP <code>browseros-neo</code> เพื่อให้ AI สามารถเปิดเบราว์เซอร์จริง ทดสอบคลิกหน้าจอ กรอกฟอร์ม และบันทึก Screenshot เป็นหลักฐานการตรวจรับได้</p>
+          <p>โหมด <code>/setup-tests browser</code> จะช่วยติดตั้ง Playwright Test Harness และสคริปต์ <code>npm run test:browser</code> เพื่อให้ <code>/check</code> สามารถตรวจรับ UI ผ่านเบราว์เซอร์จริงและ Active Browser MCP ได้</p>
         `
       },
       {
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>รวมชุดคำสั่ง Verify เข้าสู่ CI ด้วยคำสั่ง <code>/ci</code></p>
+          <p>รวมชุดคำสั่ง Verify เข้าสู่ CI ด้วยส่วนเสริม <code>npx nexus-devflow skill add ci</code></p>
         `
       }
     ]
@@ -1000,21 +863,25 @@ $onboard
     ]
   },
 
-  // 19. Autopilot
+  // 19. Autopilot (Single & Continuous --all / --max / --merge)
   {
     slug: 'commands/autopilot',
     category: 'COMMANDS',
-    title: 'Autopilot (/autopilot)',
-    lead: 'รันการพัฒนาฟีเจอร์เดี่ยวแบบอัตโนมัติต่อเนื่องตั้งแต่ Feature -> Implement -> Check ผ่านทุก Quality Gates และหยุดรอคำสั่ง Complete',
-    pills: ['Command', 'Autopilot', 'SingleFeature', 'Autonomous', 'QualityGates', 'ReviewGate'],
+    title: 'Autopilot (/autopilot, /autopilot --all)',
+    lead: 'รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge',
+    pills: ['Command', 'Autopilot', 'Continuous', 'Autonomous', 'QualityGates', 'ReviewGate'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/autopilot</code> เมื่อต้องการให้ AI จัดการพัฒนาฟีเจอร์ 1 รายการตั้งแต่ต้นจนจบอย่างรวดเร็วและปลอดภัย:</p>
-          <pre><code>/autopilot 1
-/autopilot "ระบบส่งอีเมลยืนยันการสมัครสมาชิก"</code></pre>
+          <p>ใช้คำสั่ง <code>/autopilot</code> สำหรับรัน 1 ฟีเจอร์แล้วหยุดรอตรวจทาน หรือเพิ่มแฟล็ก <code>--all</code> / <code>--max &lt;N&gt;</code> / <code>--merge</code> เพื่อรันคิวต่อเนื่องจนจบและ Squash-Merge บนเครื่อง Local:</p>
+          <pre><code># 1 ฟีเจอร์แล้วหยุดรอรีวิว
+/autopilot 1
+
+# รันทั้งคิวใน build-plan.md ต่อเนื่อง + Auto Local Squash-Merge
+/autopilot --all
+/autopilot --max 3 --merge</code></pre>
         `
       },
       {
@@ -1025,8 +892,8 @@ $onboard
             <li><strong>Spec Formulation</strong>: ร่าง Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code></li>
             <li><strong>TDD Implementation</strong>: สร้าง Branch, เขียน Test และพัฒนาโค้ดให้ผ่าน 100%</li>
             <li><strong>Verification Matrix</strong>: รัน Typecheck, Lint, Test suites และบันทึกหลักฐาน</li>
-            <li><strong>Independent Review</strong>: รัน AI Reviewer ตรวจรับหากเป็นฟีเจอร์ที่มีความเสี่ยงสูง</li>
-            <li><strong>Mandatory Pause</strong>: หยุดรอหน้าประตูส่งมอบเพื่อให้คุณตรวจรับผลลัพธ์ขั้นสุดท้ายก่อนรัน <code>/complete</code></li>
+            <li><strong>Independent Review</strong>: รัน AI Reviewer อิสระเมื่อ Quality Gate กำหนด (<code>when-sensitive</code> / <code>always</code>)</li>
+            <li><strong>Boundary Pause or Local Complete</strong>: หยุดรอคุณตรวจทาน (default) หรือสรุป/Squash-Merge ลง <code>main</code> ในเครื่อง (เมื่อใช้ <code>--all</code> / <code>--merge</code>) โดย<strong>ไม่</strong> Push ขึ้น Remote</li>
           </ol>
         `
       },
@@ -1034,55 +901,13 @@ $onboard
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>ตรวจดูผลงาน แล้วสั่ง <code>/complete</code> เพื่อรวมโค้ดเข้าสู่ main</p>
+          <p>ตรวจเช็กสถานะด้วย <code>/devflow</code> หรือดูประวัติการส่งมอบใน <code>devflow/history/HISTORY.md</code></p>
         `
       }
     ]
   },
 
-  // 20. Continuous
-  {
-    slug: 'commands/continuous',
-    category: 'COMMANDS',
-    title: 'Continuous (/continuous)',
-    lead: 'วงจรการส่งมอบอัตโนมัติหลายฟีเจอร์ต่อเนื่อง พัฒนาฟีเจอร์จาก Build Plan ทีละรายการพร้อมทำ Squash-Merge เข้าสู่ main',
-    pills: ['Command', 'Continuous', 'AutonomousLoop', 'MultiFeature', 'SafetyBoundary', 'CircuitBreaker'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/continuous</code> เพื่อให้ AI จัดการพัฒนาฟีเจอร์ทั้งหมดที่ยังค้างอยู่ใน <code>build-plan.md</code> แบบอัตโนมัติทีละรายการ:</p>
-          <pre><code># รันฟีเจอร์ที่เหลือทั้งหมดตามลำดับ
-/continuous
-
-# หรือระบุจำนวนฟีเจอร์ที่ต้องการทำ
-/continuous --limit 3</code></pre>
-        `
-      },
-      {
-        id: 'safety-boundaries-circuit-breakers',
-        title: 'ขอบเขตความปลอดภัยและระบบตัดวงจรอัตโนมัติ (Circuit Breakers)',
-        contentHtml: `
-          <p>Continuous Mode มีระบบป้องกันความปลอดภัยที่เข้มงวด:</p>
-          <ul>
-            <li><strong>Serial Execution</strong>: ทำงานทีละ 1 ฟีเจอร์ผ่านวงจรเต็มรูปแบบ (Spec -> Implement -> Check -> Complete) เสมอ</li>
-            <li><strong>Circuit Breaker</strong>: หากพบ Test ล้มเหลวที่ไม่สามารถแก้ได้ หรือข้อมูลในสเปกขัดแย้งกัน ระบบจะ<strong>หยุดทำงานทันที</strong>และแจ้งเตือนคุณ</li>
-            <li><strong>Local Squash-merge Only</strong>: รวมโค้ดในเครื่องเท่านั้น ไม่มีการรัน <code>git push</code> เด็ดขาด</li>
-          </ul>
-        `
-      },
-      {
-        id: 'next-steps',
-        title: 'ขั้นตอนถัดไป (Next steps)',
-        contentHtml: `
-          <p>ตรวจเช็กสถานะการส่งมอบด้วย <code>/devflow-status</code> หรือดูประวัติใน <code>HISTORY.md</code></p>
-        `
-      }
-    ]
-  },
-
-  // 21. Release
+  // 21. Release (Opt-in Extension)
   {
     slug: 'commands/release',
     category: 'COMMANDS',
@@ -1150,216 +975,6 @@ $onboard
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
           <p>ตรวจรับ Rollback Spec แล้วสั่ง <code>/implement</code> เพื่อดำเนินการถอนโค้ดอย่างปลอดภัย</p>
-        `
-      }
-    ]
-  },
-
-  // 23. Analyze (SA Suite)
-  {
-    slug: 'commands/analyze',
-    category: 'COMMANDS',
-    title: 'Analyze (/analyze) - SA Suite',
-    lead: 'ชุดเครื่องมือสำหรับ System Analyst (SA) นำเข้าเอกสารความต้องการทุกรูปแบบ (PDF, Word, Excel, รูปภาพ, ข้อความแชต) และวิเคราะห์ Codebase Impact',
-    pills: ['Command', 'Analyze', 'SA', 'DocIngestion', 'OCR', 'CodebaseImpact', 'Clarifications'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/analyze</code> เมื่อคุณได้รับเอกสารความต้องการจากลูกค้า, ฝ่ายธุรกิจ หรือทีมงานในรูปแบบไฟล์ต่างๆ เพื่อให้ AI ช่วยสกัด สรุป และวิเคราะห์ผลกระทบต่อระบบ:</p>
-          <pre><code># 1. นำเข้าไฟล์เอกสารจากโฟลเดอร์ใดๆ (PDF, Word, Excel, รูปภาพ UI)
-/analyze C:\\Users\\...\\Downloads\\customer-requirement.pdf
-/analyze ./mockup.png ./schema.xlsx "ระบบสะสมแต้มสมาชิก"
-
-# 2. นำเข้าข้อความความต้องการดิบจากหน้าต่างแชต
-/analyze "ลูกค้าต้องการระบบผ่อนชำระ 0% เชื่อมต่อกับ KBank Payment Gateway"
-
-# 3. สแกนไฟล์ที่วางไว้ใน devflow/inbox/ อัตโนมัติ
-/analyze</code></pre>
-        `
-      },
-      {
-        id: 'the-4-step-pipeline',
-        title: 'กระบวนการวิเคราะห์ 4 ขั้นตอน (4-Step SA Pipeline)',
-        contentHtml: `
-          <pre><code>  [Raw Files / Multi-format Docs / Prompts]
-                     │
-                     ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │ 1. Auto-Allocate & Ingest (devflow/inbox/{REQ-ID}/raw/)      │
-  │    • Generates REQ-YYYYMMDD-NNN Workspace                   │
-  │    • Safe isolated raw copy (PDF, XLSX, DOCX, Images)       │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │ 2. Parse & Normalize (Multimodal OCR -> parsed.md)          │
-  │    • Executive Summary, User Stories, Scope Boundaries      │
-  │    • Functional (FR) & Non-Functional (NFR) Requirements    │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │ 3. Codebase Impact & Blast Radius (codebase-impact.md)       │
-  │    • Scans affected API routes, services, schemas, and DB   │
-  │    • Evaluates complexity level (Low / Med / High / Extreme)│
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │ 4. Socratic Gap Scan (clarifications.md)                    │
-  │    • Detects ambiguities, missing edge-cases, assumptions   │
-  │    • Generates meeting checklist for client alignment       │
-  └─────────────────────────────────────────────────────────────┘</code></pre>
-          <ol>
-            <li><strong>Auto-Allocate & Ingest (สร้าง Workspace)</strong>: จัดสรรรหัส <code>REQ-YYYYMMDD-NNN</code> และสร้างโฟลเดอร์ <code>devflow/inbox/{REQ-ID}/raw/</code> เพื่อจัดเก็บไฟล์ต้นฉบับ</li>
-            <li><strong>Parse & Normalize (สกัดเนื้อหาเป็น Markdown)</strong>: แปลงเนื้อหา ตาราง และรูปภาพ Wireframe (ผ่าน Multimodal OCR) ให้อยู่ในรูป <code>parsed.md</code> แบ่งหมวด Executive Summary, User Stories, Functional (FR) และ Non-Functional Requirements (NFR)</li>
-            <li><strong>Codebase Impact & Blast Radius (สแกนผลกระทบต่อโค้ดเดิม)</strong>: ตรวจหาไฟล์ API และฐานข้อมูลที่ได้รับผลกระทบ ประเมินระดับความซับซ้อน (Low / Medium / High / Extreme) และบันทึกลง <code>codebase-impact.md</code></li>
-            <li><strong>Socratic Gap Scan & Clarifications Checklist</strong>: ตรวจหาจุดที่ความต้องการยังคลุมเครือ Edge cases ที่ขาดหาย และสร้าง Checklist คำถามใน <code>clarifications.md</code> เพื่อนำไปประชุมกับ Stakeholder</li>
-          </ol>
-        `
-      },
-      {
-        id: 'what-it-writes',
-        title: 'สิ่งที่ระบบสร้างและบันทึก (What it writes)',
-        contentHtml: `
-          <table>
-            <thead><tr><th>ไฟล์ผลลัพธ์</th><th>ตำแหน่ง</th><th>หน้าที่และประโยชน์</th></tr></thead>
-            <tbody>
-              <tr><td><code>raw/</code></td><td><code>devflow/inbox/{REQ-ID}/raw/</code></td><td>สำเนาไฟล์ต้นฉบับ (PDF, DOCX, XLSX, รูปภาพ) ปลอดภัย 100%</td></tr>
-              <tr><td><code>parsed.md</code></td><td><code>devflow/inbox/{REQ-ID}/parsed.md</code></td><td>เอกสารความต้องการที่สกัดเป็น Clean Markdown พร้อมหัวข้อ FR/NFR</td></tr>
-              <tr><td><code>codebase-impact.md</code></td><td><code>devflow/analysis/{REQ-ID}/codebase-impact.md</code></td><td>รายงานวิเคราะห์ขอบเขตผลกระทบ (Blast Radius) และจุดที่ต้องแก้ไขในระบบ</td></tr>
-              <tr><td><code>clarifications.md</code></td><td><code>devflow/inbox/{REQ-ID}/clarifications.md</code></td><td>Checklist คำถามสำหรับ SA นำไปใช้สอบถามลูกค้าในที่ประชุม</td></tr>
-            </tbody>
-          </table>
-        `
-      },
-      {
-        id: 'next-steps',
-        title: 'ขั้นตอนถัดไป (Next steps)',
-        contentHtml: `
-          <p>นำประเด็นที่คลุมเครือไปซักถามผ่าน <code>/grill</code> หรือส่งต่อเข้าสู่กระบวนการสำรวจทางเลือกด้วย <code>/discovery</code></p>
-        `
-      }
-    ]
-  },
-
-  // 24. Grill
-  {
-    slug: 'commands/grill',
-    category: 'COMMANDS',
-    title: 'Grill (/grill, /align)',
-    lead: 'สัมภาษณ์เจาะลึกทางสถาปัตยกรรมแบบ Socratic เพื่อท้าทายสมมติฐาน สกัดคำศัพท์ลง Glossary และบันทึก ADR ก่อนเขียนสเปก',
-    pills: ['Command', 'Grill', 'Align', 'Socratic', 'ADR', 'Glossary', 'DomainModeling'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/grill</code> (หรือ <code>/align</code>) เมื่อคุณกำลังจะออกแบบระบบที่มีความคลุมเครือ มีศัพท์เทคนิคหลายความหมาย หรือต้องตัดสินใจเรื่องสถาปัตยกรรมที่ย้อนกลับได้ยาก:</p>
-          <pre><code>/grill "สถาปัตยกรรมการตัดสต็อกสินค้าในกรณีมี Flash Sale พร้อมกัน"
-/grill "การแยกระหว่าง Entity User, Member, และ Customer ในระบบ Loyalty"</code></pre>
-        `
-      },
-      {
-        id: 'core-philosophy',
-        title: 'หลักการสำคัญ: Align Before You Build',
-        contentHtml: `
-          <pre><code>  [Vague Requirements / Complex Architecture]
-                         │
-                         ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │ 1. Codebase-Grounded Inspection                             │
-  │    • Inspects existing models, services, and APIs           │
-  │    • Never asks questions already answered in code          │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │ 2. Socratic Interview (1-2 Focused Questions Rule)          │
-  │    • Challenges assumptions & edge-cases                    │
-  │    • Always provides Recommended Defaults                   │
-  └──────────────────────────────┬──────────────────────────────┘
-                                 │
-                                 ▼
-  ┌─────────────────────────────────────────────────────────────┐
-  │ 3. Lazy Inline Persistence                                  │
-  │    • Glossary: devflow/context/glossary.md                  │
-  │    • Architecture Decision Records: devflow/decisions/      │
-  └─────────────────────────────────────────────────────────────┘</code></pre>
-          <ul>
-            <li><strong>Codebase-Grounded</strong>: AI จะอ่านโค้ดและบริบทที่มีอยู่ก่อนเสมอ จะ<strong>ไม่ถามคำถามที่โค้ดเบสมีคำตอบอยู่แล้ว</strong></li>
-            <li><strong>1-2 Focused Questions Rule</strong>: ถามทีละ 1-2 คำถามที่ตรงจุดสำคัญที่สุด พร้อมเสนอค่า Recommended Default เสมอ เพื่อไม่ให้สร้างภาระทางความคิดแก่คุณ</li>
-            <li><strong>Lazy Inline Persistence</strong>: บันทึกคำศัพท์ที่ตกลงกันลง <code>devflow/context/glossary.md</code> ทันที และบันทึกการตัดสินใจที่ย้อนกลับยากเป็น ADR ลง <code>devflow/decisions/</code></li>
-          </ul>
-        `
-      },
-      {
-        id: 'what-it-writes',
-        title: 'สิ่งที่ระบบสร้างและบันทึก (What it writes)',
-        contentHtml: `
-          <ul>
-            <li><strong><code>devflow/context/glossary.md</code></strong>: พจนานุกรมคำศัพท์โดเมนและข้อจำกัดของแต่ละ Entity</li>
-            <li><strong><code>devflow/decisions/ADR-{NNN}-{slug}.md</code></strong>: บันทึก Architecture Decision Records (Context, Decision, Alternatives, Consequences)</li>
-          </ul>
-        `
-      },
-      {
-        id: 'next-steps',
-        title: 'ขั้นตอนถัดไป (Next steps)',
-        contentHtml: `
-          <p>เริ่มพัฒนาฟีเจอร์ที่ผ่านการกลั่นกรองสถาปัตยกรรมแล้วด้วย <code>/feature</code></p>
-        `
-      }
-    ]
-  },
-
-  // 25. Bughunter
-  {
-    slug: 'commands/bughunter',
-    category: 'COMMANDS',
-    title: 'Bughunter (/bughunter)',
-    lead: 'ค้นหาช่องโหว่ความปลอดภัย ตรวจสอบ Trust Boundaries และล่าบั๊กลึกด้วยหลักฐานเชิงประจักษ์และการจำลองการโจมตี',
-    pills: ['Command', 'Bughunter', 'Security', 'Vulnerability', 'OWASP', 'EmpiricalProof'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/bughunter</code> เพื่อตรวจสอบความปลอดภัยของโมดูลหรือ API Endpoint สำคัญก่อนขึ้นระบบจริง:</p>
-          <pre><code>/bughunter src/api/payments/
-/bughunter "ตรวจสอบช่องโหว่ IDOR และ SQL Injection ในระบบจัดการคำสั่งซื้อ"</code></pre>
-        `
-      },
-      {
-        id: 'empirical-security-inspection',
-        title: 'การตรวจสอบความปลอดภัยด้วยหลักฐานเชิงประจักษ์',
-        contentHtml: `
-          <p>Bughunter จะตรวจสอบขอบเขตความปลอดภัยสำคัญ:</p>
-          <ul>
-            <li><strong>Authentication & Session Ownership</strong>: ตรวจสอบการเข้าถึงข้อมูลข้ามบัญชีผู้ใช้ (IDOR / BOLA)</li>
-            <li><strong>Untrusted Input Sanitization</strong>: ตรวจสอบ SQL Injection, XSS, Remote Code Execution</li>
-            <li><strong>Sensitive Data Exposure</strong>: ตรวจจับการรั่วไหลของรหัสผ่าน, API Keys, หรือข้อมูลส่วนบุคคล (PII)</li>
-            <li><strong>Repro Proof Requirement</strong>: ทุกช่องโหว่ที่รายงานต้องมีโค้ดจำลองการทดสอบที่พิสูจน์ได้จริง</li>
-          </ul>
-        `
-      },
-      {
-        id: 'what-it-writes',
-        title: 'สิ่งที่ระบบสร้างและบันทึก (What it writes)',
-        contentHtml: `
-          <ul>
-            <li><strong><code>devflow/context/{xxx-slug}/findings.md</code></strong>: บันทึกช่องโหว่ความปลอดภัยพร้อมระดับความเสี่ยง (Critical / High / Medium)</li>
-            <li>เสนอแนวทางการอุดช่องโหว่แบบรัดกุมที่สุดตามมาตรฐาน OWASP</li>
-          </ul>
-        `
-      },
-      {
-        id: 'next-steps',
-        title: 'ขั้นตอนถัดไป (Next steps)',
-        contentHtml: `
-          <p>นำช่องโหว่ที่พบไปเปิด Living Spec เพื่อแก้ไขด่วนด้วยคำสั่ง <code>/fix</code></p>
         `
       }
     ]
@@ -1477,60 +1092,6 @@ $onboard
         title: 'การป้องกัน Update Immunity',
         contentHtml: `
           <p>โฟลเดอร์ใน <code>devflow/.vendor/</code> จะได้รับการคุ้มครองด้วย Update Immunity ซึ่งหมายความว่าเมื่อมีการอัปเกรด DevFlow ไฟล์ที่ Vendor เข้ามาจะไม่ถูกเขียนทับหรือลบหายไป</p>
-        `
-      }
-    ]
-  },
-
-  // 30. Ponytail
-  {
-    slug: 'commands/ponytail',
-    category: 'COMMANDS',
-    title: 'Ponytail (/ponytail)',
-    lead: 'โหมด Senior Developer ขี้เกียจ ตรวจจับ Code Bloat ตัดความซับซ้อนส่วนเกิน (Over-engineering) และลดการใช้ LLM Tokens',
-    pills: ['Command', 'Ponytail', 'Simplification', 'KISS', 'YAGNI', 'TokenSaver'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/ponytail</code> เมื่อรู้สึกว่าโค้ดเริ่มซับซ้อนเกินจำเป็น มี Abstraction หลายชั้น หรือมี Dependencies ที่ไม่ได้ใช้งาน:</p>
-          <pre><code>/ponytail src/services/
-/ponytail "ช่วยรีวิวว่าโค้ดส่วนนี้เขียนให้เรียบง่ายขึ้นได้อย่างไร"</code></pre>
-        `
-      },
-      {
-        id: 'philosophy',
-        title: 'ปรัชญาความเรียบง่าย (KISS & YAGNI)',
-        contentHtml: `
-          <p>Ponytail จะช่วยเสนอทางเลือกในการเขียนโค้ดที่สั้นลง อ่านง่ายขึ้น โดยใช้ฟีเจอร์มาตรฐานของภาษาหรือ Native Platform APIs แทนการพึ่งพาไลบรารีขนาดใหญ่</p>
-        `
-      }
-    ]
-  },
-
-  // 31. Report HTML
-  {
-    slug: 'commands/report-html',
-    category: 'COMMANDS',
-    title: 'Report HTML (/report-html)',
-    lead: 'สังเคราะห์แดชบอร์ดรายงานผลการส่งมอบงานแบบ Standalone Interactive HTML จาก Living Spec หรือ History Archive',
-    pills: ['Command', 'ReportHTML', 'Dashboard', 'Standalone', 'HistoryVisualizer', 'ExecutiveReport'],
-    sections: [
-      {
-        id: 'when-to-use-it',
-        title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
-        contentHtml: `
-          <p>ใช้คำสั่ง <code>/report-html</code> เมื่อต้องการสร้างหน้าเว็บสรุปผลงานระดับบริหารจาก <code>spec.md</code> หรือจากประวัติใน <code>devflow/history/</code>:</p>
-          <pre><code>/report-html
-/report-html 090</code></pre>
-        `
-      },
-      {
-        id: 'what-it-writes',
-        title: 'สิ่งที่ระบบสร้างและบันทึก',
-        contentHtml: `
-          <p>สร้างไฟล์ <code>devflow/reports/{task-id}-report.html</code> ที่เป็น Standalone Dashboard พร้อมสรุปผลการทดสอบ ตาราง Checklist และ Diff Metrics</p>
         `
       }
     ]

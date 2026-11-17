@@ -151,13 +151,13 @@ npx -y nexus-devflow -y
 - `devflow/context/coding-standards.md` — ปรับแต่งมาตรฐานโค้ด, กฎ Lint และ Test Gates
 - `devflow/context/ai-interaction.md` — ปรับพฤติกรรมการตอบและการทำงานร่วมกับ AI
 
-หากรู้สึกว่าการตั้งค่ามีปัญหา สามารถสั่ง `/devflow-doctor` เพื่อรัน Health check แบบอ่านอย่างเดียวได้ทันที
+หากรู้สึกว่าการตั้งค่ามีปัญหา สามารถสั่ง `/devflow doctor` เพื่อรัน Health check แบบอ่านอย่างเดียวได้ทันที
 
 ### 5. วางแผนและบันทึกไอเดีย
 บันทึกความต้องการ, User stories หรือแนวคิดเริ่มต้น:
 - ใส่ไอเดียระดับสูงลงใน `devflow/ideas.md` หรือใช้ `/idea` เพื่อให้ AI ประเมินความเป็นไปได้
-- รัน `/grill` (หรือ `/align`) เพื่อทดสอบสมมติฐานสถาปัตยกรรมและบันทึก Decision Records (`devflow/decisions/`)
-- รัน `/discovery` สำหรับการค้นคว้าและสำรวจเชิงลึกหลายรอบ
+- รัน `/discovery --grill` เพื่อทดสอบสมมติฐานสถาปัตยกรรมและบันทึก Decision Records (`devflow/decisions/`)
+- รัน `/discovery` สำหรับการค้นคว้าและสำรวจเชิงลึกหลายรอบหรือแปลงเอกสารสเปก (`REQ-ID`)
 
 ### 6. สร้างภาพรวมโปรเจกต์ (Overview)
 สั่ง `/overview` เพื่อสังเคราะห์ข้อมูลทั้งหมดให้กลายเป็น `devflow/context/project-overview.md` ซึ่งเป็น Source of Truth หลักที่ AI จะอ่านทุกครั้ง:
@@ -177,13 +177,13 @@ npx -y nexus-devflow -y
 
 ### กรณีมี Codebase อยู่แล้ว? (Already have a codebase?)
 
-หากคุณนำ DevFlow ไปใช้กับโปรเจกต์เดิมที่มีโค้ดและฟีเจอร์อยู่แล้ว ให้ใช้ `/adopt` แทน `/onboard`:
+หากคุณนำ DevFlow ไปใช้กับโปรเจกต์เดิมที่มีโค้ดและฟีเจอร์อยู่แล้ว `/onboard` จะตรวจจับ brownfield ให้อัตโนมัติ (หรือสั่ง `/onboard --adopt` โดยตรง):
 
 ```text
-/adopt
+/onboard --adopt
 ```
 
-`/adopt` จะสำรวจโครงสร้างโค้ดเดิม, ปกป้องไฟล์ README เดิมของคุณ, ตรวจจับคำสั่ง Test และ CI ที่มีอยู่แล้ว และสร้างเอกสารแผนงานรวมถึงมาตรฐานโค้ดจากระบบจริงที่เป็นอยู่
+โหมด brownfield ใน `/onboard` จะสำรวจโครงสร้างโค้ดเดิม, ปกป้องไฟล์ README เดิมของคุณ, ตรวจจับคำสั่ง Test และ CI ที่มีอยู่แล้ว และสร้างเอกสารแผนงานรวมถึงมาตรฐานโค้ดจากระบบจริงที่เป็นอยู่
 
 ---
 
@@ -346,8 +346,8 @@ AI:   บันทึก Release Digest ลงใน Living Spec
 
 ![Nexus-DevFlow Workflow](assets/nexus-devflow-workflow.png)
 
-1. **Pre-Flight Discovery**: สำรวจไอเดีย (`/idea`), วิเคราะห์สถาปัตยกรรม (`/grill`) และค้นคว้าเชิงลึก (`/discovery`)
-2. **Context Setup**: รัน `/onboard` (หรือ `/adopt`) ตามด้วย `/overview` เพื่อสร้าง Source of Truth หลัก
+1. **Pre-Flight Discovery**: สำรวจไอเดีย (`/idea`, `/explore`) และวิเคราะห์สถาปัตยกรรม/เอกสารความต้องการพร้อม ADR (`/discovery` / `/discovery --grill`)
+2. **Context Setup**: รัน `/onboard` (รองรับทั้งโปรเจกต์ใหม่และ brownfield `--adopt`) ตามด้วย `/overview` เพื่อสร้าง Source of Truth หลัก
 3. **Delivery Loop**: เริ่มงานด้วย `/feature` หรือ `/fix`, เขียนโค้ดด้วย `/implement`, ตรวจสอบด้วย `/check`, Audit ด้วย `/audit` และปิดงานด้วย `/complete`
 4. **Permanent Archive**: สเปกและผลลัพธ์ที่เสร็จสมบูรณ์จะถูกจัดเก็บถาวรใน `devflow/history/` และ `devflow/decisions/`
 
@@ -406,17 +406,17 @@ devflow/
 ก่อนที่จะเริ่มลงมือเขียนโค้ดสำหรับงานที่มีความซับซ้อน สามารถใช้ Companion Skills ในการคิด วิเคราะห์ และจัดโครงสร้างล่วงหน้า:
 
 ```text
-/idea (บันทึกไอเดีย) ──▶ /grill (เจาะลึก ADR) ──▶ /discovery (สำรวจระบบ) ──▶ /feature (เริ่มส่งมอบ)
+/idea (บันทึกไอเดีย) ──▶ /explore (เทียบทางเลือก) ──▶ /discovery (สำรวจ & ADR) ──▶ /feature (เริ่มส่งมอบ)
 ```
 
 - **`/idea`**: บันทึกไอเดียลงใน `devflow/ideas.md` พร้อมระบบ AI ประเมิน Feasibility, Effort, และ Business Value อัตโนมัติ
-- **`/grill`** (หรือ **`/align`**): Socratic Alignment & Domain Modeling — ตั้งคำถามเจาะลึกเพื่อทดสอบสมมติฐาน, สกัดศัพท์เฉพาะทางลง `devflow/context/glossary.md`, และสร้าง Architecture Decision Records (`devflow/decisions/ADR-xxx.md`)
-- **`/brainstorm`**: ระดมสมองแบบ Divergent และ Convergent เพื่อสร้าง 2–3 ทางเลือกพร้อมตารางเปรียบเทียบข้อดีข้อเสีย (Trade-offs)
-- **`/discovery`**: เครื่องมือสำรวจ 2 โหมด (Macro วางผัง Roadmap ภาพรวม หรือ Micro สำรวจฟีเจอร์เจาะลึกก่อนเริ่มพัฒนา) บันทึกลงใน `devflow/discoveries/DISC-xxx/discovery.md`
+- **`/explore`**: สำรวจแนวคิดและเทียบทางเลือก 2–3 แบบ (`brainstorm` mode + ตาราง Trade-off) แบบ Read-only โดยไม่แก้ไฟล์หรือเขียนสเปก
+- **`/discovery`**: เครื่องมือสำรวจแบบรวมศูนย์ (Macro วางผัง Roadmap, Micro สำรวจฟีเจอร์ `devflow/discoveries/DISC-xxx/discovery.md`, SA Doc Intake `REQ-ID`, และ Socratic Alignment `--grill` ลง `glossary.md` + `ADR-xxx.md`)
 
 ```text
 /discovery                     # โหมด Macro: วางแผน Roadmap และระบบโครงการ
 /discovery "ชื่อฟีเจอร์"         # โหมด Micro: สำรวจเจาะลึกฟีเจอร์ก่อนเริ่มเขียนโค้ด
+/discovery ./spec.pdf --grill  # โหมด SA Intake & Socratic Alignment (glossary/ADRs)
 /discovery IDEA-001            # สำรวจไอเดียจาก ideas.md สู่ Discovery
 /discovery DISC-20260910-001   # สานต่อเอกสาร Discovery เดิม
 ```
@@ -431,7 +431,7 @@ devflow/
 | `devflow/context/{xxx-slug}/spec.md` | `/feature`, `/fix`, `/rollback` | Task-Isolated Living Spec สำหรับงานที่กำลังดำเนินการอยู่ในปัจจุบัน |
 | `devflow/context/{xxx-slug}/findings.md` | `/audit` | สมุดบันทึกคุณภาพ, ความปลอดภัย และผลการตรวจโค้ดของ Task ปัจจุบัน |
 | `devflow/context/{xxx-slug}/stage.md` | Stage Skills | ตัวชี้สถานะบอกว่างานปัจจุบันอยู่ในขั้นตอนใด (`implement`, `check`, `complete`) |
-| `devflow/decisions/ADR-xxx.md` | `/grill` | บันทึกการตัดสินใจสถาปัตยกรรม (ADR) ระบุบริบท, ทางเลือก และผลกระทบ |
+| `devflow/decisions/ADR-xxx.md` | `/discovery --grill`, `/feature` | บันทึกการตัดสินใจสถาปัตยกรรม (ADR) ระบุบริบท, ทางเลือก และผลกระทบ |
 | `devflow/discoveries/DISC-xxx.md` | `/discovery` | เอกสารผลการสำรวจและศึกษาความเป็นไปได้ก่อนเปิดงานจริง |
 | `devflow/history/features/xxx.md` | `/complete` | สเปกฟีเจอร์ที่ทำเสร็จแล้ว พร้อมบันทึกการทำงานและหลักฐานผลการทดสอบ |
 | `devflow/history/fixes/xxx.md` | `/complete` | สเปกการแก้บั๊กที่ทำเสร็จแล้ว พร้อมหลักฐานการทดสอบป้องกัน Regression |
@@ -443,12 +443,12 @@ devflow/
 ## คู่มือการใช้งานเวิร์กโฟลว์ (Using the workflow)
 
 ### ขั้นตอนการส่งมอบงานมาตรฐาน
-1. **ดูสรุปและสร้างสเปก**: สั่ง `/brief` เพื่อดูสรุปฟีเจอร์ถัดไป หรือสั่ง `/feature "ชื่อฟีเจอร์"` เพื่อสร้าง Task-Isolated Living Spec ใน `devflow/context/{xxx-slug}/spec.md`
+1. **ดูสรุปและสร้างสเปก**: สั่ง `/feature --preview` เพื่อพรีวิวฟีเจอร์ถัดไป หรือสั่ง `/feature "ชื่อฟีเจอร์"` (พร้อม Adaptive Pre-Flight Clarification) เพื่อสร้าง Task-Isolated Living Spec ใน `devflow/context/{xxx-slug}/spec.md`
 2. **รีวิวสเปก**: ตรวจสอบขอบเขต, Acceptance Criteria และขั้นตอนงาน TDD ก่อนอนุมัติให้เขียนโค้ด
 3. **ลงมือเขียนโค้ดตามสเปก**: สั่ง `/implement` โดย AI จะทำทีละข้อภายใต้วินัย Strict TDD พร้อมจังหวะการรีวิวตามโหมดที่กำหนดใน config (เช่น Efficient หรือ Guided)
 4. **ตรวจสอบผลงาน**: สั่ง `/check` เพื่อให้ Senior QA รัน Verification Matrix บนระบบจริง
-5. **คู่มือทดสอบด้วยตนเอง**: สั่ง `/try` เพื่อดูขั้นตอนการทดสอบด้วยมือ (URL, การคลิก, ผลลัพธ์ที่ถูกต้อง)
-6. **Audit คุณภาพโค้ด**: สั่ง `/audit current` เพื่อตรวจสอบความปลอดภัย, Performance และมาตรฐานโค้ดบน Branch
+5. **คู่มือทดสอบด้วยตนเอง**: สั่ง `/check guide` เพื่อดูขั้นตอนการทดสอบด้วยมือ (URL, การคลิก, ผลลัพธ์ที่ถูกต้อง)
+6. **Audit คุณภาพโค้ด**: สั่ง `/audit current` เพื่อตรวจสอบ YAGNI, คุณภาพ, ความปลอดภัย, Performance และชุดทดสอบบน Branch
 7. **ส่งมอบและปิดงาน**: สั่ง `/complete` เพื่อตรวจความปลอดภัย, บันทึก Release Digest, เก็บสเปกเข้าประวัติ และทำ Squash-Merge
 
 ---
@@ -473,7 +473,7 @@ Nexus-DevFlow ช่วยให้คุณกำหนดจังหวะก
 
 #### 🛡️ การควบคุมขนาด Overview ไม่เกิน 20KB (Overview Compactness Guard)
 เอกสารสรุปโครงการ `devflow/context/project-overview.md` จะถูกควบคุมขนาดให้อยู่ต่ำกว่า 20,000 bytes (~4,000–5,000 tokens) เสมอ เพื่อไม่ให้สิ้นเปลือง Token Window:
-- คำสั่ง `/devflow-doctor` จะรายงานขนาดไบต์จริง และแจ้งเตือนสถานะ `oversized` หากมีขนาดเกิน
+- คำสั่ง `/devflow doctor` จะรายงานขนาดไบต์จริง และแจ้งเตือนสถานะ `oversized` หากมีขนาดเกิน
 - คำสั่ง `/feature` มีระบบ Hard-Stop ป้องกันการดึง Overview ที่มีขนาดเกิน 20KB และมี Directive สั่งให้ AI Reuse Context เดิมที่มีอยู่แล้วในเซสชันโดยไม่อ่านซ้ำผ่าน Tool
 
 #### 📌 Planning Baseline Commit
@@ -519,39 +519,23 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 
 | ทักษะ (Skill) | การเรียกใช้งาน (Invocation) | หมวดหมู่ | หน้าที่และคำอธิบาย |
 | :--- | :--- | :--- | :--- |
-| **adopt** | `/adopt` / `$adopt` | Setup | นำ DevFlow ไปติดตั้งในโปรเจกต์เดิมที่มีโค้ดอยู่แล้ว |
-| **analyze** | `/analyze` / `$analyze` | SA & Ingest | สกัดเอกสารความต้องการหลายรูปแบบ (PDF, Word, Excel, รูปภาพ, ข้อความ), สแกนผลกระทบต่อ Codebase และออก Checklist คำถาม |
-| **audit** | `/audit` / `$audit` | Quality | ตรวจสอบคุณภาพโค้ด, ความปลอดภัย, ประสิทธิภาพ และชุดทดสอบ |
-| **autopilot** | `/autopilot` / `$autopilot` | Delivery | โหมดส่งมอบงานแบบรอบเดียวจบ พร้อมตรวจสอบและแก้ปัญหาในตัว |
-| **brainstorm** | `/brainstorm` | Companion | ระดมสมองและเปรียบเทียบข้อดีข้อเสียของทางเลือกสถาปัตยกรรม |
-| **brief** | `/brief` / `$brief` | Planning | สรุปข้อมูลฟีเจอร์ถัดไปแบบอ่านอย่างเดียวก่อนเริ่มเขียนสเปก |
-| **browser-tests** | `/browser-tests` / `$browser-tests` | Setup | ติดตั้งและกำหนดค่า Playwright สำหรับ browser testing พร้อมเชื่อมต่อ MCP browseros-neo |
-| **bughunter** | `/bughunter` / `$bughunter` | Security | ค้นหาช่องโหว่ความปลอดภัยเชิงรุก 83 รูปแบบ พร้อม CVE Payloads และรายงานตัวอย่าง |
-| **check** | `/check` / `$check` | QA | ตรวจแบบ Dual-Axis: ความตรงตามสเปกจากหลักฐานจริง และมาตรฐาน/สถาปัตยกรรม/Quality Gates |
-| **ci** | `/ci` / `$ci` | DevOps | ตั้งค่าคำสั่ง Verify และสร้าง GitHub Actions Workflow สำหรับ CI |
+| **audit** | `/audit` / `$audit` | Quality | ตรวจสอบคุณภาพโค้ด + YAGNI, ความปลอดภัย, ประสิทธิภาพ, ชุดทดสอบ และ `independent` review |
+| **autopilot** | `/autopilot` / `$autopilot` | Delivery | โหมดส่งมอบงานรอบเดียวหรือรันคิวต่อเนื่องอัตโนมัติ (`--all` / `--max` / `--merge`) |
+| **check** | `/check` / `$check` | QA | ตรวจแบบ Dual-Axis จากหลักฐานจริง พร้อม `/check guide` สำหรับคู่มือทดสอบด้วยตนเอง |
 | **complete** | `/complete` / `$complete` | Delivery | ตรวจความปลอดภัยรอบสุดท้าย, บันทึก Release Digest, จัดเก็บประวัติ และ Squash-Merge |
-| **continuous** | `/continuous` / `$continuous` | Delivery | โหมดวนลูปส่งมอบงานหลายฟีเจอร์อัตโนมัติในเครื่อง Local พร้อม Quality Gates |
-| **convert-any-to-md** | `/convert-any-to-md` | Utility | แปลงไฟล์ PDF, XLSX, DOCX, CSV, Logs ให้เป็น Markdown ใน `devflow/reference/` |
-| **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยเชิงวิทยาศาสตร์ 6 ระยะด้วย Red-capable feedback loop โดยไม่แก้ซอร์สโค้ด |
-| **devflow** | `/devflow` / `$devflow` | Router | ตัวตรวจสถานะหลัก, เราเตอร์นำทางขั้นตอน และคู่มือช่วยทำงาน |
-| **discovery** | `/discovery` / `$discovery` | Companion | สำรวจและค้นคว้าความต้องการของระบบเชิงลึกก่อนเริ่มพัฒนา |
-| **devflow-doctor** | `/devflow-doctor` / `$devflow-doctor` | Health | ตรวจสุขภาพ Workspace, Adapters, และรายงานขนาดไบต์ Overview (เตือนเมื่อ >= 20KB) |
-| **explore** | `/explore` / `$explore` | Companion | สนทนาวิเคราะห์ไอเดียเทียบกับโค้ดจริงแบบ Read-only โดยไม่แก้โค้ดและไม่ต้องเขียนสเปก |
-| **feature** | `/feature` / `$feature` | Delivery | สร้าง Living Spec ใน `devflow/context/{xxx-slug}/spec.md` พร้อม 20KB Overview Guard |
+| **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยแบบ 2-Track (Track A fast repro & trace; Track B 6-phase scientific isolation) |
+| **devflow** | `/devflow` / `$devflow` | Hub | ศูนย์รวมตรวจสถานะ (`--exec`), ตรวจสุขภาพ (`/devflow doctor`) และเราเตอร์นำทางคำสั่ง |
+| **discovery** | `/discovery` / `$discovery` | Pre-Flight | สำรวจระบบ/Roadmap, รับเอกสารความต้องการ (`REQ-ID`) และ Socratic Alignment (`--grill`) |
+| **explore** | `/explore` / `$explore` | Pre-Flight | วิเคราะห์ไอเดียเทียบโค้ดจริง + เปรียบเทียบ 2–3 ทางเลือก (Brainstorm) แบบ Read-only |
+| **feature** | `/feature` / `$feature` | Delivery | พรีวิวขอบเขต (`--preview`), ถามเสริมอัตโนมัติ และสร้าง Living Spec (`--check`) |
 | **fix** | `/fix` / `$fix` | Delivery | กำหนดสเปกและขั้นตอนการแก้บั๊กหรือ Patch ขนาดเล็ก |
-| **grill** | `/grill` / `/align` | Companion | Socratic Alignment, สกัดคำศัพท์เฉพาะ และสร้างเอกสาร ADR |
-| **idea** | `/idea` | Companion | บันทึกไอเดียลงใน `devflow/ideas.md` พร้อม AI Scoring |
+| **idea** | `/idea` | Pre-Flight | บันทึกไอเดียลงใน `devflow/ideas.md` พร้อม AI Scoring |
 | **implement** | `/implement` / `$implement` | Delivery | ลงมือเขียนโค้ดตามสเปกทีละขั้นตอนด้วยวินัย Strict TDD ตาม Review Cadence |
-| **onboard** | `/onboard` / `$onboard` | Setup | ตั้งค่าเริ่มต้นโปรเจกต์ใหม่ พร้อมเลือกสไตล์การพัฒนา (Efficient / Guided / Custom) |
-| **overview** | `/overview` / `$overview` | Planning | สังเคราะห์ `project-overview.md` ไม่เกิน 20KB พร้อมเสนอทำ Planning Baseline Commit |
+| **onboard** | `/onboard` / `$onboard` | Setup | ตั้งค่าเริ่มต้นโปรเจกต์ใหม่และตรวจจับ brownfield อัตโนมัติ (`--adopt`) |
+| **overview** | `/overview` / `$overview` | Setup | สังเคราะห์ `project-overview.md` ไม่เกิน 20KB พร้อมเสนอทำ Planning Baseline Commit |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | สร้าง Mockup แบบ Static HTML/CSS ในโฟลเดอร์ `prototypes/` |
-| **release** | `/release` / `$release` | DevOps | ตรวจสอบความพร้อมและสร้างไฟล์คอนฟิกสำหรับ Render หรือ Vercel |
-| **report-html** | `/report-html` | Reporting | สร้างรายงานสรุปผลงานแบบ Standalone HTML Dashboard ตามสั่ง |
-| **rollback** | `/rollback` / `$rollback` | Delivery | วางแผนและย้อนคืนฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัย |
-| **setup-tests** | `/setup-tests` / `$setup-tests` | Setup | ติดตั้งและตั้งค่า Unit Test Runner ให้ตรงกับ Stack ของโปรเจกต์ |
-| **devflow-status** | `/devflow-status` / `$devflow-status` | Monitoring | แสดงสรุปความคืบหน้าของงานปัจจุบัน และข้อแนะนำขั้นตอนถัดไป |
-| **test** | `/test` | Testing | รันชุดทดสอบ, สร้างเคสทดสอบที่ขาดหาย และวิเคราะห์ Coverage |
-| **try** | `/try` / `$try` | QA | สร้างคู่มือสำหรับมนุษย์ในการทดสอบระบบด้วยตนเองแบบ Step-by-step |
+
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
 
 ---
 
@@ -569,7 +553,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 
 ## การตรวจสอบอัตโนมัติบน GitHub (Automatic GitHub checks)
 
-ตั้งค่าระบบ CI เพื่อให้ทั้งทีมและ AI มีมาตรฐานการตรวจสอบเดียวกัน:
+ตั้งค่าระบบ CI เพื่อให้ทั้งทีมและ AI มีมาตรฐานการตรวจสอบเดียวกัน (ติดตั้งส่วนเสริมก่อนด้วย `npx nexus-devflow skill add ci`):
 
 ```text
 /ci
@@ -589,7 +573,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 [TDD-Red] เขียน Test ที่ล้มเหลว ──▶ [TDD-Green] เขียนโค้ดขั้นต่ำให้ผ่าน ──▶ [TDD-Refactor] ปรับโค้ดให้สะอาด
 ```
 
-ตั้งค่าระบบ Unit Testing ให้ตรงกับ Tech Stack ของโปรเจกต์:
+ตั้งค่าระบบ Unit & Browser Testing ให้ตรงกับ Tech Stack ของโปรเจกต์ (ติดตั้งส่วนเสริมด้วย `npx nexus-devflow skill add setup-tests`):
 
 ```text
 /setup-tests
@@ -646,10 +630,10 @@ DevFlow รองรับระบบ Quality Gates และการทำ In
 
 ## คู่มือการทดสอบด้วยตนเอง (Manual try guides)
 
-รันคำสั่ง `/try` เพื่อสร้างคู่มือทดสอบระบบสำหรับมนุษย์:
+รันคำสั่ง `/check guide` เพื่อสร้างคู่มือทดสอบระบบสำหรับมนุษย์:
 
 ```text
-/try
+/check guide
 ```
 
 ระบบจะอ่าน Living Spec ปัจจุบัน และสรุปข้อมูลให้:
@@ -757,7 +741,7 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **15 Core Skil
 | **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
-> **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/devflow-status`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
+> **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/devflow --exec`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
 
 ---
 
@@ -784,7 +768,7 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 - `devflow/history/` + Git — คลังประวัติการส่งมอบงานถาวร
 
 เมื่อเริ่มเซสชันใหม่หรือหลังจาก AI Context Window ถูกรีเซ็ต:
-- สั่ง `/devflow` หรือ `/devflow-status` เพื่อตรวจดูสถานะปัจจุบัน
+- สั่ง `/devflow` เพื่อตรวจดูสถานะปัจจุบัน
 - สั่ง `/implement` เพื่อทำงานย่อยข้อถัดไปใน Living Spec ต่อได้ทันที
 
 ---
@@ -796,35 +780,22 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 ├── AGENTS.md                  (คำแนะนำสำหรับ AI: Codex, Antigravity, Cursor, Copilot, OpenCode)
 ├── CLAUDE.md                  (จุดเริ่มต้นสำหรับ Claude Code; โหลด AGENTS.md)
 ├── .agents/
-│   └── skills/                (โฟลเดอร์ Multi-Agent Skills สำหรับ Antigravity, Codex, Copilot, OpenCode)
-│       ├── adopt/             ($adopt: ติดตั้งในโปรเจกต์เดิมที่มีโค้ดอยู่แล้ว)
-│       ├── audit/             ($audit: ตรวจสอบคุณภาพโค้ด, ความปลอดภัย และการทดสอบ)
-│       ├── autopilot/         ($autopilot: โหมดส่งมอบงานรอบเดียวจบ)
-│       ├── brainstorm/        ($brainstorm: ระดมสมองและเปรียบเทียบทางเลือก)
-│       ├── brief/             ($brief: ดูสรุปข้อมูลฟีเจอร์ก่อนเริ่มเขียนสเปก)
-│       ├── check/             ($check: การตรวจสอบระบบจริงโดย Senior QA)
-│       ├── ci/                ($ci: ตั้งค่าคำสั่ง Verify และ GitHub Actions)
+│   └── skills/                (15 Core Skills สำหรับ Antigravity, Codex, Copilot, OpenCode)
+│       ├── audit/             ($audit: ตรวจสอบคุณภาพ + YAGNI, ความปลอดภัย, Test และ independent review)
+│       ├── autopilot/         ($autopilot: โหมดส่งมอบรอบเดียว หรือรันต่อเนื่อง --all/--merge)
+│       ├── check/             ($check: ตรวจระบบจริงโดย Senior QA & /check guide สำหรับมนุษย์)
 │       ├── complete/          ($complete: ตรวจความปลอดภัย, เก็บประวัติ, Squash-Merge)
-│       ├── convert-any-to-md/ ($convert-any-to-md: เครื่องมือแปลงเอกสารเป็น Markdown)
-│       ├── debug/             ($debug: วินิจฉัยปัญหาโดยไม่แตะต้องซอร์สโค้ด)
-│       ├── devflow/           ($devflow: ตัวตรวจสถานะและเราเตอร์นำทางหลัก)
-│       ├── discovery/         ($discovery: การค้นคว้าและสำรวจเชิงลึก)
-│       ├── devflow-doctor/    ($devflow-doctor: ตรวจสุขภาพของ Workspace)
-│       ├── feature/           ($feature: สร้าง Single Living Spec)
+│       ├── debug/             ($debug: วินิจฉัย 2-Track โดยไม่แตะต้องซอร์สโค้ด)
+│       ├── devflow/           ($devflow: ศูนย์รวมสถานะ, ตรวจสุขภาพ doctor และเราเตอร์นำทางหลัก)
+│       ├── discovery/         ($discovery: สำรวจ Roadmap/ฟีเจอร์, รับเอกสาร REQ-ID และ Socratic ADRs)
+│       ├── explore/           ($explore: วิเคราะห์ไอเดียและเทียบทางเลือก 2-3 แบบ Read-only)
+│       ├── feature/           ($feature: พรีวิว --preview, ถามเสริมอัตโนมัติ และสร้าง Living Spec)
 │       ├── fix/               ($fix: สเปกการแก้บั๊กหรือ Patch)
-│       ├── grill/             ($grill: Socratic ADR Alignment)
 │       ├── idea/              ($idea: กล่องบันทึกไอเดียพร้อม AI Scoring)
 │       ├── implement/         ($implement: ลงมือเขียนโค้ดตามวินัย Strict TDD)
-│       ├── onboard/           ($onboard: ตั้งค่าเริ่มต้นสำหรับโปรเจกต์ใหม่)
+│       ├── onboard/           ($onboard: ตั้งค่าโปรเจกต์ใหม่ & Brownfield --adopt)
 │       ├── overview/          ($overview: สังเคราะห์ project-overview.md)
-│       ├── prototype/         ($prototype: สร้าง Static Mockups)
-│       ├── release/           ($release: เตรียมความพร้อม Render & Vercel)
-│       ├── report-html/       ($report-html: สร้างรายงาน Standalone HTML)
-│       ├── rollback/          ($rollback: ย้อนคืนฟีเจอร์อย่างปลอดภัย)
-│       ├── setup-tests/       ($setup-tests: ติดตั้ง Stack-native Test Runner)
-│       ├── devflow-status/    ($devflow-status: ตรวจสอบความคืบหน้าของงาน)
-│       ├── test/              ($test: รันและสร้างเคสทดสอบ)
-│       └── try/               ($try: คู่มือการทดสอบด้วยตนเองสำหรับมนุษย์)
+│       └── prototype/         ($prototype: สร้าง Static Mockups)
 ├── .claude/
 │   └── skills/                (โฟลเดอร์ Skill สำหรับ Claude Code)
 └── devflow/

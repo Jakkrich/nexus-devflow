@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual Review With Try (/try) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="คู่มือการใช้งานคำสั่ง /try เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)">
+  <title>Manual Review With /check guide (Legacy /try) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="คู่มือการใช้งานคำสั่ง /check guide (รวมความสามารถของ /try เดิม) เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/try/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -153,17 +144,17 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>REFERENCE</span> <span>/</span> <strong>Manual Review With Try (/try)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>REFERENCE</span> <span>/</span> <strong>Manual Review With /check guide (Legacy /try)</strong></div>
       
-      <h1 class="docs-title">Manual Review With Try (/try)</h1>
+      <h1 class="docs-title">Manual Review With /check guide (Legacy /try)</h1>
       
       <p class="docs-lead">
-        คู่มือการใช้งานคำสั่ง /try เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)
+        คู่มือการใช้งานคำสั่ง /check guide (รวมความสามารถของ /try เดิม) เพื่อสร้าง Manual Walkthrough สำหรับการตรวจรับระบบด้วยตนเอง (UAT)
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Reference</span>
-        <span class="docs-pill">Try</span>
+        <span class="docs-pill">CheckGuide</span>
         <span class="docs-pill">ManualReview</span>
         <span class="docs-pill">Walkthrough</span>
         <span class="docs-pill">QA</span>
@@ -172,23 +163,23 @@
 
       <div class="docs-prose">
 
-        <!-- Section: การเรียกใช้คำสั่ง /try -->
+        <!-- Section: การเรียกใช้คำสั่ง /check guide -->
         <section id="try-usage">
-          <h2>การเรียกใช้คำสั่ง /try</h2>
+          <h2>การเรียกใช้คำสั่ง /check guide</h2>
           
-          <p>ใช้คำสั่ง <code>/try</code> เมื่อต้องการคำแนะนำว่าต้องทดสอบฟีเจอร์ที่เพิ่งพัฒนาอย่างไรบนหน้าจอ:</p>
+          <p>ใช้คำสั่ง <code>/check guide</code> เมื่อต้องการคำแนะนำว่าต้องทดสอบฟีเจอร์ที่เพิ่งพัฒนาอย่างไรบนหน้าจอ:</p>
           <pre><code># สร้างคู่มือสำหรับงานปัจจุบัน
-/try
+/check guide
 
 # หรือสร้างสำหรับฟีเจอร์ที่ระบุ
-/try 1</code></pre>
+/check guide 1</code></pre>
         
           
         </section>
 
-        <!-- Section: โครงสร้างของ Manual Try Guide -->
+        <!-- Section: โครงสร้างของ Manual Review Guide -->
         <section id="try-structure">
-          <h2>โครงสร้างของ Manual Try Guide</h2>
+          <h2>โครงสร้างของ Manual Review Guide</h2>
           
           <ul>
             <li><strong>Environment Preparation</strong>: คำสั่งรัน Dev Server และเตรียมบัญชีทดสอบ</li>
@@ -217,8 +208,8 @@
     <!-- Right Sidebar (TOC) -->
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
-      <a href="#try-usage">การเรียกใช้คำสั่ง /try</a>
-      <a href="#try-structure">โครงสร้างของ Manual Try Guide</a>
+      <a href="#try-usage">การเรียกใช้คำสั่ง /check guide</a>
+      <a href="#try-structure">โครงสร้างของ Manual Review Guide</a>
     </aside>
   </div>
 

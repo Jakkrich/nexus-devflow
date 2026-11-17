@@ -178,7 +178,7 @@ When every step is built and `Verify`, or the fallback build and tests, passes
 - branch name
 - what changed, grouped by file or area
 - checks run, with the exact command or proof used
-- `## Try it now` proof (1–3 concrete steps per `../check/reference/try-it-now.md` when `qualityGates.regular.tryGuide` is active for this feature), or how to try it manually / pointer to `/try`
+- `## Try it now` proof (1–3 concrete steps per `../check/reference/try-it-now.md` when `qualityGates.regular.tryGuide` is active for this feature), or how to try it manually / pointer to `/check guide`
 - ledger state: any findings still `open` or `fixed`, by ID
 - known risks, skipped checks, or follow-up notes
 - next action, usually `/complete`
@@ -191,7 +191,7 @@ After the final packet, always offer these choices:
 
 The final walkthrough is available with either `workflow.stepReview` value and
 regardless of `workflow.checkpointCommits`. It is a read-only code tour, not the
-manual product-review path produced by `/try`, and it is not verification.
+manual product-review path produced by `/check guide`, and it is not verification.
 
 When the user chooses the walkthrough, begin with a short map of the completed
 feature, then follow the spec's build steps. For each step, explain its purpose,

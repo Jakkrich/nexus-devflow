@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debug (/debug) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="วินิจฉัยหาสาเหตุของบั๊ก อาการทดสอบตก หรือความผิดปกติของระบบตามหลักการทางวิทยาศาสตร์โดยไม่มีการแก้ไขโค้ด">
+  <title>Debug (/debug - 2-Track Protocol) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="วินิจฉัยแบบ 2-Track (Track A สืบเร็วจาก deterministic stacktrace และ Track B 6-phase scientific isolation) โดยไม่แก้โค้ดล่วงหน้า">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/debug/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link active" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link active" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -153,21 +144,21 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Debug (/debug)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Debug (/debug - 2-Track Protocol)</strong></div>
       
-      <h1 class="docs-title">Debug (/debug)</h1>
+      <h1 class="docs-title">Debug (/debug - 2-Track Protocol)</h1>
       
       <p class="docs-lead">
-        วินิจฉัยหาสาเหตุของบั๊ก อาการทดสอบตก หรือความผิดปกติของระบบตามหลักการทางวิทยาศาสตร์โดยไม่มีการแก้ไขโค้ด
+        วินิจฉัยแบบ 2-Track (Track A สืบเร็วจาก deterministic stacktrace และ Track B 6-phase scientific isolation) โดยไม่แก้โค้ดล่วงหน้า
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Command</span>
         <span class="docs-pill">Debug</span>
+        <span class="docs-pill">2-Track</span>
         <span class="docs-pill">RootCause</span>
         <span class="docs-pill">Hypothesis</span>
         <span class="docs-pill">ZeroTouch</span>
-        <span class="docs-pill">Reproduction</span>
       </div>
 
       <div class="docs-prose">
@@ -221,9 +212,9 @@
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../../commands/devflow-doctor/">
+        <a class="prev" href="../../commands/devflow/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>DevFlow Doctor</strong>
+          <strong>DevFlow (Status & Doctor)</strong>
         </a>
         <a class="next" href="../../commands/fix/">
           <span>ถัดไป (Next)</span>

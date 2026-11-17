@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link" href="../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../commands/explore/">Explore</a>
+          <a class="docs-nav-link" href="../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -256,7 +247,7 @@
         ├── External API Response Field
         └── Prior Architectural Decision (ADR)</code></pre>
           <div class="note-box warning">
-            <strong>Anti-Hallucination Guard:</strong> หากค่าหรือเงื่อนไขใดไม่มีที่มาของข้อมูลระบุไว้อย่างชัดเจน ให้ถือเป็น <strong>Owed Decision</strong> ซึ่ง AI จะไม่ได้รับอนุญาตให้คาดเดาเองเป็น "Wiring Code" โดยเด็ดขาด แต่ต้องหยุดถามผู้ใช้ หรือส่งเข้าขั้นตอน <code>/grill</code> เพื่อบันทึกข้อสรุปก่อน
+            <strong>Anti-Hallucination Guard:</strong> หากค่าหรือเงื่อนไขใดไม่มีที่มาของข้อมูลระบุไว้อย่างชัดเจน ให้ถือเป็น <strong>Owed Decision</strong> ซึ่ง AI จะไม่ได้รับอนุญาตให้คาดเดาเองเป็น "Wiring Code" โดยเด็ดขาด แต่ต้องหยุดถามผู้ใช้ หรือจัดแนวทางใน <code>/discovery --grill</code> / Adaptive Clarification ของ <code>/feature</code> เพื่อบันทึกข้อสรุปก่อน
           </div>
         
           
@@ -268,11 +259,10 @@
           
           <p>เมื่อคุณมีไอเดียใหม่หรือข้อสงสัยเชิงเทคนิคแต่ยังไม่แน่ใจว่าจะทำหรือไม่ DevFlow มีชุดคำสั่งช่วยเหลือที่ทำงานแบบ <strong>Read-Only</strong> โดยไม่แก้ไขโค้ดหรือบังคับเขียนแผนงานล่วงหน้า:</p>
           <ul>
-            <li><strong><code>/explore</code></strong>: สำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรม เปรียบเทียบทางเลือกและข้อดีข้อเสีย (Trade-offs) กับโค้ดจริงในโปรเจกต์โดยตรง</li>
-            <li><strong><code>/brief</code></strong>: สรุปและอธิบายขอบเขต ความสัมพันธ์ พื้นที่ที่ได้รับผลกระทบ และขนาดของงานสำหรับฟีเจอร์ที่อยู่ใน <code>build-plan.md</code> เพื่อช่วยในการตัดสินใจลำดับการพัฒนา</li>
+            <li><strong><code>/explore</code></strong>: สำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรม พร้อมเทียบทางเลือก 2–3 แบบและตาราง Trade-offs กับโค้ดจริงในโปรเจกต์</li>
+            <li><strong><code>/feature --preview</code></strong>: พรีวิวขอบเขต ความสัมพันธ์ พื้นที่ที่ได้รับผลกระทบ และขนาดของงานสำหรับฟีเจอร์ที่อยู่ใน <code>build-plan.md</code> แบบ Read-Only</li>
             <li><strong><code>/idea</code></strong>: บันทึกไอเดียเข้าสู่ <code>devflow/ideas.md</code> พร้อมให้ AI วิเคราะห์ Feasibility Score, Value และ Key Points ให้โดยอัตโนมัติ</li>
-            <li><strong><code>/brainstorm</code></strong>: ระดมสมองและสังเคราะห์ทางเลือกในการออกแบบระบบ 2-3 แบบ พร้อมเปรียบเทียบข้อดีข้อเสียก่อนตัดสินใจเลือกแนวทาง</li>
-            <li><strong><code>/grill</code> (หรือ <code>align</code>)</strong>: จัดเซสชันสัมภาษณ์เชิงลึกแบบ Socratic Interview เพื่อทดสอบความสมบูรณ์ของแผนงาน สกัด Glossary คำศัพท์ทางธุรกิจ และบันทึก Architecture Decision Records (ADRs) ลงใน <code>devflow/decisions/</code></li>
+            <li><strong><code>/discovery</code></strong> (รวม <code>--grill</code> &amp; SA Intake): รับเอกสารความต้องการหลายฟอร์แมต, สัมภาษณ์ Socratic Interview เพื่อสกัด Glossary และบันทึก ADRs ลงใน <code>devflow/decisions/</code></li>
           </ul>
         
           
@@ -358,8 +348,8 @@
         <section id="run-the-remaining-plan-continuously">
           <h2>การรันแผนงานแบบต่อเนื่องอัตโนมัติ (Run the remaining plan continuously)</h2>
           
-          <p>คำสั่ง <code>/continuous</code> หรือ <code>$continuous</code> เป็นโหมดการทำงานอัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> แบบต่อเนื่องหลายรายการโดยไม่ต้องหยุดรอการอนุมัติระหว่างขั้นตอนย่อย:</p>
-          <pre><code>/continuous ──▶ หยิบฟีเจอร์ถัดไป ──▶ รัน Spec/Implement/Check/Gates ──▶ Local Completion & Merge ──▶ ทำซ้ำ</code></pre>
+          <p>คำสั่ง <code>/autopilot --all</code> (หรือ <code>/autopilot --max &lt;N&gt; --merge</code>) เป็นโหมดการทำงานอัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> แบบต่อเนื่องหลายรายการโดยไม่ต้องหยุดรอการอนุมัติระหว่างขั้นตอนย่อย:</p>
+          <pre><code>/autopilot --all ──▶ หยิบฟีเจอร์ถัดไป ──▶ รัน Spec/Implement/Check/Gates ──▶ Local Completion &amp; Merge ──▶ ทำซ้ำ</code></pre>
           <p>Build Plan จะทำหน้าที่เป็นคิวงานโดยตรง แต่ละฟีเจอร์ยังคงแยก Branch, รันการทดสอบ TDD, บันทึกประวัติ และทำ Local Squash-Merge เข้าสู่ <code>main</code> อย่างปลอดภัย</p>
         
           

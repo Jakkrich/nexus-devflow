@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboard (/onboard) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ปรับแต่งเวิร์กโฟลว์ให้เข้ากับสภาพแวดล้อมจริง ตรวจสอบ tech stack, คำสั่ง verify/test, มาตรฐานโค้ด และกำหนด Review Cadence">
+  <title>Onboard (/onboard, /onboard --adopt) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ปรับแต่งเวิร์กโฟลว์ทั้งโปรเจกต์ใหม่และโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (auto-detect brownfield / --adopt) พร้อมตั้งค่า Review Cadence">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/onboard/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,37 +76,28 @@
         <!-- COMMANDS -->
         <div class="docs-nav-group">
           <div class="docs-nav-title">COMMANDS</div>
-          <a class="docs-nav-link active" href="../../commands/onboard/">Onboard</a>
-          <a class="docs-nav-link" href="../../commands/adopt/">Adopt</a>
-          <a class="docs-nav-link" href="../../commands/discovery/">Discovery</a>
-          <a class="docs-nav-link" href="../../commands/explore/">Explore</a>
+          <a class="docs-nav-link active" href="../../commands/onboard/">Onboard & Adopt</a>
+          <a class="docs-nav-link" href="../../commands/discovery/">Discovery (SA & ADR)</a>
+          <a class="docs-nav-link" href="../../commands/explore/">Explore & Brainstorm</a>
           <a class="docs-nav-link" href="../../commands/overview/">Overview</a>
-          <a class="docs-nav-link" href="../../commands/feature/">Feature</a>
+          <a class="docs-nav-link" href="../../commands/feature/">Feature (--preview)</a>
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
-          <a class="docs-nav-link" href="../../commands/check/">Check</a>
+          <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../../commands/devflow-status/">DevFlow Status</a>
-          <a class="docs-nav-link" href="../../commands/devflow-doctor/">DevFlow Doctor</a>
-          <a class="docs-nav-link" href="../../commands/debug/">Debug</a>
+          <a class="docs-nav-link" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
-          <a class="docs-nav-link" href="../../commands/brief/">Brief</a>
-          <a class="docs-nav-link" href="../../commands/audit/">Audit</a>
-          <a class="docs-nav-link" href="../../commands/tests/">Tests</a>
-          <a class="docs-nav-link" href="../../commands/ci/">CI</a>
+          <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot</a>
-          <a class="docs-nav-link" href="../../commands/continuous/">Continuous</a>
-          <a class="docs-nav-link" href="../../commands/release/">Release</a>
-          <a class="docs-nav-link" href="../../commands/rollback/">Rollback</a>
-          <a class="docs-nav-link" href="../../commands/analyze/">Analyze (SA Suite)</a>
-          <a class="docs-nav-link" href="../../commands/grill/">Grill (Domain & ADR)</a>
-          <a class="docs-nav-link" href="../../commands/bughunter/">Bughunter (Security)</a>
+          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/rollback/">Rollback (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD (Opt-in)</a>
+          <a class="docs-nav-link" href="../../commands/vendor/">Vendor (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/archify/">Archify (Diagrams)</a>
           <a class="docs-nav-link" href="../../commands/diagram-design/">Diagram Design</a>
-          <a class="docs-nav-link" href="../../commands/convert-any-to-md/">Convert Any to MD</a>
-          <a class="docs-nav-link" href="../../commands/vendor/">Vendor</a>
-          <a class="docs-nav-link" href="../../commands/ponytail/">Ponytail (Simplifier)</a>
-          <a class="docs-nav-link" href="../../commands/report-html/">Report HTML</a>
           <a class="docs-nav-link" href="../../commands/code-modernization/">Code Modernization</a>
         </div>
 
@@ -153,18 +144,19 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Onboard (/onboard)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Onboard (/onboard, /onboard --adopt)</strong></div>
       
-      <h1 class="docs-title">Onboard (/onboard)</h1>
+      <h1 class="docs-title">Onboard (/onboard, /onboard --adopt)</h1>
       
       <p class="docs-lead">
-        ปรับแต่งเวิร์กโฟลว์ให้เข้ากับสภาพแวดล้อมจริง ตรวจสอบ tech stack, คำสั่ง verify/test, มาตรฐานโค้ด และกำหนด Review Cadence
+        ปรับแต่งเวิร์กโฟลว์ทั้งโปรเจกต์ใหม่และโปรเจกต์เดิมที่มีโค้ดเบสอยู่แล้ว (auto-detect brownfield / --adopt) พร้อมตั้งค่า Review Cadence
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Command</span>
         <span class="docs-pill">Onboard</span>
-        <span class="docs-pill">Setup</span>
+        <span class="docs-pill">Adopt</span>
+        <span class="docs-pill">Brownfield</span>
         <span class="docs-pill">Config</span>
         <span class="docs-pill">Cadence</span>
         <span class="docs-pill">Preset</span>
@@ -177,15 +169,15 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>รันคำสั่ง <code>/onboard</code> (หรือ <code>$onboard</code>) ทันทีหลังจากติดตั้ง Nexus-DevFlow ลงในแอปพลิเคชันที่เพิ่ง Scaffold ขึ้นมาใหม่ หรือแอปพลิเคชันในระยะเริ่มต้น เพื่อให้ AI ทำการสำรวจสภาพแวดล้อมจริง ตรวจจับภาษา คำสั่ง Build/Test และปรับแต่งเวิร์กโฟลว์ให้เข้ากับสไตล์การพัฒนาของคุณ</p>
-          <pre><code># สำหรับ Google Antigravity IDE, Claude Code, Gemini CLI
+          <p>รันคำสั่ง <code>/onboard</code> (หรือ <code>$onboard</code>) ทันทีหลังจากติดตั้ง Nexus-DevFlow ทั้งโปรเจกต์เปล่าที่เพิ่งเริ่มต้น และโปรเจกต์เดิมที่มีโค้ดเบสทำงานอยู่แล้ว (ระบบจะตรวจจับ brownfield อัตโนมัติหรือใส่ <code>--adopt</code>):</p>
+          <pre><code># สำหรับโปรเจกต์ใหม่ (หรือตรวจจับ brownfield อัตโนมัติ)
 /onboard
 
-# สำหรับ OpenAI Codex CLI
-$onboard
+# บังคับโหมดสำรวจโค้ดเบสเดิม (legacy /adopt)
+/onboard --adopt
 
-# หรือสั่งการด้วยคำพูดทั่วไป
-"ช่วยรัน onboard เพื่อตั้งค่าโปรเจกต์นี้"</code></pre>
+# สำหรับ OpenAI Codex CLI
+$onboard</code></pre>
         
           
         </section>
@@ -286,7 +278,7 @@ $onboard
         <section id="next-steps">
           <h2>ขั้นตอนถัดไป (Next steps)</h2>
           
-          <p>1. หากต้องการตั้งค่า GitHub Actions CI ให้รันคำสั่ง <code>/ci</code></p>
+          <p>1. หากต้องการตั้งค่า GitHub Actions CI ให้ติดตั้งส่วนเสริม <code>npx nexus-devflow skill add ci</code></p>
           <p>2. กรอกเป้าหมายผลิตภัณฑ์ลงใน <code>devflow/project-plan.md</code> และรายการฟีเจอร์ใน <code>devflow/build-plan.md</code></p>
           <p>3. รันคำสั่ง <code>/overview</code> เพื่อคอมไพล์ Living Source of Truth สำหรับโปรเจกต์</p>
         
@@ -300,9 +292,9 @@ $onboard
           <span>ก่อนหน้า (Previous)</span>
           <strong>Skill Selection Policy</strong>
         </a>
-        <a class="next" href="../../commands/adopt/">
+        <a class="next" href="../../commands/discovery/">
           <span>ถัดไป (Next)</span>
-          <strong>Adopt</strong>
+          <strong>Discovery (SA & ADR)</strong>
         </a>
       </nav>
     </main>
