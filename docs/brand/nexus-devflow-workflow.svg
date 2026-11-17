@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title description">
   <title id="title">Nexus-DevFlow Core Workflow</title>
-  <desc id="description">Plan the project, compile context, specify one task-isolated work item, implement it with TDD, verify it with empirical proof, and complete it to history. Fix issues by returning to implementation, then repeat for the next work item. Brief, prototype, debug, and rollback are optional companion tools.</desc>
+  <desc id="description">Plan the project, compile context, specify one task-isolated work item, implement it with TDD, verify it with empirical proof, and complete it to history. Fix issues by returning to implementation, then repeat for the next work item. Explore, prototype, debug, and rollback are optional companion tools.</desc>
   <defs>
     <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
       <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#dce8ec" stroke-width="1"/>
@@ -33,7 +33,7 @@
 
     <g transform="translate(48 143)">
       <rect width="196" height="34" rx="17" fill="#edf2ef" stroke="#b8c8c0"/>
-      <text x="98" y="22" class="mono artifact" text-anchor="middle" fill="#42534c">/onboard or /adopt</text>
+      <text x="98" y="22" class="mono artifact" text-anchor="middle" fill="#42534c">/onboard --adopt</text>
     </g>
 
     <rect x="28" y="190" width="384" height="270" rx="22" fill="#ffffff" fill-opacity="0.72" stroke="#d5dfda" stroke-width="2"/>
@@ -128,7 +128,7 @@
       <g class="mono body" text-anchor="middle">
         <g transform="translate(24 49)">
           <rect width="150" height="42" rx="12" fill="#eef3ff" stroke="#b8c9f4"/>
-          <text x="75" y="27" fill="#244b9d">/brief</text>
+          <text x="75" y="27" fill="#244b9d">/explore</text>
         </g>
         <g transform="translate(190 49)">
           <rect width="150" height="42" rx="12" fill="#eef3ff" stroke="#b8c9f4"/>

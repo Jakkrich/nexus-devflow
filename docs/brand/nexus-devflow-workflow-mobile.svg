@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1510" role="img" aria-labelledby="title description">
   <title id="title">Nexus-DevFlow Core Workflow (Mobile)</title>
-  <desc id="description">Plan the project, compile context, specify one task-isolated work item, implement it with TDD, verify it with empirical proof, and complete it to history. Fix issues by returning to implementation, then repeat for the next work item. Brief, prototype, debug, and rollback are optional companion tools.</desc>
+  <desc id="description">Plan the project, compile context, specify one task-isolated work item, implement it with TDD, verify it with empirical proof, and complete it to history. Fix issues by returning to implementation, then repeat for the next work item. Explore, prototype, debug, and rollback are optional companion tools.</desc>
   <defs>
     <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
       <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#dce8ec" stroke-width="1"/>
@@ -31,7 +31,7 @@
     <text x="42" y="133" class="body" fill="#65716c">Overview is not required before every feature.</text>
     <g transform="translate(42 155)">
       <rect width="238" height="40" rx="20" fill="#edf2ef" stroke="#b8c8c0"/>
-      <text x="119" y="26" class="mono artifact" text-anchor="middle" fill="#42534c">/onboard or /adopt</text>
+      <text x="119" y="26" class="mono artifact" text-anchor="middle" fill="#42534c">/onboard --adopt</text>
     </g>
 
     <text x="42" y="226" class="stage" fill="#65716c">RUN WHEN PLANS CHANGE</text>
@@ -118,7 +118,7 @@
       <g class="mono artifact" text-anchor="middle">
         <g transform="translate(22 49)">
           <rect width="138" height="34" rx="10" fill="#eef3ff" stroke="#b8c9f4"/>
-          <text x="69" y="22" fill="#244b9d">/brief</text>
+          <text x="69" y="22" fill="#244b9d">/explore</text>
         </g>
         <g transform="translate(174 49)">
           <rect width="138" height="34" rx="10" fill="#eef3ff" stroke="#b8c9f4"/>
