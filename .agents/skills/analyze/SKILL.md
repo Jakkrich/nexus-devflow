@@ -8,10 +8,6 @@ argument-hint: "[{file-path, raw requirement text, or REQ-ID}]"
 
 $ARGUMENTS
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 `/analyze` is the flagship System Analyst (SA) entry point in Nexus-DevFlow. It ingests messy, multi-format requirements, auto-allocates an isolated Request Workspace, normalizes raw content into structured Markdown, scans codebase impact (for existing systems), and generates a Socratic clarification checklist before system design.
 
 ---
@@ -61,8 +57,8 @@ contract in `AGENTS.md`.
 
 ## Step 2: Parse & Normalize Requirement (`parsed.md`)
 1. Extract text and tables from all raw files:
-   - For Office/PDF docs: Invoke `convert-any-to-md` or document extractor.
-   - For Web URLs / Confluence / Notion: Invoke `defuddle`.
+   - For Office/PDF docs: Use native document/multimodal inspection, or `convert-any-to-md` if installed.
+   - For Web URLs / Confluence / Notion: Use the active web-fetch/browser MCP reader when available.
    - For Images / Wireframes / Screenshots: Conduct Multimodal Vision OCR and describe layout and fields.
 2. Structure into `devflow/inbox/{REQ-ID}/parsed.md`:
    - **Executive Summary**: Core purpose and business objective of the requirement
@@ -86,7 +82,7 @@ contract in `AGENTS.md`.
 ---
 
 ## Step 4: Socratic Gap Detection & Clarification Checklist (`clarifications.md`)
-1. Apply `grilling` and `domain-modeling` lenses to detect gaps:
+1. Apply `grill` and domain alignment principles to detect gaps:
    - **Missing Edge Cases**: Boundary conditions, error states, network drops, concurrent requests
    - **Ambiguous Business Rules**: Unclear policies, unspecified SLAs, or undefined workflows
    - **Security & Authorization**: Role definitions, access permissions, personal identifiable data (PII)
@@ -107,7 +103,7 @@ contract in `AGENTS.md`.
 
 ## Next Workflow Step
 
-Once analysis is reviewed and gaps are aligned, proceed to **System Design & Acceptance Test Matrix**:
+Once analysis is reviewed and gaps are aligned, proceed to `/discovery {REQ-ID}` (for deeper scoping) or `/feature {REQ-ID}` (to write the living spec):
 ```bash
-/design {REQ-ID}
+/feature {REQ-ID}
 ```

@@ -8,9 +8,7 @@ argument-hint: "[{run-id, number, or name}]"
 
 $ARGUMENTS
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 

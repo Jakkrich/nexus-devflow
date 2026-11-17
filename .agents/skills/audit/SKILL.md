@@ -8,10 +8,6 @@ argument-hint: "[{current|changed|full|path}] [{quality|security|performance|tes
 
 $ARGUMENTS
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
     /implement or /autopilot  ->  [audit]  ->  fixes or /complete

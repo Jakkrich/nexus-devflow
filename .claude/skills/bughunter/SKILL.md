@@ -22,7 +22,7 @@ Before executing any BugHunter analysis or security test:
      - State clearly that the BugHunter knowledge base (83 Vulnerability Classes, Payloads & 681 Disclosed Reports) is not yet downloaded in this project.
      - Provide the exact installation command:
        ```bash
-       npx @jakkrichm/create-nexus-devflow skill add bughunter
+       npx nexus-devflow skill add bughunter
        ```
      - Offer to run the installation command on their behalf.
    - Stop and wait for installation before proceeding.
@@ -105,5 +105,5 @@ All generated reports, findings recorded in `devflow/context/{xxx-slug}/findings
 
 To update all 83 skills, 15 commands, and report patterns to the latest upstream version:
 ```bash
-npx @jakkrichm/create-nexus-devflow skill update bughunter
+npx nexus-devflow skill update bughunter
 ```

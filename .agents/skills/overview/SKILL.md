@@ -5,9 +5,7 @@ description: "[devflow] Distill user-owned planning docs into `devflow/context/p
 
 # overview - dynamic project overview compiler
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 ## Position in workflow
 
@@ -47,13 +45,12 @@ actual planning content first.
 
 ## Step 2 - compile overview payload
 
-Run:
+Check whether `package.json` defines an `overview` script (e.g. inside the `nexus-devflow` repository itself):
 
-```bash
-npm run overview
-```
+- **If `package.json` declares `"overview"`**: run `npm run overview`.
+- **Otherwise (standard user project)**: synthesize and write `devflow/context/project-overview.md` directly following `devflow/reference/project-overview-template.md` and embed the `devflow:source-hash` computed below.
 
-The compiler writes:
+The compiled overview includes:
 
 - purpose + architecture summary (from `project-plan.md`)
 - ordered queue (from `build-plan.md`)

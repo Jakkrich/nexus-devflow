@@ -8,9 +8,7 @@ argument-hint: "[{resume, max-features, or start-feature}]"
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 
@@ -171,7 +169,7 @@ the execution and reviewer-context pairing defined by the review contract. A pen
 without `Requested execution` is legacy manual-only.
 
 For browser-facing features, run `npm run test:browser` when `test:browser` script exists
-and collect interactive evidence via `browseros-neo` when available.
+and collect interactive browser evidence via an active browser MCP when available.
 
 ### 2.5 Repair Findings
 - Automatically repair confirmed P0 and P1 findings directly caused by the feature, up to

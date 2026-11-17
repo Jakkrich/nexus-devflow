@@ -8,9 +8,7 @@ argument-hint: "[{number, name, DISC-id, or IDEA-id}] [--check]"
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 
@@ -102,7 +100,7 @@ the data model, stack, and conventions. Decide how big the feature is:
   those sub-items back under the parent in `build-plan.md` as an indented
   checklist (`4a`, `4b`, `4c` ...). Spec only the **first** sub-feature now; the
   rest get picked up on later `/feature` runs.
-  *Use the **4 Slicing Archetypes** ([`devflow/reference/slicing-archetypes.md`](file:///d:/Projects/devtools/nexus-devflow/devflow/reference/slicing-archetypes.md)) to guide the split: 🛹 Skateboard (core logic first), 🎭 Facade (UI/DX mock first), 🎯 Tracer Bullet (end-to-end slice), or 🧭 Journey (workflow steps).*
+  *Use the **4 Slicing Archetypes** (`devflow/reference/slicing-archetypes.md`) to guide the split: 🛹 Skateboard (core logic first), 🎭 Facade (UI/DX mock first), 🎯 Tracer Bullet (end-to-end slice), or 🧭 Journey (workflow steps).*
 
 
 Two levels of breakdown - don't confuse them:
@@ -190,8 +188,8 @@ and never fabricates or pre-approves a receipt.
 
 Also inspect the repository's declared scripts and the feature behavior. If the
 feature is browser-facing and `test:browser` exists, put `npm run test:browser`
-in the verification matrix. Record an interactive `browseros-neo` handoff for
-observable UI behavior when that MCP is available. If either capability is
+in the verification matrix. Record an interactive browser MCP handoff (e.g., Playwright MCP, Chrome DevTools MCP, or `browseros-neo` if configured) for
+observable UI behavior when such a tool is available. If either capability is
 absent, record it as unavailable instead of installing or claiming evidence.
 
 ## Step 4 - red-team the draft, then tighten

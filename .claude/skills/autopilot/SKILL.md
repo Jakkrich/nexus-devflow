@@ -5,9 +5,7 @@ description: "[devflow] Run one explicit bounded DevFlow spec and implementation
 
 # autopilot - optional Blueprint loop
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 
@@ -104,7 +102,7 @@ verdict and `current` freshness; it never continues toward `/complete` on a
 pending, malformed, changes-requested, stale, or missing receipt.
 
 For browser-visible behavior, run `npm run test:browser` when `test:browser` is
-declared and capture interactive evidence with `browseros-neo` when available.
+declared and capture interactive browser evidence via an active browser MCP when available.
 If either path is unavailable, record the limitation in the review packet and do
 not install a runner or claim browser proof implicitly.
 

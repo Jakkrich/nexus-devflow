@@ -72,7 +72,7 @@ Read these, distill them into a few lines, then stop. Do not dump file contents.
    pending, malformed, changes-requested, or stale receipt routes to
    `audit independent current`, never `/complete`. Also report whether the spec
    requires browser proof, whether `npm run test:browser` is declared and has
-   recorded evidence, and whether an interactive `browseros-neo` handoff is
+   recorded evidence, and whether an interactive browser MCP handoff is
    available or explicitly unavailable. This remains read-only: do not execute
    either browser path from `/devflow-status`.
 

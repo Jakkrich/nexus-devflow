@@ -215,7 +215,7 @@ Testing is a core quality gate in Nexus-DevFlow, not an afterthought:
 
 ## 12. HTML Documentation & Theming Standards (Light Theme Mandate)
 
-All generated HTML artifacts across the framework (Contextual Help Playbooks `devflow/reference/playbooks/{skill}.html`, Standalone Reports `report-html`, Architecture & Workflow Diagrams `archify` / `diagram-design`, and UI Prototypes/Mockups) MUST strictly adhere to the **Paper/Ink Light Theme Design System**:
+When explicitly generating standalone HTML artifacts (Standalone Reports, Architecture & Workflow Diagrams via `archify` / `diagram-design`, or UI Prototypes/Mockups), adhere to the **Paper/Ink Light Theme Design System**:
 
 - **Mandatory Default `data-theme="light"`**:
   - All HTML documents must start with `<html lang="th" data-theme="light">`.
@@ -256,8 +256,6 @@ All generated HTML artifacts across the framework (Contextual Help Playbooks `de
 - **Typography & Accessibility**:
   - Fonts: Google Sans (`'Google Sans'`, `'Google Sans Text'`) for display headers and body text, `'JetBrains Mono'` for code and monospaced data.
   - Full support for `prefers-reduced-motion: reduce` and clear `:focus-visible` outlines.
-- **Master Reference Template**:
-  - Refer to `devflow/reference/playbooks/template.html` as the authoritative, reusable component reference for all playbook and HTML documentation generation.
 
 ---
 

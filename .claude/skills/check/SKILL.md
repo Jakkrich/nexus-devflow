@@ -30,7 +30,4 @@ unchanged. The separate `check` gates continue to select verification mode.
 
 ## Verification startup (verification mode only)
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`, with command `check`. This precedes reading the
-verification reference. Guide mode must skip this startup entirely.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md` with command `check`; never block execution if unavailable. Guide mode must skip this startup entirely.

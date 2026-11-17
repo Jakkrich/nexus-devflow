@@ -21,7 +21,7 @@ Before executing any Ponytail optimization or JIT inspection:
      - State clearly that the Ponytail upstream repository is not yet downloaded in this project.
      - Provide the installation command:
        ```bash
-       npx @jakkrichm/create-nexus-devflow skill add ponytail
+       npx nexus-devflow skill add ponytail
        ```
      - Offer to run the installation command on their behalf.
    - Stop and wait for installation before proceeding.
@@ -72,11 +72,6 @@ When working on **Backend Logic, Algorithms, CLI, Data Processing, `/fix`, `/deb
 
 ---
 
-## 📖 Universal Contextual Help & Playbook Protocol (`help`, `--help`, `-h`, `?`)
+## 📖 Universal Contextual Help (`help`, `--help`, `-h`, `?`)
 
-When invoked with `/ponytail help`, `ponytail --help`, or `/ponytail -h`:
-1. **Execution Safety Gate**: Do not edit code or apply transformations.
-2. **5W1H Framework Presentation**: Render the 5W1H guide in chat.
-3. **HTML Playbook Generation**: Generate or update the styled HTML report at:
-   `devflow/docs/playbooks/ponytail.html`
-4. Conclude with: `"Help menu displayed successfully"`
+When invoked with `/ponytail help`, `ponytail --help`, or `/ponytail -h`, follow `devflow/reference/help-playbook-protocol.md` to render a concise Markdown cheat sheet directly in chat without editing code or writing HTML files.

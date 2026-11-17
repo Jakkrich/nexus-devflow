@@ -1,6 +1,6 @@
 ---
 name: vendor
-description: "[devflow] Ingest an external Git repository into project-local devflow/.vendor/<slug>/ and synthesize an intelligent custom wrapper skill (.claude/skills/<slug>/SKILL.md) with update immunity protection. Use for /vendor, /skill-add, /equip, or /ingest."
+description: "[devflow] Ingest an external Git repository into project-local devflow/.vendor/<slug>/ and synthesize an intelligent custom wrapper skill (.agents/skills/<slug>/SKILL.md) with update immunity protection. Use for /vendor, /skill-add, /equip, or /ingest."
 argument-hint: "<git-url-or-path> [--name <slug>]"
 ---
 
@@ -10,14 +10,10 @@ argument-hint: "<git-url-or-path> [--name <slug>]"
 
 **Aliases:** `/vendor`, `/skill-add`, `/add-skill`, `/equip`, `/ingest`
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
-    external git repo  ->  [vendor]  ->  devflow/.vendor/<slug>/  +  .claude/skills/<slug>/SKILL.md  ->  ready
-    (GitHub / GitLab)      (clone +       (isolated vendor code)     (AI-synthesized custom wrapper)    (/<slug>)
+    external git repo  ->  [vendor]  ->  devflow/.vendor/<slug>/  +  .agents/skills/<slug>/SKILL.md  ->  ready
+    (GitHub / GitLab)      (clone +       (isolated vendor code)     (AI-synthesized custom wrapper)     (/<slug>)
                             inspect)
 
 `/vendor` is the AI-driven bridge between raw 3rd-party repositories and your project's agentic workflow. While standard package managers (npm/pip) perform "dumb file copying", `/vendor` deploys the AI Agent to inspect the cloned repository, understand its APIs, CLI flags, schemas, and heuristics, and synthesize a tailor-made **Custom Wrapper Skill (`SKILL.md`)** designed specifically for pair-programming in this project.
@@ -26,7 +22,7 @@ Where this sits in the workflow:
 
 ## 🛡️ Core Guarantees & Operational Principles
 
-1. **Local-Only Scope**: Installs strictly into the project workspace (`devflow/.vendor/<slug>/` and `.claude/skills/<slug>/`). Never touches global system tools or outside directories.
+1. **Local-Only Scope**: Installs strictly into the project workspace (`devflow/.vendor/<slug>/` and `.agents/skills/<slug>/`). Never touches global system tools or outside directories.
 2. **Repository Hygiene**: `devflow/.vendor/` is excluded from Git commits via `.gitignore`. Your project repo stays lean and uncluttered.
 3. **DevFlow Update Immunity**: Registered as a protected custom vendor skill in `.nexus/nexus-devflow.json`. Running `npx nexus-devflow update` will **never** purge, modify, or delete your custom wrapper skill.
 4. **Upstream Upgradable**: Can be updated from git upstream at any time via `npx nexus-devflow skill update all` or `npx nexus-devflow skill update <slug>` without overwriting the AI-crafted wrapper.
@@ -57,7 +53,7 @@ Where this sits in the workflow:
    - Does it offer domain-specific code generators or format converters?
 
 ### Phase 3: Synthesize Custom Wrapper Skill (`SKILL.md`)
-Create `.claude/skills/<slug>/SKILL.md` (and replicate to `.agents/skills/<slug>/SKILL.md` if `.agents` adapter is installed):
+Create `.agents/skills/<slug>/SKILL.md` (and replicate to `.claude/skills/<slug>/SKILL.md` if Claude adapter is installed):
 
 ```markdown
 ---
@@ -99,15 +95,12 @@ referencePath: devflow/.vendor/<slug>
    ```
 3. Save `.nexus/nexus-devflow.json`.
 4. Report completion to the user with:
-   - Clickable links to [devflow/.vendor/<slug>/](file:///d:/devtools/nexus-devflow/devflow/.vendor/) and [.claude/skills/<slug>/SKILL.md](file:///d:/devtools/nexus-devflow/.claude/skills/)
+   - Clickable links to `devflow/.vendor/<slug>/` and `.agents/skills/<slug>/SKILL.md`
    - How to invoke: `/<slug>`
    - How to update upstream: `npx nexus-devflow skill update <slug>` or `npx nexus-devflow skill update all`
 
 ---
 
-## 📖 Universal Contextual Help & Playbook Protocol (`help`, `--help`, `-h`, `?`)
+## 📖 Universal Contextual Help (`help`, `--help`, `-h`, `?`)
 
-Whenever `/vendor` is invoked with a help keyword or flag:
-1. **Safety Gate**: Do NOT clone any repository or mutate files.
-2. Render the practical 5W1H Playbook in chat.
-3. Conclude with: `"Help menu displayed successfully"`.
+Whenever `/vendor` is invoked with a help keyword or flag, follow `devflow/reference/help-playbook-protocol.md` to render a concise Markdown cheat sheet directly in chat without cloning or mutating files.

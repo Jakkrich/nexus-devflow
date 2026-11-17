@@ -5,10 +5,6 @@ description: "[devflow] Plan and create throwaway static HTML and CSS mockups wi
 
 # prototype - lock the look before you build
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
     plan  ->  /overview  ->  [prototype]  ->  /feature  ->  build

@@ -10,10 +10,6 @@ argument-hint: "<git-url-or-path> [--name <slug>]"
 
 **Aliases:** `/vendor`, `/skill-add`, `/add-skill`, `/equip`, `/ingest`
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
     external git repo  ->  [vendor]  ->  devflow/.vendor/<slug>/  +  .agents/skills/<slug>/SKILL.md  ->  ready
@@ -99,15 +95,12 @@ referencePath: devflow/.vendor/<slug>
    ```
 3. Save `.nexus/nexus-devflow.json`.
 4. Report completion to the user with:
-   - Clickable links to [devflow/.vendor/<slug>/](file:///d:/devtools/nexus-devflow/devflow/.vendor/) and [.agents/skills/<slug>/SKILL.md](file:///d:/devtools/nexus-devflow/.agents/skills/)
+   - Clickable links to `devflow/.vendor/<slug>/` and `.agents/skills/<slug>/SKILL.md`
    - How to invoke: `/<slug>`
    - How to update upstream: `npx nexus-devflow skill update <slug>` or `npx nexus-devflow skill update all`
 
 ---
 
-## 📖 Universal Contextual Help & Playbook Protocol (`help`, `--help`, `-h`, `?`)
+## 📖 Universal Contextual Help (`help`, `--help`, `-h`, `?`)
 
-Whenever `/vendor` is invoked with a help keyword or flag:
-1. **Safety Gate**: Do NOT clone any repository or mutate files.
-2. Render the practical 5W1H Playbook in chat.
-3. Conclude with: `"Help menu displayed successfully"`.
+Whenever `/vendor` is invoked with a help keyword or flag, follow `devflow/reference/help-playbook-protocol.md` to render a concise Markdown cheat sheet directly in chat without cloning or mutating files.

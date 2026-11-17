@@ -8,10 +8,6 @@ argument-hint: "[{title, request, IDEA-xxx, or discovery-id}]"
 
 $ARGUMENTS
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 `/discovery` is the central discovery entry point in Nexus-DevFlow. It operates in two adaptive modes based on input scope:
 1. **🗺️ Macro Project Discovery**: Develops high-level product and build roadmap plans (`devflow/project-plan.md` & `devflow/build-plan.md`) through an adaptive conversation before `/overview`.
 2. **🔍 Micro Feature Exploration (Pre-Flight)**: Explores a specific feature, request, or idea before committing to delivery, routes through supporting lenses, and finishes with a visible `Proceed`, `Defer`, or `Reject` decision before `/feature` or `/fix`.
@@ -82,7 +78,7 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
    - **For editorial, business, quadrant, or broad diagram types**: Use `diagram-design` (`.agents/skills/diagram-design/SKILL.md`).
    - Save diagram artifacts to `devflow/discoveries/{DISCOVERY_ID}-{slug}/diagrams/{name}.html` and reference them directly in `discovery.md`.
 7. **🧩 Slicing & Decomposition Lens (4 Slicing Archetypes)**:
-   - When breaking down a large initiative into sub-features or milestones, evaluate against [`devflow/reference/slicing-archetypes.md`](file:///d:/Projects/devtools/nexus-devflow/devflow/reference/slicing-archetypes.md):
+   - When breaking down a large initiative into sub-features or milestones, evaluate against `devflow/reference/slicing-archetypes.md`:
      - **Skateboard**: Minimal functional loop (prove core logic end-to-end with minimal UI).
      - **Facade**: Rich UI/DX with mock backend (validate user flow & interaction first).
      - **Tracer Bullet**: Deep vertical slice across all layers (DB -> API -> UI) for 1 happy path.

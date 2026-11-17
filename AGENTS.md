@@ -40,7 +40,7 @@ Build for established requirements, not hypothetical scale, threats, or future f
 
 - **4-Stage Loop**: `/feature` (or `/fix`) ──▶ `/implement` ──▶ `/check` ──▶ `/complete` (using `.agents/skills/<skill>/SKILL.md` or `.claude/skills/<skill>/SKILL.md`).
 - **Default Language (Thai)**: All generated stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
-- **Contextual Help**: When invoked with `help`, `--help`, `-h`, or `?`, read [the playbook protocol](devflow/reference/help-playbook-protocol.md) without running the command's primary action.
+- **Contextual Help**: When invoked with `help`, `--help`, `-h`, or `?`, follow [the help protocol](devflow/reference/help-playbook-protocol.md) to reply with a concise in-chat Markdown cheat sheet without running the command's primary action.
 - **Activity State**: Never create or edit `devflow/.state/run.json` directly. Tracked commands record activity via the first helper that exists (see `devflow/workflow.md` for schema and field rules):
 
 ```text
@@ -55,4 +55,4 @@ node .claude/skills/devflow-doctor/scripts/run-state.mjs <action> <options>
 - Static contract check: `npm run check:static`
 - Test installer package: `npm test`
 - Package smoke test: `npm run test:package`
-- Browser tests (Optional): `npm run test:browser` (via Playwright) + MCP `browseros-neo` (`http://127.0.0.1:9010/mcp`) for interactive live visual QA
+- Browser tests (Optional): `npm run test:browser` (via Playwright) + interactive browser MCP (e.g., Playwright MCP, Chrome DevTools MCP, or `browseros-neo` if configured) for live visual QA

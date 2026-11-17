@@ -1,16 +1,12 @@
 ---
 name: browser-tests
-description: "[devflow] Add or normalize an optional repository-owned browser test harness (preferring Playwright) and connect with MCP browserOS neo (http://127.0.0.1:9010/mcp) when available for live visual inspection and repeatable E2E automation."
+description: "[devflow] Add or normalize an optional repository-owned browser test harness (preferring Playwright) and integrate with any active interactive browser MCP for live visual inspection and repeatable E2E automation."
 argument-hint: "[{runner or surface}]"
 ---
 
 # browser-tests - set up repeatable browser verification
 
 $ARGUMENTS
-
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
 
 This is an explicit optional setup command. It creates a project-owned browser
 test path that later Feature, Implement, Check, and Continuous runs can reuse. It
@@ -28,8 +24,8 @@ Nexus-DevFlow uses a **Dual-Layer Browser Verification Hierarchy**:
 │                    🌐 Hybrid Browser Verification Engine                    │
 ├──────────────────────────────────────┬──────────────────────────────────────┤
 │ 1. Code-Driven Test Automation (CI)  │ 2. Interactive AI Visual QA (MCP)    │
-│    • Framework: Playwright           │    • Server: MCP browseros-neo       │
-│    • Command: npm run test:browser   │    • URL: http://127.0.0.1:9010/mcp  │
+│    • Framework: Playwright           │    • Active Browser MCP (Playwright, │
+│    • Command: npm run test:browser   │      Chrome DevTools, browseros-neo) │
 │    • Purpose: Assertions, Headless,  │    • Purpose: Live DOM Inspection,   │
 │      Regression Suite & Pre-commit   │      Real Screenshot Proofs, /try    │
 └──────────────────────────────────────┴──────────────────────────────────────┘
@@ -40,8 +36,8 @@ Nexus-DevFlow uses a **Dual-Layer Browser Verification Hierarchy**:
    - Documents command in `AGENTS.md` as `Browser tests: npm run test:browser` (or equivalent).
    - Executed automatically during `/check` and Continuous mode.
 
-2. **Layer 2: Live Interactive QA (MCP browseros-neo)**:
-   - When the `browseros-neo` MCP server (`http://127.0.0.1:9010/mcp`) is active in IDE config (`mcp_config.json`), the AI Agent connects to it for live interactive inspection.
+2. **Layer 2: Live Interactive QA (Interactive Browser MCP)**:
+   - When an interactive browser MCP server (such as Playwright MCP, Chrome DevTools MCP, or `browseros-neo`) is configured, the AI Agent uses it for live interactive inspection.
    - Used during `/check` and `/try` to capture visual evidence, inspect rendered styles, and verify complex user interactions directly in a live browser.
 
 ---
@@ -95,7 +91,7 @@ Before editing, state:
 - application or extension surface covered by the smoke test
 - exact browser-test command that will be documented
 - any server, build, authentication, or browser-chrome limitation
-- MCP `browseros-neo` availability for interactive checks
+- interactive browser MCP availability for interactive checks
 
 Dependency installation and browser-binary downloads require the user's approval
 through the current tool's normal approval flow. Do not treat running this skill
@@ -139,7 +135,7 @@ Return a concise setup report:
 - runner and browser surface
 - command documented in `AGENTS.md`
 - smoke behavior proven
-- MCP `browseros-neo` connectivity status
+- interactive browser MCP connectivity status
 - files added or changed
 - verification result
 - remaining manual or environment-specific boundary
@@ -155,7 +151,7 @@ Once `AGENTS.md` declares `Browser tests: <command>`:
 
 - **Feature** may include a focused browser-test expectation for stable behavioral done-whens.
 - **Implement** may add and run a focused browser test when it is proportionate to the current step.
-- **Check** runs the documented command as repeatable evidence, connects to MCP `browseros-neo` (if active) for live visual verification & screenshots, and directly observes any done-when the suite does not prove.
+- **Check** runs the documented command as repeatable evidence, uses an active interactive browser MCP (if configured) for live visual verification & screenshots, and directly observes any done-when the suite does not prove.
 - **Continuous** needs no separate browser mode. Its configured Check gate uses the same command.
 
 The harness supplements direct evidence. A green browser suite does not prove

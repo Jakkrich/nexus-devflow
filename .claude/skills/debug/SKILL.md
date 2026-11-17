@@ -5,10 +5,6 @@ description: "[devflow] Diagnose a failing test, build, crash, regression, or un
 
 # debug - 6-Phase Scientific Debugging Protocol
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
     reported failure  ->  [debug]  ->  /fix or /implement

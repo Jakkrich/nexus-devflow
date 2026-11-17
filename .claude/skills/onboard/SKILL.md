@@ -5,9 +5,7 @@ description: "[devflow] Onboard a fresh or early scaffold after DevFlow is overl
 
 # onboard - finish the Blueprint overlay setup
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 
@@ -229,7 +227,7 @@ claim a verdict; when the future gate activates, the handoff is
 
 Detect browser capability without installing anything. If the project already
 declares `test:browser`, record `npm run test:browser` in the onboarding report.
-Also report whether `browseros-neo` is available for interactive UI evidence.
+Also report whether an interactive browser MCP (e.g., Playwright MCP, Chrome DevTools MCP, or `browseros-neo`) is available for UI evidence.
 When a browser-facing project lacks either capability, point to `/browser-tests`
 as an optional setup route and describe the gap honestly.
 

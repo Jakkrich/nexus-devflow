@@ -10,9 +10,7 @@ $ARGUMENTS
 
 **Aliases:** `/code-modernization`, `/modernize`
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 `code-modernization` is the flagship modernization orchestrator in Nexus-DevFlow, bringing the complete power of Anthropic's **Official Code Modernization Plugin** directly into your project with **Zero Cognitive Load**.
 

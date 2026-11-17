@@ -36,7 +36,7 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover `.agents/skills/` and `.claude/skills/`.
 4. **State-Aware Inspection**: When unsure what to do next, invoke `devflow` or `devflow-status` to inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md`.
 5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
-6. **Contextual Help**: When a DevFlow command is invoked with `help`, `--help`, `-h`, or `?`, read [the playbook protocol](devflow/reference/help-playbook-protocol.md). Produce its help deliverable without running the command's primary action or creating a task run.
+6. **Contextual Help**: When a DevFlow command is invoked with `help`, `--help`, `-h`, or `?`, follow [the help protocol](devflow/reference/help-playbook-protocol.md) to render a concise Markdown cheat sheet in chat without running the command's primary action or creating a task run.
 
 ---
 
@@ -71,11 +71,9 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 The dashboard and status reporting can show the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit.
 
-Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `analyze`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `bughunter`, `setup-tests`, `browser-tests`, `test`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `devflow-status`, and `devflow-doctor` do not need activity state. Doctor's optional approved reset removes malformed activity instead of recording another run.
+Substantial mutating or multi-step workflow commands (`onboard`, `adopt`, `overview`, `feature`, `fix`, `rollback`, `implement`, `check` verification mode, `autopilot`, `continuous`, `complete`) may publish progress on a best-effort basis when `devflow/.state/` or the helper exists. Read-only, diagnostic, and lightweight commands (`audit`, `debug`, `discovery`, `analyze`, `brief`, `try`, `explore`, `idea`, `brainstorm`, `grill`, `vendor`, `ci`, `release`, `prototype`, `setup-tests`, `browser-tests`, `devflow`, `devflow-status`, `devflow-doctor`, and `/check guide`) do not need to write activity state.
 
-Writing the initial activity record is the first action of a tracked command, before project inspection, preflight, or other tool calls. This one generated state write does not authorize product changes or bypass any safety check.
-
-Never create or edit `run.json` directly. From the project root, use the first helper that exists:
+Never create or edit `run.json` directly. When recording best-effort activity from the project root, use the first helper that exists:
 
 ```text
 node .agents/skills/devflow-doctor/scripts/run-state.mjs <action> <options>

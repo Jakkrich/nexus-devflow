@@ -75,7 +75,7 @@
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo",
+      "interactive browser",
       "At or above 20,000 bytes, stop and tell the user to run `/overview`"
     ],
     "overview": [
@@ -94,21 +94,21 @@
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo"
+      "interactive browser"
     ],
     "devflow-status": [
       "qualityGates.regular.independentReview",
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo"
+      "interactive browser"
     ],
     "onboard": [
       "qualityGates.regular.independentReview",
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo",
+      "interactive browser",
       "Efficient (Recommended)",
       "Guided",
       "Custom",
@@ -125,14 +125,14 @@
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo"
+      "interactive browser"
     ],
     "continuous": [
       "qualityGates.continuous.independentReview",
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "browseros-neo"
+      "interactive browser"
     ]
   },
   "commands": {

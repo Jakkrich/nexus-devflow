@@ -8,9 +8,7 @@ argument-hint: "[{run-id, number, or name}] [--ticket <NN | path>]"
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `devflow/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 
@@ -89,7 +87,7 @@ receipt. After the final Verify pass, an active gate routes to
 `current` freshness may proceed toward `/complete`. This skill never approves
 its own work or rewrites receipt evidence.
 
-For browser-facing changes, run focused browser tests during iteration when available. Run the required `npm run test:browser` gate once before handoff if the spec or project requires it. Use `browseros-neo` for visual or behavioral evidence when available and relevant. Record missing tooling accurately; install a runner only when setup is in the authorized scope.
+For browser-facing changes, run focused browser tests during iteration when available. Run the required `npm run test:browser` gate once before handoff if the spec or project requires it. Use an interactive browser tool (e.g., Playwright MCP, Chrome DevTools MCP, or `browseros-neo` if configured) for visual or behavioral evidence when available and relevant. Record missing tooling accurately; install a runner only when setup is in the authorized scope.
 
 Also read `qualityGates.regular.tryGuide` from `devflow/config.json` (default `"manual"`). When `tryGuide` is `"always"`, `"when-user-facing"` (for UI work), or `"when-testable"` (for testable/observable UI, API, CLI, or script changes), prepare a concise 1–3 step `## Try it now` proof per `../check/reference/try-it-now.md`.
 

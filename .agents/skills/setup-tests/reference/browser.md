@@ -5,8 +5,8 @@ test path that later Feature, Implement, Check, and Continuous runs can reuse. I
 does not replace live browser inspection, install during another workflow
 command, or make browser testing mandatory for every DevFlow project.
 
-> 💡 **Nexus-DevFlow Superpower**:
-> Nexus-DevFlow also provides the dedicated first-class skill **`/browser-tests`** which natively connects with Playwright test harnesses and the user's MCP `browseros-neo` (live real-browser inspection). Both paths are fully supported under DevFlow Dual Compatibility.
+> 💡 **Nexus-DevFlow Integration**:
+> Nexus-DevFlow also provides `/browser-tests` for Playwright test harnesses and pairs with any active interactive browser MCP (such as Playwright MCP, Chrome DevTools MCP, or `browseros-neo`) for live visual inspection.
 
 ## Input
 

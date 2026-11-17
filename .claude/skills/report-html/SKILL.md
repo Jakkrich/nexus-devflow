@@ -40,10 +40,10 @@ If the spec involves architectural design, system topology, sequence flows, or i
    - If not installed, run CLI installation:
      ```bash
      # For technical architecture, dataflows, sequence traces, interactive motion
-     npx create-nexus-devflow skill add archify
+     npx nexus-devflow skill add archify
 
      # For editorial, business, quadrant, timeline, or radar diagrams
-     npx create-nexus-devflow skill add diagram-design
+     npx nexus-devflow skill add diagram-design
      ```
 3. **Generate Diagram**:
    Use the installed skill to create the diagram artifact in `devflow/context/{xxx-slug}/diagrams/{name}.html` (or `.svg`).
@@ -51,11 +51,7 @@ If the spec involves architectural design, system topology, sequence flows, or i
    Any ` ```mermaid ` code block inside the document is automatically rendered visually via the dashboard's built-in theme-aware Mermaid.js engine.
 
 ### 3. Render Interactive HTML Dashboard
-Execute the HTML generation engine or script:
-```bash
-npm run report:html -- {RUNNING_ID}
-```
-Or transform Markdown into a styled, standalone HTML document:
+If `package.json` declares a `report:html` script, run it (`npm run report:html -- {RUNNING_ID}`); otherwise transform the Markdown spec directly into a styled, standalone HTML document:
 - Output: `devflow/context/{xxx-slug}/report.html` (or adjacent `{xxx-slug}.html`)
 
 ### 4. Output

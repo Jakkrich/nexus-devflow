@@ -61,7 +61,7 @@ include one unaffected regression path from the rollback spec.
 
 Use the Commands section in `AGENTS.md`. Match the project type:
 
-- **Web app** - dev server command, URL, and the route or screen to open. If `browseros-neo` MCP server is active (`http://127.0.0.1:9010/mcp`), you can also offer to inspect or navigate in the live browser.
+- **Web app** - dev server command, URL, and the route or screen to open. If an interactive browser MCP server is active, you can also offer to inspect or navigate in the live browser.
 - **Server/API** - server command, base URL, endpoint, method, and expected
   response shape.
 - **CLI** - exact command(s), arguments, and expected output.
@@ -100,5 +100,5 @@ End with:
 
 - **Best signal** - the one thing the user should try first.
 - **Optional deeper checks** - only if useful.
-- **MCP Visual Preview** - mention live browser inspection via MCP `browseros-neo` if active.
+- **MCP Visual Preview** - mention live browser inspection via an active interactive browser MCP if configured.
 - **Gaps** - anything the guide cannot know from the docs, such as missing route or seed data.
