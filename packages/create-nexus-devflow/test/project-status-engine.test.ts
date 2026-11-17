@@ -29,5 +29,22 @@ describe("ProjectStatusEngine Seam & Snapshot", () => {
     assert.ok(formatted.length > 50);
     assert.ok(formatted.includes("Next action"));
   });
+
+  it("falls back to unavailable git status instead of throwing when readGitStatus fails", async () => {
+    const engine = new ProjectStatusEngine(projectRoot, {
+      readGitStatus: async () => {
+        throw new Error("stdout maxBuffer length exceeded");
+      }
+    });
+    const status = await engine.getStatus();
+    assert.equal(status.git.available, false);
+    assert.equal(status.git.branch, null);
+    assert.equal(status.git.changedFiles, 0);
+    assert.equal(status.health, "warning");
+    assert.ok(status.warnings.some((w) => w.code === "git_status_unavailable"));
+    const formatted = engine.formatHuman(status, { color: false });
+    assert.ok(formatted.includes("Next action"));
+    assert.ok(formatted.includes("git status failed") || formatted.includes("git_status_unavailable") || formatted.includes("unavailable"));
+  });
 });
 

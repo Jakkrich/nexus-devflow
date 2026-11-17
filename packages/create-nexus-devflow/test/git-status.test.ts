@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { readGitStatus, clearGitStatusCache } from "../lib/git-status.js";
+import { readGitStatus, readGitStatusSafe, clearGitStatusCache } from "../lib/git-status.js";
 
 test("readGitStatus handles non-git directory gracefully", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-git-non-"));
@@ -96,6 +96,22 @@ test("readGitStatus clears a failed in-flight computation so the next call can r
   const retried = await readGitStatus(projectRoot, { runGit });
   assert.equal(retried.available, true);
   assert.equal(statusAttempts, 2);
+});
+
+test("readGitStatusSafe returns unavailable summary when git status fails or exceeds maxBuffer", async () => {
+  clearGitStatusCache();
+  const status = await readGitStatusSafe(path.join(os.tmpdir(), "nexus-test-git-safe-fail"), {
+    runGit: async (_projectRoot: string, args: readonly string[]) => {
+      if (args[0] === "status") {
+        throw new Error("stdout maxBuffer length exceeded");
+      }
+      return fakeGitOutput(args);
+    }
+  });
+  assert.equal(status.available, false);
+  assert.equal(status.branch, null);
+  assert.equal(status.clean, null);
+  assert.equal(status.changedFiles, 0);
 });
 
 function fakeGitOutput(args: readonly string[]): string {

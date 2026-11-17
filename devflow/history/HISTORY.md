@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-11-17 | `114a` | Feature | Rename `/status` & `/doctor` to `/devflow-status` & `/devflow-doctor` + Git/Pack Hardening | `c1ca922` | `Completed` | [`114a-rename-devflow-status-doctor-hardening.md`](features/114a-rename-devflow-status-doctor-hardening.md) |
 | 2026-10-30 | `113` | Fix | Remove In-IDE Interactive Choice and Predictive Follow-Up Feature | `39c3075` | `Completed` | [`113-fix-remove-interactive-choice.md`](fixes/113-fix-remove-interactive-choice.md) |
 | 2026-10-27 | `112` | Feature | In-IDE Interactive Choice & Predictive Follow-Up Gate (Antigravity Native) | `456be14` | `Completed` | [`112-interactive-action-picker.md`](features/112-interactive-action-picker.md) |
 

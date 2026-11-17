@@ -151,7 +151,7 @@ export const START_PAGES: DocPage[] = [
         contentHtml: `
           <pre><code>/feature -> /implement -> /check -> /audit current -> /complete</code></pre>
           <p>รันคำสั่งเหล่านี้ใน AI Chat (ใช้ <code>$</code> ใน Codex หรือ <code>/</code> ใน Claude Code / Antigravity) ให้รีวิว Feature Spec ก่อนเริ่ม Implement, คำสั่ง Check จะทดสอบพฤติกรรมที่สัญญาไว้ และ Audit จะรีวิวคุณภาพโค้ด การแสดง Audit ที่นี่ไม่ได้เปลี่ยนเกณฑ์ Review Gates ที่คุณตั้งค่าไว้</p>
-          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/status</code> เพื่อกลับมาทำงานต่อ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
+          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/devflow-status</code> เพื่อกลับมาทำงานต่อ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
         `
       }
     ]
@@ -412,7 +412,7 @@ export const START_PAGES: DocPage[] = [
               </tr>
               <tr>
                 <td>ต้องการตรวจสุขภาพของระบบ DevFlow ทั้งหมด</td>
-                <td><code>/doctor</code></td>
+                <td><code>/devflow-doctor</code></td>
                 <td>ตรวจสอบความสอดคล้องของ Adapters, Plans, Config, และความสดใหม่ของ Overview</td>
               </tr>
             </tbody>
@@ -479,7 +479,7 @@ export const START_PAGES: DocPage[] = [
               สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่อ่านไฟล์เกินจำเป็น
             </li>
             <li>
-              <strong><a href="../commands/status/">/status</a></strong>: 
+              <strong><a href="../commands/devflow-status/">/devflow-status</a></strong>: 
               รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สถานะของฟีเจอร์ปัจจุบัน, Git State, และคำสั่งถัดไปที่ต้องทำ
             </li>
             <li>
@@ -491,7 +491,7 @@ export const START_PAGES: DocPage[] = [
               ตรวจสอบคุณภาพและความปลอดภัย 5 มิติ (Code Quality, OWASP Top 10 Security, Performance Bottlenecks, Architecture Drift, Test Integrity) และบันทึกลง <code>findings.md</code> (รองรับ <code>/audit current</code> สำหรับงานปัจจุบัน และ <code>/audit full</code> สำหรับทั้งโปรเจกต์)
             </li>
             <li>
-              <strong><a href="../commands/doctor/">/doctor</a></strong>: 
+              <strong><a href="../commands/devflow-doctor/">/devflow-doctor</a></strong>: 
               ตรวจสุขภาพของระบบ DevFlow ทั้งหมด ตรวจสอบ Adapter Sync, Config Drift, และความสดใหม่ของ <code>project-overview.md</code>
             </li>
           </ul>
@@ -875,12 +875,12 @@ pnpm dlx nexus-devflow@latest update</code></pre>
             <li><strong><code>/tests browser</code> (หรือ <code>browser-tests</code>)</strong>: วิเคราะห์สถาปัตยกรรมเว็บแอป ติดตั้งชุดทดสอบ Playwright E2E พร้อมสคริปต์รันทั้งแบบ Headless และ Interactive UI และเชื่อมต่อกับ MCP Server ของ <code>browseros-neo</code> (ที่พอร์ต <code>http://127.0.0.1:9010/mcp</code>) เพื่อให้เอเจนต์สามารถเปิดเบราว์เซอร์จริงที่ล็อกอินบัญชีจริงไว้แล้ว ตรวจสอบผลลัพธ์เชิงภาพ และบันทึกหลักฐานการทดสอบอัตโนมัติ</li>
             <li><strong><code>/check guide</code> (หรือ <code>try</code>)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยจะระบุคำสั่งที่ต้องรัน ที่อยู่ URL จุดที่ต้องคลิกบนหน้าจอ ข้อมูลตัวอย่างที่ต้องกรอก ผลลัพธ์ที่ถูกต้อง และสัญญาณที่บ่งบอกว่าเกิดข้อผิดพลาด <em>(หมายเหตุ: โหมด guide เป็นเครื่องมือช่วยตรวจทานของมนุษย์ ไม่นับเป็นการยืนยันความถูกต้องเชิงคุณภาพอัตโนมัติ)</em></li>
             <li><strong><code>/explore</code></strong>: สกิลสำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรมแบบ Read-Only เปรียบเทียบทางเลือกและข้อดีข้อเสีย (Trade-offs) กับโค้ดจริงในโปรเจกต์ โดยไม่มีการแก้ไขโค้ดหรือบังคับเขียนสเปก/แผนงานล่วงหน้า เหมาะสำหรับการศึกษาความเป็นไปได้ก่อนตัดสินใจ</li>
-            <li><strong><code>/doctor</code></strong>: สแกนตรวจสุขภาพและวินิจฉัยความพร้อมของระบบ DevFlow ตรวจสอบความสมบูรณ์ของ Adapters, ความสดใหม่ของ <code>project-overview.md</code>, ความถูกต้องของคำสั่งใน <code>AGENTS.md</code> และแจ้งเตือนหากไฟล์ Context มีขนาดใหญ่เกินเกณฑ์ 20KB</li>
+            <li><strong><code>/devflow-doctor</code></strong>: สแกนตรวจสุขภาพและวินิจฉัยความพร้อมของระบบ DevFlow ตรวจสอบความสมบูรณ์ของ Adapters, ความสดใหม่ของ <code>project-overview.md</code>, ความถูกต้องของคำสั่งใน <code>AGENTS.md</code> และแจ้งเตือนหากไฟล์ Context มีขนาดใหญ่เกินเกณฑ์ 20KB</li>
             <li><strong><code>/overview</code></strong>: ทำหน้าที่เป็น Deterministic Compiler ที่กลั่นกรองและรวบรวมข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code> เพื่อเป็น Single Living Source of Truth ที่กระชับและแม่นยำให้ AI Agent ทุกตัวอ่านก่อนเริ่มงานในแต่ละเซสชัน</li>
             <li><strong><code>/ci</code></strong>: จัดระเบียบคำสั่ง Verify ของโปรเจกต์ สร้าง GitHub Actions CI Workflow ที่สอดคล้องกัน และเสนอการติดตั้ง Git pre-push hook ในเครื่องเพื่อป้องกันการ Push โค้ดที่ไม่ผ่านการทดสอบขึ้นสู่ Remote Repository</li>
           </ul>
 
-          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ที่อาจยังไม่ได้อัปเดตใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
+          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow-doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ที่อาจยังไม่ได้อัปเดตใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
         `,
         subsections: [
           {

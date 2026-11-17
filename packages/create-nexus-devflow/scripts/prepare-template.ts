@@ -1,3 +1,5 @@
+import { execFileSync } from "node:child_process";
+import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -6,6 +8,11 @@ import {
   loadCoreSkillInventory,
   shouldIncludeTemplatePath
 } from "../lib/core-skill-inventory.js";
+
+export interface TrackedIndex {
+  readonly files: ReadonlySet<string>;
+  readonly dirs: ReadonlySet<string>;
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
@@ -25,7 +32,136 @@ function matchesPrefix(filePath: string, prefix: string): boolean {
   return filePath === prefix || filePath.startsWith(`${prefix}/`);
 }
 
-async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<void> {
+export function buildTrackedIndex(paths: Iterable<string>): TrackedIndex {
+  const files = new Set<string>();
+  const dirs = new Set<string>();
+  for (const rawPath of paths) {
+    const normalized = rawPath.replace(/\\/g, "/").replace(/^\/+|\/+$/g, "");
+    if (!normalized) continue;
+    files.add(normalized);
+    let slash = normalized.lastIndexOf("/");
+    while (slash > 0) {
+      dirs.add(normalized.slice(0, slash));
+      slash = normalized.lastIndexOf("/", slash - 1);
+    }
+  }
+  return { files, dirs };
+}
+
+export function loadTrackedRepoIndex(rootDir: string): TrackedIndex | null {
+  const hasGitMarker = fsSync.existsSync(path.join(rootDir, ".git"));
+  try {
+    const stdout = execFileSync("git", ["-C", rootDir, "ls-files", "-z"], {
+      encoding: "utf8",
+      maxBuffer: 16 * 1024 * 1024,
+      stdio: ["pipe", "pipe", "ignore"]
+    });
+    return buildTrackedIndex(stdout.split("\0").filter(Boolean));
+  } catch (error: unknown) {
+    if (hasGitMarker) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to list tracked files in Git repository ${rootDir}: ${detail}`);
+    }
+    return null;
+  }
+}
+
+export function shouldCopyTemplateEntry(
+  normalized: string,
+  isDirectory: boolean,
+  inventory: CoreSkillInventory,
+  trackedIndex: TrackedIndex | null
+): boolean {
+  if (!shouldIncludeTemplatePath(normalized, inventory)) {
+    return false;
+  }
+  if (matchesPrefix(normalized, "devflow/.state")) {
+    return false;
+  }
+  if (
+    normalized.startsWith("devflow/context/") &&
+    normalized !== "devflow/context" &&
+    normalized !== "devflow/context/project-overview.md" &&
+    normalized !== "devflow/context/coding-standards.md" &&
+    normalized !== "devflow/context/ai-interaction.md" &&
+    normalized !== "devflow/context/glossary.md"
+  ) {
+    return false;
+  }
+  if (
+    normalized.startsWith("devflow/history/features/") &&
+    !normalized.endsWith("README.md")
+  ) {
+    return false;
+  }
+  if (
+    normalized.startsWith("devflow/history/fixes/") &&
+    !normalized.endsWith("README.md")
+  ) {
+    return false;
+  }
+  if (
+    normalized.startsWith("devflow/history/rollbacks/") &&
+    !normalized.endsWith("README.md")
+  ) {
+    return false;
+  }
+  if (
+    normalized.startsWith("devflow/discoveries/") &&
+    !normalized.endsWith(".gitkeep") &&
+    !normalized.endsWith("README.md")
+  ) {
+    return false;
+  }
+  if (
+    normalized.startsWith("devflow/decisions/") &&
+    !normalized.endsWith(".gitkeep") &&
+    !normalized.endsWith("README.md")
+  ) {
+    return false;
+  }
+  if (
+    matchesPrefix(normalized, "devflow/runs") ||
+    matchesPrefix(normalized, "devflow/inbox") ||
+    matchesPrefix(normalized, "devflow/analysis") ||
+    matchesPrefix(normalized, "devflow/scratch") ||
+    matchesPrefix(normalized, "devflow/tmp") ||
+    matchesPrefix(normalized, "devflow/temp") ||
+    matchesPrefix(normalized, "devflow/brainstorm") ||
+    matchesPrefix(normalized, "devflow/brainstorms") ||
+    matchesPrefix(normalized, "devflow/backups") ||
+    matchesPrefix(normalized, "devflow/reports") ||
+    matchesPrefix(normalized, "devflow/reference/playbooks") ||
+    matchesPrefix(normalized, "devflow/research") ||
+    matchesPrefix(normalized, "prototypes") ||
+    matchesPrefix(normalized, "evals") ||
+    matchesPrefix(normalized, ".nexus")
+  ) {
+    return false;
+  }
+  if (
+    matchesPrefix(normalized, "devflow/.vendor") ||
+    matchesPrefix(normalized, "devflow/reference/bughunter/skills") ||
+    matchesPrefix(normalized, "devflow/reference/bughunter/commands") ||
+    matchesPrefix(normalized, "devflow/reference/bughunter/disclosed-reports") ||
+    matchesPrefix(normalized, "devflow/reference/bughunter/docs")
+  ) {
+    return false;
+  }
+
+  if (trackedIndex && normalized !== "") {
+    return isDirectory
+      ? trackedIndex.dirs.has(normalized)
+      : trackedIndex.files.has(normalized);
+  }
+  return true;
+}
+
+async function copyEntry(
+  entry: string,
+  inventory: CoreSkillInventory,
+  trackedIndex: TrackedIndex | null
+): Promise<void> {
   const source = path.join(repoRoot, entry);
   const target = path.join(templateRoot, entry);
   try {
@@ -33,83 +169,8 @@ async function copyEntry(entry: string, inventory: CoreSkillInventory): Promise<
       recursive: true,
       filter: (src) => {
         const normalized = path.relative(repoRoot, src).replace(/\\/g, "/");
-        if (!shouldIncludeTemplatePath(normalized, inventory)) {
-          return false;
-        }
-        if (matchesPrefix(normalized, "devflow/.state")) {
-          return false;
-        }
-        if (
-          normalized.startsWith("devflow/context/") &&
-          normalized !== "devflow/context" &&
-          normalized !== "devflow/context/project-overview.md" &&
-          normalized !== "devflow/context/coding-standards.md" &&
-          normalized !== "devflow/context/ai-interaction.md" &&
-          normalized !== "devflow/context/glossary.md"
-        ) {
-          return false;
-        }
-        if (
-          normalized.startsWith("devflow/history/features/") &&
-          !normalized.endsWith("README.md")
-        ) {
-          return false;
-        }
-        if (
-          normalized.startsWith("devflow/history/fixes/") &&
-          !normalized.endsWith("README.md")
-        ) {
-          return false;
-        }
-        if (
-          normalized.startsWith("devflow/history/rollbacks/") &&
-          !normalized.endsWith("README.md")
-        ) {
-          return false;
-        }
-        if (
-          normalized.startsWith("devflow/discoveries/") &&
-          !normalized.endsWith(".gitkeep") &&
-          !normalized.endsWith("README.md")
-        ) {
-          return false;
-        }
-        if (
-          normalized.startsWith("devflow/decisions/") &&
-          !normalized.endsWith(".gitkeep") &&
-          !normalized.endsWith("README.md")
-        ) {
-          return false;
-        }
-        if (
-          matchesPrefix(normalized, "devflow/runs") ||
-          matchesPrefix(normalized, "devflow/inbox") ||
-          matchesPrefix(normalized, "devflow/analysis") ||
-          matchesPrefix(normalized, "devflow/scratch") ||
-          matchesPrefix(normalized, "devflow/tmp") ||
-          matchesPrefix(normalized, "devflow/temp") ||
-          matchesPrefix(normalized, "devflow/brainstorm") ||
-          matchesPrefix(normalized, "devflow/brainstorms") ||
-          matchesPrefix(normalized, "devflow/backups") ||
-          matchesPrefix(normalized, "devflow/reports") ||
-          matchesPrefix(normalized, "devflow/reference/playbooks") ||
-          matchesPrefix(normalized, "devflow/research") ||
-          matchesPrefix(normalized, "prototypes") ||
-          matchesPrefix(normalized, "evals") ||
-          matchesPrefix(normalized, ".nexus")
-        ) {
-          return false;
-        }
-        if (
-          matchesPrefix(normalized, "devflow/.vendor") ||
-          matchesPrefix(normalized, "devflow/reference/bughunter/skills") ||
-          matchesPrefix(normalized, "devflow/reference/bughunter/commands") ||
-          matchesPrefix(normalized, "devflow/reference/bughunter/disclosed-reports") ||
-          matchesPrefix(normalized, "devflow/reference/bughunter/docs")
-        ) {
-          return false;
-        }
-        return true;
+        const isDirectory = fsSync.lstatSync(src).isDirectory();
+        return shouldCopyTemplateEntry(normalized, isDirectory, inventory, trackedIndex);
       }
     });
   } catch (err: unknown) {
@@ -237,18 +298,25 @@ async function main() {
   const inventory = await loadCoreSkillInventory(
     path.join(repoRoot, "agent-bundle.manifest.json")
   );
+  const trackedIndex = loadTrackedRepoIndex(repoRoot);
   await fs.rm(templateRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   await fs.mkdir(templateRoot, { recursive: true });
 
   for (const entry of entries) {
-    await copyEntry(entry, inventory);
+    await copyEntry(entry, inventory, trackedIndex);
   }
 
   await ensureEmptyDirectories();
   await sanitizeStarterFiles();
 }
 
-main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exit(1);
-});
+const isEntrypoint =
+  Boolean(process.argv[1]) &&
+  fsSync.realpathSync(process.argv[1]) === fsSync.realpathSync(fileURLToPath(import.meta.url));
+
+if (isEntrypoint) {
+  main().catch((error: unknown) => {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  });
+}

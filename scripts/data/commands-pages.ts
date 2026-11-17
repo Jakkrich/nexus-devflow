@@ -625,7 +625,7 @@ $onboard
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>ดูสถานะภาพรวมของโปรเจกต์ด้วย <code>/status</code> หรือเริ่มฟีเจอร์ถัดไปด้วย <code>/feature</code></p>
+          <p>ดูสถานะภาพรวมของโปรเจกต์ด้วย <code>/devflow-status</code> หรือเริ่มฟีเจอร์ถัดไปด้วย <code>/feature</code></p>
         `
       }
     ]
@@ -633,18 +633,18 @@ $onboard
 
   // 10. Status
   {
-    slug: 'commands/status',
+    slug: 'commands/devflow-status',
     category: 'COMMANDS',
-    title: 'Status (/status)',
+    title: 'DevFlow Status (/devflow-status)',
     lead: 'แสดงสถานะความคืบหน้าของโปรเจกต์ ฟีเจอร์ที่กำลังทำอยู่ สถานะ Git และคำสั่งถัดไปที่แนะนำ (Read-Only)',
-    pills: ['Command', 'Status', 'Dashboard', 'Read-Only', 'GitState', 'DriftCheck'],
+    pills: ['Command', 'DevFlowStatus', 'Dashboard', 'Read-Only', 'GitState', 'DriftCheck'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>รันคำสั่ง <code>/status</code> เมื่อคุณกลับเข้ามาทำงานหลังจากพัก หรือต้องการตรวจเช็กว่าโปรเจกต์อยู่ในสถานะใด มีงานอะไรค้างอยู่:</p>
-          <pre><code>/status</code></pre>
+          <p>รันคำสั่ง <code>/devflow-status</code> เมื่อคุณกลับเข้ามาทำงานหลังจากพัก หรือต้องการตรวจเช็กว่าโปรเจกต์อยู่ในสถานะใด มีงานอะไรค้างอยู่:</p>
+          <pre><code>/devflow-status</code></pre>
         `
       },
       {
@@ -672,18 +672,18 @@ $onboard
 
   // 11. Doctor
   {
-    slug: 'commands/doctor',
+    slug: 'commands/devflow-doctor',
     category: 'COMMANDS',
-    title: 'Doctor (/doctor)',
+    title: 'DevFlow Doctor (/devflow-doctor)',
     lead: 'ตรวจสุขภาพเวิร์กโฟลว์ ความสมบูรณ์ของ Adapters ความสดใหม่ของ Context และล้างสถานะผิดปกติ',
-    pills: ['Command', 'Doctor', 'HealthCheck', 'Adapters', 'SelfHealing', 'Integrity'],
+    pills: ['Command', 'DevFlowDoctor', 'HealthCheck', 'Adapters', 'SelfHealing', 'Integrity'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>รันคำสั่ง <code>/doctor</code> เมื่อรู้สึกว่า AI ทำงานผิดปกติ คำสั่ง Slash Commands ไม่ตอบสนอง หรือต้องการตรวจสุขภาพระบบ DevFlow:</p>
-          <pre><code>/doctor</code></pre>
+          <p>รันคำสั่ง <code>/devflow-doctor</code> เมื่อรู้สึกว่า AI ทำงานผิดปกติ คำสั่ง Slash Commands ไม่ตอบสนอง หรือต้องการตรวจสุขภาพระบบ DevFlow:</p>
+          <pre><code>/devflow-doctor</code></pre>
         `
       },
       {
@@ -1073,7 +1073,7 @@ $onboard
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>ตรวจเช็กสถานะการส่งมอบด้วย <code>/status</code> หรือดูประวัติใน <code>HISTORY.md</code></p>
+          <p>ตรวจเช็กสถานะการส่งมอบด้วย <code>/devflow-status</code> หรือดูประวัติใน <code>HISTORY.md</code></p>
         `
       }
     ]

@@ -1,27 +1,27 @@
 ---
-name: status
-description: "[devflow] Show where the project stands: build-plan progress, the current feature's checked and unchecked steps, git state, drift warnings, and the exact next action. Read-only. Use when the user runs /status, asks where things stand, what's next, what's in progress, or is picking work back up after a break or a context clear."
+name: devflow-status
+description: "[devflow] Show where the project stands: build-plan progress, the current feature's checked and unchecked steps, git state, drift warnings, and the exact next action. Read-only. Use when the user runs /devflow-status, asks where things stand, what's next, what's in progress, or is picking work back up after a break or a context clear."
 ---
 
-# status - where the project stands right now
+# devflow-status - where the project stands right now
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
 Where this sits in the workflow:
 
-    any time  ->  [status]  ->  reads build-plan + current-feature + git
-                  (read-only)   prints a short "you are here"
+    any time  ->  [devflow-status]  ->  reads build-plan + current-feature + git
+                  (read-only)           prints a short "you are here"
 
-`/status` is orientation: where the project stands right now, what's done,
+`/devflow-status` is orientation: where the project stands right now, what's done,
 what's in flight, whether there's drift between plans and reality, and what
 single action makes the most sense next. It is purely read-only: it reads files
 and git, prints a summary, and exits.
 
-Use `/doctor` instead when the user wants a full setup-and-health check.
+Use `/devflow-doctor` instead when the user wants a full setup-and-health check.
 
 ## Input
 
-None. `/status` takes no argument.
+None. `/devflow-status` takes no argument.
 
 ## What it gathers
 
@@ -54,7 +54,7 @@ Read these, distill them into a few lines, then stop. Do not dump file contents.
    Report the command, mode, status, progress, boundary, and safe resume command.
    A missing file simply means no activity has been recorded. Invalid activity
    state is a warning, not a blocker for the underlying workflow; point to
-   `/doctor` to inspect and offer the approved generated-state reset.
+   `/devflow-doctor` to inspect and offer the approved generated-state reset.
 8. **Onboarding & Configuration check** - Read `devflow/config.json` when present.
    Report effective regular and Continuous quality gates, plus `review.independentExecution`.
    Explain that independent review defaults to `when-sensitive` for both workflows and
@@ -73,7 +73,7 @@ Read these, distill them into a few lines, then stop. Do not dump file contents.
    requires browser proof, whether `npm run test:browser` is declared and has
    recorded evidence, and whether an interactive `browseros-neo` handoff is
    available or explicitly unavailable. This remains read-only: do not execute
-   either browser path from `/status`.
+   either browser path from `/devflow-status`.
 
 ## Output
 
@@ -87,9 +87,9 @@ A short, scannable summary, not a wall of text. Aim for something like:
 
     Next action: run /implement 061 for Task 2.
 
-### 👔 Leadership / Executive Summary Mode (`/status --exec`)
+### 👔 Leadership / Executive Summary Mode (`/devflow-status --exec`)
 
-When requested via `/status --exec`, `/status leadership`, or when writing an update for engineering leadership (VPs, Directors, PMs, release managers):
+When requested via `/devflow-status --exec`, `/devflow-status leadership`, or when writing an update for engineering leadership (VPs, Directors, PMs, release managers):
 - **Tone**: Keep product names, JIRA keys, PR numbers, and business impact. Strip function names, file paths, struct fields, and internal code minutiae.
 - **Channel Shapes**:
   - *Slack*: 1 bolded TL;DR line + 2-3 short bullets (impact, owner + PR link, next step) under 80 words.
@@ -98,8 +98,8 @@ When requested via `/status --exec`, `/status leadership`, or when writing an up
 
 End with a single suggested next action, chosen in this order:
 
-- The project configuration is invalid -> `/doctor`.
-- Dashboard activity is malformed -> `/doctor`.
+- The project configuration is invalid -> `/devflow-doctor`.
+- Dashboard activity is malformed -> `/devflow-doctor`.
 - The overview is missing or stale and no feature is in progress -> `/overview`.
 - A spec is in progress with unchecked steps -> `/implement [id]` and name the step.
 - A spec is in progress and all implementation steps are checked -> `/check [id]` if

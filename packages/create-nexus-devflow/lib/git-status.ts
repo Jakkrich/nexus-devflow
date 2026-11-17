@@ -189,6 +189,17 @@ function unavailableSummary(): GitStatusSummary {
   };
 }
 
-export { readGitStatus, clearGitStatusCache };
+async function readGitStatusSafe(
+  projectRoot: string,
+  options: ReadGitStatusOptions = {}
+): Promise<GitStatusSummary> {
+  try {
+    return await readGitStatus(projectRoot, options);
+  } catch {
+    return unavailableSummary();
+  }
+}
 
-export type { GitStatusSummary };
+export { readGitStatus, readGitStatusSafe, clearGitStatusCache, unavailableSummary as unavailableGitStatusSummary };
+
+export type { GitStatusSummary, ReadGitStatusOptions };

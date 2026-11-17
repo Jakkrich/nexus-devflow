@@ -22,7 +22,7 @@ one just explains.
 
 How it differs from its neighbors:
 
-- `/status` reports the *whole project*: progress, current work, git, next action.
+- `/devflow-status` reports the *whole project*: progress, current work, git, next action.
   `/brief` zooms into *one feature* and explains it in depth.
 - `/feature` *writes* the spec (and may split the item in `build-plan.md`).
   `/brief` previews what `/feature` would tackle, changing nothing.

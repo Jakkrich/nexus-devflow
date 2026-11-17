@@ -151,7 +151,7 @@ npx -y nexus-devflow -y
 - `devflow/context/coding-standards.md` — ปรับแต่งมาตรฐานโค้ด, กฎ Lint และ Test Gates
 - `devflow/context/ai-interaction.md` — ปรับพฤติกรรมการตอบและการทำงานร่วมกับ AI
 
-หากรู้สึกว่าการตั้งค่ามีปัญหา สามารถสั่ง `/doctor` เพื่อรัน Health check แบบอ่านอย่างเดียวได้ทันที
+หากรู้สึกว่าการตั้งค่ามีปัญหา สามารถสั่ง `/devflow-doctor` เพื่อรัน Health check แบบอ่านอย่างเดียวได้ทันที
 
 ### 5. วางแผนและบันทึกไอเดีย
 บันทึกความต้องการ, User stories หรือแนวคิดเริ่มต้น:
@@ -473,7 +473,7 @@ Nexus-DevFlow ช่วยให้คุณกำหนดจังหวะก
 
 #### 🛡️ การควบคุมขนาด Overview ไม่เกิน 20KB (Overview Compactness Guard)
 เอกสารสรุปโครงการ `devflow/context/project-overview.md` จะถูกควบคุมขนาดให้อยู่ต่ำกว่า 20,000 bytes (~4,000–5,000 tokens) เสมอ เพื่อไม่ให้สิ้นเปลือง Token Window:
-- คำสั่ง `/doctor` จะรายงานขนาดไบต์จริง และแจ้งเตือนสถานะ `oversized` หากมีขนาดเกิน
+- คำสั่ง `/devflow-doctor` จะรายงานขนาดไบต์จริง และแจ้งเตือนสถานะ `oversized` หากมีขนาดเกิน
 - คำสั่ง `/feature` มีระบบ Hard-Stop ป้องกันการดึง Overview ที่มีขนาดเกิน 20KB และมี Directive สั่งให้ AI Reuse Context เดิมที่มีอยู่แล้วในเซสชันโดยไม่อ่านซ้ำผ่าน Tool
 
 #### 📌 Planning Baseline Commit
@@ -535,7 +535,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยเชิงวิทยาศาสตร์ 6 ระยะด้วย Red-capable feedback loop โดยไม่แก้ซอร์สโค้ด |
 | **devflow** | `/devflow` / `$devflow` | Router | ตัวตรวจสถานะหลัก, เราเตอร์นำทางขั้นตอน และคู่มือช่วยทำงาน |
 | **discovery** | `/discovery` / `$discovery` | Companion | สำรวจและค้นคว้าความต้องการของระบบเชิงลึกก่อนเริ่มพัฒนา |
-| **doctor** | `/doctor` / `$doctor` | Health | ตรวจสุขภาพ Workspace, Adapters, และรายงานขนาดไบต์ Overview (เตือนเมื่อ >= 20KB) |
+| **devflow-doctor** | `/devflow-doctor` / `$devflow-doctor` | Health | ตรวจสุขภาพ Workspace, Adapters, และรายงานขนาดไบต์ Overview (เตือนเมื่อ >= 20KB) |
 | **explore** | `/explore` / `$explore` | Companion | สนทนาวิเคราะห์ไอเดียเทียบกับโค้ดจริงแบบ Read-only โดยไม่แก้โค้ดและไม่ต้องเขียนสเปก |
 | **feature** | `/feature` / `$feature` | Delivery | สร้าง Living Spec ใน `devflow/context/{xxx-slug}/spec.md` พร้อม 20KB Overview Guard |
 | **fix** | `/fix` / `$fix` | Delivery | กำหนดสเปกและขั้นตอนการแก้บั๊กหรือ Patch ขนาดเล็ก |
@@ -549,7 +549,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **report-html** | `/report-html` | Reporting | สร้างรายงานสรุปผลงานแบบ Standalone HTML Dashboard ตามสั่ง |
 | **rollback** | `/rollback` / `$rollback` | Delivery | วางแผนและย้อนคืนฟีเจอร์ที่ส่งมอบไปแล้วอย่างปลอดภัย |
 | **setup-tests** | `/setup-tests` / `$setup-tests` | Setup | ติดตั้งและตั้งค่า Unit Test Runner ให้ตรงกับ Stack ของโปรเจกต์ |
-| **status** | `/status` / `$status` | Monitoring | แสดงสรุปความคืบหน้าของงานปัจจุบัน และข้อแนะนำขั้นตอนถัดไป |
+| **devflow-status** | `/devflow-status` / `$devflow-status` | Monitoring | แสดงสรุปความคืบหน้าของงานปัจจุบัน และข้อแนะนำขั้นตอนถัดไป |
 | **test** | `/test` | Testing | รันชุดทดสอบ, สร้างเคสทดสอบที่ขาดหาย และวิเคราะห์ Coverage |
 | **try** | `/try` / `$try` | QA | สร้างคู่มือสำหรับมนุษย์ในการทดสอบระบบด้วยตนเองแบบ Step-by-step |
 
@@ -735,7 +735,7 @@ npx nexus-devflow update [--check]
 
 ## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
 
-Nexus-DevFlow ติดตั้งมาพร้อมกับ **33 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny Outsider Review ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/status` / `/complete`) ไว้ในตัวแล้ว
+Nexus-DevFlow ติดตั้งมาพร้อมกับ **33 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny Outsider Review ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/devflow-status` / `/complete`) ไว้ในตัวแล้ว
 
 สำหรับงานเฉพาะทางด้านงานสถาปัตยกรรมภาพและความปลอดภัยเชิงรุก คุณสามารถติดตั้งสกิลเสริมจาก Community เพิ่มเติมได้ด้วยคำสั่ง `nexus-devflow skill add`:
 
@@ -757,7 +757,7 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **33 Core Skil
 | **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
-> **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/status`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
+> **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/devflow-status`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
 
 ---
 
@@ -784,7 +784,7 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 - `devflow/history/` + Git — คลังประวัติการส่งมอบงานถาวร
 
 เมื่อเริ่มเซสชันใหม่หรือหลังจาก AI Context Window ถูกรีเซ็ต:
-- สั่ง `/devflow` หรือ `/status` เพื่อตรวจดูสถานะปัจจุบัน
+- สั่ง `/devflow` หรือ `/devflow-status` เพื่อตรวจดูสถานะปัจจุบัน
 - สั่ง `/implement` เพื่อทำงานย่อยข้อถัดไปใน Living Spec ต่อได้ทันที
 
 ---
@@ -809,7 +809,7 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 │       ├── debug/             ($debug: วินิจฉัยปัญหาโดยไม่แตะต้องซอร์สโค้ด)
 │       ├── devflow/           ($devflow: ตัวตรวจสถานะและเราเตอร์นำทางหลัก)
 │       ├── discovery/         ($discovery: การค้นคว้าและสำรวจเชิงลึก)
-│       ├── doctor/            ($doctor: ตรวจสุขภาพของ Workspace)
+│       ├── devflow-doctor/    ($devflow-doctor: ตรวจสุขภาพของ Workspace)
 │       ├── feature/           ($feature: สร้าง Single Living Spec)
 │       ├── fix/               ($fix: สเปกการแก้บั๊กหรือ Patch)
 │       ├── grill/             ($grill: Socratic ADR Alignment)
@@ -822,7 +822,7 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 │       ├── report-html/       ($report-html: สร้างรายงาน Standalone HTML)
 │       ├── rollback/          ($rollback: ย้อนคืนฟีเจอร์อย่างปลอดภัย)
 │       ├── setup-tests/       ($setup-tests: ติดตั้ง Stack-native Test Runner)
-│       ├── status/            ($status: ตรวจสอบความคืบหน้าของงาน)
+│       ├── devflow-status/    ($devflow-status: ตรวจสอบความคืบหน้าของงาน)
 │       ├── test/              ($test: รันและสร้างเคสทดสอบ)
 │       └── try/               ($try: คู่มือการทดสอบด้วยตนเองสำหรับมนุษย์)
 ├── .claude/

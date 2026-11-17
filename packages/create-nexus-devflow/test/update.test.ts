@@ -11,6 +11,7 @@ import {
   readManifest,
   type TemplateFile
 } from "../lib/update.js";
+import { readCommandCatalog } from "../lib/command-catalog.js";
 
 test("adapterListFromMode resolves adapter aliases correctly", () => {
   assert.deepEqual(adapterListFromMode("both"), ["codex", "claude", "copilot", "antigravity", "opencode"]);
@@ -136,6 +137,70 @@ test("applyPreparedUpdate creates backup directory and backup.json when updating
 
     const updatedAgents = await fs.readFile(path.join(targetDir, "AGENTS.md"), "utf8");
     assert.equal(updatedAgents, "# V2 AGENTS\n");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("applyPreparedUpdate removes retired status and doctor skill folders and installs devflow-status and devflow-doctor", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-rename-update-"));
+  const templateRoot1 = path.join(tempDir, "template1");
+  const templateRoot2 = path.join(tempDir, "template2");
+  const targetDir = path.join(tempDir, "target");
+
+  try {
+    for (const adapter of [".agents", ".claude"]) {
+      await fs.mkdir(path.join(templateRoot1, adapter, "skills", "status"), { recursive: true });
+      await fs.mkdir(path.join(templateRoot1, adapter, "skills", "doctor", "scripts"), { recursive: true });
+      await fs.writeFile(path.join(templateRoot1, adapter, "skills", "status", "SKILL.md"), "# status\n");
+      await fs.writeFile(path.join(templateRoot1, adapter, "skills", "doctor", "SKILL.md"), "# doctor\n");
+      await fs.writeFile(path.join(templateRoot1, adapter, "skills", "doctor", "scripts", "run-state.mjs"), "// v1\n");
+
+      await fs.mkdir(path.join(templateRoot2, adapter, "skills", "devflow-status"), { recursive: true });
+      await fs.mkdir(path.join(templateRoot2, adapter, "skills", "devflow-doctor", "scripts"), { recursive: true });
+      await fs.writeFile(path.join(templateRoot2, adapter, "skills", "devflow-status", "SKILL.md"), "# devflow-status\n");
+      await fs.writeFile(path.join(templateRoot2, adapter, "skills", "devflow-doctor", "SKILL.md"), "# devflow-doctor\n");
+      await fs.writeFile(path.join(templateRoot2, adapter, "skills", "devflow-doctor", "scripts", "run-state.mjs"), "// v2\n");
+    }
+    await fs.mkdir(path.join(templateRoot1, "devflow"), { recursive: true });
+    await fs.mkdir(path.join(templateRoot2, "devflow"), { recursive: true });
+    await fs.writeFile(path.join(templateRoot1, "AGENTS.md"), "# AGENTS\n");
+    await fs.writeFile(path.join(templateRoot2, "AGENTS.md"), "# AGENTS\n");
+    await fs.mkdir(targetDir, { recursive: true });
+
+    const prep1 = await prepareUpdate({
+      targetDir,
+      templateRoot: templateRoot1,
+      version: "2.19.4",
+      adapter: "both"
+    });
+    await applyPreparedUpdate(prep1);
+
+    const prep2 = await prepareUpdate({
+      targetDir,
+      templateRoot: templateRoot2,
+      version: "2.20.0",
+      adapter: "both"
+    });
+    await applyPreparedUpdate(prep2);
+
+    for (const adapter of [".agents", ".claude"]) {
+      await assert.rejects(fs.stat(path.join(targetDir, adapter, "skills", "status")), { code: "ENOENT" });
+      await assert.rejects(fs.stat(path.join(targetDir, adapter, "skills", "doctor")), { code: "ENOENT" });
+      await assert.doesNotReject(fs.stat(path.join(targetDir, adapter, "skills", "devflow-status", "SKILL.md")));
+      await assert.doesNotReject(fs.stat(path.join(targetDir, adapter, "skills", "devflow-doctor", "scripts", "run-state.mjs")));
+    }
+
+    const updatedManifest = await readManifest(targetDir);
+    assert.ok(updatedManifest, "manifest should exist after update");
+    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-doctor"));
+    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-status"));
+    assert.ok(!updatedManifest.lifecycle.companionCommands.includes("doctor"));
+
+    const catalog = await readCommandCatalog(targetDir);
+    assert.ok(catalog.some((item) => item.name === "devflow-doctor"));
+    assert.ok(catalog.some((item) => item.name === "devflow-status"));
+    assert.ok(!catalog.some((item) => item.name === "doctor"));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

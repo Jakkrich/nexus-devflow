@@ -259,7 +259,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <table>
             <thead><tr><th>คำสั่ง</th><th>หน้าที่</th><th>คำสั่ง</th><th>หน้าที่</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>devflow</code></strong></td><td>ผู้ช่วยแนะนำเส้นทางและตรวจสอบสถานะงาน</td><td><strong><code>doctor</code></strong></td><td>วินิจฉัยสุขภาพโปรเจกต์และการตั้งค่าระบบ</td></tr>
+              <tr><td><strong><code>devflow</code></strong></td><td>ผู้ช่วยแนะนำเส้นทางและตรวจสอบสถานะงาน</td><td><strong><code>devflow-doctor</code></strong></td><td>วินิจฉัยสุขภาพโปรเจกต์และการตั้งค่าระบบ</td></tr>
               <tr><td><strong><code>explore</code></strong></td><td>ตอบคำถามและทำความเข้าใจโค้ดเบสแบบ Read-Only</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
               <tr><td><strong><code>brief</code></strong></td><td>สรุปขอบเขตและความเสี่ยงของฟีเจอร์ใน Build Plan</td><td><strong><code>debug</code></strong></td><td>วินิจฉัยหาสาเหตุของบั๊กอย่างเป็นระบบ</td></tr>
               <tr><td><strong><code>onboard</code></strong></td><td>ติดตั้งและปรับแต่งค่าเริ่มต้นบนโปรเจกต์ใหม่</td><td><strong><code>adopt</code></strong></td><td>สำรวจและผนวก DevFlow เข้ากับโปรเจกต์เดิม</td></tr>
@@ -269,7 +269,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
               <tr><td><strong><code>browser-tests</code></strong></td><td>ติดตั้ง Playwright และเชื่อม BrowserOS Neo MCP</td><td><strong><code>autopilot</code></strong></td><td>รัน 1 ฟีเจอร์ต่อเนื่องตั้งแต่ Spec จนถึง Check</td></tr>
               <tr><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td><td><strong><code>release</code></strong></td><td>ตรวจสอบความพร้อมก่อน Deploy ขึ้น Render/Vercel</td></tr>
               <tr><td><strong><code>report-html</code></strong></td><td>สร้าง Standalone HTML Report Dashboard</td><td><strong><code>convert-any-to-md</code></strong></td><td>แปลงเอกสารภายนอกเป็น Markdown ใน <code>reference/</code></td></tr>
-              <tr><td><strong><code>vendor</code></strong></td><td>ติดตั้ง External Skill และสร้าง Custom Wrapper</td><td><strong><code>status</code></strong></td><td>สรุปความคืบหน้าของงานและขั้นตอนถัดไป</td></tr>
+              <tr><td><strong><code>vendor</code></strong></td><td>ติดตั้ง External Skill และสร้าง Custom Wrapper</td><td><strong><code>devflow-status</code></strong></td><td>สรุปความคืบหน้าของงานและขั้นตอนถัดไป</td></tr>
             </tbody>
           </table>
         `
@@ -317,7 +317,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <table>
             <thead><tr><th>ความต้องการ</th><th>คำสั่งที่แนะนำ</th><th>พฤติกรรมหลัก</th></tr></thead>
             <tbody>
-              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, และความสมบูรณ์ของเวิร์กโฟลว์</td></tr>
+              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/devflow-doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, และความสมบูรณ์ของเวิร์กโฟลว์</td></tr>
               <tr><td>สืบหาสาเหตุของบั๊กที่แท้จริง</td><td><code>/debug</code></td><td>กระบวนการ Scientific Diagnosis 6 ขั้นตอนโดยไม่แก้โค้ดล่วงหน้า</td></tr>
               <tr><td>ทำความเข้าใจโค้ดหรือสอบถามจุดทำงาน</td><td><code>/explore</code></td><td>สำรวจและตอบคำถามเชิงลึกแบบ Read-only</td></tr>
               <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/try</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>

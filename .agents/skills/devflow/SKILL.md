@@ -40,7 +40,7 @@ When invoked without an argument (or when determining the next step), inspect:
 - If the user requests a completed fix -> preserve the implementation and verification scope; draft the required spec internally and continue to `/implement` using existing authorization.
 - If no run is active and user has pending ideas in `devflow/ideas.md` -> Highlight `/feature IDEA-xxx` or `/discovery IDEA-xxx`.
 - If no run is active and user wants deep architectural exploration -> Recommend `/discovery`.
-- If user asks to check system health -> Recommend `doctor`.
+- If user asks to check system health -> Recommend `devflow-doctor`.
 
 ---
 
@@ -60,7 +60,7 @@ When invoked without an argument (or when determining the next step), inspect:
 | **"Create editorial diagram / flowchart"**| `diagram-design`| `/diagram-design` | **Third-Party**: 39 visual diagrams (HTML/SVG) |
 | "Setup DevFlow on fresh/new project" | `onboard` | `onboard` / `setup` | `onboard` -> `/feature` |
 | "Adopt DevFlow on existing codebase" | `adopt` | `adopt` / `bootstrap` | `adopt` -> `/feature` |
-| "Check setup health & diagnostics" | `doctor` | `doctor` / `health` | `doctor` |
+| "Check setup health & diagnostics" | `devflow-doctor` | `devflow-doctor` / `health` | `devflow-doctor` |
 | "Human manual QA walkthrough guide" | `try` | `try` | Companion (after implement or check) |
 | "Safely plan feature or run reversal"| `rollback` | `rollback` | Companion |
 | "Set up automatic GitHub Actions CI" | `ci` | `ci` | Companion |
@@ -87,11 +87,11 @@ When invoked without an argument (or when determining the next step), inspect:
 - `brainstorm` - Multi-option ideation with trade-off analysis
 
 ### 3. Verification & Diagnostic Companions
-- `doctor` - Health check for setup, adapters, and workspace state
+- `devflow-doctor` - Health check for setup, adapters, and workspace state
 - `audit` - Branch-aware or full-project code, security, and quality review
 - `test` / `tests` - Test suite runner and unit test scaffolding
 - `ci` - Set up or normalize GitHub Actions checks
-- `status` - Read-only progress summary and next action suggestion
+- `devflow-status` - Read-only progress summary and next action suggestion
 - `try` - Human manual QA walkthrough guide
 - `report-html` - Standalone interactive HTML report dashboard
 - `debug` - Root-cause investigation without editing code

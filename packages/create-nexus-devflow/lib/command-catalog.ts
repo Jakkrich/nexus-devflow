@@ -14,7 +14,8 @@ interface CommandCatalogItem {
 
 const FALLBACK_DESCRIPTIONS: Record<string, string> = {
   devflow: "Inspect workflow state and route the request to the right next command.",
-  doctor: "Run a read-only health check for setup, scripts, adapters, and workflow drift.",
+  "devflow-doctor": "Run a read-only health check for setup, scripts, adapters, and workflow drift.",
+  "devflow-status": "Show where the project stands, build-plan progress, and the exact next action.",
   overview: "Compile repository plans and context into the living project overview.",
   idea: "Capture and enrich a new idea in the centralized Idea Inbox.",
   debug: "Investigate a bug and establish its root cause before implementation.",

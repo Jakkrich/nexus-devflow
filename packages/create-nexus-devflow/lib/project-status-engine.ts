@@ -14,8 +14,11 @@ import type {
   FindingsSummary,
   FindingStatus
 } from "./findings.js";
-import { readGitStatus } from "./git-status.js";
-import type { GitStatusSummary } from "./git-status.js";
+import {
+  readGitStatus,
+  unavailableGitStatusSummary,
+  type GitStatusSummary
+} from "./git-status.js";
 import { readProjectMetadata } from "./project-metadata.js";
 import type { ProjectAdapter } from "./project-metadata.js";
 
@@ -143,19 +146,43 @@ export interface WorkEvidence {
   recordFaults: Array<{ blocker: string; path: string }>;
 }
 
+export interface ProjectStatusEngineOptions {
+  readGitStatus?: (projectRoot: string) => Promise<GitStatusSummary>;
+}
+
 export class ProjectStatusEngine {
-  constructor(private projectRoot: string = process.cwd()) {}
+  private readonly gitStatusReader: (projectRoot: string) => Promise<GitStatusSummary>;
+
+  constructor(
+    private projectRoot: string = process.cwd(),
+    options: ProjectStatusEngineOptions = {}
+  ) {
+    this.gitStatusReader = options.readGitStatus || readGitStatus;
+  }
 
   async getStatus(): Promise<ProjectStatus> {
     const startPath = this.projectRoot;
   const metadata = await readProjectMetadata(startPath);
+  const gitWarnings: StatusWarning[] = [];
+  const readSafeGit = async (): Promise<GitStatusSummary> => {
+    try {
+      return await this.gitStatusReader(metadata.project.root);
+    } catch (error: unknown) {
+      const detail = error instanceof Error ? error.message : String(error);
+      gitWarnings.push({
+        code: "git_status_unavailable",
+        message: `Git status unavailable (${detail}).`
+      });
+      return unavailableGitStatusSummary();
+    }
+  };
   const [contextPaths, config, currentWork, activeRuns, findings, git, ideas, runState] = await Promise.all([
     resolveActiveContextPaths(metadata.project.root),
     readProjectConfig(metadata.project.root),
     readCurrentWork(metadata.project.root),
     listActiveRunContexts(metadata.project.root),
     readFindings(metadata.project.root),
-    readGitStatus(metadata.project.root),
+    readSafeGit(),
     readIdeas(metadata.project.root),
     readRunState(metadata.project.root)
   ]);
@@ -183,6 +210,7 @@ export class ProjectStatusEngine {
     ...findings.warnings,
     ...runState.warnings,
     ...review.warnings,
+    ...gitWarnings,
     ...findDrift(currentWork, git)
   ];
   const evidence = classifyWorkEvidence(currentWork, findings, review, stageMarkdown);
@@ -317,7 +345,8 @@ export class ProjectStatusEngine {
     "",
     formatSection("Git", style)
   );
-  appendGitLines(lines, status.git, style);
+  const gitStatusFailed = status.warnings.some((warning) => warning.code === "git_status_unavailable");
+  appendGitLines(lines, status.git, style, gitStatusFailed);
 
   if (status.warnings.length > 0) {
     lines.push("", formatSection("Attention", style));
@@ -522,10 +551,17 @@ function formatCompletionValue(
 function appendGitLines(
   lines: string[],
   git: GitStatusSummary,
-  style: TextStyle
+  style: TextStyle,
+  gitStatusFailed: boolean = false
 ): void {
   if (!git.available) {
-    lines.push(formatRow("Status", style.red("not a Git repository"), style));
+    lines.push(
+      formatRow(
+        "Status",
+        gitStatusFailed ? style.yellow("unavailable (git status failed)") : style.red("not a Git repository"),
+        style
+      )
+    );
     return;
   }
 
@@ -699,7 +735,7 @@ function selectNextAction(
 ): StatusNextAction {
   if (currentWork.state === "malformed") {
     return {
-      command: "/doctor",
+      command: "/devflow-doctor",
       reason: "Repair the stage or spec contract before continuing."
     };
   }
@@ -707,7 +743,7 @@ function selectNextAction(
   if (currentWork.state === "active" && evidence) {
     if (evidence.recordFaults.length > 0) {
       return {
-        command: "/doctor",
+        command: "/devflow-doctor",
         reason: `Diagnose ${evidence.recordFaults.map((fault) => fault.path).join(" and ")} before continuing: ${evidence.recordFaults.map((fault) => fault.blocker).join("; ")}.`
       };
     }
@@ -789,7 +825,7 @@ function selectNextAction(
 
     if (completion && completion.state !== "ready") {
       return {
-        command: "/doctor",
+        command: "/devflow-doctor",
         reason: `Resolve completion blockers before continuing: ${completion.blockers.join("; ")}.`
       };
     }

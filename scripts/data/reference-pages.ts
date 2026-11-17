@@ -79,7 +79,7 @@ export const REFERENCE_PAGES: DocPage[] = [
         title: '1. กฎการควบคุม Public Surface (Public Surface Rule)',
         contentHtml: `
           <ul>
-            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับชุดทักษะสนับสนุน (Companion Skills เช่น <code>/idea</code>, <code>/grill</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/doctor</code>, <code>/audit</code>, <code>/rollback</code>)</li>
+            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับชุดทักษะสนับสนุน (Companion Skills เช่น <code>/idea</code>, <code>/grill</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/devflow-doctor</code>, <code>/audit</code>, <code>/rollback</code>)</li>
             <li><strong>ห้ามเพิ่มคำสั่งสาธารณะโดยไม่จำเป็น</strong>: หากฟังก์ชันใหม่สามารถทำเป็น Internal Helper หรือต่อยอดจากคำสั่งเดิมได้ ให้เลือกทำภายในก่อน จนกว่าจะมีการอนุมัติและเลื่อนขั้น (Promotion) เข้าสู่ <code>agent-bundle.manifest.json#core_skills</code> อย่างเป็นทางการ</li>
           </ul>
         `

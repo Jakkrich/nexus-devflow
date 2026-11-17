@@ -1,16 +1,16 @@
 ---
-name: doctor
-description: "[devflow] Run a DevFlow health and context check covering setup, adapters, commands, visibility, plans, overview freshness, configuration, dashboard state, and workflow drift. May offer to reset malformed generated dashboard state after approval. Use for /doctor, setup problems, context overhead, or health checks."
+name: devflow-doctor
+description: "[devflow] Run a DevFlow health and context check covering setup, adapters, commands, visibility, plans, overview freshness, configuration, dashboard state, and workflow drift. May offer to reset malformed generated dashboard state after approval. Use for /devflow-doctor, setup problems, context overhead, or health checks."
 ---
 
-# doctor - DevFlow health check
+# devflow-doctor - DevFlow health check
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
 Where this sits in the workflow:
 
-    any time  ->  [doctor]  ->  reads setup + plans + workflow state + git
-                  (diagnostic)  prints health, warnings, and repair order
+    any time  ->  [devflow-doctor]  ->  reads setup + plans + workflow state + git
+                  (diagnostic)          prints health, warnings, and repair order
 
 This skill answers one question: *is this DevFlow project ready to use?* It is
 the diagnostic pass for setup drift, incomplete onboarding, missing files,
@@ -19,12 +19,12 @@ workflow state. It never changes anything: no edits, no commits, no installs, no
 builds, no branch changes. Its only repair is an approved reset of a malformed
 generated `devflow/.state/run.json` file.
 
-Use `/status` when the user mainly wants progress and the next build action. Use
-`/doctor` when the user wants to know whether the workflow itself is healthy.
+Use `/devflow-status` when the user mainly wants progress and the next build action. Use
+`/devflow-doctor` when the user wants to know whether the workflow itself is healthy.
 
 ## Input
 
-None. `/doctor` takes no argument.
+None. `/devflow-doctor` takes no argument.
 
 ## What it checks
 
@@ -74,7 +74,7 @@ Gather these, then summarize. Do not dump file contents.
    - Confirm at least one compatible skill tree exists. Codex, Antigravity, and
      GitHub Copilot use `.agents/skills/`. Claude Code uses `.claude/skills/`.
    - Confirm each installed adapter tree contains
-     `doctor/scripts/run-state.mjs`. This managed helper validates and atomically
+     `devflow-doctor/scripts/run-state.mjs`. This managed helper validates and atomically
      writes dashboard activity. A missing helper needs a DevFlow update before
      tracked commands can record activity safely.
    - If both skill trees are present, say that is healthy when the selected
@@ -193,7 +193,7 @@ Choose the repair order in this priority:
 - No git repo -> initialize git before using the build loop.
 - No tool adapter -> restore `.agents/skills/` or `.claude/skills/` for the
   selected tool. OpenCode can use either compatible tree.
-- Installed adapter is missing `doctor/scripts/run-state.mjs` -> update
+- Installed adapter is missing `devflow-doctor/scripts/run-state.mjs` -> update
   DevFlow before relying on dashboard activity.
 - Onboarding incomplete -> run `/onboard`.
 - Root README is still the DevFlow workflow doc -> run `/onboard` to replace
@@ -202,14 +202,14 @@ Choose the repair order in this priority:
   `devflow/build-plan.md`.
 - Overview missing or stale -> run `/overview`.
 - Malformed regular `devflow/.state/run.json` -> offer to reset that exact
-  generated file, then rerun `/doctor` or refresh the dashboard.
-- Active spec has unchecked steps -> run `/status` or `/implement`, depending on
+  generated file, then rerun `/devflow-doctor` or refresh the dashboard.
+- Active spec has unchecked steps -> run `/devflow-status` or `/implement`, depending on
   whether the user wants orientation or action.
 - A P0 or P1 finding is `open` -> repair it through `/implement` while a spec
   is active, or `/fix <finding id>` between work items. One that is `fixed` ->
   `/audit` to re-review and close it. Both come before suggesting `/complete`.
 - Active spec is done but not closed -> run `/check`, then `/complete`.
-- Everything is healthy -> say so, then suggest `/status` for progress or
+- Everything is healthy -> say so, then suggest `/devflow-status` for progress or
   `/feature` for the next planned feature.
 
 ## Rules

@@ -10,14 +10,14 @@ const execFileAsync = promisify(execFile);
 const helper = path.resolve(
   ".agents",
   "skills",
-  "doctor",
+  "devflow-doctor",
   "scripts",
   "run-state.mjs"
 );
 const claudeHelper = path.resolve(
   ".claude",
   "skills",
-  "doctor",
+  "devflow-doctor",
   "scripts",
   "run-state.mjs"
 );
@@ -112,11 +112,11 @@ test("run-state helper replaces malformed state on start and resets it safely", 
 
   await runHelper(projectRoot, [
     "start",
-    "--command", "doctor",
+    "--command", "devflow-doctor",
     "--summary", "Checking DevFlow health",
     "--boundary", "read-only"
   ]);
-  assert.equal((await readState(projectRoot)).command, "doctor");
+  assert.equal((await readState(projectRoot)).command, "devflow-doctor");
 
   await fs.writeFile(runPath(projectRoot), "not json\n");
   await runHelper(projectRoot, ["reset"]);

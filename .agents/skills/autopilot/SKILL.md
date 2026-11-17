@@ -11,7 +11,7 @@ contract in `AGENTS.md`.
 
 Where this sits in the workflow:
 
-    /status  ->  [autopilot]  ->  review packet  ->  /complete
+    /devflow-status  ->  [autopilot]  ->  review packet  ->  /complete
     (where       (spec, build,      (human review,    (log, commit,
      are we?)     check, audit)      fixes if needed)  merge with approval)
 
@@ -55,9 +55,9 @@ or active spec is marked `Type: Rollback`, stop and direct the user to
 the reviewed `/implement` path. Reversing completed work requires the explicit
 dependency and conflict gates in `/rollback` and `/implement`.
 
-## Step 1 - preflight like /status
+## Step 1 - preflight like /devflow-status
 
-Read the same state `/status` reads:
+Read the same state `/devflow-status` reads:
 
 - `AGENTS.md`
 - `devflow/project-plan.md`

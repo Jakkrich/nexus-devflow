@@ -85,8 +85,8 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/status/">Status</a>
-          <a class="docs-nav-link" href="../commands/doctor/">Doctor</a>
+          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
+          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/brief/">Brief</a>
@@ -259,12 +259,12 @@ pnpm dlx nexus-devflow@latest update</code></pre>
             <li><strong><code>/tests browser</code> (หรือ <code>browser-tests</code>)</strong>: วิเคราะห์สถาปัตยกรรมเว็บแอป ติดตั้งชุดทดสอบ Playwright E2E พร้อมสคริปต์รันทั้งแบบ Headless และ Interactive UI และเชื่อมต่อกับ MCP Server ของ <code>browseros-neo</code> (ที่พอร์ต <code>http://127.0.0.1:9010/mcp</code>) เพื่อให้เอเจนต์สามารถเปิดเบราว์เซอร์จริงที่ล็อกอินบัญชีจริงไว้แล้ว ตรวจสอบผลลัพธ์เชิงภาพ และบันทึกหลักฐานการทดสอบอัตโนมัติ</li>
             <li><strong><code>/check guide</code> (หรือ <code>try</code>)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยจะระบุคำสั่งที่ต้องรัน ที่อยู่ URL จุดที่ต้องคลิกบนหน้าจอ ข้อมูลตัวอย่างที่ต้องกรอก ผลลัพธ์ที่ถูกต้อง และสัญญาณที่บ่งบอกว่าเกิดข้อผิดพลาด <em>(หมายเหตุ: โหมด guide เป็นเครื่องมือช่วยตรวจทานของมนุษย์ ไม่นับเป็นการยืนยันความถูกต้องเชิงคุณภาพอัตโนมัติ)</em></li>
             <li><strong><code>/explore</code></strong>: สกิลสำรวจไอเดียและวิเคราะห์ความเป็นไปได้เชิงสถาปัตยกรรมแบบ Read-Only เปรียบเทียบทางเลือกและข้อดีข้อเสีย (Trade-offs) กับโค้ดจริงในโปรเจกต์ โดยไม่มีการแก้ไขโค้ดหรือบังคับเขียนสเปก/แผนงานล่วงหน้า เหมาะสำหรับการศึกษาความเป็นไปได้ก่อนตัดสินใจ</li>
-            <li><strong><code>/doctor</code></strong>: สแกนตรวจสุขภาพและวินิจฉัยความพร้อมของระบบ DevFlow ตรวจสอบความสมบูรณ์ของ Adapters, ความสดใหม่ของ <code>project-overview.md</code>, ความถูกต้องของคำสั่งใน <code>AGENTS.md</code> และแจ้งเตือนหากไฟล์ Context มีขนาดใหญ่เกินเกณฑ์ 20KB</li>
+            <li><strong><code>/devflow-doctor</code></strong>: สแกนตรวจสุขภาพและวินิจฉัยความพร้อมของระบบ DevFlow ตรวจสอบความสมบูรณ์ของ Adapters, ความสดใหม่ของ <code>project-overview.md</code>, ความถูกต้องของคำสั่งใน <code>AGENTS.md</code> และแจ้งเตือนหากไฟล์ Context มีขนาดใหญ่เกินเกณฑ์ 20KB</li>
             <li><strong><code>/overview</code></strong>: ทำหน้าที่เป็น Deterministic Compiler ที่กลั่นกรองและรวบรวมข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code> เพื่อเป็น Single Living Source of Truth ที่กระชับและแม่นยำให้ AI Agent ทุกตัวอ่านก่อนเริ่มงานในแต่ละเซสชัน</li>
             <li><strong><code>/ci</code></strong>: จัดระเบียบคำสั่ง Verify ของโปรเจกต์ สร้าง GitHub Actions CI Workflow ที่สอดคล้องกัน และเสนอการติดตั้ง Git pre-push hook ในเครื่องเพื่อป้องกันการ Push โค้ดที่ไม่ผ่านการทดสอบขึ้นสู่ Remote Repository</li>
           </ul>
 
-          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ที่อาจยังไม่ได้อัปเดตใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
+          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow-doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ที่อาจยังไม่ได้อัปเดตใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
         
           
           <div class="docs-step" id="if-latest-runs-an-older-version">

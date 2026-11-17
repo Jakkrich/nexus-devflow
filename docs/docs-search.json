@@ -296,37 +296,37 @@
     ]
   },
   {
-    "title": "Status (/status)",
+    "title": "DevFlow Status (/devflow-status)",
     "description": "แสดงสถานะความคืบหน้าของโปรเจกต์ ฟีเจอร์ที่กำลังทำอยู่ สถานะ Git และคำสั่งถัดไปที่แนะนำ (Read-Only)",
     "section": "COMMANDS",
-    "slug": "commands/status",
-    "href": "../commands/status/",
+    "slug": "commands/devflow-status",
+    "href": "../commands/devflow-status/",
     "tags": [
       "Command",
-      "Status",
+      "DevFlowStatus",
       "Dashboard",
       "Read-Only",
       "GitState",
       "DriftCheck",
       "commands",
-      "commands status"
+      "commands devflow-status"
     ]
   },
   {
-    "title": "Doctor (/doctor)",
+    "title": "DevFlow Doctor (/devflow-doctor)",
     "description": "ตรวจสุขภาพเวิร์กโฟลว์ ความสมบูรณ์ของ Adapters ความสดใหม่ของ Context และล้างสถานะผิดปกติ",
     "section": "COMMANDS",
-    "slug": "commands/doctor",
-    "href": "../commands/doctor/",
+    "slug": "commands/devflow-doctor",
+    "href": "../commands/devflow-doctor/",
     "tags": [
       "Command",
-      "Doctor",
+      "DevFlowDoctor",
       "HealthCheck",
       "Adapters",
       "SelfHealing",
       "Integrity",
       "commands",
-      "commands doctor"
+      "commands devflow-doctor"
     ]
   },
   {

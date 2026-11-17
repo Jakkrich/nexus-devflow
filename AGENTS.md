@@ -52,7 +52,7 @@ Build for established requirements, not hypothetical scale, threats, or future f
 
 ## Project configuration
 
-`devflow/config.json` is the user-owned, machine-readable workflow policy for this project. Workflow skills read the relevant settings before acting. A missing file means built-in defaults. An invalid file falls back to defaults for read-only status reporting, but mutating workflow commands stop and point to `/doctor` instead of guessing.
+`devflow/config.json` is the user-owned, machine-readable workflow policy for this project. Workflow skills read the relevant settings before acting. A missing file means built-in defaults. An invalid file falls back to defaults for read-only status reporting, but mutating workflow commands stop and point to `/devflow-doctor` instead of guessing.
 
 `qualityGates.regular` controls automatic audit, independent-review, check, and try-guide behavior for the normal workflow and Autopilot. `qualityGates.continuous` controls the same per-feature gates for Continuous Mode. Independent review defaults to `when-sensitive` in both workflows, while audit, check, and try guide default to `manual`. Sensitive or unusually broad work therefore selects independent review automatically; ordinary small work does not. Setting a workflow's independent review to `manual` disables that automatic selection, while an explicit `/audit independent current` remains available. The other conditional modes are `when-sensitive` for audit, `when-behavioral` for check, and `when-user-facing` for try guides. `always` runs the gate for every work item in that workflow.
 
@@ -72,7 +72,7 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### Universal Invocation & Agent Directives:
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `continuous`, `analyze`, `discovery`, `explore`, `idea`, `grill`, `brainstorm`, `bughunter`, `devflow`, `doctor`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `setup-tests`, `browser-tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `convert-any-to-md`, `publish-devflow`, `vendor`). The way you invoke commands depends on your AI Provider / Tool:
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has exactly **one Canonical Name** (e.g. `feature`, `fix`, `implement`, `check`, `complete`, `continuous`, `analyze`, `discovery`, `explore`, `idea`, `grill`, `brainstorm`, `bughunter`, `devflow`, `devflow-doctor`, `devflow-status`, `overview`, `debug`, `onboard`, `adopt`, `try`, `rollback`, `ci`, `test`, `setup-tests`, `browser-tests`, `autopilot`, `prototype`, `report-html`, `brief`, `audit`, `release`, `convert-any-to-md`, `publish-devflow`, `vendor`). The way you invoke commands depends on your AI Provider / Tool:
    - **Canonical Name (Plain text)**: Directly invoke or prompt the command by its standard name (e.g., `feature`, `implement`, `continuous`, `devflow`, `discovery`, `analyze`).
    - **Slash Prefix (`/`)**: For tools supporting slash commands (Claude Code, Google Antigravity, Gemini CLI), e.g., `/feature`, `/fix`, `/implement`, `/continuous`, `/devflow`, `/discovery`, `/analyze`.
    - **Dollar Prefix (`$`)**: For OpenAI Codex CLI or skill-invocation tools, e.g., `$feature`, `$fix`, `$continuous`, `$devflow`, `$discovery`, `$analyze`.
@@ -119,15 +119,15 @@ All development tasks execute through the 4-step progressive lifecycle:
 
 The dashboard and status reporting can show the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit.
 
-Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `analyze`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `bughunter`, `setup-tests`, `browser-tests`, `test`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `status`, and `doctor` do not need activity state. Doctor's optional approved reset removes malformed activity instead of recording another run.
+Commands with meaningful progress or a durable handoff should write it when the state directory exists: `onboard`, `adopt`, `analyze`, `discovery`, `overview`, `feature`, `fix`, `rollback`, `implement`, `debug`, `check`, `audit`, `bughunter`, `setup-tests`, `browser-tests`, `test`, `ci`, `prototype`, `autopilot`, `continuous`, `complete`, and `release`. Short read-only orientation commands such as `brief`, `try`, `devflow-status`, and `devflow-doctor` do not need activity state. Doctor's optional approved reset removes malformed activity instead of recording another run.
 
 Writing the initial activity record is the first action of a tracked command, before project inspection, preflight, or other tool calls. This one generated state write does not authorize product changes or bypass any safety check.
 
 Never create or edit `run.json` directly. From the project root, use the first helper that exists:
 
 ```text
-node .agents/skills/doctor/scripts/run-state.mjs <action> <options>
-node .claude/skills/doctor/scripts/run-state.mjs <action> <options>
+node .agents/skills/devflow-doctor/scripts/run-state.mjs <action> <options>
+node .claude/skills/devflow-doctor/scripts/run-state.mjs <action> <options>
 ```
 
 Start with `start --command <skill> --summary <truthful-summary> --boundary <boundary>`. Use `update` at meaningful milestones or for a blocker, with `--status blocked` and `--resume <exact-command>` when recovery is needed. End with `finish --status ready|completed --summary <truthful-summary>`. The helper validates every field before atomically replacing the generated file. If it is missing or fails, report the activity warning and continue the workflow without writing a manual fallback.

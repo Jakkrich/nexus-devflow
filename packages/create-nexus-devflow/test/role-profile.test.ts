@@ -37,7 +37,8 @@ test("getSkillsForRole maps skills to role profiles accurately", () => {
   assert.ok(saSkills.includes("analyze"));
   assert.ok(saSkills.includes("overview"));
   assert.ok(saSkills.includes("discovery"));
-  assert.ok(saSkills.includes("doctor"));
+  assert.ok(saSkills.includes("devflow-doctor"));
+  assert.ok(saSkills.includes("devflow-status"));
   assert.ok(saSkills.includes("explore"));
   assert.ok(!saSkills.includes("implement"));
   assert.ok(!saSkills.includes("check"));

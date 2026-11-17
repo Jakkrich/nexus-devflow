@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
 import { resolveActiveContextPaths } from "./branch-context.js";
-import { readGitStatus } from "./git-status.js";
+import { readGitStatusSafe } from "./git-status.js";
 
 export interface GitDriftReport {
   hasDrift: boolean;
@@ -99,7 +99,7 @@ export async function detectGitDrift(
   explicitBranch?: string
 ): Promise<GitDriftReport> {
   const contextPaths = await resolveActiveContextPaths(projectRoot, explicitBranch);
-  const gitStatus = await readGitStatus(projectRoot);
+  const gitStatus = await readGitStatusSafe(projectRoot);
 
   let specFiles: string[] = [];
   let stageRunningId: string | null = null;

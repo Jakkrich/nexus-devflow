@@ -37,8 +37,9 @@
     ],
     "companionCommands": [
       "devflow",
+      "devflow-doctor",
+      "devflow-status",
       "discovery",
-      "doctor",
       "overview",
       "debug",
       "onboard",

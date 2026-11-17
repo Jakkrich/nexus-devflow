@@ -17,8 +17,9 @@
     "convert-any-to-md",
     "debug",
     "devflow",
+    "devflow-doctor",
+    "devflow-status",
     "discovery",
-    "doctor",
     "explore",
     "feature",
     "fix",
@@ -32,7 +33,6 @@
     "report-html",
     "rollback",
     "setup-tests",
-    "status",
     "test",
     "try"
   ],
@@ -40,8 +40,8 @@
     ".agents/skills",
     ".claude/skills",
     ".nexus/nexus-devflow.json",
-    ".agents/skills/doctor/scripts/run-state.mjs",
-    ".claude/skills/doctor/scripts/run-state.mjs",
+    ".agents/skills/devflow-doctor/scripts/run-state.mjs",
+    ".claude/skills/devflow-doctor/scripts/run-state.mjs",
     ".agents/skills/check/reference/guide.md",
     ".agents/skills/check/reference/verify.md",
     ".claude/skills/check/reference/guide.md",
@@ -75,9 +75,9 @@
       "git merge --ff-only",
       "overview must remain below 20,000 bytes"
     ],
-    "doctor": [
+    "devflow-doctor": [
       "At or above 20,000 bytes, call it oversized",
-      "doctor/scripts/run-state.mjs",
+      "devflow-doctor/scripts/run-state.mjs",
       "Reset the malformed dashboard state now?"
     ],
     "implement": [
@@ -87,7 +87,7 @@
       "npm run test:browser",
       "browseros-neo"
     ],
-    "status": [
+    "devflow-status": [
       "qualityGates.regular.independentReview",
       "when-sensitive",
       "audit independent current",
@@ -109,7 +109,7 @@
       "authoritative installer selection",
       "does not mean all four tools were selected",
       "Do not ask the user to select adapters again",
-      "point to `/doctor` instead of guessing"
+      "point to `/devflow-doctor` instead of guessing"
     ],
     "autopilot": [
       "qualityGates.regular.independentReview",

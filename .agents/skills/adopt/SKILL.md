@@ -102,7 +102,7 @@ it rather than inherit a wrong guess.
 - **`devflow/build-plan.md`** - the ordered feature list as a checklist. **Mark
   shipped features `- [x]`** (this is the brownfield difference: the build plan
   reflects reality, so most of an existing app starts checked) and the roadmap
-  items from the interview as `- [ ]`. This makes `/status` and `/feature` work
+  items from the interview as `- [ ]`. This makes `/devflow-status` and `/feature` work
   immediately - the next unchecked item is genuinely what's next.
 - **`devflow/context/coding-standards.md`** - rewrite the default to match the
   project's *actual* conventions from Step 1, not the shipped Next.js/Prisma

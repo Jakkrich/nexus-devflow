@@ -15,7 +15,7 @@ contract in `AGENTS.md`.
 Where this sits in the workflow:
 
 ```text
-/status  ──▶  [continuous]  ──▶  Final Review Packet
+/devflow-status  ──▶  [continuous]  ──▶  Final Review Packet
 (ready)       (Serial Loop:      (Local main only,
                Spec ➔ TDD ➔       never pushed)
                Gates ➔ Merge)
@@ -81,7 +81,7 @@ the requested target fit.
 
 Read initial context:
 - `AGENTS.md`
-- `devflow/config.json` (if missing, use safe defaults; if invalid, stop and point to `/doctor`)
+- `devflow/config.json` (if missing, use safe defaults; if invalid, stop and point to `/devflow-doctor`)
 - `devflow/project-plan.md` and `devflow/build-plan.md`
 - `devflow/context/project-overview.md`
 - `devflow/context/{xxx-slug}/` (if work is already active)

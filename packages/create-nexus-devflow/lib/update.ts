@@ -179,7 +179,8 @@ export function createManifest(
       ],
       companionCommands: [
         "devflow",
-        "doctor",
+        "devflow-doctor",
+        "devflow-status",
         "overview",
         "debug",
         "onboard",

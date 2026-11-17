@@ -85,8 +85,8 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/status/">Status</a>
-          <a class="docs-nav-link" href="../commands/doctor/">Doctor</a>
+          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
+          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/brief/">Brief</a>
@@ -177,7 +177,7 @@
           <h2>1. กฎการควบคุม Public Surface (Public Surface Rule)</h2>
           
           <ul>
-            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับชุดทักษะสนับสนุน (Companion Skills เช่น <code>/idea</code>, <code>/grill</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/doctor</code>, <code>/audit</code>, <code>/rollback</code>)</li>
+            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับชุดทักษะสนับสนุน (Companion Skills เช่น <code>/idea</code>, <code>/grill</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/devflow-doctor</code>, <code>/audit</code>, <code>/rollback</code>)</li>
             <li><strong>ห้ามเพิ่มคำสั่งสาธารณะโดยไม่จำเป็น</strong>: หากฟังก์ชันใหม่สามารถทำเป็น Internal Helper หรือต่อยอดจากคำสั่งเดิมได้ ให้เลือกทำภายในก่อน จนกว่าจะมีการอนุมัติและเลื่อนขั้น (Promotion) เข้าสู่ <code>agent-bundle.manifest.json#core_skills</code> อย่างเป็นทางการ</li>
           </ul>
         

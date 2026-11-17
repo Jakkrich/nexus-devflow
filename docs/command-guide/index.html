@@ -85,8 +85,8 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/status/">Status</a>
-          <a class="docs-nav-link" href="../commands/doctor/">Doctor</a>
+          <a class="docs-nav-link" href="../commands/devflow-status/">DevFlow Status</a>
+          <a class="docs-nav-link" href="../commands/devflow-doctor/">DevFlow Doctor</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/brief/">Brief</a>
@@ -238,7 +238,7 @@
               </tr>
               <tr>
                 <td>ต้องการตรวจสุขภาพของระบบ DevFlow ทั้งหมด</td>
-                <td><code>/doctor</code></td>
+                <td><code>/devflow-doctor</code></td>
                 <td>ตรวจสอบความสอดคล้องของ Adapters, Plans, Config, และความสดใหม่ของ Overview</td>
               </tr>
             </tbody>
@@ -311,7 +311,7 @@
               สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่อ่านไฟล์เกินจำเป็น
             </li>
             <li>
-              <strong><a href="../commands/status/">/status</a></strong>: 
+              <strong><a href="../commands/devflow-status/">/devflow-status</a></strong>: 
               รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สถานะของฟีเจอร์ปัจจุบัน, Git State, และคำสั่งถัดไปที่ต้องทำ
             </li>
             <li>
@@ -323,7 +323,7 @@
               ตรวจสอบคุณภาพและความปลอดภัย 5 มิติ (Code Quality, OWASP Top 10 Security, Performance Bottlenecks, Architecture Drift, Test Integrity) และบันทึกลง <code>findings.md</code> (รองรับ <code>/audit current</code> สำหรับงานปัจจุบัน และ <code>/audit full</code> สำหรับทั้งโปรเจกต์)
             </li>
             <li>
-              <strong><a href="../commands/doctor/">/doctor</a></strong>: 
+              <strong><a href="../commands/devflow-doctor/">/devflow-doctor</a></strong>: 
               ตรวจสุขภาพของระบบ DevFlow ทั้งหมด ตรวจสอบ Adapter Sync, Config Drift, และความสดใหม่ของ <code>project-overview.md</code>
             </li>
           </ul>

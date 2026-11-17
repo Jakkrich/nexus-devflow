@@ -338,7 +338,7 @@ Then report which selected tools and adapter folders are needed:
   it does not mean all four tools were selected.
 - Do not ask the user to select adapters again when that valid manifest exists.
   Keep and report the exact selection. If a required adapter tree is missing,
-  report the mismatch and point to `/doctor` instead of guessing or deleting
+  report the mismatch and point to `/devflow-doctor` instead of guessing or deleting
   another tree.
 - Without a valid manifest, explain that folder detection cannot distinguish
   Codex, Antigravity, GitHub Copilot, and OpenCode, then ask which tools the user actually

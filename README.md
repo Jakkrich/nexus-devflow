@@ -151,7 +151,7 @@ Inspect the generated configuration files:
 - `devflow/context/coding-standards.md` — customize code conventions, lint rules, and test gates.
 - `devflow/context/ai-interaction.md` — adjust AI operational preferences and communication rules.
 
-If something feels misconfigured, run `/doctor` for an instant read-only health check.
+If something feels misconfigured, run `/devflow-doctor` for an instant read-only health check.
 
 ### 5. Plan & Capture Ideas
 Capture initial requirements, user stories, or raw thoughts:
@@ -473,7 +473,7 @@ The `/onboard` skill presents 3 implementation presets:
 
 #### 🛡️ Overview Compactness Guard (20KB Budget)
 `devflow/context/project-overview.md` is strictly constrained to under 20,000 bytes (~4,000–5,000 tokens):
-- `/doctor` reports exact byte size and warns if `oversized`.
+- `/devflow-doctor` reports exact byte size and warns if `oversized`.
 - `/feature` enforces a hard-stop on oversized overviews and directs the AI to reuse session context without redundant tool reads.
 
 #### 📌 Planning Baseline Commit
@@ -535,7 +535,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **debug** | `/debug` / `$debug` | Diagnostics | Scientific six-phase diagnosis using a red-capable feedback loop without changing source. |
 | **devflow** | `/devflow` / `$devflow` | Router | Flagship state inspector, stage router, and workflow guide. |
 | **discovery** | `/discovery` / `$discovery` | Companion | Pre-delivery multi-turn exploration and domain research. |
-| **doctor** | `/doctor` / `$doctor` | Health | Read-only workspace health check, adapter validation, and overview byte size guard (>= 20KB). |
+| **devflow-doctor** | `/devflow-doctor` / `$devflow-doctor` | Health | Read-only workspace health check, adapter validation, and overview byte size guard (>= 20KB). |
 | **explore** | `/explore` / `$explore` | Companion | Explore an idea against codebase without changing files or writing specs. |
 | **feature** | `/feature` / `$feature` | Delivery | Transform feature request into Task-Isolated Living Spec in `devflow/context/{xxx-slug}/spec.md`. |
 | **fix** | `/fix` / `$fix` | Delivery | Document and spec an ad-hoc bug fix or patch. |
@@ -549,7 +549,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **report-html** | `/report-html` | Reporting | Render interactive standalone HTML delivery dashboard on demand. |
 | **rollback** | `/rollback` / `$rollback` | Delivery | Plan and safely execute reversal of a completed feature. |
 | **setup-tests** | `/setup-tests` / `$setup-tests` | Setup | Add or normalize stack-native unit test runner. |
-| **status** | `/status` / `$status` | Monitoring | Read-only progress summary, active work, and next suggested action. |
+| **devflow-status** | `/devflow-status` / `$devflow-status` | Monitoring | Read-only progress summary, active work, and next suggested action. |
 | **test** | `/test` | Testing | Test execution, missing test generation, and coverage analysis. |
 | **try** | `/try` / `$try` | QA | Generate step-by-step human manual review and QA walkthrough. |
 
@@ -736,7 +736,7 @@ npx nexus-devflow update [--check]
 
 ## Recommended Third-Party Skills & Extensions
 
-Nexus-DevFlow ships with **33 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/status` / `/complete`).
+Nexus-DevFlow ships with **33 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/devflow-status` / `/complete`).
 
 For specialized visual architecture and offensive security workflows, you can extend your setup with community skills using `nexus-devflow skill add`:
 
@@ -779,7 +779,7 @@ npx nexus-devflow skill add code-modernization
   2. *Phase 6–8 (Build & Proof)*: Slices `BRIEF.md` into `devflow/build-plan.md` and hands off execution to **DevFlow Core Lifecycle** (`/feature` ➔ `/implement` with strict TDD ➔ `/check` with `proof_pack.py` ➔ `/complete`).
 
 > [!NOTE]
-> **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/status`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.
+> **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/devflow-status`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.
 
 ---
 
@@ -806,7 +806,7 @@ Nexus-DevFlow maintains state in files, never in volatile AI context:
 - `devflow/history/` + Git — permanent delivery ledger.
 
 When starting a new session or resuming after clearing context:
-- Run `/devflow` or `/status` to inspect current state.
+- Run `/devflow` or `/devflow-status` to inspect current state.
 - Run `/implement` to immediately resume the next unchecked living spec task.
 
 ---
@@ -831,7 +831,7 @@ When starting a new session or resuming after clearing context:
 │       ├── debug/             ($debug: isolate failures without side-effects)
 │       ├── devflow/           ($devflow: state inspector & stage router)
 │       ├── discovery/         ($discovery: deep domain exploration)
-│       ├── doctor/            ($doctor: workspace health check)
+│       ├── devflow-doctor/    ($devflow-doctor: workspace health check)
 │       ├── feature/           ($feature: living spec generator)
 │       ├── fix/               ($fix: ad-hoc bug fix spec)
 │       ├── grill/             ($grill: Socratic ADR alignment)
@@ -844,7 +844,7 @@ When starting a new session or resuming after clearing context:
 │       ├── report-html/       ($report-html: standalone HTML dashboard)
 │       ├── rollback/          ($rollback: safe feature reversal)
 │       ├── setup-tests/       ($setup-tests: setup stack-native test runner)
-│       ├── status/            ($status: progress and drift summary)
+│       ├── devflow-status/    ($devflow-status: progress and drift summary)
 │       ├── test/              ($test: test execution & missing test gen)
 │       └── try/               ($try: manual human QA guide)
 ├── .claude/
