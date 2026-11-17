@@ -33,10 +33,10 @@ passes.
 Read `devflow/config.json`. A missing file means the built-in defaults apply.
 If the file exists but is invalid, stop and point the user to `/devflow-doctor`.
 
-Before requiring a real active spec, check for pending completion using
-`reference/completion-recovery.md`. A matching archive may mean archival was
-interrupted, the work commit awaits merge, or the merge already finished. Follow
-that phase instead of restarting logging. Missing or ambiguous evidence stops
+Before requiring a real active spec, screen for pending completion using
+`reference/completion-screen.md`. Only when a matching archive or recovery candidate
+is found (or recovery is explicitly requested), read `reference/completion-recovery.md`
+and follow that phase instead of restarting logging. Missing or ambiguous evidence stops
 with concrete recovery steps; an archive or clean context never authorizes selecting new work.
 Recovery uses archive and Git proof, never dashboard activity as authority.
 
@@ -115,7 +115,7 @@ evidence is missing.
 
 ## Step 1 - log the work
 
-Follow `reference/completion-recovery.md` to capture the source tree and compact
+Follow `reference/completion-archive.md` to capture the source tree and compact
 archive annotation before any logging edits. Preserve the exact verified spec
 prefix, its UTF-8 byte length and SHA-256, branch, original HEAD, and local base.
 Record the reference's narrow `absentOptional` proof before creating any optional

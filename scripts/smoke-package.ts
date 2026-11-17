@@ -76,7 +76,12 @@ async function smokeTestPackage(): Promise<void> {
       ".claude/skills",
       ".nexus/nexus-devflow.json",
       "devflow/context/project-overview.md",
-      "devflow/reference/help-playbook-protocol.md"
+      "devflow/reference/help-playbook-protocol.md",
+      "devflow/workflow.md",
+      ".agents/skills/audit/reference/independent-review.md",
+      ".agents/skills/complete/reference/completion-screen.md",
+      ".agents/skills/complete/reference/completion-archive.md",
+      ".agents/skills/check/reference/try-it-now.md"
     ];
 
     for (const rel of expected) {

@@ -288,6 +288,110 @@ async function validateSkillMetadata(failures: string[]): Promise<void> {
   }
 }
 
+function extractSkillReferenceTargets(markdown: string): string[] {
+  const targets = new Set<string>();
+  const pattern = /(?:^|[\s(`"\[])((?:\.\.\/)+[a-z0-9-]+\/reference\/[^\s)`"'>]+|reference\/[^\s)`"'>]+|[a-z0-9-]+\/reference\/[^\s)`"'>]+)/gi;
+  for (const match of markdown.matchAll(pattern)) {
+    const raw = (match[1] || "").split("#")[0].replace(/[.,:;!?]+$/, "");
+    if (!raw || /[<>{}]/.test(raw) || raw.startsWith("devflow/reference/")) {
+      continue;
+    }
+    targets.add(raw);
+  }
+  return [...targets];
+}
+
+function collectMarkdownFiles(dir: string): string[] {
+  if (!fs.existsSync(dir)) return [];
+  const results: string[] = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectMarkdownFiles(full));
+    } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      results.push(full);
+    }
+  }
+  return results;
+}
+
+export function findBrokenSkillReferenceLinks(
+  skillsRoot: string,
+  skillNames?: readonly string[]
+): string[] {
+  const resolvedRoot = path.resolve(skillsRoot);
+  if (!fs.existsSync(resolvedRoot)) return [];
+  const rootPrefix = resolvedRoot.endsWith(path.sep) ? resolvedRoot : `${resolvedRoot}${path.sep}`;
+  const dirs = skillNames
+    ? [...skillNames]
+    : fs.readdirSync(resolvedRoot, { withFileTypes: true })
+        .filter((e) => e.isDirectory())
+        .map((e) => e.name);
+
+  const broken: string[] = [];
+  for (const skill of dirs) {
+    const skillDir = path.join(resolvedRoot, skill);
+    for (const mdFile of collectMarkdownFiles(skillDir)) {
+      const content = fs.readFileSync(mdFile, "utf8");
+      const relFile = path.relative(resolvedRoot, mdFile).replace(/\\/g, "/");
+      for (const refPath of extractSkillReferenceTargets(content)) {
+        const baseDir = refPath.startsWith("reference/") || refPath.startsWith("../")
+          ? path.dirname(mdFile)
+          : resolvedRoot;
+        const resolvedTarget = path.resolve(baseDir, refPath);
+        if (!resolvedTarget.startsWith(rootPrefix)) {
+          broken.push(`${relFile} -> ${refPath} (escapes skills root)`);
+          continue;
+        }
+        if (!fs.existsSync(resolvedTarget) || !fs.statSync(resolvedTarget).isFile()) {
+          broken.push(`${relFile} -> ${refPath} (missing target)`);
+        }
+      }
+    }
+  }
+  return broken;
+}
+
+async function validateSkillReferenceLinks(failures: string[]): Promise<void> {
+  const inventory = await loadCoreSkillInventory(
+    path.join(projectRoot, "agent-bundle.manifest.json")
+  );
+  for (const adapter of [".agents", ".claude"] as const) {
+    const skillsRoot = path.join(projectRoot, adapter, "skills");
+    const broken = findBrokenSkillReferenceLinks(skillsRoot, inventory.names);
+    if (broken.length > 0) {
+      for (const item of broken) {
+        fail(`[${adapter}] Broken skill reference link: ${item}`, failures);
+      }
+    } else {
+      ok(`[${adapter}] All cross-skill reference links resolved (${inventory.count} core skills)`);
+    }
+  }
+}
+
+function validateAgentsBudget(failures: string[]): void {
+  const agentsPath = path.join(projectRoot, "AGENTS.md");
+  if (!fs.existsSync(agentsPath)) return;
+  const content = fs.readFileSync(agentsPath, "utf8");
+  const bytes = Buffer.byteLength(content, "utf8");
+  if (bytes > 8000) {
+    fail(`AGENTS.md exceeds 8,000-byte budget (${bytes} bytes); keep reference sections in devflow/workflow.md`, failures);
+  } else {
+    ok(`AGENTS.md is compact (${bytes} <= 8,000 bytes)`);
+  }
+  for (const required of [
+    "## Proportional engineering",
+    "## Verification & Commands",
+    "<!-- devflow:onboarding-required -->",
+    "devflow/workflow.md",
+    "devflow-doctor/scripts/run-state.mjs"
+  ]) {
+    if (!content.includes(required)) {
+      fail(`AGENTS.md is missing required contract text: ${required}`, failures);
+    }
+  }
+}
+
 function validateSkillBudgets(failures: string[]): void {
   for (const adapter of [".agents", ".claude"]) {
     const skillsDir = path.join(projectRoot, adapter, "skills");
@@ -360,6 +464,8 @@ async function main(): Promise<void> {
   validateWorkflowNumbering(failures);
   await validateCoreSkillContract(failures);
   await validateSkillMetadata(failures);
+  await validateSkillReferenceLinks(failures);
+  validateAgentsBudget(failures);
   validateSkillBudgets(failures);
   validateManifestSync(failures);
   validateSkillContracts(manifest?.skill_contracts || {}, failures);
@@ -372,7 +478,13 @@ async function main(): Promise<void> {
   console.log("\nNexus-DevFlow framework static validation completed successfully!");
 }
 
-main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exit(1);
-});
+const isEntrypoint =
+  Boolean(process.argv[1]) &&
+  fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url));
+
+if (isEntrypoint) {
+  main().catch((error: unknown) => {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  });
+}

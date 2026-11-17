@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { findBrokenSkillReferenceLinks } from "../validate-framework.js";
 
 for (const adapter of [".agents", ".claude"]) {
   test(adapter + " diagram references resolve their instruction sections", () => {
@@ -28,3 +30,39 @@ for (const adapter of [".agents", ".claude"]) {
     }
   });
 }
+
+test("findBrokenSkillReferenceLinks resolves valid relative and cross-skill paths and flags broken or escaping links", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "devflow-ref-links-"));
+  try {
+    const skillsRoot = path.join(tempDir, ".agents", "skills");
+    fs.mkdirSync(path.join(skillsRoot, "alpha", "reference"), { recursive: true });
+    fs.mkdirSync(path.join(skillsRoot, "beta", "reference"), { recursive: true });
+    fs.writeFileSync(path.join(skillsRoot, "alpha", "reference", "guide.md"), "# guide\n");
+    fs.writeFileSync(path.join(skillsRoot, "beta", "reference", "target.md"), "# target\n");
+
+    // Valid links across SKILL.md and reference/*.md
+    fs.writeFileSync(
+      path.join(skillsRoot, "alpha", "SKILL.md"),
+      "Read `reference/guide.md`, `../beta/reference/target.md`, and `beta/reference/target.md`.\n"
+    );
+    fs.writeFileSync(
+      path.join(skillsRoot, "alpha", "reference", "guide.md"),
+      "See `../../beta/reference/target.md`.\n"
+    );
+    assert.deepEqual(findBrokenSkillReferenceLinks(skillsRoot, ["alpha", "beta"]), []);
+
+    // Broken relative, cross-skill, bare, and root-escaping links
+    fs.writeFileSync(
+      path.join(skillsRoot, "beta", "SKILL.md"),
+      "Bad `reference/missing.md`, `../alpha/reference/nope.md`, `alpha/reference/missing2.md`, and `../../../outside/reference/secret.md`.\n"
+    );
+    const broken = findBrokenSkillReferenceLinks(skillsRoot, ["alpha", "beta"]);
+    assert.equal(broken.length, 4);
+    assert.ok(broken.some((item) => item.includes("reference/missing.md")));
+    assert.ok(broken.some((item) => item.includes("../alpha/reference/nope.md")));
+    assert.ok(broken.some((item) => item.includes("alpha/reference/missing2.md")));
+    assert.ok(broken.some((item) => item.includes("../../../outside/reference/secret.md")));
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});

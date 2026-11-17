@@ -28,71 +28,11 @@ Format every response for fast scanning and readability:
 
 ---
 
-## 3. The 3-Pillars Unified Architecture
+## 3. Workflow Reference & 3-Pillars Boundaries
 
-```text
-devflow/
-├── 🔮 ideas.md                     # [Future] Idea Inbox with AI Feasibility Scoring
-├── 🗺️ project-plan.md              # [Future] Master Roadmap
-├── 📋 build-plan.md                # [Future] Master Build Plan & Sizing
-│
-├── ⚡ context/                      # [Present] Living Source of Truth & Active Tasks
-│   ├── project-overview.md         # 🌐 Global Architecture & Stack
-│   ├── coding-standards.md         # 🌐 Global Coding & TDD Standards
-│   ├── ai-interaction.md           # 🌐 Global AI Interaction Rules
-│   ├── glossary.md                 # 🌐 Domain Terms & Glossary
-│   │
-│   └── {xxx-slug}/                 # ⚡ Active Task Workspace
-│       ├── spec.md                 # Living Spec + TDD Checklist
-│       ├── stage.md                # Runtime Stage & Branch Reference
-│       └── findings.md             # Dedicated Audit Ledger (P0-P3)
-│
-└── 📦 history/                     # [Past] features/, fixes/, rollbacks/, and HISTORY.md
-```
+The 3-Pillars layout, 4-stage lifecycle (`/feature` / `/fix` ──▶ `/implement` ──▶ `/check` ──▶ `/complete`), companion commands (`/discovery`, `/idea`, `/grill`, `/brainstorm`, `/analyze`), and activity state contract live in `devflow/workflow.md` (read on demand).
 
-### ⚡ The Unified 4-Stage Task-Isolated Living Spec Lifecycle
-*ขับเคลื่อนการพัฒนาทุกระดับด้วย **Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)** ที่รวมความลึกระดับ Architect Mode เข้ากับความคล่องตัวระดับ Lean Velocity โดยแยก Workspace ของแต่ละงานออกจากกัน 100%:*
-
-After the first successful `/overview`, DevFlow offers a reviewed local commit for the initial workflow setup and plans before Feature 1. It shows the exact candidate diff and asks first. It skips local-only installations and stops rather than mixing app source or unrelated work into the baseline. When setup work is on a dedicated branch, the same approval can finalize the local baseline and fast-forward it into the unchanged default branch. It never pushes.
-
-```text
-/feature (หรือ /fix) ──▶ /implement ──▶ /check ──▶ /complete
-```
-
-1. **Stage 1: Spec (`/feature` หรือ `/fix`)**:
-   - ดึงบริบทจาก `devflow/discoveries/`, `devflow/ideas.md`, หรือคำขอของผู้ใช้
-   - จัดสรร Running ID (`xxx-slug`) และสร้างโฟลเดอร์ `devflow/context/{xxx-slug}/`
-   - เขียน **Task-Isolated Living Spec (`spec.md`)**, `stage.md`, และ `findings.md` ครอบคลุม:
-     - `## 🎯 1. Define & Boundaries` (Problem, In/Out Scope, Risks, Success Criteria)
-     - `## 📐 2. Technical Spec & Contracts` (Architecture, Models, Interface Contracts, Non-functional, ACs)
-     - `## 📋 3. Execution Plan & TDD Checklist` (Atomic tasks, `[TDD-Red/Green/Refactor]` Triplets)
-
-2. **Stage 2: Implement (`/implement [id]`)**:
-   - สลับไปยัง Branch `feature/{xxx-slug}` (หรือ Auto-detect จาก Current Branch / Task Queue)
-   - ดำเนินการ Task-by-task ตาม Checklist อย่างเคร่งครัดด้วย **TDD (Red-Green-Refactor)**
-   - ติ๊กเครื่องหมาย `- [x]` และบันทึก `## ⚡ 4. Implementation Log & Evidence` (Diff summary, Checkpoints) ลงใน `devflow/context/{xxx-slug}/spec.md`
-
-3. **Stage 3: Check (`/check [id]`)**:
-   - Senior QA Multi-Lane Verification (Typecheck, Lint, Test Suites, Manual Proof)
-   - บันทึกผลการพิสูจน์เชิงประจักษ์ลงใน `## 🧪 5. Multi-Lane Verification Matrix` ใน `spec.md` และบันทึก Finding ลงใน `findings.md` เฉพาะงาน
-
-4. **Stage 4: Complete (`/complete [id]`)**:
-   - สรุปผล `## 📦 6. Release Digest & Retrospective` (Changelog, Lessons Learned, ADRs)
-   - ทำการ Archive `spec.md` ไปเป็นไฟล์เดี่ยวที่ `devflow/history/{features|fixes|rollbacks}/{xxx-slug}.md`
-   - ลบโฟลเดอร์เฉพาะกิจ `devflow/context/{xxx-slug}/` ออกอย่างหมดจด
-   - **Mandatory Delivery Gate**: บังคับถามผู้ใช้ก่อนเสมอว่าต้องการ Delivery รูปแบบใด:
-     - **Option 1 (Direct Squash-Merge / Direct Commit - Solo Mode)**: สำหรับทำงานคนเดียว ทำการ Squash-merge หรือ commit เข้า main/master ในเครื่องโดยตรง (และถามแยกต่างหากก่อน push ขึ้น remote)
-     - **Option 2 (Team MR/PR Flow - Team Mode)**: สำหรับทำงานเป็นทีมมากกว่า 1 คน ดึง master/main ล่าสุดมารวมกับ Feature/Dev Branch แล้ว push branch ขึ้นไปเพื่อเปิด MR/PR (ไม่ merge เข้า main/master ในเครื่อง)
-   - อัปเดต `devflow/history/HISTORY.md` และ `devflow/build-plan.md` ให้เป็น `[x]` เรียบร้อย
-
----
-
-### 🔮 Pre-Flight Discovery & Architectural Alignment (Companion Tools)
-สำหรับงานที่ต้องการสำรวจไอเดีย, ค้นคว้าทางเทคนิค, หรือการออกแบบสถาปัตยกรรมก่อนเริ่มสร้าง Spec:
-- `/discovery`: Unified Pre-delivery Discovery & Research (บันทึกใน `devflow/discoveries/`)
-- `/idea`: วิเคราะห์และบันทึกไอเดียลงใน `devflow/ideas.md`
-- `/grill` (หรือ `/align`): Socratic Alignment, Domain Modeling & บันทึก ADRs ลงใน `devflow/decisions/`
-- `/brainstorm`: เครื่องมือระดมความคิดทางเลือก 2-3 Options พร้อมเปรียบเทียบ Trade-offs
+> **Initial Baseline**: After the first successful `/overview`, DevFlow offers one reviewed local commit (`chore: establish DevFlow project baseline`) before Feature 1, skipping local-only installs and never pushing.
 
 
 ## 4. Strict TDD & Two-Stage Review Interaction Rules
@@ -128,7 +68,7 @@ During `/check`:
 
 ---
 
-## 5. Resuming After Context Clear
+## 6. Resuming After Context Clear
 
 Progress lives in persistent files, not in transient chat history:
 
@@ -138,7 +78,7 @@ Progress lives in persistent files, not in transient chat history:
 
 ---
 
-## 6. Multi-Run Isolation
+## 7. Multi-Run Isolation
 
 - Multiple specs may be queued in `devflow/context/{xxx-slug}/` without blocking new drafts.
 - Select a run by explicit ID, matching branch, or the sole active candidate. Ask only when the target remains ambiguous.
@@ -146,7 +86,7 @@ Progress lives in persistent files, not in transient chat history:
 
 ---
 
-## 7. Branching & Git Conventions
+## 8. Branching & Git Conventions
 
 - **Branch Naming**: `feature/{xxx-slug}` or `fix/{xxx-slug}`.
 - **Commit Messages**: Conventional imperative format (e.g. `feat(uninstall): add clean eject CLI command`, `fix(parser): handle undefined metadata field`).
@@ -155,7 +95,7 @@ Progress lives in persistent files, not in transient chat history:
 
 ---
 
-## 8. Autopilot Policy
+## 9. Autopilot Policy
 
 - `autopilot` is an explicit opt-in command (`/autopilot`). Never suggest it as the default next action.
 - When invoked, it runs one bounded spec/plan/implement/verify pass.
@@ -163,7 +103,7 @@ Progress lives in persistent files, not in transient chat history:
 
 ---
 
-## 9. Socratic Alignment & Grilling Discipline (`/grill`)
+## 10. Socratic Alignment & Grilling Discipline (`/grill`)
 
 - **Align Before You Build**: When plans, domain language, or architectural boundaries are fuzzy, invoke `/grill` (or use the Grilling Lens in `/discovery`) to conduct a structured interview before creating specifications.
 - **Codebase-Grounded Inquiry**: Inspect existing context and code before asking questions. Never ask questions the codebase already answers.
@@ -174,7 +114,7 @@ Progress lives in persistent files, not in transient chat history:
 
 ---
 
-## 10. Third-Party Skill Orchestration & Multi-Skill Delegation Protocol
+## 11. Third-Party Skill Orchestration & Multi-Skill Delegation Protocol
 
 Nexus-DevFlow natively supports extending workflow capabilities with **Third-Party Skills** (installed via `nexus-devflow skill add <repo-or-path>`):
 

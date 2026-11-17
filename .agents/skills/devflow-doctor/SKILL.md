@@ -31,8 +31,8 @@ None. `/devflow-doctor` takes no argument.
 Gather these, then summarize. Do not dump file contents.
 
 1. **Required DevFlow files**
-   - Confirm `AGENTS.md`, `devflow/project-plan.md`,
-     `devflow/build-plan.md`, and `devflow/context/` exist.
+   - Confirm `AGENTS.md`, `devflow/workflow.md`, `devflow/project-plan.md`,
+     `devflow/build-plan.md`, and `devflow/context/` exist. (Missing `devflow/workflow.md` on an older install is a warning to update DevFlow.)
    - Confirm `devflow/context/project-overview.md`,
      `devflow/context/coding-standards.md`,
      `devflow/context/ai-interaction.md`, and
@@ -106,6 +106,7 @@ Gather these, then summarize. Do not dump file contents.
      Look for current requirements over hypothetical scale, reuse before new
      machinery, smaller reversible defaults, questions for material unknowns,
      and harmonization with `ponytail`.
+   - Check whether `AGENTS.md` is compact and delegates long workflow reference to `devflow/workflow.md`; if an older `AGENTS.md` still embeds the full workflow reference and exceeds ~8,000 bytes, recommend trimming it to match `devflow/workflow.md`.
    - Check whether `AGENTS.md` has a `## Commands` section with dev and build
      commands.
    - Report missing lint or test commands as informational unless the project has
@@ -142,7 +143,7 @@ Gather these, then summarize. Do not dump file contents.
 7. **Current workflow state**
    - Inspect `devflow/.state/run.json` when it exists. Missing means no recorded
      activity and is healthy. Require a regular non-symbolic-link JSON file that
-     matches dashboard schema version 1 from `AGENTS.md`.
+     matches dashboard schema version 1 from `devflow/workflow.md` (or `AGENTS.md` on legacy installs).
    - If the path is a symbolic link or not a regular file, do not read, replace,
      or remove it. Report the exact path for manual review.
    - If the regular file is invalid JSON or does not match the schema, report it

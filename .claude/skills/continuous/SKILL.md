@@ -48,12 +48,12 @@ one clean local main commit per feature that a careful human workflow would prod
 
 ## Input & Target Selection
 
-Before selecting a new feature or requiring an active live spec, always inspect
+Before selecting a new feature or requiring an active live spec, always screen
 pending completion using the installed Complete skill and
-`../complete/reference/completion-recovery.md`. Use its read-only candidate screen
+`../complete/reference/completion-screen.md`. Use its read-only candidate screen
 first: settled clean default-branch history needs no historical transient objects
-for a new run. An actual completion candidate or an explicit request to resume
-interrupted completion requires full recovery proof, using this run's scoped Git
+for a new run. Only when an actual completion candidate or explicit resume is detected,
+read `../complete/reference/completion-recovery.md` for full recovery proof, using this run's scoped Git
 authority and `qualityGates.continuous`. Do not repeat archival or a work commit/merge.
 Missing, conflicting, or unprovable recovery evidence stops before next-feature work.
 An active feature with no completion candidate resumes implementation normally; its
@@ -181,7 +181,7 @@ and collect interactive evidence via `browseros-neo` when available.
 Apply the `/complete` safety, logging, and archive behavior without asking commit and merge prompts:
 1. Run final documented verification.
 2. Confirm the current spec status is `verified`.
-3. Capture source tree / annotation proof per `../complete/reference/completion-recovery.md`
+3. Capture source tree / annotation proof per `../complete/reference/completion-archive.md`
    and embed `<!-- devflow:completion {...} -->` in the archive.
 4. Place the archive at `devflow/history/features/{xxx-slug}.md`.
 5. Update checkboxes in `devflow/build-plan.md` and append entry to `devflow/history/HISTORY.md`.

@@ -1,96 +1,23 @@
 # Completion recovery
 
-Use this contract before Complete requires a live spec, and before Status or
-Continuous selects new work. Archive and Git evidence determine the phase.
+Use this contract only when the read-only screen in `complete/reference/completion-screen.md`
+detects a pending completion candidate or explicit resume. For normal archive
+preparation without recovery, read `complete/reference/completion-archive.md`.
+Archive and Git evidence determine the phase.
 `run.json`, modification times, archive titles, and commit subjects prove none of
 these transitions. Recovery grants no commit, merge, push, or cleanup approval.
 
-## Prepare one recoverable archive
+## Recovery annotation & byte reconstruction
 
-After Complete's final gates pass, but before any logging edits, record the full
-work branch ref, `HEAD`, local default branch ref and its current commit. Require
-that default commit to be an ancestor of the work branch. Resolve refs locally;
-do not fetch. Capture the verified working tree in a temporary Git index:
-
-```bash
-node --input-type=module -e '
-import fs from "node:fs";
-import os from "node:os";
-import path from "node:path";
-import { execFileSync } from "node:child_process";
-const dir = fs.mkdtempSync(path.join(os.tmpdir(), "devflow-completion-"));
-const env = { ...process.env, GIT_INDEX_FILE: path.join(dir, "index") };
-try {
-  execFileSync("git", ["read-tree", "HEAD"], { env });
-  execFileSync("git", ["add", "-A", "--", "."], { env });
-  process.stdout.write(execFileSync("git", ["write-tree"], { env }));
-} finally {
-  fs.rmSync(dir, { recursive: true, force: true });
-}'
-```
-
-Run from the project root only after excluding unrelated work and Git conflicts.
-This writes local Git objects, not a commit or ref, and leaves the normal index
-untouched. Never force-add ignored files. Dirty submodules or required ignored
-inputs without separately recoverable exact bytes cannot support this proof.
-The source tree is evidence, not approval or a substitute for any quality gate.
-
-Before logging, record `absentOptional` as an array containing only
-`devflow/context/{xxx-slug}/findings.md` and/or `devflow/context/{xxx-slug}/review.md` when each
-exact path returns `ENOENT` from `lstat`, its parents are ordinary directories,
-and neither HEAD nor sourceTree contains it. Otherwise omit that path. This
-records original filesystem absence, never permission to discard evidence.
-Ignored existing files and symlinks are not absent. Reject other paths, duplicates,
-or contradictions; a missing field in an older annotation proves no absence.
-
-Start the archive with the original verified spec bytes, unchanged. Measure
-UTF-8 **bytes**, not characters or lines. Append two LF bytes and this single-line
-JSON comment before any Findings, Independent review, or Manual try guide section:
-
-```text
-<!-- devflow:completion {"schemaVersion":1,"specBytes":123,"specSha256":"<64 hex>","branch":"refs/heads/feature/name","head":"<full SHA>","baseRef":"refs/heads/main","baseCommit":"<full SHA>","sourceTree":"<full tree SHA>","absentOptional":[]} -->
-```
-
-Use `Buffer.length` and SHA-256 over the exact file bytes. To recover, locate the
-unique annotation boundary and remove only the two inserted line breaks before
+Read `complete/reference/completion-archive.md` alongside this recovery contract
+to see how `sourceTree`, `absentOptional`, and `<!-- devflow:completion {...} -->`
+are prepared. To recover, locate the unique annotation boundary and remove only the two inserted line breaks before
 it (LF or CRLF). Test that prefix as raw bytes and uniform LF/CRLF candidates
 against both `specBytes` and `specSha256`; deduplicate identical candidates and
 accept only one exact match. This reconstructs hash-proven original bytes across
 ordinary Git EOL conversion. Mixed endings or custom filters without an exact
 match stop recovery. Never trim content, split on a Markdown heading, or accept a
 normalized digest instead of the original. Reject malformed/duplicate annotations.
-
-Build the complete archive in a temporary file first, including all resolved
-findings, the exact passing receipt when present, and any generated try guide.
-Validate it against its inputs, then place it at the intended absent archive path
-in `devflow/history/features/`, `fixes/`, or `rollbacks/`.
-Never overwrite an existing archive: a matching one enters recovery; a conflicting
-one stops for an exact path decision. Finish plan/overview bookkeeping, update
-`devflow/history/HISTORY.md`, then clean up the run workspace `devflow/context/{xxx-slug}/`.
-Do not append sections incrementally to an existing archive during recovery.
-
-## Screen candidates read-only
-
-Before matching a reused feature branch, apply the historical-build exclusion
-below. Do not treat a proved prior reversed build as pending completion of its
-replacement. If that exclusion cannot be proved, retain the candidate and stop
-for full proof rather than guessing from a different spec or archive name.
-
-Inspect current branch, `git status --porcelain=v1`, live spec/review and plan
-consistency, and relevant annotated archives. Check recorded local work refs with
-`git show-ref --verify --quiet <branch>`. A matching work branch/archive, a retained
-matching work ref after merge, or uncommitted completion changes/live evidence tied
-to that item is a recovery candidate. An explicit request to resume completion
-also requires full proof. Status reports candidates and routes them to Complete;
-it does not create a temporary index or claim the phase has passed full proof.
-
-For ordinary Status or a new Continuous invocation, a clean local default branch
-with consistent live state, no matching local work ref, and no pending completion
-evidence is settled history. An archive at its tip alone does not trigger recovery.
-Do not require historical `head`/`sourceTree` objects for that orientation; clean
-clones and Git pruning legitimately lose them. This is not a new claim about past
-verification. A reset stub alone proves nothing: check the refs, cleanliness, and
-live state too. Missing objects still block actual recovery and explicit resume.
 
 ## Prove an actual recovery candidate
 

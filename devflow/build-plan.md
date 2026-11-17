@@ -13,7 +13,7 @@
 - [x] 112. **(Deprecated & Removed) In-IDE Interactive Choice & Predictive Follow-Up Gate** - ถอดระบบ In-App Modal บังคับออกตามคำสั่งผู้ใช้เพื่อคืนความคล่องตัวในการสนทนา (Ref: DISC-20261030-001, Task 113)
 - [ ] 114. **Upstream AI Blueprint Selective Sync (v1.11.0–v1.16.1) & Skill Rename** - ผสานความสามารถกลุ่มที่ 1 และ 2 จาก Upstream พร้อมเปลี่ยนชื่อ `/status` และ `/doctor` เป็น `/devflow-status` และ `/devflow-doctor` แบบ Zero-Regression (Ref: DISC-20261117-001)
   - [x] 114a. **(Skateboard) Rename `/status` & `/doctor` to `/devflow-status` & `/devflow-doctor` + Git/Pack Hardening** - เปลี่ยนชื่อสกิลทั้ง 2 adapter, ย้าย `run-state.mjs`, กัน crash จาก `git status` buffer และแพ็คเฉพาะ tracked template files
-  - [ ] 114b. **(Skateboard) Context Trimming, On-Demand References & Cross-Skill Link Validator** - เพิ่ม link validator ใน `validate-framework.ts`, แยก `devflow/workflow.md`, trim `ai-interaction.md`, แยก `independent-review.md` / `completion-screen.md` / `completion-archive.md` / `try-it-now.md`
+  - [x] 114b. **(Skateboard) Context Trimming, On-Demand References & Cross-Skill Link Validator** - เพิ่ม link validator ใน `validate-framework.ts`, แยก `devflow/workflow.md`, trim `ai-interaction.md`, แยก `independent-review.md` / `completion-screen.md` / `completion-archive.md` / `try-it-now.md`
   - [ ] 114c. **(Tracer Bullet) Spec Check Gate (`--check`), `when-testable` Proof & Implement Step Menu** - เพิ่ม `/feature --check` (`specCheck`), `when-testable` try-it-now proof และเมนูต่อ step เมื่อ `stepReview: "every"`
   - [ ] 114d. **(Tracer Bullet) Parallel Worktree Workflows & Recovery** - รองรับ 1 work item ต่อ 1 worktree/clone, pre-created worktree branch start และ recovery เมื่อ `main` เดินหน้า
 
