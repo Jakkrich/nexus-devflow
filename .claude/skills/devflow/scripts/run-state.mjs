@@ -31,7 +31,7 @@ async function main() {
 
   if (options.action === "reset") {
     await resetState(projectRoot);
-    console.log("Dashboard activity reset.");
+    console.log("Run activity reset.");
     return;
   }
 
@@ -308,7 +308,7 @@ function validateState(value) {
     (value.progress !== undefined && !isValidProgress(value.progress)) ||
     (value.feature !== undefined && !isValidFeature(value.feature))
   ) {
-    throw new Error("Run state does not match dashboard schema version 1.");
+    throw new Error("Run state does not match schema version 1.");
   }
 
   return value;
@@ -385,7 +385,7 @@ async function readState(projectRoot) {
   try {
     parsed = JSON.parse(await fs.readFile(filePath, "utf8"));
   } catch {
-    throw new Error("Existing dashboard state is malformed. Start a new run or use /devflow doctor.");
+    throw new Error("Existing run state is malformed. Start a new run or use /devflow doctor.");
   }
   return validateState(parsed);
 }
@@ -424,7 +424,7 @@ async function resetState(projectRoot) {
 async function requireRegularFile(filePath) {
   const stats = await fs.lstat(filePath);
   if (stats.isSymbolicLink() || !stats.isFile()) {
-    throw new Error("Dashboard run state must be a regular file.");
+    throw new Error("Run state must be a regular file.");
   }
 }
 
@@ -483,7 +483,7 @@ function readInteger(args, index, flag) {
 }
 
 function printHelp() {
-  console.log(`DevFlow dashboard activity helper
+  console.log(`DevFlow run activity helper
 
 Usage:
   node <helper> start --command feature --summary "Specifying feature 3" --boundary reviewed

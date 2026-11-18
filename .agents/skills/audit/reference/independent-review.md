@@ -266,7 +266,7 @@ request and receipt keep both execution fields absent.
    above. Never add that field to an existing pending or completed
    record. Write the pending template into `devflow/context/{xxx-slug}/review.md`.
 5. Execute the configured path:
-   - For `manual`, set dashboard activity to `ready` and give the exact handoff
+   - For `manual`, set run activity to `ready` and give the exact handoff
      command for the selected adapter. Claude Code uses
      `/audit independent current`; Google Antigravity uses
      `/audit independent current`; Codex uses `$audit independent current`;

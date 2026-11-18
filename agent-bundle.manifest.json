@@ -69,7 +69,7 @@
     "devflow": [
       "At or above 20,000 bytes, call it oversized",
       "devflow/scripts/run-state.mjs",
-      "Reset the malformed dashboard state now?",
+      "Reset the malformed run state now?",
       "qualityGates.regular.independentReview",
       "when-sensitive",
       "audit independent current",

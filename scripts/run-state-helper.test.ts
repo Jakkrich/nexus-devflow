@@ -144,11 +144,11 @@ test("run-state helper refuses to replace or reset a symbolic link", async (t) =
       "--summary", "Specifying a feature",
       "--boundary", "reviewed"
     ]),
-    /Dashboard run state must be a regular file/
+    /Run state must be a regular file/
   );
   await assert.rejects(
     runHelper(projectRoot, ["reset"]),
-    /Dashboard run state must be a regular file/
+    /Run state must be a regular file/
   );
   assert.equal(await fs.readFile(external, "utf8"), "outside\n");
 });

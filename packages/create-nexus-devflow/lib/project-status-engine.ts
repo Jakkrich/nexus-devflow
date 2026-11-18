@@ -977,5 +977,12 @@ function formatHumanStatus(
   return engine.formatHuman(status, options);
 }
 
-export { classifyWorkEvidence, formatHumanStatus, readProjectStatus, shouldUseColor };
+export {
+  classifyWorkEvidence,
+  formatHumanStatus,
+  isReviewBlocked,
+  readProjectStatus,
+  selectCompletion,
+  shouldUseColor
+};
 

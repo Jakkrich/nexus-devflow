@@ -20,8 +20,8 @@ Where this sits in the workflow:
 
 ## Mode Selection
 
-- **No argument or `status` (`/devflow`, `/devflow status`, `/devflow --exec`)**: Report project progress, active specs, findings, `review.md` gate, overview freshness, git/worktree drift, dashboard activity, and the single exact next action.
-- **`doctor` (`/devflow doctor`)**: Read and execute `reference/doctor.md` for full DevFlow setup, adapter, `devflow/scripts/run-state.mjs`, `AGENTS.md`, config, and `project-overview.md` diagnostics. At or above 20,000 bytes, call it oversized. If `devflow/.state/run.json` is malformed, ask `Reset the malformed dashboard state now?` before running `reset`.
+- **No argument or `status` (`/devflow`, `/devflow status`, `/devflow --exec`)**: Report project progress, active specs, findings, `review.md` gate, overview freshness, git/worktree drift, run activity, and the single exact next action.
+- **`doctor` (`/devflow doctor`)**: Read and execute `reference/doctor.md` for full DevFlow setup, adapter, `devflow/scripts/run-state.mjs`, `AGENTS.md`, config, and `project-overview.md` diagnostics. At or above 20,000 bytes, call it oversized. If `devflow/.state/run.json` is malformed, ask `Reset the malformed run state now?` before running `reset`.
 - **Natural-language request or legacy command (`/devflow "<request>"`)**: Classify intent using the Core Sitemap and Legacy Routing tables below.
 
 ---

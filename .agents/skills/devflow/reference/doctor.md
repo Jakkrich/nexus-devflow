@@ -17,10 +17,10 @@ Read-only diagnostic pass for setup drift, incomplete onboarding, missing files,
    - Check root `README.md` is not an obsolete `# AI Coding Blueprint` doc and `devflow/README.md` is absent.
    - Check `AGENTS.md` is compact (`<= 8,000` bytes), has proportional-engineering guidance and real `## Commands`, and verify `.github/workflows/verify.yml` if present.
    - Confirm whether DevFlow files are tracked or local-only via `.gitignore`.
-4. **Plans, Overview freshness & Dashboard state**
+4. **Plans, Overview freshness & Run state**
    - Report build-plan counts and placeholder text.
    - Report `devflow/context/project-overview.md` size (**At or above 20,000 bytes, call it oversized** and require `/overview` before `/feature`) and `devflow:source-hash` freshness.
-   - Inspect `devflow/.state/run.json`: refuse symlinks; if malformed regular JSON, explain resetting removes only dashboard history and offer: `Reset the malformed dashboard state now?` On approval, run `node .agents/skills/devflow/scripts/run-state.mjs reset` (never delete `devflow/.state/`, manifest, or backups).
+   - Inspect `devflow/.state/run.json`: refuse symlinks; if malformed regular JSON, explain resetting removes only run activity and offer: `Reset the malformed run state now?` On approval, run `node .agents/skills/devflow/scripts/run-state.mjs reset` (never delete `devflow/.state/`, manifest, or backups).
 5. **Git & Worktrees**
    - Report branch, clean/dirty state, last commit, ahead count, and `git worktree list --porcelain` conflicts (`main` ahead of merge-base, `commondir` hooks).
 

@@ -1,6 +1,6 @@
 # Nexus-DevFlow Workflow Reference
 
-> On-demand reference for DevFlow workflow configuration, adapters, lifecycle stages, dashboard activity schema, and headless ticket ingestion. Read this when executing or troubleshooting a DevFlow command; keep `AGENTS.md` focused on project-wide session rules.
+> On-demand reference for DevFlow workflow configuration, adapters, lifecycle stages, run activity schema, and headless ticket ingestion. Read this when executing or troubleshooting a DevFlow command; keep `AGENTS.md` focused on project-wide session rules.
 
 ---
 
@@ -71,9 +71,9 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ---
 
-## 📊 Dashboard Activity State Contract
+## Activity state contract
 
-The dashboard and status reporting can show the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit.
+Status reporting shows the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit. The `dashboard`, `ui`, and `studio` commands are removed. Use `nexus-devflow status` or `nexus-devflow mcp`.
 
 Substantial mutating or multi-step workflow commands (`onboard`, `overview`, `feature`, `fix`, `rollback`, `implement`, `check` verification mode, `autopilot`, `complete`) may publish progress on a best-effort basis when `devflow/.state/` or the helper exists. Read-only, diagnostic, and lightweight commands (`audit`, `debug`, `discovery`, `explore`, `idea`, `prototype`, `devflow`, `/feature --preview`, and `/check guide`) do not need to write activity state.
 

@@ -36,7 +36,7 @@ Before requiring a real active spec, screen for pending completion using
 is found (or recovery is explicitly requested), read `reference/completion-recovery.md`
 and follow that phase instead of restarting logging. Missing or ambiguous evidence stops
 with concrete recovery steps; an archive or clean context never authorizes selecting new work.
-Recovery uses archive and Git proof, never dashboard activity as authority.
+Recovery uses archive and Git proof, never run activity as authority.
 
 For a normal completion with no recovery in progress, continue below.
 

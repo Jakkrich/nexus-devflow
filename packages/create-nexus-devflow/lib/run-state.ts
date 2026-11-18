@@ -70,14 +70,14 @@ async function readRunState(
     if (stats.isSymbolicLink()) {
       return malformedSummary({
         code: "unsafe_run_state_path",
-        message: "Dashboard run state is a symbolic link and was not read."
+        message: "Run state is a symbolic link and was not read."
       });
     }
 
     if (!stats.isFile()) {
       return malformedSummary({
         code: "invalid_run_state_path",
-        message: "Dashboard run state path is not a regular file."
+        message: "Run state path is not a regular file."
       });
     }
 
@@ -99,7 +99,7 @@ function parseRunState(value: string, now: Date = new Date()): RunStateSummary {
   } catch {
     return malformedSummary({
       code: "malformed_run_state",
-      message: "Dashboard run state is not valid JSON."
+      message: "Run state is not valid JSON."
     });
   }
 
@@ -217,7 +217,7 @@ function parseFeature(value: unknown): RunFeature | null {
 function malformedRunState(): RunStateSummary {
   return malformedSummary({
     code: "malformed_run_state",
-    message: "Dashboard run state does not match schema version 1."
+    message: "Run state does not match schema version 1."
   });
 }
 
