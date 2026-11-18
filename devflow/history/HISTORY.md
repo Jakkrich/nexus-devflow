@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-11-18 | `129` | Fix | Clean legacy scripts and `mockup.html` | `PENDING` | `Completed` | [`129-clean-legacy-scripts-and-mockup.md`](fixes/129-clean-legacy-scripts-and-mockup.md) |
 | 2026-11-18 | `128` | Feature | (Skateboard) Remove Web Dashboard, Studio UI & MCP Studio Tool (Option 2) | `PENDING` | `Completed` | [`128-remove-web-dashboard-studio.md`](features/128-remove-web-dashboard-studio.md) |
 | 2026-11-18 | `127` | Feature | (Tracer Bullet) Interactive Extras Skills Checkbox Setup | `PENDING` | `Completed` | [`127-extras-skill-checkbox-setup.md`](features/127-extras-skill-checkbox-setup.md) |
 | 2026-11-17 | `126` | Feature | (Tracer Bullet) Opt-in `browseros-neo` Team Skill (E2E Testing & Evidence) | `PENDING` | `Completed` | [`126-browseros-neo-extra-skill.md`](features/126-browseros-neo-extra-skill.md) |

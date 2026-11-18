@@ -332,8 +332,7 @@ export function formatTokenTable(result: TranscriptAnalysisResult, selectedModel
 // CLI Execution Handler
 const isMain = process.argv[1] && (
   resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url)) ||
-  process.argv[1].endsWith('analyze-token-usage.ts') ||
-  process.argv[1].endsWith('analyze-token-usage.mjs')
+  process.argv[1].endsWith('analyze-token-usage.ts')
 );
 
 if (isMain) {
