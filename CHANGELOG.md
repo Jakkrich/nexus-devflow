@@ -5,6 +5,15 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.4] - 2026-11-18
+
+### Removed
+- **Legacy `.mjs` Scripts & Broken Test Runners (Fix 129)**: Removed 21 obsolete script files in `scripts/` superseded by TypeScript tooling (`validate-framework.mjs`, `validate-all.mjs`, `analyze-token-usage.mjs`, `analyze-token-usage.d.ts`, `analyze-token-usage.d.mts`, `check-skill-budgets.d.ts`, `standardize-command-invocations.mjs`, and 14 broken `scripts/test-*.mjs` files) along with 9 stale script keys in `package.json` (`render:html:test`, `report:html:test`, `artifact-language:test`, `validate:manual-review:test`, `validate:stage-content:test`, `validate:run-status:test`, `validate:checklists:test`, `validate:skills:test`, `validate:verify-impact:test`), while preserving active `scripts/lib/render-html/` and TypeScript test suites (`scripts/test/*.test.ts`).
+- **Obsolete Blueprint Dashboard Mockup**: Removed `devflow/reference/mockup.html` leftover from Feature 128 so `prepare-template.ts` no longer bundles the retired dashboard mockup into published `template/` packages.
+
+### Fixed
+- **CLI Entrypoint Cleanup (`analyze-token-usage.ts`)**: Removed the stale `analyze-token-usage.mjs` filename fallback in `scripts/analyze-token-usage.ts`.
+
 ## [2.20.3] - 2026-11-18
 
 ### Removed
