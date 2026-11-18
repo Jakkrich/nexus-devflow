@@ -5,6 +5,14 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.5] - 2026-11-18
+
+### Added
+- **Completion Gate Checker (`verify-completion-gate`)**: Added `scripts/verify-completion-gate.ts` and `npm run verify:completion-gate`, plus the project skill in `.agents/skills/verify-completion-gate/` and `.claude/skills/verify-completion-gate/`. The check calls `classifyWorkEvidence`, `selectCompletion`, and `isReviewBlocked` across 622080 finite cases. A run is `ready` to archive only when the checklist, blocking findings, Git, the review gate health uses, and a real passed-check signal are clear. Exit 0 means only the recorded findings `stage-mention` and `workflow-gate` still reproduce. Those two are known gaps, not a fix in this release.
+
+### Changed
+- **Run Activity Wording**: Renamed leftover "dashboard" labels for `devflow/.state/run.json` to run activity and run state in `devflow/workflow.md`, the `devflow`, `complete`, and `audit` skills, the doctor reset prompt, `run-state.mjs` messages, and `run-state.ts` warnings. `dashboard`, `ui`, and `studio` stay removed. The current surface is `nexus-devflow status` or `nexus-devflow mcp`. The doctor prompt is now `Reset the malformed run state now?`.
+
 ## [2.20.4] - 2026-11-18
 
 ### Removed
