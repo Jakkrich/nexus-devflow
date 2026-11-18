@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 interface DocPage {
-  slug: string; // e.g. "getting-started", "commands/feature", "cli/dashboard"
+  slug: string; // e.g. "getting-started", "commands/feature", "cli/status"
   category: 'START' | 'WORKFLOW' | 'COMMANDS' | 'CLI' | 'REFERENCE' | 'QUALITY' | 'SHIP';
   title: string;
   lead: string;
@@ -68,7 +68,6 @@ const SIDEBAR_ITEMS = [
     items: [
       { slug: 'cli', title: 'CLI Overview' },
       { slug: 'cli/status', title: 'Status' },
-      { slug: 'cli/dashboard', title: 'Live Dashboard' },
       { slug: 'cli/tokens', title: 'Token & Cost Analytics' }
     ]
   },

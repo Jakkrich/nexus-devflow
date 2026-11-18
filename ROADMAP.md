@@ -12,7 +12,7 @@ Nexus-DevFlow is a local-first, stage-based workflow layer for building producti
 | :--- | :--- | :--- |
 | **Phase 1: Foundation** | Overlay installer, multi-tool adapters, task-isolated living specs, quality gates, and consolidated Core Skills. | **Closing (115d)** |
 | **Phase 2: Ecosystem Reliability** | Release migration contract, cross-platform installer matrix, bilingual routing evals, overview integrity, and upgrade resilience. | **Active Focus** |
-| **Phase 3: Integration** | Evidence-first dashboard, one-editor sidecar pilot, and cross-IDE continuation. | **Planned** |
+| **Phase 3: Integration** | Status CLI/MCP sidecar pilot and cross-IDE continuation (Web Dashboard retired per Feature 128). | **Planned** |
 | **Phase 4: Adoption** | Executable golden paths, documentation proof, and production release hardening. | **Later** |
 
 ## Current Focus
@@ -25,7 +25,7 @@ Nexus-DevFlow is a local-first, stage-based workflow layer for building producti
 
 ## Sequencing Guardrail
 
-Dashboard and IDE sidecar work starts only after the consolidation release, cross-platform installer matrix, and planning integrity gate are green. This keeps Phase 3 on stable contracts instead of embedding current migration debt into another interface.
+IDE sidecar work starts only after the consolidation release, cross-platform installer matrix, and planning integrity gate are green. This keeps Phase 3 on stable CLI/MCP contracts instead of embedding current migration debt into another interface.
 
 ## Explicitly Deferred
 

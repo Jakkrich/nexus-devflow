@@ -63,7 +63,7 @@ The goal is not just writing code faster—it is staying firmly in control of a 
 | **The 3-Pillars Workspace** | Clean separation of Future (`ideas.md`), Present (`context/`), and Past (`history/` & `decisions/`). |
 | **Findings gate** | `/audit` findings live in `findings.md` with durable IDs; unresolved P0/P1 issues strictly block `/complete`. |
 | **Universal tool adapters** | Antigravity, Claude Code, OpenAI Codex, Cursor, GitHub Copilot, and OpenCode share compatible skills. |
-| **Real-time observability** | Built-in local Web Dashboard with 0ms first paint, Multi-Agent Swarm visualizer, and Code Graph RAG. |
+| **Real-time observability** | Instant CLI status (`nexus-devflow status`), 11-tool MCP server (`nexus-devflow mcp`), Multi-Agent Swarm, and Code Graph RAG. |
 | **Zero-drop context** | Markdown-backed state survives AI context window resets and agent session restarts. |
 
 ---
@@ -76,7 +76,6 @@ The goal is not just writing code faster—it is staying firmly in control of a 
   - [Already have a codebase?](#already-have-a-codebase)
   - [Keep DevFlow current](#keep-devflow-current)
   - [Check project status](#check-project-status)
-  - [Open the local dashboard](#open-the-local-dashboard)
 - [Tool support](#tool-support)
 - [The AI workflow](#the-ai-workflow)
 - [See it in action](#see-it-in-action)
@@ -94,7 +93,6 @@ The goal is not just writing code faster—it is staying firmly in control of a 
 - [Testing & Strict TDD Discipline](#testing--strict-tdd-discipline)
 - [Code quality audits & Findings ledger](#code-quality-audits--findings-ledger)
 - [Manual try guides](#manual-try-guides)
-- [Enterprise Web Dashboard & Real-Time Studio](#enterprise-web-dashboard--real-time-studio)
 - [CLI Management Commands](#cli-management-commands)
 - [Recommended Third-Party Skills & Extensions](#recommended-third-party-skills--extensions)
 - [Deployment readiness](#deployment-readiness)
@@ -220,20 +218,6 @@ For tool integrations, output structured JSON:
 ```bash
 npx nexus-devflow status --json
 ```
-
----
-
-### Open the local dashboard
-
-Launch the high-performance local Web Dashboard:
-
-```bash
-npx nexus-devflow dashboard
-# Or via package script:
-npm run dashboard
-```
-
-Opens an interactive dashboard on `http://127.0.0.1:4318` providing real-time visibility into the living spec, stage progress, Multi-Agent Swarm status, and Code Graph RAG.
 
 ---
 
@@ -658,57 +642,19 @@ Reads the active living spec or latest archived feature and provides:
 
 ---
 
-## Enterprise Web Dashboard & Real-Time Studio
-
-Launch the local high-performance Web Dashboard:
-
-```bash
-npm run dashboard
-# Or via CLI:
-npx nexus-devflow dashboard [--port 4318]
-```
-
-```text
-+----------------------------------------------------------------------------------------------------+
-|  nexus-devflow                                                                                     |
-|  D:\Projects\devtools\nexus-devflow                                                                |
-|                                                                                                    |
-|  [v2.X.X]  [HEALTH OK]  [✔ GATE PASSED]  [✔ IN SYNC]  [TRACK FAST]                                 |
-+----------------------------------------------------------------------------------------------------+
-|  [🔮 Pre-Flight Discovery]   [⚡ Living Spec · 4 steps]   [🤖 Multi-Agent Swarm]   [🗺️ Code Graph]   |
-+----------------------------------------------------------------------------------------------------+
-|  [ Card: Current Work ]        |  [ Card: Git & Branch ]                                           |
-+--------------------------------+-------------------------------------------------------------------+
-|  [ Card: Findings Ledger ]     |  [ Card: Completion & Gate ]                                      |
-+----------------------------------------------------------------------------------------------------+
-```
-
-### Key Dashboard Highlights:
-- ⚡ **0ms First Paint**: Server-Side Hydration (`window.__INITIAL_SNAPSHOT__`) renders instantly without client-side loading spinners.
-- ⚡ **Single-Flight Git Cache**: Coalesced Git readers return snapshots in **< 120ms** without subprocess thrashing.
-- 🤖 **Multi-Agent Swarm Visualizer**: Monitors 4 specialized agent roles in real time:
-  - 👑 **Lead Architect**: Architecture boundaries, data contracts, ADR sign-off.
-  - 👨‍💻 **Core Coder**: Clean, type-safe implementation adhering to standards.
-  - 🕵️ **QA Verifier**: Red-team test writing, edge-case validation, behavioral proof.
-  - 🛡️ **Security Auditor**: Vulnerability scanning, secret detection, zero-blocker sign-off.
-- 🗺️ **Semantic Code Graph RAG**: AST dependency parser with transitive blast-radius calculation.
-- 📋 **Live Kanban Studio**: Real-time visual tracking of living spec tasks and stage transitions.
-
----
-
 ## CLI Management Commands
 
 Nexus-DevFlow provides a rich suite of CLI automation tools:
 
 ```bash
-# Start Web Dashboard
-npx nexus-devflow dashboard [--port 4318]
+# Check project status, active work, and blockers
+npx nexus-devflow status [--json]
 
 # Automated Quality Gatekeeper & Pre-commit Hooks
 npx nexus-devflow check-gate [--strict]
 npx nexus-devflow hook install pre-commit
 
-# Model Context Protocol (MCP) Server Hub (12 Native Tools)
+# Model Context Protocol (MCP) Server Hub (11 Native Tools)
 npx nexus-devflow mcp
 
 # Just-In-Time (JIT) Dynamic Context Slicing

@@ -41,7 +41,7 @@ describe("McpServerEngine Seam & Dispatch", () => {
     assert.ok(Array.isArray(result.tools));
     assert.ok(result.tools.length >= 10);
     assert.ok(result.tools.some((t) => t.name === "devflow_get_status"));
-    assert.ok(result.tools.some((t) => t.name === "devflow_get_studio_html"));
+    assert.ok(!result.tools.some((t) => t.name === "devflow_get_studio_html"));
     assert.ok(result.tools.some((t) => t.name === "devflow_evaluate_gate"));
   });
 
@@ -82,7 +82,7 @@ describe("McpServerEngine Seam & Dispatch", () => {
     assert.ok("paths" in parsed && "currentWork" in parsed);
   });
 
-  it("dispatches devflow_get_studio_html via StudioViewRenderer in-memory", async () => {
+  it("rejects removed devflow_get_studio_html tool call", async () => {
     const engine = new McpServerEngine(projectRoot);
     const req: JsonRpcRequest = {
       jsonrpc: "2.0",
@@ -95,10 +95,7 @@ describe("McpServerEngine Seam & Dispatch", () => {
     };
     const res = await engine.handleMessage(req);
     assert.equal(res.id, 5);
-    const result = res.result as { content: Array<{ type: string; text: string }> };
-    assert.ok(result.content);
-    assert.ok(result.content[0].text.length > 500);
-    assert.ok(result.content[0].text.includes("Nexus-DevFlow") || result.content[0].text.includes("studio-container"));
+    assert.ok(res.error || (res.result as { isError?: boolean }).isError);
   });
 
   it("returns error for unknown method or missing tool", async () => {

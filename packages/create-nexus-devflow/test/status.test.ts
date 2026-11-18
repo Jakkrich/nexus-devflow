@@ -7,7 +7,6 @@ import path from "node:path";
 import test, { type TestContext } from "node:test";
 import { promisify } from "node:util";
 import { parseArgs } from "../bin/create-nexus-devflow.js";
-import { startDashboardServer } from "../lib/dashboard.js";
 import { formatHumanStatus, readProjectStatus, classifyWorkEvidence } from "../lib/status.js";
 import { parseIdeasContent } from "../lib/ideas.js";
 
@@ -33,14 +32,9 @@ test("parseArgs parses status and install command options correctly", () => {
   assert.equal(options4.target, "./custom-dir");
   assert.equal(options4.yes, true);
 
-  const optionsDashboard = parseArgs(["dashboard", "--no-open"]);
-  assert.equal(optionsDashboard.command, "dashboard");
-  assert.equal(optionsDashboard.open, false);
-  assert.equal(optionsDashboard.deprecatedUi, false);
-
-  const optionsUi = parseArgs(["ui"]);
-  assert.equal(optionsUi.command, "dashboard");
-  assert.equal(optionsUi.deprecatedUi, true);
+  assert.throws(() => parseArgs(["dashboard"]), /removed.*status.*mcp/i);
+  assert.throws(() => parseArgs(["ui"]), /removed.*status.*mcp/i);
+  assert.throws(() => parseArgs(["studio"]), /removed.*status.*mcp/i);
 });
 
 test("readProjectStatus and formatHumanStatus work with Pure Multi-Run task context", async () => {
@@ -315,7 +309,7 @@ test("readProjectStatus identifies multi-run active spec queue in devflow/contex
   }
 });
 
-test("readProjectStatus propagates review verdict and freshness into the completion gate and dashboard API", async (t) => {
+test("readProjectStatus propagates review verdict and freshness into the completion gate", async (t) => {
   const fixture = await createReviewedProject(t, "001-reviewed-status");
 
   const status = await readProjectStatus(fixture.root);
@@ -328,24 +322,6 @@ test("readProjectStatus propagates review verdict and freshness into the complet
 
   const human = formatHumanStatus(status, { color: false });
   assert.match(human, /Review\s+passed, verdict passed, check passed, freshness current/);
-
-  const server = await startDashboardServer(fixture.root, {
-    snapshotOptions: { fetchImpl: async () => { throw new Error("offline"); } }
-  });
-  t.after(async () => server.close());
-
-  const dashboardResponse = await fetch(`${server.url}/api/dashboard`);
-  assert.equal(dashboardResponse.status, 200);
-  const dashboard = await dashboardResponse.json() as {
-    status: { review: { verdict: string; freshness: string } };
-  };
-  assert.equal(dashboard.status.review.verdict, "passed");
-  assert.equal(dashboard.status.review.freshness, "current");
-
-  const pageResponse = await fetch(`${server.url}/`);
-  const page = await pageResponse.text();
-  assert.match(page, /id="review-verdict"/);
-  assert.match(page, /status\.review/);
 
   await fs.appendFile(fixture.specPath, "\n- drift after review\n", "utf8");
   const staleStatus = await readProjectStatus(fixture.root);

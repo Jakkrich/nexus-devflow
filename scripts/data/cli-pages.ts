@@ -6,8 +6,8 @@ export const CLI_PAGES: DocPage[] = [
     slug: 'cli',
     category: 'CLI',
     title: 'CLI Overview (ภาพรวมเครื่องมือ CLI)',
-    lead: 'ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง',
-    pills: ['CLI', 'Overview', 'Terminal', 'ZeroLatency', 'Dashboard', 'Commands'],
+    lead: 'ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ และจัดการ DevFlow ในเครื่อง',
+    pills: ['CLI', 'Overview', 'Terminal', 'ZeroLatency', 'Commands'],
     sections: [
       {
         id: 'overview',
@@ -19,9 +19,6 @@ npx nexus-devflow
 
 # ดูสถานะความคืบหน้าของงานปัจจุบันผ่าน Terminal
 npx nexus-devflow status
-
-# เปิด Live Web Dashboard สำหรับมอนิเตอร์สถานะและ Run Activity
-npx nexus-devflow dashboard
 
 # วิเคราะห์การใช้งานและต้นทุน Token (Session Token Analytics)
 npm run analyze:tokens
@@ -41,7 +38,6 @@ npm run check</code></pre>
             <thead><tr><th>Flag</th><th>ความหมาย</th><th>ตัวอย่างการใช้งาน</th></tr></thead>
             <tbody>
               <tr><td><code>-y, --yes</code></td><td>ตอบรับการยืนยันอัตโนมัติ (Non-interactive mode)</td><td><code>npx nexus-devflow -y</code></td></tr>
-              <tr><td><code>--port &lt;number&gt;</code></td><td>กำหนดหมายเลข Port สำหรับ Live Dashboard (ค่าเริ่มต้น: 4173)</td><td><code>npx nexus-devflow dashboard --port 3000</code></td></tr>
               <tr><td><code>--json</code></td><td>ส่งออกผลลัพธ์ของคำสั่งในรูปแบบ JSON สำหรับ CI/CD</td><td><code>npx nexus-devflow status --json</code></td></tr>
             </tbody>
           </table>
@@ -84,39 +80,7 @@ npm run check</code></pre>
     ]
   },
 
-  // 3. Dashboard CLI
-  {
-    slug: 'cli/dashboard',
-    category: 'CLI',
-    title: 'CLI Dashboard (Live Web Dashboard)',
-    lead: 'เปิดแดชบอร์ดเว็บมอนิเตอร์สถานะแบบ Real-time เชื่อมต่อผ่าน Local WebSocket พร้อมการตอบสนองความเร็วสูงและใช้ Token 0 หน่วย',
-    pills: ['CLI', 'Dashboard', 'RealTime', 'WebSockets', 'ZeroTokens', 'VisualUI'],
-    sections: [
-      {
-        id: 'dashboard-launch',
-        title: 'การเปิด Live Dashboard',
-        contentHtml: `
-          <p>เปิดแดชบอร์ดในเบราว์เซอร์ด้วยคำสั่ง:</p>
-          <pre><code>npx nexus-devflow dashboard</code></pre>
-          <p>ระบบจะเปิดเบราว์เซอร์อัตโนมัติที่ <code>http://localhost:4173</code> เพื่อแสดงหน้าแดชบอร์ดควบคุมที่สวยงามระดับพรีเมียม</p>
-        `
-      },
-      {
-        id: 'dashboard-features',
-        title: 'ความสามารถหลักของ Live Dashboard',
-        contentHtml: `
-          <ul>
-            <li><strong>Real-time Stage Tracking</strong>: ติดตามการทำงานของ AI ในแต่ละขั้นตอนแบบวินาทีต่อวินาทีผ่าน WebSocket</li>
-            <li><strong>Living Spec Inspector</strong>: เปิดดูและอ่าน <code>spec.md</code>, <code>findings.md</code>, และ <code>stage.md</code> ได้แบบ Interactive</li>
-            <li><strong>Quality Gate Visualizer</strong>: แสดงผลสถานะด่านตรวจคุณภาพ (Typecheck, Lint, Tests, Independent Review)</li>
-            <li><strong>Zero Token Overhead</strong>: ทำงานบน Local Engine ทั้งหมด ไม่มีการเรียกใช้ LLM Token ใดๆ เพิ่มเติม</li>
-          </ul>
-        `
-      }
-    ]
-  },
-
-  // 4. Token Analytics CLI (New - Feature 107)
+  // 3. Token Analytics CLI (New - Feature 107)
   {
     slug: 'cli/tokens',
     category: 'CLI',

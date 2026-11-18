@@ -6,8 +6,6 @@ import type { Readable, Writable } from "node:stream";
 import { readProjectStatus } from "./status.js";
 import { ActiveContextEngine } from "./active-context-engine.js";
 import { GatekeeperEngine, formatGateReport } from "./gatekeeper.js";
-import { StudioViewRenderer } from "./studio-view-renderer.js";
-import { DashboardStateEngine } from "./dashboard-engine.js";
 import { addIdea, readIdeas } from "./ideas.js";
 import { addFinding, resolveFinding, type FindingSeverity, type FindingStatus } from "./findings.js";
 import { sliceContextForStage, type SliceStage } from "./context-slicer.js";
@@ -205,20 +203,6 @@ export const DEVFLOW_MCP_TOOLS: McpToolDefinition[] = [
         healStage: {
           type: "boolean",
           description: "When true, heals stage pointer to match active branch (default: true)"
-        }
-      }
-    }
-  },
-  {
-    name: "devflow_get_studio_html",
-    description: "Retrieve a self-contained, interactive HTML/CSS/JS Webview Studio for embedding inside IDE panels (VS Code, Cursor, Antigravity) or browsers.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        theme: {
-          type: "string",
-          enum: ["auto", "dark", "light"],
-          description: "Theme mode (default: auto)"
         }
       }
     }
@@ -470,20 +454,7 @@ export class McpServerEngine {
       };
     });
 
-    // 11. devflow_get_studio_html
-    this.registerTool(DEVFLOW_MCP_TOOLS.find((t) => t.name === "devflow_get_studio_html")!, async (args) => {
-      const theme = (typeof args.theme === "string" ? args.theme : "auto") as "auto" | "dark" | "light";
-      const dashboardEngine = new DashboardStateEngine(this.projectRoot);
-      const snapshot = await dashboardEngine.getSnapshot();
-      const ideas = await readIdeas(this.projectRoot);
-      const renderer = new StudioViewRenderer({ defaultTheme: theme });
-      const html = renderer.renderWebviewStudio(snapshot, ideas, { theme });
-      return {
-        content: [{ type: "text", text: html }]
-      };
-    });
-
-    // 12. devflow_swarm_plan
+    // 11. devflow_swarm_plan
     this.registerTool(DEVFLOW_MCP_TOOLS.find((t) => t.name === "devflow_swarm_plan")!, async () => {
       const plan = await generateSwarmPlan(this.projectRoot);
       return {

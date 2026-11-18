@@ -83,7 +83,6 @@ Linked ${packageName} from this checkout.
 These commands now run from your local files, with no network access:
   create-nexus-devflow --help
   nexus-devflow status
-  devflow dashboard
 
 Re-run \`npm run link:local\` after editing the source. The linked commands run
 the compiled dist/ output and a copied template/, not the source files directly.

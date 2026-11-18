@@ -18,10 +18,4 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  webServer: {
-    command: "npm run dashboard",
-    url: "http://127.0.0.1:4318",
-    reuseExistingServer: !process.env.CI,
-    timeout: 15000,
-  },
 });

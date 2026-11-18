@@ -202,8 +202,7 @@ export async function addLocalDevFlowScripts(projectRoot: string, tarballPath: s
 
   content.scripts = {
     ...content.scripts,
-    "devflow:status": `npx --yes --package ${relativeTarball} create-nexus-devflow status`,
-    "devflow:dashboard": `npx --yes --package ${relativeTarball} create-nexus-devflow dashboard`
+    "devflow:status": `npx --yes --package ${relativeTarball} create-nexus-devflow status`
   };
 
   await fs.writeFile(pkgPath, JSON.stringify(content, null, 2) + "\n");

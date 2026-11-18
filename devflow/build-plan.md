@@ -37,11 +37,12 @@
 
 ## Phase 3: Integration & Operator Experience
 
-- [ ] 121. **(Facade) Evidence-First Workflow Dashboard** - ยกระดับ dashboard ปัจจุบันให้แสดง active run, gate status, open findings, drift และ next action จาก repository state โดยเริ่มแบบ read-only และมี browser tests สำหรับ critical views
-- [ ] 122. **(Tracer Bullet) IDE Sidecar Pilot** - เชื่อม editor หนึ่งตัวกับ dashboard/status API เพื่อเปิด task, อ่าน spec และติดตาม stage แบบ real-time โดยไม่ให้ sidecar แก้ source of truth โดยตรง
+- [x] 121. **(Deprecated & Removed) Evidence-First Workflow Dashboard** - ถอดแผนยกระดับ Web Dashboard ตามแนวทาง Lite-first (ถูกแทนที่ด้วย Feature 128)
+- [ ] 122. **(Tracer Bullet) IDE Sidecar Pilot** - เชื่อม editor หนึ่งตัวกับ status CLI/MCP API (JSON) เพื่อเปิด task, อ่าน spec และติดตาม stage โดยไม่ให้ sidecar แก้ source of truth โดยตรง
 - [ ] 123. **(Journey) Multi-IDE Continuation & Handoff** - พิสูจน์การรับช่วงงานระหว่าง adapters ด้วย task เดียวกัน พร้อม compatibility tests และคู่มือ recovery เมื่อ context หรือ tool เปลี่ยน
 - [x] 126. **(Tracer Bullet) Opt-in `browseros-neo` Team Skill (E2E Testing & Evidence)** - เพิ่ม custom `extras/skills/browseros-neo/` ต่อยอดจาก `browserclaw` สำหรับทดสอบและแก้ปัญหาแบบ E2E ผ่าน BrowserOS neo MCP, สร้าง test plan + evidence รายเคสใน `devflow/reports/{run-id}/` (ไม่ขึ้น Git) และผูก `name_session` ย้อนดูวิดีโอใน BrowserOS neo ตาม DevFlow ID (Ref: DISC-20261117-003)
 - [x] 127. **(Tracer Bullet) Interactive Extras Skills Checkbox Setup** - ถอด Superpower Community Skills ออกจาก Step `[3/3]` ของ `install`/`update` และแทนที่ด้วย zero-dep checkbox เลือกติดตั้ง/อัปเดต `extras/skills/` จาก local bundle (Ref: DISC-20261118-001)
+- [x] 128. **(Skateboard) Remove Web Dashboard, Studio UI & MCP Studio Tool (Option 2)** - ถอด `dashboard`/`ui`/`studio` CLI, HTTP server, `studio-view-renderer.ts` (~102 KB), `dashboard-*.ts`, `webview-studio.ts`, orphan modules (`command-catalog.ts`, `version-check.ts`, `workflow-state.ts`) และ MCP tool `devflow_get_studio_html` เพื่อลดขนาดแพ็กเกจ ~26% โดยคง Core Workflow, `status`, `run-state` และ `report:html` ไว้ครบ
 
 ---
 
@@ -57,7 +58,7 @@
 - ทำ 115d และ release baseline ให้เสร็จก่อนเริ่ม feature ใหม่
 - ทุก item ต้องมี acceptance criteria, evidence matrix และ rollback/compatibility note ตามระดับความเสี่ยง
 - Behavior changes ใช้ TDD; documentation-only changes ใช้ structural/link/contract checks
-- Dashboard และ sidecar อ่าน state จาก Markdown/JSON contracts เดิม ไม่สร้างฐานข้อมูลชุดที่สอง
+- Status CLI, MCP และ sidecar อ่าน state จาก Markdown/JSON contracts เดิม ไม่สร้างฐานข้อมูลชุดที่สอง
 - ไม่เพิ่ม core skill, dependency หรือ hosted service โดยไม่มี current requirement และ trade-off record
 
 ---

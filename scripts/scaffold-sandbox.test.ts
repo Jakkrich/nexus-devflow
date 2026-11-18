@@ -139,10 +139,7 @@ test("adds sandbox commands pinned to the locally packed CLI", async () => {
       packageJson.scripts["devflow:status"],
       "npx --yes --package ../artifacts/create-nexus-devflow-local.tgz create-nexus-devflow status"
     );
-    assert.equal(
-      packageJson.scripts["devflow:dashboard"],
-      "npx --yes --package ../artifacts/create-nexus-devflow-local.tgz create-nexus-devflow dashboard"
-    );
+    assert.equal(packageJson.scripts["devflow:dashboard"], undefined);
   } finally {
     await fs.rm(workspace, { recursive: true, force: true });
   }

@@ -107,7 +107,6 @@
           <div class="docs-nav-title">CLI</div>
           <a class="docs-nav-link" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
-          <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
           <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
@@ -331,10 +330,10 @@ pnpm dlx nexus-devflow@1.9.0 update</code></pre>
         <section id="the-global-command-does-not-update-blueprint">
           <h2>คำสั่ง Global CLI จะไม่อัปเดต DevFlow (The global command does not update DevFlow)</h2>
           
-          <p>คำสั่งส่วนกลาง (Global CLI) <code>nexus-devflow</code> หรือ <code>devflow</code> ถูกออกแบบมาสำหรับแสดงผล <strong>Status</strong> และ <strong>Live Dashboard</strong> แบบ Read-Only เท่านั้น คำสั่ง <code>devflow update</code> จะไม่ทำงาน เพื่อป้องกันความสับสนของเวอร์ชัน</p>
+          <p>คำสั่งส่วนกลาง (Global CLI) <code>nexus-devflow</code> หรือ <code>devflow</code> ถูกออกแบบมาสำหรับแสดงผล <strong>Status</strong> แบบ Read-Only เท่านั้น คำสั่ง <code>devflow update</code> จะไม่ทำงาน เพื่อป้องกันความสับสนของเวอร์ชัน</p>
           <p>เมื่อต้องการอัปเดตไฟล์เวิร์กโฟลว์ในโปรเจกต์ ให้ใช้คำสั่งระบุแพ็กเกจผ่าน npx เสมอ:</p>
           <pre><code>npx nexus-devflow@latest update</code></pre>
-          <p>หลังการอัปเดตแบบ Interactive สำเร็จ ตัวติดตั้งจะตรวจสอบเวอร์ชันของ Global CLI ในเครื่อง หากเวอร์ชันไม่ตรงกัน ระบบจะเสนอทางเลือกในการอัปเดต Global CLI ให้ตรงกับเวอร์ชันของโปรเจกต์ (ค่าเริ่มต้นคือ No ซึ่งคำสั่ง <code>npx nexus-devflow@latest status</code> และ <code>dashboard</code> ยังคงทำงานได้สมบูรณ์โดยไม่ต้องติดตั้ง Global CLI)</p>
+          <p>หลังการอัปเดตแบบ Interactive สำเร็จ ตัวติดตั้งจะตรวจสอบเวอร์ชันของ Global CLI ในเครื่อง หากเวอร์ชันไม่ตรงกัน ระบบจะเสนอทางเลือกในการอัปเดต Global CLI ให้ตรงกับเวอร์ชันของโปรเจกต์ (ค่าเริ่มต้นคือ No ซึ่งคำสั่ง <code>npx nexus-devflow@latest status</code> ยังคงทำงานได้สมบูรณ์โดยไม่ต้องติดตั้ง Global CLI)</p>
           <p>ดูรายละเอียดเพิ่มเติมได้ที่หน้า <a href="../cli/">CLI Overview</a></p>
         
           

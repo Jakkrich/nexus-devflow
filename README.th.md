@@ -63,7 +63,7 @@ npx -y nexus-devflow -y
 | **The 3-Pillars Workspace** | แยกบริบทชัดเจนเป็น 3 เสาหลัก: อนาคต (`ideas.md`), ปัจจุบัน (`context/`), และอดีต (`history/` & `decisions/`) |
 | **Findings gate** | ข้อบกพร่องจาก `/audit` ถูกบันทึกลง `findings.md` พร้อมรหัสถาวร; ปัญหา P0/P1 จะบล็อก `/complete` อย่างเด็ดขาด |
 | **Universal tool adapters** | Antigravity, Claude Code, OpenAI Codex, Cursor, GitHub Copilot และ OpenCode ใช้ Skill ร่วมกันได้ทันที |
-| **Real-time observability** | มี Web Dashboard ในตัว แสดงผลทันทีใน 0ms (First Paint), มี Multi-Agent Swarm Visualizer และ Code Graph RAG |
+| **Real-time observability** | ตรวจสถานะงานผ่าน CLI (`nexus-devflow status`) และ MCP Server 11 Tools พร้อม Multi-Agent Swarm และ Code Graph RAG |
 | **Zero-drop context** | สถานะของงานถูกบันทึกลงไฟล์ Markdown ทำให้ทนทานต่อการเคลียร์ Context Window ของ AI ได้ 100% |
 
 ---
@@ -76,7 +76,6 @@ npx -y nexus-devflow -y
   - [กรณีมี Codebase อยู่แล้ว? (Already have a codebase?)](#กรณีมี-codebase-อยู่แล้ว-already-have-a-codebase)
   - [การอัปเดต DevFlow (Keep DevFlow current)](#การอัปเดต-devflow-keep-devflow-current)
   - [ตรวจสอบสถานะโปรเจกต์ (Check project status)](#ตรวจสอบสถานะโปรเจกต์-check-project-status)
-  - [เปิด Web Dashboard ในเครื่อง (Open the local dashboard)](#เปิด-web-dashboard-ในเครื่อง-open-the-local-dashboard)
 - [เครื่องมือและ AI ที่รองรับ (Tool support)](#เครื่องมือและ-ai-ที่รองรับ-tool-support)
 - [วงจรการทำงานร่วมกับ AI (The AI workflow)](#วงจรการทำงานร่วมกับ-ai-the-ai-workflow)
 - [ตัวอย่างการทำงานจริง (See it in action)](#ตัวอย่างการทำงานจริง-see-it-in-action)
@@ -94,7 +93,6 @@ npx -y nexus-devflow -y
 - [การทดสอบและวินัย Strict TDD (Testing & Strict TDD Discipline)](#การทดสอบและวินัย-strict-tdd-testing--strict-tdd-discipline)
 - [การตรวจสอบคุณภาพโค้ดและสมุดบันทึก Findings (Code quality audits & Findings ledger)](#การตรวจสอบคุณภาพโค้ดและสมุดบันทึก-findings-code-quality-audits--findings-ledger)
 - [คู่มือการทดสอบด้วยตนเอง (Manual try guides)](#คู่มือการทดสอบด้วยตนเอง-manual-try-guides)
-- [Enterprise Web Dashboard และ Real-Time Studio](#enterprise-web-dashboard-และ-real-time-studio)
 - [ชุดคำสั่งจัดการผ่าน CLI (CLI Management Commands)](#ชุดคำสั่งจัดการผ่าน-cli-cli-management-commands)
 - [สกิลเสริมและส่วนขยายแนะนำ (Recommended Extensions)](#สกิลเสริมและส่วนขยายแนะนำ-recommended-third-party-skills--extensions)
 - [การเตรียมความพร้อมก่อน Deploy (Deployment readiness)](#การเตรียมความพร้อมก่อน-deploy-deployment-readiness)
@@ -220,20 +218,6 @@ npx nexus-devflow status
 ```bash
 npx nexus-devflow status --json
 ```
-
----
-
-### เปิด Web Dashboard ในเครื่อง (Open the local dashboard)
-
-เปิดใช้งาน Web Dashboard ความเร็วสูงในเครื่องของคุณ:
-
-```bash
-npx nexus-devflow dashboard
-# หรือผ่าน package script:
-npm run dashboard
-```
-
-แดชบอร์ดจะเปิดที่ `http://127.0.0.1:4318` แสดงสถานะ Living Spec, ความคืบหน้าของงาน, แผงควบคุม Multi-Agent Swarm และ Code Graph RAG แบบ Real-time
 
 ---
 
@@ -656,57 +640,19 @@ DevFlow รองรับระบบ Quality Gates และการทำ In
 
 ---
 
-## Enterprise Web Dashboard และ Real-Time Studio
-
-เปิดใช้งาน Web Dashboard ความเร็วสูงในเครื่องของคุณ:
-
-```bash
-npm run dashboard
-# หรือผ่าน CLI:
-npx nexus-devflow dashboard [--port 4318]
-```
-
-```text
-+----------------------------------------------------------------------------------------------------+
-|  nexus-devflow                                                                                     |
-|  D:\Projects\devtools\nexus-devflow                                                                |
-|                                                                                                    |
-|  [v2.X.X]  [HEALTH OK]  [✔ GATE PASSED]  [✔ IN SYNC]  [TRACK FAST]                                 |
-+----------------------------------------------------------------------------------------------------+
-|  [🔮 Pre-Flight Discovery]   [⚡ Living Spec · 4 steps]   [🤖 Multi-Agent Swarm]   [🗺️ Code Graph]   |
-+----------------------------------------------------------------------------------------------------+
-|  [ Card: Current Work ]        |  [ Card: Git & Branch ]                                           |
-+--------------------------------+-------------------------------------------------------------------+
-|  [ Card: Findings Ledger ]     |  [ Card: Completion & Gate ]                                      |
-+----------------------------------------------------------------------------------------------------+
-```
-
-### จุดเด่นบนแดชบอร์ด:
-- ⚡ **0ms First Paint**: Server-Side Hydration (`window.__INITIAL_SNAPSHOT__`) แสดงผลทันทีโดยไม่ต้องรอ API โหลดข้อมูล
-- ⚡ **Single-Flight Git Cache**: รวมการอ่าน Git หลายตัวพร้อมกัน ทำให้เปิดติดเร็วใน **< 120 ms**
-- 🤖 **Multi-Agent Swarm Visualizer**: แผงมอนิเตอร์ AI 4 บทบาทแบบ Real-time:
-  - 👑 **Lead Architect**: ผู้วางขอบเขตสถาปัตยกรรมและ Data Contracts
-  - 👨‍💻 **Core Coder**: ผู้เขียนโค้ดที่สะอาดและ Type-Safe ตามมาตรฐาน
-  - 🕵️ **QA Verifier**: ผู้ทดสอบอิสระ (Red-Team) ที่เขียน Test ดัก Edge Cases
-  - 🛡️ **Security Auditor**: ผู้สแกนหาช่องโหว่ความปลอดภัยและ Secret Leaks
-- 🗺️ **Semantic Code Graph RAG**: วิเคราะห์ Dependency Graph และคำนวณผลกระทบการแก้ไขโค้ด (Blast Radius)
-- 📋 **Live Kanban Studio**: แผงควบคุม Living Spec และความคืบหน้าของงานแบบ Real-time
-
----
-
 ## ชุดคำสั่งจัดการผ่าน CLI (CLI Management Commands)
 
 Nexus-DevFlow มีชุดคำสั่ง CLI ครบวงจรสำหรับจัดการ Workspace:
 
 ```bash
-# เปิด Web Dashboard
-npx nexus-devflow dashboard [--port 4318]
+# ตรวจสอบสถานะโปรเจกต์ งานที่กำลังทำ และ Blockers
+npx nexus-devflow status [--json]
 
 # ตรวจสอบ Quality Gatekeeper และติดตั้ง Git Pre-commit Hooks
 npx nexus-devflow check-gate [--strict]
 npx nexus-devflow hook install pre-commit
 
-# Model Context Protocol (MCP) Server Hub (12 Tools มาตรฐาน)
+# Model Context Protocol (MCP) Server Hub (11 Tools มาตรฐาน)
 npx nexus-devflow mcp
 
 # Just-In-Time (JIT) Dynamic Context Slicing (ตัดเฉพาะ Context ที่จำเป็น)
@@ -720,7 +666,7 @@ npx nexus-devflow reconcile
 npx nexus-devflow swarm
 npx nexus-devflow graph --file src/index.ts
 
-# สร้างรายงานสรุปผลงานแบบ Standalone HTML Dashboard
+# สร้างรายงานสรุปผลงานแบบ Standalone HTML Report
 npm run report:html -- 054-optimize-dashboard-snapshot-latency
 
 # ตรวจสอบและอัปเดตเวอร์ชัน DevFlow พร้อมระบบ Backup ปลอดภัย

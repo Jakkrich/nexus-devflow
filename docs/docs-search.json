@@ -560,7 +560,7 @@
   },
   {
     "title": "CLI Overview (ภาพรวมเครื่องมือ CLI)",
-    "description": "ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง",
+    "description": "ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ และจัดการ DevFlow ในเครื่อง",
     "section": "CLI",
     "slug": "cli",
     "href": "../cli/",
@@ -569,7 +569,6 @@
       "Overview",
       "Terminal",
       "ZeroLatency",
-      "Dashboard",
       "Commands",
       "cli",
       "cli"
@@ -590,23 +589,6 @@
       "ZeroTokenOverhead",
       "cli",
       "cli status"
-    ]
-  },
-  {
-    "title": "CLI Dashboard (Live Web Dashboard)",
-    "description": "เปิดแดชบอร์ดเว็บมอนิเตอร์สถานะแบบ Real-time เชื่อมต่อผ่าน Local WebSocket พร้อมการตอบสนองความเร็วสูงและใช้ Token 0 หน่วย",
-    "section": "CLI",
-    "slug": "cli/dashboard",
-    "href": "../cli/dashboard/",
-    "tags": [
-      "CLI",
-      "Dashboard",
-      "RealTime",
-      "WebSockets",
-      "ZeroTokens",
-      "VisualUI",
-      "cli",
-      "cli dashboard"
     ]
   },
   {

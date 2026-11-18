@@ -20,9 +20,9 @@
       },
       {
         "id": "observability",
-        "label": "Dashboard and real-time studio",
-        "focus": ["p2_context", "dashboard", "git_engine"],
-        "note": "Zero-drop local web dashboard monitoring active tasks, git status, and findings."
+        "label": "CLI Status & MCP Observability",
+        "focus": ["p2_context", "cli_mcp", "git_engine"],
+        "note": "Zero-drop local CLI status and 11-tool MCP server monitoring active tasks, git status, and findings."
       }
     ]
   },
@@ -33,7 +33,7 @@
     { "id": "p2_context", "type": "backend", "label": "⚡ Pillar 2: Present", "sublabel": "Task-Isolated spec.md", "pos": [440, 260], "size": [140, 60] },
     { "id": "p3_history", "type": "database", "label": "📦 Pillar 3: Past", "sublabel": "devflow/history/ & HISTORY", "pos": [440, 420], "size": [140, 60] },
     { "id": "qa_gates", "type": "security", "label": "Senior QA Gates", "sublabel": "check / audit / findings", "pos": [670, 260], "size": [130, 60], "tag": "P0/P1 Blocker" },
-    { "id": "dashboard", "type": "frontend", "label": "Web Dashboard", "sublabel": "0ms Real-Time Studio", "pos": [670, 420], "size": [130, 60] },
+    { "id": "cli_mcp", "type": "frontend", "label": "Status CLI & MCP", "sublabel": "11 Tools · JSON & Text", "pos": [670, 420], "size": [130, 60] },
     { "id": "git_engine", "type": "backend", "label": "Git Repository", "sublabel": "Branch & Squash-Merge", "pos": [880, 260], "size": [130, 60] }
   ],
   "boundaries": [
@@ -46,7 +46,7 @@
     { "id": "p2-to-p3", "from": "p2_context", "to": "p3_history", "label": "/complete", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelDy": 48 },
     { "id": "p2-to-qa", "from": "p2_context", "to": "qa_gates" },
     { "id": "qa-to-git", "from": "qa_gates", "to": "git_engine", "label": "squash-merge", "variant": "emphasis" },
-    { "id": "dashboard-watch", "from": "dashboard", "to": "p2_context", "variant": "dashed", "fromSide": "left", "toSide": "right" }
+    { "id": "cli-mcp-watch", "from": "cli_mcp", "to": "p2_context", "variant": "dashed", "fromSide": "left", "toSide": "right" }
   ],
   "cards": [
     {
@@ -72,7 +72,7 @@
       "title": "Zero-Drop Observability",
       "items": [
         "State persists in markdown files across AI context clear resets",
-        "0ms first paint local Web Dashboard visualizes tasks in real time",
+        "Status CLI and 11-tool MCP server inspect tasks and gates on demand",
         "Full support for Antigravity, Claude Code, Codex, and Copilot"
       ]
     }

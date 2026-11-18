@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CLI Overview (ภาพรวมเครื่องมือ CLI) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง">
+  <meta name="description" content="ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ และจัดการ DevFlow ในเครื่อง">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/cli/">
   <link rel="icon" href="../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,7 +107,6 @@
           <div class="docs-nav-title">CLI</div>
           <a class="docs-nav-link active" href="../cli/">CLI Overview</a>
           <a class="docs-nav-link" href="../cli/status/">Status</a>
-          <a class="docs-nav-link" href="../cli/dashboard/">Live Dashboard</a>
           <a class="docs-nav-link" href="../cli/tokens/">Token & Cost Analytics</a>
         </div>
 
@@ -150,7 +149,7 @@
       <h1 class="docs-title">CLI Overview (ภาพรวมเครื่องมือ CLI)</h1>
       
       <p class="docs-lead">
-        ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ เปิด Live Dashboard และจัดการ DevFlow ในเครื่อง
+        ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ และจัดการ DevFlow ในเครื่อง
       </p>
 
       <div class="docs-meta">
@@ -158,7 +157,6 @@
         <span class="docs-pill">Overview</span>
         <span class="docs-pill">Terminal</span>
         <span class="docs-pill">ZeroLatency</span>
-        <span class="docs-pill">Dashboard</span>
         <span class="docs-pill">Commands</span>
       </div>
 
@@ -174,9 +172,6 @@ npx nexus-devflow
 
 # ดูสถานะความคืบหน้าของงานปัจจุบันผ่าน Terminal
 npx nexus-devflow status
-
-# เปิด Live Web Dashboard สำหรับมอนิเตอร์สถานะและ Run Activity
-npx nexus-devflow dashboard
 
 # วิเคราะห์การใช้งานและต้นทุน Token (Session Token Analytics)
 npm run analyze:tokens
@@ -198,7 +193,6 @@ npm run check</code></pre>
             <thead><tr><th>Flag</th><th>ความหมาย</th><th>ตัวอย่างการใช้งาน</th></tr></thead>
             <tbody>
               <tr><td><code>-y, --yes</code></td><td>ตอบรับการยืนยันอัตโนมัติ (Non-interactive mode)</td><td><code>npx nexus-devflow -y</code></td></tr>
-              <tr><td><code>--port &lt;number&gt;</code></td><td>กำหนดหมายเลข Port สำหรับ Live Dashboard (ค่าเริ่มต้น: 4173)</td><td><code>npx nexus-devflow dashboard --port 3000</code></td></tr>
               <tr><td><code>--json</code></td><td>ส่งออกผลลัพธ์ของคำสั่งในรูปแบบ JSON สำหรับ CI/CD</td><td><code>npx nexus-devflow status --json</code></td></tr>
             </tbody>
           </table>

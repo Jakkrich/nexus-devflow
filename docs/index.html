@@ -540,8 +540,8 @@
       </div>
     </section>
 
-    <!-- Local Dashboard Showcase -->
-    <section id="dashboard" class="page-grid relative overflow-hidden border-y border-[var(--line)] py-24 lg:py-32">
+    <!-- CLI Status & MCP Observability Showcase -->
+    <section id="status" class="page-grid relative overflow-hidden border-y border-[var(--line)] py-24 lg:py-32">
       <div class="absolute inset-0 bg-[rgba(245,246,243,.78)]"></div>
       <div class="relative mx-auto max-w-7xl px-5 lg:px-8">
         <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -549,13 +549,13 @@
             <div class="dashboard-tilter__frame">
               <div class="dashboard-tilter__page font-mono text-xs">
                 <div class="flex items-center justify-between border-b border-[#2c3532] pb-3 text-[#9ba7a2]">
-                  <span class="text-white font-bold">NEXUS-DEVFLOW DASHBOARD</span>
-                  <span class="text-[#70d5a9]">● LIVE (PORT 4200)</span>
+                  <span class="text-white font-bold">NEXUS-DEVFLOW STATUS &amp; MCP</span>
+                  <span class="text-[#70d5a9]">● LOCAL-FIRST (0ms CLI)</span>
                 </div>
                 <div class="mt-4 grid grid-cols-2 gap-3">
                   <div class="rounded border border-[#2c3532] bg-[#171e1c] p-3">
                     <div class="text-[10px] text-[#76a8ff]">ACTIVE TASK RUN</div>
-                    <div class="mt-1 text-white font-semibold">089-clone-ai-blueprint-ui</div>
+                    <div class="mt-1 text-white font-semibold">128-remove-web-dashboard-studio</div>
                     <div class="mt-2 text-[10px] text-[#70d5a9]">Stage: /implement</div>
                   </div>
                   <div class="rounded border border-[#2c3532] bg-[#171e1c] p-3">
@@ -565,12 +565,12 @@
                   </div>
                 </div>
                 <div class="mt-3 rounded border border-[#2c3532] bg-[#171e1c] p-3">
-                  <div class="text-[10px] text-[#7f8c87]">ROADMAP PROGRESS</div>
+                  <div class="text-[10px] text-[#7f8c87]">MCP &amp; GATE READINESS</div>
                   <div class="mt-1 flex items-center gap-2">
                     <div class="h-2 flex-1 rounded bg-[#202a27] overflow-hidden">
-                      <div class="h-full bg-[var(--blue)] w-[88%]"></div>
+                      <div class="h-full bg-[var(--blue)] w-[100%]"></div>
                     </div>
-                    <span class="text-white text-[10px]">88%</span>
+                    <span class="text-white text-[10px]">11 Tools · PASS</span>
                   </div>
                 </div>
               </div>
@@ -578,16 +578,16 @@
           </div>
 
           <div class="max-w-xl">
-            <div class="eyebrow">แดชบอร์ดในเครื่อง (Local Dashboard)</div>
+            <div class="eyebrow">ตรวจสอบสถานะผ่าน CLI และ MCP</div>
             <h2 class="mt-6 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">เห็นภาพรวมทั้งโปรเจกต์ได้ในพริบตาเดียว</h2>
             <p class="mt-6 text-sm leading-7 text-[var(--ink-soft)]">
-              เปิดหน้าแดชบอร์ดแบบเรียลไทม์เพื่อดูความคืบหน้าของ Roadmap, โฟลเดอร์งานปัจจุบัน, บันทึกข้อผิดพลาด (Findings), สถานะ Git, และคำสั่งถัดไปที่ต้องทำ เรนเดอร์ตรงจากไฟล์ Markdown ในเครื่อง โหลดเร็ว 0ms
+              เช็กความคืบหน้าของ Build Plan, งานที่กำลังทำอยู่, บันทึกข้อผิดพลาด (Findings), สถานะ Git และคำสั่งถัดไปผ่าน Terminal หรือ MCP Server ได้ทันทีโดยไม่ต้องเปิดเว็บเซิร์ฟเวอร์ทิ้งไว้
             </p>
 
             <div class="mt-8 space-y-4 border-y border-[var(--line)] py-6">
               <div class="grid grid-cols-[90px_1fr] gap-4">
-                <div class="measure-label pt-1">Roadmap</div>
-                <p class="text-sm leading-6 text-[var(--ink-soft)]">ติดตามสถานะฟีเจอร์ที่เสร็จแล้ว ฟีเจอร์ปัจจุบัน และงานที่รออยู่ในคิว</p>
+                <div class="measure-label pt-1">Status</div>
+                <p class="text-sm leading-6 text-[var(--ink-soft)]">ติดตามสถานะฟีเจอร์ที่เสร็จแล้ว ฟีเจอร์ปัจจุบัน และงานที่รออยู่ในคิวผ่าน JSON หรือตาราง CLI</p>
               </div>
               <div class="grid grid-cols-[90px_1fr] gap-4">
                 <div class="measure-label pt-1">Health</div>
@@ -601,7 +601,7 @@
 
             <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
               <code class="rounded-lg border border-[var(--line-strong)] bg-[var(--ink)] px-4 py-3 font-mono text-xs text-white">
-                <span class="text-[#8cabef]">$</span> npx nexus-devflow dashboard
+                <span class="text-[#8cabef]">$</span> npx nexus-devflow status
               </code>
               <a class="text-sm font-semibold text-[var(--blue)] hover:text-[var(--blue-dark)]" href="./getting-started/">อ่านคู่มือฉบับเต็ม →</a>
             </div>

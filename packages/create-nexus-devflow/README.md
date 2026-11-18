@@ -76,28 +76,17 @@ Maintainer contracts and examples are available in the official documentation:
 
 ---
 
-## 🌐 Web Dashboard & Real-Time Studio
-
-Launch the local interactive Web Dashboard with 0ms SSR First Paint and Single-Flight Git caching:
-
-```bash
-# Launch dashboard on http://127.0.0.1:4318
-npx @jakkrichm/create-nexus-devflow dashboard
-```
-
----
-
 ## 🛠️ CLI Management Commands
 
 ```bash
-# Start Web Dashboard
-npx @jakkrichm/create-nexus-devflow dashboard [--port 4318]
+# Check project status, active work, and blockers
+npx @jakkrichm/create-nexus-devflow status [--json]
 
 # Automated Quality Gatekeeper & Pre-commit Hooks
 npx @jakkrichm/create-nexus-devflow check-gate [--strict]
 npx @jakkrichm/create-nexus-devflow hook install pre-commit
 
-# Model Context Protocol (MCP) Server Hub (12 Native Tools)
+# Model Context Protocol (MCP) Server Hub (11 Native Tools)
 npx @jakkrichm/create-nexus-devflow mcp
 
 # Just-In-Time (JIT) Dynamic Context Slicing

@@ -12,7 +12,6 @@ import {
   readManifest,
   type TemplateFile
 } from "../lib/update.js";
-import { readCommandCatalog } from "../lib/command-catalog.js";
 
 test("adapterListFromMode resolves adapter aliases correctly", () => {
   assert.deepEqual(adapterListFromMode("both"), ["codex", "claude", "copilot", "antigravity", "opencode"]);
@@ -200,11 +199,6 @@ test("applyPreparedUpdate removes retired status and doctor skill folders and in
     assert.ok(!updatedManifest.lifecycle.companionCommands.includes("try"));
     assert.ok(!updatedManifest.lifecycle.companionCommands.includes("report-html"));
     assert.ok(!updatedManifest.lifecycle.companionCommands.includes("doctor"));
-
-    const catalog = await readCommandCatalog(targetDir);
-    assert.ok(catalog.some((item) => item.name === "devflow"));
-    assert.ok(!catalog.some((item) => item.name === "try"));
-    assert.ok(!catalog.some((item) => item.name === "doctor"));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

@@ -20,17 +20,14 @@ Run directly without prior installation using `npx`:
 # 1. Overlay Nexus-DevFlow into your project directory (includes Step [3/3] interactive Extras checkbox)
 npx nexus-devflow
 
-# 2. Launch local real-time Web Dashboard (http://127.0.0.1:4318)
-npx nexus-devflow dashboard
+# 2. Check active workspace status, living specs, and findings
+npx nexus-devflow status
 
 # 3. Install an individual bundled Opt-in Extras skill anytime (offline-safe)
 npx nexus-devflow skill add setup-tests   # or ci, release, rollback, vendor, convert-any-to-md, browseros-neo
 
 # 4. Or install recommended third-party companion skills (archify, diagram-design, bughunter, ponytail, code-modernization)
 npx nexus-devflow skill add --recommended
-
-# 5. Check active workspace status, living specs, and findings
-npx nexus-devflow status
 ```
 
 > **For existing users:** Backward-compatible invocation via `npm create @jakkrichm/nexus-devflow` and `npx @jakkrichm/create-nexus-devflow` is fully supported.
@@ -73,11 +70,8 @@ All development tasks execute systematically through a 4-step progressive lifecy
 
 The `nexus-devflow` CLI bundles complete management commands for agents and developers:
 
-### 📊 Dashboard & Status
+### 📊 Workspace Status
 ```bash
-# Launch interactive web dashboard with 0ms SSR First Paint
-npx nexus-devflow dashboard [--port 4318] [--no-open]
-
 # Show project overview, progress, findings, git status, and next action
 npx nexus-devflow status [--json]
 ```

@@ -80,7 +80,7 @@ export const START_PAGES: DocPage[] = [
               <p>ในขั้นตอนที่ 3 (<code>[3/3] 🧩 Configuring Extras Skills...</code>) เมื่อรันใน Interactive Terminal ตัวติดตั้งจะแสดง <strong>Extras Skills Checkbox</strong> (<code>↑</code>/<code>↓</code> เลื่อน, <code>Space</code> เลือก, <code>a</code> เลือกทั้งหมด, <code>Enter</code> ยืนยัน, <code>Esc</code> ข้าม) ให้เลือกติดตั้ง Opt-in Extensions จากแพ็กเกจแบบ offline-safe ได้ทันที ได้แก่ <code>setup-tests</code>, <code>ci</code>, <code>release</code>, <code>rollback</code>, <code>vendor</code>, <code>convert-any-to-md</code> และ <code>browseros-neo</code></p>
               <p>ตัวติดตั้งจะสร้าง <code>devflow/.state/manifest.json</code> เพื่อให้การอัปเดตเวอร์ชันในภายหลังสามารถแยกแยะไฟล์ของ DevFlow ออกจากการปรับแต่งของโปรเจกต์ได้</p>
               <p>ก่อนคัดลอกไฟล์ ตัวติดตั้งจะตรวจสอบโฟลเดอร์ปลายทางและหยุดทำงานหากพบ Symbolic Links, ประเภทไฟล์ที่ไม่เข้ากัน หรือเป้าหมายที่อยู่ใต้ไฟล์ปกติ เพื่อความปลอดภัยสูงสุด</p>
-              <p>การติดตั้งยังมีตัวเลือกติดตั้ง DevFlow CLI ซึ่งมีคำสั่ง <code>nexus-devflow</code> สำหรับตรวจสอบสถานะโปรเจกต์และเปิด Live Dashboard</p>
+              <p>การติดตั้งยังมีตัวเลือกติดตั้ง DevFlow CLI ซึ่งมีคำสั่ง <code>nexus-devflow</code> สำหรับตรวจสอบสถานะโปรเจกต์และจัดการเวิร์กโฟลว์</p>
             `
           },
           {
@@ -351,7 +351,7 @@ export const START_PAGES: DocPage[] = [
         id: 'pick-a-starting-point',
         title: 'เลือกจุดเริ่มต้นตามประเภทงาน (Pick a starting point)',
         contentHtml: `
-          <p>เริ่มต้นจากงานที่คุณต้องการทำ แล้วเลือกคำสั่ง Skill ที่ตรงจุด ทุกคำสั่งด้านล่างนี้สามารถรันได้โดยตรงใน AI Chat ของคุณ (ส่วนคำสั่ง Terminal เช่น <code>npx nexus-devflow status</code> หรือ <code>npx nexus-devflow dashboard</code> ใช้สำหรับจัดการเครื่องมือและเปิด Live Dashboard):</p>
+          <p>เริ่มต้นจากงานที่คุณต้องการทำ แล้วเลือกคำสั่ง Skill ที่ตรงจุด ทุกคำสั่งด้านล่างนี้สามารถรันได้โดยตรงใน AI Chat ของคุณ (ส่วนคำสั่ง Terminal เช่น <code>npx nexus-devflow status</code> ใช้สำหรับตรวจสอบสถานะและจัดการเครื่องมือ):</p>
           <table>
             <thead>
               <tr>
@@ -939,10 +939,10 @@ pnpm dlx nexus-devflow@1.9.0 update</code></pre>
         id: 'the-global-command-does-not-update-blueprint',
         title: 'คำสั่ง Global CLI จะไม่อัปเดต DevFlow (The global command does not update DevFlow)',
         contentHtml: `
-          <p>คำสั่งส่วนกลาง (Global CLI) <code>nexus-devflow</code> หรือ <code>devflow</code> ถูกออกแบบมาสำหรับแสดงผล <strong>Status</strong> และ <strong>Live Dashboard</strong> แบบ Read-Only เท่านั้น คำสั่ง <code>devflow update</code> จะไม่ทำงาน เพื่อป้องกันความสับสนของเวอร์ชัน</p>
+          <p>คำสั่งส่วนกลาง (Global CLI) <code>nexus-devflow</code> หรือ <code>devflow</code> ถูกออกแบบมาสำหรับแสดงผล <strong>Status</strong> แบบ Read-Only เท่านั้น คำสั่ง <code>devflow update</code> จะไม่ทำงาน เพื่อป้องกันความสับสนของเวอร์ชัน</p>
           <p>เมื่อต้องการอัปเดตไฟล์เวิร์กโฟลว์ในโปรเจกต์ ให้ใช้คำสั่งระบุแพ็กเกจผ่าน npx เสมอ:</p>
           <pre><code>npx nexus-devflow@latest update</code></pre>
-          <p>หลังการอัปเดตแบบ Interactive สำเร็จ ตัวติดตั้งจะตรวจสอบเวอร์ชันของ Global CLI ในเครื่อง หากเวอร์ชันไม่ตรงกัน ระบบจะเสนอทางเลือกในการอัปเดต Global CLI ให้ตรงกับเวอร์ชันของโปรเจกต์ (ค่าเริ่มต้นคือ No ซึ่งคำสั่ง <code>npx nexus-devflow@latest status</code> และ <code>dashboard</code> ยังคงทำงานได้สมบูรณ์โดยไม่ต้องติดตั้ง Global CLI)</p>
+          <p>หลังการอัปเดตแบบ Interactive สำเร็จ ตัวติดตั้งจะตรวจสอบเวอร์ชันของ Global CLI ในเครื่อง หากเวอร์ชันไม่ตรงกัน ระบบจะเสนอทางเลือกในการอัปเดต Global CLI ให้ตรงกับเวอร์ชันของโปรเจกต์ (ค่าเริ่มต้นคือ No ซึ่งคำสั่ง <code>npx nexus-devflow@latest status</code> ยังคงทำงานได้สมบูรณ์โดยไม่ต้องติดตั้ง Global CLI)</p>
           <p>ดูรายละเอียดเพิ่มเติมได้ที่หน้า <a href="../cli/">CLI Overview</a></p>
         `
       },

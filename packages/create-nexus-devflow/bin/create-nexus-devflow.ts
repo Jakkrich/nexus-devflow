@@ -6,10 +6,6 @@ import path from "node:path";
 import readline from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import {
-  openDashboard,
-  startDashboardServer
-} from "../lib/dashboard.js";
-import {
   formatHumanStatus,
   readProjectStatus,
   shouldUseColor
@@ -47,9 +43,6 @@ import {
   detectGitDrift,
   reconcileState
 } from "../lib/drift-reconciler.js";
-import {
-  renderStudioHtml
-} from "../lib/webview-studio.js";
 import {
   buildCodeGraph,
   calculateBlastRadius
@@ -107,10 +100,8 @@ const roleChoices = new Set(["dev", "sa", "full"]);
 
 interface CliOptions {
   command:
-  | "dashboard"
   | "install"
   | "status"
-  | "ui"
   | "update"
   | "uninstall"
   | "eject"
@@ -125,7 +116,6 @@ interface CliOptions {
   | "slice"
   | "drift"
   | "reconcile"
-  | "studio"
   | "swarm"
   | "graph"
   | "skill"
@@ -150,7 +140,6 @@ interface CliOptions {
   fix: boolean;
   statsOnly: boolean;
   strict: boolean;
-  deprecatedUi: boolean;
   target: string | null;
   adapter: string;
   role: DevFlowRole;
@@ -158,7 +147,6 @@ interface CliOptions {
   dryRun: boolean;
   help: boolean;
   json: boolean;
-  open: boolean;
   version: boolean;
   yes: boolean;
   keepHistory: boolean;
@@ -178,10 +166,6 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   }
 
   const targetDir = path.resolve(process.cwd(), options.target || ".");
-
-  if (options.deprecatedUi) {
-    console.warn("Warning: `ui` is deprecated; use `dashboard` instead.");
-  }
 
   if (options.command === "mcp") {
     startMcpServer(targetDir);
@@ -251,16 +235,6 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
       } else {
         console.log(style.dim(result.message));
       }
-    }
-    return;
-  }
-
-  if (options.command === "studio") {
-    const html = await renderStudioHtml(targetDir);
-    if (options.json) {
-      console.log(JSON.stringify({ html }, null, 2));
-    } else {
-      console.log(html);
     }
     return;
   }
@@ -689,27 +663,6 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     return;
   }
 
-  if (options.command === "dashboard" || options.command === "ui") {
-    let server: Awaited<ReturnType<typeof startDashboardServer>>;
-    try {
-      server = await startDashboardServer(targetDir, { port: 4318 });
-    } catch {
-      server = await startDashboardServer(targetDir, { port: 0 });
-    }
-    const style = createStyle();
-    console.log(style.bold(style.cyan(`Nexus-DevFlow Dashboard live at ${server.url}`)));
-    if (options.open) {
-      try {
-        await openDashboard(server.url);
-      } catch (err: unknown) {
-        console.error(style.yellow(`Could not open browser automatically: ${err instanceof Error ? err.message : String(err)}`));
-      }
-    }
-    await waitForShutdown();
-    await server.close();
-    return;
-  }
-
   if (options.command === "uninstall" || options.command === "eject") {
     const spinner = createSpinner("Analyzing DevFlow footprint...").start();
     const prepared = await prepareUninstall({
@@ -894,7 +847,6 @@ function parseArgs(args: readonly string[]): CliOptions {
   let fix = false;
   let statsOnly = false;
   let strict = false;
-  let deprecatedUi = false;
   let target: string | null = null;
   let adapter = "both";
   let role: DevFlowRole = "full";
@@ -902,7 +854,6 @@ function parseArgs(args: readonly string[]): CliOptions {
   let dryRun = false;
   let help = false;
   let json = false;
-  let open = true;
   let version = false;
   let yes = false;
   let keepHistory = false;
@@ -924,11 +875,6 @@ function parseArgs(args: readonly string[]): CliOptions {
 
     if (arg === "--json") {
       json = true;
-      continue;
-    }
-
-    if (arg === "--no-open") {
-      open = false;
       continue;
     }
 
@@ -1268,9 +1214,6 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (first === "reconcile") {
       command = "reconcile";
       target = positional[1] || target || ".";
-    } else if (first === "studio") {
-      command = "studio";
-      target = positional[1] || target || ".";
     } else if (first === "swarm") {
       command = "swarm";
       target = positional[1] || target || ".";
@@ -1301,13 +1244,8 @@ function parseArgs(args: readonly string[]): CliOptions {
         subcommandAction = "install";
         target = positional[1] || target || ".";
       }
-    } else if (first === "dashboard") {
-      command = "dashboard";
-      target = positional[1] || target || ".";
-    } else if (first === "ui") {
-      command = "dashboard";
-      deprecatedUi = true;
-      target = positional[1] || target || ".";
+    } else if (first === "dashboard" || first === "ui" || first === "studio") {
+      throw new Error(`Command \`${first}\` has been removed. Use \`nexus-devflow status\` or \`nexus-devflow mcp\` instead.`);
     } else if (first === "update") {
       command = "update";
       target = positional[1] || target || ".";
@@ -1452,7 +1390,6 @@ function parseArgs(args: readonly string[]): CliOptions {
     fix,
     statsOnly,
     strict,
-    deprecatedUi,
     target,
     adapter,
     role,
@@ -1460,26 +1397,10 @@ function parseArgs(args: readonly string[]): CliOptions {
     dryRun,
     help,
     json,
-    open,
     version,
     yes,
     keepHistory
   };
-}
-
-async function waitForShutdown(): Promise<void> {
-  await new Promise<void>((resolve) => {
-    const keepAliveTimer = setInterval(() => {}, 10_000);
-    const stop = (): void => {
-      clearInterval(keepAliveTimer);
-      process.off("SIGINT", stop);
-      process.off("SIGTERM", stop);
-      resolve();
-    };
-
-    process.once("SIGINT", stop);
-    process.once("SIGTERM", stop);
-  });
 }
 
 function readPackageVersion(): string {
@@ -1500,13 +1421,11 @@ ${style.bold("Usage:")}
   ${style.cyan("nexus-devflow slice")} [--stage <stage>] [--max-tokens <num>] [--json]
   ${style.cyan("nexus-devflow drift")} [target-dir] [--json]
   ${style.cyan("nexus-devflow reconcile")} [target-dir] [--fix] [--json]
-  ${style.cyan("nexus-devflow studio")} [target-dir] [--json]
   ${style.cyan("nexus-devflow swarm")} [target-dir] [--json]
   ${style.cyan("nexus-devflow graph")} [target-dir] [--file <path>] [--json]
   ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
   ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
   ${style.cyan("nexus-devflow hook uninstall")}
-  ${style.cyan("nexus-devflow dashboard")} [target-dir] [options]
   ${style.cyan("nexus-devflow idea")} add "<text>" [--title "<title>"]
   ${style.cyan("nexus-devflow ideas")} [list] [--json]
   ${style.cyan("nexus-devflow findings add")} "<title>" [--severity P0|P1|P2|P3] [--location <loc>]
@@ -1530,7 +1449,6 @@ ${style.bold("Commands:")}
   ${style.brightCyan("slice")}              Generate JIT stage-aware context slice (reduces AI tokens by 60-70%)
   ${style.brightCyan("check-gate")}         CI/CD quality gatekeeper check (returns exit code 0 or 1)
   ${style.brightCyan("hook")}               Install or remove local Git pre-commit/pre-push gatekeeper hooks
-  ${style.brightCyan("dashboard")}          Run local interactive web dashboard for Nexus-DevFlow (alias: ui)
   ${style.brightCyan("idea, ideas")}        Manage idea backlog: add new ideas or list pending ideas
   ${style.brightCyan("findings")}           Inspect findings ledger, record new findings, filter blockers, or resolve
   ${style.brightCyan("doctor")}             Inspect project workspace health and auto-heal missing files (--fix)
@@ -1553,7 +1471,6 @@ ${style.bold("Options:")}
   ${style.cyan("--stats")}            Display history summary statistics only
   ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, opencode, both, all
   ${style.cyan("--role <role>")}       Workspace role profile: full (default), dev, sa
-  ${style.cyan("--no-open")}          Start local dashboard without opening a browser
   ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
   ${style.cyan("--json")}             Print output as structured JSON object
   ${style.cyan("--target, -t")}       Target project directory

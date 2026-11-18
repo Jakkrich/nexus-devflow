@@ -46,7 +46,7 @@ Nexus-DevFlow ช่วย solo developer, ทีมขนาดเล็ก แ
 - **Task-Isolated Living Spec**: แยกแต่ละ feature/fix เป็น workspace ที่มี `spec.md`, `stage.md`, `findings.md` และหลักฐานตรวจสอบของตัวเอง
 - **Three-Pillars Workspace**: แยก Future, Present และ Past เพื่อให้แผน งานที่กำลังทำ และประวัติไม่ปะปนกัน
 - **Quality Gates & Evidence**: ใช้ typecheck, static contracts, routing evals, package smoke tests, review receipts และ findings ledger ก่อนปิดงาน
-- **Status & Dashboard Surfaces**: สรุปสถานะ workflow, drift, gates และ next action จากข้อมูลใน repository
+- **Status CLI & MCP Surfaces**: สรุปสถานะ workflow, drift, gates และ next action จากข้อมูลใน repository ผ่าน CLI และ MCP
 
 ### Near-Term Outcomes
 
@@ -54,12 +54,12 @@ Nexus-DevFlow ช่วย solo developer, ทีมขนาดเล็ก แ
 2. ทำ installer/update ให้พิสูจน์ได้บน Windows, macOS และ Linux รวม Node.js รุ่นที่รองรับ
 3. ทำ routing evals ภาษาไทยและอังกฤษให้แม่นยำ พร้อมป้องกัน false activation และคำสั่ง legacy รั่วกลับมา
 4. ป้องกัน project plan และ overview แบบ placeholder ไม่ให้กลายเป็น source of truth ที่ดูเหมือนพร้อมใช้งาน
-5. ยกระดับ dashboard/IDE sidecar แบบ read-only หลัง contract และ cross-platform foundation นิ่งแล้ว
+5. รองรับการอ่านสถานะและส่งต่อบริบทผ่าน CLI/MCP และ IDE sidecar แบบ read-only หลัง contract และ cross-platform foundation นิ่งแล้ว
 
 ### Explicit Non-Goals for This Horizon
 
 - ระบบสมาชิก, billing, cloud sync หรือ hosted SaaS
-- การเขียน application UI ทั่วไปที่ไม่เกี่ยวกับ DevFlow dashboard
+- การเขียนหรือดูแล web dashboard / webview application UI ใน core package (ให้เครื่องมือภายนอกหรือ AI chat ใช้ CLI/MCP JSON แทน)
 - การเพิ่ม core skill ใหม่โดยไม่มีหลักฐานว่าความสามารถเดิมรองรับไม่ได้
 - การผูก workflow หลักกับ AI vendor หรือ IDE รายเดียว
 
@@ -71,7 +71,7 @@ Nexus-DevFlow ช่วย solo developer, ทีมขนาดเล็ก แ
 - **Active Delivery State**: task workspace ภายใต้ `devflow/context/{run}/` พร้อม spec, stage, findings และ review receipt
 - **Historical State**: archive ภายใต้ `devflow/history/` และสรุปใน `HISTORY.md`
 - **Configuration State**: `devflow/config.json`, `.nexus/nexus-devflow.json` และ agent bundle manifest
-- **Generated State**: `project-overview.md`, static documentation และ dashboard snapshots ซึ่งต้องสร้างซ้ำได้จาก source files
+- **Generated State**: `project-overview.md` และ static documentation ซึ่งต้องสร้างซ้ำได้จาก source files
 - **Persistence**: ใช้ Markdown และ JSON ใน Git; ไม่มี database ใน core product
 
 ---
@@ -104,7 +104,7 @@ Nexus-DevFlow ช่วย solo developer, ทีมขนาดเล็ก แ
 
 ## 7. Planning Assumptions & Open Decisions
 
-- **Assumption**: ลำดับถัดไปยังคงอยู่ใน Phase 2: Ecosystem ตาม `ROADMAP.md`; Phase 3 dashboard/sidecar เริ่มหลัง release foundation ผ่านเกณฑ์
+- **Assumption**: ลำดับถัดไปยังคงอยู่ใน Phase 2: Ecosystem ตาม `ROADMAP.md`; Core package คงความเบาแบบ CLI/MCP-first โดยไม่มี Web Dashboard/Studio UI
 - **Assumption**: รองรับ Node.js ตาม `package.json` ปัจจุบันก่อน และใช้ CI matrix เป็นหลักฐานข้ามแพลตฟอร์ม
 - **Open Decision**: เวอร์ชันที่รวมการยุบคำสั่งเดิมควรเป็น v2 minor ต่อ หรือ v3 major ต้องตัดสินในงาน release baseline
 - **Open Decision**: IDE sidecar ระยะแรกจะรองรับ editor ใดบ้าง ต้องเลือกจาก usage evidence ก่อนเริ่ม implementation
