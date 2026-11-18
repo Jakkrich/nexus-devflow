@@ -5,6 +5,16 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.3] - 2026-11-18
+
+### Removed
+- **Web Dashboard, Studio UI & MCP Studio Tool (Feature 128 — Option 2)**: Removed `dashboard.ts`, `dashboard-engine.ts`, `dashboard-page.ts`, `dashboard-snapshot.ts`, `studio-view-renderer.ts` (~102 KB), `webview-studio.ts`, and orphan modules (`command-catalog.ts`, `version-check.ts`, `workflow-state.ts`) along with 10 associated unit/tooling tests and `e2e/dashboard-visualizer.spec.ts`, reducing `packages/create-nexus-devflow/lib/` by `141,609` bytes (`-26.4%`).
+- **MCP `devflow_get_studio_html` & CLI `dashboard`/`ui`/`studio`**: Removed `devflow_get_studio_html` from `McpServerEngine` (leaving 11 pure JSON/Text MCP tools), removed `dashboard`/`ui`/`studio` handlers and `--no-open` from `create-nexus-devflow.ts`, and retired `cli/dashboard` from `docs/`.
+
+### Changed
+- **Retired-Command Guard & Lite CLI/MCP Surface**: Added an explicit guard in `parseArgs()` so invoking `dashboard`, `ui`, or `studio` fails with guidance to use `nexus-devflow status` or `nexus-devflow mcp` instead of falling through to project scaffolding.
+- **Playwright, Architecture Diagram & Docs Alignment**: Removed `webServer: "npm run dashboard"` from `playwright.config.ts`, updated `ROADMAP.md`, `README.md`, `README.th.md`, package READMEs, `docs/index.html`, and regenerated `docs/` (50 pages) plus `docs/diagrams/nexus-devflow-architecture.html` (`9/9` showcase checks) for CLI/MCP-first observability while preserving `run-state.ts`, `status`, `doctor`, `check-gate`, and `report:html`.
+
 ## [2.20.2] - 2026-11-18
 
 ### Added
