@@ -15,7 +15,7 @@ Install and manage **Nexus-DevFlow** — an enterprise-grade agentic workflow la
 
 ## 🚀 Quick Installation
 
-Requires Node.js 18 or newer. Run the installer in your target project directory:
+Requires Node.js 18.17 or newer (package minimum Node.js 18). Run the installer in your target project directory:
 
 ```bash
 # Standard project initialization (Recommended)
@@ -101,7 +101,7 @@ npx @jakkrichm/create-nexus-devflow swarm
 npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
 # Framework Update & Safety Rollback
-npx @jakkrichm/create-nexus-devflow update [--check]
+npx @jakkrichm/create-nexus-devflow update [--dry-run]
 
 # Opt-in Team & Ops Extensions
 npx nexus-devflow skill add browseros-neo     # E2E testing, debugging & ID-traceable evidence via BrowserOS neo MCP
@@ -111,7 +111,6 @@ npx nexus-devflow skill add release           # Production release readiness che
 npx nexus-devflow skill add rollback          # History-preserving feature reversal
 npx nexus-devflow skill add convert-any-to-md # Bulk Office/PDF to Markdown converter
 npx nexus-devflow skill add vendor            # Local git repo ingestion & wrapper synthesis
-npx nexus-devflow skill add publish-devflow   # Maintainer semver bump, tag & NPM release automation
 
 # Recommended Third-Party Companion Skills
 npx nexus-devflow skill add --recommended

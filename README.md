@@ -47,7 +47,7 @@ Vibe coding is describing a vague idea and blindly accepting whatever the AI ret
 
 1. **Spec before code.** Planning skills write a complete living spec and pause. You review scope, data contracts, and edge cases before a single line of code is written.
 2. **Small, reviewable TDD steps.** Each implementation step enforces strict Red-Green-Refactor discipline with an observable diff, test proof, and empirical verification.
-3. **One work item at a time.** `devflow/context/current-feature.md` holds exactly one feature, fix, or rollback as a Single Living Spec. Finish it, archive it to `devflow/history/`, and move on.
+3. **One work item per task workspace.** `devflow/context/{xxx-slug}/spec.md` holds one feature, fix, or rollback as a Task-Isolated Living Spec. Finish it, archive it to `devflow/history/`, and move on.
 4. **Findings & Quality Gates with teeth.** Review findings get durable IDs in a persistent ledger (`findings.md`), and critical findings (P0/P1) block release until verified or explicitly waived on the record. Nothing gets lost when context clears.
 
 The goal is not just writing code faster—it is staying firmly in control of a production codebase built with AI assistance.
@@ -110,7 +110,7 @@ The goal is not just writing code faster—it is staying firmly in control of a 
 Scaffold your application first, then overlay Nexus-DevFlow.
 
 **Prerequisites:**
-- Node.js 20 or newer
+- Node.js 18.17 or newer (installer package supports Node.js 18+)
 - An application scaffolded with your preferred stack (Next.js, Vite, NestJS, Python, Go, etc.)
 - A Git repository initialized for that application
 
@@ -190,7 +190,7 @@ Brownfield adoption in `/onboard` surveys your codebase, preserves your existing
 Check for updates without modifying files:
 
 ```bash
-npx nexus-devflow update --check
+npx nexus-devflow update --dry-run
 ```
 
 Apply managed updates safely:
@@ -246,7 +246,7 @@ Nexus-DevFlow structures AI development into a disciplined, repeatable engineeri
 /feature ──▶ review spec ──▶ /implement ──▶ /check ──▶ /audit current ──▶ /complete
 ```
 
-- **`/feature`**: Allocates sequential ID (`xxx-slug`), defines scope, establishes data contracts, and creates the Single Living Spec (`devflow/context/current-feature.md`).
+- **`/feature`**: Allocates sequential ID (`xxx-slug`), defines scope, establishes data contracts, and creates the Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`).
 - **`/implement`**: Builds each task incrementally with strict TDD (`[TDD-Red]`, `[TDD-Green]`, `[TDD-Refactor]`) and logs diff evidence.
 - **`/check`**: Senior QA verification across multi-lane test suites (types, lints, unit tests, manual proof).
 - **`/audit current`**: Audits branch deltas for code quality, security boundaries, and performance regressions; records findings in `findings.md`.
@@ -297,7 +297,7 @@ DevFlow makes handoffs explicit and reviewable at every stage:
 
 ```text
 You: Run the next feature: user authentication.
-AI:  Created Single Living Spec at devflow/context/current-feature.md (001-user-authentication).
+AI:  Created Task-Isolated Living Spec at devflow/context/001-user-authentication/spec.md.
      Defined 3 Acceptance Criteria, 4 TDD tasks. Paused for your review.
 
 You: The spec looks solid. Implement task 1.
@@ -352,9 +352,11 @@ devflow/
 │   ├── project-overview.md     # Primary source of truth for architecture and tech stack
 │   ├── coding-standards.md     # Engineering conventions, strict TDD rules, and test gates
 │   ├── ai-interaction.md       # AI agent interaction rules and operational preferences
-│   ├── findings.md             # Quality, security, and verification findings ledger (P0-P3)
-│   ├── current-stage.md        # Active stage run tracker and state pointer
-│   └── current-feature.md      # The Single Living Spec (Active delivery spec / idle stub)
+│   └── {xxx-slug}/             # Task-Isolated Living Spec workspace
+│       ├── spec.md             # Active delivery spec (ACs, contracts, TDD tasks)
+│       ├── stage.md            # Active stage tracker and next-action pointer
+│       ├── findings.md         # Quality, security, and verification findings ledger (P0-P3)
+│       └── review.md           # Independent review receipt
 │
 ├── 🏛️ decisions/                # Architecture Decision Records (ADR-xxx-slug.md)
 │
@@ -370,13 +372,13 @@ devflow/
 ### Why 3 Pillars?
 - **Token Efficiency**: Agents only load active context (`devflow/context/`), saving up to 80% token overhead on each prompt.
 - **Durable History**: Completed work is archived with full commit references and retrospectives.
-- **Survivable Context Resets**: Even if the AI context window clears, active work instantly resumes from `current-feature.md`.
+- **Survivable Context Resets**: Even if the AI context window clears, active work instantly resumes from `devflow/context/{xxx-slug}/spec.md`.
 
 ---
 
 ## The Single Living Spec Model
 
-Every delivery task operates on `devflow/context/current-feature.md`, structured into **6 standard sections**:
+Every delivery task operates on `devflow/context/{xxx-slug}/spec.md`, structured into **6 standard sections**:
 
 1. **🎯 1. Define & Boundaries**: Problem statement, proposed solution, scope boundaries, and non-breaking invariants.
 2. **📐 2. Technical Spec & Contracts**: Data contracts, API schemas, and testable Acceptance Criteria (AC-1..AC-N).
@@ -521,7 +523,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **overview** | `/overview` / `$overview` | Setup | Generate compact `project-overview.md` (<= 20KB) and offer planning baseline commit. |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | Generate throwaway static HTML/CSS mockups in `prototypes/`. |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `publish-devflow`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
 
 ---
 
@@ -672,7 +674,7 @@ npx nexus-devflow graph --file src/index.ts
 npm run report:html -- 054-optimize-dashboard-snapshot-latency
 
 # Check and Apply Framework Updates
-npx nexus-devflow update [--check]
+npx nexus-devflow update [--dry-run]
 ```
 
 ---
@@ -744,8 +746,8 @@ Validates environment variables, inspects `render.yaml` or `vercel.json`, verifi
 Nexus-DevFlow maintains state in files, never in volatile AI context:
 
 - `devflow/context/project-overview.md` — persistent architecture source of truth.
-- `devflow/context/current-feature.md` — Single Living Spec with completed and remaining tasks.
-- `devflow/context/current-stage.md` — active stage pointer.
+- `devflow/context/{xxx-slug}/spec.md` — Task-Isolated Living Spec with completed and remaining tasks.
+- `devflow/context/{xxx-slug}/stage.md` — active stage pointer.
 - `devflow/history/` + Git — permanent delivery ledger.
 
 When starting a new session or resuming after clearing context:

@@ -35,8 +35,13 @@ test("unscoped nexus-devflow wrapper package is correctly configured and runnabl
   const binStats = await fs.stat(binScriptPath);
   assert.ok(binStats.isFile());
 
-  // Execute shim with --help to verify runtime resolution
+  // Execute shim with --help to verify runtime resolution and grouped help output
   const { stdout, stderr } = await execFileAsync(process.execPath, [binScriptPath, "--help"]);
   assert.ok(stdout.includes("nexus-devflow") || stdout.includes("DevFlow"));
+  assert.ok(stdout.includes("Quick Start & Everyday Commands:"));
+  assert.ok(stdout.includes("Advanced, CI & AI Tooling Commands:"));
+  assert.ok(stdout.includes("Common Options:"));
+  assert.ok(stdout.includes("Command-Specific Options:"));
+  assert.ok(stdout.includes("--dry-run"));
   assert.equal(stderr, "");
 });

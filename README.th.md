@@ -47,7 +47,7 @@ npx -y nexus-devflow -y
 
 1. **กำหนดสเปกก่อนเขียนโค้ด (Spec before code)**: AI จะสร้าง Living Spec ที่ชัดเจนแล้วหยุดรอให้คุณรีวิวขอบเขต, Data Contracts และ Edge Cases ก่อนเริ่มเขียนโค้ดแม้แต่บรรทัดเดียว
 2. **ขั้นตอนย่อยแบบ TDD ที่ตรวจสอบได้ (Small, reviewable TDD steps)**: ทุกขั้นตอนการลงมือทำจะบังคับใช้วินัย Red-Green-Refactor พร้อมแสดง Diff, ผลการรัน Test และหลักฐานเชิงประจักษ์
-3. **ส่งมอบทีละงานอย่างมีโฟกัส (One work item at a time)**: `devflow/context/current-feature.md` เก็บงานปัจจุบันเพียง 1 รายการ (ฟีเจอร์, บั๊ก หรือการ Rollback) เมื่อเสร็จสิ้นจะถูกย้ายไปเก็บถาวรใน `devflow/history/` ก่อนเริ่มงานถัดไป
+3. **ส่งมอบทีละงานอย่างมีโฟกัส (One work item per task workspace)**: `devflow/context/{xxx-slug}/spec.md` เก็บสเปกมีชีวิตแยกตามงาน (ฟีเจอร์, บั๊ก หรือการ Rollback) เมื่อเสร็จสิ้นจะถูกย้ายไปเก็บถาวรใน `devflow/history/` ก่อนเริ่มงานถัดไป
 4. **จุดตรวจและสมุดบันทึก Findings ที่เข้มงวด (Findings & Quality Gates with teeth)**: ข้อบกพร่องที่พบจากการ Audit จะได้รับรหัสประจำตัวถาวรในสมุดบันทึก (`findings.md`) และปัญหาสำคัญ (P0/P1) จะบล็อกการ Release จนกว่าจะได้รับการแก้ไขและตรวจซ้ำ หรือได้รับการยกเว้นอย่างเป็นทางการ ข้อมูลจะไม่สูญหายแม้ AI Context จะถูกรีเซ็ต
 
 เป้าหมายไม่ใช่แค่การพิมพ์โค้ดให้น้อยลง แต่คือการ **รักษาการควบคุม** อย่างสมบูรณ์ใน codebase ที่พัฒนาด้วย AI
@@ -110,7 +110,7 @@ npx -y nexus-devflow -y
 สร้างโครงสร้างโปรเจกต์ของแอปพลิเคชันคุณก่อน แล้วจึงติดตั้ง Nexus-DevFlow ทับลงไป
 
 **สิ่งที่ต้องเตรียมล่วงหน้า (Prerequisites):**
-- Node.js เวอร์ชัน 20 ขึ้นไป
+- Node.js เวอร์ชัน 18.17 ขึ้นไป (ตัวติดตั้งรองรับ Node.js 18+)
 - แอปพลิเคชันที่สร้างขึ้นด้วย Tech Stack ที่คุณต้องการ (Next.js, Vite, NestJS, Python, Go ฯลฯ)
 - ติดตั้ง Git และสั่ง `git init` ในโฟลเดอร์แอปพลิเคชันนั้นแล้ว
 
@@ -190,7 +190,7 @@ npx -y nexus-devflow -y
 ตรวจสอบอัปเดตโดยไม่แตะต้องไฟล์:
 
 ```bash
-npx nexus-devflow update --check
+npx nexus-devflow update --dry-run
 ```
 
 อัปเดตเวอร์ชันเวิร์กโฟลว์อย่างปลอดภัย:
@@ -246,7 +246,7 @@ Nexus-DevFlow จัดระเบียบการพัฒนาด้วย
 /feature ──▶ รีวิวสเปก ──▶ /implement ──▶ /check ──▶ /audit current ──▶ /complete
 ```
 
-- **`/feature`**: ออกรหัสงาน (`xxx-slug`), กำหนดขอบเขต, ออกแบบ Data Contracts และสร้าง Single Living Spec (`devflow/context/current-feature.md`)
+- **`/feature`**: ออกรหัสงาน (`xxx-slug`), กำหนดขอบเขต, ออกแบบ Data Contracts และสร้าง Task-Isolated Living Spec (`devflow/context/{xxx-slug}/spec.md`)
 - **`/implement`**: พัฒนางานย่อยทีละข้อตามวินัย TDD (`[TDD-Red]`, `[TDD-Green]`, `[TDD-Refactor]`) พร้อมแสดงหลักฐาน Diff
 - **`/check`**: ตรวจสอบคุณภาพรอบด้านโดย Senior QA ผ่าน Verification Matrix (Typecheck, Lint, Unit tests, การรันจริง)
 - **`/audit current`**: ตรวจสอบความเปลี่ยนแปลงบน Git Branch ทั้งเรื่องความปลอดภัย, Performance และมาตรฐานโค้ด พร้อมบันทึกลง `findings.md`
@@ -297,7 +297,7 @@ DevFlow ทำให้ทุกขั้นตอนการส่งต่อ
 
 ```text
 ผู้ใช้: เริ่มทำฟีเจอร์ถัดไป: ระบบยืนยันตัวตนผู้ใช้งาน (User authentication)
-AI:   สร้าง Single Living Spec ที่ devflow/context/current-feature.md (001-user-authentication) เรียบร้อย
+AI:   สร้าง Task-Isolated Living Spec ที่ devflow/context/001-user-authentication/spec.md เรียบร้อย
       กำหนด Acceptance Criteria 3 ข้อ และงาน TDD 4 ขั้นตอน หยุดรอการรีวิวจากเจ้านายครับ
 
 ผู้ใช้: สเปกถูกต้องแล้ว ลงมือทำข้อ 1 ได้เลย
@@ -352,9 +352,11 @@ devflow/
 │   ├── project-overview.md     # Source of Truth สถาปัตยกรรมและ Tech Stack
 │   ├── coding-standards.md     # มาตรฐานโค้ด, กฎ Strict TDD และ Test Gates
 │   ├── ai-interaction.md       # กฎการทำงานร่วมกับ AI และการตอบภาษาไทย
-│   ├── findings.md             # สมุดบันทึก Findings และจุดตรวจคุณภาพ (P0-P3)
-│   ├── current-stage.md        # ตัวชี้สถานะของรอบงานปัจจุบัน
-│   └── current-feature.md      # The Single Living Spec (สเปกมีชีวิตของงานปัจจุบัน / stub เมื่อว่าง)
+│   └── {xxx-slug}/             # พื้นที่ทำงานแยกตามงาน (Task-Isolated Living Spec)
+│       ├── spec.md             # สเปกมีชีวิตของงานปัจจุบัน (ACs, Contracts, TDD tasks)
+│       ├── stage.md            # ตัวชี้สถานะของรอบงานปัจจุบัน
+│       ├── findings.md         # สมุดบันทึก Findings และจุดตรวจคุณภาพ (P0-P3)
+│       └── review.md           # ใบรับรองผล Independent Review
 │
 ├── 🏛️ decisions/                # คลังบันทึกการตัดสินใจสถาปัตยกรรม (ADRs: ADR-xxx-slug.md)
 │
@@ -370,13 +372,13 @@ devflow/
 ### จุดเด่นของสถาปัตยกรรม 3 เสาหลัก:
 - **ประหยัด Token สูงสุด**: AI โหลดเฉพาะบริบทที่กำลังใช้งานใน `devflow/context/` ช่วยลดการใช้ Token ได้ถึง 80% ต่อครั้ง
 - **ประวัติการทำงานถาวร**: งานที่เสร็จแล้วถูกจัดเก็บพร้อมข้อมูล Commit, บันทึกการทดสอบ และ Retrospective อย่างครบถ้วน
-- **ทนทานต่อการรีเซ็ต Context**: แม้ Context Window ของ AI จะถูกล้าง งานที่ทำค้างอยู่สามารถโหลดกลับมาทำต่อได้ทันทีจาก `current-feature.md`
+- **ทนทานต่อการรีเซ็ต Context**: แม้ Context Window ของ AI จะถูกล้าง งานที่ทำค้างอยู่สามารถโหลดกลับมาทำต่อได้ทันทีจาก `devflow/context/{xxx-slug}/spec.md`
 
 ---
 
 ## โมเดลสเปกมีชีวิต (The Single Living Spec Model)
 
-ทุกงานพัฒนาจะขับเคลื่อนผ่านไฟล์ `devflow/context/current-feature.md` ซึ่งแบ่งออกเป็น **6 ส่วนมาตรฐาน**:
+ทุกงานพัฒนาจะขับเคลื่อนผ่านไฟล์ `devflow/context/{xxx-slug}/spec.md` ซึ่งแบ่งออกเป็น **6 ส่วนมาตรฐาน**:
 
 1. **🎯 1. Define & Boundaries**: ปัญหาที่ต้องการแก้, ทางออกที่นำเสนอ, ขอบเขตของงาน และสิ่งที่ห้ามพังเด็ดขาด
 2. **📐 2. Technical Spec & Contracts**: Data Contracts, API Schemas และ Acceptance Criteria ที่ทดสอบได้ (AC-1..AC-N)
@@ -521,7 +523,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **overview** | `/overview` / `$overview` | Setup | สังเคราะห์ `project-overview.md` ไม่เกิน 20KB พร้อมเสนอทำ Planning Baseline Commit |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | สร้าง Mockup แบบ Static HTML/CSS ในโฟลเดอร์ `prototypes/` |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `publish-devflow`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
 
 ---
 
@@ -670,7 +672,7 @@ npx nexus-devflow graph --file src/index.ts
 npm run report:html -- 054-optimize-dashboard-snapshot-latency
 
 # ตรวจสอบและอัปเดตเวอร์ชัน DevFlow พร้อมระบบ Backup ปลอดภัย
-npx nexus-devflow update [--check]
+npx nexus-devflow update [--dry-run]
 ```
 
 ---
@@ -721,8 +723,8 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **15 Core Skil
 Nexus-DevFlow เก็บสถานะของงานไว้ในไฟล์ Markdown เสมอ ไม่ขึ้นอยู่กับ Context ของ AI:
 
 - `devflow/context/project-overview.md` — Source of Truth ของสถาปัตยกรรม
-- `devflow/context/current-feature.md` — Single Living Spec แสดงงานที่เสร็จแล้วและงานที่เหลือ
-- `devflow/context/current-stage.md` — ตัวชี้บอกขั้นตอนปัจจุบัน
+- `devflow/context/{xxx-slug}/spec.md` — Task-Isolated Living Spec แสดงงานที่เสร็จแล้วและงานที่เหลือ
+- `devflow/context/{xxx-slug}/stage.md` — ตัวชี้บอกขั้นตอนปัจจุบัน
 - `devflow/history/` + Git — คลังประวัติการส่งมอบงานถาวร
 
 เมื่อเริ่มเซสชันใหม่หรือหลังจาก AI Context Window ถูกรีเซ็ต:
@@ -762,9 +764,7 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
     │   ├── project-overview.md  (Source of Truth สร้างโดย /overview)
     │   ├── coding-standards.md  (มาตรฐานโค้ด และ TDD Gates)
     │   ├── ai-interaction.md    (กฎการทำงานและภาษาที่ใช้ร่วมกับ AI)
-    │   ├── findings.md          (สมุดบันทึกคุณภาพและความปลอดภัย)
-    │   ├── current-stage.md     (ตัวชี้บอกขั้นตอนปัจจุบัน)
-    │   └── current-feature.md   (Single Living Spec / stub เมื่อว่าง)
+    │   └── {xxx-slug}/          (Task-Isolated Living Spec: spec.md, stage.md, findings.md, review.md)
     ├── decisions/             (คลังบันทึกการตัดสินใจสถาปัตยกรรม: ADR-xxx.md)
     ├── discoveries/           (เอกสารการสำรวจเชิงลึก: DISC-xxx.md)
     └── history/               (เสาหลักที่ 3: อดีต / คลังประวัติถาวร)

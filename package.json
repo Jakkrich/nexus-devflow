@@ -22,6 +22,7 @@
     "test:routing": "tsx ./scripts/evals/routing.ts",
     "test:run-state": "tsx --test scripts/run-state-helper.test.ts",
     "verify:completion-gate": "tsx scripts/verify-completion-gate.ts",
+    "verify:update-resilience": "tsx scripts/verify-update-resilience.ts",
     "test:sandbox": "tsx --test scripts/clear-sandbox.test.ts scripts/scaffold-sandbox.test.ts",
     "test:e2e": "tsx scripts/e2e/run.ts",
     "test:browser": "playwright test",

@@ -203,13 +203,6 @@ export const KNOWN_SKILL_ALIASES: Record<
     subpath: "extras/skills/verify-harness",
     name: "verify-harness",
     description: "[devflow] Opt-in repo-local app verification skill and feature map generator (Launch, Doctor, Drive, Evidence, Cleanup)"
-  },
-  "publish-devflow": {
-    source: "https://github.com/Jakkrich/nexus-devflow",
-    subpath: "extras/skills/publish-devflow",
-    name: "publish-devflow",
-    description: "[maintainer] Opt-in release, semver bump, tag, and NPM publish automation for nexus-devflow",
-    maintainerOnly: true
   }
 };
 

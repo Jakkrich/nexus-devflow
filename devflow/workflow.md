@@ -61,7 +61,7 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 ### 🧩 Opt-in Team & Ops Extensions (`npx nexus-devflow skill add <name>`)
 
 - `browseros-neo`: Custom team E2E testing (`--verify`) and live E2E debugging (`--debug`) over BrowserOS neo MCP. Resolves `{run-id}` (`{xxx-slug}`, `DISC-*`, or `adhoc-YYYYMMDD-HHMMSS`), tags `name_session` with `{run-id}` for native BrowserOS video/session replay (no video files stored in `devflow/`), and writes mandatory `devflow/reports/{run-id}/browser-test-plan.md` + `evidence.md` (+ `screenshots/`, gitignored).
-- `setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `publish-devflow`: Tier-2 setup, ops, document conversion, and maintainer release extensions stored in `extras/skills/`.
+- `setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`: Tier-2 setup, ops, and document conversion extensions stored in `extras/skills/` (`publish-devflow` is repo-local in `.agents/skills/` for framework maintainers only).
 
 ### 🌿 Parallel Worktree Workflows & Recovery
 

@@ -1413,72 +1413,51 @@ function printHelp(): void {
   const style = createStyle();
   console.log(`
 ${style.bold(style.cyan("Nexus-DevFlow CLI"))} ${style.bold(`v${readPackageVersion()}`)}
+${style.dim("Terminal CLI for setup and status. Run /onboard, /feature, /implement, /check, and /complete inside your AI chat.")}
 
-${style.bold("Usage:")}
+${style.bold("Quick Start & Everyday Commands:")}
   ${style.cyan("npx @jakkrichm/create-nexus-devflow")} [target-dir] [options]
-  ${style.cyan("nexus-devflow status")} [target-dir] [options]
-  ${style.cyan("nexus-devflow mcp")} [target-dir]
-  ${style.cyan("nexus-devflow slice")} [--stage <stage>] [--max-tokens <num>] [--json]
-  ${style.cyan("nexus-devflow drift")} [target-dir] [--json]
-  ${style.cyan("nexus-devflow reconcile")} [target-dir] [--fix] [--json]
-  ${style.cyan("nexus-devflow swarm")} [target-dir] [--json]
-  ${style.cyan("nexus-devflow graph")} [target-dir] [--file <path>] [--json]
-  ${style.cyan("nexus-devflow check-gate")} [--strict] [--json]
-  ${style.cyan("nexus-devflow hook install")} [pre-commit|pre-push]
-  ${style.cyan("nexus-devflow hook uninstall")}
-  ${style.cyan("nexus-devflow idea")} add "<text>" [--title "<title>"]
-  ${style.cyan("nexus-devflow ideas")} [list] [--json]
-  ${style.cyan("nexus-devflow findings add")} "<title>" [--severity P0|P1|P2|P3] [--location <loc>]
-  ${style.cyan("nexus-devflow findings")} [list] [--blockers] [--json]
-  ${style.cyan("nexus-devflow findings resolve")} <ID> [--status <status>]
-  ${style.cyan("nexus-devflow doctor")} [--fix] [--json]
-  ${style.cyan("nexus-devflow skill")} [list] [--json]
-  ${style.cyan("nexus-devflow skill add")} <git-url-or-path|--recommended> [--name <name>] [--all] [--force]
-  ${style.cyan("nexus-devflow skill update")} [name|--all|--recommended]
-  ${style.cyan("nexus-devflow skill restore")} [target-dir]
-  ${style.cyan("nexus-devflow skill remove")} <name>
-  ${style.cyan("nexus-devflow skill sync")}
-  ${style.cyan("nexus-devflow archive")} [list|stats] [--json]
-  ${style.cyan("nexus-devflow update")} [target-dir] [options]
-  ${style.cyan("nexus-devflow uninstall")} [target-dir] [options]
-  ${style.cyan("nexus-devflow eject")} [target-dir] [options]
+  ${style.brightCyan("status")} [target-dir] [--json]               Show project overview, active run, blockers, and next action
+  ${style.brightCyan("doctor")} [target-dir] [--fix] [--json]       Inspect workspace health and repair missing files
+  ${style.brightCyan("idea")} add "<text>" [--title "<title>"]      Add an idea to devflow/ideas.md (list with: ideas [--json])
+  ${style.brightCyan("findings")} [list|--blockers] [--json]        Inspect findings ledger (add / resolve <ID> [--status ...])
+  ${style.brightCyan("update")} [target-dir] [--dry-run]            Update managed framework files without overwriting user edits
+  ${style.brightCyan("uninstall, eject")} [target-dir] [options]    Remove DevFlow files and adapters (--keep-history)
 
-${style.bold("Commands:")}
-  ${style.brightCyan("status")}             Show project overview, progress, findings, git status, and next action
-  ${style.brightCyan("mcp")}                Run Model Context Protocol (MCP) JSON-RPC Stdio Server for AI agents
-  ${style.brightCyan("slice")}              Generate JIT stage-aware context slice (reduces AI tokens by 60-70%)
-  ${style.brightCyan("check-gate")}         CI/CD quality gatekeeper check (returns exit code 0 or 1)
-  ${style.brightCyan("hook")}               Install or remove local Git pre-commit/pre-push gatekeeper hooks
-  ${style.brightCyan("idea, ideas")}        Manage idea backlog: add new ideas or list pending ideas
-  ${style.brightCyan("findings")}           Inspect findings ledger, record new findings, filter blockers, or resolve
-  ${style.brightCyan("doctor")}             Inspect project workspace health and auto-heal missing files (--fix)
-  ${style.brightCyan("skill, skills")}      Manage third-party skills: add from Git/local/preset, update, remove, sync, or list
-  ${style.brightCyan("archive")}            Explore delivered runs and release statistics from devflow/history/
-  ${style.brightCyan("update")}             Update existing DevFlow installation without overwriting user changes
-  ${style.brightCyan("uninstall, eject")}   Completely remove DevFlow workflow files and adapters from project
+${style.bold("Advanced, CI & AI Tooling Commands:")}
+  ${style.brightCyan("check-gate")} [--strict] [--json]             CI/CD quality gate check (exits 0 or 1)
+  ${style.brightCyan("hook")} install|uninstall [pre-commit|pre-push]  Manage local Git gatekeeper hooks
+  ${style.brightCyan("skill")} [list|add|update|restore|remove|sync]  Manage bundled extras & third-party skills
+  ${style.brightCyan("archive")} [list|stats] [--json]              Inspect completed runs in devflow/history/
+  ${style.brightCyan("mcp")} [target-dir]                           Run MCP JSON-RPC stdio server for AI agents
+  ${style.brightCyan("slice")} [--stage <stage>] [--max-tokens <n>] Generate JIT stage context slice
+  ${style.brightCyan("drift")} / ${style.brightCyan("reconcile")} [--fix] [--json]          Check or reconcile Git diff vs living spec
+  ${style.brightCyan("swarm")} [target-dir] [--json]                Generate multi-agent swarm plan from active spec
+  ${style.brightCyan("graph")} [target-dir] [--file <path>] [--json] Inspect dependency graph & blast radius
 
-${style.bold("Options:")}
-  ${style.cyan("--recommended")}      Install or update all recommended community skills (archify, diagram-design, bughunter, ponytail)
-  ${style.cyan("--strict")}           Strict mode for check-gate (blocks unverified runs)
-  ${style.cyan("--title <text>")}     Custom title for idea add
-  ${style.cyan("--name <skill-name>")} Target specific skill in a multi-skill repository
-  ${style.cyan("--all, --all-skills")} Install all skills from a multi-skill repository
-  ${style.cyan("--severity, -s")}     Finding severity: P0, P1, P2, P3 (default: P2)
-  ${style.cyan("--status <name>")}    Status to set when resolving finding (default: closed)
-  ${style.cyan("--location <path>")}  Finding source code file and line location
-  ${style.cyan("--blockers")}         Filter findings to only active P0/P1 blockers
-  ${style.cyan("--fix")}              Automatically repair/create missing context files in doctor
-  ${style.cyan("--stats")}            Display history summary statistics only
-  ${style.cyan("--adapter <name>")}   Tool adapters to install: codex, antigravity, claude, copilot, opencode, both, all
-  ${style.cyan("--role <role>")}       Workspace role profile: full (default), dev, sa
-  ${style.cyan("--keep-history")}     Keep devflow/history/ directory during uninstall
-  ${style.cyan("--json")}             Print output as structured JSON object
+${style.bold("Common Options:")}
+  ${style.cyan("--adapter <name>")}   Target adapters: codex, antigravity, claude, copilot, opencode, both, all
+  ${style.cyan("--role <role>")}      Workspace profile: full (default), dev, sa
+  ${style.cyan("--dry-run")}          Preview install, update, or uninstall without modifying disk
+  ${style.cyan("-y, --yes")}          Accept interactive prompts automatically
+  ${style.cyan("-f, --force")}        Overwrite conflicting files or force uninstall without prompting
   ${style.cyan("--target, -t")}       Target project directory
-  ${style.cyan("--force, -f")}        Overwrite conflicting files / force uninstall without prompting
-  ${style.cyan("--dry-run")}          Preview changes without modifying disk
-  ${style.cyan("-y, --yes")}          Automatically confirm interactive prompts
+  ${style.cyan("--json")}             Output structured JSON
   ${style.cyan("--version, -v")}      Show version number
   ${style.cyan("--help, -h")}         Show help screen
+
+${style.bold("Command-Specific Options:")}
+  ${style.cyan("--recommended")}      Install or update recommended community skills (archify, diagram-design, bughunter, ponytail)
+  ${style.cyan("--name <skill>")}     Target a specific skill in a multi-skill repo (${style.cyan("--all")} installs all)
+  ${style.cyan("--strict")}           Strict check-gate mode (fails unverified active runs)
+  ${style.cyan("--fix")}              Repair missing workspace files (doctor) or heal spec drift (reconcile)
+  ${style.cyan("--title <text>")}     Custom title for idea add
+  ${style.cyan("--severity, -s")}     Finding severity: P0, P1, P2, P3 (default: P2)
+  ${style.cyan("--status <name>")}    Status when resolving a finding (default: closed)
+  ${style.cyan("--location <path>")}  Source file and line for findings add
+  ${style.cyan("--blockers")}         Filter findings to active P0/P1 blockers
+  ${style.cyan("--stats")}            Show archive summary statistics only
+  ${style.cyan("--keep-history")}     Preserve devflow/history/ during uninstall
 `);
 }
 
