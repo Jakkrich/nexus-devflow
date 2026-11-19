@@ -5,6 +5,20 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.6] - 2026-11-19
+
+### Added
+- **Multi-Chat Safe Isolation, Worktree Guard & Aggregated Status (Feature 130)**:
+  - Isolated per-run activity state in `devflow/.state/runs/{run-id}.json` (`run-state.mjs` `--run-id`, `--branch`, `--worktree`, `--handoff-*` flags; `readAllRunStates()` in `run-state.ts`) while preserving legacy `run.json` fallback compatibility.
+  - Added `listGitWorktrees()`, `listGitLocalBranches()`, `resolveGitCommonDir()` in `git-status.ts`, and `evaluateWorktreeGuard()` + `reserveNextRunningId()` (`wx` atomic lockfiles under `<gitCommonDir>/devflow-id-reservations/`) in `branch-context.ts` to prevent concurrent checkout/branch collisions and duplicate Running IDs across linked worktrees.
+  - Extended `ActiveContextEngine`, `listWorktreeRunContexts()`, and `ProjectStatusEngine` (`status` / `formatHuman()`) to aggregate active runs and `stage.md` handoff summaries read-only across all linked worktrees.
+  - Added formal concurrency verification script `scripts/verify-concurrent-run-isolation.ts` (`npm run verify:concurrent-isolation`, 29 checks) and repo-local `concurrent-run-isolation-proof` skill.
+- **Verification Harness & Update Resilience Skills**: Added opt-in `extras/skills/verify-harness/` skill for project verification harnesses (registered in `KNOWN_SKILL_ALIASES`), repo-local `/verify` CLI E2E skill, and `scripts/verify-update-resilience.ts` (`npm run verify:update-resilience`) + `/update-resilience-proof` skill.
+
+### Changed
+- **Onboarding Docs & Grouped CLI Help**: Aligned `README.md`, `README.th.md`, `packages/create-nexus-devflow/README.md`, `devflow/workflow.md`, and `docs/workflow-surface-map/index.html` with actual CLI commands (`update --dry-run`), Node `>=18.17`, and task-isolated `{xxx-slug}/spec.md` paths; grouped `create-nexus-devflow --help` output into core vs advanced commands.
+- **Repo-Local Maintainer Boundary**: Moved maintainer-only `publish-devflow` from `extras/skills/` to repo-local `.agents/skills/` and `.claude/skills/` so it is excluded from published npm packages.
+
 ## [2.20.5] - 2026-11-18
 
 ### Added
