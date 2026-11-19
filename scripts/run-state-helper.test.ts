@@ -153,6 +153,69 @@ test("run-state helper refuses to replace or reset a symbolic link", async (t) =
   assert.equal(await fs.readFile(external, "utf8"), "outside\n");
 });
 
+test("run-state helper isolates parallel --run-id state files and records handoff metadata", async (t) => {
+  const projectRoot = await createProject(t);
+
+  await Promise.all([
+    runHelper(projectRoot, [
+      "start",
+      "--run-id", "130-alpha",
+      "--branch", "feature/130-alpha",
+      "--worktree", projectRoot,
+      "--command", "feature",
+      "--summary", "Drafting alpha spec",
+      "--boundary", "reviewed",
+      "--handoff-next", "/implement 130-alpha",
+      "--handoff-note", "Schema locked",
+      "--handoff-files", "lib/a.ts,lib/b.ts"
+    ]),
+    runHelper(projectRoot, [
+      "start",
+      "--run-id", "131-beta",
+      "--branch", "feature/131-beta",
+      "--worktree", `${projectRoot}-wt`,
+      "--command", "implement",
+      "--summary", "Building beta feature",
+      "--boundary", "local-only",
+      "--handoff-next", "/check 131-beta"
+    ])
+  ]);
+
+  const alphaPath = path.join(projectRoot, "devflow", ".state", "runs", "130-alpha.json");
+  const betaPath = path.join(projectRoot, "devflow", ".state", "runs", "131-beta.json");
+  const alpha = JSON.parse(await fs.readFile(alphaPath, "utf8")) as Record<string, unknown>;
+  const beta = JSON.parse(await fs.readFile(betaPath, "utf8")) as Record<string, unknown>;
+
+  assert.equal(alpha.runId, "130-alpha");
+  assert.equal(alpha.branch, "feature/130-alpha");
+  assert.deepEqual(alpha.handoff, {
+    touchedFiles: ["lib/a.ts", "lib/b.ts"],
+    nextStep: "/implement 130-alpha",
+    notes: "Schema locked"
+  });
+  assert.equal(beta.runId, "131-beta");
+  assert.equal(beta.command, "implement");
+  await assert.rejects(fs.access(runPath(projectRoot)), { code: "ENOENT" });
+
+  await runHelper(projectRoot, ["reset", "--run-id", "130-alpha"]);
+  await assert.rejects(fs.access(alphaPath), { code: "ENOENT" });
+  await assert.doesNotReject(fs.access(betaPath));
+});
+
+test("run-state helper rejects unsafe --run-id path segments", async (t) => {
+  const projectRoot = await createProject(t);
+  await assert.rejects(
+    runHelper(projectRoot, [
+      "start",
+      "--run-id", "../outside",
+      "--command", "feature",
+      "--summary", "Bad id",
+      "--boundary", "reviewed"
+    ]),
+    /Run ID/
+  );
+});
+
 async function createProject(t: TestContext): Promise<string> {
   const workspace = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-run-state-"));
   const projectRoot = path.join(workspace, "project");

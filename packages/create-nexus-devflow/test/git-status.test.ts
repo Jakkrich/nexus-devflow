@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
-import { readGitStatus, readGitStatusSafe, clearGitStatusCache } from "../lib/git-status.js";
+import { readGitStatus, readGitStatusSafe, clearGitStatusCache, listGitWorktrees } from "../lib/git-status.js";
 
 const execFile = promisify(execFileCb);
 
@@ -148,6 +148,11 @@ test("readGitStatus detects linked git worktree and resolves mainWorktreeRoot", 
       wtStatus.mainWorktreeRoot?.toLowerCase(),
       (await fs.realpath(primaryDir)).toLowerCase()
     );
+
+    const worktrees = await listGitWorktrees(worktreeDir);
+    assert.equal(worktrees.length, 2);
+    assert.ok(worktrees.some((w) => w.isMain && w.branch === "main"));
+    assert.ok(worktrees.some((w) => !w.isMain && w.branch === "feature/wt-test"));
   } finally {
     await execFile("git", ["-C", primaryDir, "worktree", "remove", "--force", worktreeDir]).catch(() => {});
     await fs.rm(baseDir, { recursive: true, force: true });

@@ -73,18 +73,18 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ## Activity state contract
 
-Status reporting shows the active or most recent substantial DevFlow command from `devflow/.state/run.json`. This file is generated local state, ignored by Git, and never part of a feature commit. The `dashboard`, `ui`, and `studio` commands are removed. Use `nexus-devflow status` or `nexus-devflow mcp`.
+Status reporting shows the active or most recent substantial DevFlow command from per-run state files under `devflow/.state/runs/{run-id}.json` (with `devflow/.state/run.json` retained as legacy single-run fallback). These files are generated local state, ignored by Git, and never part of a feature commit. The `dashboard`, `ui`, and `studio` commands are removed. Use `nexus-devflow status` or `nexus-devflow mcp`.
 
 Substantial mutating or multi-step workflow commands (`onboard`, `overview`, `feature`, `fix`, `rollback`, `implement`, `check` verification mode, `autopilot`, `complete`) may publish progress on a best-effort basis when `devflow/.state/` or the helper exists. Read-only, diagnostic, and lightweight commands (`audit`, `debug`, `discovery`, `explore`, `idea`, `prototype`, `devflow`, `/feature --preview`, and `/check guide`) do not need to write activity state.
 
-Never create or edit `run.json` directly. When recording best-effort activity from the project root, use the first helper that exists:
+Never create or edit `run.json` or `runs/*.json` directly. When recording best-effort activity from the project root, use the first helper that exists:
 
 ```text
-node .agents/skills/devflow/scripts/run-state.mjs <action> <options>
-node .claude/skills/devflow/scripts/run-state.mjs <action> <options>
+node .agents/skills/devflow/scripts/run-state.mjs <action> --run-id <xxx-slug> <options>
+node .claude/skills/devflow/scripts/run-state.mjs <action> --run-id <xxx-slug> <options>
 ```
 
-Start with `start --command <skill> --summary <truthful-summary> --boundary <boundary>`. Use `update` at meaningful milestones or for a blocker, with `--status blocked` and `--resume <exact-command>` when recovery is needed. End with `finish --status ready|completed --summary <truthful-summary>`. The helper validates every field before atomically replacing the generated file. If it is missing or fails, report the activity warning and continue the workflow without writing a manual fallback.
+Start with `start --run-id <xxx-slug> --branch <branch> --worktree <root> --command <skill> --summary <truthful-summary> --boundary <boundary>`. Use `update` at meaningful milestones, for handoff summaries (`--handoff-next`, `--handoff-note`, `--handoff-files`, `--handoff-decisions`), or for a blocker with `--status blocked` and `--resume <exact-command>`. End with `finish --run-id <xxx-slug> --status ready|completed --summary <truthful-summary>`. The helper validates every field before atomically replacing the generated file. If it is missing or fails, report the activity warning and continue the workflow without writing a manual fallback.
 
 The helper writes this schema:
 

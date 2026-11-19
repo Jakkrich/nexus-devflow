@@ -1,22 +1,28 @@
 import assert from "node:assert/strict";
+import { execFile as execFileCb } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
 
 import {
   calculateNextRunningId,
   cleanupBranchContext,
   cleanupRunContext,
+  evaluateWorktreeGuard,
   fuzzyMatchRunId,
   initBranchContext,
   initRunContext,
   listActiveRunContexts,
   listBranchContexts,
+  reserveNextRunningId,
   resolveActiveContextPaths,
   resolveActiveRunContext,
   sanitizeBranchName
 } from "../lib/branch-context.js";
+
+const execFile = promisify(execFileCb);
 
 async function setupTestProject(dir: string): Promise<void> {
   await fs.mkdir(path.join(dir, "devflow", "context"), { recursive: true });
@@ -221,6 +227,95 @@ test("calculateNextRunningId accounts for history archives and active run contex
     assert.equal(next2, "058");
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("evaluateWorktreeGuard, cross-worktree calculateNextRunningId, reserveNextRunningId, and strict runDir isolation", async () => {
+  const baseDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-wt-guard-"));
+  const primaryDir = path.join(baseDir, "primary");
+  const siblingWt = path.join(baseDir, "wt-088");
+
+  try {
+    await fs.mkdir(primaryDir, { recursive: true });
+    await execFile("git", ["init", "-b", "main", primaryDir]);
+    await execFile("git", ["-C", primaryDir, "config", "user.name", "DevFlow Test"]);
+    await execFile("git", ["-C", primaryDir, "config", "user.email", "test@nexus.local"]);
+    await setupTestProject(primaryDir);
+    await fs.mkdir(path.join(primaryDir, "devflow", ".state", "runs"), { recursive: true });
+    await execFile("git", ["-C", primaryDir, "add", "."]);
+    await execFile("git", ["-C", primaryDir, "commit", "-m", "init"]);
+
+    await execFile("git", ["-C", primaryDir, "worktree", "add", siblingWt, "-b", "feature/088-sibling"]);
+    await initRunContext(siblingWt, "088-sibling", "Sibling Feature", {
+      branch: "feature/088-sibling"
+    });
+
+    // 1. Cross-worktree next running ID sees 088 in sibling worktree
+    const nextId = await calculateNextRunningId(primaryDir);
+    assert.equal(nextId, "089");
+
+    // 2. Concurrent reserveNextRunningId across two worktrees produces unique sequential IDs
+    const [resA, resB] = await Promise.all([
+      reserveNextRunningId(primaryDir),
+      reserveNextRunningId(siblingWt)
+    ]);
+    assert.notEqual(resA.id, resB.id);
+    assert.deepEqual([resA.id, resB.id].sort(), ["089", "090"]);
+    await resA.release();
+    await resB.release();
+
+    // 3. Worktree guard blocks checking out branch already active in sibling worktree
+    const siblingBlocked = await evaluateWorktreeGuard(primaryDir, "088-sibling", {
+      intent: "implement",
+      targetBranch: "feature/088-sibling"
+    });
+    assert.equal(siblingBlocked.allowed, false);
+    if (!siblingBlocked.allowed) {
+      assert.equal(siblingBlocked.reason, "branch_checked_out_in_sibling_worktree");
+    }
+
+    // 4. Worktree guard blocks concurrent implement in same checkout when another run is running
+    await fs.writeFile(
+      path.join(primaryDir, "devflow", ".state", "runs", "089-first.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        runId: "089-first",
+        branch: "feature/089-first",
+        worktreePath: await fs.realpath(primaryDir),
+        command: "implement",
+        status: "running",
+        summary: "Building 089",
+        startedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }),
+      "utf8"
+    );
+    const sameCheckoutBlocked = await evaluateWorktreeGuard(primaryDir, "090-second", {
+      intent: "implement",
+      targetBranch: "feature/090-second"
+    });
+    assert.equal(sameCheckoutBlocked.allowed, false);
+    if (!sameCheckoutBlocked.allowed) {
+      assert.equal(sameCheckoutBlocked.reason, "same_checkout_active_run");
+      assert.equal(sameCheckoutBlocked.conflictingRunId, "089-first");
+    }
+
+    // Spec-ahead on same checkout remains allowed
+    const specAheadOk = await evaluateWorktreeGuard(primaryDir, "090-second", {
+      intent: "feature_spec",
+      targetBranch: "feature/090-second"
+    });
+    assert.equal(specAheadOk.allowed, true);
+
+    // 5. Multi-run resolveActiveRunContext never falls back to global findings.md/current-stage.md
+    await initRunContext(primaryDir, "089-first", "First");
+    await fs.rm(path.join(primaryDir, "devflow", "context", "089-first", "findings.md"));
+    const resolved = await resolveActiveRunContext(primaryDir, "089-first");
+    assert.equal(resolved.isMultiRun, true);
+    assert.ok(resolved.findingsPath.endsWith(path.join("089-first", "findings.md")));
+  } finally {
+    await execFile("git", ["-C", primaryDir, "worktree", "remove", "--force", siblingWt]).catch(() => {});
+    await fs.rm(baseDir, { recursive: true, force: true });
   }
 });
 

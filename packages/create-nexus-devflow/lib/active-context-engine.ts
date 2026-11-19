@@ -4,9 +4,11 @@ import {
   resolveActiveContextPaths,
   resolveActiveRunContext,
   listActiveRunContexts,
+  listWorktreeRunContexts,
   type ActiveContextPaths,
   type RunContextPaths,
-  type ActiveRunSummary
+  type ActiveRunSummary,
+  type WorktreeRunSummary
 } from "./branch-context.js";
 import {
   readCurrentWork,
@@ -29,6 +31,7 @@ export interface ActiveTaskContext {
   stage: string | null;
   discoveries: string[];
   activeRuns?: ActiveRunSummary[];
+  worktreeRuns?: WorktreeRunSummary[];
 }
 
 export class ActiveContextEngine {
@@ -179,7 +182,10 @@ export class ActiveContextEngine {
       track = "deep";
     }
 
-    const activeRuns = await listActiveRunContexts(this.projectRoot).catch(() => []);
+    const [activeRuns, worktreeRuns] = await Promise.all([
+      listActiveRunContexts(this.projectRoot).catch(() => []),
+      listWorktreeRunContexts(this.projectRoot).catch(() => [])
+    ]);
 
     const context: ActiveTaskContext = {
       state,
@@ -189,7 +195,8 @@ export class ActiveContextEngine {
       currentWork,
       stage,
       discoveries,
-      activeRuns
+      activeRuns,
+      worktreeRuns
     };
 
     if (this.options.cacheTtlMs && !branch) {
@@ -205,6 +212,13 @@ export class ActiveContextEngine {
    */
   public async getActiveRuns(): Promise<ActiveRunSummary[]> {
     return listActiveRunContexts(this.projectRoot);
+  }
+
+  /**
+   * Retrieves active runs and handoff summaries across all linked Git worktrees.
+   */
+  public async getWorktreeRuns(): Promise<WorktreeRunSummary[]> {
+    return listWorktreeRunContexts(this.projectRoot);
   }
 
   /**

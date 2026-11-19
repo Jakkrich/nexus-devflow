@@ -25,6 +25,14 @@ type GitCommandRunner = (
   args: readonly string[]
 ) => Promise<string>;
 
+interface GitWorktreeEntry {
+  path: string;
+  head: string | null;
+  branch: string | null;
+  isMain: boolean;
+  isBare: boolean;
+}
+
 interface ReadGitStatusOptions {
   ttlMs?: number;
   forceFresh?: boolean;
@@ -237,6 +245,89 @@ async function readGitStatusSafe(
   }
 }
 
-export { readGitStatus, readGitStatusSafe, clearGitStatusCache, unavailableSummary as unavailableGitStatusSummary };
+async function listGitWorktrees(
+  projectRoot: string,
+  gitRunner: GitCommandRunner = runGit
+): Promise<GitWorktreeEntry[]> {
+  if (!(await isGitRepository(projectRoot, gitRunner))) {
+    return [];
+  }
+  const raw = await runOptionalGit(projectRoot, ["worktree", "list", "--porcelain"], gitRunner);
+  if (!raw) {
+    return [];
+  }
 
-export type { GitStatusSummary, ReadGitStatusOptions };
+  const entries: GitWorktreeEntry[] = [];
+  const blocks = raw.split(/\r?\n\r?\n/);
+  for (let index = 0; index < blocks.length; index += 1) {
+    const block = blocks[index].trim();
+    if (!block) continue;
+    let wtPath = "";
+    let head: string | null = null;
+    let branch: string | null = null;
+    let isBare = false;
+
+    for (const line of block.split(/\r?\n/)) {
+      if (line.startsWith("worktree ")) {
+        wtPath = path.resolve(line.slice("worktree ".length).trim());
+      } else if (line.startsWith("HEAD ")) {
+        head = line.slice("HEAD ".length).trim() || null;
+      } else if (line.startsWith("branch ")) {
+        branch = line.slice("branch ".length).trim().replace(/^refs\/heads\//, "") || null;
+      } else if (line === "bare") {
+        isBare = true;
+      }
+    }
+
+    if (wtPath) {
+      entries.push({
+        path: wtPath,
+        head,
+        branch,
+        isMain: entries.length === 0,
+        isBare
+      });
+    }
+  }
+  return entries;
+}
+
+async function listGitLocalBranches(
+  projectRoot: string,
+  gitRunner: GitCommandRunner = runGit
+): Promise<string[]> {
+  if (!(await isGitRepository(projectRoot, gitRunner))) {
+    return [];
+  }
+  const raw = await runOptionalGit(
+    projectRoot,
+    ["for-each-ref", "refs/heads/", "--format=%(refname:short)"],
+    gitRunner
+  );
+  if (!raw) return [];
+  return raw.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+}
+
+async function resolveGitCommonDir(
+  projectRoot: string,
+  gitRunner: GitCommandRunner = runGit
+): Promise<string | null> {
+  if (!(await isGitRepository(projectRoot, gitRunner))) {
+    return null;
+  }
+  const raw = await runOptionalGit(projectRoot, ["rev-parse", "--git-common-dir"], gitRunner);
+  if (!raw) return null;
+  return path.resolve(projectRoot, raw);
+}
+
+export {
+  clearGitStatusCache,
+  listGitLocalBranches,
+  listGitWorktrees,
+  readGitStatus,
+  readGitStatusSafe,
+  resolveGitCommonDir,
+  unavailableSummary as unavailableGitStatusSummary
+};
+
+export type { GitStatusSummary, GitWorktreeEntry, ReadGitStatusOptions };

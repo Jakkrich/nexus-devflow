@@ -18,6 +18,13 @@ interface RunFeature {
   title: string;
 }
 
+interface RunHandoff {
+  decisions?: string[];
+  touchedFiles?: string[];
+  nextStep?: string;
+  notes?: string;
+}
+
 interface RunStateWarning {
   code:
     | "invalid_run_state_path"
@@ -29,6 +36,9 @@ interface RunStateWarning {
 interface RunStateSummary {
   state: RunStateKind;
   mode: RunMode;
+  runId?: string | null;
+  branch?: string | null;
+  worktreePath?: string | null;
   command: string | null;
   status: RunStatus | null;
   freshness: RunFreshness | null;
@@ -40,11 +50,20 @@ interface RunStateSummary {
   resumeCommand: string | null;
   progress: RunProgress | null;
   feature: RunFeature | null;
+  handoff?: RunHandoff | null;
+  warnings: RunStateWarning[];
+}
+
+interface RunStateCollectionSummary {
+  primary: RunStateSummary;
+  runs: RunStateSummary[];
   warnings: RunStateWarning[];
 }
 
 const RUN_STATE_PATH = path.join("devflow", ".state", "run.json");
+const RUNS_STATE_DIR = path.join("devflow", ".state", "runs");
 const COMMAND_PATTERN = /^[a-z][a-z-]{0,31}$/;
+const RUN_ID_PATTERN = /^[a-z0-9][a-z0-9._-]{0,63}$/;
 const RUN_STATUSES = new Set<RunStatus>([
   "running",
   "blocked",
@@ -107,6 +126,9 @@ function parseRunState(value: string, now: Date = new Date()): RunStateSummary {
     return malformedRunState();
   }
 
+  const runId = readOptionalString(parsed.runId);
+  const branch = readOptionalString(parsed.branch);
+  const worktreePath = readOptionalString(parsed.worktreePath);
   const command = readString(parsed.command);
   const status = readString(parsed.status) as RunStatus | null;
   const summary = readString(parsed.summary);
@@ -117,9 +139,13 @@ function parseRunState(value: string, now: Date = new Date()): RunStateSummary {
   const resumeCommand = readOptionalString(parsed.resumeCommand);
   const progress = parseProgress(parsed.progress);
   const feature = parseFeature(parsed.feature);
+  const handoff = parseHandoff(parsed.handoff);
 
   if (
     parsed.schemaVersion !== 1 ||
+    (parsed.runId !== undefined && (!runId || runId.includes("..") || !RUN_ID_PATTERN.test(runId))) ||
+    (parsed.branch !== undefined && branch === null) ||
+    (parsed.worktreePath !== undefined && worktreePath === null) ||
     !command ||
     !COMMAND_PATTERN.test(command) ||
     !status ||
@@ -134,7 +160,8 @@ function parseRunState(value: string, now: Date = new Date()): RunStateSummary {
     (parsed.boundary !== undefined && (!boundary || !RUN_BOUNDARIES.has(boundary))) ||
     (parsed.resumeCommand !== undefined && resumeCommand === null) ||
     (parsed.progress !== undefined && progress === null) ||
-    (parsed.feature !== undefined && feature === null)
+    (parsed.feature !== undefined && feature === null) ||
+    (parsed.handoff !== undefined && handoff === null)
   ) {
     return malformedRunState();
   }
@@ -153,6 +180,9 @@ function parseRunState(value: string, now: Date = new Date()): RunStateSummary {
         : command === "continuous"
         ? "continuous"
         : "manual",
+    runId,
+    branch,
+    worktreePath,
     command,
     status,
     freshness,
@@ -164,7 +194,137 @@ function parseRunState(value: string, now: Date = new Date()): RunStateSummary {
     resumeCommand,
     progress,
     feature,
+    handoff,
     warnings: []
+  };
+}
+
+function parseHandoff(value: unknown): RunHandoff | null {
+  if (value === undefined) {
+    return null;
+  }
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const parseStringArray = (raw: unknown): string[] | undefined | null => {
+    if (raw === undefined) return undefined;
+    if (!Array.isArray(raw)) return null;
+    const items: string[] = [];
+    for (const entry of raw) {
+      const normalized = readString(entry);
+      if (!normalized) return null;
+      items.push(normalized);
+    }
+    return items;
+  };
+
+  const decisions = parseStringArray(value.decisions);
+  const touchedFiles = parseStringArray(value.touchedFiles);
+  const nextStep = readOptionalString(value.nextStep);
+  const notes = readOptionalString(value.notes);
+
+  if (
+    decisions === null ||
+    touchedFiles === null ||
+    (value.nextStep !== undefined && nextStep === null) ||
+    (value.notes !== undefined && notes === null)
+  ) {
+    return null;
+  }
+
+  return {
+    ...(decisions !== undefined ? { decisions } : {}),
+    ...(touchedFiles !== undefined ? { touchedFiles } : {}),
+    ...(nextStep !== null ? { nextStep } : {}),
+    ...(notes !== null ? { notes } : {})
+  };
+}
+
+async function readRunFileAtPath(
+  filePath: string,
+  now: Date
+): Promise<RunStateSummary> {
+  const stats = await fs.lstat(filePath);
+  if (stats.isSymbolicLink()) {
+    return malformedSummary({
+      code: "unsafe_run_state_path",
+      message: `Run state at ${path.basename(filePath)} is a symbolic link and was not read.`
+    });
+  }
+  if (!stats.isFile()) {
+    return malformedSummary({
+      code: "invalid_run_state_path",
+      message: `Run state at ${path.basename(filePath)} is not a regular file.`
+    });
+  }
+  return parseRunState(await fs.readFile(filePath, "utf8"), now);
+}
+
+async function readAllRunStates(
+  projectRoot: string,
+  now: Date = new Date()
+): Promise<RunStateCollectionSummary> {
+  const runs: RunStateSummary[] = [];
+  const warnings: RunStateWarning[] = [];
+  const seenRunIds = new Set<string>();
+
+  const runsDir = path.join(projectRoot, RUNS_STATE_DIR);
+  try {
+    const dirStats = await fs.lstat(runsDir);
+    if (dirStats.isSymbolicLink()) {
+      warnings.push({
+        code: "unsafe_run_state_path",
+        message: "Run states directory is a symbolic link and was not read."
+      });
+    } else if (!dirStats.isDirectory()) {
+      warnings.push({
+        code: "invalid_run_state_path",
+        message: "Run states path is not a directory."
+      });
+    } else {
+      const entries = (await fs.readdir(runsDir)).filter((name) => name.endsWith(".json")).sort();
+      for (const entry of entries) {
+        const parsed = await readRunFileAtPath(path.join(runsDir, entry), now);
+        warnings.push(...parsed.warnings);
+        if (parsed.state === "recorded") {
+          const fallbackRunId = entry.replace(/\.json$/, "");
+          const normalized: RunStateSummary = {
+            ...parsed,
+            runId: parsed.runId ?? fallbackRunId
+          };
+          if (normalized.runId) {
+            seenRunIds.add(normalized.runId);
+          }
+          runs.push(normalized);
+        }
+      }
+    }
+  } catch (error: unknown) {
+    if (getErrorCode(error) !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  const legacy = await readRunState(projectRoot, now);
+  warnings.push(...legacy.warnings);
+  if (legacy.state === "recorded" && (!legacy.runId || !seenRunIds.has(legacy.runId))) {
+    runs.push(legacy);
+  }
+
+  runs.sort((a, b) => {
+    const timeDiff = Date.parse(b.updatedAt || "") - Date.parse(a.updatedAt || "");
+    if (!Number.isNaN(timeDiff) && timeDiff !== 0) {
+      return timeDiff;
+    }
+    return (a.runId || "").localeCompare(b.runId || "");
+  });
+
+  const primary = runs[0] ?? (warnings.length > 0 ? malformedSummary(warnings[0]) : idleSummary());
+  return {
+    primary,
+    runs,
+    warnings
   };
 }
 
@@ -225,6 +385,9 @@ function idleSummary(): RunStateSummary {
   return {
     state: "idle",
     mode: "manual",
+    runId: null,
+    branch: null,
+    worktreePath: null,
     command: null,
     status: null,
     freshness: null,
@@ -236,6 +399,7 @@ function idleSummary(): RunStateSummary {
     resumeCommand: null,
     progress: null,
     feature: null,
+    handoff: null,
     warnings: []
   };
 }
@@ -273,14 +437,16 @@ function getErrorCode(error: unknown): string | undefined {
     : undefined;
 }
 
-export { RUN_STATE_PATH, parseRunState, readRunState };
+export { RUN_STATE_PATH, RUNS_STATE_DIR, parseRunState, readAllRunStates, readRunState };
 
 export type {
   RunBoundary,
   RunFeature,
   RunFreshness,
+  RunHandoff,
   RunMode,
   RunProgress,
+  RunStateCollectionSummary,
   RunStateKind,
   RunStateSummary,
   RunStateWarning,

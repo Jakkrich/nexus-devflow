@@ -32,6 +32,7 @@
 - [ ] 118. **(Journey) Bilingual Intent Routing Reliability** - ขยาย routing evals ภาษาไทย/อังกฤษด้วย positive, negative, legacy และ ambiguous prompts; รายงาน pass rate, false activation และ regression ownership แบบตรวจซ้ำได้
 - [ ] 119. **(Skateboard) Planning & Overview Integrity Gate** - ตรวจ placeholder/stale/mismatched plans ก่อนสร้าง overview, ให้ข้อความแก้ไขที่ทำตามได้ และเพิ่ม regression tests สำหรับ source hash กับ generated-state boundaries
 - [ ] 120. **(Tracer Bullet) Package Contract & Upgrade Resilience** - ทดสอบว่าการ update รักษา user-owned plans, custom config, protected skills และ task history พร้อมรายงาน drift ที่แก้ได้โดยไม่เขียนทับข้อมูลผู้ใช้
+- [x] 130. **(Tracer Bullet) Multi-Chat Safe Isolation & Aggregated Status** - แยก per-run activity state (`devflow/.state/runs/{run-id}.json`), เพิ่ม `evaluateWorktreeGuard` และ cross-worktree `reserveNextRunningId`, รวมสถานะ + handoff summary ข้าม worktree ใน `status`, และสร้าง formal concurrency proof (`verify:concurrent-isolation`)
 
 ---
 

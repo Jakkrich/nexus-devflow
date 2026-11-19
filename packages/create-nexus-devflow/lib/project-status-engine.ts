@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { listActiveRunContexts, resolveActiveContextPaths } from "./branch-context.js";
-import type { ActiveRunSummary } from "./branch-context.js";
+import { listActiveRunContexts, listWorktreeRunContexts, resolveActiveContextPaths } from "./branch-context.js";
+import type { ActiveRunSummary, WorktreeRunSummary } from "./branch-context.js";
 import { readCurrentWork } from "./current-work.js";
 import type {
   CurrentWorkSummary,
@@ -30,7 +30,7 @@ import type {
   ProjectConfigState,
   QualityGatePolicy
 } from "./project-config.js";
-import { readRunState } from "./run-state.js";
+import { readAllRunStates } from "./run-state.js";
 import type { RunStateSummary } from "./run-state.js";
 import { readIndependentReview } from "./review.js";
 import type {
@@ -132,6 +132,7 @@ export interface ProjectStatus {
   activity: StatusActivity;
   currentWork: StatusCurrentWork;
   activeRuns: StatusActiveRun[];
+  worktreeRuns?: WorktreeRunSummary[];
   findings: StatusFindings;
   review: StatusReview;
   ideas: IdeasSummary;
@@ -176,18 +177,23 @@ export class ProjectStatusEngine {
       return unavailableGitStatusSummary();
     }
   };
-  const [contextPaths, config, currentWork, activeRuns, findings, git, ideas, runState] = await Promise.all([
+  const [contextPaths, config, currentWork, activeRuns, worktreeRuns, findings, git, ideas, runStateCollection] = await Promise.all([
     resolveActiveContextPaths(metadata.project.root),
     readProjectConfig(metadata.project.root),
     readCurrentWork(metadata.project.root),
     listActiveRunContexts(metadata.project.root),
+    listWorktreeRunContexts(metadata.project.root).catch(() => []),
     readFindings(metadata.project.root),
     readSafeGit(),
     readIdeas(metadata.project.root),
-    readRunState(metadata.project.root)
+    readAllRunStates(metadata.project.root)
   ]);
 
   const primaryRunId = currentWork.runId || (activeRuns.length === 1 ? activeRuns[0]?.runId : undefined);
+  const runState =
+    (primaryRunId
+      ? runStateCollection.runs.find((entry) => entry.runId === primaryRunId)
+      : undefined) || runStateCollection.primary;
   const [review, activeRunReviews] = await Promise.all([
     readIndependentReview(metadata.project.root, primaryRunId || undefined),
     Promise.all(activeRuns.map((run) => readIndependentReview(metadata.project.root, run.runId)))
@@ -262,6 +268,7 @@ export class ProjectStatusEngine {
     },
     currentWork: formatCurrentWork(currentWork),
     activeRuns: statusActiveRuns,
+    worktreeRuns,
     findings: formatFindings(findings),
     review: statusReview,
     ideas,
@@ -328,6 +335,25 @@ export class ProjectStatusEngine {
         style
       )
     );
+  }
+
+  if (status.worktreeRuns && status.worktreeRuns.length > 0) {
+    lines.push(
+      formatRow(
+        "Worktree runs",
+        `${status.worktreeRuns.length} across worktrees`,
+        style
+      )
+    );
+    for (const wtRun of status.worktreeRuns) {
+      const scopeLabel = wtRun.isCurrentWorktree ? "current" : path.basename(wtRun.worktreePath);
+      const actLabel = wtRun.activity?.command
+        ? `/${wtRun.activity.command}:${wtRun.activity.status || "recorded"}`
+        : wtRun.stage;
+      const handoffNote = wtRun.handoff?.notes || wtRun.handoff?.nextStep || "";
+      const suffix = handoffNote ? ` — ${handoffNote}` : "";
+      lines.push(`    - ${wtRun.runId} [${scopeLabel}] (${actLabel})${suffix}`);
+    }
   }
 
   lines.push(

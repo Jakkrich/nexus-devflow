@@ -8,15 +8,21 @@ import path from "node:path";
 const ACTIONS = new Set(["start", "update", "finish", "reset"]);
 const BOUNDARIES = new Set(["read-only", "reviewed", "local-only"]);
 const COMMAND_PATTERN = /^[a-z][a-z-]{0,31}$/;
+const RUN_ID_PATTERN = /^[a-z0-9][a-z0-9._-]{0,63}$/;
 const RUN_PATH = path.join("devflow", ".state", "run.json");
+const RUNS_DIR = path.join("devflow", ".state", "runs");
 const STATUSES = new Set(["running", "blocked", "ready", "completed"]);
 const MAX_LENGTHS = {
+  branch: 160,
   detail: 1000,
   featureId: 80,
   featureTitle: 160,
+  handoffItem: 240,
+  handoffNotes: 1000,
   progressLabel: 80,
   resumeCommand: 240,
-  summary: 240
+  summary: 240,
+  worktreePath: 400
 };
 
 async function main() {
@@ -30,16 +36,16 @@ async function main() {
   const projectRoot = await findProjectRoot(options.target);
 
   if (options.action === "reset") {
-    await resetState(projectRoot);
+    await resetState(projectRoot, options.runId);
     console.log("Run activity reset.");
     return;
   }
 
   const previous = options.action === "start"
     ? null
-    : await readState(projectRoot);
+    : await readState(projectRoot, options.runId);
   const state = buildState(options, previous, new Date().toISOString());
-  await writeState(projectRoot, state);
+  await writeState(projectRoot, state, options.runId);
   console.log(`Recorded /${state.command}: ${state.status} - ${state.summary}`);
 }
 
@@ -47,18 +53,25 @@ function parseArgs(args) {
   const options = {
     action: null,
     boundary: null,
+    branch: null,
     command: null,
     current: null,
     detail: null,
     featureId: null,
     featureTitle: null,
+    handoffDecisions: null,
+    handoffFiles: null,
+    handoffNext: null,
+    handoffNote: null,
     help: false,
     label: null,
     resumeCommand: null,
+    runId: null,
     status: null,
     summary: null,
     target: null,
-    total: null
+    total: null,
+    worktreePath: null
   };
 
   for (let index = 0; index < args.length; index += 1) {
@@ -73,6 +86,34 @@ function parseArgs(args) {
     }
     if (arg === "--help" || arg === "-h") {
       options.help = true;
+      continue;
+    }
+    if (arg === "--run-id") {
+      options.runId = readValue(args, ++index, arg);
+      continue;
+    }
+    if (arg === "--branch") {
+      options.branch = readValue(args, ++index, arg);
+      continue;
+    }
+    if (arg === "--worktree") {
+      options.worktreePath = readValue(args, ++index, arg);
+      continue;
+    }
+    if (arg === "--handoff-next") {
+      options.handoffNext = readValue(args, ++index, arg);
+      continue;
+    }
+    if (arg === "--handoff-note") {
+      options.handoffNote = readValue(args, ++index, arg);
+      continue;
+    }
+    if (arg === "--handoff-files") {
+      options.handoffFiles = readValue(args, ++index, arg);
+      continue;
+    }
+    if (arg === "--handoff-decisions") {
+      options.handoffDecisions = readValue(args, ++index, arg);
       continue;
     }
     if (arg === "--command") {
@@ -131,12 +172,23 @@ function parseArgs(args) {
   return options;
 }
 
+function validateRunId(runId) {
+  const normalized = runId?.trim();
+  if (!normalized || normalized.includes("..") || !RUN_ID_PATTERN.test(normalized)) {
+    throw new Error("Run ID must use 1-64 lowercase alphanumeric, dot, underscore, or hyphen characters without '..'.");
+  }
+  return normalized;
+}
+
 function validateOptions(options) {
   if (options.help) {
     return;
   }
   if (!options.action) {
     throw new Error("Choose one run-state action: start, update, finish, or reset.");
+  }
+  if (options.runId !== null) {
+    options.runId = validateRunId(options.runId);
   }
 
   const progressCount = [options.current, options.total, options.label]
@@ -151,19 +203,25 @@ function validateOptions(options) {
   if (options.action === "reset") {
     const unsupported = [
       options.boundary,
+      options.branch,
       options.command,
       options.current,
       options.detail,
       options.featureId,
       options.featureTitle,
+      options.handoffDecisions,
+      options.handoffFiles,
+      options.handoffNext,
+      options.handoffNote,
       options.label,
       options.resumeCommand,
       options.status,
       options.summary,
-      options.total
+      options.total,
+      options.worktreePath
     ].some((value) => value !== null);
     if (unsupported) {
-      throw new Error("Reset accepts only --target and --help.");
+      throw new Error("Reset accepts only --run-id, --target, and --help.");
     }
     return;
   }
@@ -195,12 +253,18 @@ function validateOptions(options) {
   }
 
   const hasUpdate = [
+    options.branch,
     options.current,
     options.detail,
     options.featureTitle,
+    options.handoffDecisions,
+    options.handoffFiles,
+    options.handoffNext,
+    options.handoffNote,
     options.resumeCommand,
     options.status,
-    options.summary
+    options.summary,
+    options.worktreePath
   ].some((value) => value !== null);
   if (!hasUpdate) {
     throw new Error("Update needs at least one changed activity field.");
@@ -249,7 +313,23 @@ function buildState(options, previous, timestamp) {
   return validateState(state);
 }
 
+function parseCommaList(value) {
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
 function applyOptionalFields(state, options) {
+  if (options.runId) {
+    state.runId = validateRunId(options.runId);
+  }
+  if (options.branch) {
+    state.branch = requireText(options.branch, "branch", MAX_LENGTHS.branch);
+  }
+  if (options.worktreePath) {
+    state.worktreePath = requireText(options.worktreePath, "worktree", MAX_LENGTHS.worktreePath);
+  }
   if (options.detail) {
     state.detail = requireText(options.detail, "detail", MAX_LENGTHS.detail);
   }
@@ -284,6 +364,42 @@ function applyOptionalFields(state, options) {
       );
     }
   }
+  if (
+    options.handoffDecisions !== null ||
+    options.handoffFiles !== null ||
+    options.handoffNext !== null ||
+    options.handoffNote !== null
+  ) {
+    const handoff = isRecord(state.handoff) ? { ...state.handoff } : {};
+    if (options.handoffDecisions !== null) {
+      const decisions = parseCommaList(options.handoffDecisions);
+      if (decisions.length > 0) handoff.decisions = decisions;
+    }
+    if (options.handoffFiles !== null) {
+      const files = parseCommaList(options.handoffFiles);
+      if (files.length > 0) handoff.touchedFiles = files;
+    }
+    if (options.handoffNext !== null) {
+      handoff.nextStep = requireText(options.handoffNext, "handoff next step", MAX_LENGTHS.handoffItem);
+    }
+    if (options.handoffNote !== null) {
+      handoff.notes = requireText(options.handoffNote, "handoff note", MAX_LENGTHS.handoffNotes);
+    }
+    if (Object.keys(handoff).length > 0) {
+      state.handoff = handoff;
+    }
+  }
+}
+
+function isValidHandoff(value) {
+  if (!isRecord(value)) return false;
+  const checkList = (arr) =>
+    Array.isArray(arr) && arr.every((item) => isBoundedText(item, MAX_LENGTHS.handoffItem));
+  if (value.decisions !== undefined && !checkList(value.decisions)) return false;
+  if (value.touchedFiles !== undefined && !checkList(value.touchedFiles)) return false;
+  if (value.nextStep !== undefined && !isBoundedText(value.nextStep, MAX_LENGTHS.handoffItem)) return false;
+  if (value.notes !== undefined && !isBoundedText(value.notes, MAX_LENGTHS.handoffNotes)) return false;
+  return true;
 }
 
 function validateState(value) {
@@ -292,6 +408,10 @@ function validateState(value) {
   }
   if (
     value.schemaVersion !== 1 ||
+    (value.runId !== undefined &&
+      (typeof value.runId !== "string" || value.runId.includes("..") || !RUN_ID_PATTERN.test(value.runId))) ||
+    (value.branch !== undefined && !isBoundedText(value.branch, MAX_LENGTHS.branch)) ||
+    (value.worktreePath !== undefined && !isBoundedText(value.worktreePath, MAX_LENGTHS.worktreePath)) ||
     typeof value.command !== "string" ||
     !COMMAND_PATTERN.test(value.command) ||
     !STATUSES.has(value.status) ||
@@ -306,7 +426,8 @@ function validateState(value) {
     (value.resumeCommand !== undefined &&
       !isBoundedText(value.resumeCommand, MAX_LENGTHS.resumeCommand)) ||
     (value.progress !== undefined && !isValidProgress(value.progress)) ||
-    (value.feature !== undefined && !isValidFeature(value.feature))
+    (value.feature !== undefined && !isValidFeature(value.feature)) ||
+    (value.handoff !== undefined && !isValidHandoff(value.handoff))
   ) {
     throw new Error("Run state does not match schema version 1.");
   }
@@ -358,11 +479,22 @@ async function findProjectRoot(target) {
         throw new Error("DevFlow path must be a real directory.");
       }
       const statePath = path.join(devflowPath, ".state");
-      const state = await fs.lstat(statePath);
-      if (state.isSymbolicLink() || !state.isDirectory()) {
-        throw new Error("DevFlow state path must be a real directory.");
+      try {
+        const state = await fs.lstat(statePath);
+        if (state.isSymbolicLink() || !state.isDirectory()) {
+          throw new Error("DevFlow state path must be a real directory.");
+        }
+        return current;
+      } catch (stateErr) {
+        if (stateErr?.code !== "ENOENT") {
+          throw stateErr;
+        }
+        const contextPath = path.join(devflowPath, "context");
+        const contextStats = await fs.lstat(contextPath);
+        if (!contextStats.isSymbolicLink() && contextStats.isDirectory()) {
+          return current;
+        }
       }
-      return current;
     } catch (error) {
       if (error?.code !== "ENOENT") {
         throw error;
@@ -377,8 +509,34 @@ async function findProjectRoot(target) {
   }
 }
 
-async function readState(projectRoot) {
-  const filePath = path.join(projectRoot, RUN_PATH);
+function resolveStateFilePath(projectRoot, runId) {
+  if (runId) {
+    return path.join(projectRoot, RUNS_DIR, `${validateRunId(runId)}.json`);
+  }
+  return path.join(projectRoot, RUN_PATH);
+}
+
+async function ensureRealDir(dirPath, label) {
+  try {
+    const stats = await fs.lstat(dirPath);
+    if (stats.isSymbolicLink() || !stats.isDirectory()) {
+      throw new Error(`${label} must be a real directory.`);
+    }
+  } catch (error) {
+    if (error?.code !== "ENOENT") {
+      throw error;
+    }
+    await fs.mkdir(dirPath, { recursive: true });
+  }
+}
+
+async function ensureRunsDir(projectRoot) {
+  await ensureRealDir(path.join(projectRoot, "devflow", ".state"), "DevFlow state path");
+  await ensureRealDir(path.join(projectRoot, RUNS_DIR), "DevFlow runs state path");
+}
+
+async function readState(projectRoot, runId = null) {
+  const filePath = resolveStateFilePath(projectRoot, runId);
   await requireRegularFile(filePath);
 
   let parsed;
@@ -390,8 +548,12 @@ async function readState(projectRoot) {
   return validateState(parsed);
 }
 
-async function writeState(projectRoot, state) {
-  const filePath = path.join(projectRoot, RUN_PATH);
+async function writeState(projectRoot, state, runId = null) {
+  await ensureRealDir(path.join(projectRoot, "devflow", ".state"), "DevFlow state path");
+  if (runId) {
+    await ensureRunsDir(projectRoot);
+  }
+  const filePath = resolveStateFilePath(projectRoot, runId);
   await requireRegularOrMissing(filePath);
   const temporaryPath = `${filePath}.${randomUUID()}.tmp`;
 
@@ -409,8 +571,8 @@ async function writeState(projectRoot, state) {
   }
 }
 
-async function resetState(projectRoot) {
-  const filePath = path.join(projectRoot, RUN_PATH);
+async function resetState(projectRoot, runId = null) {
+  const filePath = resolveStateFilePath(projectRoot, runId);
   try {
     await requireRegularFile(filePath);
     await fs.rm(filePath);

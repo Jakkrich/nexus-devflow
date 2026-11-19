@@ -8,7 +8,7 @@ argument-hint: "[{number, name, DISC-id, IDEA-id, or REQ-id}] [--preview] [--che
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
-**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` with `--run-id {xxx-slug}` to `devflow/.state/runs/{xxx-slug}.json` (or `run.json` before ID allocation) per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 
@@ -147,8 +147,8 @@ Before review, allocate the selected feature ID's build attempt using
 `reference/build-history.md`: first build 1, otherwise one greater than
 the maximum proven prior attempt after all prior builds were reversed. For attempt N > 1, append `--build-N` to the slug and archive path (e.g. `086-export--build-2.md`).
 
-For the one (sub-)feature being built now, allocate sequential ID (`xxx-slug`) and create a dedicated workspace at `devflow/context/{xxx-slug}/`. Keep one work item per worktree/clone; if running inside a linked worktree pre-created on `feature/{xxx-slug}`, allow that empty current-worktree branch when it passes `reference/build-history.md` collision checks (zero sibling checkout lock, zero prior commits/archives). Write the full living spec to
-`devflow/context/{xxx-slug}/spec.md`, following `reference/feature-spec-template.md`. Also initialize `stage.md` and `findings.md` in that folder. The first heading and build-plan identity must use this canonical form:
+For the one (sub-)feature being built now, allocate sequential ID (`xxx-slug`) using cross-worktree/branch-aware reservation (scanning `devflow/history/*`, `devflow/context/*`, linked worktrees, local `refs/heads/`, and `<gitCommonDir>/devflow-id-reservations/`) and create a dedicated workspace at `devflow/context/{xxx-slug}/`. Keep one work item per worktree/clone; if running inside a linked worktree pre-created on `feature/{xxx-slug}`, allow that empty current-worktree branch when it passes `reference/build-history.md` collision checks (zero sibling checkout lock, zero prior commits/archives). Write the full living spec to
+`devflow/context/{xxx-slug}/spec.md`, following `reference/feature-spec-template.md`. Also initialize `stage.md` (with `## Handoff Summary`) and `findings.md` in that folder. The first heading and build-plan identity must use this canonical form:
 
 ```markdown
 # Feature: <title>

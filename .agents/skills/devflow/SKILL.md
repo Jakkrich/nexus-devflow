@@ -33,7 +33,7 @@ Gather without dumping full files:
 2. **Build Plan & Overview**: Summarize checked vs. total items in `devflow/build-plan.md` and next unchecked leaf. Check `devflow/context/project-overview.md` freshness via `/overview`'s normalized `devflow:source-hash` contract (or size `>= 20,000` bytes -> `/overview`).
 3. **Active Runs (`devflow/context/{xxx-slug}/`)**: Report `spec.md` step progress, open/fixed P0/P1 findings in `findings.md`, and `qualityGates.regular.independentReview` (`when-sensitive` / `always` -> `review.md` state, verdict, freshness; missing/stale/pending routes to `audit independent current`, never `/complete`). Note whether spec requires browser proof, `npm run test:browser`, and active interactive browser MCP availability without executing browser tools.
 4. **Pending Ideas & Discoveries**: Summarize `devflow/ideas.md` pending items and open `devflow/discoveries/` if present.
-5. **Git, Worktrees & Activity**: Current branch, dirty files, last commit, linked worktree / advanced-main drift, and `devflow/.state/run.json` summary.
+5. **Git, Worktrees & Activity**: Current branch, dirty files, last commit, linked worktree / advanced-main drift, plus aggregated `devflow/.state/runs/*.json` (fallback `devflow/.state/run.json`) and per-worktree `## Handoff Summary` across linked worktrees.
 
 ### Executive Mode (`/devflow --exec` or `leadership`)
 Keep product names, ticket keys, and business impact; strip file paths and code minutiae (Slack TL;DR <80 words, Async Standup 1-2 lines, or Written Status).

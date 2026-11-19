@@ -1,7 +1,13 @@
 import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
-import { readGitStatus } from "./git-status.js";
+import {
+  listGitLocalBranches,
+  listGitWorktrees,
+  readGitStatus,
+  resolveGitCommonDir
+} from "./git-status.js";
+import { readAllRunStates, type RunHandoff, type RunStateSummary } from "./run-state.js";
 export {
   ActiveContextEngine,
   type ActiveContextEngineOptions,
@@ -51,6 +57,26 @@ export interface InitRunOptions {
   status?: string;
   initialSpec?: string;
 }
+
+export interface WorktreeRunSummary extends ActiveRunSummary {
+  worktreePath: string;
+  isCurrentWorktree: boolean;
+  activity: RunStateSummary | null;
+  handoff: RunHandoff | null;
+}
+
+export type WorktreeGuardVerdict =
+  | {
+      allowed: true;
+      mode: "isolated_worktree" | "spec_ahead_on_main" | "single_active_run";
+    }
+  | {
+      allowed: false;
+      reason: "same_checkout_active_run" | "branch_checked_out_in_sibling_worktree";
+      conflictingRunId: string | null;
+      conflictingWorktreePath: string | null;
+      recommendedAction: string;
+    };
 
 const RESERVED_CONTEXT_DIRS = new Set([
   "current-run",
@@ -219,6 +245,29 @@ export function fuzzyMatchRunId(
   return null;
 }
 
+function resolveRunStagePath(
+  runDir: string,
+  runId: string,
+  defaultStagePath: string
+): string {
+  const localStage = path.join(runDir, "stage.md");
+  if (fsSync.existsSync(localStage)) {
+    return localStage;
+  }
+  if (fsSync.existsSync(defaultStagePath)) {
+    try {
+      const content = fsSync.readFileSync(defaultStagePath, "utf8");
+      const match = content.match(/Active Running ID:\s*`?([^\r\n`]+)/i);
+      if (match && sanitizeBranchName(match[1]) === sanitizeBranchName(runId)) {
+        return defaultStagePath;
+      }
+    } catch {
+      // ignore unreadable legacy stage file
+    }
+  }
+  return localStage;
+}
+
 /**
  * Resolves active run context with Multi-Run and fallback support.
  */
@@ -237,20 +286,13 @@ export async function resolveActiveRunContext(
   if (targetIdOrBranch) {
     const matched = fuzzyMatchRunId(targetIdOrBranch, activeRuns);
     if (matched) {
-      const stageFile = fsSync.existsSync(path.join(matched.runDir, "stage.md"))
-        ? path.join(matched.runDir, "stage.md")
-        : defaultStagePath;
-      const findingsFile = fsSync.existsSync(path.join(matched.runDir, "findings.md"))
-        ? path.join(matched.runDir, "findings.md")
-        : defaultFindingsPath;
-
       return {
         isMultiRun: true,
         runId: matched.runId,
         runDir: matched.runDir,
         specPath: matched.specPath,
-        stagePath: stageFile,
-        findingsPath: findingsFile,
+        stagePath: resolveRunStagePath(matched.runDir, matched.runId, defaultStagePath),
+        findingsPath: path.join(matched.runDir, "findings.md"),
         globalOverviewPath,
         globalStandardsPath
       };
@@ -269,12 +311,8 @@ export async function resolveActiveRunContext(
         runId: sanitized,
         runDir: directDir,
         specPath: directSpec,
-        stagePath: fsSync.existsSync(path.join(directDir, "stage.md"))
-          ? path.join(directDir, "stage.md")
-          : defaultStagePath,
-        findingsPath: fsSync.existsSync(path.join(directDir, "findings.md"))
-          ? path.join(directDir, "findings.md")
-          : defaultFindingsPath,
+        stagePath: resolveRunStagePath(directDir, sanitized, defaultStagePath),
+        findingsPath: path.join(directDir, "findings.md"),
         globalOverviewPath,
         globalStandardsPath
       };
@@ -294,12 +332,8 @@ export async function resolveActiveRunContext(
         runId: gitMatched.runId,
         runDir: gitMatched.runDir,
         specPath: gitMatched.specPath,
-        stagePath: fsSync.existsSync(path.join(gitMatched.runDir, "stage.md"))
-          ? path.join(gitMatched.runDir, "stage.md")
-          : defaultStagePath,
-        findingsPath: fsSync.existsSync(path.join(gitMatched.runDir, "findings.md"))
-          ? path.join(gitMatched.runDir, "findings.md")
-          : defaultFindingsPath,
+        stagePath: resolveRunStagePath(gitMatched.runDir, gitMatched.runId, defaultStagePath),
+        findingsPath: path.join(gitMatched.runDir, "findings.md"),
         globalOverviewPath,
         globalStandardsPath
       };
@@ -314,12 +348,8 @@ export async function resolveActiveRunContext(
       runId: single.runId,
       runDir: single.runDir,
       specPath: single.specPath,
-      stagePath: fsSync.existsSync(path.join(single.runDir, "stage.md"))
-        ? path.join(single.runDir, "stage.md")
-        : defaultStagePath,
-      findingsPath: fsSync.existsSync(path.join(single.runDir, "findings.md"))
-        ? path.join(single.runDir, "findings.md")
-        : defaultFindingsPath,
+      stagePath: resolveRunStagePath(single.runDir, single.runId, defaultStagePath),
+      findingsPath: path.join(single.runDir, "findings.md"),
       globalOverviewPath,
       globalStandardsPath
     };
@@ -409,8 +439,33 @@ export async function cleanupRunContext(
   }
 }
 
+const DEFAULT_RESERVATION_TTL_MS = 10 * 60 * 1000;
+
+async function normalizeRealPath(targetPath: string): Promise<string> {
+  try {
+    return (await fs.realpath(targetPath)).toLowerCase();
+  } catch {
+    return path.resolve(targetPath).toLowerCase();
+  }
+}
+
+async function resolveReservationDir(projectRoot: string): Promise<string> {
+  const commonDir = await resolveGitCommonDir(projectRoot);
+  if (commonDir) {
+    return path.join(commonDir, "devflow-id-reservations");
+  }
+  return path.join(projectRoot, "devflow", ".state", "locks");
+}
+
+function extractLeadingId(value: string): number | null {
+  const match = value.match(/(?:^|\/)(?:feature|fix|chore|rollback)?\/?(\d{3})(?:-|$)/i) ||
+    value.match(/^(\d{3})/);
+  return match ? parseInt(match[1], 10) : null;
+}
+
 /**
- * Calculates the next sequential 3-digit running ID by scanning history archives and active run contexts.
+ * Calculates the next sequential 3-digit running ID by scanning history archives,
+ * active run contexts across all linked worktrees, local branches, and active reservations.
  */
 export async function calculateNextRunningId(projectRoot: string): Promise<string> {
   const ids: number[] = [];
@@ -427,10 +482,8 @@ export async function calculateNextRunningId(projectRoot: string): Promise<strin
       try {
         const files = await fs.readdir(root);
         for (const file of files) {
-          const match = file.match(/^(\d{3})/);
-          if (match) {
-            ids.push(parseInt(match[1], 10));
-          }
+          const parsed = extractLeadingId(file);
+          if (parsed !== null) ids.push(parsed);
         }
       } catch {
         // ignore
@@ -438,17 +491,255 @@ export async function calculateNextRunningId(projectRoot: string): Promise<strin
     }
   }
 
-  // 2. Scan active run contexts
-  const activeRuns = await listActiveRunContexts(projectRoot);
-  for (const run of activeRuns) {
-    const match = run.runId.match(/^(\d{3})/);
-    if (match) {
-      ids.push(parseInt(match[1], 10));
+  // 2. Scan active run contexts and run state files across current + linked worktrees
+  const worktrees = await listGitWorktrees(projectRoot);
+  const worktreeRoots = worktrees.length > 0
+    ? [...new Set(worktrees.filter((w) => !w.isBare).map((w) => w.path))]
+    : [path.resolve(projectRoot)];
+
+  for (const wtRoot of worktreeRoots) {
+    const activeRuns = await listActiveRunContexts(wtRoot);
+    for (const run of activeRuns) {
+      const parsed = extractLeadingId(run.runId);
+      if (parsed !== null) ids.push(parsed);
+    }
+
+    const states = await readAllRunStates(wtRoot).catch(() => null);
+    if (states) {
+      for (const state of states.runs) {
+        if (state.runId) {
+          const parsed = extractLeadingId(state.runId);
+          if (parsed !== null) ids.push(parsed);
+        }
+      }
+    }
+  }
+
+  // 3. Scan local branches (refs/heads/*)
+  const branches = await listGitLocalBranches(projectRoot);
+  for (const branch of branches) {
+    const parsed = extractLeadingId(branch);
+    if (parsed !== null) ids.push(parsed);
+  }
+
+  // 4. Scan active non-expired atomic ID reservations
+  const reservationDir = await resolveReservationDir(projectRoot);
+  if (fsSync.existsSync(reservationDir)) {
+    const now = Date.now();
+    try {
+      const locks = await fs.readdir(reservationDir);
+      for (const file of locks) {
+        if (!file.endsWith(".lock")) continue;
+        const lockPath = path.join(reservationDir, file);
+        try {
+          const payload = JSON.parse(await fs.readFile(lockPath, "utf8")) as { expiresAt?: number };
+          if (typeof payload.expiresAt === "number" && payload.expiresAt <= now) {
+            await fs.rm(lockPath, { force: true }).catch(() => {});
+            continue;
+          }
+          const parsed = extractLeadingId(file);
+          if (parsed !== null) ids.push(parsed);
+        } catch {
+          // ignore unreadable or concurrent lock
+        }
+      }
+    } catch {
+      // ignore
     }
   }
 
   const maxId = ids.length > 0 ? Math.max(...ids) : 0;
   return (maxId + 1).toString().padStart(3, "0");
+}
+
+/**
+ * Atomically reserves the next sequential 3-digit running ID across concurrent chats/worktrees.
+ */
+export async function reserveNextRunningId(
+  projectRoot: string,
+  options: { ttlMs?: number; ownerToken?: string } = {}
+): Promise<{ id: string; release: () => Promise<void> }> {
+  const ttlMs = options.ttlMs ?? DEFAULT_RESERVATION_TTL_MS;
+  const reservationDir = await resolveReservationDir(projectRoot);
+  await fs.mkdir(reservationDir, { recursive: true });
+
+  const baseId = parseInt(await calculateNextRunningId(projectRoot), 10);
+  for (let attempt = 0; attempt < 256; attempt += 1) {
+    const candidateId = (baseId + attempt).toString().padStart(3, "0");
+    const lockPath = path.join(reservationDir, `${candidateId}.lock`);
+    const now = Date.now();
+    const payload = JSON.stringify({
+      id: candidateId,
+      pid: process.pid,
+      ownerToken: options.ownerToken || `${process.pid}-${now}`,
+      createdAt: now,
+      expiresAt: now + ttlMs
+    });
+
+    try {
+      await fs.writeFile(lockPath, `${payload}\n`, { encoding: "utf8", flag: "wx" });
+      return {
+        id: candidateId,
+        release: async () => {
+          await fs.rm(lockPath, { force: true });
+        }
+      };
+    } catch (error: unknown) {
+      if ((error as NodeJS.ErrnoException).code !== "EEXIST") {
+        throw error;
+      }
+      try {
+        const existing = JSON.parse(await fs.readFile(lockPath, "utf8")) as { expiresAt?: number };
+        if (typeof existing.expiresAt === "number" && existing.expiresAt <= Date.now()) {
+          await fs.rm(lockPath, { force: true }).catch(() => {});
+          attempt -= 1;
+        }
+      } catch {
+        // another actor holds or just removed lock; advance candidate
+      }
+    }
+  }
+
+  throw new Error("Could not reserve a unique running ID after 256 attempts.");
+}
+
+/**
+ * Evaluates whether starting or implementing targetRunId in projectRoot conflicts with
+ * an active run in the same checkout or a sibling linked worktree holding targetBranch.
+ */
+export async function evaluateWorktreeGuard(
+  projectRoot: string,
+  targetRunId: string,
+  options: { intent?: "feature_spec" | "implement"; targetBranch?: string } = {}
+): Promise<WorktreeGuardVerdict> {
+  const intent = options.intent ?? "implement";
+  const normalizedTarget = sanitizeBranchName(targetRunId);
+  const targetBranch = options.targetBranch || `feature/${normalizedTarget}`;
+  const currentPathNorm = await normalizeRealPath(projectRoot);
+
+  const worktrees = await listGitWorktrees(projectRoot);
+  for (const wt of worktrees) {
+    const wtNorm = await normalizeRealPath(wt.path);
+    if (wtNorm !== currentPathNorm && wt.branch === targetBranch) {
+      return {
+        allowed: false,
+        reason: "branch_checked_out_in_sibling_worktree",
+        conflictingRunId: normalizedTarget,
+        conflictingWorktreePath: wt.path,
+        recommendedAction: `Switch to sibling worktree at ${wt.path} or pick a new run ID.`
+      };
+    }
+  }
+
+  if (intent === "feature_spec") {
+    return { allowed: true, mode: "spec_ahead_on_main" };
+  }
+
+  const runStates = await readAllRunStates(projectRoot);
+  const conflicting = runStates.runs.find(
+    (entry) =>
+      entry.state === "recorded" &&
+      entry.status === "running" &&
+      entry.freshness !== "stale" &&
+      entry.runId &&
+      sanitizeBranchName(entry.runId) !== normalizedTarget
+  );
+
+  if (conflicting) {
+    return {
+      allowed: false,
+      reason: "same_checkout_active_run",
+      conflictingRunId: conflicting.runId || null,
+      conflictingWorktreePath: conflicting.worktreePath || projectRoot,
+      recommendedAction: `Create a separate worktree: git worktree add ..\\wt-${normalizedTarget} -b ${targetBranch}`
+    };
+  }
+
+  const git = await readGitStatus(projectRoot);
+  return {
+    allowed: true,
+    mode: git.isWorktree ? "isolated_worktree" : "single_active_run"
+  };
+}
+
+function parseHandoffFromStage(stageContent: string): RunHandoff | null {
+  const match = stageContent.match(/##\s+Handoff Summary\s*\r?\n([\s\S]*?)(?:\r?\n##\s+|$)/i);
+  if (!match) return null;
+  const bullets = match[1]
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("- "))
+    .map((line) => line.slice(2).trim())
+    .filter(Boolean);
+  if (bullets.length === 0) return null;
+  return {
+    notes: bullets.join(" | ")
+  };
+}
+
+/**
+ * Lists active runs across the current checkout and all linked Git worktrees without mutating them.
+ */
+export async function listWorktreeRunContexts(
+  projectRoot: string
+): Promise<WorktreeRunSummary[]> {
+  const worktrees = await listGitWorktrees(projectRoot);
+  const currentPathNorm = await normalizeRealPath(projectRoot);
+  const entries = worktrees.length > 0
+    ? worktrees.filter((w) => !w.isBare)
+    : [{ path: path.resolve(projectRoot), head: null, branch: null, isMain: true, isBare: false }];
+
+  const byRunId = new Map<string, { score: number; item: WorktreeRunSummary }>();
+
+  for (const wt of entries) {
+    const wtRoot = wt.path;
+    const wtNorm = await normalizeRealPath(wtRoot);
+    const isCurrentWorktree = wtNorm === currentPathNorm;
+    const [runs, stateCollection] = await Promise.all([
+      listActiveRunContexts(wtRoot),
+      readAllRunStates(wtRoot).catch(() => null)
+    ]);
+
+    for (const run of runs) {
+      const activity =
+        stateCollection?.runs.find(
+          (item) => item.runId && sanitizeBranchName(item.runId) === sanitizeBranchName(run.runId)
+        ) || null;
+
+      let handoff: RunHandoff | null = activity?.handoff ?? null;
+      if (!handoff) {
+        try {
+          const stageContent = await fs.readFile(path.join(run.runDir, "stage.md"), "utf8");
+          handoff = parseHandoffFromStage(stageContent);
+        } catch {
+          handoff = null;
+        }
+      }
+
+      const branchMatches = Boolean(wt.branch && run.branch && wt.branch === run.branch);
+      const score =
+        (branchMatches ? 4 : 0) +
+        (activity ? 2 : 0) +
+        (isCurrentWorktree ? 1 : 0);
+
+      const candidate: WorktreeRunSummary = {
+        ...run,
+        worktreePath: wtRoot,
+        isCurrentWorktree,
+        activity,
+        handoff
+      };
+
+      const existing = byRunId.get(run.runId);
+      if (!existing || score > existing.score) {
+        byRunId.set(run.runId, { score, item: candidate });
+      }
+    }
+  }
+
+  return [...byRunId.values()]
+    .map((entry) => entry.item)
+    .sort((a, b) => a.runId.localeCompare(b.runId));
 }
 
 /**

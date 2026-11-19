@@ -8,7 +8,7 @@ argument-hint: "[{run-id, number, or name}] [--ticket <NN | path>]"
 
 **Context reuse:** Reuse any required file already loaded in project instructions or the current session. Read it again only if absent, changed, or exact current bytes or line references are needed.
 
-**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md`; never block execution if unavailable.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` with `--run-id {xxx-slug}`, `--branch`, `--worktree`, and `--handoff-*` updates to `devflow/.state/runs/{xxx-slug}.json` per `AGENTS.md`; never block execution if unavailable.
 
 Where this sits in the workflow:
 
@@ -105,7 +105,7 @@ Before touching code or executing build tasks, perform a positive **Input Covera
 
 ## Step 1 - branch
 
-Inspect `git worktree list --porcelain` alongside `git.featureBranchPrefix`, `git.fixBranchPrefix`, or `git.rollbackBranchPrefix` from config (defaults: `feature/`, `fix/`, `rollback/`). If already inside the linked worktree (or checkout) whose `HEAD` is the spec's pre-created/resumed branch, continue directly there. If that branch is already checked out in a *sibling* worktree, stop and report its exact worktree path instead of running `git checkout`. Otherwise preserve unrelated working-tree changes and create or check out the branch normally. If the
+Inspect `git worktree list --porcelain` and `devflow/.state/runs/*.json` alongside `git.featureBranchPrefix`, `git.fixBranchPrefix`, or `git.rollbackBranchPrefix` from config (defaults: `feature/`, `fix/`, `rollback/`). If another `runId` currently has `status === "running"` in the *same* checkout (`same_checkout_active_run`), stop before switching branches and guide the user to create an isolated worktree (`git worktree add ../wt-{xxx-slug} -b feature/{xxx-slug}`) so concurrent chats never overwrite each other's working tree. If already inside the linked worktree (or checkout) whose `HEAD` is the spec's pre-created/resumed branch, continue directly there. If that branch is already checked out in a *sibling* worktree, stop and report its exact worktree path instead of running `git checkout`. Otherwise preserve unrelated working-tree changes and create or check out the branch normally. If the
 project isn't a git repo yet, say so and ask the user to run `git init` first;
 the loop needs branches. On resume inside the owning checkout, switch back to the existing branch instead of creating a new one.
 
