@@ -175,3 +175,25 @@ test("extras/skills/browseros-neo satisfies skill budgets and E2E test-plan/evid
   assert.match(skill, /E2E Debug/i);
   assert.doesNotMatch(skill, /recordVideo/);
 });
+
+test("extras/skills/verify-harness satisfies skill budgets and verification harness contracts", () => {
+  const budgetResult = checkSkillBudgets(extrasSkillsRoot);
+  assert.deepEqual(
+    budgetResult.violations,
+    [],
+    `extras/skills budget violations: ${budgetResult.violations.join("; ")}`
+  );
+
+  const skillPath = path.join(extrasSkillsRoot, "verify-harness", "SKILL.md");
+  const templatePath = path.join(extrasSkillsRoot, "verify-harness", "reference", "harness-template.md");
+  assert.equal(fs.existsSync(skillPath), true, "extras/skills/verify-harness/SKILL.md must exist");
+  assert.equal(fs.existsSync(templatePath), true, "extras/skills/verify-harness/reference/harness-template.md must exist");
+
+  const skill = fs.readFileSync(skillPath, "utf8");
+  assert.match(skill, /Launch/);
+  assert.match(skill, /Doctor/);
+  assert.match(skill, /Drive/);
+  assert.match(skill, /Evidence/);
+  assert.match(skill, /Cleanup/);
+  assert.doesNotMatch(skill, /\.cursor\b/);
+});

@@ -29,7 +29,7 @@ Reuse context already loaded in the session. Read relevant project instructions,
 code, tests as text, manifests, and existing plans when they help answer the
 question. Follow the actual implementation far enough to support your claims;
 point to concrete files or symbols. Avoid scanning unrelated parts of the repo.
-Read-only Git inspection can establish what exists or is already in progress.
+Read-only Git inspection (`git log`, commit messages, `devflow/decisions/`, and `devflow/history/`) can establish both what exists and *why* it was built that way; cite what the record states, label inferences separately, and note what the record leaves unanswered.
 
 Authoritative documentation lookup is appropriate when technical uncertainty
 needs it. Distinguish documented facts from what this project actually uses.

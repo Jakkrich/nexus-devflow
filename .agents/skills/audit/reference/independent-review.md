@@ -316,7 +316,10 @@ Use this phase when a current pending request exists in `devflow/context/{xxx-sl
    and tests together. Review the code fresh against the recorded
    `Base commit` and `Target commit`; exclude the request and findings files
    from the code scope. Existing findings are context, never the review
-   checklist.
+   checklist. Apply **Blast-Radius & Safety Fact Proof** (trace non-grep seams and
+   grade safety facts on the Proof Ladder) and **Prove-by-Run** for locally
+   runnable P0/P1 behavioral defects (attach the exact command and failure output,
+   or note why execution was unavailable).
 4. Run `/check` from the reviewer session when the request says Check is
    required. Follow Check's server and evidence boundaries. A required check
    that cannot run prevents a passing receipt.

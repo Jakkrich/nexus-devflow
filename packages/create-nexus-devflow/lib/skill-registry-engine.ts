@@ -198,6 +198,12 @@ export const KNOWN_SKILL_ALIASES: Record<
     name: "browseros-neo",
     description: "[devflow] Opt-in BrowserOS neo MCP E2E testing, debugging, and ID-traceable evidence workflow"
   },
+  "verify-harness": {
+    source: "https://github.com/Jakkrich/nexus-devflow",
+    subpath: "extras/skills/verify-harness",
+    name: "verify-harness",
+    description: "[devflow] Opt-in repo-local app verification skill and feature map generator (Launch, Doctor, Drive, Evidence, Cleanup)"
+  },
   "publish-devflow": {
     source: "https://github.com/Jakkrich/nexus-devflow",
     subpath: "extras/skills/publish-devflow",

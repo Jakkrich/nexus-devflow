@@ -710,8 +710,8 @@ test("installThirdPartySkill supports monorepo subpath and copies scripts and ag
   }
 });
 
-test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops, convert-any-to-md, browseros-neo, and publish-devflow presets", () => {
-  for (const name of ["setup-tests", "ci", "release", "rollback", "vendor", "convert-any-to-md", "browseros-neo", "publish-devflow"]) {
+test("KNOWN_SKILL_ALIASES registers opt-in Tier-2 Ops, convert-any-to-md, browseros-neo, verify-harness, and publish-devflow presets", () => {
+  for (const name of ["setup-tests", "ci", "release", "rollback", "vendor", "convert-any-to-md", "browseros-neo", "verify-harness", "publish-devflow"]) {
     const alias = KNOWN_SKILL_ALIASES[name];
     assert.ok(alias, `Missing KNOWN_SKILL_ALIASES entry for ${name}`);
     assert.equal(alias.subpath, `extras/skills/${name}`);
@@ -792,7 +792,7 @@ test("installThirdPartySkill installs non-compound extras/skills/* subpath with 
   }
 });
 
-test("getExtrasSkillCatalog returns the 7 user/team extras skills and excludes publish-devflow by default", async () => {
+test("getExtrasSkillCatalog returns the 8 user/team extras skills and excludes publish-devflow by default", async () => {
   const mod = await import("../lib/skill-manager.js");
   assert.equal(typeof (mod as Record<string, unknown>).getExtrasSkillCatalog, "function");
   const getExtrasSkillCatalog = (mod as {
@@ -808,7 +808,8 @@ test("getExtrasSkillCatalog returns the 7 user/team extras skills and excludes p
     "rollback",
     "vendor",
     "convert-any-to-md",
-    "browseros-neo"
+    "browseros-neo",
+    "verify-harness"
   ]);
   assert.ok(!names.includes("publish-devflow"), "publish-devflow should be excluded by default");
   assert.ok(!names.includes("browser-tests"), "alias duplicate browser-tests should not appear");

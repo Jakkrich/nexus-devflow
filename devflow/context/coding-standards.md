@@ -71,6 +71,12 @@ Build for established requirements, not hypothetical scale, threats, or future f
 - **Material Unknowns Only**: Ask questions only when an unknown materially changes behavior, architecture, persisted data, interoperability, a real security boundary, or cost. Otherwise choose the simplest repository-native implementation.
 - **Just-In-Time Abstractions**: Add an abstraction, dependency, service, configuration surface, compatibility layer, or security mechanism only for a current requirement.
 - **Non-Negotiable Boundaries**: Simplicity never removes real trust-boundary validation, data-loss prevention, accessibility, explicit security requirements, configured tests, or project rules.
+- **Structural Fix Escalation Ladder (Prevent Repeat Mistakes)**: When the same defect or agent mistake occurs twice, fix it at the highest enforceable layer that works instead of adding another prose reminder:
+  1. **Architecture**: Give state one owner and remove duplicate or legacy paths agents might copy.
+  2. **Types**: Make invalid states unrepresentable at compile time.
+  3. **Lint / Framework Gate / CI**: Add a deterministic check (e.g., `scripts/validate-framework.ts`) whose error names the valid file, type, or helper.
+  4. **Behavior Test**: Assert user-observable behavior so tests fail on real regressions and survive internal refactors.
+  5. **Docs / Rules (`AGENTS.md`) Last**: Reserve prose rules only for judgment calls that automated checks cannot enforce.
 
 ---
 

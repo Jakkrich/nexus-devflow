@@ -187,6 +187,8 @@ expectations. Apply only the selected lens or lenses:
   - *Full Call-Path Tracing*: Follow the call graph through real code paths (entry point → call sites → branches taken → state mutated → exit/side effect), including unchanged code on either side of the diff where bugs hide.
   - *Verify Claims & Edge Cases*: Does the traced path actually produce the claimed behavior? What inputs/states would break it (concurrency, retries, null/unicode/huge payloads, ordering)? What does it silently change?
   - *Assumed Decision Debt Check*: Scan `devflow/decisions/` for any ADR with `Status: Assumed`. Flag unratified assumptions as `Q-xxx` (P2) to ensure ratification before production handoff.
+  - *Blast-Radius & Safety Fact Proof*: Identify the single load-bearing fact the change's safety depends on, trace non-grep seams (wire/JSON contracts, DB columns, teardown order, pinned dependency internals, multi-hop callers), and classify confidence on the 5-level **Proof Ladder** (`1: Asserted` -> `2: Line cited` -> `3: Control-flow traced` -> `4: Executed via script/test` -> `5: Reproduced end-to-end`). Never clear a risky change on Level 1–2 alone when Level 4–5 is locally runnable.
+  - *Prove-by-Run Behavioral Claims*: For locally runnable P0/P1 behavioral defects, attach the exact repro command and observed failure output. Unrun suspicions remain tagged `Inferred` / `Unverified` and must not be reported as confirmed runtime failures.
   - *No Rubber-Stamping*: "LGTM" is prohibited. State what was traced, what was verified, and what evidence supports the verdict.
 
 
@@ -211,4 +213,5 @@ Maintain the durable record in `devflow/context/{xxx-slug}/findings.md` (or `dev
    - `P3`: minor improvement, code cleanup, cosmetic tweak.
    *(For a proportionality finding, state in Suggested fix what can be deleted. An otherwise pure proportionality finding is P2 or P3. Raise to P0/P1 only when the unnecessary machinery causes a concrete reachable defect or violates an established security or data-integrity boundary.)*
 4. Set status: `open`, `fixed`, `closed`, `accepted`, or `invalid`.
-5. Display concise findings summary and next actions.
+5. For recurring mistake classes, prefer `Suggested fix` along the **Structural Escalation Ladder** (Architecture -> Types -> Lint/CI Gate -> Behavior Test -> Docs/Rules last).
+6. Display concise findings summary and next actions.

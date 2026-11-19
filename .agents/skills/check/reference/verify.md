@@ -75,6 +75,9 @@ Drive the app to each checklist item and capture evidence as you go:
 - Capture **screenshots** for visual/UI claims, **output** for CLI/API claims.
 - Watch for **console errors and failed network requests**; a clean-looking screen
   with errors in the console is not a pass.
+- Verify **side effects and cleanup**: confirm expected files, DB/state changes,
+  and outputs persist where intended, and tear down only processes or temp state
+  started by this verification run without deleting captured evidence.
 
 With `verification.uiEvidence: "required"`, every UI claim needs direct browser
 evidence, including a screenshot and the relevant console and network check. If

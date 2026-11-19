@@ -151,3 +151,6 @@ docs/agents/
 
 # Internal Architecture & Development Docs
 docs/adr/
+
+.agents/plugins
+.agents/rules

@@ -11,6 +11,10 @@
 - **Authorization**: Reuse explicit authorization already given for the requested work. Ask before destructive actions or material architectural changes outside that scope. Identify the instruction requiring a pause; routine implementation choices do not require renewed approval.
 - **Don't Add Unplanned Scope**: Stick strictly to the Acceptance Criteria defined in the spec. Avoid adding "nice-to-have" features that were not requested.
 - **Preserve Existing Codebase Patterns**: Respect existing file structure, typing patterns, naming conventions, and deep module boundaries.
+- **Evidence Precision & Anti-Slop**:
+  - Tag non-trivial technical claims inline when their basis is not immediately obvious from quoted output: **Measured** (observed command/test output), **Inferred** (derived from code/records read), or **Guess/Unverified** (prediction or unseen cause).
+  - Lead with impact on the consumer and maintainer, followed by concrete mechanisms or numbers; avoid filler, hedging, vague attributions, and abstract metaphor nouns where a literal term fits.
+  - Never hand the user a verification check that the agent can safely run itself.
 
 ---
 

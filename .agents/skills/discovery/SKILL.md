@@ -68,7 +68,9 @@ devflow/discoveries/{DISCOVERY_ID}-{slug}/discovery.md
    - Construct a **Trade-off Comparison Table** (Pros, Cons, Recommendation).
 2. **Research & Empirical Proof Lens**:
    - Inspect existing codebase patterns with search tools (`grep_search`, `rg`).
+   - **Record-First Archaeology**: When investigating *why* code or constraints exist, inspect `git log`, commit history, `devflow/decisions/`, and `devflow/history/` before inferring from source alone. Cite what the record says, mark inferences separately, and state what remains unanswered.
    - Conduct external web search if library feasibility or API contracts are uncertain.
+   - **Experiment-vs-Preference Fork**: Before asking the user how an existing system behaves or which technical option works, check if a read-only probe or small experiment can settle the fact; run it first and report the observed result, reserving user questions for product scope, preferences, or irreversible trade-offs.
 3. **PRD & Scoping Lens**:
    - Problem Statement, Target Persona, Core User Stories, and In-Scope vs. Out-of-Scope boundaries.
 4. **Issue & Bug Triage Lens**:
