@@ -9,21 +9,45 @@ const repoRoot = path.resolve(__dirname, "..", "..");
 const packageRoot = path.join(repoRoot, "packages", "create-nexus-devflow");
 const runsRoot = path.join(__dirname, "runs");
 
-interface CommandOptions extends SpawnSyncOptions {
-  allowFailure?: boolean;
+export type AgentId = "claude" | "copilot" | "codex" | "antigravity";
+
+export interface AgentInvocationOptions {
+  prompt: string;
+  maxTurns: number;
+  model?: string;
+  workspace: string;
 }
 
-function runNpm(args: string[], cwd: string) {
-  if (process.platform !== "win32") {
-    return run("npm", args, cwd);
-  }
+export interface AgentInvocation {
+  args: string[];
+  stdinInput?: string;
+  envPatch?: Record<string, string | undefined>;
+}
 
-  return run(process.env.ComSpec || "cmd.exe", [
-    "/d",
-    "/s",
-    "/c",
-    `npm ${args.join(" ")}`
-  ], cwd);
+export interface ParsedTranscript {
+  transcript: unknown;
+  resultText: string;
+}
+
+export interface AgentAdapter {
+  readonly id: AgentId;
+  readonly aliases: readonly string[];
+  readonly executable: string;
+  readonly installerFlag: `--${AgentId}`;
+  readonly versionArgs: readonly string[];
+  buildInvocation(options: AgentInvocationOptions): AgentInvocation;
+  parseTranscript(rawStdout: string): ParsedTranscript;
+}
+
+export interface SpawnSpec {
+  command: string;
+  args: string[];
+  windowsVerbatimArguments?: boolean;
+}
+
+interface CommandOptions extends SpawnSyncOptions {
+  allowFailure?: boolean;
+  stdinInput?: string;
 }
 
 interface Check {
@@ -31,8 +55,6 @@ interface Check {
   description: string;
   passed: boolean;
 }
-
-type AgentName = "claude" | "copilot";
 
 interface AgentResult {
   status: number | null;
@@ -46,24 +68,321 @@ export interface Scenario {
   run: (runner: Runner) => Promise<void>;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Parse single-document JSON or newline-delimited JSONL stdout into a typed JS value.
+ */
+export function parseJsonOrJsonl(raw: string): unknown {
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+
+  try {
+    return JSON.parse(trimmed) as unknown;
+  } catch {
+    const parsedLines: unknown[] = [];
+    for (const line of trimmed.split(/\r?\n/)) {
+      const candidate = line.trim();
+      if (!candidate) continue;
+      try {
+        parsedLines.push(JSON.parse(candidate) as unknown);
+      } catch {
+        // Ignore non-JSON preamble or progress lines emitted before structured events.
+      }
+    }
+    return parsedLines.length > 0 ? parsedLines : trimmed;
+  }
+}
+
+function extractGenericText(node: unknown): string {
+  if (!node) return "";
+  if (typeof node === "string") return node;
+  if (Array.isArray(node)) {
+    return node.map(extractGenericText).filter(Boolean).join("\n");
+  }
+  if (isRecord(node)) {
+    if (typeof node.result === "string" && node.result.length > 0) return node.result;
+    if (typeof node.response === "string" && node.response.length > 0) return node.response;
+    if (typeof node.text === "string" && node.text.length > 0) return node.text;
+    if (typeof node.content === "string" && node.content.length > 0) return node.content;
+    if (typeof node.output_text === "string" && node.output_text.length > 0) return node.output_text;
+    if (typeof node.message === "string" && node.message.length > 0) return node.message;
+    if (Array.isArray(node.content)) return extractGenericText(node.content);
+    if (isRecord(node.message)) return extractGenericText(node.message);
+    if (Array.isArray(node.messages)) return extractGenericText(node.messages);
+    if (typeof node.error === "string" && node.error.length > 0) return node.error;
+  }
+  return "";
+}
+
+function extractCodexText(transcript: unknown): string {
+  if (!Array.isArray(transcript)) {
+    return extractGenericText(transcript);
+  }
+
+  const messages: string[] = [];
+  for (const event of transcript) {
+    if (!isRecord(event)) continue;
+
+    // Codex `exec --json` item.completed events
+    if (event.type === "item.completed" && isRecord(event.item)) {
+      if (event.item.type === "agent_message" && typeof event.item.text === "string") {
+        messages.push(event.item.text);
+        continue;
+      }
+    }
+
+    // Legacy Codex event envelope `{ msg: { type: "agent_message", message: "..." } }`
+    if (isRecord(event.msg) && event.msg.type === "agent_message" && typeof event.msg.message === "string") {
+      messages.push(event.msg.message);
+      continue;
+    }
+  }
+
+  if (messages.length > 0) {
+    return messages.join("\n");
+  }
+
+  return extractGenericText(transcript);
+}
+
+function createStandardParser(extractor: (transcript: unknown) => string = extractGenericText) {
+  return (rawStdout: string): ParsedTranscript => {
+    const transcript = parseJsonOrJsonl(rawStdout);
+    return {
+      transcript,
+      resultText: extractor(transcript)
+    };
+  };
+}
+
+/**
+ * Authoritative registry of supported E2E agent CLI adapters.
+ */
+export const AGENT_ADAPTERS = {
+  claude: {
+    id: "claude",
+    aliases: [],
+    executable: "claude",
+    installerFlag: "--claude",
+    versionArgs: ["--version"],
+    buildInvocation({ prompt, maxTurns, model }) {
+      const args = [
+        "-p",
+        prompt,
+        "--output-format",
+        "json",
+        "--max-turns",
+        String(maxTurns),
+        "--dangerously-skip-permissions",
+        "--strict-mcp-config"
+      ];
+      if (model) args.push("--model", model);
+      return {
+        args,
+        envPatch: {
+          CLAUDECODE: undefined,
+          CLAUDE_CODE_ENTRYPOINT: undefined
+        }
+      };
+    },
+    parseTranscript: createStandardParser()
+  },
+  copilot: {
+    id: "copilot",
+    aliases: [],
+    executable: "copilot",
+    installerFlag: "--copilot",
+    versionArgs: ["--version"],
+    buildInvocation({ prompt, model }) {
+      const args = [
+        "-p",
+        prompt,
+        "--output-format",
+        "json",
+        "--allow-all",
+        "--no-ask-user",
+        "--no-remote",
+        "--no-remote-export"
+      ];
+      if (model) args.push("--model", model);
+      return { args };
+    },
+    parseTranscript: createStandardParser()
+  },
+  codex: {
+    id: "codex",
+    aliases: [],
+    executable: "codex",
+    installerFlag: "--codex",
+    versionArgs: ["--version"],
+    buildInvocation({ prompt, model, workspace }) {
+      const args = [
+        "exec",
+        "--json",
+        "--ephemeral",
+        "--ignore-user-config",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "-C",
+        workspace
+      ];
+      if (model) args.push("-m", model);
+      // Read the prompt from stdin so Windows cmd.exe shims never mangle newlines or quotes.
+      args.push("-");
+      return {
+        args,
+        stdinInput: prompt
+      };
+    },
+    parseTranscript: createStandardParser(extractCodexText)
+  },
+  antigravity: {
+    id: "antigravity",
+    aliases: ["agy"],
+    executable: "agy",
+    installerFlag: "--antigravity",
+    versionArgs: ["--version"],
+    buildInvocation({ prompt, model }) {
+      const args = [
+        "-p",
+        prompt,
+        "--output-format",
+        "json",
+        "--dangerously-skip-permissions",
+        "--mode",
+        "auto",
+        "--new-project"
+      ];
+      if (model) args.push("--model", model);
+      return { args };
+    },
+    parseTranscript: createStandardParser()
+  }
+} as const satisfies Record<AgentId, AgentAdapter>;
+
+const ALIAS_LOOKUP: Record<string, AgentId> = Object.values(AGENT_ADAPTERS).reduce<Record<string, AgentId>>(
+  (acc, adapter) => {
+    acc[adapter.id] = adapter.id;
+    for (const alias of adapter.aliases) {
+      acc[alias] = adapter.id;
+    }
+    return acc;
+  },
+  {}
+);
+
+/**
+ * Normalize and validate an `E2E_AGENT` string at the harness boundary.
+ */
+export function parseAgentId(raw: string | undefined = process.env.E2E_AGENT): AgentId {
+  const normalized = (raw ?? "claude").trim().toLowerCase();
+  const resolved = ALIAS_LOOKUP[normalized];
+  if (!resolved) {
+    const supported = Object.values(AGENT_ADAPTERS)
+      .map((adapter) =>
+        adapter.aliases.length > 0 ? `${adapter.id} (${adapter.aliases.join(", ")})` : adapter.id
+      )
+      .join(", ");
+    throw new Error(`Unsupported E2E_AGENT: ${raw ?? ""}. Use one of: ${supported}.`);
+  }
+  return resolved;
+}
+
+export function getAgentAdapter(agentId: AgentId = parseAgentId()): AgentAdapter {
+  return AGENT_ADAPTERS[agentId];
+}
+
+function quoteCmdArg(arg: string): string {
+  if (/^[a-zA-Z0-9_./:\\=-]+$/.test(arg)) {
+    return arg;
+  }
+  return `"${arg.replace(/"/g, '\\"')}"`;
+}
+
+function findExecutableOnPath(command: string, env: NodeJS.ProcessEnv): string | null {
+  if (path.isAbsolute(command) || command.includes(path.sep) || command.includes("/")) {
+    return fs.existsSync(command) ? command : null;
+  }
+
+  const pathValue = env.PATH ?? env.Path ?? "";
+  const dirs = pathValue.split(path.delimiter).filter(Boolean);
+  const extensions = [".exe", ".com", ".cmd", ".bat"];
+
+  for (const dir of dirs) {
+    for (const ext of extensions) {
+      const candidate = path.join(dir, command.endsWith(ext) ? command : `${command}${ext}`);
+      if (fs.existsSync(candidate)) {
+        return candidate;
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Resolve platform-specific execution details at the process boundary.
+ * On Windows, `.cmd`/`.bat` npm shims (such as `npm` and `codex`) must run via `cmd.exe`,
+ * while native `.exe` binaries (`claude`, `agy`, `git`, `node`) execute directly without a shell.
+ */
+export function resolveSpawnSpec(
+  command: string,
+  args: readonly string[],
+  platform: NodeJS.Platform = process.platform,
+  env: NodeJS.ProcessEnv = process.env
+): SpawnSpec {
+  if (platform !== "win32") {
+    return { command, args: [...args] };
+  }
+
+  const resolvedPath = findExecutableOnPath(command, env);
+  const isCmdShim =
+    command === "npm" ||
+    (resolvedPath !== null && /\.(cmd|bat)$/i.test(resolvedPath));
+
+  if (!isCmdShim) {
+    return { command: resolvedPath ?? command, args: [...args] };
+  }
+
+  const cmdTarget = resolvedPath ? quoteCmdArg(resolvedPath) : command;
+  const cmdLine = `"${[cmdTarget, ...args.map(quoteCmdArg)].join(" ")}"`;
+  return {
+    command: env.ComSpec || "cmd.exe",
+    args: ["/d", "/s", "/c", cmdLine],
+    windowsVerbatimArguments: true
+  };
+}
+
+function runNpm(args: string[], cwd: string) {
+  return run("npm", args, cwd);
+}
+
 function run(
   command: string,
   args: readonly string[],
   cwd: string,
   options: CommandOptions = {}
 ) {
-  const result = spawnSync(command, args, {
+  const { allowFailure, stdinInput, env: rawEnv, ...spawnOptions } = options;
+  const env = rawEnv ?? process.env;
+  const spec = resolveSpawnSpec(command, args, process.platform, env);
+
+  const result = spawnSync(spec.command, spec.args, {
     cwd,
     encoding: "utf8",
     maxBuffer: 64 * 1024 * 1024,
-    ...options
+    input: stdinInput,
+    windowsVerbatimArguments: spec.windowsVerbatimArguments,
+    env,
+    ...spawnOptions
   });
 
   if (result.error) {
     throw result.error;
   }
 
-  if (result.status !== 0 && !options.allowFailure) {
+  if (result.status !== 0 && !allowFailure) {
     throw new Error(
       `${command} ${args.join(" ")} failed (${result.status}): ${(result.stderr || "").slice(0, 2000)}`
     );
@@ -78,14 +397,22 @@ function git(workspace: string, ...args: string[]): string {
 
 export class Runner {
   name: string;
+  adapter: AgentAdapter;
+  model: string | undefined;
   checks: Check[];
   currentPhase: string;
   runDir: string;
   workspace: string;
   phaseCount: number;
 
-  constructor(scenarioName: string) {
+  constructor(
+    scenarioName: string,
+    agentId: AgentId = parseAgentId(),
+    model: string | undefined = process.env.E2E_MODEL || undefined
+  ) {
     this.name = scenarioName;
+    this.adapter = getAgentAdapter(agentId);
+    this.model = model;
     this.checks = [];
     this.currentPhase = "setup";
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -105,7 +432,7 @@ export class Runner {
     console.log(`  ${condition ? "PASS" : "FAIL"}  ${description}`);
   }
 
-  installDevFlow(adapterFlag = getDefaultAdapterFlag()): void {
+  installDevFlow(adapterFlag: string = this.adapter.installerFlag): void {
     const artifacts = path.join(this.runDir, "artifacts");
     const runner = path.join(this.runDir, "npm-runner");
     fs.mkdirSync(artifacts, { recursive: true });
@@ -167,44 +494,35 @@ export class Runner {
 
   agent(
     prompt: string,
-    { maxTurns = 50, timeoutMs = 15 * 60 * 1000 }: { maxTurns?: number; timeoutMs?: number } = {}
+    {
+      maxTurns = 50,
+      timeoutMs = 15 * 60 * 1000,
+      model = this.model
+    }: { maxTurns?: number; timeoutMs?: number; model?: string } = {}
   ): AgentResult {
     this.phaseCount += 1;
-    const agent = getAgentName();
-    const args = agent === "claude"
-      ? [
-          "-p",
-          prompt,
-          "--output-format",
-          "json",
-          "--max-turns",
-          String(maxTurns),
-          "--dangerously-skip-permissions"
-        ]
-      : [
-          "-p",
-          prompt,
-          "--output-format",
-          "json",
-          "--allow-all",
-          "--no-ask-user",
-          "--no-remote",
-          "--no-remote-export"
-        ];
+    const invocation = this.adapter.buildInvocation({
+      prompt,
+      maxTurns,
+      model,
+      workspace: this.workspace
+    });
 
-    if (process.env.E2E_MODEL) {
-      args.push("--model", process.env.E2E_MODEL);
+    const env: NodeJS.ProcessEnv = { ...process.env };
+    if (invocation.envPatch) {
+      for (const [key, value] of Object.entries(invocation.envPatch)) {
+        if (value === undefined) {
+          delete env[key];
+        } else {
+          env[key] = value;
+        }
+      }
     }
 
-    const env = { ...process.env };
-    if (agent === "claude") {
-      delete env.CLAUDECODE;
-      delete env.CLAUDE_CODE_ENTRYPOINT;
-    }
-
-    const result = run(agent, args, this.workspace, {
+    const result = run(this.adapter.executable, invocation.args, this.workspace, {
       allowFailure: true,
       timeout: timeoutMs,
+      stdinInput: invocation.stdinInput,
       env
     });
 
@@ -215,12 +533,12 @@ export class Runner {
       fs.writeFileSync(`${logBase}.stderr.log`, result.stderr);
     }
 
-    const transcript = parseAgentTranscript(String(result.stdout), agent);
+    const parsed = this.adapter.parseTranscript(String(result.stdout ?? ""));
 
     return {
       status: result.status,
-      resultText: extractAgentText(transcript),
-      transcript
+      resultText: parsed.resultText,
+      transcript: parsed.transcript
     };
   }
 
@@ -236,61 +554,11 @@ export class Runner {
   }
 }
 
-function getAgentName(): AgentName {
-  const configured = process.env.E2E_AGENT || "claude";
-
-  if (configured === "claude" || configured === "copilot") {
-    return configured;
-  }
-
-  throw new Error(`Unsupported E2E_AGENT: ${configured}. Use "claude" or "copilot".`);
-}
-
-function getDefaultAdapterFlag(): string {
-  const agent = getAgentName();
-  return agent === "claude" ? "--claude" : "--copilot";
-}
-
-export function ensureAgentAvailable(): void {
-  const agent = getAgentName();
-  const version = run(agent, ["--version"], repoRoot, { allowFailure: true });
+export function ensureAgentAvailable(agentId: AgentId = parseAgentId()): void {
+  const adapter = getAgentAdapter(agentId);
+  const version = run(adapter.executable, adapter.versionArgs, repoRoot, { allowFailure: true });
 
   if (version.status !== 0) {
-    throw new Error(`The ${agent} executable was not found on PATH.`);
+    throw new Error(`The ${adapter.executable} executable (for adapter "${adapter.id}") was not found on PATH.`);
   }
-}
-
-function parseAgentTranscript(raw: string, agent: AgentName): unknown {
-  if (!raw.trim()) return null;
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    const lines = raw.trim().split("\n").filter(Boolean);
-    const parsedLines: unknown[] = [];
-    for (const line of lines) {
-      try {
-        parsedLines.push(JSON.parse(line));
-      } catch {
-        // ignore
-      }
-    }
-    return parsedLines;
-  }
-}
-
-function extractAgentText(transcript: unknown): string {
-  if (!transcript) return "";
-  if (typeof transcript === "string") return transcript;
-  if (Array.isArray(transcript)) {
-    return transcript.map(extractAgentText).join("\n");
-  }
-  if (typeof transcript === "object" && transcript !== null) {
-    const obj = transcript as Record<string, unknown>;
-    if (typeof obj.text === "string") return obj.text;
-    if (typeof obj.content === "string") return obj.content;
-    if (typeof obj.result === "string") return obj.result;
-    return JSON.stringify(transcript);
-  }
-  return String(transcript);
 }

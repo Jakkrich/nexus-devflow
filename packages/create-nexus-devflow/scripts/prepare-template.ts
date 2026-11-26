@@ -79,6 +79,9 @@ export function shouldCopyTemplateEntry(
   if (matchesPrefix(normalized, "devflow/.state")) {
     return false;
   }
+  if (matchesPrefix(normalized, "devflow/check-layers.json") || matchesPrefix(normalized, "formal")) {
+    return false;
+  }
   if (
     normalized.startsWith("devflow/context/") &&
     normalized !== "devflow/context" &&

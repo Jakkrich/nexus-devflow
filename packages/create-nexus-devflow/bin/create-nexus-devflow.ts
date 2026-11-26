@@ -36,6 +36,10 @@ import {
   formatGateReport
 } from "../lib/gatekeeper.js";
 import {
+  formatCheckPipelineReport,
+  runCheckPipeline
+} from "../lib/check-pipeline.js";
+import {
   sliceContextForStage,
   type SliceStage
 } from "../lib/context-slicer.js";
@@ -111,6 +115,7 @@ interface CliOptions {
   | "doctor"
   | "archive"
   | "check-gate"
+  | "verify-layers"
   | "hook"
   | "mcp"
   | "slice"
@@ -313,6 +318,23 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
 
     if (!report.passed) {
+      process.exitCode = 1;
+    }
+    return;
+  }
+
+  if (options.command === "verify-layers") {
+    const result = runCheckPipeline(targetDir, {
+      planOnly: options.dryRun
+    });
+
+    if (options.json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      console.log(formatCheckPipelineReport(result));
+    }
+
+    if (!result.passed) {
       process.exitCode = 1;
     }
     return;
@@ -1223,6 +1245,9 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (first === "check-gate") {
       command = "check-gate";
       target = positional[1] || target || ".";
+    } else if (first === "verify-layers") {
+      command = "verify-layers";
+      target = positional[1] || target || ".";
     } else if (first === "hook" || first === "hooks") {
       command = "hook";
       if (positional[1] === "uninstall") {
@@ -1426,6 +1451,7 @@ ${style.bold("Quick Start & Everyday Commands:")}
 
 ${style.bold("Advanced, CI & AI Tooling Commands:")}
   ${style.brightCyan("check-gate")} [--strict] [--json]             CI/CD quality gate check (exits 0 or 1)
+  ${style.brightCyan("verify-layers")} [target-dir] [--dry-run] [--json] 3-layer code check (lint -> tests -> TLA+/Lean)
   ${style.brightCyan("hook")} install|uninstall [pre-commit|pre-push]  Manage local Git gatekeeper hooks
   ${style.brightCyan("skill")} [list|add|update|restore|remove|sync]  Manage bundled extras & third-party skills
   ${style.brightCyan("archive")} [list|stats] [--json]              Inspect completed runs in devflow/history/

@@ -11,6 +11,7 @@
     "isolatedModules": true
   },
   "include": [
+    "formal/**/*.ts",
     "scripts/**/*.ts",
     "packages/create-nexus-devflow/bin/**/*.ts",
     "packages/create-nexus-devflow/lib/**/*.ts",

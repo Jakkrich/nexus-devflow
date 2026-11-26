@@ -64,6 +64,23 @@ test("template packaging strictly excludes devflow development and transient fol
       "template should not contain devflow/scratch"
     );
 
+    // Must NOT contain DevFlow's own formal specs, guard config, or formal verification skills
+    await assert.rejects(
+      async () => await fs.stat(path.join(templateRoot, "formal")),
+      { code: "ENOENT" },
+      "template should not contain formal/"
+    );
+    await assert.rejects(
+      async () => await fs.stat(path.join(templateDevflow, "check-layers.json")),
+      { code: "ENOENT" },
+      "template should not contain devflow/check-layers.json"
+    );
+    await assert.rejects(
+      async () => await fs.stat(path.join(templateRoot, ".agents", "skills", "run-isolation-formal")),
+      { code: "ENOENT" },
+      "template should not bundle local run-isolation-formal skill"
+    );
+
     // Must NOT contain devflow/research
     await assert.rejects(
       async () => await fs.stat(path.join(templateDevflow, "research")),
@@ -124,6 +141,31 @@ test("shouldCopyTemplateEntry excludes untracked files when tracked index is pro
   assert.equal(
     shouldCopyTemplateEntry(".agents/skills/feature/scratch-untracked.md", false, inventory, null),
     true
+  );
+});
+
+test("shouldCopyTemplateEntry excludes DevFlow formal specs, guard config, and local formal skills even when tracked", async () => {
+  const inventory = await loadCoreSkillInventory(path.join(repoRoot, "agent-bundle.manifest.json"));
+  const tracked = buildTrackedIndex([
+    "AGENTS.md",
+    "devflow/check-layers.json",
+    "formal/RunStateAllocation.tla",
+    "formal/check-layers.json",
+    ".agents/skills/run-isolation-formal/SKILL.md",
+    ".claude/skills/run-isolation-formal/SKILL.md"
+  ]);
+
+  assert.equal(shouldCopyTemplateEntry("AGENTS.md", false, inventory, tracked), true);
+  assert.equal(shouldCopyTemplateEntry("devflow/check-layers.json", false, inventory, tracked), false);
+  assert.equal(shouldCopyTemplateEntry("formal/RunStateAllocation.tla", false, inventory, tracked), false);
+  assert.equal(shouldCopyTemplateEntry("formal/check-layers.json", false, inventory, tracked), false);
+  assert.equal(
+    shouldCopyTemplateEntry(".agents/skills/run-isolation-formal/SKILL.md", false, inventory, tracked),
+    false
+  );
+  assert.equal(
+    shouldCopyTemplateEntry(".claude/skills/run-isolation-formal/SKILL.md", false, inventory, tracked),
+    false
   );
 });
 

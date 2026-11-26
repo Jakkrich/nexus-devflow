@@ -43,6 +43,20 @@ observable behavior, not "it works". If the user named one thing, scope to that.
 
 If there's no active feature spec, ask what to verify rather than guessing.
 
+## Step 1.5 - run deterministic 3-layer code gate
+
+Before exercising UI/CLI flows, run the executable 3-layer gate directly (first available command):
+
+- `npx tsx scripts/tooling.ts verify-layers --json` (when `scripts/tooling.ts` exists in this repo)
+- `npx nexus-devflow verify-layers --json` (in installed projects)
+
+This code runner detects changed-file languages, enforces each layer's named `requiredLib`, and stops immediately on failure:
+1. **Layer 1:** per-language lint/typecheck
+2. **Layer 2:** test cases
+3. **Layer 3:** TLA+ (`tlc`) / Lean (`lake`/`lean`) formal check when guarded files or formal specs change
+
+Hard stop rule: if `verify-layers` exits non-zero, **do not continue** to later layers or mark `verified`. Set `**Status:**` to `verification incomplete` when `failureKind === "missing_lib"` (naming the missing `requiredLib` and install hint), or `verification failed` when `failureKind === "command_failed"`, and hand back to `/implement`.
+
 ## Step 2 - get the app running
 
 Use the project's real commands (see Commands in `AGENTS.md`). Match the project

@@ -1,11 +1,59 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { Runner, ensureAgentAvailable } from "./harness.js";
-import type { Scenario } from "./harness.js";
+import { Runner, ensureAgentAvailable, parseAgentId } from "./harness.js";
+import type { AgentId, Scenario } from "./harness.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const scenariosDir = path.join(__dirname, "scenarios");
+
+interface CliArgs {
+  agentId: AgentId;
+  model: string | undefined;
+  scenarios: string[];
+}
+
+function parseCliArgs(argv: readonly string[]): CliArgs {
+  let rawAgent = process.env.E2E_AGENT;
+  let model = process.env.E2E_MODEL || undefined;
+  const scenarios: string[] = [];
+
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+    if (arg === "--agent") {
+      rawAgent = argv[++i];
+      if (!rawAgent) {
+        throw new Error("--agent requires a value");
+      }
+      continue;
+    }
+    if (arg.startsWith("--agent=")) {
+      rawAgent = arg.slice("--agent=".length);
+      continue;
+    }
+    if (arg === "--model") {
+      model = argv[++i];
+      if (!model) {
+        throw new Error("--model requires a value");
+      }
+      continue;
+    }
+    if (arg.startsWith("--model=")) {
+      model = arg.slice("--model=".length);
+      continue;
+    }
+    if (arg.startsWith("-")) {
+      throw new Error(`Unknown option: ${arg}`);
+    }
+    scenarios.push(arg);
+  }
+
+  return {
+    agentId: parseAgentId(rawAgent),
+    model,
+    scenarios
+  };
+}
 
 async function main() {
   if (process.env.E2E_ACCEPT_RISK !== "1") {
@@ -17,7 +65,8 @@ async function main() {
     process.exit(1);
   }
 
-  ensureAgentAvailable();
+  const { agentId, model, scenarios: requested } = parseCliArgs(process.argv.slice(2));
+  ensureAgentAvailable(agentId);
 
   if (!fs.existsSync(scenariosDir)) {
     console.log("No e2e scenarios found.");
@@ -29,7 +78,6 @@ async function main() {
     .filter((file) => file.endsWith(".ts"))
     .map((file) => file.replace(/\.ts$/, ""))
     .sort();
-  const requested = process.argv.slice(2);
 
   for (const name of requested) {
     if (!available.includes(name)) {
@@ -55,8 +103,8 @@ async function main() {
     if (!scenario) {
       throw new Error(`Scenario ${name} has no valid default export.`);
     }
-    console.log(`\n=== Scenario: ${scenario.name} - ${scenario.description} ===`);
-    const runner = new Runner(scenario.name);
+    console.log(`\n=== Scenario: ${scenario.name} (${agentId}) - ${scenario.description} ===`);
+    const runner = new Runner(scenario.name, agentId, model);
 
     try {
       await scenario.run(runner);

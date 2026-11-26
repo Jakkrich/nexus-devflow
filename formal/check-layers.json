@@ -1,0 +1,19 @@
+{
+  "formalGuards": [
+    {
+      "tool": "tla",
+      "specPath": "formal/RunStateAllocation.tla",
+      "guardedPaths": [
+        "packages/create-nexus-devflow/lib/branch-context.ts",
+        ".agents/skills/devflow/scripts/run-state.mjs",
+        "formal/RunStateAllocation.tla",
+        "formal/RunStateAllocation.cfg",
+        "formal/check-run-isolation.ts"
+      ],
+      "command": "npx tsx formal/check-run-isolation.ts",
+      "requiredLib": "tsx",
+      "requiredBinary": "node",
+      "installHint": "npm install (tsx is in devDependencies)"
+    }
+  ]
+}
