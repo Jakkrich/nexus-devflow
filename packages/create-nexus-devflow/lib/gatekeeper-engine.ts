@@ -3,6 +3,13 @@ import { readProjectStatus, type ProjectStatus } from "./status.js";
 import { readFindings, type FindingsSummary } from "./findings.js";
 import { readProjectConfig, type ProjectConfig } from "./project-config.js";
 import { detectGitDrift, reconcileState, type GitDriftReport, type ReconcileResult } from "./drift-reconciler.js";
+import {
+  inspectRunEvidence,
+  type EvidenceArtifact,
+  type RunEvidenceSummary
+} from "./evidence-packet.js";
+
+export type { EvidenceArtifact, RunEvidenceSummary };
 
 export interface GatekeeperEngineOptions {
   config?: ProjectConfig;
@@ -11,6 +18,7 @@ export interface GatekeeperEngineOptions {
 export interface GateEvaluateOptions {
   strict?: boolean;
   allowUnverified?: boolean;
+  requireEvidenceArtifacts?: boolean;
   status?: ProjectStatus;
   drift?: GitDriftReport;
   workflow?: "regular" | "continuous";
@@ -25,6 +33,7 @@ export interface GateReport {
   warnings: string[];
   findingsBlockers: number;
   remainingTasks: number;
+  evidence: RunEvidenceSummary;
   twoStage: {
     stage1SpecFidelity: boolean;
     stage2CodeQuality: boolean;
@@ -120,14 +129,26 @@ export class GatekeeperEngine {
       );
     }
 
-    // Advisory Findings (P2 / P3 in open or unverified status)
-    const nonBlockers = (status.findings.active || []).filter(
-      (item) => (item.severity === "P2" || item.severity === "P3") && (item.status === "open" || item.status === "unverified")
-    );
-    for (const item of nonBlockers) {
-      warnings.push(
-        `Advisory Finding ${item.id} [${item.severity}] (${item.status}): ${item.title}`
-      );
+    // Unverified Hypotheses (P0 / P1 not yet reproduced by run) & Advisory Findings (P2 / P3)
+    for (const item of status.findings.active || []) {
+      if ((item.severity === "P0" || item.severity === "P1") && item.status === "unverified") {
+        if (options.allowUnverified === false) {
+          violations.push(
+            `Unverified Hypothesis ${item.id} [${item.severity}] (unverified): ${item.title}`
+          );
+        } else {
+          warnings.push(
+            `Unverified Hypothesis ${item.id} [${item.severity}] (unverified): ${item.title}`
+          );
+        }
+      } else if (
+        (item.severity === "P2" || item.severity === "P3") &&
+        (item.status === "open" || item.status === "unverified")
+      ) {
+        warnings.push(
+          `Advisory Finding ${item.id} [${item.severity}] (${item.status}): ${item.title}`
+        );
+      }
     }
 
     // Status warnings
@@ -185,6 +206,28 @@ export class GatekeeperEngine {
       // ignore drift detection errors in isolated test environments
     }
 
+    const evidence = await inspectRunEvidence(this.projectRoot, status.currentWork.runId);
+    for (const evidenceWarning of evidence.warnings) {
+      warnings.push(`Warning (evidence_packet): ${evidenceWarning}`);
+    }
+
+    if (status.currentWork.state === "active" && !evidence.present) {
+      const targetRunId = status.currentWork.runId || "active";
+      if (options.requireEvidenceArtifacts === true) {
+        violations.push(
+          `Missing durable evidence artifacts in devflow/reports/${targetRunId}/ (missing_evidence_artifacts)`
+        );
+      } else if (
+        isStrict &&
+        status.completion.state === "ready" &&
+        config.delivery.gate === "option-a-evidence-packet"
+      ) {
+        warnings.push(
+          `Warning (missing_evidence_artifacts): No durable proof files found in devflow/reports/${targetRunId}/. Save /check outputs before Option A handoff.`
+        );
+      }
+    }
+
     const stage1SpecFidelity = remaining === 0 && (
       status.currentWork.state === "idle" ||
       status.completion.state === "ready" ||
@@ -214,6 +257,7 @@ export class GatekeeperEngine {
       warnings,
       findingsBlockers: blockers.length,
       remainingTasks: remaining,
+      evidence,
       twoStage: {
         stage1SpecFidelity,
         stage2CodeQuality

@@ -55,12 +55,15 @@ This code runner detects changed-file languages, enforces each layer's named `re
 2. **Layer 2:** test cases
 3. **Layer 3:** TLA+ (`tlc`) / Lean (`lake`/`lean`) formal check when guarded files or formal specs change
 
-Hard stop rule: if `verify-layers` exits non-zero, **do not continue** to later layers or mark `verified`. Set `**Status:**` to `verification incomplete` when `failureKind === "missing_lib"` (naming the missing `requiredLib` and install hint), or `verification failed` when `failureKind === "command_failed"`, and hand back to `/implement`.
+Persist the raw JSON output to `devflow/reports/{xxx-slug}/verify-layers.json` (excluding temp build noise) so downstream review and Option A delivery can inspect it directly.
+
+Hard stop rule: if `verify-layers` exits non-zero, **do not continue** to later layers or mark `verified`. Set `**Status:**` to `verification failed` when `failureKind === "command_failed"` (or `verification incomplete` when `failureKind === "missing_lib"`, naming the missing `requiredLib` and install hint), and hand back to `/implement`.
 
 ## Step 2 - get the app running
 
-Use the project's real commands (see Commands in `AGENTS.md`). Match the project
-type:
+First inspect whether a project-local `verify` driver skill (`.agents/skills/verify/SKILL.md`, `.claude/skills/verify/SKILL.md`, or `verify-*/SKILL.md`) exists. When present, read its `Launch`, `Doctor`, and `features/README.md` map and prefer driving the real surface through that maintained driver inside an isolated workspace, port, or browser profile. When `execution.engine` resolves `pstack` on `standard` or `high-risk` tiers with multiple independent feature flows, you may fan out parallel read-only/isolated verification lanes via `pstack`'s `swarm` skill and merge their evidence under `devflow/reports/{xxx-slug}/`.
+
+Otherwise, use the project's real commands (see Commands in `AGENTS.md`) matching the project type:
 
 - **Web app** - start (or reuse) the dev/preview server, then drive a real browser
   to the relevant routes. Prefer reusing an already-running server over starting a
@@ -92,6 +95,7 @@ Drive the app to each checklist item and capture evidence as you go:
 - Verify **side effects and cleanup**: confirm expected files, DB/state changes,
   and outputs persist where intended, and tear down only processes or temp state
   started by this verification run without deleting captured evidence.
+- Persist raw command transcripts, exit codes, JSON snapshots, and UI screenshots/console checks inside `devflow/reports/{xxx-slug}/` (gitignored), and confirm `Test-Path` / `lstat` on those proof files **after** `Cleanup` completes.
 
 With `verification.uiEvidence: "required"`, every UI claim needs direct browser
 evidence, including a screenshot and the relevant console and network check. If
@@ -114,7 +118,7 @@ Give a short, honest verdict, one line per checklist item:
     [fail] PDF border missing - printBackground not set; screenshot: pdf-no-border.png
     [skip] Vercel render - can't verify locally (feature 9)
 
-Then state the bottom line: are all the feature's done-whens proven, or not yet.
+Then state the bottom line and **Evidence Packet Summary** (naming every persisted file under `devflow/reports/{xxx-slug}/` alongside exact rerun commands): are all the feature's done-whens proven, or not yet.
 
 - All proven -> update only the `**Status:**` line in
   `devflow/context/{xxx-slug}/spec.md` to `verified`, then say it is ready for

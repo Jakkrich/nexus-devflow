@@ -4,6 +4,7 @@ import path from "node:path";
 import { isDevFlowProjectRoot } from "./project-root.js";
 import { createStyle } from "./ui.js";
 import { readProjectConfig } from "./project-config.js";
+import { inspectVerifyDriverSkill } from "./evidence-packet.js";
 
 export interface DoctorCheck {
   id: string;
@@ -549,6 +550,34 @@ export async function runDoctor(
       name: "Execution Engine & pstack Capability",
       status: "pass",
       message: "Execution engine 'auto': pstack not detected; using native DevFlow single-verifier fallback.",
+      fixable: false
+    });
+  }
+
+  // Check 9c: Verification Driver Skill (.agents/skills/verify/ or verify-*)
+  const verifyDriver = await inspectVerifyDriverSkill(projectRoot);
+  if (verifyDriver.state === "ready") {
+    checks.push({
+      id: "verification_driver_skill",
+      name: "Verification Driver Skill (verify)",
+      status: "pass",
+      message: `Project verification skill ready at ${verifyDriver.skillPath} (Launch, Doctor, Drive, Evidence, Cleanup).`,
+      fixable: false
+    });
+  } else if (verifyDriver.state === "incomplete" || verifyDriver.state === "unsafe") {
+    checks.push({
+      id: "verification_driver_skill",
+      name: "Verification Driver Skill (verify)",
+      status: "warn",
+      message: verifyDriver.warning || `Verification driver at ${verifyDriver.skillPath} is incomplete.`,
+      fixable: false
+    });
+  } else {
+    checks.push({
+      id: "verification_driver_skill",
+      name: "Verification Driver Skill (verify)",
+      status: "pass",
+      message: "No project-local verify skill yet (run /onboard or create-verification-skill once app entrypoints exist).",
       fixable: false
     });
   }

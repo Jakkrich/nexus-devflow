@@ -47,6 +47,13 @@ Install optional CI extension with `npx nexus-devflow skill add ci` when you wan
 
 Explain that CI is not required to finish adoption.
 
+## Step 4b - bootstrap or validate project-local `verify` driver skill
+
+Brownfield repositories usually already expose runnable commands, routes, or APIs. Inspect `.agents/skills/verify/SKILL.md` (and `verify-*/SKILL.md`):
+
+- If present with `Launch`, `Doctor`, `Drive`, `Evidence`, and `Cleanup` sections, verify its entrypoints match Step 1 (or refresh via `pstack` `maintain-verification-skill` when active).
+- If absent and a runnable surface exists, bootstrap `.agents/skills/verify/SKILL.md` and `features/README.md` (via `pstack`'s `create-verification-skill` when detected, otherwise directly targeting `devflow/reports/{run-id}/`), sync adapters if needed, and execute one `Launch -> Doctor -> Drive -> Cleanup` smoke pass storing artifacts under `devflow/reports/onboard-verify/` so the generated driver is proven before handoff.
+
 ## Step 5 - ask about DevFlow visibility
 
 Ask how the DevFlow workflow files should be handled in git, unless the user already gave a preference:

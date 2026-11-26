@@ -140,3 +140,96 @@ test("GatekeeperEngine: delegates getDrift and reconcile cleanly", async () => {
   }
 });
 
+test("GatekeeperEngine: Prove-by-Run distinguishes unverified hypotheses from reproduced blockers and inspects evidence packets", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-engine-evidence-"));
+
+  try {
+    await setupDevFlowTestProject(tempDir);
+    const taskDir = path.join(tempDir, "devflow", "context", "002-evidence");
+    await fs.mkdir(taskDir, { recursive: true });
+    await fs.writeFile(
+      path.join(taskDir, "spec.md"),
+      `# 📐 [002-evidence] Evidence Gate\n\n**Status:** verified\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(taskDir, "stage.md"),
+      "# Current Stage\n\n- Active Running ID: `002-evidence`\n- Track: `fast`\n- Current Stage: `check (Passed)`\n",
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(taskDir, "findings.md"),
+      `# Findings Ledger\n\n### SEC-001 [P1] unverified - Hypothesis: unrun suspicion\n`,
+      "utf8"
+    );
+
+    const engine = new GatekeeperEngine(tempDir);
+    const missingEvidenceReport = await engine.evaluate({
+      strict: false,
+      requireEvidenceArtifacts: true
+    });
+    assert.equal(missingEvidenceReport.passed, false);
+    assert.equal(missingEvidenceReport.findingsBlockers, 0);
+    assert.equal(missingEvidenceReport.evidence.present, false);
+    assert.ok(missingEvidenceReport.warnings.some((w) => w.includes("Unverified Hypothesis SEC-001 [P1]")));
+    assert.ok(missingEvidenceReport.violations.some((v) => v.includes("missing_evidence_artifacts")));
+
+    const reportDir = path.join(tempDir, "devflow", "reports", "002-evidence");
+    await fs.mkdir(reportDir, { recursive: true });
+    await fs.writeFile(path.join(reportDir, "verify-layers.json"), "{\"passed\":true}", "utf8");
+
+    const passingReport = await engine.evaluate({
+      strict: false,
+      requireEvidenceArtifacts: true
+    });
+    assert.equal(passingReport.passed, true);
+    assert.equal(passingReport.findingsBlockers, 0);
+    assert.equal(passingReport.evidence.present, true);
+    assert.equal(passingReport.evidence.artifactCount, 1);
+
+    const disallowUnverifiedReport = await engine.evaluate({
+      strict: false,
+      allowUnverified: false
+    });
+    assert.equal(disallowUnverifiedReport.passed, false);
+    assert.ok(
+      disallowUnverifiedReport.violations.some((v) => v.includes("Unverified Hypothesis SEC-001 [P1]"))
+    );
+
+    await fs.writeFile(
+      path.join(taskDir, "findings.md"),
+      `# Findings Ledger\n\n### SEC-002 [P1] open - Reproduced race condition\n`,
+      "utf8"
+    );
+    const reproducedBlockerReport = await engine.evaluate({ strict: false });
+    assert.equal(reproducedBlockerReport.passed, false);
+    assert.equal(reproducedBlockerReport.findingsBlockers, 1);
+
+    const noEvidenceEngine = new GatekeeperEngine(tempDir);
+    const statusWithoutArtifacts = await noEvidenceEngine.evaluate({
+      strict: true,
+      status: {
+        ...(await (await import("../lib/status.js")).readProjectStatus(tempDir)),
+        completion: { state: "ready", blockers: [] },
+        currentWork: {
+          state: "active",
+          type: "feature",
+          title: "Missing Report Check",
+          status: "verified",
+          runId: "003-missing-reports",
+          completed: 1,
+          remaining: 0,
+          total: 1,
+          nextStep: null
+        }
+      }
+    });
+    assert.ok(
+      statusWithoutArtifacts.warnings.some((w) => w.includes("missing_evidence_artifacts")),
+      "strict mode with option-a-evidence-packet warns when verified run has no report artifacts"
+    );
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

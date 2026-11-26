@@ -247,3 +247,43 @@ test("131b devflow-mode, devflow-help, bundled playbooks, and pstack adapter con
   const budgetResult = checkSkillBudgets(agentsSkillsRoot);
   assert.deepEqual(budgetResult.violations, [], `Budget violations: ${budgetResult.violations.join("; ")}`);
 });
+
+test("131c evidence-first verification, onboard verify bootstrap, and audit prove-by-run contracts", () => {
+  const verifySkill = fs.readFileSync(path.join(agentsSkillsRoot, "verify", "SKILL.md"), "utf8");
+  for (const heading of ["## Launch", "## Doctor", "## Drive", "## Evidence", "## Cleanup"]) {
+    assert.match(verifySkill, new RegExp(`^${heading}$`, "m"));
+  }
+  assert.doesNotMatch(verifySkill, /d:\\devtools/i);
+
+  const verifyStatusDoc = fs.readFileSync(
+    path.join(agentsSkillsRoot, "verify", "features", "status-and-doctor.md"),
+    "utf8"
+  );
+  assert.match(verifyStatusDoc, /execution_engine_pstack/);
+  assert.match(verifyStatusDoc, /verification_driver_skill/);
+
+  const onboardSkill = fs.readFileSync(path.join(agentsSkillsRoot, "onboard", "SKILL.md"), "utf8");
+  assert.match(onboardSkill, /\.agents\/skills\/verify\/SKILL\.md/);
+  assert.match(onboardSkill, /create-verification-skill/);
+
+  const brownfield = fs.readFileSync(
+    path.join(agentsSkillsRoot, "onboard", "reference", "brownfield.md"),
+    "utf8"
+  );
+  assert.match(brownfield, /\.agents\/skills\/verify\/SKILL\.md/);
+  assert.match(brownfield, /create-verification-skill/);
+
+  const checkRef = fs.readFileSync(
+    path.join(agentsSkillsRoot, "check", "reference", "verify.md"),
+    "utf8"
+  );
+  assert.match(checkRef, /\.agents\/skills\/verify\/SKILL\.md/);
+  assert.match(checkRef, /verify-layers\.json/);
+  assert.match(checkRef, /devflow\/reports\/\{xxx-slug\}\//);
+
+  const auditSkill = fs.readFileSync(path.join(agentsSkillsRoot, "audit", "SKILL.md"), "utf8");
+  assert.doesNotMatch(auditSkill, /\/autopilot\b/);
+  assert.match(auditSkill, /Prove-by-Run/);
+  assert.match(auditSkill, /interrogate/);
+  assert.match(auditSkill, /\bunverified\b/);
+});

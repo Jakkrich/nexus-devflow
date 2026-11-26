@@ -316,20 +316,23 @@ Use this phase when a current pending request exists in `devflow/context/{xxx-sl
    context. For a legacy request with no `Requested execution`, require a fresh
    reviewer session, record `fresh session`, and omit `Actual execution`.
 3. Run Audit Steps 1 through 3 across `current` with quality, security, performance,
-   and tests together. Review the code fresh against the recorded
+   and tests together. When `execution.engine` resolves `pstack` on `standard` or
+   `high-risk` tiers, you may pair this pass with `pstack`'s `interrogate` rubric
+   without modifying `pstack`. Review the code fresh against the recorded
    `Base commit` and `Target commit`; exclude the request and findings files
    from the code scope. Existing findings are context, never the review
    checklist. Apply **Blast-Radius & Safety Fact Proof** (trace non-grep seams and
-   grade safety facts on the Proof Ladder) and **Prove-by-Run** for locally
-   runnable P0/P1 behavioral defects (attach the exact command and failure output,
-   or note why execution was unavailable).
+   grade safety facts on the Proof Ladder) and **Prove-by-Run**: record locally
+   reproduced defects as `open` with the exact repro command and observed output,
+   and record unrun suspicions as `unverified` hypotheses rather than unverified P0/P1 blockers.
 4. Run `/check` from the reviewer session when the request says Check is
-   required. Follow Check's server and evidence boundaries. A required check
-   that cannot run prevents a passing receipt.
+   required, saving proof artifacts into `devflow/reports/{xxx-slug}/`. Follow Check's
+   server and evidence boundaries. A required check that cannot run prevents a passing receipt.
 5. Update the findings ledger through Audit Step 4, then replace the pending request
-   with a completed receipt in `devflow/context/{xxx-slug}/review.md`. Use `passed` only when the whole target was
-   reviewed, required checks passed, and no P0 or P1 finding is `open` or
-   `fixed`.
+   with a completed receipt in `devflow/context/{xxx-slug}/review.md` citing saved
+   `devflow/reports/{xxx-slug}/` evidence under `## Evidence`. Use `passed` only when
+   the whole target was reviewed, required checks passed, and no confirmed P0 or P1
+   finding is `open` or `fixed`.
    Record actual `automatic` with `fresh subagent`, or actual `manual` with
    `fresh session`, including an explicit manual fallback from an automatic
    request.

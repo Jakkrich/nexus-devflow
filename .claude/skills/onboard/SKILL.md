@@ -231,7 +231,7 @@ Also report whether an interactive browser MCP (e.g., Playwright MCP, Chrome Dev
 When a browser-facing project lacks either capability, point to `/browser-tests`
 as an optional setup route and describe the gap honestly.
 
-Do not create or change Verify commands or GitHub workflows during onboarding.
+Do not create or change GitHub workflows during onboarding.
 Report any verification command or CI already present. When equivalent automatic
 pull-request checks are absent, mention the optional standalone setup:
 
@@ -240,7 +240,18 @@ Run /ci or $ci when you want automatic GitHub checks.
 ```
 
 Explain that CI is not required to continue with planning or the Blueprint build
-loop. The `/ci` skill owns project-specific Verify and GitHub workflow setup.
+loop. The `/ci` skill owns project-specific GitHub workflow setup.
+
+## Step 5b - bootstrap or validate project-local `verify` driver skill
+
+Check whether `.agents/skills/verify/SKILL.md` (or a `verify-*/SKILL.md` driver under `.agents/skills/` or `.claude/skills/`) already exists:
+
+- **Already present**: verify that it defines all five required sections (`Launch`, `Doctor`, `Drive`, `Evidence`, `Cleanup`) without unresolved placeholders and stores proof under `devflow/reports/{run-id}/`. When `execution.engine` resolves `pstack` and commands/routes drifted, mention `pstack`'s `maintain-verification-skill`.
+- **Absent on a runnable project** (detected app entrypoints, CLI binary, server/API routes, UI pages, or real test target):
+  - When `execution.engine` resolves `pstack` (`auto` + `poteto-mode/SKILL.md` detected, or `pstack`), delegate creation of `.agents/skills/verify/SKILL.md` + `features/README.md` to `pstack`'s `create-verification-skill` (read-only reuse; never edit `pstack`).
+  - Otherwise (`native` fallback), generate `.agents/skills/verify/SKILL.md` and `.agents/skills/verify/features/README.md` directly with `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup` (mirroring to `.claude/skills/verify/` if active).
+  - Run one live smoke verification (`Launch -> Doctor -> Drive -> Cleanup`) saving proof in `devflow/reports/onboard-verify/` and confirming the proof files survive cleanup.
+- **Absent on an empty scaffold** (no runnable entrypoint yet): do not create a speculative or untested `verify` skill; record that `/implement` or `/onboard --adopt` should bootstrap `.agents/skills/verify/SKILL.md` once the first runnable surface exists.
 
 ## Step 6 - check ignore files, visibility, and adapters
 
@@ -362,7 +373,7 @@ Stop with a concise onboarding report:
 - files changed
 - commands now available
 - testing gate status
-- verification command and GitHub checks status
+- verification command, `verify` driver skill status (`.agents/skills/verify/SKILL.md`), and GitHub checks status
 - adapter recommendation
 - TODOs or uncertainties
 - exact next files for the user to fill in:

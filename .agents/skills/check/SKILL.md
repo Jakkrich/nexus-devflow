@@ -19,8 +19,10 @@ argument-hint: "[guide] [latest | <step> | <path> | <route>]"
   or review a change also selects guide mode. If the request mixes a guide with
   agent verification, clarify which mode to run first before any activity.
 - `/check` or `$check`, optionally with a verification scope: verify observed
-  behavior against the spec. Follow verification startup below, then read and
-  follow `reference/verify.md` only.
+  behavior against the spec, driving `.agents/skills/verify/SKILL.md` (or
+  `.claude/skills/verify/SKILL.md`) when present and saving durable proof under
+  `devflow/reports/{xxx-slug}/`. Follow verification startup below, then read
+  and follow `reference/verify.md` only.
 
 Load only the selected reference. Do not read both references preemptively.
 Guide generation never satisfies a verification gate. The existing

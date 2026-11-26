@@ -10,9 +10,9 @@ $ARGUMENTS
 
 Where this sits in the workflow:
 
-    /implement or /autopilot  ->  [audit]  ->  fixes or /complete
-    (code exists)                 (review +    (repair quality issues
-                                   ledger)      or close the feature)
+    /implement or /devflow-mode  ->  [audit]  ->  fixes or /complete
+    (code exists)                    (review +    (repair quality issues
+                                      ledger)      or close the feature)
 
 `/check` proves behavior against the spec. `/devflow doctor` checks Blueprint setup and
 workflow health. This skill checks the code itself through either a broad review
@@ -188,7 +188,9 @@ expectations. Apply only the selected lens or lenses:
   - *Verify Claims & Edge Cases*: Does the traced path actually produce the claimed behavior? What inputs/states would break it (concurrency, retries, null/unicode/huge payloads, ordering)? What does it silently change?
   - *Assumed Decision Debt Check*: Scan `devflow/decisions/` for any ADR with `Status: Assumed`. Flag unratified assumptions as `Q-xxx` (P2) to ensure ratification before production handoff.
   - *Blast-Radius & Safety Fact Proof*: Identify the single load-bearing fact the change's safety depends on, trace non-grep seams (wire/JSON contracts, DB columns, teardown order, pinned dependency internals, multi-hop callers), and classify confidence on the 5-level **Proof Ladder** (`1: Asserted` -> `2: Line cited` -> `3: Control-flow traced` -> `4: Executed via script/test` -> `5: Reproduced end-to-end`). Never clear a risky change on Level 1–2 alone when Level 4–5 is locally runnable.
-  - *Prove-by-Run Behavioral Claims*: For locally runnable P0/P1 behavioral defects, attach the exact repro command and observed failure output. Unrun suspicions remain tagged `Inferred` / `Unverified` and must not be reported as confirmed runtime failures.
+  - *Prove-by-Run & `interrogate` Classification*: When `execution.engine` resolves `pstack` on `standard` or `high-risk` tiers, `/audit` (or the Coordinator Verifier Swarm) may delegate adversarial diff scrutiny to `pstack`'s `interrogate` skill (without editing `pstack`) and record its output here. Distinguish:
+    - **Confirmed (`open`)**: locally runnable P0/P1 behavioral defects backed by an exact repro command and observed failure output (Proof Ladder Level 4–5).
+    - **Hypothesis (`unverified`)**: unrun suspicions or speculative edge cases not yet reproduced by execution. Record them with status `unverified` (`### S-001 [P1] unverified - Hypothesis: ...`) so they surface as advisories without falsely blocking `check-gate` — unless local execution is genuinely impossible for a critical trust/data-loss flaw, in which case document why execution could not run.
   - *No Rubber-Stamping*: "LGTM" is prohibited. State what was traced, what was verified, and what evidence supports the verdict.
 
 
@@ -212,6 +214,6 @@ Maintain the durable record in `devflow/context/{xxx-slug}/findings.md` (or `dev
    - `P2`: moderate debt, performance degradation, missing edge cases, or pure proportionality finding.
    - `P3`: minor improvement, code cleanup, cosmetic tweak.
    *(For a proportionality finding, state in Suggested fix what can be deleted. An otherwise pure proportionality finding is P2 or P3. Raise to P0/P1 only when the unnecessary machinery causes a concrete reachable defect or violates an established security or data-integrity boundary.)*
-4. Set status: `open`, `fixed`, `closed`, `accepted`, or `invalid`.
+4. Set status: `unverified` (unrun hypothesis), `open` (reproduced/confirmed), `fixed`, `closed`, `accepted`, or `invalid`.
 5. For recurring mistake classes, prefer `Suggested fix` along the **Structural Escalation Ladder** (Architecture -> Types -> Lint/CI Gate -> Behavior Test -> Docs/Rules last).
 6. Display concise findings summary and next actions.

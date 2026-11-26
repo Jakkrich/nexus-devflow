@@ -8,7 +8,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 2026-11-26 | `131b` | Feature | (Tracer Bullet) `devflow-mode`, `devflow-help`, Playbooks & `pstack` Adapter | `PENDING` | `Completed` | [`131b-devflow-mode-help-playbooks-pstack-adapter.md`](features/131b-devflow-mode-help-playbooks-pstack-adapter.md) |
+| 2026-11-26 | `131c` | Feature | (Tracer Bullet) Evidence-First Verification & `verify` Bootstrap | `PENDING` | `Completed` | [`131c-evidence-first-verification-and-verify-bootstrap.md`](features/131c-evidence-first-verification-and-verify-bootstrap.md) |
+| 2026-11-26 | `131b` | Feature | (Tracer Bullet) `devflow-mode`, `devflow-help`, Playbooks & `pstack` Adapter | `b3335d3` | `Completed` | [`131b-devflow-mode-help-playbooks-pstack-adapter.md`](features/131b-devflow-mode-help-playbooks-pstack-adapter.md) |
 | 2026-11-26 | `131a` | Feature | (Skateboard) v3 Config Policy, Contract & Autonomous Core Loop | `3248ca9` | `Completed` | [`131a-v3-config-policy-and-autonomous-loop.md`](features/131a-v3-config-policy-and-autonomous-loop.md) |
 | 2026-11-19 | `130` | Feature | (Tracer Bullet) Multi-Chat Safe Isolation & Aggregated Status | `PENDING` | `Completed` | [`130-multi-chat-safe-isolation.md`](features/130-multi-chat-safe-isolation.md) |
 | 2026-11-18 | `129` | Fix | Clean legacy scripts and `mockup.html` | `PENDING` | `Completed` | [`129-clean-legacy-scripts-and-mockup.md`](fixes/129-clean-legacy-scripts-and-mockup.md) |

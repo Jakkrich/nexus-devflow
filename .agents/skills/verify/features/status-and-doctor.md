@@ -20,9 +20,9 @@ Preconditions:
 - `$Target` has a completed fresh overlay install (`node $Cli $Target --yes --role full`).
 
 - **Human status.** Run `node $Cli status $Target`. Exit code is `0` and stdout summarizes the workspace without unhandled errors.
-- **JSON status.** Run `node $Cli status $Target --json | Tee-Object -FilePath "$ProofDir\status.json"`. Exit code is `0`, and `ConvertFrom-Json` succeeds with `currentWork.state -eq "idle"`.
-- **Doctor check.** Run `node $Cli doctor $Target --json | Tee-Object -FilePath "$ProofDir\doctor.json"`. Exit code is `0` and valid JSON is returned.
-- **Proof.** Save combined command log and parsed field assertions (`currentWork.state`, `completion.state`, doctor summary) in `$ProofDir/status-and-doctor.log`.
+- **JSON status.** Run `node $Cli status $Target --json | Tee-Object -FilePath "$ProofDir\status.json"`. Exit code is `0`, and `ConvertFrom-Json` succeeds with `currentWork.state -eq "idle"` and `configuration.values.execution.engine -in @("auto", "pstack", "native")`.
+- **Doctor check.** Run `node $Cli doctor $Target --json | Tee-Object -FilePath "$ProofDir\doctor.json"`. Exit code is `0`, valid JSON is returned, and `checks` includes both `execution_engine_pstack` and `verification_driver_skill`.
+- **Proof.** Save combined command log and parsed field assertions (`currentWork.state`, `completion.state`, `execution_engine_pstack`, `verification_driver_skill`, doctor summary) in `$ProofDir/status-and-doctor.log`.
 
 ## Gotchas
 

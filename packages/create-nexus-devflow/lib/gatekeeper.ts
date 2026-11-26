@@ -1,9 +1,11 @@
 import {
   GatekeeperEngine,
+  type EvidenceArtifact,
   type GatekeeperEngineOptions,
   type GateEvaluateOptions,
   type GateReport,
-  type ReconcileOptions
+  type ReconcileOptions,
+  type RunEvidenceSummary
 } from "./gatekeeper-engine.js";
 import { createStyle } from "./ui.js";
 
@@ -13,10 +15,12 @@ export interface GateOptions extends GateEvaluateOptions {
 
 export {
   GatekeeperEngine,
+  type EvidenceArtifact,
   type GatekeeperEngineOptions,
   type GateEvaluateOptions,
   type GateReport,
-  type ReconcileOptions
+  type ReconcileOptions,
+  type RunEvidenceSummary
 };
 
 export async function evaluateGate(
@@ -46,9 +50,13 @@ export function formatGateReport(
 
   const s1Badge = report.twoStage.stage1SpecFidelity ? style.green("✔ PASS") : style.red("✖ FAIL");
   const s2Badge = report.twoStage.stage2CodeQuality ? style.green("✔ PASS") : style.red("✖ FAIL");
+  const evidenceBadge = report.evidence.present
+    ? style.green(`${report.evidence.artifactCount} artifact(s) (${report.evidence.totalBytes} B)`)
+    : style.dim(report.evidence.runId ? `none in devflow/reports/${report.evidence.runId}/` : "none");
   lines.push(style.bold("Two-Stage Review Status:"));
   lines.push(`  - Stage 1 (Spec Fidelity & Tasks) : ${s1Badge}`);
   lines.push(`  - Stage 2 (Code Quality & Security): ${s2Badge}`);
+  lines.push(`  - Evidence Packet                 : ${evidenceBadge}`);
   lines.push("");
 
   if (report.violations.length > 0) {
