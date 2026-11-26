@@ -9,7 +9,8 @@ import { loadCoreSkillInventory } from "../lib/core-skill-inventory.js";
 import {
   buildTrackedIndex,
   loadTrackedRepoIndex,
-  shouldCopyTemplateEntry
+  shouldCopyTemplateEntry,
+  stripAgentStarterKitBlock
 } from "../scripts/prepare-template.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,17 +20,17 @@ const templateRoot = path.join(packageRoot, "template");
 
 test("root .gitignore covers transient, raw inbox, analysis, and development files", async () => {
   const gitignoreContent = await fs.readFile(path.join(repoRoot, ".gitignore"), "utf8");
-  
+
   // Must ignore raw inbox files to protect client secrets / sensitive documents
   assert.match(gitignoreContent, /devflow\/inbox\/\*\/raw\/\*/);
   assert.match(gitignoreContent, /devflow\/inbox\/raw\/\*/);
-  
+
   // Must ignore analysis artifacts
   assert.match(gitignoreContent, /devflow\/analysis\/\*/);
-  
+
   // Must ignore scratch files
   assert.match(gitignoreContent, /devflow\/scratch\/\*/);
-  
+
   // Must ignore vendor and state
   assert.match(gitignoreContent, /devflow\/\.state\//);
   assert.match(gitignoreContent, /devflow\/\.vendor\//);
@@ -270,6 +271,90 @@ test("sanitizeStarterFiles replaces maintainer plans with clean reference starte
     } finally {
       await fs.rm(emptySourceRoot, { recursive: true, force: true });
     }
+  } finally {
+    await fs.rm(tempTemplate, { recursive: true, force: true });
+  }
+});
+
+test("shouldCopyTemplateEntry excludes all agent-starter-kit maintainer paths even when tracked", async () => {
+  const inventory = await loadCoreSkillInventory(path.join(repoRoot, "agent-bundle.manifest.json"));
+  const starterKitPaths = [
+    ".agents/.gitignore",
+    ".agents/starter-kit.json",
+    ".agents/tools/install-project.ps1",
+    ".agents/docs/pstack-guide-th/README.md",
+    ".agents/assets/logo.png",
+    ".agents/rules/chief-of-staff.md",
+    ".agents/plugins/pstack/plugin.json",
+    ".agents/.cache/pstack-claude/VERSION",
+    ".agents/.backup/legacy/note.txt",
+    ".agents/skills/chief-of-staff/SKILL.md",
+    ".agents/skills/make-bot-ui/SKILL.md",
+    ".agents/skills/verify-project/SKILL.md",
+    ".claude/skills/chief-of-staff/SKILL.md",
+    "AI_HANDOFF.md",
+    "GEMINI.md",
+    ".context/cos-board.md"
+  ];
+  const tracked = buildTrackedIndex(["AGENTS.md", "CLAUDE.md", ...starterKitPaths]);
+
+  for (const relPath of starterKitPaths) {
+    assert.equal(
+      shouldCopyTemplateEntry(relPath, false, inventory, tracked),
+      false,
+      `Expected tracked path to be excluded from user template: ${relPath}`
+    );
+    assert.equal(
+      shouldCopyTemplateEntry(relPath, false, inventory, null),
+      false,
+      `Expected untracked-mode path to be excluded from user template: ${relPath}`
+    );
+  }
+});
+
+test("sanitizeStarterFiles strips AGENT-STARTER-KIT marker blocks from AGENTS.md and CLAUDE.md", async () => {
+  const mod = await import("../scripts/prepare-template.js");
+  const sanitizeStarterFiles = (mod as {
+    sanitizeStarterFiles: (targetTemplateRoot?: string, sourceRepoRoot?: string) => Promise<void>;
+  }).sanitizeStarterFiles;
+
+  const markerBlock = [
+    "<!-- BEGIN AGENT-STARTER-KIT -->",
+    "# AI Agent Instructions & Chief of Staff",
+    "Read AI_HANDOFF.md and .context/cos-board.md",
+    "<!-- END AGENT-STARTER-KIT -->"
+  ].join("\n");
+
+  assert.equal(stripAgentStarterKitBlock(`${markerBlock}\n\n# Nexus-DevFlow\n`), "# Nexus-DevFlow\n");
+
+  const tempTemplate = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-strip-markers-"));
+  try {
+    await fs.mkdir(path.join(tempTemplate, "devflow", "context"), { recursive: true });
+    await fs.mkdir(path.join(tempTemplate, "devflow", "history"), { recursive: true });
+    await fs.writeFile(
+      path.join(tempTemplate, "AGENTS.md"),
+      `${markerBlock}\n\n# Nexus-DevFlow\n\n## Verification & Commands\n- internal\n`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(tempTemplate, "CLAUDE.md"),
+      `${markerBlock}\n\n# CLAUDE.md\n\n@AGENTS.md\n`,
+      "utf8"
+    );
+
+    await sanitizeStarterFiles(tempTemplate, repoRoot);
+
+    const outAgents = await fs.readFile(path.join(tempTemplate, "AGENTS.md"), "utf8");
+    const outClaude = await fs.readFile(path.join(tempTemplate, "CLAUDE.md"), "utf8");
+
+    assert.doesNotMatch(outAgents, /AGENT-STARTER-KIT/);
+    assert.doesNotMatch(outAgents, /chief-of-staff/);
+    assert.match(outAgents, /^# Nexus-DevFlow/);
+    assert.match(outAgents, /## Commands/);
+
+    assert.doesNotMatch(outClaude, /AGENT-STARTER-KIT/);
+    assert.doesNotMatch(outClaude, /chief-of-staff/);
+    assert.equal(outClaude, "# CLAUDE.md\n\n@AGENTS.md\n");
   } finally {
     await fs.rm(tempTemplate, { recursive: true, force: true });
   }

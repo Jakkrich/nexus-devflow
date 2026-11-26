@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import * as routing from "../evals/routing.js";
-import { parseSkillFrontmatter, tokenize, type SkillInfo } from "../evals/routing.js";
+import { isModelInvocationDisabled, parseSkillFrontmatter, tokenize, type SkillInfo } from "../evals/routing.js";
 const { evaluateCases, rankSkill } = routing;
 
 const skills = new Map<string, SkillInfo>([
@@ -47,4 +47,24 @@ test("empty evaluation is an error, not a perfect score", () => {
 
 test("frontmatter quotes are removed without altering description", () => {
   assert.deepEqual(parseSkillFrontmatter('---\nname: fix\ndescription: "Draft a fix plan."\n---\n'), { name: "fix", description: "Draft a fix plan." });
+});
+
+test("frontmatter supports YAML folded description blocks and disable-model-invocation detection", () => {
+  const folded = [
+    "---",
+    "name: make-bot-ui",
+    "description: >-",
+    "  First line of description",
+    "  second line of description.",
+    "disable-model-invocation: true",
+    "---",
+    "# Body"
+  ].join("\n");
+
+  assert.deepEqual(parseSkillFrontmatter(folded), {
+    name: "make-bot-ui",
+    description: "First line of description second line of description."
+  });
+  assert.equal(isModelInvocationDisabled(folded), true);
+  assert.equal(isModelInvocationDisabled("---\nname: fix\ndescription: \"x\"\n---\n"), false);
 });

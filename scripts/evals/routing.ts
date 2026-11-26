@@ -28,13 +28,39 @@ export function tokenize(text: string): string[] {
   return text.toLowerCase().replace(/[^\p{L}\p{M}\p{N}-]/gu, " ").split(/\s+/)
     .filter(token => token.length > 1 && !stopWords.has(token));
 }
+export function isModelInvocationDisabled(content: string): boolean {
+  const frontmatter = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  return Boolean(frontmatter && /^disable-model-invocation:\s*true\s*$/m.test(frontmatter[1]));
+}
 export function parseSkillFrontmatter(content: string): { name: string; description: string } {
   const frontmatter = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const block = frontmatter?.[1] ?? "";
   const field = (key: string): string => {
-    const value = frontmatter?.[1].match(new RegExp("^" + key + ":\\s*(.*)$", "m"))?.[1].trim() ?? "";
-    if (value.startsWith('"') && value.endsWith('"')) return JSON.parse(value) as string;
-    if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replace(/''/g, "'");
-    return value;
+    const lines = block.split(/\r?\n/);
+    for (let i = 0; i < lines.length; i += 1) {
+      const match = lines[i].match(new RegExp("^" + key + ":\\s*(.*)$"));
+      if (!match) continue;
+      const value = match[1].trim();
+      if (value === ">-" || value === ">" || value === "|-" || value === "|") {
+        const collected: string[] = [];
+        for (let j = i + 1; j < lines.length; j += 1) {
+          const nextLine = lines[j];
+          if (/^[A-Za-z0-9_-]+:\s*/.test(nextLine)) break;
+          if (nextLine.trim() === "") {
+            if (collected.length > 0) collected.push("");
+            continue;
+          }
+          if (!/^[ \t]+/.test(nextLine)) break;
+          collected.push(nextLine.trim());
+        }
+        const sep = value.startsWith(">") ? " " : "\n";
+        return collected.join(sep).replace(/\s+/g, value.startsWith(">") ? " " : "\n").trim();
+      }
+      if (value.startsWith('"') && value.endsWith('"')) return JSON.parse(value) as string;
+      if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replace(/''/g, "'");
+      return value;
+    }
+    return "";
   };
   return { name: field("name"), description: field("description") };
 }
@@ -43,7 +69,9 @@ export function loadSkills(root = path.join(repoRoot, ".agents", "skills")): Map
   for (const entry of fs.readdirSync(root)) {
     const file = path.join(root, entry, "SKILL.md");
     if (!fs.existsSync(file)) continue;
-    const meta = parseSkillFrontmatter(fs.readFileSync(file, "utf8"));
+    const rawContent = fs.readFileSync(file, "utf8");
+    if (isModelInvocationDisabled(rawContent)) continue;
+    const meta = parseSkillFrontmatter(rawContent);
     if (!/^[a-z0-9-]+$/.test(entry) || !meta.name || !meta.description) throw new Error("Invalid skill metadata: " + file);
     skills.set(entry, { ...meta, descTokens: new Set(tokenize(meta.description)) });
   }

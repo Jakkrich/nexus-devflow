@@ -2,6 +2,7 @@ export interface FrontmatterResult {
   name?: string;
   description?: string;
   allowedTools?: string;
+  disableModelInvocation?: boolean;
 }
 
 export interface SkillBudgetStats {
@@ -28,6 +29,7 @@ export declare const DEFAULT_SKILL_BYTE_BUDGET: number;
 export declare const DEFAULT_SUPPORT_MD_BYTE_BUDGET: number;
 export declare const DEFAULT_DESCRIPTION_CHAR_CAP: number;
 export declare const DEFAULT_WARN_AT: number;
+export declare const DESCRIPTION_CHAR_OVERRIDES: Record<string, number>;
 
 export declare function parseFrontmatter(text: string): FrontmatterResult;
 export declare function checkSkillBudgets(skillsDir: string, options?: SkillBudgetOptions): SkillBudgetResult;

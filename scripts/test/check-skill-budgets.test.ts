@@ -79,3 +79,40 @@ ${midBody}`;
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
 });
+
+test("parseFrontmatter supports YAML folded description blocks and disable-model-invocation", () => {
+  const sample = `---
+name: make-bot-ui
+description: >-
+  Use when building a custom UI
+  that should wake a bot over a webhook.
+disable-model-invocation: true
+---
+# Bot UI`;
+
+  const fm = parseFrontmatter(sample);
+  assert.equal(fm.name, "make-bot-ui");
+  assert.equal(fm.description, "Use when building a custom UI that should wake a bot over a webhook.");
+  assert.equal(fm.disableModelInvocation, true);
+});
+
+test("checkSkillBudgets honors DESCRIPTION_CHAR_OVERRIDES for chief-of-staff", () => {
+  const desc = "a".repeat(415);
+  const sampleSkill = `---
+name: chief-of-staff
+description: "${desc}"
+disable-model-invocation: true
+---
+# Chief of Staff`;
+
+  const tempDir = path.resolve("devflow/tmp/test-budgets-cos-override");
+  fs.mkdirSync(path.join(tempDir, "chief-of-staff"), { recursive: true });
+  fs.writeFileSync(path.join(tempDir, "chief-of-staff", "SKILL.md"), sampleSkill, "utf8");
+
+  try {
+    const result = checkSkillBudgets(tempDir);
+    assert.deepEqual(result.violations, []);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});

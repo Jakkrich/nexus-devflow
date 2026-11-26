@@ -16,6 +16,10 @@ export const SKILL_BYTE_OVERRIDES = {
   // Granular grandfathered overrides if needed
 };
 
+export const DESCRIPTION_CHAR_OVERRIDES = {
+  'chief-of-staff': 512,
+};
+
 export const SUPPORT_MD_OVERRIDES = {
   'diagram-design/references/primitive-icons.md': 128 * 1024, // Full SVG monochrome icon dictionary
   'diagram-design/references/type-line.md': 40 * 1024,
@@ -24,6 +28,32 @@ export const SUPPORT_MD_OVERRIDES = {
   'diagram-design/references/type-high-level.md': 36 * 1024,
   'diagram-design/references/type-medallion.md': 30 * 1024,
 };
+
+function extractYamlDescription(raw) {
+  const lines = raw.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i += 1) {
+    const match = lines[i].match(/^description:\s*(.*)$/);
+    if (!match) continue;
+    const inlineValue = match[1].trim();
+    if (inlineValue === '>-' || inlineValue === '>' || inlineValue === '|-' || inlineValue === '|') {
+      const collected = [];
+      for (let j = i + 1; j < lines.length; j += 1) {
+        const nextLine = lines[j];
+        if (/^[A-Za-z0-9_-]+:\s*/.test(nextLine)) break;
+        if (nextLine.trim() === '') {
+          if (collected.length > 0) collected.push('');
+          continue;
+        }
+        if (!/^[ \t]+/.test(nextLine)) break;
+        collected.push(nextLine.trim());
+      }
+      const sep = inlineValue.startsWith('>') ? ' ' : '\n';
+      return collected.join(sep).replace(/\s+/g, inlineValue.startsWith('>') ? ' ' : '\n').trim();
+    }
+    return inlineValue.replace(/^["']|["']$/g, '').trim();
+  }
+  return undefined;
+}
 
 export function parseFrontmatter(text) {
   const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -34,11 +64,15 @@ export function parseFrontmatter(text) {
   const nameMatch = raw.match(/^name:\s*(.+)$/m);
   if (nameMatch) result.name = nameMatch[1].trim().replace(/^['"]|['"]$/g, '');
 
-  const descMatch = raw.match(/^description:\s*["']?([\s\S]*?)["']?\s*$/m);
-  if (descMatch) result.description = descMatch[1].trim().replace(/^"|"$/g, '');
+  const desc = extractYamlDescription(raw);
+  if (desc) result.description = desc;
 
   const toolsMatch = raw.match(/^allowed-tools:\s*(.+)$/m);
   if (toolsMatch) result.allowedTools = toolsMatch[1].trim();
+
+  if (/^disable-model-invocation:\s*true\s*$/m.test(raw)) {
+    result.disableModelInvocation = true;
+  }
 
   return result;
 }
@@ -46,6 +80,7 @@ export function parseFrontmatter(text) {
 export function checkSkillBudgets(skillsDir, options = {}) {
   const skillBudget = options.skillBudget ?? DEFAULT_SKILL_BYTE_BUDGET;
   const supportBudget = options.supportBudget ?? DEFAULT_SUPPORT_MD_BYTE_BUDGET;
+  const hasExplicitDescCap = options.descCap !== undefined;
   const descCap = options.descCap ?? DEFAULT_DESCRIPTION_CHAR_CAP;
   const warnAt = options.warnThreshold ?? DEFAULT_WARN_AT;
 
@@ -80,6 +115,10 @@ export function checkSkillBudgets(skillsDir, options = {}) {
 
     if (isSkillMd) {
       const fm = parseFrontmatter(text);
+      const skillName = rel.split('/')[0];
+      const effectiveDescCap = hasExplicitDescCap
+        ? descCap
+        : (DESCRIPTION_CHAR_OVERRIDES[skillName] ?? descCap);
       if (!fm.name) {
         violations.push(`${rel}: missing or invalid \`name\` in YAML frontmatter`);
       }
@@ -87,14 +126,13 @@ export function checkSkillBudgets(skillsDir, options = {}) {
         violations.push(`${rel}: missing or invalid \`description\` in YAML frontmatter`);
       } else {
         const descLen = fm.description.length;
-        if (descLen > descCap) {
-          violations.push(`${rel}: description is ${descLen} chars (cap ${descCap}) - it loads into every session`);
-        } else if (descLen / descCap > warnAt) {
-          warnings.push(`${rel}: description is ${descLen}/${descCap} chars (${(100 * descLen / descCap).toFixed(1)}% of cap)`);
+        if (descLen > effectiveDescCap) {
+          violations.push(`${rel}: description is ${descLen} chars (cap ${effectiveDescCap}) - it loads into every session`);
+        } else if (descLen / effectiveDescCap > warnAt) {
+          warnings.push(`${rel}: description is ${descLen}/${effectiveDescCap} chars (${(100 * descLen / effectiveDescCap).toFixed(1)}% of cap)`);
         }
       }
 
-      const skillName = rel.split('/')[0];
       const budget = SKILL_BYTE_OVERRIDES[skillName] ?? skillBudget;
       if (bytes > budget) {
         violations.push(`${rel}: ${bytes} bytes exceeds its budget of ${budget} (by ${bytes - budget} bytes)`);

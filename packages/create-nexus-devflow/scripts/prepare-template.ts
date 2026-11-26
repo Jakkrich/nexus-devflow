@@ -33,6 +33,13 @@ function matchesPrefix(filePath: string, prefix: string): boolean {
   return filePath === prefix || filePath.startsWith(`${prefix}/`);
 }
 
+const AGENT_STARTER_KIT_BLOCK_REGEX =
+  /<!-- BEGIN AGENT-STARTER-KIT -->[\s\S]*?<!-- END AGENT-STARTER-KIT -->\r?\n*/g;
+
+export function stripAgentStarterKitBlock(content: string): string {
+  return content.replace(AGENT_STARTER_KIT_BLOCK_REGEX, "").replace(/^\r?\n+/, "");
+}
+
 export function buildTrackedIndex(paths: Iterable<string>): TrackedIndex {
   const files = new Set<string>();
   const dirs = new Set<string>();
@@ -152,6 +159,31 @@ export function shouldCopyTemplateEntry(
   ) {
     return false;
   }
+  if (
+    normalized === "AI_HANDOFF.md" ||
+    normalized === "GEMINI.md" ||
+    matchesPrefix(normalized, ".context") ||
+    normalized === ".agents/.gitignore" ||
+    normalized === ".claude/.gitignore" ||
+    normalized === ".agents/starter-kit.json" ||
+    normalized === ".claude/starter-kit.json" ||
+    matchesPrefix(normalized, ".agents/assets") ||
+    matchesPrefix(normalized, ".agents/docs") ||
+    matchesPrefix(normalized, ".agents/tools") ||
+    matchesPrefix(normalized, ".agents/rules") ||
+    matchesPrefix(normalized, ".agents/plugins") ||
+    matchesPrefix(normalized, ".agents/.cache") ||
+    matchesPrefix(normalized, ".agents/.backup") ||
+    matchesPrefix(normalized, ".claude/assets") ||
+    matchesPrefix(normalized, ".claude/docs") ||
+    matchesPrefix(normalized, ".claude/tools") ||
+    matchesPrefix(normalized, ".claude/rules") ||
+    matchesPrefix(normalized, ".claude/plugins") ||
+    matchesPrefix(normalized, ".claude/.cache") ||
+    matchesPrefix(normalized, ".claude/.backup")
+  ) {
+    return false;
+  }
 
   return isTrackedEntry(normalized, isDirectory, trackedIndex);
 }
@@ -221,10 +253,10 @@ export async function sanitizeStarterFiles(
   targetTemplateRoot: string = templateRoot,
   sourceRepoRoot: string = repoRoot
 ): Promise<void> {
-  // 1. Sanitize AGENTS.md
+  // 1a. Sanitize AGENTS.md (strip maintainer starter-kit marker block & maintainer commands)
   try {
     const agentsPath = path.join(targetTemplateRoot, "AGENTS.md");
-    let agentsContent = await fs.readFile(agentsPath, "utf8");
+    let agentsContent = stripAgentStarterKitBlock(await fs.readFile(agentsPath, "utf8"));
     const maintainerCommandsRegex = /## Verification & Commands[\s\S]*$/;
     const starterCommands = `## Commands
 
@@ -235,6 +267,18 @@ export async function sanitizeStarterFiles(
 `;
     agentsContent = agentsContent.replace(maintainerCommandsRegex, starterCommands);
     await fs.writeFile(agentsPath, agentsContent, "utf8");
+  } catch (error: unknown) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+
+  // 1b. Sanitize CLAUDE.md (strip maintainer starter-kit marker block)
+  try {
+    const claudePath = path.join(targetTemplateRoot, "CLAUDE.md");
+    let claudeContent = stripAgentStarterKitBlock(await fs.readFile(claudePath, "utf8"));
+    if (claudeContent.length > 0 && !claudeContent.endsWith("\n")) {
+      claudeContent += "\n";
+    }
+    await fs.writeFile(claudePath, claudeContent, "utf8");
   } catch (error: unknown) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
