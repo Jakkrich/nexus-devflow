@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
@@ -299,7 +299,7 @@
           <p>หลังจากติดตั้งเสร็จสิ้น ให้ทำตามลำดับนี้ในแต่ละฟีเจอร์:</p>
           <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
           <p>Agent Skills จะหยุดที่ขอบเขตสำคัญเสมอ จะไม่มีการ merge, push, deploy หรือส่งข้อมูลใดๆ โดยไม่ได้รับการอนุมัติตามข้อกำหนดของเวิร์กโฟลว์</p>
-          <p>เมื่อคุณต้องการให้ DevFlow ดำเนินการต่อจนจบ Build Plan ที่เหลือโดยอัตโนมัติ ให้รัน <code>$autopilot --all</code> หรือ <code>/autopilot --all</code> ซึ่งจะรันตามวงจรฟีเจอร์ด้วย 1 branch และ 1 local main commit ต่อฟีเจอร์ และไม่มีการ push อัตโนมัติ ดูรายละเอียดได้ที่ <a href="../commands/autopilot/">Autopilot</a> และ <a href="../project-configuration/">Project Configuration</a></p>
+          <p>เมื่อคุณต้องการให้ DevFlow ดำเนินการต่อจนจบ Build Plan ที่เหลือโดยอัตโนมัติ ให้รัน <code>$devflow-mode --all</code> หรือ <code>/devflow-mode --all</code> (รองรับคำสั่งเดิม <code>/autopilot --all</code>) ซึ่งจะรันตามวงจรฟีเจอร์ผ่าน Isolated Subagents และหยุดที่ Option A Evidence Packet โดยไม่มีการ merge หรือ push อัตโนมัติ ดูรายละเอียดได้ที่ <a href="../commands/devflow-mode/">DevFlow Mode</a> และ <a href="../project-configuration/">Project Configuration</a></p>
           <p>เมื่อมีการตั้งค่าคำสั่ง Verify ไว้ ขั้นตอน implementation และ completion จะใช้สูตรเดียวกัน และ GitHub Actions จะรันโดยอัตโนมัติเมื่อเวิร์กโฟลว์ถูกเผยแพร่</p>
           <p>หากต้องการนำฟีเจอร์ที่เสร็จสมบูรณ์แล้วออกในภายหลัง ให้ทำตามคำแนะนำของคำสั่ง <a href="../commands/rollback/">Rollback</a> แทนการเขียน Git History ใหม่หรือลบฟีเจอร์ด้วยตนเอง</p>
         
@@ -330,7 +330,7 @@
           
           <pre><code>/feature -> /implement -> /check -> /audit current -> /complete</code></pre>
           <p>รันคำสั่งเหล่านี้ใน AI Chat (ใช้ <code>$</code> ใน Codex หรือ <code>/</code> ใน Claude Code / Antigravity) ให้รีวิว Feature Spec ก่อนเริ่ม Implement, คำสั่ง Check จะทดสอบพฤติกรรมที่สัญญาไว้ และ Audit จะรีวิวคุณภาพโค้ด การแสดง Audit ที่นี่ไม่ได้เปลี่ยนเกณฑ์ Review Gates ที่คุณตั้งค่าไว้</p>
-          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/devflow</code> เพื่อกลับมาทำงานต่อ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
+          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/devflow-help</code> เพื่อเปิด guide/สถานะ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
         
           
         </section>

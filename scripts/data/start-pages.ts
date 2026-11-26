@@ -127,7 +127,7 @@ export const START_PAGES: DocPage[] = [
           <p>หลังจากติดตั้งเสร็จสิ้น ให้ทำตามลำดับนี้ในแต่ละฟีเจอร์:</p>
           <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
           <p>Agent Skills จะหยุดที่ขอบเขตสำคัญเสมอ จะไม่มีการ merge, push, deploy หรือส่งข้อมูลใดๆ โดยไม่ได้รับการอนุมัติตามข้อกำหนดของเวิร์กโฟลว์</p>
-          <p>เมื่อคุณต้องการให้ DevFlow ดำเนินการต่อจนจบ Build Plan ที่เหลือโดยอัตโนมัติ ให้รัน <code>$autopilot --all</code> หรือ <code>/autopilot --all</code> ซึ่งจะรันตามวงจรฟีเจอร์ด้วย 1 branch และ 1 local main commit ต่อฟีเจอร์ และไม่มีการ push อัตโนมัติ ดูรายละเอียดได้ที่ <a href="../commands/autopilot/">Autopilot</a> และ <a href="../project-configuration/">Project Configuration</a></p>
+          <p>เมื่อคุณต้องการให้ DevFlow ดำเนินการต่อจนจบ Build Plan ที่เหลือโดยอัตโนมัติ ให้รัน <code>$devflow-mode --all</code> หรือ <code>/devflow-mode --all</code> (รองรับคำสั่งเดิม <code>/autopilot --all</code>) ซึ่งจะรันตามวงจรฟีเจอร์ผ่าน Isolated Subagents และหยุดที่ Option A Evidence Packet โดยไม่มีการ merge หรือ push อัตโนมัติ ดูรายละเอียดได้ที่ <a href="../commands/devflow-mode/">DevFlow Mode</a> และ <a href="../project-configuration/">Project Configuration</a></p>
           <p>เมื่อมีการตั้งค่าคำสั่ง Verify ไว้ ขั้นตอน implementation และ completion จะใช้สูตรเดียวกัน และ GitHub Actions จะรันโดยอัตโนมัติเมื่อเวิร์กโฟลว์ถูกเผยแพร่</p>
           <p>หากต้องการนำฟีเจอร์ที่เสร็จสมบูรณ์แล้วออกในภายหลัง ให้ทำตามคำแนะนำของคำสั่ง <a href="../commands/rollback/">Rollback</a> แทนการเขียน Git History ใหม่หรือลบฟีเจอร์ด้วยตนเอง</p>
         `
@@ -152,7 +152,7 @@ export const START_PAGES: DocPage[] = [
         contentHtml: `
           <pre><code>/feature -> /implement -> /check -> /audit current -> /complete</code></pre>
           <p>รันคำสั่งเหล่านี้ใน AI Chat (ใช้ <code>$</code> ใน Codex หรือ <code>/</code> ใน Claude Code / Antigravity) ให้รีวิว Feature Spec ก่อนเริ่ม Implement, คำสั่ง Check จะทดสอบพฤติกรรมที่สัญญาไว้ และ Audit จะรีวิวคุณภาพโค้ด การแสดง Audit ที่นี่ไม่ได้เปลี่ยนเกณฑ์ Review Gates ที่คุณตั้งค่าไว้</p>
-          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/devflow</code> เพื่อกลับมาทำงานต่อ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
+          <p>ไม่แน่ใจว่าไอเดียควรอยู่ในแผนงานหรือไม่? เริ่มต้นด้วย <code>/explore</code>, ใช้ <code>/devflow-help</code> เพื่อเปิด guide/สถานะ และใช้ <code>/fix</code> สำหรับการแก้ไขงานด่วนขนาดเล็กที่ไม่ได้อยู่ในแผนงาน ดูรายละเอียดคำสั่งทั้งหมดจัดกลุ่มตามหมวดหมู่ได้ที่ <a href="../command-guide/">Command Guide</a></p>
         `
       }
     ]
@@ -326,13 +326,13 @@ export const START_PAGES: DocPage[] = [
         contentHtml: `
           <p>เมื่อกระบวนการ Adopt เสร็จสมบูรณ์ โค้ดเบสเดิมของคุณจะมีความพร้อมเต็มที่สำหรับการพัฒนาฟีเจอร์ใหม่ตามวงจรมาตรฐาน 4 ขั้นตอน:</p>
           <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
-          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วยโหมด Continuous ผ่าน <code>/autopilot --all</code>:</p>
-          <pre><code>/autopilot --all</code></pre>
+          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วย Coordinator Mode ผ่าน <code>/devflow-mode --all</code>:</p>
+          <pre><code>/devflow-mode --all</code></pre>
           <p>ดูรายละเอียดและแนวทางปฏิบัติเพิ่มเติมได้ที่:</p>
           <ul>
             <li><a href="../command-guide/">Command Guide</a> — คู่มือสรุปชุดคำสั่ง 15 Core Skills + ส่วนเสริม</li>
             <li><a href="../writing-your-plans/">Writing Your Plans</a> — เทคนิคการเขียนและจัดระเบียบแผนงาน</li>
-            <li><a href="../commands/autopilot/">Autopilot &amp; Continuous Mode</a> — การรันลูปพัฒนาฟีเจอร์แบบอัตโนมัติ</li>
+            <li><a href="../commands/devflow-mode/">DevFlow Mode &amp; Playbooks</a> — การรันลูป Coordinator + Subagents แบบอัตโนมัติ</li>
           </ul>
         `
       }
@@ -412,9 +412,9 @@ export const START_PAGES: DocPage[] = [
                 <td>ติดตั้งส่วนเสริม <code>/browseros-neo</code> สำหรับ E2E Test Plan, Evidence และ Session Replay</td>
               </tr>
               <tr>
-                <td>ต้องการเช็กสถานะ, สรุปผู้บริหาร หรือตรวจสุขภาพ</td>
-                <td><code>/devflow</code> / <code>/devflow doctor</code></td>
-                <td>ศูนย์รวมเช็กสถานะงาน (<code>--exec</code>), ตรวจสุขภาพ Adapters/Overview และเราเตอร์</td>
+                <td>ต้องการเช็กสถานะ, แนะนำคำสั่ง หรือตรวจสุขภาพ</td>
+                <td><code>/devflow-help</code> / <code>/devflow-help doctor</code></td>
+                <td>ศูนย์รวม Interactive Guide, Prompt Builder, สถานะงาน (<code>--exec</code>), ตรวจสุขภาพ และเราเตอร์คำสั่งเดิม</td>
               </tr>
             </tbody>
           </table>
@@ -480,8 +480,8 @@ export const START_PAGES: DocPage[] = [
               สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่สร้างไฟล์เกินจำเป็น
             </li>
             <li>
-              <strong><a href="../commands/devflow/">/devflow</a></strong>: 
-              รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สรุปผู้บริหาร (<code>--exec</code>), ตรวจสุขภาพด้วย <code>/devflow doctor</code> และคำสั่งถัดไป
+              <strong><a href="../commands/devflow-help/">/devflow-help</a></strong>: 
+              Interactive Guide &amp; Prompt Builder, รายงานสถานะภาพรวม (<code>--exec</code>), ตรวจสุขภาพด้วย <code>/devflow-help doctor</code> และเราเตอร์คำสั่งเดิม
             </li>
             <li>
               <strong><a href="../commands/debug/">/debug</a></strong>: 
@@ -559,8 +559,8 @@ export const START_PAGES: DocPage[] = [
           <p>กลุ่มคำสั่งสำหรับการพัฒนาระบบแบบอัตโนมัติโดยลดการแทรกแซงของมนุษย์:</p>
           <ul>
             <li>
-              <strong><a href="../commands/autopilot/">/autopilot</a></strong>: 
-              รันกระบวนการพัฒนา 1 ฟีเจอร์แบบอัตโนมัติ (Spec -&gt; Implement -&gt; Check -&gt; Audit) หรือรันคิวต่อเนื่องทั้งหมดในเครื่องด้วย <code>/autopilot --all</code>
+              <strong><a href="../commands/devflow-mode/">/devflow-mode</a></strong>: 
+              Lead-Coordinator + Playbook Router รันงานด้วย Isolated Subagents และ <code>pstack</code> (หรือรันคิวต่อเนื่องด้วย <code>/devflow-mode --all</code>)
             </li>
           </ul>
         `
@@ -571,8 +571,8 @@ export const START_PAGES: DocPage[] = [
         contentHtml: `
           <p>คุณสามารถเรียกใช้คำสั่งได้ตามรูปแบบที่เครื่องมือ AI ของคุณรองรับ:</p>
           <ul>
-            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/devflow doctor</code>, <code>/check guide</code></li>
-            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$devflow doctor</code>, <code>$check guide</code></li>
+            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/devflow-help doctor</code>, <code>/check guide</code></li>
+            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$devflow-help doctor</code>, <code>$check guide</code></li>
             <li><strong>GitHub Copilot / OpenCode / Chat ทั่วไป</strong>: พิมพ์ชื่อคำสั่งหรือระบุความต้องการเป็นภาษาไทยหรืออังกฤษได้โดยตรง</li>
           </ul>
           
@@ -856,23 +856,33 @@ pnpm dlx nexus-devflow@latest update</code></pre>
                 <td>สร้างคู่มือการทดสอบ Manual Walkthrough ทีละขั้นตอนสำหรับมนุษย์ตรวจทาน</td>
               </tr>
               <tr>
-                <td><code>/adopt</code>, <code>/devflow-doctor</code>, <code>/continuous</code></td>
-                <td><code>/onboard --adopt</code>, <code>/devflow doctor</code>, <code>/autopilot --all</code></td>
+                <td><code>/autopilot</code>, <code>/continuous</code></td>
+                <td><code>/devflow-mode</code></td>
+                <td>Lead-Coordinator + 5 Composable Playbooks + Isolated Subagents &amp; <code>pstack</code> integration</td>
+              </tr>
+              <tr>
+                <td><code>/devflow</code>, <code>/devflow-doctor</code>, <code>/devflow-status</code></td>
+                <td><code>/devflow-help</code>, <code>/devflow-help doctor</code></td>
+                <td>รวม Interactive Guide, Prompt Builder, Status (<code>--exec</code>), Doctor และ Legacy Router</td>
+              </tr>
+              <tr>
+                <td><code>/adopt</code></td>
+                <td><code>/onboard --adopt</code></td>
                 <td>ควบรวมเป็นโหมดมาตรฐานภายใน 15 Core Skills เพื่อลดคำสั่งซ้ำซ้อน</td>
               </tr>
             </tbody>
           </table>
-          <p>สำหรับ OpenAI Codex ให้ใช้ <code>$check guide</code>, <code>$devflow doctor</code> และ <code>$autopilot --all</code></p>
+          <p>สำหรับ OpenAI Codex ให้ใช้ <code>$check guide</code>, <code>$devflow-help doctor</code> และ <code>$devflow-mode --all</code></p>
           
           <h4>กลไกการทำงานของ Core Skills สำคัญ (15 Core Skills)</h4>
           <ul>
             <li><strong><code>/check guide</code> (รวม <code>/try</code> เดิม)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยระบุคำสั่งรัน URL จุดคลิก ผลลัพธ์ที่ถูกต้อง และสัญญาณข้อผิดพลาด</li>
             <li><strong><code>/explore</code> (รวม <code>/brainstorm</code> เดิม)</strong>: วิเคราะห์ไอเดียและเปรียบเทียบ 2–3 ทางเลือก (Trade-offs) กับโค้ดจริงแบบ Read-Only โดยไม่แก้ไขไฟล์</li>
-            <li><strong><code>/devflow doctor</code> (รวม <code>/devflow-doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters ความสดใหม่และขนาดของ <code>project-overview.md</code> (&lt; 20KB) และคำสั่งใน <code>AGENTS.md</code></li>
+            <li><strong><code>/devflow-help doctor</code> (รวม <code>/devflow doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters, Execution Engine (<code>pstack</code>), <code>verify</code> skill และขนาดของ <code>project-overview.md</code> (&lt; 20KB)</li>
             <li><strong><code>/overview</code></strong>: Deterministic Compiler ที่กลั่นกรองข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code></li>
           </ul>
 
-          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
+          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow-help doctor</code> เพื่อตรวจสอบสุขภาพระบบทั้งหมดได้ทันที</p>
         `,
         subsections: [
           {

@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
@@ -348,9 +348,9 @@
         <section id="run-the-remaining-plan-continuously">
           <h2>การรันแผนงานแบบต่อเนื่องอัตโนมัติ (Run the remaining plan continuously)</h2>
           
-          <p>คำสั่ง <code>/autopilot --all</code> (หรือ <code>/autopilot --max &lt;N&gt; --merge</code>) เป็นโหมดการทำงานอัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> แบบต่อเนื่องหลายรายการโดยไม่ต้องหยุดรอการอนุมัติระหว่างขั้นตอนย่อย:</p>
-          <pre><code>/autopilot --all ──▶ หยิบฟีเจอร์ถัดไป ──▶ รัน Spec/Implement/Check/Gates ──▶ Local Completion &amp; Merge ──▶ ทำซ้ำ</code></pre>
-          <p>Build Plan จะทำหน้าที่เป็นคิวงานโดยตรง แต่ละฟีเจอร์ยังคงแยก Branch, รันการทดสอบ TDD, บันทึกประวัติ และทำ Local Squash-Merge เข้าสู่ <code>main</code> อย่างปลอดภัย</p>
+          <p>คำสั่ง <code>/devflow-mode --all</code> (หรือ <code>/devflow-mode --max &lt;N&gt; --merge</code>, รองรับ alias เดิม <code>/autopilot --all</code>) เป็นโหมด Coordinator อัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> ผ่าน Isolated Subagents และ Verifier Swarm แล้วหยุดที่ Option A Evidence Packet:</p>
+          <pre><code>/devflow-mode --all ──▶ Coordinator ──▶ Worktree Subagents (TDD) ──▶ Verifier Swarm ──▶ Option A Gate</code></pre>
+          <p>Build Plan จะทำหน้าที่เป็นคิวงานโดยตรง แต่ละฟีเจอร์ยังคงแยก Branch, รันการทดสอบ TDD + Prove-by-Run และเก็บหลักฐานใน <code>devflow/reports/{run-id}/</code> อย่างปลอดภัย</p>
         
           
         </section>

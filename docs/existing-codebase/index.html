@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
@@ -337,13 +337,13 @@
           
           <p>เมื่อกระบวนการ Adopt เสร็จสมบูรณ์ โค้ดเบสเดิมของคุณจะมีความพร้อมเต็มที่สำหรับการพัฒนาฟีเจอร์ใหม่ตามวงจรมาตรฐาน 4 ขั้นตอน:</p>
           <pre><code>/feature -> review -> /implement -> /check -> /complete</code></pre>
-          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วยโหมด Continuous ผ่าน <code>/autopilot --all</code>:</p>
-          <pre><code>/autopilot --all</code></pre>
+          <p>หรือหากคุณต้องการให้ระบบพัฒนาฟีเจอร์ใน Build Plan ต่อเนื่องแบบอัตโนมัติ สามารถสั่งรันด้วย Coordinator Mode ผ่าน <code>/devflow-mode --all</code>:</p>
+          <pre><code>/devflow-mode --all</code></pre>
           <p>ดูรายละเอียดและแนวทางปฏิบัติเพิ่มเติมได้ที่:</p>
           <ul>
             <li><a href="../command-guide/">Command Guide</a> — คู่มือสรุปชุดคำสั่ง 15 Core Skills + ส่วนเสริม</li>
             <li><a href="../writing-your-plans/">Writing Your Plans</a> — เทคนิคการเขียนและจัดระเบียบแผนงาน</li>
-            <li><a href="../commands/autopilot/">Autopilot &amp; Continuous Mode</a> — การรันลูปพัฒนาฟีเจอร์แบบอัตโนมัติ</li>
+            <li><a href="../commands/devflow-mode/">DevFlow Mode &amp; Playbooks</a> — การรันลูป Coordinator + Subagents แบบอัตโนมัติ</li>
           </ul>
         
           

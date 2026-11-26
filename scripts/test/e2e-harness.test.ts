@@ -20,11 +20,12 @@ describe("E2E Harness AgentAdapter registry", () => {
     assert.equal(parseAgentId("antigravity"), "antigravity");
     assert.equal(parseAgentId("agy"), "antigravity");
     assert.equal(parseAgentId("copilot"), "copilot");
+    assert.equal(parseAgentId("opencode"), "opencode");
 
     assert.throws(() => parseAgentId("unknown-agent"), /Unsupported E2E_AGENT/);
   });
 
-  it("exposes installer flags and executables for claude, codex, and antigravity", () => {
+  it("exposes installer flags and executables for claude, codex, antigravity, and opencode", () => {
     assert.equal(AGENT_ADAPTERS.claude.executable, "claude");
     assert.equal(AGENT_ADAPTERS.claude.installerFlag, "--claude");
 
@@ -33,6 +34,9 @@ describe("E2E Harness AgentAdapter registry", () => {
 
     assert.equal(AGENT_ADAPTERS.antigravity.executable, "agy");
     assert.equal(AGENT_ADAPTERS.antigravity.installerFlag, "--antigravity");
+
+    assert.equal(AGENT_ADAPTERS.opencode.executable, "opencode");
+    assert.equal(AGENT_ADAPTERS.opencode.installerFlag, "--opencode");
   });
 
   it("builds isolated invocations per adapter", () => {
@@ -79,6 +83,21 @@ describe("E2E Harness AgentAdapter registry", () => {
     assert.ok(agyInv.args.includes("--new-project"));
     assert.ok(agyInv.args.includes("auto"));
     assert.ok(agyInv.args.includes("gemini"));
+
+    const opencodeInv = getAgentAdapter(parseAgentId("opencode")).buildInvocation({
+      prompt: "Run devflow-mode",
+      maxTurns: 10,
+      model: "gemini-2.5-pro",
+      workspace
+    });
+    assert.deepEqual(opencodeInv.args, [
+      "run",
+      "--format",
+      "json",
+      "-m",
+      "gemini-2.5-pro",
+      "Run devflow-mode"
+    ]);
   });
 
   it("parses JSON and JSONL transcripts without leaking prompt text", () => {

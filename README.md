@@ -88,7 +88,7 @@ The goal is not just writing code faster—it is staying firmly in control of a 
   - [Fixes](#fixes)
   - [Rollbacks](#rollbacks)
 - [Command reference](#command-reference)
-  - [Autopilot](#autopilot)
+  - [DevFlow Mode (/devflow-mode)](#devflow-mode-devflow-mode)
 - [Automatic GitHub checks](#automatic-github-checks)
 - [Testing & Strict TDD Discipline](#testing--strict-tdd-discipline)
 - [Code quality audits & Findings ledger](#code-quality-audits--findings-ledger)
@@ -149,7 +149,7 @@ Inspect the generated configuration files:
 - `devflow/context/coding-standards.md` — customize code conventions, lint rules, and test gates.
 - `devflow/context/ai-interaction.md` — adjust AI operational preferences and communication rules.
 
-If something feels misconfigured, run `/devflow doctor` for an instant read-only health check.
+If something feels misconfigured, run `/devflow-help doctor` for an instant read-only health check.
 
 ### 5. Plan & Capture Ideas
 Capture initial requirements, user stories, or raw thoughts:
@@ -201,7 +201,10 @@ npx nexus-devflow update
 
 DevFlow updates only managed workflow skills under `.agents/skills/` and `.claude/skills/`. Your project plans, living specs, context, history, and source code are never overwritten.
 
-In interactive terminals, Step `[3/3]` (`Configuring Extras Skills...`) displays a multi-select checkbox (`↑`/`↓`, `Space`, `a`, `Enter`, `Esc`) for the 7 bundled opt-in extras skills (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`), pre-checking already-installed skills on `update` without removing unticked ones (skipped automatically under `--yes`, `--dry-run`, or non-interactive runs).
+> [!NOTE]
+> **Migrating from v2 to v3**: Running `npx nexus-devflow update` automatically prunes retired v2 skill folders (`autopilot`, `devflow`), installs `devflow-mode` (with 5 bundled playbooks) and `devflow-help`, and preserves existing `devflow/config.json`, `devflow/build-plan.md`, and `devflow/history/` while merging v3 defaults (`execution.engine: "auto"`, `delivery.gate: "option-a-evidence-packet"`). Use `--dry-run` first to preview changes.
+
+In interactive terminals, Step `[3/3]` (`Configuring Extras Skills...`) displays a multi-select checkbox (`↑`/`↓`, `Space`, `a`, `Enter`, `Esc`) for the bundled opt-in extras skills (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `verify-harness`), pre-checking already-installed skills on `update` without removing unticked ones (skipped automatically under `--yes`, `--dry-run`, or non-interactive runs).
 
 ---
 
@@ -227,9 +230,9 @@ Nexus-DevFlow supports all major AI coding assistants through native adapters:
 
 | Tool / IDE | Support & Location | Invocation Syntax |
 | :--- | :--- | :--- |
-| **Google Antigravity** | Native project skills in `.agents/skills/` | Slash commands (e.g. `/feature`, `/implement`, `/devflow`) |
-| **Claude Code** | Native project skills in `.claude/skills/` | Slash commands (e.g. `/feature`, `/implement`, `/devflow`) |
-| **OpenAI Codex CLI** | Native project skills in `.agents/skills/` | Dollar invocation (e.g. `$feature`, `$implement`, `$devflow`) |
+| **Google Antigravity** | Native project skills in `.agents/skills/` | Slash commands (e.g. `/feature`, `/implement`, `/devflow-mode`, `/devflow-help`) |
+| **Claude Code** | Native project skills in `.claude/skills/` | Slash commands (e.g. `/feature`, `/implement`, `/devflow-mode`, `/devflow-help`) |
+| **OpenAI Codex CLI** | Native project skills in `.agents/skills/` | Dollar invocation (e.g. `$feature`, `$implement`, `$devflow-mode`, `$devflow-help`) |
 | **Cursor / Copilot** | `AGENTS.md` + shared `.agents/skills/` | Prompt by canonical name or follow `SKILL.md` |
 | **OpenCode / Windsurf** | Compatible shared skill trees | Direct skill execution on demand |
 | **Gemini CLI / Aider** | Shared instructions via `AGENTS.md` | Ask agent to follow matching `SKILL.md` |
@@ -460,7 +463,7 @@ The `/onboard` skill presents 3 implementation presets:
 - 🛠️ **Custom**: Tune review frequency and checkpoint commits independently.
 
 #### 🛡️ Overview & Context Compactness Guards
-- `devflow/context/project-overview.md` is strictly constrained to under 20,000 bytes (~4,000–5,000 tokens); `/devflow doctor` reports exact byte size and `/feature` halts on oversized overviews.
+- `devflow/context/project-overview.md` is strictly constrained to under 20,000 bytes (~4,000–5,000 tokens); `/devflow-help doctor` reports exact byte size and `/feature` halts on oversized overviews.
 - `AGENTS.md` stays compact (`<= 8,000` bytes) by delegating long workflow schemas and activity tracking details to on-demand [`devflow/workflow.md`](devflow/workflow.md).
 - `validate-framework.ts` enforces cross-skill reference link resolution across `.agents/skills/` and `.claude/skills/`.
 
@@ -507,35 +510,33 @@ count and are excluded from the published package unless explicitly promoted.
 
 | Skill | Canonical Invocation | Category | Description |
 | :--- | :--- | :--- | :--- |
-| **audit** | `/audit` / `$audit` | Quality | Branch-aware or full-project audit (Quality + YAGNI, Security, Perf, Tests) and `independent` review. |
-| **autopilot** | `/autopilot` / `$autopilot` | Delivery | Bounded single-pass execution or continuous multi-feature queue (`--all` / `--max` / `--merge`). |
-| **check** | `/check` / `$check` | QA | Dual-Axis empirical verification plus `/check guide` for manual human walkthroughs. |
-| **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and local squash-merge gate. |
+| **audit** | `/audit` / `$audit` | Quality | Branch-aware or full-project audit (Quality + YAGNI, Security, Perf, Tests), `interrogate`, & Prove-by-Run. |
+| **check** | `/check` / `$check` | QA | Evidence-first verification driving project `verify` skills + `verify-layers` & `/check guide`. |
+| **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and Option A / local squash-merge gate. |
 | **debug** | `/debug` / `$debug` | Diagnostics | 2-Track diagnosis (Track A fast repro & trace; Track B 6-phase scientific isolation). |
-| **devflow** | `/devflow` / `$devflow` | Hub | Unified status report (default / `--exec`), health check (`/devflow doctor`), and intent/legacy router. |
+| **devflow-help** | `/devflow-help` / `$devflow-help` | Hub | Interactive guide & prompt builder, status (`--exec`), health check (`doctor`), and legacy router. |
+| **devflow-mode** | `/devflow-mode` / `$devflow-mode` | Coordinator | Autonomous Coordinator, 5 composable playbooks, isolated subagents, `pstack` integration, and `--all`. |
 | **discovery** | `/discovery` / `$discovery` | Pre-Flight | Macro/micro discovery, SA requirement intake (`REQ-ID`), and Socratic domain alignment (`--grill`). |
 | **explore** | `/explore` / `$explore` | Pre-Flight | Read-only codebase exploration and 2–3 option comparison (brainstorm mode) without writing specs. |
 | **feature** | `/feature` / `$feature` | Delivery | Preview (`--preview`), adaptive pre-flight clarification, and Task-Isolated Living Spec (`--check`). |
 | **fix** | `/fix` / `$fix` | Delivery | Document and spec an ad-hoc bug fix or patch. |
 | **idea** | `/idea` | Pre-Flight | Quick idea capture in `devflow/ideas.md` with AI feasibility scoring. |
 | **implement** | `/implement` / `$implement` | Delivery | Incrementally execute living spec tasks with strict TDD discipline per configured review cadence. |
-| **onboard** | `/onboard` / `$onboard` | Setup | Unified fresh setup and auto-detected brownfield adoption (`--adopt`). |
+| **onboard** | `/onboard` / `$onboard` | Setup | Unified fresh setup, brownfield adoption (`--adopt`), and project `verify` skill bootstrap. |
 | **overview** | `/overview` / `$overview` | Setup | Generate compact `project-overview.md` (<= 20KB) and offer planning baseline commit. |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | Generate throwaway static HTML/CSS mockups in `prototypes/`. |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow`.
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `verify-harness`): Install on demand with `npx nexus-devflow skill add <name>`. Legacy aliases (such as `/autopilot`, `/devflow`, `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`) are mapped inside `/devflow-help`.
 
 ---
 
-### Autopilot
+### DevFlow Mode (`/devflow-mode`)
 
-`/autopilot` is an explicit opt-in mode for a bounded, single-pass delivery:
-- Picks up or resumes the active feature.
-- Drafts the living spec if missing.
-- Implements small steps with TDD and checkpoint commits on the feature branch.
-- Runs verification and targeted `/audit current`.
-- Repairs confirmed in-scope P0/P1 findings and re-verifies.
-- **Stops before `/complete`, merge, push, deploy, or destructive operations**, presenting a clean review packet.
+`/devflow-mode` runs the Lead-Coordinator + Isolated Subagent workflow via composable `playbooks/` (`feature`, `bug-fix`, `refactor`, `discovery`, `autonomous-queue`):
+- Eliminates redundant intermediate approval pauses on reversible feature-branch work when `execution.autoApproveSpec` and `execution.autoCommitFeatureBranch` are active.
+- Integrates `pstack` skills (`arena`, `architect`, `interrogate`, `swarm`, `create-verification-skill`, `deslop`, `no-comments`) read-only when `execution.engine: "auto"` detects `pstack`, with native fallback otherwise.
+- Runs 3-layer empirical verification (`verify-layers` + project `verify` driver + Prove-by-Run audit) saving durable artifacts under `devflow/reports/{run-id}/`.
+- **Stops at the Option A Final Human Delivery Gate** (`delivery.gate: "option-a-evidence-packet"`), never auto-merging into `main` or pushing without explicit human confirmation.
 
 ---
 
@@ -604,7 +605,8 @@ Every confirmed issue is recorded with a durable ID (`F-01`), severity (P0-P3), 
 
 | Status | Meaning |
 | :--- | :--- |
-| `open` | Confirmed finding, awaiting repair |
+| `unverified` | Unrun hypothesis; surfaced as an advisory warning (`check-gate` allows unless `--allow-unverified=false`) |
+| `open` | Confirmed finding backed by reproduction/evidence, awaiting repair |
 | `fixed` | Repaired by developer/AI, awaiting re-audit |
 | `closed` | Verified resolved by fresh audit |
 | `accepted` | Waived with documented rationale |
@@ -681,7 +683,7 @@ npx nexus-devflow update [--dry-run]
 
 ## Recommended Third-Party Skills & Extensions
 
-Nexus-DevFlow ships with **15 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny outsider code review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/devflow --exec` / `/complete`).
+Nexus-DevFlow ships with **15 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny & Prove-by-Run review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/devflow-help --exec` / `/complete`).
 
 For specialized visual architecture and offensive security workflows, you can extend your setup with community skills using `nexus-devflow skill add`:
 
@@ -724,7 +726,7 @@ npx nexus-devflow skill add code-modernization
   2. *Phase 6–8 (Build & Proof)*: Slices `BRIEF.md` into `devflow/build-plan.md` and hands off execution to **DevFlow Core Lifecycle** (`/feature` ➔ `/implement` with strict TDD ➔ `/check` with `proof_pack.py` ➔ `/complete`).
 
 > [!NOTE]
-> **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/devflow --exec`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.
+> **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/devflow-help --exec`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.
 
 ---
 
@@ -751,8 +753,8 @@ Nexus-DevFlow maintains state in files, never in volatile AI context:
 - `devflow/history/` + Git — permanent delivery ledger.
 
 When starting a new session or resuming after clearing context:
-- Run `/devflow` to inspect current state.
-- Run `/implement` to immediately resume the next unchecked living spec task.
+- Run `/devflow-help` to inspect current state and get ready-to-send next-step prompts.
+- Run `/devflow-mode` (or `/implement`) to resume autonomous or step-by-step execution.
 
 ---
 
@@ -764,12 +766,12 @@ When starting a new session or resuming after clearing context:
 ├── CLAUDE.md                  (Claude Code entry point; imports AGENTS.md)
 ├── .agents/
 │   └── skills/                (15 Core Skills for Antigravity, Codex, Copilot, OpenCode)
-│       ├── audit/             ($audit: code quality, YAGNI, security, tests, and independent review)
-│       ├── autopilot/         ($autopilot: bounded single-pass or continuous --all/--merge loop)
-│       ├── check/             ($check: empirical QA verification & /check guide manual walkthrough)
-│       ├── complete/          ($complete: safety gate, archive spec, squash-merge)
+│       ├── audit/             ($audit: code quality, YAGNI, security, Prove-by-Run & independent review)
+│       ├── check/             ($check: evidence-first QA verification & /check guide manual walkthrough)
+│       ├── complete/          ($complete: safety gate, archive spec, Option A delivery / squash-merge)
 │       ├── debug/             ($debug: 2-track adaptive diagnosis)
-│       ├── devflow/           ($devflow: unified status, doctor diagnostics, & intent router)
+│       ├── devflow-help/      ($devflow-help: interactive guide, prompt builder, status, doctor & legacy router)
+│       ├── devflow-mode/      ($devflow-mode: autonomous Coordinator, composable playbooks & pstack engine)
 │       ├── discovery/         ($discovery: roadmap/micro exploration, doc intake, & Socratic ADRs)
 │       ├── explore/           ($explore: read-only option comparison & brainstorm matrix)
 │       ├── feature/           ($feature: --preview scope, adaptive clarification, & living spec)

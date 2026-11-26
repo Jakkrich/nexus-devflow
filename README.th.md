@@ -88,7 +88,7 @@ npx -y nexus-devflow -y
   - [การแก้บั๊ก (Fixes)](#การแก้บั๊ก-fixes)
   - [การย้อนคืนฟีเจอร์อย่างปลอดภัย (Rollbacks)](#การย้อนคืนฟีเจอร์อย่างปลอดภัย-rollbacks)
 - [ตารางอ้างอิงคำสั่งทั้งหมด (Command reference)](#ตารางอ้างอิงคำสั่งทั้งหมด-command-reference)
-  - [โหมดออโต้ไพลอต (Autopilot)](#โหมดออโต้ไพลอต-autopilot)
+  - [โหมด DevFlow Mode (/devflow-mode)](#โหมด-devflow-mode-devflow-mode)
 - [การตรวจสอบอัตโนมัติบน GitHub (Automatic GitHub checks)](#การตรวจสอบอัตโนมัติบน-github-automatic-github-checks)
 - [การทดสอบและวินัย Strict TDD (Testing & Strict TDD Discipline)](#การทดสอบและวินัย-strict-tdd-testing--strict-tdd-discipline)
 - [การตรวจสอบคุณภาพโค้ดและสมุดบันทึก Findings (Code quality audits & Findings ledger)](#การตรวจสอบคุณภาพโค้ดและสมุดบันทึก-findings-code-quality-audits--findings-ledger)
@@ -149,7 +149,7 @@ npx -y nexus-devflow -y
 - `devflow/context/coding-standards.md` — ปรับแต่งมาตรฐานโค้ด, กฎ Lint และ Test Gates
 - `devflow/context/ai-interaction.md` — ปรับพฤติกรรมการตอบและการทำงานร่วมกับ AI
 
-หากรู้สึกว่าการตั้งค่ามีปัญหา สามารถสั่ง `/devflow doctor` เพื่อรัน Health check แบบอ่านอย่างเดียวได้ทันที
+หากรู้สึกว่าการตั้งค่ามีปัญหา สามารถสั่ง `/devflow-help doctor` เพื่อรัน Health check แบบอ่านอย่างเดียวได้ทันที
 
 ### 5. วางแผนและบันทึกไอเดีย
 บันทึกความต้องการ, User stories หรือแนวคิดเริ่มต้น:
@@ -201,7 +201,10 @@ npx nexus-devflow update
 
 DevFlow จะอัปเดตเฉพาะไฟล์ Skill ภายใต้ `.agents/skills/` และ `.claude/skills/` เท่านั้น โดย **ไม่มีการเขียนทับ** แผนงาน, Living Spec, บริบทใน `devflow/`, ประวัติงาน หรือซอร์สโค้ดของแอปพลิเคชันคุณเด็ดขาด
 
-เมื่อรันใน Interactive Terminal ขั้นตอนที่ 3 (`[3/3] 🧩 Configuring Extras Skills...`) จะแสดง Checkbox (`↑`/`↓`, `Space`, `a`, `Enter`, `Esc`) สำหรับเลือกติดตั้ง 7 Opt-in Extras Skills จากแพ็กเกจแบบ offline-safe (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`) โดยติ๊กเลือกให้อัตโนมัติสำหรับตัวที่ติดตั้งแล้วตอน `update` และไม่ลบตัวที่เอาติ๊กออก (ข้ามอัตโนมัติเมื่อใช้ `--yes`, `--dry-run`, หรือโหมด non-interactive)
+> [!NOTE]
+> **การอัปเกรดจาก v2 เป็น v3 (v2 → v3 Migration)**: คำสั่ง `npx nexus-devflow update` จะถอดโฟลเดอร์ v2 ที่ปลดระวางแล้ว (`autopilot`, `devflow`) ให้อัตโนมัติ พร้อมติดตั้ง `devflow-mode` (และ 5 playbooks) กับ `devflow-help` โดยยังคงรักษา `devflow/config.json`, `devflow/build-plan.md` และ `devflow/history/` ของคุณไว้ครบถ้วน (พร้อมเติมค่าเริ่มต้น v3 `execution.engine: "auto"` และ `delivery.gate: "option-a-evidence-packet"` ให้อัตโนมัติ)
+
+เมื่อรันใน Interactive Terminal ขั้นตอนที่ 3 (`[3/3] 🧩 Configuring Extras Skills...`) จะแสดง Checkbox (`↑`/`↓`, `Space`, `a`, `Enter`, `Esc`) สำหรับเลือกติดตั้ง Opt-in Extras Skills จากแพ็กเกจแบบ offline-safe (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `verify-harness`) โดยติ๊กเลือกให้อัตโนมัติสำหรับตัวที่ติดตั้งแล้วตอน `update` และไม่ลบตัวที่เอาติ๊กออก (ข้ามอัตโนมัติเมื่อใช้ `--yes`, `--dry-run`, หรือโหมด non-interactive)
 
 ---
 
@@ -227,9 +230,9 @@ Nexus-DevFlow รองรับ AI Coding Assistants ชั้นนำทุ�
 
 | เครื่องมือ / AI IDE | ตำแหน่ง Adapter และการรองรับ | วิธีการเรียกใช้งาน |
 | :--- | :--- | :--- |
-| **Google Antigravity** | Native project skills ใน `.agents/skills/` | Slash commands (เช่น `/feature`, `/implement`, `/devflow`) |
-| **Claude Code** | Native project skills ใน `.claude/skills/` | Slash commands (เช่น `/feature`, `/implement`, `/devflow`) |
-| **OpenAI Codex CLI** | Native project skills ใน `.agents/skills/` | Dollar invocation (เช่น `$feature`, `$implement`, `$devflow`) |
+| **Google Antigravity** | Native project skills ใน `.agents/skills/` | Slash commands (เช่น `/feature`, `/implement`, `/devflow-mode`, `/devflow-help`) |
+| **Claude Code** | Native project skills ใน `.claude/skills/` | Slash commands (เช่น `/feature`, `/implement`, `/devflow-mode`, `/devflow-help`) |
+| **OpenAI Codex CLI** | Native project skills ใน `.agents/skills/` | Dollar invocation (เช่น `$feature`, `$implement`, `$devflow-mode`, `$devflow-help`) |
 | **Cursor / Copilot** | `AGENTS.md` + โฟลเดอร์ `.agents/skills/` | เรียกชื่อคำสั่งตรงๆ หรือสั่งให้ปฏิบัติตาม `SKILL.md` |
 | **OpenCode / Windsurf** | อ่านโฟลเดอร์ Adapter ร่วมกันได้ | เรียกใช้คำสั่ง Skill ได้โดยตรง |
 | **Gemini CLI / Aider** | อ่านคำแนะนำผ่าน `AGENTS.md` | สั่งให้ปฏิบัติตามคำแนะนำใน `SKILL.md` |
@@ -461,7 +464,7 @@ Nexus-DevFlow ช่วยให้คุณกำหนดจังหวะก
 
 #### 🛡️ การควบคุมขนาด Overview ไม่เกิน 20KB (Overview Compactness Guard)
 เอกสารสรุปโครงการ `devflow/context/project-overview.md` จะถูกควบคุมขนาดให้อยู่ต่ำกว่า 20,000 bytes (~4,000–5,000 tokens) เสมอ เพื่อไม่ให้สิ้นเปลือง Token Window:
-- คำสั่ง `/devflow doctor` จะรายงานขนาดไบต์จริง และแจ้งเตือนสถานะ `oversized` หากมีขนาดเกิน
+- คำสั่ง `/devflow-help doctor` จะรายงานขนาดไบต์จริง และแจ้งเตือนสถานะ `oversized` หากมีขนาดเกิน
 - คำสั่ง `/feature` มีระบบ Hard-Stop ป้องกันการดึง Overview ที่มีขนาดเกิน 20KB และมี Directive สั่งให้ AI Reuse Context เดิมที่มีอยู่แล้วในเซสชันโดยไม่อ่านซ้ำผ่าน Tool
 
 #### 📌 Planning Baseline Commit
@@ -507,35 +510,33 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 
 | ทักษะ (Skill) | การเรียกใช้งาน (Invocation) | หมวดหมู่ | หน้าที่และคำอธิบาย |
 | :--- | :--- | :--- | :--- |
-| **audit** | `/audit` / `$audit` | Quality | ตรวจสอบคุณภาพโค้ด + YAGNI, ความปลอดภัย, ประสิทธิภาพ, ชุดทดสอบ และ `independent` review |
-| **autopilot** | `/autopilot` / `$autopilot` | Delivery | โหมดส่งมอบงานรอบเดียวหรือรันคิวต่อเนื่องอัตโนมัติ (`--all` / `--max` / `--merge`) |
-| **check** | `/check` / `$check` | QA | ตรวจแบบ Dual-Axis จากหลักฐานจริง พร้อม `/check guide` สำหรับคู่มือทดสอบด้วยตนเอง |
-| **complete** | `/complete` / `$complete` | Delivery | ตรวจความปลอดภัยรอบสุดท้าย, บันทึก Release Digest, จัดเก็บประวัติ และ Squash-Merge |
+| **audit** | `/audit` / `$audit` | Quality | ตรวจคุณภาพ + YAGNI, ความปลอดภัย, ประสิทธิภาพ, ชุดทดสอบ, `interrogate` และ Prove-by-Run |
+| **check** | `/check` / `$check` | QA | ตรวจหลักฐานจริงผ่าน project `verify` driver + `verify-layers` และ `/check guide` |
+| **complete** | `/complete` / `$complete` | Delivery | ตรวจความปลอดภัย, Release Digest, เก็บประวัติ และ Option A / Local Squash-Merge Gate |
 | **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยแบบ 2-Track (Track A fast repro & trace; Track B 6-phase scientific isolation) |
-| **devflow** | `/devflow` / `$devflow` | Hub | ศูนย์รวมตรวจสถานะ (`--exec`), ตรวจสุขภาพ (`/devflow doctor`) และเราเตอร์นำทางคำสั่ง |
+| **devflow-help** | `/devflow-help` / `$devflow-help` | Hub | Interactive Guide & Prompt Builder, รายงานสถานะ (`--exec`), `doctor` และเราเตอร์คำสั่งเดิม |
+| **devflow-mode** | `/devflow-mode` / `$devflow-mode` | Coordinator | Autonomous Coordinator, 5 Composable Playbooks, Subagents, รองรับ `pstack` และ `--all` |
 | **discovery** | `/discovery` / `$discovery` | Pre-Flight | สำรวจระบบ/Roadmap, รับเอกสารความต้องการ (`REQ-ID`) และ Socratic Alignment (`--grill`) |
 | **explore** | `/explore` / `$explore` | Pre-Flight | วิเคราะห์ไอเดียเทียบโค้ดจริง + เปรียบเทียบ 2–3 ทางเลือก (Brainstorm) แบบ Read-only |
 | **feature** | `/feature` / `$feature` | Delivery | พรีวิวขอบเขต (`--preview`), ถามเสริมอัตโนมัติ และสร้าง Living Spec (`--check`) |
 | **fix** | `/fix` / `$fix` | Delivery | กำหนดสเปกและขั้นตอนการแก้บั๊กหรือ Patch ขนาดเล็ก |
 | **idea** | `/idea` | Pre-Flight | บันทึกไอเดียลงใน `devflow/ideas.md` พร้อม AI Scoring |
 | **implement** | `/implement` / `$implement` | Delivery | ลงมือเขียนโค้ดตามสเปกทีละขั้นตอนด้วยวินัย Strict TDD ตาม Review Cadence |
-| **onboard** | `/onboard` / `$onboard` | Setup | ตั้งค่าเริ่มต้นโปรเจกต์ใหม่และตรวจจับ brownfield อัตโนมัติ (`--adopt`) |
+| **onboard** | `/onboard` / `$onboard` | Setup | ตั้งค่าโปรเจกต์ใหม่, ตรวจจับ brownfield (`--adopt`), และสร้าง/ตรวจ `verify` skill |
 | **overview** | `/overview` / `$overview` | Setup | สังเคราะห์ `project-overview.md` ไม่เกิน 20KB พร้อมเสนอทำ Planning Baseline Commit |
 | **prototype** | `/prototype` / `$prototype` | UI/UX | สร้าง Mockup แบบ Static HTML/CSS ในโฟลเดอร์ `prototypes/` |
 
-> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
+> **Opt-in Tier-2 Ops & Utility Extensions** (`setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`, `verify-harness`): ติดตั้งเพิ่มเฉพาะเมื่อต้องใช้ด้วย `npx nexus-devflow skill add <name>` และ `/devflow-help` มีตารางนำทางสำหรับคำสั่งเดิมครบถ้วน (เช่น `/autopilot`, `/devflow`, `/adopt`, `/analyze`, `/grill`, `/brainstorm`, `/brief`, `/try`, `/devflow-status`, `/devflow-doctor`, `/continuous`)
 
 ---
 
-### โหมดออโต้ไพลอต (Autopilot)
+### โหมด DevFlow Mode (`/devflow-mode`)
 
-`/autopilot` เป็นโหมดการทำงานแบบ Bounded Pass สำหรับการส่งมอบงานรอบเดียว:
-- ดึงงานปัจจุบันหรือเริ่มงานจากสเปกที่มี
-- ร่าง Living Spec ให้อัตโนมัติหากยังไม่มี
-- เขียนโค้ดตามขั้นตอน TDD และทำ Checkpoint Commit บน Branch
-- รันการตรวจสอบและสั่ง `/audit current` อัตโนมัติ
-- แก้ไขปัญหา P0/P1 ที่พบในขอบเขตงานและตรวจซ้ำ
-- **หยุดรอการอนุมัติก่อนทำ `/complete`, Merge, Push, Deploy หรือคำสั่งที่มีความเสี่ยงเสมอ**
+`/devflow-mode` คือ Coordinator หลักของ DevFlow v3 ที่จับคู่ `playbooks/` (`feature`, `bug-fix`, `refactor`, `discovery`, `autonomous-queue`) กับ isolated worktree subagents:
+- ตัด human approval pause ระหว่างทางบน feature branch ออกเมื่อ `execution.autoApproveSpec` และ `execution.autoCommitFeatureBranch` เปิดใช้งาน
+- เชื่อมต่อ `pstack` แบบอ่านอย่างเดียว (`arena`, `architect`, `interrogate`, `swarm`, `create-verification-skill`, `deslop`, `no-comments`) เมื่อ `execution.engine: "auto"` ตรวจพบ หรือใช้ native fallback อัตโนมัติ
+- รันการพิสูจน์ 3 ชั้น (`verify-layers` + project `verify` driver + Prove-by-Run audit) และเก็บหลักฐานไว้ใน `devflow/reports/{run-id}/`
+- **หยุดที่ Final Delivery Gate (Option A — `option-a-evidence-packet`)** พร้อมหลักฐานจริงบน branch ก่อน Merge/PR/Push เสมอ
 
 ---
 
@@ -603,7 +604,8 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 
 | สถานะ (Status) | ความหมาย (Meaning) |
 | :--- | :--- |
-| `open` | พบปัญหาและยืนยันแล้ว กำลัรอการแก้ไข |
+| `unverified` | สมมติฐานที่ยังไม่ได้รันพิสูจน์ (แจ้งเตือนเป็น advisory ใน `check-gate` จนกว่าจะพิสูจน์เป็น `open`) |
+| `open` | พบปัญหาและยืนยันด้วยการรัน/หลักฐานแล้ว กำลังรอการแก้ไข |
 | `fixed` | แก้ไขโค้ดแล้ว กำลังรอการตรวจซ้ำ |
 | `closed` | ตรวจสอบซ้ำแล้วว่าปัญหาได้รับการแก้ไขอย่างสมบูรณ์ |
 | `accepted` | ได้รับการยกเว้นโดยมนุษย์พร้อมระบุเหตุผลอย่างเป็นทางการ |
@@ -679,7 +681,7 @@ npx nexus-devflow update [--dry-run]
 
 ## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
 
-Nexus-DevFlow ติดตั้งมาพร้อมกับ **15 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny Outsider Review ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/devflow --exec` / `/complete`) ไว้ในตัวแล้ว
+Nexus-DevFlow ติดตั้งมาพร้อมกับ **15 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny & Prove-by-Run ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/devflow-help --exec` / `/complete`) ไว้ในตัวแล้ว
 
 สำหรับงานเฉพาะทางด้านงานสถาปัตยกรรมภาพและความปลอดภัยเชิงรุก คุณสามารถติดตั้งสกิลเสริมจาก Community เพิ่มเติมได้ด้วยคำสั่ง `nexus-devflow skill add`:
 
@@ -701,7 +703,7 @@ Nexus-DevFlow ติดตั้งมาพร้อมกับ **15 Core Skil
 | **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
-> **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/devflow --exec`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
+> **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/devflow-help --exec`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
 
 ---
 
@@ -728,8 +730,8 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 - `devflow/history/` + Git — คลังประวัติการส่งมอบงานถาวร
 
 เมื่อเริ่มเซสชันใหม่หรือหลังจาก AI Context Window ถูกรีเซ็ต:
-- สั่ง `/devflow` เพื่อตรวจดูสถานะปัจจุบัน
-- สั่ง `/implement` เพื่อทำงานย่อยข้อถัดไปใน Living Spec ต่อได้ทันที
+- สั่ง `/devflow-help` เพื่อตรวจดูสถานะและรับ prompt พร้อมส่งสำหรับขั้นตอนถัดไป
+- สั่ง `/devflow-mode` (หรือ `/implement`) เพื่อทำงานต่ออัตโนมัติหรือทีละขั้นตอน
 
 ---
 
@@ -741,12 +743,12 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 ├── CLAUDE.md                  (จุดเริ่มต้นสำหรับ Claude Code; โหลด AGENTS.md)
 ├── .agents/
 │   └── skills/                (15 Core Skills สำหรับ Antigravity, Codex, Copilot, OpenCode)
-│       ├── audit/             ($audit: ตรวจสอบคุณภาพ + YAGNI, ความปลอดภัย, Test และ independent review)
-│       ├── autopilot/         ($autopilot: โหมดส่งมอบรอบเดียว หรือรันต่อเนื่อง --all/--merge)
-│       ├── check/             ($check: ตรวจระบบจริงโดย Senior QA & /check guide สำหรับมนุษย์)
-│       ├── complete/          ($complete: ตรวจความปลอดภัย, เก็บประวัติ, Squash-Merge)
+│       ├── audit/             ($audit: ตรวจสอบคุณภาพ + YAGNI, ความปลอดภัย, Prove-by-Run และ independent review)
+│       ├── check/             ($check: ตรวจหลักฐานจริงผ่าน verify driver & verify-layers + /check guide)
+│       ├── complete/          ($complete: ตรวจความปลอดภัย, เก็บประวัติ, Option A / Squash-Merge)
 │       ├── debug/             ($debug: วินิจฉัย 2-Track โดยไม่แตะต้องซอร์สโค้ด)
-│       ├── devflow/           ($devflow: ศูนย์รวมสถานะ, ตรวจสุขภาพ doctor และเราเตอร์นำทางหลัก)
+│       ├── devflow-help/      ($devflow-help: Interactive guide, prompt builder, status, doctor & router)
+│       ├── devflow-mode/      ($devflow-mode: Autonomous Coordinator, playbooks & pstack engine)
 │       ├── discovery/         ($discovery: สำรวจ Roadmap/ฟีเจอร์, รับเอกสาร REQ-ID และ Socratic ADRs)
 │       ├── explore/           ($explore: วิเคราะห์ไอเดียและเทียบทางเลือก 2-3 แบบ Read-only)
 │       ├── feature/           ($feature: พรีวิว --preview, ถามเสริมอัตโนมัติ และสร้าง Living Spec)

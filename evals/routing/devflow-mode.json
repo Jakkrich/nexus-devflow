@@ -6,10 +6,16 @@
     "invoke /devflow-mode command",
     "run /devflow-mode --all continuously across build-plan",
     "autonomous coordinator playbook router with subagent orchestration",
-    "apply devflow-mode guidance"
+    "apply devflow-mode guidance",
+    "ช่วยรัน /devflow-mode --all จัดการคิวฟีเจอร์ต่อเนื่อง",
+    "ใช้ $devflow-mode สำหรับงานใน build-plan",
+    "เปิดโหมด autonomous coordinator ใช้ playbook router จัดการ subagent อัตโนมัติ",
+    "สั่งรัน continuous build-plan queue ด้วย pstack integration"
   ],
   "negative": [
     "unrelated random task query",
-    "general generic string prompt"
+    "general generic string prompt",
+    "สวัสดีวันนี้อากาศดีไหม",
+    "คำนวณภาษีเงินได้บุคคลธรรมดา"
   ]
 }

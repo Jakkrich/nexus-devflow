@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
@@ -168,7 +168,7 @@
           <h2>1. กฎการควบคุม Public Surface (Public Surface Rule)</h2>
           
           <ul>
-            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับ Core Companion Skills (<code>/idea</code>, <code>/explore</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/debug</code>, <code>/audit</code>, <code>/autopilot</code>, <code>/onboard</code>, <code>/overview</code>, <code>/prototype</code>, <code>/fix</code>) รวม <strong>15 Core Skills</strong></li>
+            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับ Core Companion Skills (<code>/idea</code>, <code>/explore</code>, <code>/discovery</code>, <code>/devflow-help</code>, <code>/debug</code>, <code>/audit</code>, <code>/devflow-mode</code>, <code>/onboard</code>, <code>/overview</code>, <code>/prototype</code>, <code>/fix</code>) รวม <strong>15 Core Skills</strong></li>
             <li><strong>ห้ามเพิ่มคำสั่งสาธารณะโดยไม่จำเป็น</strong>: หากฟังก์ชันใหม่สามารถทำเป็น Internal Helper หรือต่อยอดจากคำสั่งเดิมได้ ให้เลือกทำภายในก่อน จนกว่าจะมีการอนุมัติและเลื่อนขั้น (Promotion) เข้าสู่ <code>agent-bundle.manifest.json#core_skills</code> อย่างเป็นทางการ</li>
           </ul>
         

@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
@@ -238,23 +238,33 @@ pnpm dlx nexus-devflow@latest update</code></pre>
                 <td>สร้างคู่มือการทดสอบ Manual Walkthrough ทีละขั้นตอนสำหรับมนุษย์ตรวจทาน</td>
               </tr>
               <tr>
-                <td><code>/adopt</code>, <code>/devflow-doctor</code>, <code>/continuous</code></td>
-                <td><code>/onboard --adopt</code>, <code>/devflow doctor</code>, <code>/autopilot --all</code></td>
+                <td><code>/autopilot</code>, <code>/continuous</code></td>
+                <td><code>/devflow-mode</code></td>
+                <td>Lead-Coordinator + 5 Composable Playbooks + Isolated Subagents &amp; <code>pstack</code> integration</td>
+              </tr>
+              <tr>
+                <td><code>/devflow</code>, <code>/devflow-doctor</code>, <code>/devflow-status</code></td>
+                <td><code>/devflow-help</code>, <code>/devflow-help doctor</code></td>
+                <td>รวม Interactive Guide, Prompt Builder, Status (<code>--exec</code>), Doctor และ Legacy Router</td>
+              </tr>
+              <tr>
+                <td><code>/adopt</code></td>
+                <td><code>/onboard --adopt</code></td>
                 <td>ควบรวมเป็นโหมดมาตรฐานภายใน 15 Core Skills เพื่อลดคำสั่งซ้ำซ้อน</td>
               </tr>
             </tbody>
           </table>
-          <p>สำหรับ OpenAI Codex ให้ใช้ <code>$check guide</code>, <code>$devflow doctor</code> และ <code>$autopilot --all</code></p>
+          <p>สำหรับ OpenAI Codex ให้ใช้ <code>$check guide</code>, <code>$devflow-help doctor</code> และ <code>$devflow-mode --all</code></p>
           
           <h4>กลไกการทำงานของ Core Skills สำคัญ (15 Core Skills)</h4>
           <ul>
             <li><strong><code>/check guide</code> (รวม <code>/try</code> เดิม)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยระบุคำสั่งรัน URL จุดคลิก ผลลัพธ์ที่ถูกต้อง และสัญญาณข้อผิดพลาด</li>
             <li><strong><code>/explore</code> (รวม <code>/brainstorm</code> เดิม)</strong>: วิเคราะห์ไอเดียและเปรียบเทียบ 2–3 ทางเลือก (Trade-offs) กับโค้ดจริงแบบ Read-Only โดยไม่แก้ไขไฟล์</li>
-            <li><strong><code>/devflow doctor</code> (รวม <code>/devflow-doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters ความสดใหม่และขนาดของ <code>project-overview.md</code> (&lt; 20KB) และคำสั่งใน <code>AGENTS.md</code></li>
+            <li><strong><code>/devflow-help doctor</code> (รวม <code>/devflow doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters, Execution Engine (<code>pstack</code>), <code>verify</code> skill และขนาดของ <code>project-overview.md</code> (&lt; 20KB)</li>
             <li><strong><code>/overview</code></strong>: Deterministic Compiler ที่กลั่นกรองข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code></li>
           </ul>
 
-          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow doctor</code> เพื่อตรวจสอบคำแนะนำ Proportional Engineering ใน <code>AGENTS.md</code> ได้อย่างง่ายดาย</p>
+          <p>หลังจากรันคำสั่งอัปเดตแล้ว สามารถรัน <code>/devflow-help doctor</code> เพื่อตรวจสอบสุขภาพระบบทั้งหมดได้ทันที</p>
         
           
           <div class="docs-step" id="if-latest-runs-an-older-version">

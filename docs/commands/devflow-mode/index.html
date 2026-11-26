@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevFlow (/devflow, /devflow doctor) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ศูนย์รวมรายงานสถานะงาน (Status & --exec), ตรวจสุขภาพ Adapters/Overview (/devflow doctor) และตารางนำทางคำสั่งเดิม (Read-Only)">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/devflow/">
+  <title>DevFlow Mode (/devflow-mode, /devflow-mode --all) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/devflow-mode/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link active" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link active" href="../../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
@@ -144,22 +144,22 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>DevFlow (/devflow, /devflow doctor)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>DevFlow Mode (/devflow-mode, /devflow-mode --all)</strong></div>
       
-      <h1 class="docs-title">DevFlow (/devflow, /devflow doctor)</h1>
+      <h1 class="docs-title">DevFlow Mode (/devflow-mode, /devflow-mode --all)</h1>
       
       <p class="docs-lead">
-        ศูนย์รวมรายงานสถานะงาน (Status & --exec), ตรวจสุขภาพ Adapters/Overview (/devflow doctor) และตารางนำทางคำสั่งเดิม (Read-Only)
+        Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Command</span>
-        <span class="docs-pill">DevFlow</span>
-        <span class="docs-pill">Status</span>
-        <span class="docs-pill">Doctor</span>
-        <span class="docs-pill">HealthCheck</span>
-        <span class="docs-pill">Router</span>
-        <span class="docs-pill">Read-Only</span>
+        <span class="docs-pill">DevFlowMode</span>
+        <span class="docs-pill">Coordinator</span>
+        <span class="docs-pill">Playbooks</span>
+        <span class="docs-pill">Subagents</span>
+        <span class="docs-pill">pstack</span>
+        <span class="docs-pill">Autonomous</span>
       </div>
 
       <div class="docs-prose">
@@ -168,29 +168,28 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>รันคำสั่ง <code>/devflow</code> เพื่อดูภาพรวมสถานะปัจจุบัน สรุปผู้บริหาร (<code>--exec</code>) ตรวจสุขภาพระบบ (<code>doctor</code>) หรือสอบถามเส้นทางคำสั่ง:</p>
-          <pre><code># รายงานสถานะปัจจุบันและขั้นตอนถัดไป (Default Status)
-/devflow
+          <p>ใช้คำสั่ง <code>/devflow-mode</code> (รองรับ alias เดิม <code>/autopilot</code>) สำหรับรันงานแบบ Lead-Coordinator + Isolated Worktree Subagents หรือเพิ่ม <code>--all</code> / <code>--max &lt;N&gt;</code> เพื่อรันทั้งคิวใน Build Plan:</p>
+          <pre><code># รันฟีเจอร์ถัดไปด้วย Coordinator + Worktree Subagents
+/devflow-mode 1
 
-# รายงานสรุปผู้บริหารแบบไม่เปิดเผย path โค้ด
-/devflow --exec
-
-# ตรวจสุขภาพ Adapters, Config, run.json และ Overview 20KB Guard
-/devflow doctor</code></pre>
+# รันทั้งคิวใน build-plan.md ต่อเนื่องบน feature/rework branch
+/devflow-mode --all
+/devflow-mode --max 3 --merge</code></pre>
         
           
         </section>
 
-        <!-- Section: สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics) -->
-        <section id="what-it-inspects">
-          <h2>สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics)</h2>
+        <!-- Section: กระบวนการทำงานอัตโนมัติ (Coordinator Execution Pipeline) -->
+        <section id="autopilot-pipeline">
+          <h2>กระบวนการทำงานอัตโนมัติ (Coordinator Execution Pipeline)</h2>
           
-          <ul>
-            <li><strong>Build Plan &amp; Active Context</strong>: ความคืบหน้า Build Plan, Spec/Findings/Review Gate ใน <code>devflow/context/</code>, และ Exact Next Action</li>
-            <li><strong>Adapters &amp; Config Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code> และขนาดของ <code>project-overview.md</code> (&lt; 20KB)</li>
-            <li><strong>Run State Recovery</strong>: ตรวจสอบและช่วยรีเซ็ต <code>devflow/.state/run.json</code> เมื่อได้รับอนุมัติ</li>
-            <li><strong>Legacy Command Routing</strong>: แปลคำสั่งเดิม (เช่น <code>/adopt</code>, <code>/brief</code>, <code>/continuous</code>, <code>/try</code>, <code>/grill</code>) ไปยัง 15 Core Skills</li>
-          </ul>
+          <ol>
+            <li><strong>Coordinator Planning</strong>: จัดทำ Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code> (เดินหน้าอัตโนมัติบน branch เมื่อ <code>execution.autoApproveSpec: true</code>)</li>
+            <li><strong>Isolated TDD Subagents</strong>: ให้ worker subagents พัฒนาและทดสอบแบบ TDD บน isolated worktree/branch</li>
+            <li><strong>3-Layer Evidence Verification</strong>: รัน <code>verify-layers</code>, project <code>verify</code> driver, และ <code>pstack:interrogate</code> / <code>audit</code> แบบ Prove-by-Run บันทึกหลักฐานลง <code>devflow/reports/{run-id}/</code></li>
+            <li><strong>Bounded Auto-Repair</strong>: แก้ไข Confirmed P0/P1 findings ที่รันซ้ำได้จริงและตรวจซ้ำอัตโนมัติ</li>
+            <li><strong>Option A Final Human Gate</strong>: หยุดบนสาขา feature พร้อม <strong>Evidence Packet</strong> ให้มนุษย์ตัดสินใจ Merge / PR / Push เสมอ</li>
+          </ol>
         
           
         </section>
@@ -199,7 +198,7 @@
         <section id="next-steps">
           <h2>ขั้นตอนถัดไป (Next steps)</h2>
           
-          <p>ทำตามคำสั่งถัดไปที่ระบบแนะนำ เช่น <code>/overview</code>, <code>/implement</code>, <code>/check</code> หรือ <code>/complete</code></p>
+          <p>ตรวจเช็กสถานะด้วย <code>/devflow-help</code> หรือดูประวัติการส่งมอบใน <code>devflow/history/HISTORY.md</code></p>
         
           
         </section>
@@ -207,13 +206,13 @@
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../../commands/complete/">
+        <a class="prev" href="../../commands/prototype/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Complete</strong>
+          <strong>Prototype</strong>
         </a>
-        <a class="next" href="../../commands/debug/">
+        <a class="next" href="../../commands/tests/">
           <span>ถัดไป (Next)</span>
-          <strong>Debug (2-Track)</strong>
+          <strong>Setup Tests (Opt-in)</strong>
         </a>
       </nav>
     </main>
@@ -222,7 +221,7 @@
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
       <a href="#when-to-use-it">เมื่อไหร่ที่ควรใช้ (When to use it)</a>
-      <a href="#what-it-inspects">สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics)</a>
+      <a href="#autopilot-pipeline">กระบวนการทำงานอัตโนมัติ (Coordinator Execution Pipeline)</a>
       <a href="#next-steps">ขั้นตอนถัดไป (Next steps)</a>
     </aside>
   </div>

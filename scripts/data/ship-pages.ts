@@ -101,9 +101,9 @@ $release vercel</code></pre>
         id: 'setup-still-feels-wrong',
         title: 'ยังรู้สึกว่าการตั้งค่าระบบมีความผิดปกติ (Setup still feels wrong)',
         contentHtml: `
-          <p>หากรู้สึกว่ามีบางอย่างผิดปกติหรือไม่แน่ใจในความสมบูรณ์ของระบบ ให้รันคำสั่ง <strong><code>/devflow doctor</code></strong> เพื่อขอรับรายงานการตรวจสุขภาพระบบแบบ Read-Only:</p>
-          <pre><code>/devflow doctor</code></pre>
-          <p>โหมด <code>/devflow doctor</code> จะทำการสแกนไฟล์ทั้งหมด, ตรวจสอบความสมบูรณ์ของ Adapters, ตรวจสอบคำสั่งใน <code>AGENTS.md</code>, ยืนยันความสอดคล้องของ CI, ตรวจสอบความพร้อมของแผนงาน, ประเมินความสดใหม่และขนาดของ Overview (< 20KB) และแจ้งเตือน Workflow Drift พร้อมเสนอแนวทางแก้ไขที่ปลอดภัย</p>
+          <p>หากรู้สึกว่ามีบางอย่างผิดปกติหรือไม่แน่ใจในความสมบูรณ์ของระบบ ให้รันคำสั่ง <strong><code>/devflow-help doctor</code></strong> เพื่อขอรับรายงานการตรวจสุขภาพระบบแบบ Read-Only:</p>
+          <pre><code>/devflow-help doctor</code></pre>
+          <p>โหมด <code>/devflow-help doctor</code> จะทำการสแกนไฟล์ทั้งหมด, ตรวจสอบความสมบูรณ์ของ Adapters, Execution Engine (<code>pstack</code>), <code>verify</code> driver skill, ตรวจสอบคำสั่งใน <code>AGENTS.md</code>, ยืนยันความพร้อมของแผนงาน และประเมินขนาดของ Overview (&lt; 20KB) พร้อมเสนอแนวทางแก้ไขที่ปลอดภัย</p>
         `
       }
     ]

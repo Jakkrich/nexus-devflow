@@ -79,7 +79,7 @@ export const REFERENCE_PAGES: DocPage[] = [
         title: '1. กฎการควบคุม Public Surface (Public Surface Rule)',
         contentHtml: `
           <ul>
-            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับ Core Companion Skills (<code>/idea</code>, <code>/explore</code>, <code>/discovery</code>, <code>/devflow</code>, <code>/debug</code>, <code>/audit</code>, <code>/autopilot</code>, <code>/onboard</code>, <code>/overview</code>, <code>/prototype</code>, <code>/fix</code>) รวม <strong>15 Core Skills</strong></li>
+            <li><strong>ขอบเขตของ Public Surface</strong>: ประกอบด้วยวงจรชีวิตหลัก 4 ขั้นตอน (<code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code>) บวกกับ Core Companion Skills (<code>/idea</code>, <code>/explore</code>, <code>/discovery</code>, <code>/devflow-help</code>, <code>/debug</code>, <code>/audit</code>, <code>/devflow-mode</code>, <code>/onboard</code>, <code>/overview</code>, <code>/prototype</code>, <code>/fix</code>) รวม <strong>15 Core Skills</strong></li>
             <li><strong>ห้ามเพิ่มคำสั่งสาธารณะโดยไม่จำเป็น</strong>: หากฟังก์ชันใหม่สามารถทำเป็น Internal Helper หรือต่อยอดจากคำสั่งเดิมได้ ให้เลือกทำภายในก่อน จนกว่าจะมีการอนุมัติและเลื่อนขั้น (Promotion) เข้าสู่ <code>agent-bundle.manifest.json#core_skills</code> อย่างเป็นทางการ</li>
           </ul>
         `

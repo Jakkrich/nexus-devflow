@@ -100,10 +100,14 @@ npx @jakkrichm/create-nexus-devflow reconcile
 npx @jakkrichm/create-nexus-devflow swarm
 npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
-# Framework Update & Safety Rollback
+# Deterministic 3-layer code verification gate
+npx @jakkrichm/create-nexus-devflow verify-layers [--json]
+
+# Framework Update & Safety Rollback (v2 -> v3 auto-prunes retired autopilot/devflow)
 npx @jakkrichm/create-nexus-devflow update [--dry-run]
 
 # Opt-in Team & Ops Extensions
+npx nexus-devflow skill add verify-harness    # Generate project-local .agents/skills/verify-<app>/ driver
 npx nexus-devflow skill add browseros-neo     # E2E testing, debugging & ID-traceable evidence via BrowserOS neo MCP
 npx nexus-devflow skill add setup-tests       # Unit & Playwright browser test harness
 npx nexus-devflow skill add ci                # Verify command & GitHub Actions CI

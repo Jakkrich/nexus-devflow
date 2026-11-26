@@ -7,10 +7,16 @@
     "run /devflow-help doctor to check setup health",
     "run /devflow-help --exec status",
     "state-aware interactive guide and prompt builder",
-    "apply devflow-help guidance"
+    "apply devflow-help guidance",
+    "เรียก /devflow-help doctor เช็กสุขภาพโปรเจกต์",
+    "ดูสถานะผ่าน $devflow-help --exec",
+    "เปิด interactive guide พร้อม prompt builder ช่วยแนะนำคำสั่งถัดไป",
+    "เช็ก unified status และ doctor health ของโปรเจกต์นี้หน่อย"
   ],
   "negative": [
     "unrelated random task query",
-    "general generic string prompt"
+    "general generic string prompt",
+    "สวัสดีวันนี้อากาศดีไหม",
+    "คำนวณภาษีเงินได้บุคคลธรรมดา"
   ]
 }

@@ -177,9 +177,9 @@ export const WORKFLOW_PAGES: DocPage[] = [
         id: 'run-the-remaining-plan-continuously',
         title: 'การรันแผนงานแบบต่อเนื่องอัตโนมัติ (Run the remaining plan continuously)',
         contentHtml: `
-          <p>คำสั่ง <code>/autopilot --all</code> (หรือ <code>/autopilot --max &lt;N&gt; --merge</code>) เป็นโหมดการทำงานอัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> แบบต่อเนื่องหลายรายการโดยไม่ต้องหยุดรอการอนุมัติระหว่างขั้นตอนย่อย:</p>
-          <pre><code>/autopilot --all ──▶ หยิบฟีเจอร์ถัดไป ──▶ รัน Spec/Implement/Check/Gates ──▶ Local Completion &amp; Merge ──▶ ทำซ้ำ</code></pre>
-          <p>Build Plan จะทำหน้าที่เป็นคิวงานโดยตรง แต่ละฟีเจอร์ยังคงแยก Branch, รันการทดสอบ TDD, บันทึกประวัติ และทำ Local Squash-Merge เข้าสู่ <code>main</code> อย่างปลอดภัย</p>
+          <p>คำสั่ง <code>/devflow-mode --all</code> (หรือ <code>/devflow-mode --max &lt;N&gt; --merge</code>, รองรับ alias เดิม <code>/autopilot --all</code>) เป็นโหมด Coordinator อัตโนมัติสำหรับรันฟีเจอร์ที่ยังไม่ได้ทำใน <code>devflow/build-plan.md</code> ผ่าน Isolated Subagents และ Verifier Swarm แล้วหยุดที่ Option A Evidence Packet:</p>
+          <pre><code>/devflow-mode --all ──▶ Coordinator ──▶ Worktree Subagents (TDD) ──▶ Verifier Swarm ──▶ Option A Gate</code></pre>
+          <p>Build Plan จะทำหน้าที่เป็นคิวงานโดยตรง แต่ละฟีเจอร์ยังคงแยก Branch, รันการทดสอบ TDD + Prove-by-Run และเก็บหลักฐานใน <code>devflow/reports/{run-id}/</code> อย่างปลอดภัย</p>
         `
       },
       {
@@ -211,7 +211,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
             <thead><tr><th>สไตล์การเรียกคำสั่ง</th><th>เครื่องมือที่รองรับ</th><th>ตัวอย่างการเรียกใช้</th></tr></thead>
             <tbody>
               <tr><td><strong>Slash Prefix (<code>/</code>)</strong></td><td>Google Antigravity, Claude Code, Gemini CLI</td><td><code>/feature</code>, <code>/implement</code>, <code>/check</code>, <code>/complete</code></td></tr>
-              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$autopilot --all</code>, <code>$devflow</code></td></tr>
+              <tr><td><strong>Dollar Prefix (<code>$</code>)</strong></td><td>OpenAI Codex CLI</td><td><code>$feature</code>, <code>$devflow-mode --all</code>, <code>$devflow-help</code></td></tr>
               <tr><td><strong>Plain Canonical Name</strong></td><td>GitHub Copilot, Generic Terminals, OpenCode, Aider</td><td><code>feature 1</code>, <code>implement</code>, <code>check</code></td></tr>
             </tbody>
           </table>
@@ -229,7 +229,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
               <tr><td><strong><code>implement</code></strong></td><td>Execution</td><td>ดำเนินการพัฒนาตาม Task Checklist ด้วยวินัย Strict TDD</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
               <tr><td><strong><code>check</code></strong></td><td>Quality Gate</td><td>Senior QA Dual-Axis Verification และ <code>/check guide</code> สำหรับคู่มือทดสอบด้วยตนเอง</td><td><code>context/{xxx-slug}/spec.md</code></td></tr>
               <tr><td><strong><code>complete</code></strong></td><td>Delivery</td><td>สรุป Release Digest, ย้ายเข้า History Archive และ Squash-Merge</td><td><code>history/features/</code></td></tr>
-              <tr><td><strong><code>autopilot</code></strong></td><td>Automation</td><td>รัน 1 ฟีเจอร์หรือคิวต่อเนื่องในเครื่อง (<code>--all</code> / <code>--max</code> / <code>--merge</code>)</td><td><code>history/features/</code></td></tr>
+              <tr><td><strong><code>devflow-mode</code></strong></td><td>Coordinator</td><td>Lead-Coordinator, 5 Composable Playbooks, Worktree Subagents และคิว <code>--all</code></td><td><code>devflow/reports/</code></td></tr>
             </tbody>
           </table>
         `
@@ -255,9 +255,9 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <table>
             <thead><tr><th>คำสั่ง</th><th>หน้าที่</th><th>คำสั่ง</th><th>หน้าที่</th></tr></thead>
             <tbody>
-              <tr><td><strong><code>devflow</code></strong></td><td>ศูนย์รวมตรวจสถานะ (<code>--exec</code>), <code>doctor</code>, และ Legacy Routing</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
-              <tr><td><strong><code>onboard</code></strong></td><td>ตั้งค่าโปรเจกต์ใหม่และ auto-detect brownfield (<code>--adopt</code>)</td><td><strong><code>debug</code></strong></td><td>วินิจฉัย 2-Track (Fast trace หรือ Scientific 6-phase)</td></tr>
-              <tr><td><strong><code>audit</code></strong></td><td>สแกน YAGNI, Quality, Security, Perf, Tests + <code>independent</code></td><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td></tr>
+              <tr><td><strong><code>devflow-help</code></strong></td><td>Interactive Guide &amp; Prompt Builder, สถานะ (<code>--exec</code>), <code>doctor</code>, และ Legacy Routing</td><td><strong><code>overview</code></strong></td><td>คอมไพล์บริบทโปรเจกต์ลง <code>project-overview.md</code></td></tr>
+              <tr><td><strong><code>onboard</code></strong></td><td>ตั้งค่าโปรเจกต์ใหม่, auto-detect brownfield (<code>--adopt</code>), และสร้าง <code>verify</code> skill</td><td><strong><code>debug</code></strong></td><td>วินิจฉัย 2-Track (Fast trace หรือ Scientific 6-phase)</td></tr>
+              <tr><td><strong><code>audit</code></strong></td><td>สแกน YAGNI, Quality, Security, Perf, Tests + Prove-by-Run &amp; <code>interrogate</code></td><td><strong><code>prototype</code></strong></td><td>สร้าง Mockup HTML/CSS จำลองหน้าจอแบบ Static</td></tr>
             </tbody>
           </table>
           <p><strong>Opt-in Tier-2 Extensions</strong> (ติดตั้งเฉพาะเมื่อต้องการใช้ด้วย <code>npx nexus-devflow skill add &lt;name&gt;</code>): <code>setup-tests</code> (รวม Playwright browser), <code>ci</code>, <code>release</code>, <code>rollback</code>, <code>vendor</code>, <code>convert-any-to-md</code>, <code>browseros-neo</code>, <code>archify</code>, <code>diagram-design</code></p>
@@ -305,7 +305,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <table>
             <thead><tr><th>ความต้องการ</th><th>คำสั่งที่แนะนำ</th><th>พฤติกรรมหลัก</th></tr></thead>
             <tbody>
-              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/devflow doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, และความสมบูรณ์ของเวิร์กโฟลว์</td></tr>
+              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/devflow-help doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, <code>pstack</code> engine, <code>verify</code> driver และ Workflow Health</td></tr>
               <tr><td>สืบหาสาเหตุของบั๊กที่แท้จริง</td><td><code>/debug</code></td><td>วินิจฉัยแบบ 2-Track (Fast trace หรือ Scientific 6-phase) โดยไม่แก้โค้ดล่วงหน้า</td></tr>
               <tr><td>ทำความเข้าใจโค้ดหรือเทียบทางเลือก</td><td><code>/explore</code></td><td>สำรวจโค้ดและเทียบ Options 2–3 แบบแบบ Read-only</td></tr>
               <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/check guide</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>

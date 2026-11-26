@@ -12,6 +12,9 @@ import {
   readManifest,
   type TemplateFile
 } from "../lib/update.js";
+import { readProjectConfig } from "../lib/project-config.js";
+import { runDoctor } from "../lib/doctor.js";
+import { FULL_ROLE_SKILLS, getSkillsForRole, type DevFlowRole } from "../lib/skill-manager.js";
 
 test("adapterListFromMode resolves adapter aliases correctly", () => {
   assert.deepEqual(adapterListFromMode("both"), ["codex", "claude", "copilot", "antigravity", "opencode"]);
@@ -387,6 +390,168 @@ test("handleExtrasSkillsSetup replaces Superpower Community prompt with interact
       { isInteractive: true, extrasRoot: repoExtrasRoot }
     );
     assert.deepEqual(yesResult, []);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("AC-1: applyPreparedUpdate migrates v2 workspace (prunes autopilot & devflow, installs devflow-mode & devflow-help, preserves customized config.json)", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-v2-v3-migrate-"));
+  const v2Template = path.join(tempDir, "template-v2");
+  const v3Template = path.join(tempDir, "template-v3");
+  const targetDir = path.join(tempDir, "target");
+
+  try {
+    // 1. Setup synthetic v2 template (autopilot + devflow + v2 config.json)
+    for (const adapter of [".agents", ".claude"]) {
+      await fs.mkdir(path.join(v2Template, adapter, "skills", "autopilot"), { recursive: true });
+      await fs.writeFile(path.join(v2Template, adapter, "skills", "autopilot", "SKILL.md"), "# autopilot v2\n", "utf8");
+      await fs.mkdir(path.join(v2Template, adapter, "skills", "devflow", "reference"), { recursive: true });
+      await fs.mkdir(path.join(v2Template, adapter, "skills", "devflow", "scripts"), { recursive: true });
+      await fs.writeFile(path.join(v2Template, adapter, "skills", "devflow", "SKILL.md"), "# devflow v2\n", "utf8");
+      await fs.writeFile(path.join(v2Template, adapter, "skills", "devflow", "reference", "doctor.md"), "# doctor v2\n", "utf8");
+      await fs.writeFile(path.join(v2Template, adapter, "skills", "devflow", "scripts", "run-state.mjs"), "// v2\n", "utf8");
+      await fs.mkdir(path.join(v2Template, adapter, "skills", "feature"), { recursive: true });
+      await fs.writeFile(path.join(v2Template, adapter, "skills", "feature", "SKILL.md"), "# feature v2\n", "utf8");
+    }
+    await fs.mkdir(path.join(v2Template, "devflow"), { recursive: true });
+    await fs.writeFile(path.join(v2Template, "AGENTS.md"), "# v2 AGENTS\n", "utf8");
+    await fs.writeFile(path.join(v2Template, "devflow", "config.json"), JSON.stringify({ schemaVersion: 1 }, null, 2), "utf8");
+
+    // 2. Setup synthetic v3 template (devflow-mode + 5 playbooks, devflow-help + scripts, v3 config)
+    for (const adapter of [".agents", ".claude"]) {
+      await fs.mkdir(path.join(v3Template, adapter, "skills", "devflow-mode", "playbooks"), { recursive: true });
+      await fs.writeFile(path.join(v3Template, adapter, "skills", "devflow-mode", "SKILL.md"), "# devflow-mode v3\n", "utf8");
+      for (const pb of ["feature.md", "bug-fix.md", "refactor.md", "discovery.md", "autonomous-queue.md"]) {
+        await fs.writeFile(path.join(v3Template, adapter, "skills", "devflow-mode", "playbooks", pb), `# ${pb}\n`, "utf8");
+      }
+      await fs.mkdir(path.join(v3Template, adapter, "skills", "devflow-help", "scripts"), { recursive: true });
+      await fs.writeFile(path.join(v3Template, adapter, "skills", "devflow-help", "SKILL.md"), "# devflow-help v3\n", "utf8");
+      await fs.writeFile(path.join(v3Template, adapter, "skills", "devflow-help", "scripts", "run-state.mjs"), "// v3\n", "utf8");
+      await fs.mkdir(path.join(v3Template, adapter, "skills", "feature"), { recursive: true });
+      await fs.writeFile(path.join(v3Template, adapter, "skills", "feature", "SKILL.md"), "# feature v3\n", "utf8");
+    }
+    await fs.mkdir(path.join(v3Template, "devflow"), { recursive: true });
+    await fs.writeFile(path.join(v3Template, "AGENTS.md"), "# v3 AGENTS\n", "utf8");
+    await fs.writeFile(
+      path.join(v3Template, "devflow", "config.json"),
+      JSON.stringify({ schemaVersion: 1, execution: { engine: "auto" }, delivery: { gate: "option-a-evidence-packet" } }, null, 2),
+      "utf8"
+    );
+
+    await fs.mkdir(targetDir, { recursive: true });
+    const installV2 = await prepareUpdate({
+      targetDir,
+      templateRoot: v2Template,
+      version: "2.21.0",
+      adapter: "all"
+    });
+    await applyPreparedUpdate(installV2);
+
+    // Customize user v2 config.json and ensure conflict protection catches it while pruning v2 skills on replaceConflicts: true
+    await fs.writeFile(
+      path.join(targetDir, "devflow", "config.json"),
+      JSON.stringify({ schemaVersion: 1, workflow: { stepReview: "every" } }, null, 2),
+      "utf8"
+    );
+
+    const v3ConflictCheck = await prepareUpdate({
+      targetDir,
+      templateRoot: v3Template,
+      version: "3.0.0"
+    });
+    assert.ok(v3ConflictCheck.conflictList.some((c) => c.relativePath === "devflow/config.json"));
+
+    // Preserve customized config.json (skip force replace) -> v3 defaults still merge in readProjectConfig
+    const preservedConfig = await readProjectConfig(targetDir);
+    assert.equal(preservedConfig.values.workflow.stepReview, "every");
+    assert.equal(preservedConfig.values.execution.engine, "auto");
+    assert.equal(preservedConfig.values.delivery.gate, "option-a-evidence-packet");
+
+    // Apply v3 migration (backup + prune retired v2 skills across both adapter trees)
+    await applyPreparedUpdate(v3ConflictCheck, { replaceConflicts: true });
+
+    for (const adapter of [".agents", ".claude"]) {
+      await assert.rejects(fs.stat(path.join(targetDir, adapter, "skills", "autopilot")), { code: "ENOENT" });
+      await assert.rejects(fs.stat(path.join(targetDir, adapter, "skills", "devflow")), { code: "ENOENT" });
+      await assert.doesNotReject(fs.stat(path.join(targetDir, adapter, "skills", "devflow-mode", "SKILL.md")));
+      await assert.doesNotReject(fs.stat(path.join(targetDir, adapter, "skills", "devflow-mode", "playbooks", "autonomous-queue.md")));
+      await assert.doesNotReject(fs.stat(path.join(targetDir, adapter, "skills", "devflow-help", "scripts", "run-state.mjs")));
+    }
+
+    const updatedManifest = await readManifest(targetDir);
+    assert.ok(updatedManifest);
+    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-mode"));
+    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-help"));
+    assert.ok(!updatedManifest.lifecycle.companionCommands.includes("autopilot"));
+    assert.ok(!updatedManifest.lifecycle.companionCommands.includes("devflow"));
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("AC-2: installer matrix supports all 5 adapters (antigravity, claude, codex, copilot, opencode) and 3 role profiles", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-matrix-"));
+  const v3Template = path.join(tempDir, "template");
+
+  try {
+    for (const adapter of [".agents", ".claude"]) {
+      for (const skill of FULL_ROLE_SKILLS) {
+        await fs.mkdir(path.join(v3Template, adapter, "skills", skill), { recursive: true });
+        await fs.writeFile(path.join(v3Template, adapter, "skills", skill, "SKILL.md"), `# ${skill}\n`, "utf8");
+      }
+    }
+    await fs.mkdir(path.join(v3Template, "devflow"), { recursive: true });
+    await fs.writeFile(
+      path.join(v3Template, "devflow", "config.json"),
+      JSON.stringify({ schemaVersion: 1, execution: { engine: "auto" }, delivery: { gate: "option-a-evidence-packet" } }, null, 2),
+      "utf8"
+    );
+    await fs.writeFile(path.join(v3Template, "AGENTS.md"), "# v3 Matrix Test\n\n## Proportional engineering\n\nBuild for established requirements, not hypothetical scale.\n", "utf8");
+    await fs.writeFile(path.join(v3Template, "CLAUDE.md"), "# Claude Entry\n", "utf8");
+
+    const adapterCases = [
+      { mode: "antigravity", hasAgents: true, hasClaude: false },
+      { mode: "claude", hasAgents: false, hasClaude: true },
+      { mode: "codex", hasAgents: true, hasClaude: false },
+      { mode: "copilot", hasAgents: true, hasClaude: false },
+      { mode: "opencode", hasAgents: true, hasClaude: false }
+    ] as const;
+
+    const roles: readonly DevFlowRole[] = ["full", "dev", "sa"];
+
+    for (const { mode, hasAgents, hasClaude } of adapterCases) {
+      for (const role of roles) {
+        const target = path.join(tempDir, `${mode}-${role}`);
+        await fs.mkdir(target, { recursive: true });
+        const prep = await prepareUpdate({
+          targetDir: target,
+          templateRoot: v3Template,
+          version: "3.0.0",
+          adapter: mode,
+          role
+        });
+        await applyPreparedUpdate(prep);
+
+        const expectedSkills = getSkillsForRole(role);
+        if (hasAgents) {
+          const dirs = (await fs.readdir(path.join(target, ".agents", "skills"))).sort();
+          assert.deepEqual(dirs, [...expectedSkills].sort());
+        } else {
+          await assert.rejects(fs.stat(path.join(target, ".agents")), { code: "ENOENT" });
+        }
+
+        if (hasClaude) {
+          const dirs = (await fs.readdir(path.join(target, ".claude", "skills"))).sort();
+          assert.deepEqual(dirs, [...expectedSkills].sort());
+        } else {
+          await assert.rejects(fs.stat(path.join(target, ".claude")), { code: "ENOENT" });
+        }
+
+        const doctorReport = await runDoctor(target, { pstackProbePaths: [] });
+        assert.equal(doctorReport.failCount, 0, `${mode}/${role} doctor should have 0 failures`);
+      }
+    }
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

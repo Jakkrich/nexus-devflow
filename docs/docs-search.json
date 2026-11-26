@@ -279,21 +279,22 @@
     ]
   },
   {
-    "title": "DevFlow (/devflow, /devflow doctor)",
-    "description": "ศูนย์รวมรายงานสถานะงาน (Status & --exec), ตรวจสุขภาพ Adapters/Overview (/devflow doctor) และตารางนำทางคำสั่งเดิม (Read-Only)",
+    "title": "DevFlow Help (/devflow-help, /devflow-help doctor)",
+    "description": "ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)",
     "section": "COMMANDS",
-    "slug": "commands/devflow",
-    "href": "../commands/devflow/",
+    "slug": "commands/devflow-help",
+    "href": "../commands/devflow-help/",
     "tags": [
       "Command",
-      "DevFlow",
+      "DevFlowHelp",
       "Status",
       "Doctor",
+      "PromptBuilder",
       "HealthCheck",
       "Router",
       "Read-Only",
       "commands",
-      "commands devflow"
+      "commands devflow-help"
     ]
   },
   {
@@ -399,20 +400,21 @@
     ]
   },
   {
-    "title": "Autopilot (/autopilot, /autopilot --all)",
-    "description": "รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge",
+    "title": "DevFlow Mode (/devflow-mode, /devflow-mode --all)",
+    "description": "Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)",
     "section": "COMMANDS",
-    "slug": "commands/autopilot",
-    "href": "../commands/autopilot/",
+    "slug": "commands/devflow-mode",
+    "href": "../commands/devflow-mode/",
     "tags": [
       "Command",
-      "Autopilot",
-      "Continuous",
+      "DevFlowMode",
+      "Coordinator",
+      "Playbooks",
+      "Subagents",
+      "pstack",
       "Autonomous",
-      "QualityGates",
-      "ReviewGate",
       "commands",
-      "commands autopilot"
+      "commands devflow-mode"
     ]
   },
   {

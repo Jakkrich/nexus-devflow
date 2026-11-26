@@ -567,33 +567,33 @@ $onboard</code></pre>
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>ดูสถานะภาพรวมของโปรเจกต์ด้วย <code>/devflow</code> หรือเริ่มฟีเจอร์ถัดไปด้วย <code>/feature</code></p>
+          <p>ดูสถานะภาพรวมของโปรเจกต์ด้วย <code>/devflow-help</code> หรือเริ่มฟีเจอร์ถัดไปด้วย <code>/feature</code></p>
         `
       }
     ]
   },
 
-  // 10. DevFlow Hub (Status + Doctor + Router)
+  // 10. DevFlow Help (Interactive Guide + Prompt Builder + Status + Doctor + Legacy Router)
   {
-    slug: 'commands/devflow',
+    slug: 'commands/devflow-help',
     category: 'COMMANDS',
-    title: 'DevFlow (/devflow, /devflow doctor)',
-    lead: 'ศูนย์รวมรายงานสถานะงาน (Status & --exec), ตรวจสุขภาพ Adapters/Overview (/devflow doctor) และตารางนำทางคำสั่งเดิม (Read-Only)',
-    pills: ['Command', 'DevFlow', 'Status', 'Doctor', 'HealthCheck', 'Router', 'Read-Only'],
+    title: 'DevFlow Help (/devflow-help, /devflow-help doctor)',
+    lead: 'ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)',
+    pills: ['Command', 'DevFlowHelp', 'Status', 'Doctor', 'PromptBuilder', 'HealthCheck', 'Router', 'Read-Only'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>รันคำสั่ง <code>/devflow</code> เพื่อดูภาพรวมสถานะปัจจุบัน สรุปผู้บริหาร (<code>--exec</code>) ตรวจสุขภาพระบบ (<code>doctor</code>) หรือสอบถามเส้นทางคำสั่ง:</p>
-          <pre><code># รายงานสถานะปัจจุบันและขั้นตอนถัดไป (Default Status)
-/devflow
+          <p>รันคำสั่ง <code>/devflow-help</code> (รองรับ alias เดิม <code>/devflow</code>) เพื่อเปิด Interactive Guide &amp; Prompt Builder, ดูภาพรวมสถานะปัจจุบัน, สรุปผู้บริหาร (<code>--exec</code>) หรือตรวจสุขภาพระบบ (<code>doctor</code>):</p>
+          <pre><code># รายงานสถานะปัจจุบัน, Interactive Guide & Prompt Builder
+/devflow-help
 
 # รายงานสรุปผู้บริหารแบบไม่เปิดเผย path โค้ด
-/devflow --exec
+/devflow-help --exec
 
-# ตรวจสุขภาพ Adapters, Config, run.json และ Overview 20KB Guard
-/devflow doctor</code></pre>
+# ตรวจสุขภาพ Adapters, Config, Execution Engine (pstack), Verify Driver และ Overview 20KB Guard
+/devflow-help doctor</code></pre>
         `
       },
       {
@@ -601,10 +601,10 @@ $onboard</code></pre>
         title: 'สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics)',
         contentHtml: `
           <ul>
+            <li><strong>Interactive Guide &amp; Prompt Builder</strong>: อ่านสถานะปัจจุบันจาก <code>devflow/</code> แล้วสร้างคำสั่งและ prompt พร้อมส่งสำหรับขั้นตอนถัดไป</li>
             <li><strong>Build Plan &amp; Active Context</strong>: ความคืบหน้า Build Plan, Spec/Findings/Review Gate ใน <code>devflow/context/</code>, และ Exact Next Action</li>
-            <li><strong>Adapters &amp; Config Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code> และขนาดของ <code>project-overview.md</code> (&lt; 20KB)</li>
-            <li><strong>Run State Recovery</strong>: ตรวจสอบและช่วยรีเซ็ต <code>devflow/.state/run.json</code> เมื่อได้รับอนุมัติ</li>
-            <li><strong>Legacy Command Routing</strong>: แปลคำสั่งเดิม (เช่น <code>/adopt</code>, <code>/brief</code>, <code>/continuous</code>, <code>/try</code>, <code>/grill</code>) ไปยัง 15 Core Skills</li>
+            <li><strong>Adapters, Verify &amp; Engine Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code>, <code>execution_engine_pstack</code>, <code>verification_driver_skill</code>, และขนาด <code>project-overview.md</code> (&lt; 20KB)</li>
+            <li><strong>Legacy Command Routing</strong>: แปลคำสั่งเดิม (เช่น <code>/autopilot</code>, <code>/devflow</code>, <code>/adopt</code>, <code>/brief</code>, <code>/continuous</code>, <code>/try</code>, <code>/grill</code>) ไปยัง 15 Core Skills</li>
           </ul>
         `
       },
@@ -864,37 +864,37 @@ npx nexus-devflow skill add setup-tests
     ]
   },
 
-  // 19. Autopilot (Single & Continuous --all / --max / --merge)
+  // 19. DevFlow Mode (Coordinator + Playbooks + Autonomous Queue)
   {
-    slug: 'commands/autopilot',
+    slug: 'commands/devflow-mode',
     category: 'COMMANDS',
-    title: 'Autopilot (/autopilot, /autopilot --all)',
-    lead: 'รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge',
-    pills: ['Command', 'Autopilot', 'Continuous', 'Autonomous', 'QualityGates', 'ReviewGate'],
+    title: 'DevFlow Mode (/devflow-mode, /devflow-mode --all)',
+    lead: 'Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)',
+    pills: ['Command', 'DevFlowMode', 'Coordinator', 'Playbooks', 'Subagents', 'pstack', 'Autonomous'],
     sections: [
       {
         id: 'when-to-use-it',
         title: 'เมื่อไหร่ที่ควรใช้ (When to use it)',
         contentHtml: `
-          <p>ใช้คำสั่ง <code>/autopilot</code> สำหรับรัน 1 ฟีเจอร์แล้วหยุดรอตรวจทาน หรือเพิ่มแฟล็ก <code>--all</code> / <code>--max &lt;N&gt;</code> / <code>--merge</code> เพื่อรันคิวต่อเนื่องจนจบและ Squash-Merge บนเครื่อง Local:</p>
-          <pre><code># 1 ฟีเจอร์แล้วหยุดรอรีวิว
-/autopilot 1
+          <p>ใช้คำสั่ง <code>/devflow-mode</code> (รองรับ alias เดิม <code>/autopilot</code>) สำหรับรันงานแบบ Lead-Coordinator + Isolated Worktree Subagents หรือเพิ่ม <code>--all</code> / <code>--max &lt;N&gt;</code> เพื่อรันทั้งคิวใน Build Plan:</p>
+          <pre><code># รันฟีเจอร์ถัดไปด้วย Coordinator + Worktree Subagents
+/devflow-mode 1
 
-# รันทั้งคิวใน build-plan.md ต่อเนื่อง + Auto Local Squash-Merge
-/autopilot --all
-/autopilot --max 3 --merge</code></pre>
+# รันทั้งคิวใน build-plan.md ต่อเนื่องบน feature/rework branch
+/devflow-mode --all
+/devflow-mode --max 3 --merge</code></pre>
         `
       },
       {
         id: 'autopilot-pipeline',
-        title: 'กระบวนการทำงานอัตโนมัติ (Execution Pipeline)',
+        title: 'กระบวนการทำงานอัตโนมัติ (Coordinator Execution Pipeline)',
         contentHtml: `
           <ol>
-            <li><strong>Spec Formulation</strong>: ร่าง Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code></li>
-            <li><strong>TDD Implementation</strong>: สร้าง Branch, เขียน Test และพัฒนาโค้ดให้ผ่าน 100%</li>
-            <li><strong>Verification Matrix</strong>: รัน Typecheck, Lint, Test suites และบันทึกหลักฐาน</li>
-            <li><strong>Independent Review</strong>: รัน AI Reviewer อิสระเมื่อ Quality Gate กำหนด (<code>when-sensitive</code> / <code>always</code>)</li>
-            <li><strong>Boundary Pause or Local Complete</strong>: หยุดรอคุณตรวจทาน (default) หรือสรุป/Squash-Merge ลง <code>main</code> ในเครื่อง (เมื่อใช้ <code>--all</code> / <code>--merge</code>) โดย<strong>ไม่</strong> Push ขึ้น Remote</li>
+            <li><strong>Coordinator Planning</strong>: จัดทำ Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code> (เดินหน้าอัตโนมัติบน branch เมื่อ <code>execution.autoApproveSpec: true</code>)</li>
+            <li><strong>Isolated TDD Subagents</strong>: ให้ worker subagents พัฒนาและทดสอบแบบ TDD บน isolated worktree/branch</li>
+            <li><strong>3-Layer Evidence Verification</strong>: รัน <code>verify-layers</code>, project <code>verify</code> driver, และ <code>pstack:interrogate</code> / <code>audit</code> แบบ Prove-by-Run บันทึกหลักฐานลง <code>devflow/reports/{run-id}/</code></li>
+            <li><strong>Bounded Auto-Repair</strong>: แก้ไข Confirmed P0/P1 findings ที่รันซ้ำได้จริงและตรวจซ้ำอัตโนมัติ</li>
+            <li><strong>Option A Final Human Gate</strong>: หยุดบนสาขา feature พร้อม <strong>Evidence Packet</strong> ให้มนุษย์ตัดสินใจ Merge / PR / Push เสมอ</li>
           </ol>
         `
       },
@@ -902,7 +902,7 @@ npx nexus-devflow skill add setup-tests
         id: 'next-steps',
         title: 'ขั้นตอนถัดไป (Next steps)',
         contentHtml: `
-          <p>ตรวจเช็กสถานะด้วย <code>/devflow</code> หรือดูประวัติการส่งมอบใน <code>devflow/history/HISTORY.md</code></p>
+          <p>ตรวจเช็กสถานะด้วย <code>/devflow-help</code> หรือดูประวัติการส่งมอบใน <code>devflow/history/HISTORY.md</code></p>
         `
       }
     ]

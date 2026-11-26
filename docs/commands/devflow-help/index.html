@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autopilot (/autopilot, /autopilot --all) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge">
-  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/autopilot/">
+  <title>DevFlow Help (/devflow-help, /devflow-help doctor) - คู่มือ Nexus-DevFlow</title>
+  <meta name="description" content="ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)">
+  <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/devflow-help/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link active" href="../../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link active" href="../../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../../commands/release/">Release (Opt-in)</a>
@@ -144,21 +144,23 @@
 
     <!-- Main Content -->
     <main class="docs-main" id="docs-content">
-      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>Autopilot (/autopilot, /autopilot --all)</strong></div>
+      <div class="docs-breadcrumb"><a href="../../getting-started/">คู่มือ</a> <span>/</span> <span>COMMANDS</span> <span>/</span> <strong>DevFlow Help (/devflow-help, /devflow-help doctor)</strong></div>
       
-      <h1 class="docs-title">Autopilot (/autopilot, /autopilot --all)</h1>
+      <h1 class="docs-title">DevFlow Help (/devflow-help, /devflow-help doctor)</h1>
       
       <p class="docs-lead">
-        รันการพัฒนา 1 ฟีเจอร์ต่อเนื่องหรือรันทั้งคิวใน Build Plan แบบอัตโนมัติ (--all / --max / --merge) ผ่าน Quality Gates และ Local Squash-Merge
+        ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)
       </p>
 
       <div class="docs-meta">
         <span class="docs-pill">Command</span>
-        <span class="docs-pill">Autopilot</span>
-        <span class="docs-pill">Continuous</span>
-        <span class="docs-pill">Autonomous</span>
-        <span class="docs-pill">QualityGates</span>
-        <span class="docs-pill">ReviewGate</span>
+        <span class="docs-pill">DevFlowHelp</span>
+        <span class="docs-pill">Status</span>
+        <span class="docs-pill">Doctor</span>
+        <span class="docs-pill">PromptBuilder</span>
+        <span class="docs-pill">HealthCheck</span>
+        <span class="docs-pill">Router</span>
+        <span class="docs-pill">Read-Only</span>
       </div>
 
       <div class="docs-prose">
@@ -167,28 +169,29 @@
         <section id="when-to-use-it">
           <h2>เมื่อไหร่ที่ควรใช้ (When to use it)</h2>
           
-          <p>ใช้คำสั่ง <code>/autopilot</code> สำหรับรัน 1 ฟีเจอร์แล้วหยุดรอตรวจทาน หรือเพิ่มแฟล็ก <code>--all</code> / <code>--max &lt;N&gt;</code> / <code>--merge</code> เพื่อรันคิวต่อเนื่องจนจบและ Squash-Merge บนเครื่อง Local:</p>
-          <pre><code># 1 ฟีเจอร์แล้วหยุดรอรีวิว
-/autopilot 1
+          <p>รันคำสั่ง <code>/devflow-help</code> (รองรับ alias เดิม <code>/devflow</code>) เพื่อเปิด Interactive Guide &amp; Prompt Builder, ดูภาพรวมสถานะปัจจุบัน, สรุปผู้บริหาร (<code>--exec</code>) หรือตรวจสุขภาพระบบ (<code>doctor</code>):</p>
+          <pre><code># รายงานสถานะปัจจุบัน, Interactive Guide & Prompt Builder
+/devflow-help
 
-# รันทั้งคิวใน build-plan.md ต่อเนื่อง + Auto Local Squash-Merge
-/autopilot --all
-/autopilot --max 3 --merge</code></pre>
+# รายงานสรุปผู้บริหารแบบไม่เปิดเผย path โค้ด
+/devflow-help --exec
+
+# ตรวจสุขภาพ Adapters, Config, Execution Engine (pstack), Verify Driver และ Overview 20KB Guard
+/devflow-help doctor</code></pre>
         
           
         </section>
 
-        <!-- Section: กระบวนการทำงานอัตโนมัติ (Execution Pipeline) -->
-        <section id="autopilot-pipeline">
-          <h2>กระบวนการทำงานอัตโนมัติ (Execution Pipeline)</h2>
+        <!-- Section: สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics) -->
+        <section id="what-it-inspects">
+          <h2>สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics)</h2>
           
-          <ol>
-            <li><strong>Spec Formulation</strong>: ร่าง Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code></li>
-            <li><strong>TDD Implementation</strong>: สร้าง Branch, เขียน Test และพัฒนาโค้ดให้ผ่าน 100%</li>
-            <li><strong>Verification Matrix</strong>: รัน Typecheck, Lint, Test suites และบันทึกหลักฐาน</li>
-            <li><strong>Independent Review</strong>: รัน AI Reviewer อิสระเมื่อ Quality Gate กำหนด (<code>when-sensitive</code> / <code>always</code>)</li>
-            <li><strong>Boundary Pause or Local Complete</strong>: หยุดรอคุณตรวจทาน (default) หรือสรุป/Squash-Merge ลง <code>main</code> ในเครื่อง (เมื่อใช้ <code>--all</code> / <code>--merge</code>) โดย<strong>ไม่</strong> Push ขึ้น Remote</li>
-          </ol>
+          <ul>
+            <li><strong>Interactive Guide &amp; Prompt Builder</strong>: อ่านสถานะปัจจุบันจาก <code>devflow/</code> แล้วสร้างคำสั่งและ prompt พร้อมส่งสำหรับขั้นตอนถัดไป</li>
+            <li><strong>Build Plan &amp; Active Context</strong>: ความคืบหน้า Build Plan, Spec/Findings/Review Gate ใน <code>devflow/context/</code>, และ Exact Next Action</li>
+            <li><strong>Adapters, Verify &amp; Engine Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code>, <code>execution_engine_pstack</code>, <code>verification_driver_skill</code>, และขนาด <code>project-overview.md</code> (&lt; 20KB)</li>
+            <li><strong>Legacy Command Routing</strong>: แปลคำสั่งเดิม (เช่น <code>/autopilot</code>, <code>/devflow</code>, <code>/adopt</code>, <code>/brief</code>, <code>/continuous</code>, <code>/try</code>, <code>/grill</code>) ไปยัง 15 Core Skills</li>
+          </ul>
         
           
         </section>
@@ -197,7 +200,7 @@
         <section id="next-steps">
           <h2>ขั้นตอนถัดไป (Next steps)</h2>
           
-          <p>ตรวจเช็กสถานะด้วย <code>/devflow</code> หรือดูประวัติการส่งมอบใน <code>devflow/history/HISTORY.md</code></p>
+          <p>ทำตามคำสั่งถัดไปที่ระบบแนะนำ เช่น <code>/overview</code>, <code>/implement</code>, <code>/check</code> หรือ <code>/complete</code></p>
         
           
         </section>
@@ -205,13 +208,13 @@
 
       <!-- Bottom Page Navigation -->
       <nav class="docs-page-nav" aria-label="Documentation page navigation">
-        <a class="prev" href="../../commands/prototype/">
+        <a class="prev" href="../../commands/complete/">
           <span>ก่อนหน้า (Previous)</span>
-          <strong>Prototype</strong>
+          <strong>Complete</strong>
         </a>
-        <a class="next" href="../../commands/tests/">
+        <a class="next" href="../../commands/debug/">
           <span>ถัดไป (Next)</span>
-          <strong>Setup Tests (Opt-in)</strong>
+          <strong>Debug (2-Track)</strong>
         </a>
       </nav>
     </main>
@@ -220,7 +223,7 @@
     <aside class="docs-toc" aria-label="On this page">
       <div class="docs-toc-title">ในหน้านี้ (On this page)</div>
       <a href="#when-to-use-it">เมื่อไหร่ที่ควรใช้ (When to use it)</a>
-      <a href="#autopilot-pipeline">กระบวนการทำงานอัตโนมัติ (Execution Pipeline)</a>
+      <a href="#what-it-inspects">สิ่งที่ระบบรายงานและตรวจสุขภาพ (Status & Diagnostics)</a>
       <a href="#next-steps">ขั้นตอนถัดไป (Next steps)</a>
     </aside>
   </div>

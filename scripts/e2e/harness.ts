@@ -9,7 +9,7 @@ const repoRoot = path.resolve(__dirname, "..", "..");
 const packageRoot = path.join(repoRoot, "packages", "create-nexus-devflow");
 const runsRoot = path.join(__dirname, "runs");
 
-export type AgentId = "claude" | "copilot" | "codex" | "antigravity";
+export type AgentId = "claude" | "copilot" | "codex" | "antigravity" | "opencode";
 
 export interface AgentInvocationOptions {
   prompt: string;
@@ -256,6 +256,20 @@ export const AGENT_ADAPTERS = {
         "--new-project"
       ];
       if (model) args.push("--model", model);
+      return { args };
+    },
+    parseTranscript: createStandardParser()
+  },
+  opencode: {
+    id: "opencode",
+    aliases: [],
+    executable: "opencode",
+    installerFlag: "--opencode",
+    versionArgs: ["--version"],
+    buildInvocation({ prompt, model }) {
+      const args = ["run", "--format", "json"];
+      if (model) args.push("-m", model);
+      args.push(prompt);
       return { args };
     },
     parseTranscript: createStandardParser()

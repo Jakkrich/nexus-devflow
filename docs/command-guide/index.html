@@ -84,12 +84,12 @@
           <a class="docs-nav-link" href="../commands/implement/">Implement</a>
           <a class="docs-nav-link" href="../commands/check/">Check & Guide</a>
           <a class="docs-nav-link" href="../commands/complete/">Complete</a>
-          <a class="docs-nav-link" href="../commands/devflow/">DevFlow (Status & Doctor)</a>
+          <a class="docs-nav-link" href="../commands/devflow-help/">DevFlow Help (Guide & Doctor)</a>
           <a class="docs-nav-link" href="../commands/debug/">Debug (2-Track)</a>
           <a class="docs-nav-link" href="../commands/fix/">Fix</a>
           <a class="docs-nav-link" href="../commands/audit/">Audit & YAGNI</a>
           <a class="docs-nav-link" href="../commands/prototype/">Prototype</a>
-          <a class="docs-nav-link" href="../commands/autopilot/">Autopilot (--all)</a>
+          <a class="docs-nav-link" href="../commands/devflow-mode/">DevFlow Mode (Coordinator)</a>
           <a class="docs-nav-link" href="../commands/tests/">Setup Tests (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/ci/">CI (Opt-in)</a>
           <a class="docs-nav-link" href="../commands/release/">Release (Opt-in)</a>
@@ -228,9 +228,9 @@
                 <td>ติดตั้งส่วนเสริม <code>/browseros-neo</code> สำหรับ E2E Test Plan, Evidence และ Session Replay</td>
               </tr>
               <tr>
-                <td>ต้องการเช็กสถานะ, สรุปผู้บริหาร หรือตรวจสุขภาพ</td>
-                <td><code>/devflow</code> / <code>/devflow doctor</code></td>
-                <td>ศูนย์รวมเช็กสถานะงาน (<code>--exec</code>), ตรวจสุขภาพ Adapters/Overview และเราเตอร์</td>
+                <td>ต้องการเช็กสถานะ, แนะนำคำสั่ง หรือตรวจสุขภาพ</td>
+                <td><code>/devflow-help</code> / <code>/devflow-help doctor</code></td>
+                <td>ศูนย์รวม Interactive Guide, Prompt Builder, สถานะงาน (<code>--exec</code>), ตรวจสุขภาพ และเราเตอร์คำสั่งเดิม</td>
               </tr>
             </tbody>
           </table>
@@ -302,8 +302,8 @@
               สรุปภาพรวมของฟีเจอร์ถัดไปใน Build Plan อธิบายขอบเขต ความเสี่ยง ผลกระทบ และแนวทางการแบ่งฟีเจอร์ย่อย โดยไม่สร้างไฟล์เกินจำเป็น
             </li>
             <li>
-              <strong><a href="../commands/devflow/">/devflow</a></strong>: 
-              รายงานสถานะภาพรวมของโปรเจกต์ ความคืบหน้าของ Build Plan, สรุปผู้บริหาร (<code>--exec</code>), ตรวจสุขภาพด้วย <code>/devflow doctor</code> และคำสั่งถัดไป
+              <strong><a href="../commands/devflow-help/">/devflow-help</a></strong>: 
+              Interactive Guide &amp; Prompt Builder, รายงานสถานะภาพรวม (<code>--exec</code>), ตรวจสุขภาพด้วย <code>/devflow-help doctor</code> และเราเตอร์คำสั่งเดิม
             </li>
             <li>
               <strong><a href="../commands/debug/">/debug</a></strong>: 
@@ -387,8 +387,8 @@
           <p>กลุ่มคำสั่งสำหรับการพัฒนาระบบแบบอัตโนมัติโดยลดการแทรกแซงของมนุษย์:</p>
           <ul>
             <li>
-              <strong><a href="../commands/autopilot/">/autopilot</a></strong>: 
-              รันกระบวนการพัฒนา 1 ฟีเจอร์แบบอัตโนมัติ (Spec -&gt; Implement -&gt; Check -&gt; Audit) หรือรันคิวต่อเนื่องทั้งหมดในเครื่องด้วย <code>/autopilot --all</code>
+              <strong><a href="../commands/devflow-mode/">/devflow-mode</a></strong>: 
+              Lead-Coordinator + Playbook Router รันงานด้วย Isolated Subagents และ <code>pstack</code> (หรือรันคิวต่อเนื่องด้วย <code>/devflow-mode --all</code>)
             </li>
           </ul>
         
@@ -401,8 +401,8 @@
           
           <p>คุณสามารถเรียกใช้คำสั่งได้ตามรูปแบบที่เครื่องมือ AI ของคุณรองรับ:</p>
           <ul>
-            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/devflow doctor</code>, <code>/check guide</code></li>
-            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$devflow doctor</code>, <code>$check guide</code></li>
+            <li><strong>Claude Code / Google Antigravity / Gemini CLI</strong>: ใช้เครื่องหมาย Slash เช่น <code>/explore</code>, <code>/devflow-help doctor</code>, <code>/check guide</code></li>
+            <li><strong>OpenAI Codex</strong>: ใช้เครื่องหมาย Dollar เช่น <code>$explore</code>, <code>$devflow-help doctor</code>, <code>$check guide</code></li>
             <li><strong>GitHub Copilot / OpenCode / Chat ทั่วไป</strong>: พิมพ์ชื่อคำสั่งหรือระบุความต้องการเป็นภาษาไทยหรืออังกฤษได้โดยตรง</li>
           </ul>
           
