@@ -69,12 +69,15 @@ If a selected or previously initiated independent review does not already have a
 current passing receipt:
 
 1. Use an existing current pending request and its immutable target when one is
-   present. Otherwise show the exact product, test, and verified-spec candidate
-   for the immutable review checkpoint. Obtain explicit commit approval under
-   the normal Git rules, then create or use that clean checkpoint. Configuration,
-   including `review.independentExecution: "automatic"`, never grants permission
-   to commit. A pending request without `Requested execution` is legacy and
-   manual-only; never add execution fields or run a subagent against it.
+   present. Otherwise, when `execution.autoCommitFeatureBranch` is `true` on a
+   non-default `feature/*` or `fix/*` branch (not `Type: Rollback`), create or
+   reuse the clean immutable review checkpoint on that branch automatically.
+   When `execution.autoCommitFeatureBranch` is `false` (or for `Type: Rollback`),
+   show the exact product, test, and verified-spec candidate and obtain explicit
+   commit approval first. Local branch checkpoints never grant permission to
+   merge into `main`/`master`, push, or deploy. A pending request without
+   `Requested execution` is legacy and manual-only; never add execution fields
+   or run a subagent against it.
 2. Prepare Phase A of `/audit independent current` when no current request
    exists. Record `Requested execution` from `review.independentExecution`.
 3. For requested `automatic`, start the generic isolated current-runtime child
@@ -141,19 +144,15 @@ delete the `prototypes/` folder now.
 
 ## Step 2 - make the work commit on feature branch
 
-Show the complete product and logging diff with the proposed commit message,
-then obtain explicit commit approval. Only then stage the reviewed branch work
-(any uncommitted step work plus the Step 1 logging
-changes) and make one conventional work commit on the active branch (for example `feat: <feature>`,
-`fix: <name>`, or `revert: roll back <feature>`). `Verify`, or the fallback build
-and tests, must pass first.
+Read `execution.autoCommitFeatureBranch` (default `true`) and `delivery.gate` (default `"option-a-evidence-packet"`) from `devflow/config.json`.
+- When `execution.autoCommitFeatureBranch` is `true` on a non-default `feature/*` or `fix/*` branch (never `main`/`master` and never `Type: Rollback`), stage the reviewed branch work (any uncommitted step work plus the Step 1 logging changes) and create the local conventional work commit on that branch (`feat: <feature>` or `fix: <name>`), then present the Evidence Packet at Step 3.
+- When `execution.autoCommitFeatureBranch` is `false` (or for `Type: Rollback` / direct default-branch work), show the complete product and logging diff with the proposed commit message and obtain explicit commit approval first.
+`Verify`, or the fallback build and tests, must pass before committing.
 
-
-## Step 3 - Mandatory Delivery Gate (Ask User First)
+## Step 3 - Mandatory Delivery Gate (Option A Evidence Packet / Ask User First)
 
 > [!IMPORTANT]
-> **MANDATORY USER SELECTION**: In real-world engineering teams, developers often do NOT have direct merge/push access to `main` or `master` (protected branches).
-> Therefore, you **MUST STOP AND ASK** the user to choose their desired delivery flow. **NEVER automatically merge into `main` or `master` without explicit user choice.**
+> **MANDATORY USER SELECTION (`delivery.gate: "option-a-evidence-packet"`)**: Present the completed **Evidence Packet** (lane verdicts, proof paths, and rerun commands) on the feature branch and **STOP AND ASK** the user to choose their desired delivery flow. **NEVER automatically merge into `main` or `master`, open/merge a PR, or push without explicit user choice.**
 
 Present the user with two clear delivery options:
 

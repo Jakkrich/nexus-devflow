@@ -24,6 +24,15 @@ test("default config configures independent review execution and quality gates",
   assert.equal(defaults.workflow.stepReview, "feature");
   assert.equal(defaults.workflow.checkpointCommits, "disabled");
   assert.equal(defaults.review.independentExecution, "automatic");
+  assert.deepEqual(defaults.execution, {
+    engine: "auto",
+    tier: "auto",
+    autoApproveSpec: true,
+    autoCommitFeatureBranch: true
+  });
+  assert.deepEqual(defaults.delivery, {
+    gate: "option-a-evidence-packet"
+  });
   assert.deepEqual(defaults.qualityGates.regular, defaultGates);
   assert.deepEqual(defaults.qualityGates.continuous, defaultGates);
   assert.equal(defaults.continuous.finalIntegrationAudit, false);
@@ -61,6 +70,14 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
     },
     continuous: {
       maxFeatures: 4
+    },
+    execution: {
+      engine: "pstack",
+      tier: "high-risk",
+      autoCommitFeatureBranch: false
+    },
+    delivery: {
+      gate: "pr-ready"
     }
   });
 
@@ -70,6 +87,11 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
   assert.equal(result.values.git.featureBranchPrefix, "feat/");
   assert.equal(result.values.git.fixBranchPrefix, "fix/");
   assert.equal(result.values.review.independentExecution, "automatic");
+  assert.equal(result.values.execution.engine, "pstack");
+  assert.equal(result.values.execution.tier, "high-risk");
+  assert.equal(result.values.execution.autoApproveSpec, true);
+  assert.equal(result.values.execution.autoCommitFeatureBranch, false);
+  assert.equal(result.values.delivery.gate, "pr-ready");
   assert.equal(result.values.qualityGates.regular.specCheck, "always");
   assert.equal(result.values.qualityGates.regular.audit, "when-sensitive");
   assert.equal(result.values.qualityGates.regular.independentReview, "always");
@@ -86,6 +108,50 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
   );
   assert.equal(result.values.continuous.maxFeatures, 4);
   assert.equal(result.values.continuous.maxRepairAttempts, 2);
+  assert.deepEqual(result.warnings, []);
+});
+
+test("readProjectConfig falls back to v3 execution and delivery defaults when omitted from legacy config", async (t) => {
+  const projectRoot = await createProject(t);
+  await writeConfig(projectRoot, {
+    schemaVersion: 1,
+    workflow: { role: "dev" }
+  });
+
+  const result = await readProjectConfig(projectRoot);
+  assert.equal(result.state, "project");
+  assert.deepEqual(result.values.execution, createDefaultProjectConfig().execution);
+  assert.deepEqual(result.values.delivery, createDefaultProjectConfig().delivery);
+  assert.deepEqual(result.warnings, []);
+});
+
+test("readProjectConfig merges partial execution and delivery overrides over defaults", async (t) => {
+  const projectRoot = await createProject(t);
+  await writeConfig(projectRoot, {
+    schemaVersion: 1,
+    execution: {
+      engine: "pstack",
+      tier: "high-risk",
+      autoApproveSpec: false,
+      autoCommitFeatureBranch: false
+    },
+    delivery: {
+      gate: "local-squash"
+    }
+  });
+
+  const result = await readProjectConfig(projectRoot);
+
+  assert.equal(result.state, "project");
+  assert.deepEqual(result.values.execution, {
+    engine: "pstack",
+    tier: "high-risk",
+    autoApproveSpec: false,
+    autoCommitFeatureBranch: false
+  });
+  assert.deepEqual(result.values.delivery, {
+    gate: "local-squash"
+  });
   assert.deepEqual(result.warnings, []);
 });
 
@@ -180,6 +246,48 @@ test("readProjectConfig rejects unknown and invalid values", async (t) => {
       review: { independentExecution: "background" }
     }),
     /review\.independentExecution must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      execution: { engine: "cursor" }
+    }),
+    /execution\.engine must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      execution: { tier: "extreme" }
+    }),
+    /execution\.tier must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      execution: { autoApproveSpec: "yes" }
+    }),
+    /execution\.autoApproveSpec must be true or false/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      execution: { unknownKey: true }
+    }),
+    /execution contains unknown key: unknownKey/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      delivery: { gate: "auto-push" }
+    }),
+    /delivery\.gate must be one of/
+  );
+  assert.throws(
+    () => parseProjectConfig({
+      schemaVersion: 1,
+      delivery: { unknownKey: true }
+    }),
+    /delivery contains unknown key: unknownKey/
   );
 });
 

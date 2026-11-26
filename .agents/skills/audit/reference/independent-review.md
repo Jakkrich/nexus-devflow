@@ -234,8 +234,11 @@ request and receipt keep both execution fields absent.
    the exact local `Spec snapshot` under the contract above. Never force-add
    it or change ignore visibility. Never create a commit inside Audit. If any
    tracked, staged, unstaged, or untracked path other than those two evidence
-   paths differs from the target, stop and ask the user to approve a review
-   checkpoint through `/implement`, even when normal checkpoint commits are
+   paths differs from the target: when `execution.autoCommitFeatureBranch` is
+   `true` on a non-default `feature/*` or `fix/*` branch (not `Type: Rollback`),
+   have `/implement` or the Coordinator create the local branch checkpoint commit
+   automatically before continuing; otherwise stop and ask the user to approve a
+   review checkpoint through `/implement`, even when normal checkpoint commits are
    disabled. Do not create a checkpoint solely for review/findings changes.
    This normal Phase A exception never allows snapshot Git differences or
    overwriting conflicting completion-recovery evidence.

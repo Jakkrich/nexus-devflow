@@ -8,7 +8,7 @@ Read-only diagnostic pass for setup drift, incomplete onboarding, missing files,
    - Confirm `AGENTS.md`, `devflow/workflow.md`, `devflow/project-plan.md`, `devflow/build-plan.md`, and `devflow/context/` (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `glossary.md`) exist.
    - Confirm `devflow/history/features/` and `devflow/history/fixes/` exist.
    - Check `devflow/context/{xxx-slug}/findings.md` (format `### <id> [<severity>] <status> - <title>`) and `review.md` (pending, changes-requested, malformed, or stale state). Report open/fixed P0/P1 blockers without blocking Doctor itself.
-   - Read `devflow/config.json` when present (require regular non-symlink JSON with `schemaVersion: 1`; reject unknown keys/unsupported values). Report regular & continuous quality gates (`audit`, `independentReview`, `check`, `tryGuide`, `specCheck`) and `review.independentExecution`.
+   - Read `devflow/config.json` when present (require regular non-symlink JSON with `schemaVersion: 1`; reject unknown keys/unsupported values). Report regular & continuous quality gates (`audit`, `independentReview`, `check`, `tryGuide`, `specCheck`), `review.independentExecution`, `execution` (`engine`, `tier`, `autoApproveSpec`, `autoCommitFeatureBranch`), and `delivery.gate`.
 2. **Tool adapters & runtime helper**
    - Read `.nexus/nexus-devflow.json` and report logical adapters (`codex`, `claude`, `copilot`, `antigravity`, `opencode`).
    - Confirm at least one compatible skill tree (`.agents/skills/` or `.claude/skills/`) contains `devflow/scripts/run-state.mjs`.

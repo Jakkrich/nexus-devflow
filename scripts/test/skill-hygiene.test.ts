@@ -197,3 +197,27 @@ test("extras/skills/verify-harness satisfies skill budgets and verification harn
   assert.match(skill, /Cleanup/);
   assert.doesNotMatch(skill, /\.cursor\b/);
 });
+
+test("131a autonomous feature-branch policies are present across feature, implement, audit, and complete", () => {
+  const feature = fs.readFileSync(path.join(agentsSkillsRoot, "feature", "SKILL.md"), "utf8");
+  assert.match(feature, /execution\.autoApproveSpec/);
+
+  const implement = fs.readFileSync(path.join(agentsSkillsRoot, "implement", "SKILL.md"), "utf8");
+  assert.match(implement, /execution\.autoCommitFeatureBranch/);
+  assert.match(implement, /execution\.engine/);
+  assert.match(implement, /option-a-evidence-packet/);
+
+  const reviewRef = fs.readFileSync(
+    path.join(agentsSkillsRoot, "audit", "reference", "independent-review.md"),
+    "utf8"
+  );
+  assert.match(reviewRef, /execution\.autoCommitFeatureBranch/);
+
+  const complete = fs.readFileSync(path.join(agentsSkillsRoot, "complete", "SKILL.md"), "utf8");
+  assert.match(complete, /delivery\.gate/);
+  assert.match(complete, /option-a-evidence-packet/);
+
+  const devflow = fs.readFileSync(path.join(agentsSkillsRoot, "devflow", "SKILL.md"), "utf8");
+  assert.match(devflow, /execution/);
+  assert.match(devflow, /delivery\.gate/);
+});

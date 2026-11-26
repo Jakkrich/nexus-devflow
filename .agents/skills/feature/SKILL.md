@@ -139,7 +139,7 @@ Before creating `spec.md`, inspect the gathered context (`project-overview.md`, 
 4. **Auth, Data Integrity & Irreversible Trade-offs**: Trust boundaries, destructive mutations, or schema changes needing an ADR.
 
 - **Fast Path (Context Complete)**: If codebase + planning docs + `DISC`/`REQ` already answer all 4 gates cleanly, skip questions and proceed straight to Step 3 with zero ceremony.
-- **Clarify Path (Gaps Detected)**: Never guess silently, and never ask the user factual codebase/compatibility/behavior questions you can verify directly via read-only inspection or existing commands (**Experiment-vs-Preference Fork**). Ask **1–2 focused Socratic questions maximum per round** only for genuine product, scope, or irreversible architectural choices, with recommended defaults and concise rationale. Wait for user answers, persist settled terms to `devflow/context/glossary.md` and irreversible architecture decisions to `devflow/decisions/ADR-xxx-{slug}.md`, then proceed to Step 3. Keep **Spec-first**: always present `spec.md` for review and stop before implementation unless running inside explicit `/autopilot`.
+- **Clarify Path (Gaps Detected)**: Never guess silently, and never ask the user factual codebase/compatibility/behavior questions you can verify directly via read-only inspection or existing commands (**Experiment-vs-Preference Fork**). Ask **1–2 focused Socratic questions maximum per round** only for genuine product, scope, or irreversible architectural choices, with recommended defaults and concise rationale. Wait for user answers, persist settled terms to `devflow/context/glossary.md` and irreversible architecture decisions to `devflow/decisions/ADR-xxx-{slug}.md`, then proceed to Step 3. When `execution.autoApproveSpec` is `false` in `devflow/config.json`, keep **Spec-first**: present `spec.md` for review and stop before implementation unless running inside explicit `/autopilot`. When `execution.autoApproveSpec` is `true` (default), proceed autonomously once Step 4 critique passes with zero unresolved product/design gaps.
 
 ## Step 3 - write the spec
 
@@ -250,9 +250,9 @@ When `--check` is passed or `specCheck` is `"always"`, run a focused verificatio
 - Confirm step ordering has no forward dependency, AC-to-step coverage is complete, and no Owed Decisions remain.
 - Fix concrete mismatches directly in `spec.md`, then include a short **Spec Check** verdict right under **"what the critique changed"**.
 
-Stop and present the spec, leading with a short **"what the critique changed"** note - the splits, gaps, or scope cuts you made (or "nothing - the draft held up"). That note is the point: it shows the gate working before a line of code is written.
-
-Tell the user to review and adjust. This skill plans; it never starts building.
+Check `execution.autoApproveSpec` in `devflow/config.json` (default `true`):
+- When `execution.autoApproveSpec` is `true` and no unresolved product ambiguity, missing design reference, or Spec Check mismatch remains, present a concise **"what the critique changed"** summary and proceed directly into `/implement` (reversible feature-branch work) without blocking for human spec approval.
+- When `execution.autoApproveSpec` is `false` (or an unresolved product/design decision remains), stop, present the spec with **"what the critique changed"**, and ask the user to review and adjust before building.
 
 ## Rules the spec must follow
 

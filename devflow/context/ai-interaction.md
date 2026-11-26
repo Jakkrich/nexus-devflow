@@ -55,11 +55,11 @@ During `/check`:
 - **Stage 2 (Code Quality & Security Gate)**: Report Typecheck, Lint, Test Suites, Security checks, and Findings Ledger (0 blockers).
 
 ### ⚡ Review Cadence & Implementation Loop
-- **Efficient Default (`stepReview: "feature"`)**: Presents one comprehensive review packet after all implementation steps of the feature complete, with step checkpoint commits disabled (`checkpointCommits: "disabled"`). This minimizes review fatigue and saves context window tokens.
-- **Guided Review (`stepReview: "every"`)**: Available for high-risk changes, pair programming, or instructional sessions. Pauses for user approval after each small step. Offer optional checkpoints only if `checkpointCommits: "enabled"`.
+- **Efficient Default (`stepReview: "feature"`, `execution.autoApproveSpec: true`, `execution.autoCommitFeatureBranch: true`)**: Proceeds autonomously through reversible spec/build/local-branch checkpoints and presents one Evidence Packet before the Option A Final Human Delivery Gate (`delivery.gate: "option-a-evidence-packet"`).
+- **Guided Review (`stepReview: "every"`, `autoApproveSpec: false`, `autoCommitFeatureBranch: false`)**: Available for high-risk changes, pair programming, or instructional sessions. Pauses for user approval after spec creation, each small step, and local commits.
 - **Post-Implementation Walkthrough**: After the final review packet, `/implement` always offers an optional read-only walkthrough of the finished code, regardless of review cadence or checkpoint settings.
 - **Independent Review Execution**: Regular and Continuous independent review default to `when-sensitive`, while `review.independentExecution` defaults to `automatic` (spawning an isolated reviewer child when the active adapter supports it). Setting `review.independentExecution: "manual"` produces the fresh-session handoff.
-- **Configuration**: Managed directly in `devflow/config.json`. The two workflow keys are independent: `every` does not imply checkpoints are enabled, and `enabled` never grants commit authorization. Use the implementation skill's cadence contract for all four combinations.
+- **Configuration**: Managed directly in `devflow/config.json`. Never commit directly on `main`/`master`, merge, push, or deploy without explicit user approval at the Final Delivery Gate.
 
 ---
 

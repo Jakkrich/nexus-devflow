@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-11-26 | `131a` | Feature | (Skateboard) v3 Config Policy, Contract & Autonomous Core Loop | `PENDING` | `Completed` | [`131a-v3-config-policy-and-autonomous-loop.md`](features/131a-v3-config-policy-and-autonomous-loop.md) |
 | 2026-11-19 | `130` | Feature | (Tracer Bullet) Multi-Chat Safe Isolation & Aggregated Status | `PENDING` | `Completed` | [`130-multi-chat-safe-isolation.md`](features/130-multi-chat-safe-isolation.md) |
 | 2026-11-18 | `129` | Fix | Clean legacy scripts and `mockup.html` | `PENDING` | `Completed` | [`129-clean-legacy-scripts-and-mockup.md`](fixes/129-clean-legacy-scripts-and-mockup.md) |
 | 2026-11-18 | `128` | Feature | (Skateboard) Remove Web Dashboard, Studio UI & MCP Studio Tool (Option 2) | `PENDING` | `Completed` | [`128-remove-web-dashboard-studio.md`](features/128-remove-web-dashboard-studio.md) |

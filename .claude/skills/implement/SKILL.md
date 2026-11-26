@@ -22,17 +22,18 @@ Build the selected spec through its acceptance criteria and required verificatio
 
 ## Review cadence and checkpoints
 
-Read `workflow.stepReview` and `workflow.checkpointCommits` from `devflow/config.json` independently; defaults are `feature` and `disabled`.
+Read `workflow.stepReview`, `workflow.checkpointCommits`, `execution.autoCommitFeatureBranch` (default `true`), `execution.engine` (default `"auto"`), and `execution.tier` (default `"auto"`) from `devflow/config.json`; defaults for `workflow` are `feature` and `disabled`.
 
 - `stepReview: "feature"`: continue through all authorized steps without asking Continue after each step. Record evidence as work proceeds and present one final review packet.
 - `stepReview: "every"`: after each working step, show its concise diff summary, done-when proof, and optional checkpoint candidate (when `checkpointCommits: "enabled"`), then present these numbered choices and wait before moving on:
-  1. **Continue to next step** (create the step checkpoint first only when `checkpointCommits: "enabled"` and explicitly approved).
+  1. **Continue to next step** (create the step checkpoint first only when `checkpointCommits: "enabled"` and explicitly approved, or when `execution.autoCommitFeatureBranch: true` on a non-default feature/fix branch).
   2. **Walk me through this step** (read-only explanation of what changed and why).
   3. **Request changes on this step**.
-- `checkpointCommits: "disabled"`: omit ordinary checkpoint offers.
-- `checkpointCommits: "enabled"`: offer an optional checkpoint at the configured review boundary (per-step for `every`, final packet for `feature`). Show the exact candidate and obtain commit authorization before committing. The setting itself is not authorization.
+- `checkpointCommits: "disabled"` and `execution.autoCommitFeatureBranch: false`: omit ordinary checkpoint offers.
+- `execution.autoCommitFeatureBranch: true` (default) on a non-default `feature/*` or `fix/*` branch (never `main`/`master` and never `Type: Rollback`): local checkpoint commits — including the immutable review checkpoint commit required before spawning an isolated reviewer subagent — proceed automatically without interrupting for commit approval, because feature-branch commits are reversible.
+- `checkpointCommits: "enabled"` with `execution.autoCommitFeatureBranch: false`: offer an optional checkpoint at the configured review boundary, show the exact candidate, and obtain commit authorization before committing.
 
-Independent-review checkpoints follow their separate contract below. Review cadence never authorizes commit, merge, push, or deployment.
+Independent-review checkpoints follow their separate contract below. Review cadence and `autoCommitFeatureBranch` never authorize commit on `main`/`master`, merge, push, or deployment.
 
 ## Multi-Run Target & Ticket-Driven Target Resolution
 
@@ -137,11 +138,14 @@ final packet:
 
 1. If `qualityGates.regular.independentReview` does not select review and no
    request already exists, proceed directly to the final review packet.
-2. Otherwise show the exact product, test, and verified-spec candidate for the
-   immutable review checkpoint. Obtain explicit commit approval when the exact
-   checkpoint does not already exist, then create or use it. Configuration,
-   including `review.independentExecution: "automatic"`, never grants commit
-   permission, even when normal checkpoint commits are disabled.
+2. Otherwise prepare the immutable review checkpoint (product, test, and
+   verified-spec candidate when tracked). When `execution.autoCommitFeatureBranch`
+   is `true` on a non-default `feature/*` or `fix/*` branch (not `Type: Rollback`),
+   create or reuse that clean local branch checkpoint automatically without
+   pausing for commit approval. When `execution.autoCommitFeatureBranch` is
+   `false` (or for `Type: Rollback`), show the exact candidate and obtain explicit
+   commit approval before creating the checkpoint. Configuration still never
+   grants permission to commit on `main`/`master`, merge, push, or deploy.
 3. Follow `/audit independent current` to prepare or reuse the request and record
    `Requested execution`. For requested `automatic`, start and wait for the
    generic isolated current-runtime child instructed from the project-local
@@ -173,15 +177,15 @@ the loop now:
   `accepted` or `invalid`.
 
 When every step is built and `Verify`, or the fallback build and tests, passes
-(committed as checkpoints or not), stop with a compact review packet:
+(committed as checkpoints or not), check `delivery.gate` in `devflow/config.json` (default `"option-a-evidence-packet"`) and stop with a compact review / Evidence Packet:
 
 - branch name
 - what changed, grouped by file or area
-- checks run, with the exact command or proof used
+- checks run, with the exact command or proof used and proof artifact paths (when present)
 - `## Try it now` proof (1–3 concrete steps per `../check/reference/try-it-now.md` when `qualityGates.regular.tryGuide` is active for this feature), or how to try it manually / pointer to `/check guide`
 - ledger state: any findings still `open` or `fixed`, by ID
 - known risks, skipped checks, or follow-up notes
-- next action, usually `/complete`
+- next action, usually `/complete` (or Final Human Delivery Gate under `option-a-evidence-packet`)
 
 After the final packet, always offer these choices:
 
@@ -202,15 +206,13 @@ named area. If the feature spans too many distinct areas for one useful pass,
 name the sections first and let the user choose where to begin. Remain read-only
 unless the user separately requests changes.
 
-Ordinary checkpoint commits are available only through the configured review boundary and explicit candidate approval above. The immutable independent-review checkpoint also requires explicit candidate approval. Work-level completion commits belong to `/complete`. Configuration never supplies commit approval. Never merge, push, deploy, publish,
-or start unrelated work from this skill.
+Ordinary checkpoint commits follow `execution.autoCommitFeatureBranch` and the configured review boundary. Work-level completion commits and the Option A Final Delivery Gate belong to `/complete`. Never merge, push, deploy, publish, or start unrelated work from this skill.
 
 ## Rules
 
 - Keep diffs small and apply the configured review cadence.
 - Explain every change in plain English. Understanding the code is the point.
-- Iterate on the branch until each step works; never commit code the user hasn't
-  approved.
+- Iterate on the branch until each step works; obey `execution.autoCommitFeatureBranch` on feature/fix branches and never commit directly on `main`/`master` or without explicit approval when `autoCommitFeatureBranch: false`.
 - Follow `devflow/context/coding-standards.md` (server vs client, scope user-owned queries
   by the authenticated user id, validate inputs, and so on).
 - Keep the spec aligned with the authorized scope. Correct routine omissions with evidence; ask only when a material scope or design decision is unresolved.

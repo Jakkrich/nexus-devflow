@@ -58,7 +58,8 @@
       "audit independent current",
       "npm run test:browser",
       "interactive browser",
-      "At or above 20,000 bytes, stop and tell the user to run `/overview`"
+      "At or above 20,000 bytes, stop and tell the user to run `/overview`",
+      "execution.autoApproveSpec"
     ],
     "overview": [
       "chore: establish DevFlow project baseline",
@@ -81,7 +82,9 @@
       "when-sensitive",
       "audit independent current",
       "npm run test:browser",
-      "interactive browser"
+      "interactive browser",
+      "execution.autoCommitFeatureBranch",
+      "option-a-evidence-packet"
     ],
     "onboard": [
       "qualityGates.regular.independentReview",

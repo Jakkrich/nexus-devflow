@@ -301,6 +301,11 @@ export class ProjectStatusEngine {
       status.configuration.values.review.independentExecution,
       style
     ),
+    formatRow(
+      "Execution",
+      `${status.configuration.values.execution.engine} (tier: ${status.configuration.values.execution.tier}, gate: ${status.configuration.values.delivery.gate})`,
+      style
+    ),
     formatRow("Quality gates", formatQualityGates(status.configuration.values.qualityGates.regular), style),
     "",
     formatSection("Progress", style),

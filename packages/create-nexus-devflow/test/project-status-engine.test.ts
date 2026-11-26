@@ -62,6 +62,19 @@ describe("ProjectStatusEngine Seam & Snapshot", () => {
     assert.match(formatted, /Quality gates\s+spec always.*try guide when-testable/);
   });
 
+  it("displays Execution policy row in formatHuman() and reflects custom execution/delivery config", async () => {
+    const engine = new ProjectStatusEngine(projectRoot);
+    const status = await engine.getStatus();
+    const defaultFormatted = engine.formatHuman(status, { color: false });
+    assert.match(defaultFormatted, /Execution\s+auto \(tier: auto, gate: option-a-evidence-packet\)/);
+
+    status.configuration.values.execution.engine = "pstack";
+    status.configuration.values.execution.tier = "high-risk";
+    status.configuration.values.delivery.gate = "local-squash";
+    const customFormatted = engine.formatHuman(status, { color: false });
+    assert.match(customFormatted, /Execution\s+pstack \(tier: high-risk, gate: local-squash\)/);
+  });
+
   it("displays Worktree row in formatHuman when running inside a linked worktree", async () => {
     const engine = new ProjectStatusEngine(projectRoot);
     const status = await engine.getStatus();

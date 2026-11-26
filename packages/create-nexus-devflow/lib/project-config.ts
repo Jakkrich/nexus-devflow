@@ -8,6 +8,13 @@ const PROJECT_CONFIG_PATH = "devflow/config.json";
 const PROJECT_CONFIG_SCHEMA_VERSION = 1 as const;
 
 type IndependentReviewExecution = "automatic" | "manual";
+type ExecutionEnginePolicy = "auto" | "pstack" | "native";
+type ExecutionTierPolicy = "auto" | "docs" | "standard" | "high-risk";
+type DeliveryGatePolicy =
+  | "option-a-evidence-packet"
+  | "ask"
+  | "local-squash"
+  | "pr-ready";
 type RolePolicy = "dev" | "sa" | "full";
 type StepReviewPolicy = "every" | "feature";
 type CheckpointCommitPolicy = "disabled" | "enabled";
@@ -51,6 +58,15 @@ interface ProjectConfig {
   review: {
     independentExecution: IndependentReviewExecution;
   };
+  execution: {
+    engine: ExecutionEnginePolicy;
+    tier: ExecutionTierPolicy;
+    autoApproveSpec: boolean;
+    autoCommitFeatureBranch: boolean;
+  };
+  delivery: {
+    gate: DeliveryGatePolicy;
+  };
   qualityGates: {
     regular: QualityGatePolicy;
     continuous: QualityGatePolicy;
@@ -93,6 +109,15 @@ function createDefaultProjectConfig(): ProjectConfig {
     },
     review: {
       independentExecution: "automatic"
+    },
+    execution: {
+      engine: "auto",
+      tier: "auto",
+      autoApproveSpec: true,
+      autoCommitFeatureBranch: true
+    },
+    delivery: {
+      gate: "option-a-evidence-packet"
     },
     qualityGates: {
       regular: {
@@ -192,6 +217,8 @@ function parseProjectConfig(value: unknown): ProjectConfig {
       "git",
       "verification",
       "review",
+      "execution",
+      "delivery",
       "qualityGates",
       "continuous"
     ],
@@ -207,6 +234,8 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   const git = optionalRecord(root.git, "git");
   const verification = optionalRecord(root.verification, "verification");
   const review = optionalRecord(root.review, "review");
+  const execution = optionalRecord(root.execution, "execution");
+  const delivery = optionalRecord(root.delivery, "delivery");
   const qualityGates = optionalRecord(root.qualityGates, "qualityGates");
   const regularGates = optionalRecord(
     qualityGates.regular,
@@ -226,6 +255,12 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   );
   assertKnownKeys(verification, ["logicTests", "uiEvidence"], "verification");
   assertKnownKeys(review, ["independentExecution"], "review");
+  assertKnownKeys(
+    execution,
+    ["engine", "tier", "autoApproveSpec", "autoCommitFeatureBranch"],
+    "execution"
+  );
+  assertKnownKeys(delivery, ["gate"], "delivery");
   assertKnownKeys(qualityGates, ["regular", "continuous"], "qualityGates");
   assertKnownKeys(
     regularGates,
@@ -302,6 +337,38 @@ function parseProjectConfig(value: unknown): ProjectConfig {
         ["automatic", "manual"],
         defaults.review.independentExecution,
         "review.independentExecution"
+      )
+    },
+    execution: {
+      engine: optionalEnum(
+        execution.engine,
+        ["auto", "pstack", "native"],
+        defaults.execution.engine,
+        "execution.engine"
+      ),
+      tier: optionalEnum(
+        execution.tier,
+        ["auto", "docs", "standard", "high-risk"],
+        defaults.execution.tier,
+        "execution.tier"
+      ),
+      autoApproveSpec: optionalBoolean(
+        execution.autoApproveSpec,
+        defaults.execution.autoApproveSpec,
+        "execution.autoApproveSpec"
+      ),
+      autoCommitFeatureBranch: optionalBoolean(
+        execution.autoCommitFeatureBranch,
+        defaults.execution.autoCommitFeatureBranch,
+        "execution.autoCommitFeatureBranch"
+      )
+    },
+    delivery: {
+      gate: optionalEnum(
+        delivery.gate,
+        ["option-a-evidence-packet", "ask", "local-squash", "pr-ready"],
+        defaults.delivery.gate,
+        "delivery.gate"
       )
     },
     qualityGates: {
@@ -513,6 +580,9 @@ export type {
   AuditGatePolicy,
   CheckpointCommitPolicy,
   CheckGatePolicy,
+  DeliveryGatePolicy,
+  ExecutionEnginePolicy,
+  ExecutionTierPolicy,
   IndependentReviewExecution,
   IndependentReviewGatePolicy,
   LogicTestPolicy,

@@ -29,7 +29,7 @@ Where this sits in the workflow:
 ## Status Mode (Default)
 
 Gather without dumping full files:
-1. **Onboarding & Config**: Read `devflow/config.json` (report `qualityGates.regular`, `qualityGates.continuous`, and `review.independentExecution`; if invalid, `Repair order:` -> `/devflow doctor`). If `AGENTS.md` still contains `<!-- devflow:onboarding-required -->`, recommend `/onboard`.
+1. **Onboarding & Config**: Read `devflow/config.json` (report `qualityGates.regular`, `qualityGates.continuous`, `review.independentExecution`, `execution` [`engine`, `tier`, `autoApproveSpec`, `autoCommitFeatureBranch`], and `delivery.gate`; if invalid, `Repair order:` -> `/devflow doctor`). If `AGENTS.md` still contains `<!-- devflow:onboarding-required -->`, recommend `/onboard`.
 2. **Build Plan & Overview**: Summarize checked vs. total items in `devflow/build-plan.md` and next unchecked leaf. Check `devflow/context/project-overview.md` freshness via `/overview`'s normalized `devflow:source-hash` contract (or size `>= 20,000` bytes -> `/overview`).
 3. **Active Runs (`devflow/context/{xxx-slug}/`)**: Report `spec.md` step progress, open/fixed P0/P1 findings in `findings.md`, and `qualityGates.regular.independentReview` (`when-sensitive` / `always` -> `review.md` state, verdict, freshness; missing/stale/pending routes to `audit independent current`, never `/complete`). Note whether spec requires browser proof, `npm run test:browser`, and active interactive browser MCP availability without executing browser tools.
 4. **Pending Ideas & Discoveries**: Summarize `devflow/ideas.md` pending items and open `devflow/discoveries/` if present.

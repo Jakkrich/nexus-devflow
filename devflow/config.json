@@ -17,6 +17,15 @@
   "review": {
     "independentExecution": "automatic"
   },
+  "execution": {
+    "engine": "auto",
+    "tier": "auto",
+    "autoApproveSpec": true,
+    "autoCommitFeatureBranch": true
+  },
+  "delivery": {
+    "gate": "option-a-evidence-packet"
+  },
   "qualityGates": {
     "regular": {
       "audit": "manual",
