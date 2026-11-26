@@ -31,6 +31,8 @@ export interface DoctorOptions {
   fix?: boolean;
   color?: boolean;
   pstackProbePaths?: readonly string[];
+  homeDir?: string;
+  env?: Readonly<Record<string, string | undefined>>;
 }
 
 const DEFAULT_FINDINGS_STUB = `# Findings Ledger
@@ -572,7 +574,11 @@ export async function runDoctor(
   const detectedPstackPath =
     executionEngine === "native"
       ? null
-      : await detectPstackSkillPath(projectRoot, options.pstackProbePaths);
+      : await detectPstackSkillPath(projectRoot, {
+        customPaths: options.pstackProbePaths,
+        homeDir: options.homeDir,
+        env: options.env
+      });
 
   if (executionEngine === "native") {
     checks.push({
@@ -587,7 +593,7 @@ export async function runDoctor(
       id: "execution_engine_pstack",
       name: "Execution Engine & pstack Capability",
       status: "pass",
-      message: `Execution engine '${executionEngine}': pstack detected at ${detectedPstackPath}.`,
+      message: `Execution engine '${executionEngine}': pstack detected at ${detectedPstackPath} (tip: set 'session hook: off' in pstack-models.md or PSTACK_SESSION_HOOK=off so DevFlow remains sole Coordinator).`,
       fixable: false
     });
   } else if (executionEngine === "pstack") {
@@ -739,32 +745,178 @@ export function formatDoctorHuman(
   return lines.join("\n").trimEnd();
 }
 
+async function isRegularNonSymlinkFile(filePath: string): Promise<boolean> {
+  try {
+    const stats = await fs.lstat(filePath);
+    return !stats.isSymbolicLink() && stats.isFile();
+  } catch {
+    return false;
+  }
+}
+
+async function isRegularNonSymlinkDir(dirPath: string): Promise<boolean> {
+  try {
+    const stats = await fs.lstat(dirPath);
+    return !stats.isSymbolicLink() && stats.isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+async function areChildSegmentsSafeDirs(baseDir: string, segments: readonly string[]): Promise<boolean> {
+  let current = baseDir;
+  for (const segment of segments) {
+    current = path.join(current, segment);
+    if (!(await isRegularNonSymlinkDir(current))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function compareVersionDirDesc(a: string, b: string): number {
+  const splitPrerelease = (value: string): [string, string | null] => {
+    const dashIndex = value.indexOf("-");
+    return dashIndex === -1 ? [value, null] : [value.slice(0, dashIndex), value.slice(dashIndex + 1)];
+  };
+  const [aBase, aPre] = splitPrerelease(a);
+  const [bBase, bPre] = splitPrerelease(b);
+  const baseCmp = bBase.localeCompare(aBase, undefined, { numeric: true });
+  if (baseCmp !== 0) {
+    return baseCmp;
+  }
+  if (aPre === null && bPre !== null) return -1;
+  if (aPre !== null && bPre === null) return 1;
+  if (aPre !== null && bPre !== null) {
+    return bPre.localeCompare(aPre, undefined, { numeric: true });
+  }
+  return b.localeCompare(a, undefined, { numeric: true });
+}
+
+async function scanPstackCacheDir(dir: string, depth: number, maxDepth: number): Promise<string | null> {
+  if (!(await isRegularNonSymlinkDir(dir))) {
+    return null;
+  }
+
+  for (const suffix of [
+    ["skills", "poteto-mode", "SKILL.md"],
+    ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]
+  ] as const) {
+    const parentSegments = suffix.slice(0, -1);
+    const candidate = path.join(dir, ...suffix);
+    if ((await areChildSegmentsSafeDirs(dir, parentSegments)) && (await isRegularNonSymlinkFile(candidate))) {
+      return candidate;
+    }
+  }
+
+  if (depth >= maxDepth) {
+    return null;
+  }
+
+  let entries;
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch {
+    return null;
+  }
+
+  const subdirs = entries
+    .filter((entry) => entry.isDirectory() && !entry.isSymbolicLink())
+    .map((entry) => entry.name)
+    .sort(compareVersionDirDesc);
+
+  for (const name of subdirs) {
+    const found = await scanPstackCacheDir(path.join(dir, name), depth + 1, maxDepth);
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
+}
+
+interface DetectPstackOptions {
+  customPaths?: readonly string[];
+  homeDir?: string;
+  env?: Readonly<Record<string, string | undefined>>;
+}
+
+async function resolveSafeCandidate(baseDir: string, segments: readonly string[]): Promise<string | null> {
+  if (segments.length === 0) return null;
+  if (!(await isRegularNonSymlinkDir(baseDir))) {
+    return null;
+  }
+  if (await areChildSegmentsSafeDirs(baseDir, segments.slice(0, -1))) {
+    const candidate = path.join(baseDir, ...segments);
+    if (await isRegularNonSymlinkFile(candidate)) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
 async function detectPstackSkillPath(
   projectRoot: string,
-  customPaths?: readonly string[]
+  options: DetectPstackOptions = {}
 ): Promise<string | null> {
-  const candidates: string[] = customPaths
-    ? [...customPaths]
-    : [
-        ...(process.env.PSTACK_PLUGIN_DIR
-          ? [path.join(process.env.PSTACK_PLUGIN_DIR, "skills", "poteto-mode", "SKILL.md")]
-          : []),
-        path.join(os.homedir(), ".gemini", "config", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"),
-        path.join(os.homedir(), ".claude", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"),
-        path.join(os.homedir(), ".agents", "skills", "poteto-mode", "SKILL.md"),
-        path.join(projectRoot, ".agents", "skills", "poteto-mode", "SKILL.md"),
-        path.join(projectRoot, ".claude", "skills", "poteto-mode", "SKILL.md")
-      ];
-
-  for (const candidate of candidates) {
-    if (!candidate) continue;
-    try {
-      const stats = await fs.lstat(candidate);
-      if (!stats.isSymbolicLink() && stats.isFile()) {
+  if (options.customPaths !== undefined) {
+    for (const candidate of options.customPaths) {
+      if (!candidate) continue;
+      if (await isRegularNonSymlinkFile(candidate)) {
         return candidate;
       }
-    } catch {
-      // candidate absent
+    }
+    return null;
+  }
+
+  const home = options.homeDir ?? os.homedir();
+  const env = options.env ?? process.env;
+  const claudeHome = env.CLAUDE_CONFIG_DIR || path.join(home, ".claude");
+  const codexHome = env.CODEX_HOME || path.join(home, ".codex");
+  const copilotHome = env.COPILOT_HOME || path.join(home, ".copilot");
+
+  const safeCandidates: Array<[string, readonly string[]]> = [
+    ...(env.PSTACK_PLUGIN_DIR
+      ? [[env.PSTACK_PLUGIN_DIR, ["skills", "poteto-mode", "SKILL.md"]] as [string, readonly string[]]]
+      : []),
+    [projectRoot, [".agents", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
+    [projectRoot, [".claude", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
+    [projectRoot, [".agents", "skills", "poteto-mode", "SKILL.md"]],
+    [projectRoot, [".claude", "skills", "poteto-mode", "SKILL.md"]],
+    ...(env.XDG_DATA_HOME
+      ? [[env.XDG_DATA_HOME, ["open-pstack", "pstack", "skills", "poteto-mode", "SKILL.md"]] as [string, readonly string[]]]
+      : []),
+    [home, [".local", "share", "open-pstack", "pstack", "skills", "poteto-mode", "SKILL.md"]],
+    ...(env.LOCALAPPDATA
+      ? [[env.LOCALAPPDATA, ["open-pstack", "pstack", "skills", "poteto-mode", "SKILL.md"]] as [string, readonly string[]]]
+      : []),
+    [home, [".gemini", "config", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
+    [claudeHome, ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
+    [codexHome, ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
+    [copilotHome, ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
+    [home, [".agents", "skills", "poteto-mode", "SKILL.md"]]
+  ];
+
+  for (const [base, segments] of safeCandidates) {
+    const resolved = await resolveSafeCandidate(base, segments);
+    if (resolved) {
+      return resolved;
+    }
+  }
+
+  const cacheRoots = [
+    path.join(claudeHome, "plugins", "cache"),
+    path.join(claudeHome, "plugins", "marketplaces"),
+    path.join(codexHome, "plugins", "cache"),
+    path.join(codexHome, "plugins", "marketplaces"),
+    path.join(copilotHome, "installed-plugins"),
+    path.join(copilotHome, "plugins", "cache")
+  ];
+
+  for (const cacheRoot of cacheRoots) {
+    const found = await scanPstackCacheDir(cacheRoot, 0, 4);
+    if (found) {
+      return found;
     }
   }
 

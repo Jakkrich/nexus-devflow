@@ -95,6 +95,35 @@ test("readProjectStatus returns idle on clean workspace without active tasks", a
     assert.equal(status.currentWork.state, "idle");
     assert.equal(status.currentWork.completed, 0);
     assert.equal(status.currentWork.total, 0);
+    assert.equal(status.nextAction.command, "/devflow-mode");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("readProjectStatus routes idle workspace to /feature when guided spec-first config is active", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-guided-"));
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# DevFlow Instructions");
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "config.json"),
+      JSON.stringify({ schemaVersion: 1, execution: { autoApproveSpec: false } }),
+      "utf8"
+    );
+
+    const status = await readProjectStatus(tempDir);
+    assert.equal(status.currentWork.state, "idle");
+    assert.equal(status.nextAction.command, "/feature");
+
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "config.json"),
+      JSON.stringify({ schemaVersion: 1, workflow: { stepReview: "every" } }),
+      "utf8"
+    );
+    const stepReviewStatus = await readProjectStatus(tempDir);
+    assert.equal(stepReviewStatus.nextAction.command, "/feature");
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

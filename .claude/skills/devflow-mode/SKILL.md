@@ -52,7 +52,7 @@ Pick one playbook from `playbooks/` and copy its numbered steps into your task c
 | Architecture / pre-flight exploration | `playbooks/discovery.md` | Broad trade-offs, ADRs, glossary alignment (read-only/docs) |
 | Continuous build-plan queue | `playbooks/autonomous-queue.md` | Invoked with `--all`, `--max <N>`, `--merge` (or legacy `/autopilot --all`, `/continuous`) |
 
-If `.agents/playbooks/*.md` (or `~/.agents/playbooks/*.md`) extends any bundled playbook with `extends:`, run `node .agents/skills/devflow-mode/scripts/check-playbooks.mjs` first, report any broken anchor, and apply valid `**After**` / `**Before**` / `**Replace**` / `**In**` adjustments.
+If `devflow/playbooks/*.md`, `.agents/playbooks/*.md`, or `~/.agents/playbooks/*.md` extends any bundled playbook with `extends:`, run `node .agents/skills/devflow-mode/scripts/check-playbooks.mjs` first (prefer `devflow/playbooks/` for collision-free DevFlow extensions when `pstack` is also installed, or prefix `devflow:` / `namespace: devflow` inside shared `.agents/playbooks/`), report any broken anchor, and apply valid `**After**` / `**Before**` / `**Replace**` / `**In**` adjustments.
 
 ---
 

@@ -51,8 +51,8 @@ Explain that CI is not required to finish adoption.
 
 Brownfield repositories usually already expose runnable commands, routes, or APIs. Inspect `.agents/skills/verify/SKILL.md` (and `verify-*/SKILL.md`):
 
-- If present with `Launch`, `Doctor`, `Drive`, `Evidence`, and `Cleanup` sections, verify its entrypoints match Step 1 (or refresh via `pstack` `maintain-verification-skill` when active).
-- If absent and a runnable surface exists, bootstrap `.agents/skills/verify/SKILL.md` and `features/README.md` (via `pstack`'s `create-verification-skill` when detected, otherwise directly targeting `devflow/reports/{run-id}/`), sync adapters if needed, and execute one `Launch -> Doctor -> Drive -> Cleanup` smoke pass storing artifacts under `devflow/reports/onboard-verify/` so the generated driver is proven before handoff.
+- If present with `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup` sections, verify its entrypoints match Step 1 and both `.agents/skills/verify/` and `.claude/skills/verify/` stay synced (or refresh via `pstack` `maintain-verification-skill` when active).
+- If absent and a runnable surface exists, bootstrap `.agents/skills/verify/SKILL.md` and `features/README.md` (when delegating to `pstack`'s `create-verification-skill`, require exact H2 headings `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, `## Cleanup` and proof storage under `devflow/reports/{run-id}/`; otherwise generate directly), sync `.agents/skills/verify/` and `.claude/skills/verify/` via `npx nexus-devflow skill sync` (when both adapter trees exist), and execute one `Launch -> Doctor -> Drive -> Cleanup` smoke pass storing artifacts under `devflow/reports/onboard-verify/` so the generated driver is proven before handoff.
 
 ## Step 5 - ask about DevFlow visibility
 

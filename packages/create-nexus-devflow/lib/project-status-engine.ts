@@ -234,7 +234,8 @@ export class ProjectStatusEngine {
     findings,
     stageMarkdown,
     evidence,
-    completion
+    completion,
+    config.values
   );
 
   return {
@@ -771,7 +772,8 @@ function selectNextAction(
   findings: FindingsSummary,
   stageMarkdown?: string,
   evidence?: WorkEvidence,
-  completion?: StatusCompletion
+  completion?: StatusCompletion,
+  config?: ProjectConfig
 ): StatusNextAction {
   if (currentWork.state === "malformed") {
     return {
@@ -886,9 +888,16 @@ function selectNextAction(
     };
   }
 
+  if (config && (!config.execution.autoApproveSpec || config.workflow.stepReview === "every")) {
+    return {
+      command: "/feature",
+      reason: "Workspace is idle (guided spec-first mode). Draft and review the next spec with /feature."
+    };
+  }
+
   return {
-    command: "/feature",
-    reason: "Workspace is idle. Ready to spec or discover a new feature."
+    command: "/devflow-mode",
+    reason: "Workspace is idle. Run /devflow-mode for autonomous delivery, or /feature to slice and review a spec first."
   };
 }
 

@@ -294,7 +294,8 @@ test("shouldCopyTemplateEntry excludes all agent-starter-kit maintainer paths ev
     ".claude/skills/chief-of-staff/SKILL.md",
     "AI_HANDOFF.md",
     "GEMINI.md",
-    ".context/cos-board.md"
+    ".context/cos-board.md",
+    "devflow/playbooks/custom.md"
   ];
   const tracked = buildTrackedIndex(["AGENTS.md", "CLAUDE.md", ...starterKitPaths]);
 

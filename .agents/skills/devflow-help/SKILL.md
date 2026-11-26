@@ -24,11 +24,19 @@ argument-hint: "[status | doctor | --exec | \"<question or request>\"]"
 
 Inspect current workspace state silently before answering:
 1. Check `AGENTS.md` for `<!-- devflow:onboarding-required -->` (not onboarded -> recommend `/onboard` first).
-2. Check `devflow/config.json` (`execution.engine`, `execution.tier`, `delivery.gate`) and whether `pstack` (`poteto-mode/SKILL.md`) is detected.
+2. Check `devflow/config.json` (`execution.engine`, `execution.tier`, `delivery.gate`) and whether `pstack` (`poteto-mode/SKILL.md` or in-session `poteto-mode` skill) is detected; when `pstack` is active, remind users to set `session hook: off` in `pstack-models.md` (or `PSTACK_SESSION_HOOK=off`) so `/devflow-mode` stays the sole Coordinator.
 3. Check whether a project-local `.agents/skills/verify/SKILL.md` driver exists (if absent, note that real-app proof is limited until `/onboard` or `create-verification-skill` sets one up).
 4. Check `devflow/context/{xxx-slug}/` and `devflow/build-plan.md` for active specs, open P0/P1 blockers, or the next unchecked feature.
 
-Answer concisely by category (**Get set up**, **Start a task with `/devflow-mode`**, **Pick a skill or playbook**, **Fix a stuck run**, or **Customize playbooks via `.agents/playbooks/`**), link the relevant `SKILL.md` or playbook, and hand the user **one concrete copy-paste prompt** tailored to their current workspace state.
+Answer concisely by category (**Get set up**, **Start a task with `/devflow-mode`**, **Pick a skill or playbook**, **Fix a stuck run**, or **Customize playbooks via `devflow/playbooks/` or `.agents/playbooks/`**), link the relevant `SKILL.md` or playbook, and hand the user **one concrete copy-paste prompt** tailored to their current workspace state.
+
+### Routing by Task Nature (`devflow-mode` vs `feature`)
+- **Default -> `/devflow-mode`** (`/devflow-mode <id | "task">` or `/devflow-mode --all`): Recommend for build-ready `build-plan.md` items, bug fixes, refactors, or continuous queues that fit a single reviewable unit. Never output an ambiguous `"/devflow-mode or /feature"` pair — pick one command and give a 1-line reason.
+- **Spec Workbench -> `/feature`** (`/feature <id>` or `/feature <id> --preview`): Recommend instead of `/devflow-mode` **only** when task nature matches one of 4 signals:
+  1. **Oversized / Needs Slicing**: Next `build-plan.md` item spans multiple subsystems/journeys and needs splitting into `Na`, `Nb`, `Nc` sub-features first (`/feature <id> --preview` for read-only sizing, or `/feature <id>` to split & spec).
+  2. **Spec-Ahead / Multi-Run Grooming**: User wants to draft `spec.md` across multiple items ahead of time or lock cross-module contracts/schemas before coding.
+  3. **Taste-Heavy UI/UX or Fuzzy Rules Without Reference**: UI feature with no `prototypes/` or visual reference yet, or nuanced business rules where misinterpretation would waste subagent/swarm tokens (lock `spec.md` first, or `/prototype` for mockups).
+  4. **Guided / Micro-Slice / Pairing**: Config sets `execution.autoApproveSpec: false` or `workflow.stepReview: "every"`, or a tiny 1–2 file tweak / unfamiliar module where the user wants inline step-by-step control (`/feature <id>` -> `/implement`).
 
 ---
 
@@ -48,9 +56,9 @@ Keep product names, ticket keys, and business impact; strip file paths and code 
 Print concise labels (`Status`, `Plans`, `Current work`, `Findings`, `Git`, optional `Watch:`, `Next action:`). Pick one exact next action in order:
 1. Invalid `devflow/config.json` or malformed `run.json` -> `/devflow-help doctor`
 2. Missing/stale/oversized overview with no active run -> `/overview`
-3. Active spec with unchecked steps -> `/devflow-mode` or `/implement [id]`
+3. Active spec with unchecked steps -> `/implement [id]` when `stage.md` names `/implement`, `execution.autoApproveSpec` is `false`, or `workflow.stepReview` is `"every"`; otherwise `/devflow-mode [id]`
 4. All steps checked: `/check [id]` if proof missing; `/implement [id]` for `open` P0/P1; `/audit` for `fixed` P0/P1; `/audit independent current` if gate unsatisfied; otherwise `/complete [id]`
-5. No active run and unchecked build-plan items remain -> `/devflow-mode` or `/feature`
+5. No active run and unchecked build-plan items remain -> `/devflow-mode` (default), or `/feature <id>` (or `--preview`) only when the next item matches a Spec Workbench task-nature signal above (oversized/needs split, spec-ahead, taste-heavy UI without reference, or guided config)
 6. All items checked -> milestone complete.
 
 ---

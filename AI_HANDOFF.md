@@ -13,7 +13,7 @@ Project governance and handoff hub for **Nexus-DevFlow maintainers**. Active tas
 | Field | Value |
 |---|---|
 | Repository / Owner | `Jakkrich/nexus-devflow` (branch `main`, version `3.0.0`) |
-| Last known commit | `1ff9692` (`refactor(v3): remove outdated backlog items, dead stubs, and over-engineered CLI/MCP tools`) |
+| Last known commit | `953126a` (`chore(maintainer): install on-project agent-starter-kit with template isolation`) |
 | Runtime / Stack | Node.js `>=18.17`, TypeScript `^5.7.2` (ESM), zero-runtime-dep installer CLI (`packages/create-nexus-devflow` + wrapper `packages/nexus-devflow`), Playwright (optional browser tests) |
 | Build command | `npm --prefix packages/create-nexus-devflow run build` (`npm run build:docs`, `npm run overview`) |
 | Test / Verify command | `npm run check && npm test && npm run check:release` |
@@ -56,6 +56,16 @@ Project governance and handoff hub for **Nexus-DevFlow maintainers**. Active tas
 - [x] Resolved in Feature `132`: `doctor.ts` `detectPstackSkillPath` now detects `.agents/plugins/pstack`, `open-pstack` staging, and Claude/Codex/Copilot versioned plugin caches with full ancestor symlink checks.
 
 ## 5. Change Log (newest at top)
+
+### 2026-11-27 · Antigravity · Option 3 Role Split (`/devflow-mode` vs `/feature`) & Task-Nature Routing
+- **What:**
+  - Updated `.agents/skills/feature/SKILL.md` (and mirrored `.claude/skills/feature/SKILL.md`) so direct `/feature` invocation operates as the **Spec & Slicing Workbench** and stops at `devflow/context/{xxx-slug}/spec.md` (unless implementation was requested in the same prompt), while `/devflow-mode` continues to use `execution.autoApproveSpec` for autonomous delivery.
+  - Updated `.agents/skills/devflow-help/SKILL.md` (and mirrored `.claude/skills/devflow-help/SKILL.md`) to remove ambiguous dual next-action strings, default to `/devflow-mode`, and route to `/feature` / `/feature <id> --preview` only on 4 concrete task-nature signals (Oversized / Needs Slicing, Spec-Ahead / Multi-Run Grooming, Taste-Heavy UI/UX or Fuzzy Rules Without Reference, Guided / Micro-Slice / Pairing).
+  - Updated `devflow/workflow.md`, `devflow/context/ai-interaction.md`, and `packages/create-nexus-devflow/lib/project-status-engine.ts` (`selectNextAction` idle routing defaults to `/devflow-mode`, switching to `/feature` when `execution.autoApproveSpec === false` or `workflow.stepReview === "every"`).
+  - Added regression tests in `packages/create-nexus-devflow/test/status.test.ts` and `scripts/test/skill-hygiene.test.ts`, and synced adapters via `npm run sync:adapters`.
+- **Why:** Eliminate overlap between `/feature` and `/devflow-mode` under v3 `autoApproveSpec: true` and give `devflow-help` deterministic task-nature routing.
+- **Verification:** `npm run check` (`validate-framework` OK, `routing` 129/129, 17 eval/link tests, 226 package tests, `smoke-package` passed), `npm test` (311 passed: 226 + 6 + 11 + 7 + 61), `npm run verify:completion-gate` (622080 cases, exit 0), `npm run validate:docs` (1037 files, 0 violations), `npm run check:release` (286 create files, 4 wrapper files, clean), `doctor` (17 passed, 0 warnings, 0 failed).
+- **Pending / Notes for next agent:** Uncommitted working tree ready for user review before any git commit.
 
 ### 2026-11-27 · Antigravity · Feature `132-pstack-integration-hardening` (4 `pstack` integration fixes)
 - **What:**

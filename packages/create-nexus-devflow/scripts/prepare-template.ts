@@ -142,6 +142,7 @@ export function shouldCopyTemplateEntry(
     matchesPrefix(normalized, "devflow/brainstorms") ||
     matchesPrefix(normalized, "devflow/backups") ||
     matchesPrefix(normalized, "devflow/reports") ||
+    matchesPrefix(normalized, "devflow/playbooks") ||
     matchesPrefix(normalized, "devflow/reference/playbooks") ||
     matchesPrefix(normalized, "devflow/research") ||
     matchesPrefix(normalized, "prototypes") ||

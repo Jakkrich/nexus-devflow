@@ -61,6 +61,7 @@ Build for established requirements, not hypothetical scale, threats, or future f
 ## Workflow
 
 - **4-Stage Loop**: `/feature` (or `/fix`) ──▶ `/implement` ──▶ `/check` ──▶ `/complete` (using `.agents/skills/<skill>/SKILL.md` or `.claude/skills/<skill>/SKILL.md`).
+- **Coordinator Precedence (`pstack`)**: When `pstack` is installed alongside DevFlow, DevFlow owns planning, specs, and delivery gates as sole Coordinator while `/devflow-mode` delegates leaf skills to `pstack` (set `session hook: off` in `pstack-models.md` or `PSTACK_SESSION_HOOK=off`).
 - **Default Language (Thai)**: All generated stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 - **Contextual Help**: When invoked with `help`, `--help`, `-h`, or `?`, follow [the help protocol](devflow/reference/help-playbook-protocol.md) to reply with a concise in-chat Markdown cheat sheet without running the command's primary action.
 - **Activity State**: Never create or edit `devflow/.state/run.json` directly. Tracked commands record activity via the first helper that exists (see `devflow/workflow.md` for schema and field rules):

@@ -181,3 +181,145 @@ test("runDoctor reports verification_driver_skill status for absent, complete, i
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("runDoctor auto-detects pstack across on-project, open-pstack, and versioned Claude/Codex/Copilot plugin caches while refusing symlinks", async () => {
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-doctor-pstack-matrix-"));
+
+  try {
+    const createCaseDirs = async (name: string) => {
+      const projectDir = path.join(tempRoot, name, "project");
+      const homeDir = path.join(tempRoot, name, "home");
+      await fs.mkdir(path.join(projectDir, "devflow"), { recursive: true });
+      await fs.mkdir(homeDir, { recursive: true });
+      await fs.writeFile(
+        path.join(projectDir, "devflow", "config.json"),
+        JSON.stringify({ schemaVersion: 1, execution: { engine: "auto" } }),
+        "utf8"
+      );
+      return { projectDir, homeDir };
+    };
+
+    // Case A: On-project .agents/plugins/pstack
+    {
+      const { projectDir, homeDir } = await createCaseDirs("case-a-onproject");
+      const target = path.join(projectDir, ".agents", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md");
+      await fs.mkdir(path.dirname(target), { recursive: true });
+      await fs.writeFile(target, "---\nname: poteto-mode\n---\n", "utf8");
+      const report = await runDoctor(projectDir, { homeDir, env: {} });
+      const check = report.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(check);
+      assert.equal(check.status, "pass");
+      assert.match(check.message, /pstack detected/i);
+      assert.match(check.message, /session hook: off/i);
+      assert.ok(check.message.includes(target));
+    }
+
+    // Case B: open-pstack staging (~/.local/share/open-pstack/pstack)
+    {
+      const { projectDir, homeDir } = await createCaseDirs("case-b-open-pstack");
+      const target = path.join(homeDir, ".local", "share", "open-pstack", "pstack", "skills", "poteto-mode", "SKILL.md");
+      await fs.mkdir(path.dirname(target), { recursive: true });
+      await fs.writeFile(target, "---\nname: poteto-mode\n---\n", "utf8");
+      const report = await runDoctor(projectDir, { homeDir, env: {} });
+      const check = report.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(check);
+      assert.equal(check.status, "pass");
+      assert.ok(check.message.includes(target));
+    }
+
+    // Case C: Claude Code versioned cache picks highest stable semver (0.9.158 over 0.9.158-beta.1 & 0.9.100)
+    {
+      const { projectDir, homeDir } = await createCaseDirs("case-c-claude-cache");
+      const oldSkill = path.join(homeDir, ".claude", "plugins", "cache", "pstack-claude", "pstack", "0.9.100", "skills", "poteto-mode", "SKILL.md");
+      const betaSkill = path.join(homeDir, ".claude", "plugins", "cache", "pstack-claude", "pstack", "0.9.158-beta.1", "skills", "poteto-mode", "SKILL.md");
+      const newSkill = path.join(homeDir, ".claude", "plugins", "cache", "pstack-claude", "pstack", "0.9.158", "skills", "poteto-mode", "SKILL.md");
+      await fs.mkdir(path.dirname(oldSkill), { recursive: true });
+      await fs.mkdir(path.dirname(betaSkill), { recursive: true });
+      await fs.mkdir(path.dirname(newSkill), { recursive: true });
+      await fs.writeFile(oldSkill, "---\nname: poteto-mode\n---\n", "utf8");
+      await fs.writeFile(betaSkill, "---\nname: poteto-mode\n---\n", "utf8");
+      await fs.writeFile(newSkill, "---\nname: poteto-mode\n---\n", "utf8");
+      const report = await runDoctor(projectDir, { homeDir, env: {} });
+      const check = report.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(check);
+      assert.equal(check.status, "pass");
+      assert.ok(check.message.includes(newSkill), `Expected ${newSkill}, got: ${check.message}`);
+    }
+
+    // Case D: Codex cache (~/.codex/plugins/cache/...)
+    {
+      const { projectDir, homeDir } = await createCaseDirs("case-d-codex-cache");
+      const target = path.join(homeDir, ".codex", "plugins", "cache", "pstack-claude", "pstack", "0.9.158", "skills", "poteto-mode", "SKILL.md");
+      await fs.mkdir(path.dirname(target), { recursive: true });
+      await fs.writeFile(target, "---\nname: poteto-mode\n---\n", "utf8");
+      const report = await runDoctor(projectDir, { homeDir, env: {} });
+      const check = report.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(check);
+      assert.equal(check.status, "pass");
+      assert.ok(check.message.includes(target));
+    }
+
+    // Case E: Copilot installed-plugins (~/.copilot/installed-plugins/...)
+    {
+      const { projectDir, homeDir } = await createCaseDirs("case-e-copilot-cache");
+      const target = path.join(homeDir, ".copilot", "installed-plugins", "pstack-claude", "pstack", "skills", "poteto-mode", "SKILL.md");
+      await fs.mkdir(path.dirname(target), { recursive: true });
+      await fs.writeFile(target, "---\nname: poteto-mode\n---\n", "utf8");
+      const report = await runDoctor(projectDir, { homeDir, env: {} });
+      const check = report.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(check);
+      assert.equal(check.status, "pass");
+      assert.ok(check.message.includes(target));
+    }
+
+    // Case F: Symlinked dir or symlinked SKILL.md inside cache is refused safely
+    {
+      const { projectDir, homeDir } = await createCaseDirs("case-f-symlink-cache");
+      const outside = path.join(tempRoot, "case-f-outside");
+      const outsideSkill = path.join(outside, "skills", "poteto-mode", "SKILL.md");
+      await fs.mkdir(path.dirname(outsideSkill), { recursive: true });
+      await fs.writeFile(outsideSkill, "---\nname: poteto-mode\n---\n", "utf8");
+
+      const cacheParent = path.join(homeDir, ".claude", "plugins", "cache", "pstack-claude", "pstack");
+      await fs.mkdir(cacheParent, { recursive: true });
+      await fs.symlink(outside, path.join(cacheParent, "0.9.158"), "junction");
+
+      const autoReport = await runDoctor(projectDir, { homeDir, env: {} });
+      const autoCheck = autoReport.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(autoCheck);
+      assert.equal(autoCheck.status, "pass");
+      assert.match(autoCheck.message, /native/i);
+
+      await fs.writeFile(
+        path.join(projectDir, "devflow", "config.json"),
+        JSON.stringify({ schemaVersion: 1, execution: { engine: "pstack" } }),
+        "utf8"
+      );
+      const forcedReport = await runDoctor(projectDir, { homeDir, env: {} });
+      const forcedCheck = forcedReport.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(forcedCheck);
+      assert.equal(forcedCheck.status, "warn");
+    }
+
+    // Case G: Symlinked directory on direct home candidate (e.g. open-pstack) is also refused
+    {
+      const { projectDir, homeDir } = await createCaseDirs("case-g-symlink-direct");
+      const outside = path.join(tempRoot, "case-g-outside");
+      const outsideSkill = path.join(outside, "skills", "poteto-mode", "SKILL.md");
+      await fs.mkdir(path.dirname(outsideSkill), { recursive: true });
+      await fs.writeFile(outsideSkill, "---\nname: poteto-mode\n---\n", "utf8");
+
+      const openPstackDir = path.join(homeDir, ".local", "share", "open-pstack");
+      await fs.mkdir(openPstackDir, { recursive: true });
+      await fs.symlink(outside, path.join(openPstackDir, "pstack"), "junction");
+
+      const report = await runDoctor(projectDir, { homeDir, env: {} });
+      const check = report.checks.find((c) => c.id === "execution_engine_pstack");
+      assert.ok(check);
+      assert.equal(check.status, "pass");
+      assert.match(check.message, /native/i);
+    }
+  } finally {
+    await fs.rm(tempRoot, { recursive: true, force: true });
+  }
+});

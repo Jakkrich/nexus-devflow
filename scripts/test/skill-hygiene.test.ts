@@ -287,3 +287,52 @@ test("131c evidence-first verification, onboard verify bootstrap, and audit prov
   assert.match(auditSkill, /interrogate/);
   assert.match(auditSkill, /\bunverified\b/);
 });
+
+test("132 pstack integration contracts across platform-adapters, onboard, devflow-mode, and devflow-help", () => {
+  const adaptersRef = fs.readFileSync(
+    path.join(agentsSkillsRoot, "devflow-mode", "reference", "platform-adapters.md"),
+    "utf8"
+  );
+  assert.match(adaptersRef, /<skills>/);
+  assert.match(adaptersRef, /\.agents\/plugins\/pstack/);
+  assert.match(adaptersRef, /open-pstack/);
+  assert.match(adaptersRef, /plugins\/cache/);
+  assert.match(adaptersRef, /session hook:\s*off/i);
+  assert.match(adaptersRef, /PSTACK_SESSION_HOOK=off/);
+
+  const devflowMode = fs.readFileSync(path.join(agentsSkillsRoot, "devflow-mode", "SKILL.md"), "utf8");
+  assert.match(devflowMode, /devflow\/playbooks/);
+
+  const doctorRef = fs.readFileSync(
+    path.join(agentsSkillsRoot, "devflow-help", "reference", "doctor.md"),
+    "utf8"
+  );
+  assert.match(doctorRef, /devflow\/playbooks/);
+  assert.match(doctorRef, /session hook:\s*off/i);
+
+  for (const rel of ["onboard/SKILL.md", "onboard/reference/brownfield.md"]) {
+    const text = fs.readFileSync(path.join(agentsSkillsRoot, rel), "utf8");
+    for (const h2 of ["## Launch", "## Doctor", "## Drive", "## Evidence", "## Cleanup"]) {
+      assert.ok(text.includes(h2), `${rel} missing ${h2}`);
+    }
+    assert.match(text, /devflow\/reports\/\{run-id\}\//);
+    assert.match(text, /\.claude\/skills\/verify\//);
+  }
+});
+
+test("Option 3 role split separates standalone /feature Spec Workbench from default /devflow-mode routing in devflow-help", () => {
+  const feature = fs.readFileSync(path.join(agentsSkillsRoot, "feature", "SKILL.md"), "utf8");
+  assert.match(feature, /Spec & Slicing Workbench/i);
+  assert.match(feature, /Direct `\/feature` invocation/i);
+  assert.match(feature, /Coordinator invocation inside `\/devflow-mode`/i);
+  assert.match(feature, /execution\.autoApproveSpec/);
+
+  const devflowHelp = fs.readFileSync(path.join(agentsSkillsRoot, "devflow-help", "SKILL.md"), "utf8");
+  assert.match(devflowHelp, /Routing by Task Nature/i);
+  assert.match(devflowHelp, /Oversized \/ Needs Slicing/i);
+  assert.match(devflowHelp, /Spec-Ahead \/ Multi-Run Grooming/i);
+  assert.match(devflowHelp, /Taste-Heavy UI\/UX/i);
+  assert.match(devflowHelp, /Guided \/ Micro-Slice \/ Pairing/i);
+  assert.doesNotMatch(devflowHelp, /-> `\/devflow-mode` or `\/feature`/);
+  assert.doesNotMatch(devflowHelp, /-> `\/devflow-mode` or `\/implement \[id\]`/);
+});

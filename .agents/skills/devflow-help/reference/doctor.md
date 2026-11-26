@@ -13,8 +13,8 @@ Read-only diagnostic pass for setup drift, incomplete onboarding, missing files,
    - Read `.nexus/nexus-devflow.json` and report logical adapters (`codex`, `claude`, `copilot`, `antigravity`, `opencode`).
    - Confirm at least one compatible skill tree (`.agents/skills/` or `.claude/skills/`) contains `devflow-help/scripts/run-state.mjs`.
    - Flag missing mirror skills when both trees exist, duplicate `.opencode/skills/`, or incomplete `/onboard` (`CLAUDE.md` placeholder `# Project Name`).
-   - Probe `execution.engine` (`auto` / `pstack` / `native`) via `execution_engine_pstack`: report detected `poteto-mode/SKILL.md` path or native fallback status (warn if `engine: "pstack"` and `pstack` is absent).
-   - If `.agents/playbooks/` or `~/.agents/playbooks/` exists, run `node .agents/skills/devflow-mode/scripts/check-playbooks.mjs` and report any broken `when:` or `extends:` anchor.
+   - Probe `execution.engine` (`auto` / `pstack` / `native`) via `execution_engine_pstack`: report detected `poteto-mode/SKILL.md` path (including on-project `.agents/plugins/pstack/`, `open-pstack`, and Claude/Codex/Copilot caches) or native fallback status (warn if `engine: "pstack"` and `pstack` is absent). When `pstack` is detected, advise setting `session hook: off` in `pstack-models.md` (or `PSTACK_SESSION_HOOK=off`) so DevFlow remains sole Coordinator.
+   - If `devflow/playbooks/`, `.agents/playbooks/`, or `~/.agents/playbooks/` exists, run `node .agents/skills/devflow-mode/scripts/check-playbooks.mjs` and report any broken `when:` or `extends:` anchor (`poteto-mode` playbooks in shared `.agents/playbooks/` are automatically ignored).
 3. **Commands, setup & visibility**
    - Check root `README.md` is not an obsolete `# AI Coding Blueprint` doc and `devflow/README.md` is absent.
    - Check `AGENTS.md` is compact (`<= 8,000` bytes), has proportional-engineering guidance and real `## Commands`, and verify `.github/workflows/verify.yml` if present.
