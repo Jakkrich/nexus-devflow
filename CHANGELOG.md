@@ -5,6 +5,20 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.21.0] - 2026-11-26
+
+### Added
+- **Deterministic 3-Layer Verification Gate (`verify-layers` / `check-pipeline.ts`)**:
+  - Added `packages/create-nexus-devflow/lib/check-pipeline.ts`, tooling command `verify-layers` (`packages/create-nexus-devflow/lib/tooling/commands/verify-layers.ts`), and CLI subcommand `create-nexus-devflow verify-layers` (`--dry-run`, `--json`) to detect changed-file languages and run fail-fast checks across Layer 1 (per-language lint/typecheck), Layer 2 (test suites), and Layer 3 (TLA+/Lean formal verification when guarded paths change).
+  - Enforced explicit `requiredLib` and `installHint` metadata per language (`typescript`, `javascript`, `python`, `php`, `rust`, `go`, `tla`, `lean`), including Composer/`vendor/bin` detection for PHP (`php -l`, PHPStan/Larastan, Pint, PHPCS, Pest, PHPUnit), stopping immediately with exit code `1` on missing libraries or command failures.
+  - Integrated `verify-layers --json` as Step 1.5 hard gate in `.agents/skills/check/reference/verify.md` (and synced `.claude/skills/check/reference/verify.md`), plus unit and real-workspace tests in `packages/create-nexus-devflow/test/check-pipeline.test.ts`.
+- **DevFlow Repository Formal Spec & Template Exclusion (`formal/` + `run-isolation-formal`)**:
+  - Added `formal/RunStateAllocation.tla`, `formal/RunStateAllocation.cfg`, `formal/check-run-isolation.ts` (exhaustive BFS state-space model checker with `--prove-detection` and `branch-context.ts` parity probes), `formal/check-layers.json`, and repo-local `.agents/skills/run-isolation-formal/SKILL.md` (synced to `.claude/skills/run-isolation-formal/`).
+  - Updated `prepare-template.ts` and `prepare-template.test.ts` to strictly exclude `formal/`, `devflow/check-layers.json`, and local formal verification skills from published user `template/` packages.
+- **Multi-Adapter E2E Harness & `/implement -> /check` Scenario (`scripts/e2e/`)**:
+  - Refactored `scripts/e2e/harness.ts` around an `AGENT_ADAPTERS` registry supporting `claude`, `codex`, `antigravity` (`agy`), and `copilot`, added `--agent` / `--model` flags to `scripts/e2e/run.ts`, isolated `codex` (`--ignore-user-config` + stdin prompt) and `claude` (`--strict-mcp-config`), and fixed Windows `.cmd` shim quoting in `resolveSpawnSpec()`.
+  - Added minimal runnable scenario `scripts/e2e/scenarios/implement-check.ts` and unit tests in `scripts/test/e2e-harness.test.ts`.
+
 ## [2.20.6] - 2026-11-19
 
 ### Added
