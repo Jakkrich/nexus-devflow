@@ -8,6 +8,7 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 2026-11-27 | `132` | Feature | (Tracer Bullet) Seamless `pstack` Detection, Playbook Namespace Isolation & Coordinator Precedence | `72db2bf` | `Completed` | [`132-pstack-integration-hardening.md`](features/132-pstack-integration-hardening.md) |
 | 2026-11-26 | `125` | Feature | Production Release Readiness (`3.0.0`) | `PENDING` | `Completed` | [`125-production-release-readiness.md`](features/125-production-release-readiness.md) |
 | 2026-11-26 | `119` | Feature | (Skateboard) Planning & Overview Integrity Gate | `PENDING` | `Completed` | [`119-planning-and-overview-integrity-gate.md`](features/119-planning-and-overview-integrity-gate.md) |
 | 2026-11-26 | `131d` | Feature | (Journey) Multi-IDE E2E Proof, Installer Matrix & v3 Migration | `0d67085` | `Completed` | [`131d-multi-ide-e2e-installer-matrix-and-v3-migration.md`](features/131d-multi-ide-e2e-installer-matrix-and-v3-migration.md) |

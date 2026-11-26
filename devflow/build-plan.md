@@ -44,7 +44,7 @@
   - [x] 131b. **(Tracer Bullet) `devflow-mode`, `devflow-help`, Playbooks & `pstack` Adapter** - สร้าง `devflow-mode` (แทน `autopilot`), `devflow-help` (รวม/แทน guide, status และ doctor ของ `devflow`), Core `playbooks/` (`feature`, `bug-fix`, `refactor`, `discovery`, `autonomous-queue`), ตัวตรวจ `extends:` anchor, และ sync `.agents/` ↔ `.claude/`
   - [x] 131c. **(Tracer Bullet) Evidence-First Verification & `verify` Bootstrap** - ให้ `/onboard` สร้าง/ตรวจ `.agents/skills/verify/`, ยกระดับ `/check` และ `/audit` เป็น Verifier Swarm + Prove-by-Run (`interrogate` / `verify-layers`) ที่บันทึกหลักฐานถาวรใน `devflow/reports/{run-id}/`
   - [x] 131d. **(Journey) Multi-IDE E2E Proof, Installer Matrix & v3 Migration** - อัปเดต template/installer ของ `create-nexus-devflow`, routing evals ไทย/อังกฤษ, คู่มือ migration v2 → v3 และรัน full test/package suite
-- [ ] 132. **(Tracer Bullet) Seamless `pstack` Detection, Playbook Namespace Isolation & Coordinator Precedence** - ขยายการตรวจจับ path จริงของ `pstack` (plugin caches, `open-pstack`, `.agents/plugins/pstack`, in-session skills), แยก namespace ของ custom playbooks (`devflow/playbooks/` + กรอง `poteto-mode` ใน `.agents/playbooks/`), กำกับ H2 headings + adapter sync ของ `verify` ใน `/onboard`, และระบุหลัก Coordinator เดียวคู่กับ `session hook: off`
+- [x] 132. **(Tracer Bullet) Seamless `pstack` Detection, Playbook Namespace Isolation & Coordinator Precedence** - ขยายการตรวจจับ path จริงของ `pstack` (plugin caches, `open-pstack`, `.agents/plugins/pstack`, in-session skills), แยก namespace ของ custom playbooks (`devflow/playbooks/` + กรอง `poteto-mode` ใน `.agents/playbooks/`), กำกับ H2 headings + adapter sync ของ `verify` ใน `/onboard`, และระบุหลัก Coordinator เดียวคู่กับ `session hook: off`
 
 ---
 
