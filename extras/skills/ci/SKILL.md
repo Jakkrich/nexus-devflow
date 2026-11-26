@@ -179,7 +179,7 @@ part of this skill.
   creates CI by itself.
 - `/implement`, `/complete`, and `/autopilot` run Verify when it is documented,
   with their existing fallback behavior when it is absent.
-- `/devflow-doctor` diagnoses drift between `AGENTS.md`, the project command, and the
+- `/devflow-help` (`doctor`) diagnoses drift between `AGENTS.md`, the project command, and the
   workflow. Missing CI remains informational.
 
 ## Rules

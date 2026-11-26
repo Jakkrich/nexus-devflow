@@ -9,9 +9,6 @@
     "check:release": "tsx scripts/check-release-readiness.ts",
     "check:static": "tsx scripts/validate-framework.ts",
     "check:budgets": "node scripts/check-skill-budgets.mjs",
-    "analyze:tokens": "tsx scripts/analyze-token-usage.ts",
-    "token:usage": "tsx scripts/analyze-token-usage.ts",
-    "check:upstream": "tsx scripts/check-upstream-drift.ts",
     "overview": "tsx ./scripts/overview.ts --write",
     "typecheck": "tsc --noEmit",
     "build:docs": "tsx scripts/generate-all-docs.ts",
@@ -23,7 +20,7 @@
     "test:routing": "tsx ./scripts/evals/routing.ts",
     "test:run-state": "tsx --test scripts/run-state-helper.test.ts",
     "verify:completion-gate": "tsx scripts/verify-completion-gate.ts",
-    "verify:concurrent-isolation": "tsx scripts/verify-concurrent-run-isolation.ts",
+    "verify:concurrent-isolation": "tsx formal/check-run-isolation.ts",
     "verify:update-resilience": "tsx scripts/verify-update-resilience.ts",
     "test:sandbox": "tsx --test scripts/clear-sandbox.test.ts scripts/scaffold-sandbox.test.ts",
     "test:e2e": "tsx scripts/e2e/run.ts",
@@ -35,15 +32,7 @@
     "link:local": "tsx scripts/link-local.ts",
     "unlink:local": "tsx scripts/link-local.ts --undo",
     "release:tag": "tsx scripts/tag-release.ts",
-    "activate": "node ./scripts/activate-agent.mjs",
-    "goal": "node ./scripts/goal-runner.mjs",
-    "index": "node ./scripts/generate-project-index.mjs",
-    "link-project": "tsx scripts/tooling.ts link-project",
-    "migrate:artifacts": "tsx scripts/tooling.ts migrate-stage-artifacts",
     "tooling": "tsx scripts/tooling.ts",
-    "render:html": "tsx scripts/tooling.ts render-html",
-    "report:html": "tsx scripts/tooling.ts report-html",
-    "artifact-language:switch": "tsx scripts/tooling.ts switch-artifact-language",
     "roadmap:validate": "tsx ./scripts/validate-framework.ts --roadmap-only",
     "security:scan": "tsx scripts/tooling.ts scan-security-hygiene",
     "sync:check": "node ./scripts/sync-agent-bundle.mjs",
@@ -55,9 +44,6 @@
     "@types/node": "^22.10.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
-  },
-  "bin": {
-    "nexus-devflow": "./scripts/activate-agent.mjs"
   },
   "engines": {
     "node": ">=18.17"

@@ -39,7 +39,7 @@ describe("McpServerEngine Seam & Dispatch", () => {
     assert.equal(res.id, 2);
     const result = res.result as { tools: Array<{ name: string; description: string }> };
     assert.ok(Array.isArray(result.tools));
-    assert.ok(result.tools.length >= 10);
+    assert.equal(result.tools.length, 6);
     assert.ok(result.tools.some((t) => t.name === "devflow_get_status"));
     assert.ok(!result.tools.some((t) => t.name === "devflow_get_studio_html"));
     assert.ok(result.tools.some((t) => t.name === "devflow_evaluate_gate"));

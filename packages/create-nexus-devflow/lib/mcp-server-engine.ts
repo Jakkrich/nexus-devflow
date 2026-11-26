@@ -1,20 +1,35 @@
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
+import { fileURLToPath } from "node:url";
 import type { Readable, Writable } from "node:stream";
 
 import { readProjectStatus } from "./status.js";
 import { ActiveContextEngine } from "./active-context-engine.js";
 import { GatekeeperEngine, formatGateReport } from "./gatekeeper.js";
-import { addIdea, readIdeas } from "./ideas.js";
+import { addIdea } from "./ideas.js";
 import { addFinding, resolveFinding, type FindingSeverity, type FindingStatus } from "./findings.js";
-import { sliceContextForStage, type SliceStage } from "./context-slicer.js";
-import { buildCodeGraph, calculateBlastRadius } from "./code-graph.js";
-import { generateSwarmPlan } from "./swarm-orchestrator.js";
+
+function readInstalledPackageVersion(): string {
+  const dir = path.dirname(fileURLToPath(import.meta.url));
+  for (const rel of ["../package.json", "../../package.json"]) {
+    const candidate = path.resolve(dir, rel);
+    try {
+      const parsed = JSON.parse(fsSync.readFileSync(candidate, "utf8")) as { name?: string; version?: string };
+      if (parsed.name === "@jakkrichm/create-nexus-devflow" && parsed.version) {
+        return parsed.version;
+      }
+    } catch {
+      // ignore missing candidate
+    }
+  }
+  return "3.0.0";
+}
 
 export const PROTOCOL_VERSION = "2024-11-05";
 export const SERVER_NAME = "nexus-devflow-mcp";
-export const SERVER_VERSION = "2.14.0";
+export const SERVER_VERSION = readInstalledPackageVersion();
 
 export interface JsonRpcRequest {
   jsonrpc: "2.0";
@@ -161,71 +176,6 @@ export const DEVFLOW_MCP_TOOLS: McpToolDefinition[] = [
         }
       },
       required: ["document"]
-    }
-  },
-  {
-    name: "devflow_get_sliced_context",
-    description: "Retrieve a JIT Stage-Aware sliced context for AI coding (reduces tokens by 60-70% by extracting only relevant rules, tasks, and constraints for the current stage).",
-    inputSchema: {
-      type: "object",
-      properties: {
-        stage: {
-          type: "string",
-          enum: ["implement", "check", "explore", "feature", "status"],
-          description: "Target DevFlow workflow stage"
-        },
-        maxTokens: {
-          type: "number",
-          description: "Optional maximum token budget limit"
-        }
-      },
-      required: ["stage"]
-    }
-  },
-  {
-    name: "devflow_detect_drift",
-    description: "Detect git drift between actual repository modified files and the Living Spec (identifies undocumented files and phantom files).",
-    inputSchema: {
-      type: "object",
-      properties: {}
-    }
-  },
-  {
-    name: "devflow_reconcile_state",
-    description: "Automatically reconcile and heal workspace drift (syncs undocumented files into living spec and heals stage alignment).",
-    inputSchema: {
-      type: "object",
-      properties: {
-        autoAddUndocumented: {
-          type: "boolean",
-          description: "When true, automatically adds undocumented files into active living spec (default: true)"
-        },
-        healStage: {
-          type: "boolean",
-          description: "When true, heals stage pointer to match active branch (default: true)"
-        }
-      }
-    }
-  },
-  {
-    name: "devflow_swarm_plan",
-    description: "Generate a multi-agent specialized swarm execution plan (Coder, QA, Security, Architect) with task allocations and context requirements.",
-    inputSchema: {
-      type: "object",
-      properties: {}
-    }
-  },
-  {
-    name: "devflow_query_code_graph",
-    description: "Query the codebase semantic dependency graph to analyze imports, exports, and calculate the Blast Radius of file changes.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        file: {
-          type: "string",
-          description: "Optional target file path to calculate Blast Radius and impacted dependents"
-        }
-      }
     }
   }
 ];
@@ -416,77 +366,6 @@ export class McpServerEngine {
           isError: false
         };
       }
-    });
-
-    // 8. devflow_get_sliced_context
-    this.registerTool(DEVFLOW_MCP_TOOLS.find((t) => t.name === "devflow_get_sliced_context")!, async (args) => {
-      const stage = (typeof args.stage === "string" ? args.stage.toLowerCase() : "status") as SliceStage;
-      const maxTokens = typeof args.maxTokens === "number" ? args.maxTokens : undefined;
-      const slice = await sliceContextForStage(this.projectRoot, stage, { maxTokens });
-      return {
-        content: [
-          {
-            type: "text",
-            text: `[JIT Context Slice - Stage: ${slice.stage}] (Tokens: ~${slice.estimatedTokens}, Saved: ${slice.reductionPercentage}%)\n\n${slice.content}`
-          }
-        ]
-      };
-    });
-
-    // 9. devflow_detect_drift
-    this.registerTool(DEVFLOW_MCP_TOOLS.find((t) => t.name === "devflow_detect_drift")!, async () => {
-      const drift = await this.gatekeeperEngine.getDrift();
-      return {
-        content: [{ type: "text", text: JSON.stringify(drift, null, 2) }]
-      };
-    });
-
-    // 10. devflow_reconcile_state
-    this.registerTool(DEVFLOW_MCP_TOOLS.find((t) => t.name === "devflow_reconcile_state")!, async (args) => {
-      const autoAdd = args.autoAddUndocumented !== false;
-      const heal = args.healStage !== false;
-      const result = await this.gatekeeperEngine.reconcile({
-        autoAddUndocumented: autoAdd,
-        healStage: heal
-      });
-      return {
-        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-      };
-    });
-
-    // 11. devflow_swarm_plan
-    this.registerTool(DEVFLOW_MCP_TOOLS.find((t) => t.name === "devflow_swarm_plan")!, async () => {
-      const plan = await generateSwarmPlan(this.projectRoot);
-      return {
-        content: [{ type: "text", text: JSON.stringify(plan, null, 2) }]
-      };
-    });
-
-    // 13. devflow_query_code_graph
-    this.registerTool(DEVFLOW_MCP_TOOLS.find((t) => t.name === "devflow_query_code_graph")!, async (args) => {
-      const graph = await buildCodeGraph(this.projectRoot);
-      if (typeof args.file === "string" && args.file.trim().length > 0) {
-        const blast = calculateBlastRadius(graph, args.file.trim());
-        return {
-          content: [{ type: "text", text: JSON.stringify(blast, null, 2) }]
-        };
-      }
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(
-              {
-                totalFiles: graph.totalFiles,
-                totalEdges: graph.totalEdges,
-                files: Object.keys(graph.nodes)
-              },
-              null,
-              2
-            )
-          }
-        ]
-      };
     });
   }
 

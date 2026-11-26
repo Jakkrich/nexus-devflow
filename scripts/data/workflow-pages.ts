@@ -311,7 +311,6 @@ export const WORKFLOW_PAGES: DocPage[] = [
               <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/check guide</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>
               <tr><td>สแกนความปลอดภัยและคุณภาพโค้ด + YAGNI</td><td><code>/audit</code></td><td>ตรวจเช็คทั้ง Branch Delta หรือทั้งโปรเจกต์ บันทึกลง <code>findings.md</code></td></tr>
               <tr><td>สร้าง Mockup หน้าจอจำลองก่อนเขียนโค้ด</td><td><code>/prototype</code></td><td>สร้าง Static HTML/CSS จำลองที่ใช้ Design Tokens ร่วมกัน</td></tr>
-              <tr><td>สร้างรายงานสรุปผลแบบ Standalone HTML</td><td><code>npm run report:html</code></td><td>คอมไพล์สเปกหรือประวัติเป็นรายงาน HTML สำหรับนำเสนอ</td></tr>
             </tbody>
           </table>
         `

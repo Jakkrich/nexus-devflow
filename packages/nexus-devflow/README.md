@@ -26,8 +26,8 @@ npx nexus-devflow status
 # 3. Install an individual bundled Opt-in Extras skill anytime (offline-safe)
 npx nexus-devflow skill add setup-tests   # or ci, release, rollback, vendor, convert-any-to-md, browseros-neo, verify-harness
 
-# 4. Or install recommended third-party companion skills (archify, diagram-design, bughunter, ponytail, code-modernization)
-npx nexus-devflow skill add --recommended
+# 4. Or install third-party visual diagram skills (archify, diagram-design)
+npx nexus-devflow skill add archify
 ```
 
 > **Migrating from v2 to v3:** Run `npx nexus-devflow update` (or `--dry-run` first) to prune retired `/autopilot` and `/devflow` skills, install `/devflow-mode` (Coordinator + 5 Playbooks) and `/devflow-help` (Interactive Guide, Status & Doctor), and preserve existing `devflow/config.json`, plans, and history.
@@ -83,17 +83,12 @@ npx nexus-devflow status [--json]
 # List all installed skills across adapters
 npx nexus-devflow skill list
 
-# Install all recommended community companion skills in one command
-npx nexus-devflow skill add --recommended
-
-# Or install individual skills by name or git URL:
+# Install visual skills or any Git skill repository by name or URL:
 npx nexus-devflow skill add archify        # Architecture, sequence & data flow trace diagrams
 npx nexus-devflow skill add diagram-design # 39 editorial charts & presentation diagram templates
-npx nexus-devflow skill add bughunter      # Offensive security audit & vulnerability testing
-npx nexus-devflow skill add ponytail       # Lazy senior dev mode - cuts code bloat & tokens (YAGNI)
 
-# Update installed skills to latest versions
-npx nexus-devflow skill update --recommended
+# Update installed third-party skills to latest versions
+npx nexus-devflow skill update
 
 # Synchronize skill inventory between .agents and .claude adapters
 npx nexus-devflow skill sync
@@ -103,23 +98,17 @@ npx nexus-devflow skill sync
 ```bash
 # Verify active branch gates before commit/merge (exit code 0 or 1)
 npx nexus-devflow check-gate [--strict]
+npx nexus-devflow verify-layers [--json]
 
 # Install automatic local Git pre-commit or pre-push hook
 npx nexus-devflow hook install pre-commit
 npx nexus-devflow hook install pre-push
 ```
 
-### ⚡ Context Optimization & Agent Tooling
+### ⚡ Agent Tooling & Workspace Maintenance
 ```bash
-# Model Context Protocol (MCP) JSON-RPC Stdio Server
+# Model Context Protocol (MCP) JSON-RPC Stdio Server (6 Core Tools)
 npx nexus-devflow mcp
-
-# Just-In-Time (JIT) Dynamic Context Slicing (reduces AI tokens by 60-70%)
-npx nexus-devflow slice --stage implement [--max-tokens 4000]
-
-# Detect drift between code changes and active living spec
-npx nexus-devflow drift
-npx nexus-devflow reconcile [--fix]
 
 # Workspace health doctor and auto-healing
 npx nexus-devflow doctor [--fix]

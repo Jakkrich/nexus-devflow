@@ -3,14 +3,14 @@
 > **Document Type**: Build Plan (User-Owned)
 > **Purpose**: รายการฟีเจอร์ตามลำดับการพัฒนาจริง (Ordered Feature Roadmap Checklist)
 > **Workflow**: ทำงานจากบนลงล่างด้วย `/feature` -> `/implement` -> `/check` -> `/complete`; ห้ามข้ามงานที่เป็น dependency
-> **Planning Baseline**: 2026-11-17 — แทนที่รายการ UI template เดิมด้วยคิวงานที่ตรงกับผลิตภัณฑ์ Nexus-DevFlow
+> **Planning Baseline**: 2026-11-26 — คิวงานสำหรับ v3.0.0 เสร็จสมบูรณ์และตัดรายการค้างที่ล้าสมัยหรือถูกผนวกรวมไปแล้วออก
 
 ---
 
 ## Phase 1: Foundation & Workflow Consolidation
 
 - [x] 1. **Upstream AI Blueprint Synchronization & Zero-Regression Fusion** - ผสาน `explore`, proportional engineering, adapter switching และ CI pre-push hook โดยรักษาสถาปัตยกรรม DevFlow (Ref: DISC-20260929-001)
-- [x] 111. **Code-Modernization Recommended Third-Party Skill & Master Orchestrator** - เพิ่ม code-modernization แบบ opt-in พร้อม sparse ingestion engine (Ref: DISC-20261027-001)
+- [x] 111. **(Deprecated & Removed) Code-Modernization Recommended Third-Party Skill & Master Orchestrator** - ถอดระบบ `--recommended`, `compound-knowledge` wrapper synthesis และ `getCodeModernizationMasterSkill` ออกจาก Core CLI ในการเก็บกวาด v3.0 (Ref: DISC-20261027-001)
 - [x] 112. **(Deprecated & Removed) In-IDE Interactive Choice & Predictive Follow-Up Gate** - ถอด modal บังคับเพื่อคืน workflow สนทนาปกติ (Ref: DISC-20261030-001, Task 113)
 - [x] 114. **Upstream AI Blueprint Selective Sync (v1.11.0–v1.16.1)** - ผสาน upstream แบบเลือกเฉพาะส่วนและ harden Git/package workflow (Ref: DISC-20261117-001)
   - [x] 114a. **(Skateboard) Command Rename & Git/Pack Hardening** - ปรับชื่อ skill, ย้าย state helper, กัน `git status` buffer overflow และแพ็กเฉพาะ tracked template files
@@ -25,13 +25,10 @@
 
 ---
 
-## Phase 2: Ecosystem Reliability (Active Focus)
+## Phase 2: Ecosystem Reliability
 
 - [x] 116. **(Deprecated & Removed) Consolidation Release Baseline & Migration Contract** - ถอดออกเนื่องจากขอบเขต v2 → v3 migration และ installer matrix ถูกรวมเข้ากับ Feature 131d แล้ว และเกณฑ์เตรียม release ถูกรวมไว้ที่ Feature 125
-- [ ] 117. **(Tracer Bullet) Cross-Platform Installer & Update Confidence Matrix** - เพิ่ม CI/smoke matrix สำหรับ Windows, macOS, Linux และ Node.js รุ่นที่รองรับ ครอบคลุม fresh install, existing-project overlay, update, adapter switch และ path edge cases
-- [ ] 118. **(Journey) Bilingual Intent Routing Reliability** - ขยาย routing evals ภาษาไทย/อังกฤษด้วย positive, negative, legacy และ ambiguous prompts; รายงาน pass rate, false activation และ regression ownership แบบตรวจซ้ำได้
 - [x] 119. **(Skateboard) Planning & Overview Integrity Gate** - ตรวจ placeholder/stale/mismatched plans ก่อนสร้าง overview, ให้ข้อความแก้ไขที่ทำตามได้ และเพิ่ม regression tests สำหรับ source hash กับ generated-state boundaries
-- [ ] 120. **(Tracer Bullet) Package Contract & Upgrade Resilience** - ทดสอบว่าการ update รักษา user-owned plans, custom config, protected skills และ task history พร้อมรายงาน drift ที่แก้ได้โดยไม่เขียนทับข้อมูลผู้ใช้
 - [x] 130. **(Tracer Bullet) Multi-Chat Safe Isolation & Aggregated Status** - แยก per-run activity state (`devflow/.state/runs/{run-id}.json`), เพิ่ม `evaluateWorktreeGuard` และ cross-worktree `reserveNextRunningId`, รวมสถานะ + handoff summary ข้าม worktree ใน `status`, และสร้าง formal concurrency proof (`verify:concurrent-isolation`)
 
 ---
@@ -39,8 +36,6 @@
 ## Phase 3: Integration & Operator Experience
 
 - [x] 121. **(Deprecated & Removed) Evidence-First Workflow Dashboard** - ถอดแผนยกระดับ Web Dashboard ตามแนวทาง Lite-first (ถูกแทนที่ด้วย Feature 128)
-- [ ] 122. **(Tracer Bullet) IDE Sidecar Pilot** - เชื่อม editor หนึ่งตัวกับ status CLI/MCP API (JSON) เพื่อเปิด task, อ่าน spec และติดตาม stage โดยไม่ให้ sidecar แก้ source of truth โดยตรง
-- [ ] 123. **(Journey) Multi-IDE Continuation & Handoff** - พิสูจน์การรับช่วงงานระหว่าง adapters ด้วย task เดียวกัน พร้อม compatibility tests และคู่มือ recovery เมื่อ context หรือ tool เปลี่ยน
 - [x] 126. **(Tracer Bullet) Opt-in `browseros-neo` Team Skill (E2E Testing & Evidence)** - เพิ่ม custom `extras/skills/browseros-neo/` ต่อยอดจาก `browserclaw` สำหรับทดสอบและแก้ปัญหาแบบ E2E ผ่าน BrowserOS neo MCP, สร้าง test plan + evidence รายเคสใน `devflow/reports/{run-id}/` (ไม่ขึ้น Git) และผูก `name_session` ย้อนดูวิดีโอใน BrowserOS neo ตาม DevFlow ID (Ref: DISC-20261117-003)
 - [x] 127. **(Tracer Bullet) Interactive Extras Skills Checkbox Setup** - ถอด Superpower Community Skills ออกจาก Step `[3/3]` ของ `install`/`update` และแทนที่ด้วย zero-dep checkbox เลือกติดตั้ง/อัปเดต `extras/skills/` จาก local bundle (Ref: DISC-20261118-001)
 - [x] 128. **(Skateboard) Remove Web Dashboard, Studio UI & MCP Studio Tool (Option 2)** - ถอด `dashboard`/`ui`/`studio` CLI, HTTP server, `studio-view-renderer.ts` (~102 KB), `dashboard-*.ts`, `webview-studio.ts`, orphan modules (`command-catalog.ts`, `version-check.ts`, `workflow-state.ts`) และ MCP tool `devflow_get_studio_html` เพื่อลดขนาดแพ็กเกจ ~26% โดยคง Core Workflow, `status`, `run-state` และ `report:html` ไว้ครบ
@@ -54,23 +49,21 @@
 
 ## Phase 4: Adoption & Release Hardening
 
-- [ ] 124. **(Journey) Golden-Path Examples & Documentation Proof** - สร้างตัวอย่าง greenfield, brownfield และ bug-fix ที่รันได้จริง เชื่อมเอกสารกับ package smoke tests และตรวจ retired commands อัตโนมัติ
 - [x] 125. **Production Release Readiness** - ตรวจ security hygiene, package contents, semantic version, release notes, rollback steps และ full quality matrix ก่อน publish (การ publish/push ต้องได้รับอนุญาตแยกต่างหาก)
 
 ---
 
 ## Project Architecture & Delivery Rules
 
-- ทำ 115d และ release baseline ให้เสร็จก่อนเริ่ม feature ใหม่
 - ทุก item ต้องมี acceptance criteria, evidence matrix และ rollback/compatibility note ตามระดับความเสี่ยง
 - Behavior changes ใช้ TDD; documentation-only changes ใช้ structural/link/contract checks
-- Status CLI, MCP และ sidecar อ่าน state จาก Markdown/JSON contracts เดิม ไม่สร้างฐานข้อมูลชุดที่สอง
+- Status CLI และ MCP อ่าน state จาก Markdown/JSON contracts เดิม ไม่สร้างฐานข้อมูลชุดที่สอง
 - ไม่เพิ่ม core skill, dependency หรือ hosted service โดยไม่มี current requirement และ trade-off record
 
 ---
 
 ## Later / Evidence Required
 
-- รองรับ editor เพิ่มเติมหลัง sidecar pilot มี usage evidence
+- IDE sidecar หรือส่วนเสริมเฉพาะ editor ต้องมีหลักฐานความต้องการใช้งานจริงก่อนนำเข้าคิว (ปัจจุบันใช้ CLI/MCP JSON โดยตรงตามแนวทาง Lite-first)
 - Hosted collaboration, cloud sync, organization policy packs และ analytics ต้องผ่าน discovery แยกก่อนเข้าคิว
 - Automated publish หรือ deployment ยังอยู่นอก scope จนกว่าจะมี permission และ release governance ชัดเจน

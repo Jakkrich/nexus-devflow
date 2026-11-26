@@ -542,25 +542,6 @@
     ]
   },
   {
-    "title": "Code Modernization (/code-modernization, /modernize)",
-    "description": "ปรับปรุง Legacy Codebase ขนานใหญ่ด้วยขุมพลัง Anthropic Code Modernization Plugin พร้อมระบบ Master Orchestrator นำทาง State Machine อัตโนมัติและเอกสารภาษาไทย (Thai First)",
-    "section": "COMMANDS",
-    "slug": "commands/code-modernization",
-    "href": "../commands/code-modernization/",
-    "tags": [
-      "Command",
-      "Modernize",
-      "Legacy",
-      "Uplift",
-      "Transform",
-      "Reimagine",
-      "ThaiFirst",
-      "EquivalenceProof",
-      "commands",
-      "commands code-modernization"
-    ]
-  },
-  {
     "title": "CLI Overview (ภาพรวมเครื่องมือ CLI)",
     "description": "ชุดเครื่องมือคำสั่งบรรทัด (CLI) สำหรับติดตั้ง ตรวจสอบสถานะ และจัดการ DevFlow ในเครื่อง",
     "section": "CLI",
@@ -591,24 +572,6 @@
       "ZeroTokenOverhead",
       "cli",
       "cli status"
-    ]
-  },
-  {
-    "title": "Token & Cost Analytics CLI (เครื่องมือวิเคราะห์ต้นทุน Token)",
-    "description": "คำสั่งวิเคราะห์ปริมาณการใช้งาน Token 4 มิติหลัก (Fresh Input, Prompt Cache Write, Cache Read, Output) พร้อมประเมินต้นทุนค่าใช้จ่ายจริง ($ USD) ต่อโมเดล",
-    "section": "CLI",
-    "slug": "cli/tokens",
-    "href": "../cli/tokens/",
-    "tags": [
-      "CLI",
-      "TokenAnalytics",
-      "Cost",
-      "PromptCaching",
-      "ROI",
-      "Pricing",
-      "Feature107",
-      "cli",
-      "cli tokens"
     ]
   },
   {

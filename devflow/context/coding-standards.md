@@ -316,7 +316,7 @@ When explicitly generating standalone HTML artifacts (Standalone Reports, Archit
 ## 16. Token Economy & Cost Optimization Standards
 
 - **Token Economics Visibility**:
-  - Leverage `npm run analyze:tokens` (or `scripts/analyze-token-usage.ts`) to audit session token usage across Main Thread vs Subagents.
+  - Leverage `npm run check:budgets` (or `scripts/check-skill-budgets.mjs`) to enforce byte/token budget ceilings across all adapters and skills.
   - Track the 4 token dimensions: **Fresh Input Tokens**, **Prompt Cache Write Tokens**, **Prompt Cache Read Tokens (Hits)**, and **Output Tokens**.
 - **Prompt Caching Optimization**:
   - Structure documentation and context files with immutable headers first so LLM providers can achieve high prompt cache hit rates (>60%).

@@ -4,7 +4,6 @@ import {
   type GatekeeperEngineOptions,
   type GateEvaluateOptions,
   type GateReport,
-  type ReconcileOptions,
   type RunEvidenceSummary
 } from "./gatekeeper-engine.js";
 import { createStyle } from "./ui.js";
@@ -19,7 +18,6 @@ export {
   type GatekeeperEngineOptions,
   type GateEvaluateOptions,
   type GateReport,
-  type ReconcileOptions,
   type RunEvidenceSummary
 };
 

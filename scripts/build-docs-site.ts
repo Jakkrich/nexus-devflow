@@ -59,16 +59,14 @@ const SIDEBAR_ITEMS = [
       { slug: 'commands/vendor', title: 'Vendor (Opt-in)' },
       { slug: 'commands/browseros-neo', title: 'BrowserOS neo (Opt-in)' },
       { slug: 'commands/archify', title: 'Archify (Diagrams)' },
-      { slug: 'commands/diagram-design', title: 'Diagram Design' },
-      { slug: 'commands/code-modernization', title: 'Code Modernization' }
+      { slug: 'commands/diagram-design', title: 'Diagram Design' }
     ]
   },
   {
     category: 'CLI',
     items: [
       { slug: 'cli', title: 'CLI Overview' },
-      { slug: 'cli/status', title: 'Status' },
-      { slug: 'cli/tokens', title: 'Token & Cost Analytics' }
+      { slug: 'cli/status', title: 'Status' }
     ]
   },
   {

@@ -41,27 +41,13 @@ export const listCommand: ToolCommand = {
   },
 };
 
-import { renderHtmlCommand } from "./commands/render-html.js";
-import { reportHtmlCommand } from "./commands/report-html.js";
-import { switchArtifactLanguageCommand } from "./commands/switch-artifact-language.js";
-import { migrateStageArtifactsCommand } from "./commands/migrate-stage-artifacts.js";
-import { summarizeRunStatusCommand } from "./commands/summarize-run-status.js";
-import { linkProjectCommand } from "./commands/link-project.js";
 import { scanDocContractCommand } from "./commands/scan-doc-contract.js";
 import { scanSecurityHygieneCommand } from "./commands/scan-security-hygiene.js";
-import { skillDescriptionsCommand } from "./commands/skill-descriptions.js";
 import { verifyLayersCommand } from "./commands/verify-layers.js";
 
 // Register built-in commands
 registerToolCommand(helpCommand);
 registerToolCommand(listCommand);
-registerToolCommand(renderHtmlCommand);
-registerToolCommand(reportHtmlCommand);
-registerToolCommand(switchArtifactLanguageCommand);
-registerToolCommand(migrateStageArtifactsCommand);
-registerToolCommand(summarizeRunStatusCommand);
-registerToolCommand(linkProjectCommand);
 registerToolCommand(scanDocContractCommand);
 registerToolCommand(scanSecurityHygieneCommand);
-registerToolCommand(skillDescriptionsCommand);
 registerToolCommand(verifyLayersCommand);

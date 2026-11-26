@@ -20,9 +20,6 @@ npx nexus-devflow
 # ดูสถานะความคืบหน้าของงานปัจจุบันผ่าน Terminal
 npx nexus-devflow status
 
-# วิเคราะห์การใช้งานและต้นทุน Token (Session Token Analytics)
-npm run analyze:tokens
-
 # ตรวจสอบขนาด Byte-budget ของ Skill ทุกตัว
 npm run check:budgets
 
@@ -65,7 +62,6 @@ npm run check</code></pre>
             <li><strong>Build Plan Progress</strong>: ความคืบหน้าของฟีเจอร์ทั้งหมด (เช่น 4 / 10 Completed - 40%)</li>
             <li><strong>Active Task</strong>: ฟีเจอร์ที่กำลังทำอยู่, รหัสงาน, และสถานะขั้นตอน (<code>feature</code>, <code>implement</code>, <code>check</code>)</li>
             <li><strong>Git Branch & Working Tree</strong>: Branch ปัจจุบันและสถานะการเปลี่ยนแปลงที่ยังไม่ได้ Commit</li>
-            <li><strong>Drift Warnings</strong>: แจ้งเตือนความคลาดเคลื่อนหากโค้ดไม่ตรงกับสเปก</li>
           </ul>
         `
       },
@@ -75,68 +71,6 @@ npm run check</code></pre>
         contentHtml: `
           <p>สามารถส่งออกข้อมูลเป็น JSON เพื่อนำไปเขียนสคริปต์หรือเชื่อมต่อกับเครื่องมือภายนอกได้:</p>
           <pre><code>npx nexus-devflow status --json</code></pre>
-        `
-      }
-    ]
-  },
-
-  // 3. Token Analytics CLI (New - Feature 107)
-  {
-    slug: 'cli/tokens',
-    category: 'CLI',
-    title: 'Token & Cost Analytics CLI (เครื่องมือวิเคราะห์ต้นทุน Token)',
-    lead: 'คำสั่งวิเคราะห์ปริมาณการใช้งาน Token 4 มิติหลัก (Fresh Input, Prompt Cache Write, Cache Read, Output) พร้อมประเมินต้นทุนค่าใช้จ่ายจริง ($ USD) ต่อโมเดล',
-    pills: ['CLI', 'TokenAnalytics', 'Cost', 'PromptCaching', 'ROI', 'Pricing', 'Feature107'],
-    sections: [
-      {
-        id: 'token-analytics-usage',
-        title: 'การเรียกใช้งาน Token Analytics CLI',
-        contentHtml: `
-          <p>สามารถรันเครื่องมือวิเคราะห์ Token ได้ทันทีจากโปรเจกต์:</p>
-          <pre><code># วิเคราะห์ Session ล่าสุดและแสดงผลตาราง Terminal
-npm run analyze:tokens
-
-# ระบุโมเดลเฉพาะเจาะจง (เช่น Claude 3.7 Sonnet, Gemini 2.5 Pro, GPT-4o)
-npm run analyze:tokens -- --model claude-3-7-sonnet
-
-# ส่งออกผลลัพธ์เป็น JSON สำหรับรายงานและ CI Analytics
-npm run analyze:tokens -- --json</code></pre>
-        `
-      },
-      {
-        id: 'token-dimensions',
-        title: 'มิติการแจกแจง Token 4 มิติ และการคำนวณ Cache Savings',
-        contentHtml: `
-          <p>เครื่องมือจะแจกแจง Token ออกเป็น 4 ประเภทที่มีอัตราค่าบริการต่างกันอย่างสิ้นเชิง:</p>
-          <table>
-            <thead><tr><th>ประเภท Token</th><th>น้ำหนักต้นทุน</th><th>คำอธิบาย</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Fresh Input Tokens</strong></td><td>1.0x (เต็มราคา)</td><td>Token คำสั่งและบริบทใหม่ที่ยังไม่มีใน Cache</td></tr>
-              <tr><td><strong>Prompt Cache Write</strong></td><td>1.25x (ค่าเขียน)</td><td>Token ข้อมูลที่ถูกนำไปสร้างแคชสำหรับการใช้งานซ้ำ</td></tr>
-              <tr><td><strong>Prompt Cache Read (Hits)</strong></td><td>0.1x (ประหยัด 90%)</td><td>Token ที่อ่านซ้ำจากแคชเดิม ช่วยประหยัดต้นทุนมหาศาล</td></tr>
-              <tr><td><strong>Output Tokens</strong></td><td>5.0x</td><td>Token ผลลัพธ์ที่ AI สร้างและส่งกลับมา</td></tr>
-            </tbody>
-          </table>
-          <div class="note-box">
-            <strong>Prompt Caching ROI:</strong> DevFlow ออกแบบให้มีอัตรา <strong>Cache Hit Rate สูงกว่า 85%</strong> ด้วยสถาปัตยกรรม Living Source of Truth (<code>project-overview.md</code>) และ Task-Isolated Contexts ทำให้ประหยัดค่าใช้จ่าย API ได้ถึง 60–80% เมื่อเทียบกับการส่งไฟล์ทั้งหมดซ้ำๆ
-          </div>
-        `
-      },
-      {
-        id: 'pricing-catalog',
-        title: 'ตารางราคาเปรียบเทียบใน Model Pricing Catalog',
-        contentHtml: `
-          <table>
-            <thead><tr><th>โมเดล</th><th>Input ($/M)</th><th>Cache Write ($/M)</th><th>Cache Read ($/M)</th><th>Output ($/M)</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Claude 3.7 / 3.5 Sonnet</strong></td><td>$3.00</td><td>$3.75</td><td>$0.30</td><td>$15.00</td></tr>
-              <tr><td><strong>Claude 3.5 Haiku</strong></td><td>$0.80</td><td>$1.00</td><td>$0.08</td><td>$4.00</td></tr>
-              <tr><td><strong>Gemini 2.5 Pro</strong></td><td>$1.25</td><td>$1.25</td><td>$0.31</td><td>$5.00</td></tr>
-              <tr><td><strong>Gemini 2.5 Flash</strong></td><td>$0.075</td><td>$0.075</td><td>$0.01875</td><td>$0.30</td></tr>
-              <tr><td><strong>GPT-4o</strong></td><td>$2.50</td><td>$2.50</td><td>$1.25</td><td>$10.00</td></tr>
-              <tr><td><strong>DeepSeek V3</strong></td><td>$0.14</td><td>$0.14</td><td>$0.014</td><td>$0.28</td></tr>
-            </tbody>
-          </table>
         `
       }
     ]

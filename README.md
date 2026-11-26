@@ -658,22 +658,11 @@ npx nexus-devflow status [--json]
 npx nexus-devflow check-gate [--strict]
 npx nexus-devflow hook install pre-commit
 
-# Model Context Protocol (MCP) Server Hub (11 Native Tools)
+# Model Context Protocol (MCP) Server Hub (6 Core Tools)
 npx nexus-devflow mcp
 
-# Just-In-Time (JIT) Dynamic Context Slicing
-npx nexus-devflow slice --stage implement
-
-# Git Diff Drift Detection & Reconciler
-npx nexus-devflow drift
-npx nexus-devflow reconcile
-
-# Multi-Agent Swarm Visualizer & Code Graph Inspector
-npx nexus-devflow swarm
-npx nexus-devflow graph --file src/index.ts
-
-# Generate Standalone Interactive HTML Delivery Report
-npm run report:html -- 054-optimize-dashboard-snapshot-latency
+# Deterministic 3-layer code verification gate
+npx nexus-devflow verify-layers [--json]
 
 # Check and Apply Framework Updates
 npx nexus-devflow update [--dry-run]
@@ -681,49 +670,16 @@ npx nexus-devflow update [--dry-run]
 
 ---
 
-## Recommended Third-Party Skills & Extensions
+## Optional Third-Party Skills & Extensions
 
 Nexus-DevFlow ships with **15 Core Skills** out-of-the-box, packing high-leverage engineering capabilities (such as Scrutiny & Prove-by-Run review in `/audit`, 4 Debug Mantras & 8-block post-mortem in `/debug`, and executive summaries in `/devflow-help --exec` / `/complete`).
 
-For specialized visual architecture and offensive security workflows, you can extend your setup with community skills using `nexus-devflow skill add`:
-
-> [!TIP]
-> **🚀 Install Recommended Skills in One Command**:
-> ```bash
-> npx nexus-devflow skill add --recommended
-> ```
-> **🔄 Update All Recommended Skills to Latest Version**:
-> ```bash
-> npx nexus-devflow skill update --recommended
-> ```
+For specialized visual architecture or diagrams, you can install individual bundled Extras interactively during `npx nexus-devflow` or add community skills by Git URL using `nexus-devflow skill add <name-or-git-url>`:
 
 | Skill | Category | Description | Installation Command |
 | :--- | :--- | :--- | :--- |
-| **code-modernization** | Migration / Legacy | Guided legacy codebase modernization (Assessment, Business Rules mining, Uplift, Rewrite & Byte-for-byte Proof) | `npx nexus-devflow skill add code-modernization` |
 | **archify** | Visual Architecture | Interactive, verifiable technical diagrams (Architecture, Dataflow, Sequence, Lifecycle HTML/SVG with motion & dark theme) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
 | **diagram-design** | Editorial Diagram | 39 editorial visual diagram templates (Business, Quadrants, Timelines, Mindmaps, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
-| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide indexed to HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
-| **ponytail** | YAGNI / Bloat-Cut | Senior dev mode: cuts ~54% unnecessary bloat and dependencies via YAGNI ladder | `npx nexus-devflow skill add https://github.com/DietrichGebert/ponytail` |
-
-### 🚀 Code Modernization Guide (`/code-modernization`, `/modernize`)
-
-Nexus-DevFlow integrates Anthropic's **Official Code Modernization Plugin** with an intelligent **Master Front-Door Orchestrator** and **Thai-First Artifact Standards**:
-
-```bash
-# 1. Install skill
-npx nexus-devflow skill add code-modernization
-
-# 2. Invoke Master Orchestrator in your AI IDE
-/code-modernization
-# or
-/modernize
-```
-
-- **Thai-First Artifact Standards (`th`)**: All generated markdown files under `analysis/<system>/` (`INTENT.md`, `PREFLIGHT.md`, `ASSESSMENT.md`, `MAP.md`, `RULES.md`, `BRIEF.md`, `PROOF.md`, `DELTA_CATALOG.md`, `SECURITY_FINDINGS.md`) default to **Thai** for clear stakeholder and team communication.
-- **Auto-Translation for Existing Artifacts**: If existing English artifacts are detected, invoking `/modernize` offers to translate and update them to Thai, automatically refreshing `REPORT.html`.
-- **Two-Stage Governance**:
-  1. *Phase 0–5 (Discovery & Business Rules Mining)*: Handled by `code-modernization` reverse-engineering tools.
-  2. *Phase 6–8 (Build & Proof)*: Slices `BRIEF.md` into `devflow/build-plan.md` and hands off execution to **DevFlow Core Lifecycle** (`/feature` ➔ `/implement` with strict TDD ➔ `/check` with `proof_pack.py` ➔ `/complete`).
 
 > [!NOTE]
 > **Consolidated Built-in Capabilities**: Skills from 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) are now directly integrated into Core Skills (`/debug`, `/audit`, `/devflow-help --exec`, `/complete`) in Nexus-DevFlow, available immediately without separate installation.

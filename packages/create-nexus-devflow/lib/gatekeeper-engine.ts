@@ -2,7 +2,6 @@ import path from "node:path";
 import { readProjectStatus, type ProjectStatus } from "./status.js";
 import { readFindings, type FindingsSummary } from "./findings.js";
 import { readProjectConfig, type ProjectConfig } from "./project-config.js";
-import { detectGitDrift, reconcileState, type GitDriftReport, type ReconcileResult } from "./drift-reconciler.js";
 import {
   inspectRunEvidence,
   type EvidenceArtifact,
@@ -20,7 +19,6 @@ export interface GateEvaluateOptions {
   allowUnverified?: boolean;
   requireEvidenceArtifacts?: boolean;
   status?: ProjectStatus;
-  drift?: GitDriftReport;
   workflow?: "regular" | "continuous";
 }
 
@@ -39,11 +37,6 @@ export interface GateReport {
     stage2CodeQuality: boolean;
   };
   summary: string;
-}
-
-export interface ReconcileOptions {
-  autoAddUndocumented?: boolean;
-  healStage?: boolean;
 }
 
 import { ActiveContextEngine, type ActiveTaskContext } from "./active-context-engine.js";
@@ -88,20 +81,6 @@ export class GatekeeperEngine {
    */
   public async getFindings(): Promise<FindingsSummary> {
     return readFindings(this.projectRoot);
-  }
-
-  /**
-   * Evaluates Git drift between modified repository files and active living spec.
-   */
-  public async getDrift(branch?: string): Promise<GitDriftReport> {
-    return detectGitDrift(this.projectRoot, branch);
-  }
-
-  /**
-   * Automatically reconciles undocumented modified files and heals stage drift.
-   */
-  public async reconcile(options: ReconcileOptions = { autoAddUndocumented: true, healStage: true }): Promise<ReconcileResult> {
-    return reconcileState(this.projectRoot, options);
   }
 
   /**
@@ -190,21 +169,6 @@ export class GatekeeperEngine {
     }
 
 
-
-    // Git drift detection
-    try {
-      const drift = options.drift || (await this.getDrift());
-      if (drift.hasDrift && drift.undocumentedFiles.length > 0) {
-        const driftMsg = `Warning (git_drift): ${drift.undocumentedFiles.length} file(s) modified in git without being listed in living spec.`;
-        if (isStrict && gatePolicy.check === "always") {
-          violations.push(driftMsg);
-        } else {
-          warnings.push(driftMsg);
-        }
-      }
-    } catch {
-      // ignore drift detection errors in isolated test environments
-    }
 
     const evidence = await inspectRunEvidence(this.projectRoot, status.currentWork.runId);
     for (const evidenceWarning of evidence.warnings) {

@@ -86,19 +86,8 @@ npx @jakkrichm/create-nexus-devflow status [--json]
 npx @jakkrichm/create-nexus-devflow check-gate [--strict]
 npx @jakkrichm/create-nexus-devflow hook install pre-commit
 
-# Model Context Protocol (MCP) Server Hub (11 Native Tools)
+# Model Context Protocol (MCP) Server Hub (6 Core Tools)
 npx @jakkrichm/create-nexus-devflow mcp
-
-# Just-In-Time (JIT) Dynamic Context Slicing
-npx @jakkrichm/create-nexus-devflow slice --stage implement
-
-# Git Diff Drift Detection & Reconciler
-npx @jakkrichm/create-nexus-devflow drift
-npx @jakkrichm/create-nexus-devflow reconcile
-
-# Multi-Agent Swarm & Code Graph
-npx @jakkrichm/create-nexus-devflow swarm
-npx @jakkrichm/create-nexus-devflow graph --file src/index.ts
 
 # Deterministic 3-layer code verification gate
 npx @jakkrichm/create-nexus-devflow verify-layers [--json]
@@ -116,14 +105,9 @@ npx nexus-devflow skill add rollback          # History-preserving feature rever
 npx nexus-devflow skill add convert-any-to-md # Bulk Office/PDF to Markdown converter
 npx nexus-devflow skill add vendor            # Local git repo ingestion & wrapper synthesis
 
-# Recommended Third-Party Companion Skills
-npx nexus-devflow skill add --recommended
-npx nexus-devflow skill update --recommended
-npx nexus-devflow skill add code-modernization # Guided legacy modernization, rule mining & proof
+# Optional Community Visual Skills
 npx nexus-devflow skill add archify        # Architecture & trace diagrams
 npx nexus-devflow skill add diagram-design # 39 visual charts & presentation templates
-npx nexus-devflow skill add bughunter      # Security audit & vulnerability testing
-npx nexus-devflow skill add ponytail       # YAGNI optimizer - cuts code bloat & tokens
 ```
 
 ---

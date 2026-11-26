@@ -47,5 +47,5 @@
 
 ### Prompt Caching Rate & Billed-Equivalent Cost
 - **Definition**: ดัชนีวัดประสิทธิภาพการใช้ Token ของ AI Coding Agent โดยแยกแยะระหว่าง Fresh Input Tokens, Cache Creation (Write), Cache Read (Prompt Caching Hits), และ Output Tokens เพื่อคำนวณต้นทุนจริง (USD) และ % ส่วนลดที่ประหยัดได้จาก Prompt Caching
-- **Constraints**: วิเคราะห์ผ่าน `scripts/analyze-token-usage.ts` และคำสั่ง `npm run analyze:tokens`
+- **Constraints**: ควบคุมขนาด prompt และบริบทผ่าน `scripts/check-skill-budgets.mjs` และคำสั่ง `npm run check:budgets`
 - **Aliases / Related**: Token Economics, Cost Units, Cache Hit Rate

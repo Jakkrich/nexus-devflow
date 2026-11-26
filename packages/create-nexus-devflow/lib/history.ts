@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { parseCompatibilityFeature } from "./current-work.js";
 import { createStyle } from "./ui.js";
-import { DeliveryLifecycleEngine, HistoryLedger } from "./delivery-lifecycle-engine.js";
 
 type HistoryItemType = "feature" | "fix" | "rollback";
 
@@ -317,8 +316,6 @@ export {
   parseHistoryLedger,
   readHistory,
   readHistoryLedger,
-  DeliveryLifecycleEngine,
-  HistoryLedger,
 };
 
 export type { HistoryItem, HistoryItemType, HistorySummary };

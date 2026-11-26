@@ -656,22 +656,11 @@ npx nexus-devflow status [--json]
 npx nexus-devflow check-gate [--strict]
 npx nexus-devflow hook install pre-commit
 
-# Model Context Protocol (MCP) Server Hub (11 Tools มาตรฐาน)
+# Model Context Protocol (MCP) Server Hub (6 Core Tools มาตรฐาน)
 npx nexus-devflow mcp
 
-# Just-In-Time (JIT) Dynamic Context Slicing (ตัดเฉพาะ Context ที่จำเป็น)
-npx nexus-devflow slice --stage implement
-
-# ตรวจจับและกู้คืนความคลาดเคลื่อนของไฟล์ใน Git (Git Drift Reconciler)
-npx nexus-devflow drift
-npx nexus-devflow reconcile
-
-# ดูแผนผัง Multi-Agent Swarm และ Code Graph
-npx nexus-devflow swarm
-npx nexus-devflow graph --file src/index.ts
-
-# สร้างรายงานสรุปผลงานแบบ Standalone HTML Report
-npm run report:html -- 054-optimize-dashboard-snapshot-latency
+# ตรวจสอบคุณภาพ 3 ชั้น (Lint/Typecheck -> Tests -> Formal)
+npx nexus-devflow verify-layers [--json]
 
 # ตรวจสอบและอัปเดตเวอร์ชัน DevFlow พร้อมระบบ Backup ปลอดภัย
 npx nexus-devflow update [--dry-run]
@@ -679,28 +668,16 @@ npx nexus-devflow update [--dry-run]
 
 ---
 
-## สกิลเสริมและส่วนขยายแนะนำ (Recommended Third-Party Skills & Extensions)
+## สกิลเสริมและส่วนขยาย (Optional Skills & Extensions)
 
 Nexus-DevFlow ติดตั้งมาพร้อมกับ **15 Core Skills** มาตรฐานที่ควบรวมคุณค่าวิศวกรรมระดับสูง (เช่น Scrutiny & Prove-by-Run ใน `/audit`, 4 Debug Mantras & Post-Mortem 8 บล็อกใน `/debug`, และ Executive Summary ใน `/devflow-help --exec` / `/complete`) ไว้ในตัวแล้ว
 
-สำหรับงานเฉพาะทางด้านงานสถาปัตยกรรมภาพและความปลอดภัยเชิงรุก คุณสามารถติดตั้งสกิลเสริมจาก Community เพิ่มเติมได้ด้วยคำสั่ง `nexus-devflow skill add`:
-
-> [!TIP]
-> **🚀 ติดตั้ง Recommended Skills ในคำสั่งเดียว**:
-> ```bash
-> npx nexus-devflow skill add --recommended
-> ```
-> **🔄 อัปเดต Recommended Skills ทั้งหมดให้เป็นเวอร์ชันล่าสุดจาก Upstream Git**:
-> ```bash
-> npx nexus-devflow skill update --recommended
-> ```
+สำหรับงานด้านสถาปัตยกรรมภาพและแผนภาพเพิ่มเติม คุณสามารถเลือกติดตั้ง bundled Extras ได้ใน Step `[3/3]` ของ `npx nexus-devflow` หรือเพิ่มสกิลจากภายนอกด้วย `nexus-devflow skill add <name-or-git-url>`:
 
 | สกิล (Skill) | หมวดหมู่ | หน้าที่และความสามารถ | คำสั่งติดตั้ง |
 | :--- | :--- | :--- | :--- |
-| **code-modernization** | Migration / Legacy | ระบบนำทางการปรับปรุง Legacy Codebase (ประเมินระบบ, ขุด Business Rules, Uplift, Rewrite และพิสูจน์ผล Byte-for-byte) | `npx nexus-devflow skill add code-modernization` |
 | **archify** | Visual Architecture | แผนผังสถาปัตยกรรมระบบ Interactive HTML (สลับธีม Dark/Light, มี Animation, ตรวจสอบความถูกต้องได้) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
 | **diagram-design** | Editorial Diagram | ไดอะแกรมสาย Editorial 39 รูปแบบ (Business Quadrant, Timeline, Mindmap, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
-| **bughunter** | Security / Pentest | Offensive security orchestrator & bug hunting guide อิง HackerOne patterns | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
 
 > [!NOTE]
 > **Consolidated Built-in Capabilities**: ทักษะจาก 9arm-skills (`debug-mantra`, `scrutinize`, `post-mortem`, `management-talk`) ได้รับการผสานรวมเป็นส่วนหนึ่งของ Core Skills (`/debug`, `/audit`, `/devflow-help --exec`, `/complete`) ใน Nexus-DevFlow เรียบร้อยแล้ว จึงพร้อมใช้งานทันทีโดยไม่ต้องติดตั้งเพิ่มเติม
@@ -775,64 +752,6 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
         ├── rollbacks/         (ประวัติการย้อนคืนฟีเจอร์)
         └── HISTORY.md         (ตารางประวัติการส่งมอบงานทั้งหมด)
 ```
-
----
-
-## สกิลเสริมแนะนำจากภายนอก (Recommended Third-Party Skills)
-
-Nexus-DevFlow มาพร้อมกับตัวจัดการสกิลที่สามารถดึงขุมพลังจาก Third-party Repositories ภายนอกเข้ามาเป็นส่วนขยายของระบบได้อย่างปลอดภัย:
-
-```bash
-# ติดตั้งสกิลแนะนำทั้งหมดในคำสั่งเดียว
-npx nexus-devflow skill add --recommended
-
-# หรืออัปเดตสกิลแนะนำทั้งหมดเป็นเวอร์ชันล่าสุด
-npx nexus-devflow skill update --recommended
-```
-
-| สกิล (Skill) | หมวดหมู่ | คำอธิบาย | คำสั่งติดตั้ง |
-| :--- | :--- | :--- | :--- |
-| **code-modernization** | Migration / Legacy | ปรับปรุงระบบเก่าขนาดใหญ่ (Assessment, Mining Rules, Uplift, Rewrite & Proof) พร้อมมาตรฐานเอกสารภาษาไทย | `npx nexus-devflow skill add code-modernization` |
-| **archify** | Visual Architecture | ไดอะแกรมสถาปัตยกรรมเชิงโต้ตอบแบบ Interactive HTML/SVG (Dataflow, Sequence, State) | `npx nexus-devflow skill add https://github.com/tt-a1i/archify` |
-| **diagram-design** | Editorial Diagram | เทมเพลตแผนภาพระดับบรรณาธิการ 39 แบบ (Business, Quadrants, Timelines, Radar) | `npx nexus-devflow skill add https://github.com/cathrynlavery/diagram-design` |
-| **bughunter** | Security / Pentest | เครื่องมือนำทางการทดสอบเจาะระบบและค้นหาช่องโหว่ความปลอดภัย 83 Vulnerability Classes | `npx nexus-devflow skill add https://github.com/elementalsouls/Claude-BugHunter` |
-| **ponytail** | YAGNI / Bloat-Cut | Senior Dev Mode ตัดโค้ดส่วนเกินและลด Token ได้กว่า 50% ด้วยบันได YAGNI | `npx nexus-devflow skill add https://github.com/DietrichGebert/ponytail` |
-
----
-
-### 🚀 คู่มือการใช้งาน Code Modernization (`/code-modernization`, `/modernize`)
-
-Nexus-DevFlow นำพลังของ Official Code Modernization Plugin จาก Anthropic มาติดตั้งในโปรเจกต์ของคุณ โดยมี **Master Front-Door Orchestrator** ทำหน้าที่นำทาง State Machine อัตโนมัติ ผู้ใช้ไม่ต้องจำคำสั่งย่อยทั้ง 13 คำสั่งด้วยตนเอง
-
-#### 1. การติดตั้งและเรียกใช้งาน
-```bash
-# 1. ติดตั้งสกิลเข้าสู่โปรเจกต์
-npx nexus-devflow skill add code-modernization
-
-# 2. เรียกใช้งานใน AI IDE (Antigravity, Claude Code, Codex, ฯลฯ)
-/code-modernization
-# หรือใช้ชื่อย่อ
-/modernize
-```
-
-#### 2. มาตรฐานเอกสารภาษาไทย (Thai First Artifacts)
-เอกสารวิเคราะห์และรายงานทั้งหมดใน `analysis/<system>/` จะถูกสร้างขึ้นเป็น **ภาษาไทย** ทั้งหมดโดยค่าเริ่มต้น:
-- `INTENT.md`: เป้าหมาย ขอบเขต และข้อจำกัดของระบบ
-- `PREFLIGHT.md`: การตรวจความพร้อมของสภาพแวดล้อม และ 5 คำถามมนุษย์
-- `ASSESSMENT.md`: การประเมินโค้ดเบสเดิม หนี้ทางเทคนิค และจุดเสี่ยง
-- `MAP.md`: แผนผังสถาปัตยกรรมและกระแสข้อมูล
-- `RULES.md`: กฎทางธุรกิจพร้อมเงื่อนไข `Given / When / Then` และคำอธิบายภาษาไทย
-- `BRIEF.md`: แผนงาน Modernization แบบแบ่งระยะ (Phased Plan)
-- `PROOF.md`: ผลการพิสูจน์ความถูกต้องและความเทียบเคียงแบบ Byte-for-byte
-- `DELTA_CATALOG.md`: แคตตาล็อกความแตกต่างระหว่างพฤติกรรมเดิมกับใหม่
-- `SECURITY_FINDINGS.md`: รายการข้อตรวจพบความปลอดภัยและแนวทางแก้ไข
-- `REPORT.html`: แดชบอร์ดสรุปผลภาพรวมแบบ Interactive ในไฟล์เดียว
-
-> 💡 **การแปลงไฟล์เดิมอัตโนมัติ**: หากโปรเจกต์มี Artifacts เดิมที่เป็นภาษาอังกฤษอยู่แล้ว เมื่อสั่ง `/modernize` ระบบจะเสนอแปลและปรับปรุงเนื้อหาเป็นภาษาไทยให้อัตโนมัติ พร้อมรัน `build_report.py` เพื่อให้ `REPORT.html` กลายเป็นภาษาไทยทันที
-
-#### 3. การควบคุมขั้นตอนการแก้ไขโค้ดด้วย DevFlow (Two-Stage Governance)
-- **Phase 0–5 (Discovery & Rules Mining)**: `code-modernization` จะทำการขุดคุ้ยโค้ดเดิม สกัดกฎธุรกิจ และเขียนแผนงาน `BRIEF.md`
-- **Phase 6–8 (Build & Proof)**: เมื่อแผนงานผ่านการอนุมัติ แผนจะถูกย่อยเข้า `devflow/build-plan.md` และส่งต่อให้ **DevFlow Core Lifecycle** ควบคุมการแก้โค้ดจริงทีละโมดูลด้วย `/feature` ➔ `/implement` (TDD Red-Green-Refactor บน Git Branch แยก) ➔ `/check` (รัน Unit Tests ควบคู่กับ `proof_pack.py` / `compare.py`) ➔ `/complete` เพื่อความปลอดภัยสูงสุด
 
 ---
 

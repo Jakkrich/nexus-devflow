@@ -13,12 +13,10 @@ import {
   SA_ROLE_SKILLS,
   FULL_ROLE_SKILLS,
   getSkillsForRole,
-  type RecommendedSkillPreset,
   type ExtrasSkillPreset,
   getExtrasSkillCatalog,
   resolveBundledExtrasSkillDir,
   KNOWN_SKILL_ALIASES,
-  RECOMMENDED_THIRD_PARTY_SKILLS,
   parseSkillFrontmatter,
   type DiscoveredSkill,
   discoverSkillsInDirectory,
@@ -41,27 +39,16 @@ export {
   SA_ROLE_SKILLS,
   FULL_ROLE_SKILLS,
   getSkillsForRole,
-  type RecommendedSkillPreset,
   type ExtrasSkillPreset,
   getExtrasSkillCatalog,
   resolveBundledExtrasSkillDir,
   KNOWN_SKILL_ALIASES,
-  RECOMMENDED_THIRD_PARTY_SKILLS,
   parseSkillFrontmatter,
   type DiscoveredSkill,
   discoverSkillsInDirectory,
   findSkillSourceDirectory,
   isAntivirusSafeVendorPath
 };
-
-export interface InstallRecommendedOptions {
-  presets?: readonly RecommendedSkillPreset[];
-  force?: boolean;
-}
-
-export interface UpdateRecommendedOptions {
-  presets?: readonly RecommendedSkillPreset[];
-}
 
 function getEngine(projectRoot: string): SkillRegistryEngine {
   return new SkillRegistryEngine(projectRoot);
@@ -106,66 +93,6 @@ export async function updateThirdPartySkills(
   options?: { force?: boolean }
 ): Promise<SkillUpdateResult> {
   return getEngine(projectRoot).update(targetSkillName, options);
-}
-
-export async function installRecommendedSkills(
-  projectRoot: string,
-  options?: InstallRecommendedOptions
-): Promise<SkillDetail[]> {
-  const presets = options?.presets || RECOMMENDED_THIRD_PARTY_SKILLS;
-  const installedList: SkillDetail[] = [];
-
-  for (const preset of presets) {
-    const result = await installThirdPartySkill(projectRoot, preset.source, {
-      name: preset.name,
-      all: preset.all,
-      force: options?.force ?? true
-    });
-
-    if (Array.isArray(result)) {
-      installedList.push(...result);
-    } else {
-      installedList.push(result);
-    }
-  }
-
-  return installedList;
-}
-
-export async function updateRecommendedSkills(
-  projectRoot: string,
-  options?: UpdateRecommendedOptions
-): Promise<SkillUpdateResult> {
-  const presets = options?.presets || RECOMMENDED_THIRD_PARTY_SKILLS;
-  const updatedSkills: SkillDetail[] = [];
-  const failedSkills: Array<{ name: string; reason: string }> = [];
-
-  for (const preset of presets) {
-    try {
-      const result = await installThirdPartySkill(projectRoot, preset.source, {
-        name: preset.name,
-        all: preset.all,
-        force: true
-      });
-
-      if (Array.isArray(result)) {
-        updatedSkills.push(...result);
-      } else {
-        updatedSkills.push(result);
-      }
-    } catch (err: unknown) {
-      failedSkills.push({
-        name: preset.name || preset.source,
-        reason: err instanceof Error ? err.message : String(err)
-      });
-    }
-  }
-
-  return {
-    updatedSkills,
-    failedSkills,
-    totalUpdated: updatedSkills.length
-  };
 }
 
 export interface InstallExtrasOptions {

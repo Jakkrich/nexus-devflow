@@ -3,7 +3,7 @@
 > **Document Type**: Project Plan (User-Owned)
 > **Purpose**: แหล่งความจริงหลัก (Single Source of Truth) สำหรับวิสัยทัศน์ผลิตภัณฑ์ สถาปัตยกรรมระบบ ขอบเขตการทำงาน และข้อกำหนดทางเทคนิค
 > **Workflow**: เมื่อแผนนี้หรือ `build-plan.md` เปลี่ยน ให้รัน `/overview` เพื่อประมวลผลเป็น `project-overview.md`
-> **Planning Baseline**: 2026-11-17 — สังเคราะห์จาก README, ROADMAP, ประวัติการส่งมอบ และสถานะ Feature 115d
+> **Planning Baseline**: 2026-11-26 — อัปเดตให้ตรงกับสถานะการส่งมอบ DevFlow v3.0.0 และการตัดคิวงานที่ซ้ำซ้อนออก
 
 ---
 
@@ -50,11 +50,11 @@ Nexus-DevFlow ช่วย solo developer, ทีมขนาดเล็ก แ
 
 ### Near-Term Outcomes
 
-1. ปิดการปรับโครงสร้าง Core Skills ชุด 115 ให้สมบูรณ์ รวมข้อสังเกต P2 และ release/migration notes
-2. ทำ installer/update ให้พิสูจน์ได้บน Windows, macOS และ Linux รวม Node.js รุ่นที่รองรับ
-3. ทำ routing evals ภาษาไทยและอังกฤษให้แม่นยำ พร้อมป้องกัน false activation และคำสั่ง legacy รั่วกลับมา
-4. ป้องกัน project plan และ overview แบบ placeholder ไม่ให้กลายเป็น source of truth ที่ดูเหมือนพร้อมใช้งาน
-5. รองรับการอ่านสถานะและส่งต่อบริบทผ่าน CLI/MCP และ IDE sidecar แบบ read-only หลัง contract และ cross-platform foundation นิ่งแล้ว
+1. รักษามาตรฐานคุณภาพของ DevFlow `3.0.0` (`npm run check`, `npm run check:release`, routing evals และ update-resilience proof) ให้พร้อมสำหรับการส่งมอบและ publish
+2. คงความเข้ากันได้ของ installer/update บน Windows, macOS และ Linux ผ่าน CI matrix (`Node 20/22/24`) โดยไม่เขียนทับไฟล์ของผู้ใช้
+3. คงความแม่นยำของ bilingual routing (`th`/`en`) และป้องกันคำสั่ง legacy รั่วกลับเข้าเอกสารหรือ skills
+4. บังคับใช้ overview integrity gate เพื่อป้องกันแผนแบบ placeholder หรือ `project-overview.md` ที่ล้าสมัย
+5. คงพื้นผิว CLI และ MCP JSON แบบเบา (Lite-first) ให้แต่ละ IDE/AI agent เรียกใช้งานได้โดยตรงโดยไม่ต้องดูแล UI หรือ sidecar แยก
 
 ### Explicit Non-Goals for This Horizon
 
@@ -104,7 +104,7 @@ Nexus-DevFlow ช่วย solo developer, ทีมขนาดเล็ก แ
 
 ## 7. Planning Assumptions & Open Decisions
 
-- **Assumption**: ลำดับถัดไปยังคงอยู่ใน Phase 2: Ecosystem ตาม `ROADMAP.md`; Core package คงความเบาแบบ CLI/MCP-first โดยไม่มี Web Dashboard/Studio UI
-- **Assumption**: รองรับ Node.js ตาม `package.json` ปัจจุบันก่อน และใช้ CI matrix เป็นหลักฐานข้ามแพลตฟอร์ม
-- **Open Decision**: เวอร์ชันที่รวมการยุบคำสั่งเดิมควรเป็น v2 minor ต่อ หรือ v3 major ต้องตัดสินในงาน release baseline
-- **Open Decision**: IDE sidecar ระยะแรกจะรองรับ editor ใดบ้าง ต้องเลือกจาก usage evidence ก่อนเริ่ม implementation
+- **Assumption**: คิวงานหลักสำหรับ `v3.0.0` ส่งมอบครบแล้ว; Core package คงความเบาแบบ CLI/MCP-first โดยไม่มี Web Dashboard, Studio UI หรือ IDE sidecar ในแพ็กเกจหลัก
+- **Assumption**: รองรับ Node.js `>=18.17` และใช้ GitHub Actions CI matrix (`ubuntu`, `windows`, `macos` บน Node `20/22/24`) เป็นหลักฐานข้ามแพลตฟอร์ม
+- **Governance**: การ merge เข้า `main`, การติด Git tag และการ `npm publish` ต้องได้รับอนุมัติจาก maintainer แยกต่างหากเสมอ
+- **Future Gate**: งานใหม่หลัง `3.0.0` จะเข้าคิวใน `build-plan.md` เมื่อมีหลักฐานปัญหาจากการใช้งานจริงเท่านั้น (Proportional Engineering / YAGNI)

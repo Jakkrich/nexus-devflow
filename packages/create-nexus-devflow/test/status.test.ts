@@ -198,15 +198,17 @@ test("parseArgs parses idea, findings, doctor, and archive subcommands correctly
   assert.equal(hookUninstall.command, "hook");
   assert.equal(hookUninstall.subcommandAction, "uninstall");
 
-  const skillAddRec = parseArgs(["skill", "add", "--recommended"]);
-  assert.equal(skillAddRec.command, "skill");
-  assert.equal(skillAddRec.subcommandAction, "add");
-  assert.equal(skillAddRec.recommended, true);
+  const skillAddExtra = parseArgs(["skill", "add", "browseros-neo"]);
+  assert.equal(skillAddExtra.command, "skill");
+  assert.equal(skillAddExtra.subcommandAction, "add");
+  assert.equal(skillAddExtra.subcommandArg, "browseros-neo");
 
-  const skillUpdateRec = parseArgs(["skill", "update", "--recommended"]);
-  assert.equal(skillUpdateRec.command, "skill");
-  assert.equal(skillUpdateRec.subcommandAction, "update");
-  assert.equal(skillUpdateRec.recommended, true);
+  assert.throws(() => parseArgs(["swarm"]), /has been removed/);
+  assert.throws(() => parseArgs(["graph"]), /has been removed/);
+  assert.throws(() => parseArgs(["slice"]), /has been removed/);
+  assert.throws(() => parseArgs(["drift"]), /has been removed/);
+  assert.throws(() => parseArgs(["reconcile"]), /has been removed/);
+  assert.throws(() => parseArgs(["skill", "add", "--recommended"]), /has been removed/);
 
   const skillRestore = parseArgs(["skill", "restore"]);
   assert.equal(skillRestore.command, "skill");

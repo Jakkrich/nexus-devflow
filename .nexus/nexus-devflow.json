@@ -51,15 +51,6 @@
   "installedAt": "2026-08-17T00:00:00.000Z",
   "thirdPartySkills": [
     {
-      "name": "bughunter",
-      "source": "https://github.com/elementalsouls/Claude-BugHunter",
-      "version": "2.0.0",
-      "description": "Offensive security orchestrator & bug hunting guide",
-      "installedAt": "2026-09-07T10:34:42.292Z",
-      "type": "compound-knowledge",
-      "referencePath": "devflow/.vendor/bughunter"
-    },
-    {
       "name": "archify",
       "source": "https://github.com/tt-a1i/archify",
       "version": "2.17",
@@ -74,15 +65,6 @@
       "description": "Create branded architecture, IT current-state, flowchart, sequence, state machine, ER/data model, timeline, swimlane, quadrant, radar/spider, polar chart (polar/radial lollipop), loop/flywheel, nested, tree, org chart, layer stack, Venn, pyramid/funnel, treemap, bar, line, Gantt and scatter charts, high-level, process, medallion, data flow, DP integration, DP security matrix, Sankey, fishbone, Wardley map, kanban, user journey, deployment, dependency graph, UML class, story map, or database schema diagrams as standalone HTML/SVG/PNG. Redraw .drawio/.drawio.png/.drawio.svg or Mermaid .mmd sources at a chosen size/detail; onboard brand tokens from a website; add semantic patterns, callouts, accessible motion, or sketchy/hand-drawn styling.",
       "installedAt": "2026-09-08T15:17:13.193Z",
       "type": "git"
-    },
-    {
-      "name": "ponytail",
-      "source": "https://github.com/DietrichGebert/ponytail",
-      "version": "4.9.0",
-      "description": "Lazy senior dev mode for AI agents - cuts code bloat & tokens via YAGNI ladder",
-      "installedAt": "2026-09-09T21:22:00.000Z",
-      "type": "compound-knowledge",
-      "referencePath": "devflow/.vendor/ponytail"
     }
   ]
 }

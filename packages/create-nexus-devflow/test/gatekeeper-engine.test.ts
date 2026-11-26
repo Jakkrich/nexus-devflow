@@ -111,35 +111,6 @@ test("GatekeeperEngine: reads and respects qualityGates policy from devflow/conf
   }
 });
 
-test("GatekeeperEngine: delegates getDrift and reconcile cleanly", async () => {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-engine-drift-"));
-
-  try {
-    await setupDevFlowTestProject(tempDir);
-    const taskDir = path.join(tempDir, "devflow", "context", "001-test");
-    await fs.mkdir(taskDir, { recursive: true });
-    await fs.writeFile(
-      path.join(taskDir, "spec.md"),
-      `# 📐 [001-test] Test Feature\n\n## 2. Plan & Test Strategy\n- **Files to Modify/Create**:\n  - \`packages/lib/planned.ts\`\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n`
-    );
-    await fs.writeFile(
-      path.join(taskDir, "stage.md"),
-      "# Current Stage\n\n- Active Running ID: `001-test`\n- Track: `fast`\n- Current Stage: `implement`\n"
-    );
-
-    const engine = new GatekeeperEngine(tempDir);
-    const drift = await engine.getDrift();
-    assert.equal(drift.specFiles.length, 1);
-    assert.ok(drift.specFiles.includes("packages/lib/planned.ts"));
-
-    const reconcileResult = await engine.reconcile();
-    assert.ok(reconcileResult);
-    assert.equal(typeof reconcileResult.reconciled, "boolean");
-  } finally {
-    await fs.rm(tempDir, { recursive: true, force: true });
-  }
-});
-
 test("GatekeeperEngine: Prove-by-Run distinguishes unverified hypotheses from reproduced blockers and inspects evidence packets", async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-engine-evidence-"));
 

@@ -42,12 +42,6 @@ describe("Contract Verification & Hygiene Scan Commands", () => {
     await fs.rm(tempDir, { recursive: true, force: true });
   });
 
-  it("checks skill descriptions across .agents/skills", async () => {
-    const result = await runTooling("skill-descriptions", ["--check"]);
-    assert.equal(result.ok, true);
-    assert.ok(result.data);
-  });
-
   it("rejects active instructions using retired v2/v3 commands while allowing migration notes", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "doc-contract-retired-"));
     try {

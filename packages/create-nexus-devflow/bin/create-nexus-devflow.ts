@@ -40,21 +40,6 @@ import {
   runCheckPipeline
 } from "../lib/check-pipeline.js";
 import {
-  sliceContextForStage,
-  type SliceStage
-} from "../lib/context-slicer.js";
-import {
-  detectGitDrift,
-  reconcileState
-} from "../lib/drift-reconciler.js";
-import {
-  buildCodeGraph,
-  calculateBlastRadius
-} from "../lib/code-graph.js";
-import {
-  generateSwarmPlan
-} from "../lib/swarm-orchestrator.js";
-import {
   startMcpServer
 } from "../lib/mcp.js";
 import {
@@ -86,12 +71,10 @@ import {
   type DevFlowRole,
   getExtrasSkillCatalog,
   installExtrasSkills,
-  installRecommendedSkills,
   installThirdPartySkill,
   listInstalledSkills,
   removeThirdPartySkill,
   syncSkills,
-  updateRecommendedSkills,
   updateThirdPartySkills
 } from "../lib/skill-manager.js";
 
@@ -118,18 +101,10 @@ interface CliOptions {
   | "verify-layers"
   | "hook"
   | "mcp"
-  | "slice"
-  | "drift"
-  | "reconcile"
-  | "swarm"
-  | "graph"
   | "skill"
   | "skills";
   subcommandAction?: "add" | "list" | "resolve" | "stats" | "install" | "uninstall" | "remove" | "sync" | "update" | "upgrade" | "restore";
   subcommandArg?: string;
-  graphFile?: string;
-  sliceStage?: SliceStage;
-  maxTokens?: number;
   hookType?: GitHookType;
   ideaTitle?: string;
   findingStatus?: FindingStatus;
@@ -140,7 +115,6 @@ interface CliOptions {
   findingRemediation?: string;
   skillName?: string;
   installAllSkills: boolean;
-  recommended: boolean;
   blockersOnly: boolean;
   fix: boolean;
   statsOnly: boolean;
@@ -174,123 +148,6 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
 
   if (options.command === "mcp") {
     startMcpServer(targetDir);
-    return;
-  }
-
-  if (options.command === "slice") {
-    const stage = options.sliceStage || "implement";
-    const sliceResult = await sliceContextForStage(targetDir, stage, { maxTokens: options.maxTokens });
-    if (options.json) {
-      console.log(JSON.stringify(sliceResult, null, 2));
-    } else {
-      console.log(`[DevFlow JIT Context Slice - Stage: ${sliceResult.stage}]`);
-      console.log(`Estimated Tokens: ~${sliceResult.estimatedTokens} (Reduction: ~${sliceResult.reductionPercentage}%)\n`);
-      console.log(sliceResult.content);
-    }
-    return;
-  }
-
-  if (options.command === "drift") {
-    const drift = await detectGitDrift(targetDir);
-    if (options.json) {
-      console.log(JSON.stringify(drift, null, 2));
-    } else {
-      const style = createStyle();
-      if (!drift.hasDrift && drift.phantomFiles.length === 0) {
-        console.log(style.green("✔ No Git drift detected. Living spec is in sync with repository files."));
-      } else {
-        console.log(style.bold(style.yellow("Git Drift Detection Report:")));
-        if (drift.undocumentedFiles.length > 0) {
-          console.log(style.red(`  - Undocumented modified files (${drift.undocumentedFiles.length}):`));
-          for (const f of drift.undocumentedFiles) {
-            console.log(`    ✖ ${f}`);
-          }
-        }
-        if (drift.phantomFiles.length > 0) {
-          console.log(style.yellow(`  - Phantom spec files (not modified in git) (${drift.phantomFiles.length}):`));
-          for (const f of drift.phantomFiles) {
-            console.log(`    ⚠ ${f}`);
-          }
-        }
-        if (drift.stageDrift.isDrifted) {
-          console.log(style.yellow(`  - Stage alignment drift: Active branch '${drift.stageDrift.activeBranch}' vs Stage ID '${drift.stageDrift.stageRunningId}'`));
-        }
-        console.log(`\nRun ${style.cyan("nexus-devflow reconcile --fix")} to auto-heal spec alignment.`);
-      }
-    }
-    return;
-  }
-
-  if (options.command === "reconcile") {
-    const result = await reconcileState(targetDir, {
-      autoAddUndocumented: options.fix,
-      healStage: options.fix
-    });
-    if (options.json) {
-      console.log(JSON.stringify(result, null, 2));
-    } else {
-      const style = createStyle();
-      if (result.reconciled) {
-        console.log(style.green(`✔ ${result.message}`));
-        if (result.addedFiles.length > 0) {
-          for (const f of result.addedFiles) {
-            console.log(style.dim(`  + Added to spec: ${f}`));
-          }
-        }
-      } else {
-        console.log(style.dim(result.message));
-      }
-    }
-    return;
-  }
-
-  if (options.command === "swarm") {
-    const plan = await generateSwarmPlan(targetDir);
-    if (options.json) {
-      console.log(JSON.stringify(plan, null, 2));
-    } else {
-      const style = createStyle();
-      console.log(style.bold(style.cyan(`[Nexus-DevFlow Multi-Agent Swarm Matrix: ${plan.runId}]`)));
-      console.log(`Title: ${plan.title} (Strategy: ${plan.executionStrategy})\n`);
-      for (const t of plan.tasks) {
-        const roleIcon = t.role === "coder" ? "👨‍💻" : t.role === "qa" ? "🕵️" : t.role === "security" ? "🛡️" : "👑";
-        console.log(`  ${roleIcon} ${style.bold(t.id)}: ${t.title} [Role: ${t.role.toUpperCase()}]`);
-        console.log(style.dim(`     Context: ${t.requiredContext.join(", ")}`));
-        console.log(style.dim(`     Verify : ${t.verificationCriterion}`));
-      }
-    }
-    return;
-  }
-
-  if (options.command === "graph") {
-    const graph = await buildCodeGraph(targetDir);
-    if (options.graphFile) {
-      const blast = calculateBlastRadius(graph, options.graphFile);
-      if (options.json) {
-        console.log(JSON.stringify(blast, null, 2));
-      } else {
-        const style = createStyle();
-        console.log(style.bold(style.cyan(`[Code Graph Blast Radius: ${blast.targetFile}]`)));
-        console.log(`Impact Score: ${blast.impactScore} | Total Affected: ${blast.totalAffected} files\n`);
-        if (blast.directDependents.length > 0) {
-          console.log(style.bold("Direct Dependents:"));
-          for (const d of blast.directDependents) console.log(`  - ${d}`);
-        }
-        if (blast.transitiveDependents.length > 0) {
-          console.log(style.bold("Transitive Dependents:"));
-          for (const t of blast.transitiveDependents) console.log(`  ~ ${t}`);
-        }
-      }
-    } else {
-      if (options.json) {
-        console.log(JSON.stringify({ totalFiles: graph.totalFiles, totalEdges: graph.totalEdges, files: Object.keys(graph.nodes) }, null, 2));
-      } else {
-        const style = createStyle();
-        console.log(style.bold(style.cyan("[Nexus-DevFlow Semantic Code Graph]")));
-        console.log(`Indexed Files: ${graph.totalFiles} | Total Dependency Edges: ${graph.totalEdges}`);
-        console.log(`\nRun ${style.yellow("nexus-devflow graph --file <path>")} to calculate Blast Radius.`);
-      }
-    }
     return;
   }
 
@@ -373,32 +230,9 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
   if (options.command === "skill" || options.command === "skills") {
     const style = createStyle(shouldUseColor());
     if (options.subcommandAction === "add" || options.subcommandAction === "install") {
-      if (options.recommended || options.subcommandArg === "recommended" || options.subcommandArg === "--recommended") {
-        const spinner = createSpinner("Installing recommended third-party skills...").start();
-        try {
-          const detail = await installRecommendedSkills(targetDir, { force: options.force });
-          spinner.succeed(`Successfully installed ${detail.length} recommended third-party skill(s): ${detail.map((d) => style.bold(style.cyan(d.name))).join(", ")}`);
-          if (options.json) {
-            console.log(JSON.stringify(detail, null, 2));
-          } else {
-            for (const d of detail) {
-              console.log(`\n  ${style.dim("Name    :")} ${style.bold(d.name)}`);
-              if (d.version) console.log(`  ${style.dim("Version :")} ${d.version}`);
-              if (d.description) console.log(`  ${style.dim("Desc    :")} ${d.description}`);
-              console.log(`  ${style.dim("Adapters:")} ${d.adapters.join(", ")}`);
-            }
-            console.log(`\n${style.green("✔")} All ${detail.length} recommended skills ready to use! Invocable as /<skill-name> in workflows.`);
-          }
-        } catch (err: unknown) {
-          spinner.fail(`Failed to install recommended skills: ${err instanceof Error ? err.message : String(err)}`);
-          process.exitCode = 1;
-        }
-        return;
-      }
-
       const source = options.subcommandArg || "";
       if (!source.trim()) {
-        throw new Error("Skill source (Git URL or local directory) is required. Example: nexus-devflow skill add https://github.com/cathrynlavery/diagram-design or nexus-devflow skill add --recommended");
+        throw new Error("Skill source (bundled extra name, Git URL, or local directory) is required. Example: nexus-devflow skill add browseros-neo");
       }
       const spinner = createSpinner(`Installing skill from ${source}...`).start();
       try {
@@ -473,38 +307,6 @@ async function main(args: readonly string[] = process.argv.slice(2)): Promise<vo
     }
 
     if (options.subcommandAction === "update" || options.subcommandAction === "upgrade" || options.subcommandAction === "restore") {
-      if (options.recommended || options.subcommandArg === "recommended" || options.subcommandArg === "--recommended") {
-        const spinner = createSpinner("Updating recommended third-party skills from latest upstream repositories...").start();
-        try {
-          const result = await updateRecommendedSkills(targetDir);
-          if (result.totalUpdated === 0 && result.failedSkills.length === 0) {
-            spinner.succeed("No recommended third-party skills installed to update.");
-          } else if (result.failedSkills.length > 0 && result.totalUpdated === 0) {
-            spinner.fail(`Failed to update recommended skills: ${result.failedSkills.map((f) => `${f.name} (${f.reason})`).join(", ")}`);
-            process.exitCode = 1;
-          } else {
-            spinner.succeed(`Successfully updated ${result.totalUpdated} recommended third-party skill(s): ${result.updatedSkills.map((s) => style.bold(style.cyan(s.name))).join(", ")}`);
-            if (options.json) {
-              console.log(JSON.stringify(result, null, 2));
-            } else {
-              for (const d of result.updatedSkills) {
-                console.log(`  ✔ ${style.bold(style.cyan(d.name))} ${d.version ? `v${d.version}` : ""}`);
-              }
-              if (result.failedSkills.length > 0) {
-                console.log(`\n${style.yellow("⚠")} Failed to update (${result.failedSkills.length}):`);
-                for (const f of result.failedSkills) {
-                  console.log(`  ✖ ${style.red(f.name)}: ${f.reason}`);
-                }
-              }
-            }
-          }
-        } catch (err: unknown) {
-          spinner.fail(`Failed to update recommended skills: ${err instanceof Error ? err.message : String(err)}`);
-          process.exitCode = 1;
-        }
-        return;
-      }
-
       const targetSkill = options.subcommandArg || (options.installAllSkills ? "--all" : undefined);
       const isAllTarget = !targetSkill || targetSkill === "--all" || targetSkill.toLowerCase() === "all";
       const spinner = createSpinner(!isAllTarget ? `Updating skill ${targetSkill}...` : "Updating third-party skills...").start();
@@ -851,9 +653,6 @@ function parseArgs(args: readonly string[]): CliOptions {
   let command: CliOptions["command"] = "install";
   let subcommandAction: CliOptions["subcommandAction"];
   let subcommandArg: string | undefined;
-  let graphFile: string | undefined;
-  let sliceStage: SliceStage | undefined;
-  let maxTokens: number | undefined;
   let hookType: GitHookType | undefined;
   let ideaTitle: string | undefined;
   let findingStatus: FindingStatus | undefined;
@@ -864,7 +663,6 @@ function parseArgs(args: readonly string[]): CliOptions {
   let findingRemediation: string | undefined;
   let skillName: string | undefined;
   let installAllSkills = false;
-  let recommended = false;
   let blockersOnly = false;
   let fix = false;
   let statsOnly = false;
@@ -925,11 +723,6 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
-    if (arg === "--file" && args[i + 1] && !args[i + 1].startsWith("-")) {
-      graphFile = args[i + 1];
-      i++;
-      continue;
-    }
     if (arg === "--fix") {
       fix = true;
       continue;
@@ -1043,30 +836,6 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
-    if (arg === "--stage") {
-      const next = args[++i];
-      if (!next) throw new Error(`${arg} requires a stage name`);
-      sliceStage = next.toLowerCase() as SliceStage;
-      continue;
-    }
-
-    if (arg.startsWith("--stage=")) {
-      sliceStage = arg.slice("--stage=".length).toLowerCase() as SliceStage;
-      continue;
-    }
-
-    if (arg === "--max-tokens") {
-      const next = args[++i];
-      if (!next || isNaN(Number(next))) throw new Error(`${arg} requires a number`);
-      maxTokens = Number(next);
-      continue;
-    }
-
-    if (arg.startsWith("--max-tokens=")) {
-      maxTokens = Number(arg.slice("--max-tokens=".length));
-      continue;
-    }
-
     if (arg === "--target" || arg === "-t") {
       const next = args[++i];
       if (!next) {
@@ -1169,20 +938,10 @@ function parseArgs(args: readonly string[]): CliOptions {
       continue;
     }
 
-    if (arg === "--recommended") {
-      recommended = true;
-      continue;
-    }
-
-    if (arg === "--preset=recommended") {
-      recommended = true;
-      continue;
-    }
-
-    if (arg === "--preset" && args[i + 1] === "recommended") {
-      recommended = true;
-      i++;
-      continue;
+    if (arg === "--recommended" || arg === "--preset=recommended" || (arg === "--preset" && args[i + 1] === "recommended")) {
+      throw new Error(
+        "Flag `--recommended` has been removed in v3.0. Run `npx nexus-devflow` for interactive Extras selection or `npx nexus-devflow skill add <name-or-git-url>`."
+      );
     }
 
     if (arg === "--all" || arg === "--both") {
@@ -1223,26 +982,6 @@ function parseArgs(args: readonly string[]): CliOptions {
     } else if (first === "mcp") {
       command = "mcp";
       target = positional[1] || target || ".";
-    } else if (first === "slice") {
-      command = "slice";
-      if (positional[1] && !positional[1].startsWith("-")) {
-        sliceStage = positional[1].toLowerCase() as SliceStage;
-        target = positional[2] || target || ".";
-      } else {
-        target = positional[1] || target || ".";
-      }
-    } else if (first === "drift") {
-      command = "drift";
-      target = positional[1] || target || ".";
-    } else if (first === "reconcile") {
-      command = "reconcile";
-      target = positional[1] || target || ".";
-    } else if (first === "swarm") {
-      command = "swarm";
-      target = positional[1] || target || ".";
-    } else if (first === "graph") {
-      command = "graph";
-      target = positional[1] || target || ".";
     } else if (first === "check-gate") {
       command = "check-gate";
       target = positional[1] || target || ".";
@@ -1270,7 +1009,16 @@ function parseArgs(args: readonly string[]): CliOptions {
         subcommandAction = "install";
         target = positional[1] || target || ".";
       }
-    } else if (first === "dashboard" || first === "ui" || first === "studio") {
+    } else if (
+      first === "dashboard" ||
+      first === "ui" ||
+      first === "studio" ||
+      first === "slice" ||
+      first === "drift" ||
+      first === "reconcile" ||
+      first === "swarm" ||
+      first === "graph"
+    ) {
       throw new Error(`Command \`${first}\` has been removed. Use \`nexus-devflow status\` or \`nexus-devflow mcp\` instead.`);
     } else if (first === "update") {
       command = "update";
@@ -1339,17 +1087,22 @@ function parseArgs(args: readonly string[]): CliOptions {
       command = "skill";
       if (positional[1] === "add" || positional[1] === "install") {
         subcommandAction = "add";
-        if (positional[2] === "--recommended" || positional[2] === "recommended") {
-          recommended = true;
-          target = positional[3] || target || ".";
-        } else {
-          subcommandArg = positional[2];
-          target = positional[3] || target || ".";
+        if (positional[2] === "recommended") {
+          throw new Error(
+            "Flag `--recommended` has been removed in v3.0. Run `npx nexus-devflow` for interactive Extras selection or `npx nexus-devflow skill add <name-or-git-url>`."
+          );
         }
-      } else if (positional[1] === "add-recommended" || positional[1] === "install-recommended") {
-        subcommandAction = "add";
-        recommended = true;
-        target = positional[2] || target || ".";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
+      } else if (
+        positional[1] === "add-recommended" ||
+        positional[1] === "install-recommended" ||
+        positional[1] === "update-recommended" ||
+        positional[1] === "upgrade-recommended"
+      ) {
+        throw new Error(
+          "Command `skill " + positional[1] + "` has been removed in v3.0. Run `npx nexus-devflow` for interactive Extras selection or `npx nexus-devflow skill add <name-or-git-url>`."
+        );
       } else if (positional[1] === "remove" || positional[1] === "uninstall" || positional[1] === "rm") {
         subcommandAction = "remove";
         subcommandArg = positional[2];
@@ -1359,29 +1112,25 @@ function parseArgs(args: readonly string[]): CliOptions {
         target = positional[2] || target || ".";
       } else if (positional[1] === "update" || positional[1] === "upgrade" || positional[1] === "restore") {
         subcommandAction = positional[1] === "restore" ? "restore" : "update";
-        if (positional[2] === "--recommended" || positional[2] === "recommended") {
-          recommended = true;
-          target = positional[3] || target || ".";
-        } else {
-          subcommandArg = positional[2];
-          target = positional[3] || target || ".";
+        if (positional[2] === "recommended") {
+          throw new Error(
+            "Flag `--recommended` has been removed in v3.0. Run `npx nexus-devflow skill update [name|--all]` instead."
+          );
         }
-      } else if (positional[1] === "update-recommended" || positional[1] === "upgrade-recommended") {
-        subcommandAction = "update";
-        recommended = true;
-        target = positional[2] || target || ".";
+        subcommandArg = positional[2];
+        target = positional[3] || target || ".";
       } else if (positional[1] === "list" || positional[1] === "ls") {
         subcommandAction = "list";
         target = positional[2] || target || ".";
       } else if (positional[1] && !positional[1].startsWith("-")) {
-        subcommandAction = "add";
         if (positional[1] === "recommended") {
-          recommended = true;
-          target = positional[2] || target || ".";
-        } else {
-          subcommandArg = positional[1];
-          target = positional[2] || target || ".";
+          throw new Error(
+            "Flag `--recommended` has been removed in v3.0. Run `npx nexus-devflow` for interactive Extras selection or `npx nexus-devflow skill add <name-or-git-url>`."
+          );
         }
+        subcommandAction = "add";
+        subcommandArg = positional[1];
+        target = positional[2] || target || ".";
       } else {
         subcommandAction = "list";
         target = positional[1] || target || ".";
@@ -1398,9 +1147,6 @@ function parseArgs(args: readonly string[]): CliOptions {
     command,
     subcommandAction,
     subcommandArg,
-    graphFile,
-    sliceStage,
-    maxTokens,
     hookType,
     ideaTitle,
     findingStatus,
@@ -1411,7 +1157,6 @@ function parseArgs(args: readonly string[]): CliOptions {
     findingRemediation,
     skillName,
     installAllSkills,
-    recommended,
     blockersOnly,
     fix,
     statsOnly,
@@ -1457,10 +1202,6 @@ ${style.bold("Advanced, CI & AI Tooling Commands:")}
   ${style.brightCyan("skill")} [list|add|update|restore|remove|sync]  Manage bundled extras & third-party skills
   ${style.brightCyan("archive")} [list|stats] [--json]              Inspect completed runs in devflow/history/
   ${style.brightCyan("mcp")} [target-dir]                           Run MCP JSON-RPC stdio server for AI agents
-  ${style.brightCyan("slice")} [--stage <stage>] [--max-tokens <n>] Generate JIT stage context slice
-  ${style.brightCyan("drift")} / ${style.brightCyan("reconcile")} [--fix] [--json]          Check or reconcile Git diff vs living spec
-  ${style.brightCyan("swarm")} [target-dir] [--json]                Generate multi-agent swarm plan from active spec
-  ${style.brightCyan("graph")} [target-dir] [--file <path>] [--json] Inspect dependency graph & blast radius
 
 ${style.bold("Common Options:")}
   ${style.cyan("--adapter <name>")}   Target adapters: codex, antigravity, claude, copilot, opencode, both, all
@@ -1474,10 +1215,9 @@ ${style.bold("Common Options:")}
   ${style.cyan("--help, -h")}         Show help screen
 
 ${style.bold("Command-Specific Options:")}
-  ${style.cyan("--recommended")}      Install or update recommended community skills (archify, diagram-design, bughunter, ponytail)
   ${style.cyan("--name <skill>")}     Target a specific skill in a multi-skill repo (${style.cyan("--all")} installs all)
   ${style.cyan("--strict")}           Strict check-gate mode (fails unverified active runs)
-  ${style.cyan("--fix")}              Repair missing workspace files (doctor) or heal spec drift (reconcile)
+  ${style.cyan("--fix")}              Repair missing workspace files (doctor)
   ${style.cyan("--title <text>")}     Custom title for idea add
   ${style.cyan("--severity, -s")}     Finding severity: P0, P1, P2, P3 (default: P2)
   ${style.cyan("--status <name>")}    Status when resolving a finding (default: closed)
