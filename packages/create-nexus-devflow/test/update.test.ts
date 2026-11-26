@@ -557,3 +557,93 @@ test("AC-2: installer matrix supports all 5 adapters (antigravity, claude, codex
   }
 });
 
+test("AC-2: applyPreparedUpdate installs and updates cleanly inside space + Thai Unicode target paths", async () => {
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-unicode-path-"));
+  const targetDir = path.join(tempRoot, "โปรเจกต์ ทดสอบ v3");
+  const unicodeTemplate = path.join(tempRoot, "template");
+  try {
+    await fs.mkdir(path.join(unicodeTemplate, ".agents", "skills", "feature"), { recursive: true });
+    await fs.mkdir(path.join(unicodeTemplate, "devflow", "context"), { recursive: true });
+    await fs.writeFile(
+      path.join(unicodeTemplate, ".agents", "skills", "feature", "SKILL.md"),
+      "# feature\n",
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(unicodeTemplate, "AGENTS.md"),
+      "# Project\n\n## Proportional engineering\n\nBuild for established requirements, not hypothetical scale.\n",
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(unicodeTemplate, "devflow", "config.json"),
+      JSON.stringify({ schemaVersion: 1, execution: { engine: "auto" } }, null, 2),
+      "utf8"
+    );
+
+    await fs.writeFile(
+      path.join(unicodeTemplate, "devflow", "build-plan.md"),
+      "# Build Plan\n\n- [ ] 1. **Starter** - template\n",
+      "utf8"
+    );
+
+    const initialPrep = await prepareUpdate({
+      targetDir,
+      templateRoot: unicodeTemplate,
+      version: "2.21.0",
+      adapter: "codex",
+      role: "full"
+    });
+    await applyPreparedUpdate(initialPrep);
+
+    const customTaskSpec = "# Feature: งานภาษาไทย\n\n- Keep intact inside space + Unicode path.\n";
+    await fs.mkdir(path.join(targetDir, "devflow", "context", "001-งานไทย"), { recursive: true });
+    await fs.writeFile(path.join(targetDir, "devflow", "context", "001-งานไทย", "spec.md"), customTaskSpec, "utf8");
+    await fs.writeFile(
+      path.join(unicodeTemplate, ".agents", "skills", "feature", "SKILL.md"),
+      "# feature v3\n",
+      "utf8"
+    );
+
+    const upgradePrep = await prepareUpdate({
+      targetDir,
+      templateRoot: unicodeTemplate,
+      version: "3.0.0",
+      adapter: "codex",
+      role: "full"
+    });
+    assert.equal(upgradePrep.conflictList.length, 0);
+    await applyPreparedUpdate(upgradePrep);
+
+    const preservedSpec = await fs.readFile(
+      path.join(targetDir, "devflow", "context", "001-งานไทย", "spec.md"),
+      "utf8"
+    );
+    assert.equal(preservedSpec, customTaskSpec, "User task spec must survive update in space/Unicode directory");
+    const updatedFeature = await fs.readFile(
+      path.join(targetDir, ".agents", "skills", "feature", "SKILL.md"),
+      "utf8"
+    );
+    assert.equal(updatedFeature, "# feature v3\n");
+
+    // Also verify customized managed files are flagged in conflictList (never silently overwritten)
+    await fs.writeFile(
+      path.join(targetDir, "devflow", "build-plan.md"),
+      "# Build Plan\n\n- [ ] 1. **Customized Plan** - keep\n",
+      "utf8"
+    );
+    const conflictPrep = await prepareUpdate({
+      targetDir,
+      templateRoot: unicodeTemplate,
+      version: "3.0.0",
+      adapter: "codex",
+      role: "full"
+    });
+    assert.ok(conflictPrep.conflictList.some((c) => c.relativePath === "devflow/build-plan.md" && c.reason === "customized"));
+
+    const doctorReport = await runDoctor(targetDir, { pstackProbePaths: [] });
+    assert.equal(doctorReport.failCount, 0);
+  } finally {
+    await fs.rm(tempRoot, { recursive: true, force: true });
+  }
+});
+

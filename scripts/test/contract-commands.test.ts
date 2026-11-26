@@ -47,4 +47,73 @@ describe("Contract Verification & Hygiene Scan Commands", () => {
     assert.equal(result.ok, true);
     assert.ok(result.data);
   });
+
+  it("rejects active instructions using retired v2/v3 commands while allowing migration notes", async () => {
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "doc-contract-retired-"));
+    try {
+      await fs.mkdir(path.join(tempDir, ".agents", "skills", "demo"), { recursive: true });
+      await fs.writeFile(
+        path.join(tempDir, "README.md"),
+        [
+          "# Demo",
+          "- Migrating from v2 to v3: `/autopilot` and `/devflow-status` were retired.",
+          "- Run `/devflow-status` to check progress."
+        ].join("\n"),
+        "utf8"
+      );
+      await fs.writeFile(
+        path.join(tempDir, ".agents", "skills", "demo", "SKILL.md"),
+        "---\nname: demo\ndescription: \"Use for /autopilot alias.\"\n---\nRun `npx nexus-devflow dashboard`.\n",
+        "utf8"
+      );
+
+      await assert.rejects(
+        async () => {
+          await runTooling("scan-doc-contract", [], { projectRoot: tempDir });
+        },
+        (error: unknown) => {
+          assert.ok(error instanceof ToolingError);
+          assert.equal(error.exitCode, 1);
+          assert.match(error.message, /\/devflow-status/);
+          assert.match(error.message, /nexus-devflow dashboard/);
+          assert.doesNotMatch(error.message, /Migrating from v2 to v3/);
+          return true;
+        }
+      );
+
+      // F-01 regression: bare /devflow-mode co-mention or unframed description: must still reject retired commands
+      await fs.writeFile(
+        path.join(tempDir, ".agents", "skills", "demo", "SKILL.md"),
+        "---\nname: demo\ndescription: \"Run /autopilot\"\n---\nUse /devflow-mode or /autopilot.\n",
+        "utf8"
+      );
+      await assert.rejects(
+        async () => {
+          await runTooling("scan-doc-contract", [], { projectRoot: tempDir });
+        },
+        (error: unknown) => {
+          assert.ok(error instanceof ToolingError);
+          assert.equal(error.exitCode, 1);
+          assert.match(error.message, /\/autopilot/);
+          return true;
+        }
+      );
+
+      // Clean active lines while retaining migration & alias lines -> must pass
+      await fs.writeFile(
+        path.join(tempDir, "README.md"),
+        "# Demo\n- Legacy aliases (`/autopilot`, `/devflow-status`, `/devflow-doctor`) route to `/devflow-mode` and `/devflow-help`.\n",
+        "utf8"
+      );
+      await fs.writeFile(
+        path.join(tempDir, ".agents", "skills", "demo", "SKILL.md"),
+        "---\nname: demo\ndescription: \"Use for /autopilot alias.\"\n---\nRun `npx nexus-devflow status`.\n",
+        "utf8"
+      );
+      const cleanResult = await runTooling("scan-doc-contract", [], { projectRoot: tempDir });
+      assert.equal(cleanResult.ok, true);
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
 });

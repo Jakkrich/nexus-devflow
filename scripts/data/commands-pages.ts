@@ -886,7 +886,7 @@ npx nexus-devflow skill add setup-tests
         `
       },
       {
-        id: 'autopilot-pipeline',
+        id: 'coordinator-pipeline',
         title: 'กระบวนการทำงานอัตโนมัติ (Coordinator Execution Pipeline)',
         contentHtml: `
           <ol>

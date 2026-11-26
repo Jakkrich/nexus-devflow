@@ -1,6 +1,6 @@
 ---
 name: devflow-mode
-description: "[devflow] Autonomous Coordinator mode, playbook router (feature, bug-fix, refactor, discovery), isolated subagent orchestration, and continuous build-plan queue (--all / --max / --merge) with pstack integration. Use for /devflow-mode, /autopilot, or /continuous."
+description: "[devflow] Autonomous Coordinator mode, playbook router (feature, bug-fix, refactor, discovery), isolated subagent orchestration, and continuous build-plan queue (--all / --max / --merge) with pstack integration. Use for /devflow-mode (legacy aliases: /autopilot, /continuous)."
 argument-hint: "[<task | build-plan-id | resume | fix \"...\">] [--all] [--max <N>] [--merge]"
 ---
 

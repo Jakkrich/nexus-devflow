@@ -24,11 +24,13 @@ npx nexus-devflow
 npx nexus-devflow status
 
 # 3. Install an individual bundled Opt-in Extras skill anytime (offline-safe)
-npx nexus-devflow skill add setup-tests   # or ci, release, rollback, vendor, convert-any-to-md, browseros-neo
+npx nexus-devflow skill add setup-tests   # or ci, release, rollback, vendor, convert-any-to-md, browseros-neo, verify-harness
 
 # 4. Or install recommended third-party companion skills (archify, diagram-design, bughunter, ponytail, code-modernization)
 npx nexus-devflow skill add --recommended
 ```
+
+> **Migrating from v2 to v3:** Run `npx nexus-devflow update` (or `--dry-run` first) to prune retired `/autopilot` and `/devflow` skills, install `/devflow-mode` (Coordinator + 5 Playbooks) and `/devflow-help` (Interactive Guide, Status & Doctor), and preserve existing `devflow/config.json`, plans, and history.
 
 > **For existing users:** Backward-compatible invocation via `npm create @jakkrichm/nexus-devflow` and `npx @jakkrichm/create-nexus-devflow` is fully supported.
 

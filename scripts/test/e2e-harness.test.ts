@@ -98,6 +98,21 @@ describe("E2E Harness AgentAdapter registry", () => {
       "gemini-2.5-pro",
       "Run devflow-mode"
     ]);
+
+    const copilotAdapter = getAgentAdapter("copilot");
+    assert.equal(copilotAdapter.executable, "copilot");
+    assert.equal(copilotAdapter.installerFlag, "--copilot");
+    const copilotInv = copilotAdapter.buildInvocation({
+      prompt: "Run check",
+      maxTurns: 8,
+      model: "gpt-5",
+      workspace
+    });
+    assert.ok(copilotInv.args.includes("-p"));
+    assert.ok(copilotInv.args.includes("--allow-all"));
+    assert.ok(copilotInv.args.includes("--no-ask-user"));
+    assert.ok(copilotInv.args.includes("--no-remote"));
+    assert.ok(copilotInv.args.includes("gpt-5"));
   });
 
   it("parses JSON and JSONL transcripts without leaking prompt text", () => {
@@ -123,6 +138,13 @@ describe("E2E Harness AgentAdapter registry", () => {
     ].join("\n");
     const codexParsed = getAgentAdapter("codex").parseTranscript(codexStdout);
     assert.equal(codexParsed.resultText, "PASS: Hello, world!");
+
+    const opencodeStdout = [
+      JSON.stringify({ type: "step_start", timestamp: 1 }),
+      JSON.stringify({ type: "text", text: "PASS: OpenCode output verified" })
+    ].join("\n");
+    const opencodeParsed = getAgentAdapter("opencode").parseTranscript(opencodeStdout);
+    assert.equal(opencodeParsed.resultText, "PASS: OpenCode output verified");
 
     assert.deepEqual(parseJsonOrJsonl('{"a":1}\n{"b":2}\n'), [{ a: 1 }, { b: 2 }]);
   });

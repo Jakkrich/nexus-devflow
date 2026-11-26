@@ -217,10 +217,13 @@ async function ensureEmptyDirectories(): Promise<void> {
   await fs.writeFile(path.join(decDir, ".gitkeep"), "", "utf8");
 }
 
-async function sanitizeStarterFiles(): Promise<void> {
+export async function sanitizeStarterFiles(
+  targetTemplateRoot: string = templateRoot,
+  sourceRepoRoot: string = repoRoot
+): Promise<void> {
   // 1. Sanitize AGENTS.md
   try {
-    const agentsPath = path.join(templateRoot, "AGENTS.md");
+    const agentsPath = path.join(targetTemplateRoot, "AGENTS.md");
     let agentsContent = await fs.readFile(agentsPath, "utf8");
     const maintainerCommandsRegex = /## Verification & Commands[\s\S]*$/;
     const starterCommands = `## Commands
@@ -257,7 +260,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 - **\`fixes/\`**: Bug fixes, hotfixes, regressions, security patches, and performance optimizations.
 - **\`rollbacks/\`**: Safe feature reversal and rollback execution records.
 `;
-  await fs.writeFile(path.join(templateRoot, "devflow", "history", "HISTORY.md"), starterHistory, "utf8");
+  await fs.mkdir(path.join(targetTemplateRoot, "devflow", "history"), { recursive: true });
+  await fs.writeFile(path.join(targetTemplateRoot, "devflow", "history", "HISTORY.md"), starterHistory, "utf8");
 
   // 3. Clean Starter ideas.md
   const starterIdeas = `# 🔮 Centralized Idea Inbox & Backlog
@@ -280,7 +284,8 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 | ID | Title | Shipped In | Completed Date |
 | :--- | :--- | :--- | :--- |
 `;
-  await fs.writeFile(path.join(templateRoot, "devflow", "ideas.md"), starterIdeas, "utf8");
+  await fs.mkdir(path.join(targetTemplateRoot, "devflow"), { recursive: true });
+  await fs.writeFile(path.join(targetTemplateRoot, "devflow", "ideas.md"), starterIdeas, "utf8");
 
   // 4. Clean Starter project-overview.md
   const starterOverview = `# Project Overview & Source of Truth
@@ -311,7 +316,20 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 ## 7. Known Architectural Focus Areas
 - Upcoming priorities, refactoring targets, or known technical considerations.
 `;
-  await fs.writeFile(path.join(templateRoot, "devflow", "context", "project-overview.md"), starterOverview, "utf8");
+  await fs.mkdir(path.join(targetTemplateRoot, "devflow", "context"), { recursive: true });
+  await fs.writeFile(path.join(targetTemplateRoot, "devflow", "context", "project-overview.md"), starterOverview, "utf8");
+
+  // 5. Replace maintainer project-plan.md & build-plan.md with clean reference starter templates
+  const starterPlanPairs: ReadonlyArray<readonly [string, string]> = [
+    ["project-plan-template.md", "project-plan.md"],
+    ["build-plan-template.md", "build-plan.md"]
+  ];
+  for (const [refName, targetName] of starterPlanPairs) {
+    const srcPath = path.join(sourceRepoRoot, "devflow", "reference", refName);
+    const destPath = path.join(targetTemplateRoot, "devflow", targetName);
+    const content = await fs.readFile(srcPath, "utf8");
+    await fs.writeFile(destPath, content, "utf8");
+  }
 }
 
 async function copyExtrasSkills(trackedIndex: TrackedIndex | null): Promise<void> {

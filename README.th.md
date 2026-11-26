@@ -616,7 +616,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 
 ### การรีวิวอิสระและการตั้งค่า Quality Gates (`devflow/config.json`)
 
-DevFlow รองรับระบบ Quality Gates และการทำ Independent Code Review ที่กำหนดค่าได้ทั้งในโหมดปกติ, Autopilot และ Continuous Mode:
+DevFlow รองรับระบบ Quality Gates และการทำ Independent Code Review ที่กำหนดค่าได้ทั้งในโหมดปกติ, DevFlow Mode (`/devflow-mode`) และโหมดคิวต่อเนื่อง (Continuous):
 
 - **การกำหนดค่า Quality Gates (`qualityGates.regular` / `qualityGates.continuous`)**:
   - `independentReview`: ค่าเริ่มต้นคือ `when-sensitive` (เปิดใช้งานอัตโนมัติเมื่อแตะส่วนสำคัญ เช่น Auth, Payments, Encryption, Permissions, การลบข้อมูล หรือการเปลี่ยนแปลงที่มี Scope กว้าง) หรือเลือกตั้งเป็น `always` / `manual` ได้

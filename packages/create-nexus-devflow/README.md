@@ -15,7 +15,7 @@ Install and manage **Nexus-DevFlow** — an enterprise-grade agentic workflow la
 
 ## 🚀 Quick Installation
 
-Requires Node.js 18.17 or newer (package minimum Node.js 18). Run the installer in your target project directory:
+Requires Node.js 18.17 or newer. Run the installer in your target project directory:
 
 ```bash
 # Standard project initialization (Recommended)

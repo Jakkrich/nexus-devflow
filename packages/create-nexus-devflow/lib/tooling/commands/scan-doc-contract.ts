@@ -5,7 +5,12 @@ import { ToolingError } from "../types.js";
 
 const targets = [
   "README.md",
+  "README.th.md",
   "USAGE.md",
+  "packages/create-nexus-devflow/README.md",
+  "packages/nexus-devflow/README.md",
+  ".agents/skills",
+  ".claude/skills",
   "docs",
   ".agent/agents",
   ".agent/resources/schemas",
@@ -18,7 +23,12 @@ const allowedFiles = new Set([
   path.normalize(".agent/package.json"),
 ]);
 
-const forbiddenPatterns = [
+const retiredV3ExemptFiles = new Set([
+  path.normalize("docs/updates/index.html"),
+  path.normalize("docs/updating-devflow/index.html"),
+]);
+
+const legacyToolingPatterns = [
   {
     pattern: /\bnpx\s+agent-flow\b/,
     message: "Use repo-mode command examples (`npm.cmd run agent -- ...`) in canonical docs.",
@@ -28,6 +38,20 @@ const forbiddenPatterns = [
     message: "Task validation must use `npm.cmd run agent -- validate {ID}`.",
   },
 ];
+
+const retiredV3Patterns = [
+  {
+    pattern: /\b(?:npx\s+)?(?:create-)?nexus-devflow\s+(?:dashboard|studio|ui)\b/,
+    message: "Retired v2 UI command referenced; use `npx nexus-devflow status` or `mcp`.",
+  },
+  {
+    pattern: /(?:^|[\s`">])\/(?:autopilot|devflow-status|devflow-doctor)\b/,
+    message: "Retired v2 command (`/autopilot`, `/devflow-status`, `/devflow-doctor`) referenced outside migration/alias context; use `/devflow-mode` or `/devflow-help`.",
+  },
+];
+
+const RETIRED_CONTEXT_EXEMPTION =
+  /(?:^\s*\|\s*`?\/[^|]+\|\s*`?\/(?:devflow-help|devflow-mode)\b|legacy|alias|aliases|retired|migrat|replac|prun|formerly|deprecated|mapped|routing|history|คำสั่งเดิม|รองรับคำสั่งเดิม|แทน\s*\/|ถอด|ยุบ|ย้าย|ตารางนำทาง|ประวัติ)/i;
 
 function walk(projectRoot: string, target: string, files: string[] = []): string[] {
   const full = path.join(projectRoot, target);
@@ -40,7 +64,7 @@ function walk(projectRoot: string, target: string, files: string[] = []): string
     }
     return files;
   }
-  if (/\.(md|json|mjs|js|txt)$/i.test(target)) files.push(path.normalize(target));
+  if (/\.(md|html|json|mjs|js|txt)$/i.test(target)) files.push(path.normalize(target));
   return files;
 }
 
@@ -59,9 +83,17 @@ export const scanDocContractCommand: ToolCommand = {
       const content = fs.readFileSync(fullPath, "utf8");
       const lines = content.split(/\r?\n/);
       lines.forEach((line, index) => {
-        for (const rule of forbiddenPatterns) {
+        for (const rule of legacyToolingPatterns) {
           if (rule.pattern.test(line)) {
             hits.push(`${file}:${index + 1}: ${rule.message}`);
+          }
+        }
+        if (!retiredV3ExemptFiles.has(file) && !RETIRED_CONTEXT_EXEMPTION.test(line)) {
+          for (const rule of retiredV3Patterns) {
+            const match = rule.pattern.exec(line);
+            if (match) {
+              hits.push(`${file}:${index + 1}: ${rule.message} (found: "${match[0].trim()}")`);
+            }
           }
         }
       });

@@ -217,3 +217,60 @@ test("shouldCopyExtrasEntry bundles only tracked extras/skills files and package
   const gitignore = await fs.readFile(path.join(repoRoot, ".gitignore"), "utf8");
   assert.match(gitignore, /packages\/create-nexus-devflow\/extras\//);
 });
+
+test("sanitizeStarterFiles replaces maintainer plans with clean reference starter templates", async () => {
+  const mod = await import("../scripts/prepare-template.js");
+  assert.equal(typeof (mod as Record<string, unknown>).sanitizeStarterFiles, "function");
+  const sanitizeStarterFiles = (mod as {
+    sanitizeStarterFiles: (targetTemplateRoot?: string, sourceRepoRoot?: string) => Promise<void>;
+  }).sanitizeStarterFiles;
+
+  const tempTemplate = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-starter-plans-"));
+  try {
+    await fs.mkdir(path.join(tempTemplate, "devflow", "context"), { recursive: true });
+    await fs.mkdir(path.join(tempTemplate, "devflow", "history"), { recursive: true });
+    await fs.writeFile(
+      path.join(tempTemplate, "AGENTS.md"),
+      "# Project\n\n## Verification & Commands\n- internal\n",
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(tempTemplate, "devflow", "project-plan.md"),
+      await fs.readFile(path.join(repoRoot, "devflow", "project-plan.md"), "utf8"),
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(tempTemplate, "devflow", "build-plan.md"),
+      await fs.readFile(path.join(repoRoot, "devflow", "build-plan.md"), "utf8"),
+      "utf8"
+    );
+
+    await sanitizeStarterFiles(tempTemplate, repoRoot);
+
+    const refProjectPlan = await fs.readFile(
+      path.join(repoRoot, "devflow", "reference", "project-plan-template.md"),
+      "utf8"
+    );
+    const refBuildPlan = await fs.readFile(
+      path.join(repoRoot, "devflow", "reference", "build-plan-template.md"),
+      "utf8"
+    );
+    const outProjectPlan = await fs.readFile(path.join(tempTemplate, "devflow", "project-plan.md"), "utf8");
+    const outBuildPlan = await fs.readFile(path.join(tempTemplate, "devflow", "build-plan.md"), "utf8");
+
+    assert.equal(outProjectPlan, refProjectPlan);
+    assert.equal(outBuildPlan, refBuildPlan);
+    assert.ok(!outBuildPlan.includes("131a"));
+    assert.ok(!outBuildPlan.includes("DISC-2026"));
+
+    // F-04 regression: fail loudly if reference starter templates are missing
+    const emptySourceRoot = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-missing-ref-"));
+    try {
+      await assert.rejects(() => sanitizeStarterFiles(tempTemplate, emptySourceRoot), { code: "ENOENT" });
+    } finally {
+      await fs.rm(emptySourceRoot, { recursive: true, force: true });
+    }
+  } finally {
+    await fs.rm(tempTemplate, { recursive: true, force: true });
+  }
+});

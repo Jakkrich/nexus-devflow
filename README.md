@@ -617,7 +617,7 @@ Every confirmed issue is recorded with a durable ID (`F-01`), severity (P0-P3), 
 
 ### Independent Review & Quality Gates (`devflow/config.json`)
 
-DevFlow supports configurable Quality Gates and Independent Code Review across regular development, Autopilot, and Continuous modes:
+DevFlow supports configurable Quality Gates and Independent Code Review across regular development, DevFlow Mode (`/devflow-mode`), and Continuous queue modes:
 
 - **Quality Gates Configuration (`qualityGates.regular` / `qualityGates.continuous`)**:
   - `independentReview`: Defaults to `when-sensitive` (triggers automatically on auth, payments, encryption, permissions, destructive operations, or wide-surface changes). Can be configured to `always` or `manual`.

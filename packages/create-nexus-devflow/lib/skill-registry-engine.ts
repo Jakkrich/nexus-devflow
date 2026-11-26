@@ -473,14 +473,17 @@ export class SkillRegistryEngine {
     await fs.writeFile(fullPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   }
 
-  async list(options?: { role?: DevFlowRole }): Promise<SkillListResult> {
-    let coreNameSet: ReadonlySet<string> = new Set<string>();
+  private async resolveCoreSkillNames(): Promise<ReadonlySet<string>> {
     try {
       const inventory = await loadCoreSkillInventory(path.join(this.projectRoot, AGENT_MANIFEST_PATH));
-      coreNameSet = inventory.nameSet;
+      return inventory.nameSet;
     } catch {
-      // fallback
+      return new Set(FULL_ROLE_SKILLS);
     }
+  }
+
+  async list(options?: { role?: DevFlowRole }): Promise<SkillListResult> {
+    const coreNameSet = await this.resolveCoreSkillNames();
 
     const manifest = await this.readManifest();
     const recordedThirdParty = Array.isArray(manifest?.thirdPartySkills)
@@ -499,9 +502,12 @@ export class SkillRegistryEngine {
 
     const agentsSkills = new Set<string>();
     const claudeSkills = new Set<string>();
+    let hasAgentsRoot = false;
+    let hasClaudeRoot = false;
 
     try {
       const entries = await fs.readdir(agentsDir, { withFileTypes: true });
+      hasAgentsRoot = true;
       for (const e of entries) {
         if (e.isDirectory()) agentsSkills.add(e.name);
       }
@@ -511,12 +517,19 @@ export class SkillRegistryEngine {
 
     try {
       const entries = await fs.readdir(claudeDir, { withFileTypes: true });
+      hasClaudeRoot = true;
       for (const e of entries) {
         if (e.isDirectory()) claudeSkills.add(e.name);
       }
     } catch {
       // ignore
     }
+
+    const manifestAdapters = Array.isArray(manifest?.adapters)
+      ? manifest.adapters.filter((a): a is string => typeof a === "string")
+      : [];
+    const expectClaude = hasClaudeRoot || manifestAdapters.includes("claude");
+    const expectAgents = hasAgentsRoot || manifestAdapters.some((a) => a !== "claude");
 
     const allSkillNames = new Set([...agentsSkills, ...claudeSkills, ...thirdPartyMap.keys()]);
 
@@ -537,7 +550,14 @@ export class SkillRegistryEngine {
       if (inAgents) adapters.push(".agents");
       if (inClaude) adapters.push(".claude");
 
-      const synced = inAgents && inClaude;
+      const synced =
+        expectAgents && expectClaude
+          ? inAgents && inClaude
+          : expectAgents
+            ? inAgents
+            : expectClaude
+              ? inClaude
+              : false;
 
       let description = "";
       let version = "1.0.0";
@@ -660,13 +680,7 @@ export class SkillRegistryEngine {
     }
 
     let tempCloneDir: string | null = null;
-    let coreNameSet: ReadonlySet<string> = new Set<string>();
-    try {
-      const inventory = await loadCoreSkillInventory(path.join(this.projectRoot, AGENT_MANIFEST_PATH));
-      coreNameSet = inventory.nameSet;
-    } catch {
-      // ignore
-    }
+    const coreNameSet = await this.resolveCoreSkillNames();
 
     try {
       tempCloneDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-skill-fetch-"));
@@ -1044,13 +1058,7 @@ export class SkillRegistryEngine {
   }
 
   async remove(name: string): Promise<{ removed: boolean; message?: string }> {
-    let coreNameSet: ReadonlySet<string> = new Set<string>();
-    try {
-      const inventory = await loadCoreSkillInventory(path.join(this.projectRoot, AGENT_MANIFEST_PATH));
-      coreNameSet = inventory.nameSet;
-    } catch {
-      // ignore
-    }
+    const coreNameSet = await this.resolveCoreSkillNames();
 
     if (coreNameSet.has(name)) {
       throw new Error(`Cannot remove Core Skill: "${name}". Core skills are managed by Nexus-DevFlow.`);

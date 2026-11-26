@@ -189,4 +189,119 @@ describe("SkillRegistryEngine Seam & Lifecycle", () => {
       await fs.rm(tempDir, { recursive: true, force: true });
     }
   });
+
+  it("AC-1: classifies Core Skills and single-adapter sync accurately without agent-bundle.manifest.json", async () => {
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-single-adapter-core-"));
+    try {
+      // Single-adapter .agents project (e.g. --codex / --antigravity / --copilot / --opencode) without agent-bundle.manifest.json
+      await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+      await fs.mkdir(path.join(tempDir, "devflow", "history", "features"), { recursive: true });
+      await fs.mkdir(path.join(tempDir, "devflow", "history", "fixes"), { recursive: true });
+      await fs.mkdir(path.join(tempDir, "devflow", "history", "rollbacks"), { recursive: true });
+      await fs.mkdir(path.join(tempDir, "devflow", "reference"), { recursive: true });
+      await fs.mkdir(path.join(tempDir, "devflow", "discoveries"), { recursive: true });
+      for (const rel of [
+        "devflow/context/project-overview.md",
+        "devflow/context/coding-standards.md",
+        "devflow/context/ai-interaction.md",
+        "devflow/context/glossary.md",
+        "devflow/project-plan.md",
+        "devflow/build-plan.md",
+        "devflow/ideas.md",
+        "devflow/history/HISTORY.md"
+      ]) {
+        await fs.writeFile(path.join(tempDir, rel), "# stub\n", "utf8");
+      }
+      await fs.writeFile(
+        path.join(tempDir, "AGENTS.md"),
+        "# Test\n\n## Proportional engineering\n\nBuild for established requirements, not hypothetical scale.\n",
+        "utf8"
+      );
+      await fs.mkdir(path.join(tempDir, ".nexus"), { recursive: true });
+      await fs.writeFile(
+        path.join(tempDir, ".nexus", "nexus-devflow.json"),
+        JSON.stringify({ schemaVersion: 1, version: "2.21.0", adapters: ["codex"] }, null, 2),
+        "utf8"
+      );
+
+      for (const skill of ["feature", "devflow-mode", "devflow-help"]) {
+        const skillDir = path.join(tempDir, ".agents", "skills", skill);
+        await fs.mkdir(skillDir, { recursive: true });
+        await fs.writeFile(
+          path.join(skillDir, "SKILL.md"),
+          `---\nname: ${skill}\ndescription: ${skill}\n---\n# ${skill}\n`,
+          "utf8"
+        );
+      }
+
+      const engine = new SkillRegistryEngine(tempDir);
+      const listing = await engine.list();
+      assert.equal(listing.coreSkills.length, 3);
+      assert.equal(listing.thirdPartySkills.length, 0);
+      assert.ok(listing.coreSkills.every((s) => s.synced === true));
+
+      await assert.rejects(() => engine.remove("feature"), /Cannot remove Core Skill/);
+
+      const { runDoctor } = await import("../lib/doctor.js");
+      const doc = await runDoctor(tempDir, { pstackProbePaths: [] });
+      assert.equal(doc.failCount, 0);
+      assert.equal(doc.warnCount, 0);
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("AC-1: treats third-party skills as synced on single-.claude install and flags desync only when both roots exist", async () => {
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-claude-only-sync-"));
+    try {
+      await fs.mkdir(path.join(tempDir, "devflow"), { recursive: true });
+      await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Test\n", "utf8");
+      await fs.mkdir(path.join(tempDir, ".nexus"), { recursive: true });
+      await fs.writeFile(
+        path.join(tempDir, ".nexus", "nexus-devflow.json"),
+        JSON.stringify({
+          schemaVersion: 1,
+          version: "2.21.0",
+          adapters: ["claude"],
+          thirdPartySkills: [
+            { name: "sample-ext", source: "local", installedAt: new Date().toISOString() }
+          ]
+        }, null, 2),
+        "utf8"
+      );
+      const claudeSkillDir = path.join(tempDir, ".claude", "skills", "sample-ext");
+      await fs.mkdir(claudeSkillDir, { recursive: true });
+      await fs.writeFile(
+        path.join(claudeSkillDir, "SKILL.md"),
+        "---\nname: sample-ext\ndescription: sample\n---\n# sample\n",
+        "utf8"
+      );
+
+      const engine = new SkillRegistryEngine(tempDir);
+      const singleListing = await engine.list();
+      const singleExt = singleListing.thirdPartySkills.find((s) => s.name === "sample-ext");
+      assert.ok(singleExt);
+      assert.equal(singleExt.synced, true);
+
+      const { runDoctor } = await import("../lib/doctor.js");
+      const cleanDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+      const cleanCheck = cleanDoc.checks.find((c) => c.id === "third_party_skills");
+      assert.ok(cleanCheck);
+      assert.equal(cleanCheck.status, "pass");
+
+      // Now add empty .agents/skills root so both adapters exist -> desync must trigger warn
+      await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+      const dualListing = await engine.list();
+      const dualExt = dualListing.thirdPartySkills.find((s) => s.name === "sample-ext");
+      assert.ok(dualExt);
+      assert.equal(dualExt.synced, false);
+
+      const desyncDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+      const desyncCheck = desyncDoc.checks.find((c) => c.id === "third_party_skills");
+      assert.ok(desyncCheck);
+      assert.equal(desyncCheck.status, "warn");
+    } finally {
+      await fs.rm(tempDir, { recursive: true, force: true });
+    }
+  });
 });

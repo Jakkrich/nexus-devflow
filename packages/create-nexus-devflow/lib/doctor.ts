@@ -5,6 +5,7 @@ import { isDevFlowProjectRoot } from "./project-root.js";
 import { createStyle } from "./ui.js";
 import { readProjectConfig } from "./project-config.js";
 import { inspectVerifyDriverSkill } from "./evidence-packet.js";
+import { inspectOverviewFreshness } from "./overview-integrity.js";
 
 export interface DoctorCheck {
   id: string;
@@ -384,6 +385,59 @@ export async function runDoctor(
     });
   }
 
+  // Check 5b: Overview Integrity & Freshness
+  const devflowRootDir = path.join(projectRoot, "devflow");
+  const contextRootDir = path.join(devflowRootDir, "context");
+  const overviewAbsPath = path.join(contextRootDir, "project-overview.md");
+  try {
+    const devflowStats = await fs.lstat(devflowRootDir).catch(() => null);
+    const contextStats = devflowStats?.isDirectory() ? await fs.lstat(contextRootDir).catch(() => null) : null;
+    if (devflowStats?.isSymbolicLink() || contextStats?.isSymbolicLink()) {
+      checks.push({
+        id: "overview_integrity",
+        name: "Overview Integrity & Freshness (project-overview.md)",
+        status: "warn",
+        message: "devflow/ or devflow/context/ is a symbolic link and was not trusted.",
+        fixable: false
+      });
+    } else if (contextStats?.isDirectory()) {
+      const overviewStats = await fs.lstat(overviewAbsPath).catch(() => null);
+      if (overviewStats?.isSymbolicLink()) {
+        checks.push({
+          id: "overview_integrity",
+          name: "Overview Integrity & Freshness (project-overview.md)",
+          status: "warn",
+          message: "devflow/context/project-overview.md is a symbolic link and was not trusted.",
+          fixable: false
+        });
+      } else if (overviewStats?.isFile()) {
+        const overviewContent = await fs.readFile(overviewAbsPath, "utf8");
+        const projectPlanContent = hasProjectPlan ? await fs.readFile(projectPlanPath, "utf8") : null;
+        const buildPlanContent = hasBuildPlan ? await fs.readFile(buildPlanPath, "utf8") : null;
+        const freshness = inspectOverviewFreshness({
+          overviewContent,
+          projectPlanContent,
+          buildPlanContent
+        });
+        checks.push({
+          id: "overview_integrity",
+          name: "Overview Integrity & Freshness (project-overview.md)",
+          status: freshness.ok ? "pass" : "warn",
+          message: freshness.message,
+          fixable: false
+        });
+      }
+    }
+  } catch {
+    checks.push({
+      id: "overview_integrity",
+      name: "Overview Integrity & Freshness (project-overview.md)",
+      status: "warn",
+      message: "Unable to inspect devflow/context/project-overview.md integrity.",
+      fixable: false
+    });
+  }
+
   // Check 6: Ideas File
   const ideasPath = path.join(projectRoot, "devflow", "ideas.md");
   const hasIdeas = await fileExists(ideasPath);
@@ -584,7 +638,8 @@ export async function runDoctor(
 
   // Check 10: Third-Party Skills & Extensions
   const agentsSkillsDir = path.join(projectRoot, ".agents", "skills");
-  if (await dirExists(agentsSkillsDir)) {
+  const claudeSkillsDir = path.join(projectRoot, ".claude", "skills");
+  if ((await dirExists(agentsSkillsDir)) || (await dirExists(claudeSkillsDir))) {
     try {
       const { listInstalledSkills, syncSkills } = await import("./skill-manager.js");
       const inventory = await listInstalledSkills(projectRoot);

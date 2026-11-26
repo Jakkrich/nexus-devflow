@@ -1,6 +1,6 @@
 # Completion archive preparation
 
-Use this reference during normal `/complete` Step 1 and `/autopilot --all` Step 2.6 after final verification and any required Check/review gates pass.
+Use this reference during normal `/complete` Step 1 and `/devflow-mode --all` Step 2.6 after final verification and any required Check/review gates pass.
 
 ## Prepare one recoverable archive
 

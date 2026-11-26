@@ -178,6 +178,11 @@ async function validateCoreSkillContract(failures: string[]): Promise<void> {
 
 function validateManifestSync(failures: string[]): void {
   const pkg = readJson<{ version?: string }>("package.json", failures);
+  const createPkg = readJson<{ version?: string }>("packages/create-nexus-devflow/package.json", failures);
+  const wrapperPkg = readJson<{
+    version?: string;
+    dependencies?: Record<string, string>;
+  }>("packages/nexus-devflow/package.json", failures);
   const devflowManifest = readJson<{
     version?: string;
     lifecycle?: {
@@ -187,7 +192,7 @@ function validateManifestSync(failures: string[]): void {
     };
   }>(".nexus/nexus-devflow.json", failures);
 
-  if (!pkg || !devflowManifest) return;
+  if (!pkg || !createPkg || !wrapperPkg || !devflowManifest) return;
 
   if (devflowManifest.version !== pkg.version) {
     fail(
@@ -196,6 +201,34 @@ function validateManifestSync(failures: string[]): void {
     );
   } else {
     ok(`.nexus/nexus-devflow.json version is synchronized ("${pkg.version}")`);
+  }
+
+  if (createPkg.version !== pkg.version) {
+    fail(
+      `packages/create-nexus-devflow/package.json version ("${createPkg.version}") does not match package.json version ("${pkg.version}")`,
+      failures
+    );
+  } else {
+    ok(`packages/create-nexus-devflow/package.json version is synchronized ("${pkg.version}")`);
+  }
+
+  if (wrapperPkg.version !== pkg.version) {
+    fail(
+      `packages/nexus-devflow/package.json version ("${wrapperPkg.version}") does not match package.json version ("${pkg.version}")`,
+      failures
+    );
+  } else {
+    ok(`packages/nexus-devflow/package.json version is synchronized ("${pkg.version}")`);
+  }
+
+  const depVersion = wrapperPkg.dependencies?.["@jakkrichm/create-nexus-devflow"];
+  if (depVersion !== pkg.version) {
+    fail(
+      `packages/nexus-devflow/package.json dependency @jakkrichm/create-nexus-devflow ("${depVersion}") does not match package.json version ("${pkg.version}")`,
+      failures
+    );
+  } else {
+    ok(`packages/nexus-devflow/package.json dependency version is synchronized ("${pkg.version}")`);
   }
 
   if (!devflowManifest.lifecycle?.fastTrackStages) {

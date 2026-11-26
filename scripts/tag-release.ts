@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { evaluateReleaseReadiness } from "./check-release-readiness.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
@@ -11,6 +12,7 @@ interface VersionBumpOptions {
   summary?: string;
   push?: boolean;
   dryRun?: boolean;
+  verifyOnly?: boolean;
 }
 
 function parseSemver(version: string): { major: number; minor: number; patch: number } {
@@ -45,10 +47,24 @@ function calculateNextVersion(currentVersion: string, bumpType: string = "patch"
   throw new Error(`Unknown bump type or invalid version: "${bumpType}". Use patch, minor, major, or explicit X.Y.Z.`);
 }
 
-export function tagRelease(options: VersionBumpOptions = {}): { oldVersion: string; newVersion: string; tag: string } {
+export async function tagRelease(
+  options: VersionBumpOptions = {}
+): Promise<{ oldVersion: string; newVersion: string; tag: string }> {
   const pkgPath = path.join(projectRoot, "package.json");
   const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8")) as { version: string };
   const oldVersion = pkg.version;
+
+  if (options.verifyOnly) {
+    const report = await evaluateReleaseReadiness(projectRoot);
+    for (const check of report.checks) {
+      console.log(`  [${check.ok ? "OK" : "FAIL"}] ${check.name}: ${check.message}`);
+    }
+    if (!report.ok) {
+      throw new Error(`Release readiness gate failed for version ${oldVersion}.`);
+    }
+    return { oldVersion, newVersion: oldVersion, tag: `v${oldVersion}` };
+  }
+
   const newVersion = calculateNextVersion(oldVersion, options.typeOrVersion || "patch");
   const tag = `v${newVersion}`;
   const today = new Date().toISOString().slice(0, 10);
@@ -159,17 +175,17 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
   const bumpType = args[0] || "patch";
   const noPush = args.includes("--no-push");
   const dryRun = args.includes("--dry-run");
+  const verifyOnly = args.includes("--verify-only");
   const summaryArg = args.find((a) => a.startsWith("--summary="))?.slice("--summary=".length);
 
-  try {
-    tagRelease({
-      typeOrVersion: bumpType.startsWith("-") ? "patch" : bumpType,
-      push: !noPush,
-      dryRun,
-      summary: summaryArg
-    });
-  } catch (err: unknown) {
+  tagRelease({
+    typeOrVersion: bumpType.startsWith("-") ? "patch" : bumpType,
+    push: !noPush,
+    dryRun,
+    verifyOnly,
+    summary: summaryArg
+  }).catch((err: unknown) => {
     console.error(`\n✖ Release failed: ${err instanceof Error ? err.message : String(err)}`);
     process.exit(1);
-  }
+  });
 }

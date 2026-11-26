@@ -8,7 +8,9 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
 | Completed Date | Run ID | Category | Title | Git Commit | Status | Archive Link |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 2026-11-26 | `131d` | Feature | (Journey) Multi-IDE E2E Proof, Installer Matrix & v3 Migration | `PENDING` | `Completed` | [`131d-multi-ide-e2e-installer-matrix-and-v3-migration.md`](features/131d-multi-ide-e2e-installer-matrix-and-v3-migration.md) |
+| 2026-11-26 | `125` | Feature | Production Release Readiness (`3.0.0`) | `PENDING` | `Completed` | [`125-production-release-readiness.md`](features/125-production-release-readiness.md) |
+| 2026-11-26 | `119` | Feature | (Skateboard) Planning & Overview Integrity Gate | `PENDING` | `Completed` | [`119-planning-and-overview-integrity-gate.md`](features/119-planning-and-overview-integrity-gate.md) |
+| 2026-11-26 | `131d` | Feature | (Journey) Multi-IDE E2E Proof, Installer Matrix & v3 Migration | `0d67085` | `Completed` | [`131d-multi-ide-e2e-installer-matrix-and-v3-migration.md`](features/131d-multi-ide-e2e-installer-matrix-and-v3-migration.md) |
 | 2026-11-26 | `131c` | Feature | (Tracer Bullet) Evidence-First Verification & `verify` Bootstrap | `fda68ef` | `Completed` | [`131c-evidence-first-verification-and-verify-bootstrap.md`](features/131c-evidence-first-verification-and-verify-bootstrap.md) |
 | 2026-11-26 | `131b` | Feature | (Tracer Bullet) `devflow-mode`, `devflow-help`, Playbooks & `pstack` Adapter | `b3335d3` | `Completed` | [`131b-devflow-mode-help-playbooks-pstack-adapter.md`](features/131b-devflow-mode-help-playbooks-pstack-adapter.md) |
 | 2026-11-26 | `131a` | Feature | (Skateboard) v3 Config Policy, Contract & Autonomous Core Loop | `3248ca9` | `Completed` | [`131a-v3-config-policy-and-autonomous-loop.md`](features/131a-v3-config-policy-and-autonomous-loop.md) |

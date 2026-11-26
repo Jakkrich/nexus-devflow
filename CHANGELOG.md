@@ -5,6 +5,26 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-11-26
+
+### Added
+- **DevFlow v3 Lead-Coordinator & Playbooks (`131a`, `131b`)**: Introduced `execution` policy (`engine`, `tier`, `autoApproveSpec`, `autoCommitFeatureBranch`), `delivery.gate: "option-a-evidence-packet"`, `/devflow-mode` + 5 core `playbooks/` (`feature`, `bug-fix`, `refactor`, `discovery`, `autonomous-queue`), `check-playbooks.mjs`, optional `pstack` adapter integration, and unified `/devflow-help` (Interactive Guide, Status & Doctor).
+- **Evidence-First Verification & Multi-IDE Matrix (`131c`, `131d`)**: Added `lib/evidence-packet.ts`, `/onboard` project-local `/verify` driver bootstrap, Prove-by-Run `unverified` findings gate, `opencode` support in `scripts/e2e/harness.ts` (5 adapters × 3 roles installer matrix), and bilingual Thai/English routing evals (`129/129`).
+- **Planning & Overview Integrity Gate (`119`)**: Added `lib/overview-integrity.ts`, `devflow:source-hash` stamping + placeholder/20KB hard-stop in `scripts/overview.ts`, sanitized starter planning templates in `prepare-template.ts`, and `overview_integrity` check in `doctor.ts`.
+- **Production Release Readiness Gate (`125`)**: Added `scripts/check-release-readiness.ts` (`npm run check:release`) and upgraded `scan-doc-contract.ts` to catch retired command references outside migration/alias notes.
+
+### Fixed
+- Fixed single-adapter Core Skill classification and `doctor.ts` third-party sync accuracy when `agent-bundle.manifest.json` is absent in user workspaces (`lib/skill-registry-engine.ts`, `lib/doctor.ts`).
+
+### Breaking Changes & Migration Guide (v2 → v3)
+- Replaced `/autopilot` and `/continuous` with `/devflow-mode` (`--all` / `--max <N>`).
+- Consolidated `/devflow`, `/devflow-status`, and `/devflow-doctor` into `/devflow-help`.
+- Removed deprecated Web Dashboard / Studio UI (`128`); use `npx nexus-devflow status` or `npx nexus-devflow mcp`.
+- **How to Migrate**: Run `npx nexus-devflow update --dry-run` followed by `npx nexus-devflow update` to prune retired skill folders and install `/devflow-mode` + `/devflow-help` while preserving user-owned plans and `devflow/config.json`.
+
+### Rollback Steps
+- If an existing workspace must revert to v2 after upgrading, restore overwritten files from the timestamped installer backup under `devflow/.state/backups/` or pin the previous release via `npx @jakkrichm/create-nexus-devflow@2.21.0 update`.
+
 ## [2.21.0] - 2026-11-26
 
 ### Added

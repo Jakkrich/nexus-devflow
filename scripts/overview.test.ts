@@ -176,3 +176,83 @@ test("overview fails with clear error when required files are missing", () => {
     fs.rmSync(workspace, { recursive: true, force: true });
   }
 });
+
+test("overview embeds devflow:source-hash and preserves hash across checkbox completion", () => {
+  const workspace = makeWorkspace();
+  writeProjectArtifacts(workspace);
+
+  try {
+    const first = runOverview(workspace);
+    assert.equal(first.status, 0);
+    const matchA = /<!--\s*devflow:source-hash\s+([0-9a-f]{64})\s*-->/.exec(first.stdout);
+    assert.ok(matchA?.[1], "Expected devflow:source-hash in stdout");
+
+    const buildPlanPath = path.join(workspace, "devflow", "build-plan.md");
+    const updatedBuild = fs.readFileSync(buildPlanPath, "utf8").replace("- [ ] add integration test", "- [x] add integration test");
+    fs.writeFileSync(buildPlanPath, updatedBuild, "utf8");
+
+    const second = runOverview(workspace);
+    assert.equal(second.status, 0);
+    const matchB = /<!--\s*devflow:source-hash\s+([0-9a-f]{64})\s*-->/.exec(second.stdout);
+    assert.ok(matchB?.[1]);
+    assert.equal(matchA[1], matchB[1]);
+  } finally {
+    fs.rmSync(workspace, { recursive: true, force: true });
+  }
+});
+
+test("overview rejects placeholder plans without overwriting existing overview and enforces 20KB cap", () => {
+  const workspace = makeWorkspace();
+  writeProjectArtifacts(workspace);
+
+  const overviewPath = path.join(workspace, "devflow", "context", "project-overview.md");
+  fs.mkdirSync(path.dirname(overviewPath), { recursive: true });
+  const sentinel = "# Previous Valid Overview\nKeep me intact.\n";
+  fs.writeFileSync(overviewPath, sentinel, "utf8");
+
+  try {
+    // 1. Placeholder in project-plan.md must fail exit 1 and keep existing overview intact
+    fs.writeFileSync(
+      path.join(workspace, "devflow", "project-plan.md"),
+      "# Project Plan\n\n## 1. Problem\n- **Core Problem**: [ระบุปัญหาหลักที่ผู้ใช้กำลังเผชิญ เช่น Manual]\n",
+      "utf8"
+    );
+    const placeholderRun = runOverview(workspace, ["--write"]);
+    assert.equal(placeholderRun.status, 1);
+    assert.match(placeholderRun.stderr, /project-plan\.md/);
+    assert.equal(fs.readFileSync(overviewPath, "utf8"), sentinel);
+
+    // 2. Oversized output >= 20,000 bytes must fail exit 1 and keep existing overview intact
+    writeProjectArtifacts(workspace);
+    const hugePlan = `# Project Plan\n\n## Product Vision\n${"a".repeat(20_500)}\n`;
+    fs.writeFileSync(path.join(workspace, "devflow", "project-plan.md"), hugePlan, "utf8");
+    const oversizedRun = runOverview(workspace, ["--write"]);
+    assert.equal(oversizedRun.status, 1);
+    assert.match(oversizedRun.stderr, /20,000|20000/);
+    assert.equal(fs.readFileSync(overviewPath, "utf8"), sentinel);
+
+    // 3. F-02 & F-03 regressions: preserve "- description" prose and stamp valid source-hash even when body mentions "devflow:source-hash"
+    writeProjectArtifacts(workspace);
+    fs.writeFileSync(
+      path.join(workspace, "devflow", "project-plan.md"),
+      [
+        "# Project Plan",
+        "",
+        "## Product Vision",
+        "- description: Sync contract checks devflow:source-hash markers safely.",
+        "",
+        "## Constraints",
+        "- Offline only"
+      ].join("\n"),
+      "utf8"
+    );
+    const customTemplatePath = path.join(workspace, "no-hash-template.md");
+    fs.writeFileSync(customTemplatePath, "# {{projectName}}\n\n{{projectPurpose}}\n", "utf8");
+    const customRun = runOverview(workspace, ["--template", customTemplatePath]);
+    assert.equal(customRun.status, 0);
+    assert.match(customRun.stdout, /- description: Sync contract checks devflow:source-hash markers safely\./);
+    assert.match(customRun.stdout, /^<!--\s*devflow:source-hash\s+[0-9a-f]{64}\s*-->/m);
+  } finally {
+    fs.rmSync(workspace, { recursive: true, force: true });
+  }
+});

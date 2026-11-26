@@ -27,10 +27,10 @@
 
 ## Phase 2: Ecosystem Reliability (Active Focus)
 
-- [ ] 116. **(Skateboard) Consolidation Release Baseline & Migration Contract** - ตัดสิน v2/v3 boundary, ทำ changelog และ migration guide สำหรับ retired commands, ตรวจ fresh install/update/uninstall และสร้าง release candidate ที่ย้อนกลับได้
+- [x] 116. **(Deprecated & Removed) Consolidation Release Baseline & Migration Contract** - ถอดออกเนื่องจากขอบเขต v2 → v3 migration และ installer matrix ถูกรวมเข้ากับ Feature 131d แล้ว และเกณฑ์เตรียม release ถูกรวมไว้ที่ Feature 125
 - [ ] 117. **(Tracer Bullet) Cross-Platform Installer & Update Confidence Matrix** - เพิ่ม CI/smoke matrix สำหรับ Windows, macOS, Linux และ Node.js รุ่นที่รองรับ ครอบคลุม fresh install, existing-project overlay, update, adapter switch และ path edge cases
 - [ ] 118. **(Journey) Bilingual Intent Routing Reliability** - ขยาย routing evals ภาษาไทย/อังกฤษด้วย positive, negative, legacy และ ambiguous prompts; รายงาน pass rate, false activation และ regression ownership แบบตรวจซ้ำได้
-- [ ] 119. **(Skateboard) Planning & Overview Integrity Gate** - ตรวจ placeholder/stale/mismatched plans ก่อนสร้าง overview, ให้ข้อความแก้ไขที่ทำตามได้ และเพิ่ม regression tests สำหรับ source hash กับ generated-state boundaries
+- [x] 119. **(Skateboard) Planning & Overview Integrity Gate** - ตรวจ placeholder/stale/mismatched plans ก่อนสร้าง overview, ให้ข้อความแก้ไขที่ทำตามได้ และเพิ่ม regression tests สำหรับ source hash กับ generated-state boundaries
 - [ ] 120. **(Tracer Bullet) Package Contract & Upgrade Resilience** - ทดสอบว่าการ update รักษา user-owned plans, custom config, protected skills และ task history พร้อมรายงาน drift ที่แก้ได้โดยไม่เขียนทับข้อมูลผู้ใช้
 - [x] 130. **(Tracer Bullet) Multi-Chat Safe Isolation & Aggregated Status** - แยก per-run activity state (`devflow/.state/runs/{run-id}.json`), เพิ่ม `evaluateWorktreeGuard` และ cross-worktree `reserveNextRunningId`, รวมสถานะ + handoff summary ข้าม worktree ใน `status`, และสร้าง formal concurrency proof (`verify:concurrent-isolation`)
 
@@ -55,7 +55,7 @@
 ## Phase 4: Adoption & Release Hardening
 
 - [ ] 124. **(Journey) Golden-Path Examples & Documentation Proof** - สร้างตัวอย่าง greenfield, brownfield และ bug-fix ที่รันได้จริง เชื่อมเอกสารกับ package smoke tests และตรวจ retired commands อัตโนมัติ
-- [ ] 125. **Production Release Readiness** - ตรวจ security hygiene, package contents, semantic version, release notes, rollback steps และ full quality matrix ก่อน publish (การ publish/push ต้องได้รับอนุญาตแยกต่างหาก)
+- [x] 125. **Production Release Readiness** - ตรวจ security hygiene, package contents, semantic version, release notes, rollback steps และ full quality matrix ก่อน publish (การ publish/push ต้องได้รับอนุญาตแยกต่างหาก)
 
 ---
 

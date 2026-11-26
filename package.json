@@ -1,11 +1,12 @@
 {
   "name": "nexus-devflow",
-  "version": "2.21.0",
+  "version": "3.0.0",
   "description": "Enterprise-grade spec-driven development framework for multi-agent workflows",
   "type": "module",
   "private": true,
   "scripts": {
     "check": "npm run typecheck && tsx scripts/check-devflow.ts",
+    "check:release": "tsx scripts/check-release-readiness.ts",
     "check:static": "tsx scripts/validate-framework.ts",
     "check:budgets": "node scripts/check-skill-budgets.mjs",
     "analyze:tokens": "tsx scripts/analyze-token-usage.ts",
