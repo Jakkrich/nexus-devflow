@@ -1,0 +1,15 @@
+{
+  "skill": "devflow-mode",
+  "description": "[devflow] Autonomous Coordinator mode, playbook router (feature, bug-fix, refactor, discovery), isolated subagent orchestration, and continuous build-plan queue (--all / --max / --merge) with pstack integration. Use for /devflow-mode, /autopilot, or /continuous.",
+  "positive": [
+    "run devflow-mode skill",
+    "invoke /devflow-mode command",
+    "run /devflow-mode --all continuously across build-plan",
+    "autonomous coordinator playbook router with subagent orchestration",
+    "apply devflow-mode guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

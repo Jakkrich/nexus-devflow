@@ -193,7 +193,8 @@ test("applyPreparedUpdate removes retired status and doctor skill folders and in
 
     const updatedManifest = await readManifest(targetDir);
     assert.ok(updatedManifest, "manifest should exist after update");
-    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow"));
+    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-help"));
+    assert.ok(updatedManifest.lifecycle.companionCommands.includes("devflow-mode"));
     assert.ok(!updatedManifest.lifecycle.companionCommands.includes("devflow-doctor"));
     assert.ok(!updatedManifest.lifecycle.companionCommands.includes("devflow-status"));
     assert.ok(!updatedManifest.lifecycle.companionCommands.includes("try"));

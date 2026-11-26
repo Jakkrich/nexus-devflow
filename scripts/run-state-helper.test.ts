@@ -10,14 +10,14 @@ const execFileAsync = promisify(execFile);
 const helper = path.resolve(
   ".agents",
   "skills",
-  "devflow",
+  "devflow-help",
   "scripts",
   "run-state.mjs"
 );
 const claudeHelper = path.resolve(
   ".claude",
   "skills",
-  "devflow",
+  "devflow-help",
   "scripts",
   "run-state.mjs"
 );

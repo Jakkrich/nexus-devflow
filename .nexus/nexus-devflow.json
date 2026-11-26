@@ -36,13 +36,13 @@
       "complete"
     ],
     "companionCommands": [
-      "devflow",
+      "devflow-help",
       "discovery",
       "overview",
       "debug",
       "onboard",
       "idea",
-      "autopilot",
+      "devflow-mode",
       "prototype",
       "audit",
       "explore"

@@ -36,9 +36,10 @@ test("getSkillsForRole maps skills to role profiles accurately", () => {
   const saSkills = getSkillsForRole("sa");
   assert.ok(saSkills.includes("discovery"));
   assert.ok(saSkills.includes("overview"));
-  assert.ok(saSkills.includes("devflow"));
+  assert.ok(saSkills.includes("devflow-help"));
   assert.ok(saSkills.includes("explore"));
   assert.ok(saSkills.includes("feature"));
+  assert.ok(!saSkills.includes("devflow-mode"));
   assert.ok(!saSkills.includes("implement"));
   assert.ok(!saSkills.includes("check"));
   assert.ok(!saSkills.includes("complete"));
@@ -48,7 +49,8 @@ test("getSkillsForRole maps skills to role profiles accurately", () => {
   assert.ok(devSkills.includes("check"));
   assert.ok(devSkills.includes("complete"));
   assert.ok(devSkills.includes("explore"));
-  assert.ok(devSkills.includes("devflow"));
+  assert.ok(devSkills.includes("devflow-mode"));
+  assert.ok(devSkills.includes("devflow-help"));
   assert.ok(!devSkills.includes("discovery"));
 
   const fullSkills = getSkillsForRole("full");
@@ -57,6 +59,8 @@ test("getSkillsForRole maps skills to role profiles accurately", () => {
   assert.ok(fullSkills.includes("check"));
   assert.ok(fullSkills.includes("complete"));
   assert.ok(fullSkills.includes("explore"));
+  assert.ok(fullSkills.includes("devflow-mode"));
+  assert.ok(fullSkills.includes("devflow-help"));
   assert.equal(fullSkills.length, 15);
 });
 

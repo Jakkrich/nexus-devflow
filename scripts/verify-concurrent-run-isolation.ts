@@ -23,7 +23,7 @@ const execFile = promisify(execFileCb);
 const RUN_STATE_HELPER = path.resolve(
   ".agents",
   "skills",
-  "devflow",
+  "devflow-help",
   "scripts",
   "run-state.mjs"
 );

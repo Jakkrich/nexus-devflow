@@ -5,7 +5,7 @@
       "specPath": "formal/RunStateAllocation.tla",
       "guardedPaths": [
         "packages/create-nexus-devflow/lib/branch-context.ts",
-        ".agents/skills/devflow/scripts/run-state.mjs",
+        ".agents/skills/devflow-help/scripts/run-state.mjs",
         "formal/RunStateAllocation.tla",
         "formal/RunStateAllocation.cfg",
         "formal/check-run-isolation.ts"

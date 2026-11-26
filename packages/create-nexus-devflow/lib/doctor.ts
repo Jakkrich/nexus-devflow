@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { isDevFlowProjectRoot } from "./project-root.js";
 import { createStyle } from "./ui.js";
@@ -27,6 +28,7 @@ export interface DoctorReport {
 export interface DoctorOptions {
   fix?: boolean;
   color?: boolean;
+  pstackProbePaths?: readonly string[];
 }
 
 const DEFAULT_FINDINGS_STUB = `# Findings Ledger
@@ -510,6 +512,47 @@ export async function runDoctor(
     });
   }
 
+  // Check 9b: Execution Engine & pstack Capability
+  const executionEngine = configResult.values.execution.engine;
+  const detectedPstackPath =
+    executionEngine === "native"
+      ? null
+      : await detectPstackSkillPath(projectRoot, options.pstackProbePaths);
+
+  if (executionEngine === "native") {
+    checks.push({
+      id: "execution_engine_pstack",
+      name: "Execution Engine & pstack Capability",
+      status: "pass",
+      message: "Native DevFlow execution engine active (pstack probe skipped).",
+      fixable: false
+    });
+  } else if (detectedPstackPath) {
+    checks.push({
+      id: "execution_engine_pstack",
+      name: "Execution Engine & pstack Capability",
+      status: "pass",
+      message: `Execution engine '${executionEngine}': pstack detected at ${detectedPstackPath}.`,
+      fixable: false
+    });
+  } else if (executionEngine === "pstack") {
+    checks.push({
+      id: "execution_engine_pstack",
+      name: "Execution Engine & pstack Capability",
+      status: "warn",
+      message: "Execution engine is set to 'pstack', but poteto-mode/SKILL.md was not found. Install pstack or set execution.engine to 'auto' / 'native'.",
+      fixable: false
+    });
+  } else {
+    checks.push({
+      id: "execution_engine_pstack",
+      name: "Execution Engine & pstack Capability",
+      status: "pass",
+      message: "Execution engine 'auto': pstack not detected; using native DevFlow single-verifier fallback.",
+      fixable: false
+    });
+  }
+
   // Check 10: Third-Party Skills & Extensions
   const agentsSkillsDir = path.join(projectRoot, ".agents", "skills");
   if (await dirExists(agentsSkillsDir)) {
@@ -610,4 +653,36 @@ export function formatDoctorHuman(
   }
 
   return lines.join("\n").trimEnd();
+}
+
+async function detectPstackSkillPath(
+  projectRoot: string,
+  customPaths?: readonly string[]
+): Promise<string | null> {
+  const candidates: string[] = customPaths
+    ? [...customPaths]
+    : [
+        ...(process.env.PSTACK_PLUGIN_DIR
+          ? [path.join(process.env.PSTACK_PLUGIN_DIR, "skills", "poteto-mode", "SKILL.md")]
+          : []),
+        path.join(os.homedir(), ".gemini", "config", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"),
+        path.join(os.homedir(), ".claude", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"),
+        path.join(os.homedir(), ".agents", "skills", "poteto-mode", "SKILL.md"),
+        path.join(projectRoot, ".agents", "skills", "poteto-mode", "SKILL.md"),
+        path.join(projectRoot, ".claude", "skills", "poteto-mode", "SKILL.md")
+      ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    try {
+      const stats = await fs.lstat(candidate);
+      if (!stats.isSymbolicLink() && stats.isFile()) {
+        return candidate;
+      }
+    } catch {
+      // candidate absent
+    }
+  }
+
+  return null;
 }

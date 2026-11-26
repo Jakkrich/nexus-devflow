@@ -65,21 +65,23 @@ test("parseRunState treats other commands as manual mode", () => {
   assert.equal(run.status, "completed");
 });
 
-test("parseRunState treats autopilot as autopilot mode", () => {
-  const run = parseRunState(JSON.stringify({
-    schemaVersion: 1,
-    command: "autopilot",
-    status: "ready",
-    summary: "Autopilot reached review boundary",
-    boundary: "reviewed",
-    startedAt: "2026-08-26T12:00:00.000Z",
-    updatedAt: "2026-08-26T12:05:00.000Z",
-    resumeCommand: "/complete"
-  }));
+test("parseRunState treats autopilot and devflow-mode as autopilot mode", () => {
+  for (const command of ["autopilot", "devflow-mode"]) {
+    const run = parseRunState(JSON.stringify({
+      schemaVersion: 1,
+      command,
+      status: "ready",
+      summary: "Autonomous mode reached review boundary",
+      boundary: "reviewed",
+      startedAt: "2026-08-26T12:00:00.000Z",
+      updatedAt: "2026-08-26T12:05:00.000Z",
+      resumeCommand: "/complete"
+    }));
 
-  assert.equal(run.mode, "autopilot");
-  assert.equal(run.command, "autopilot");
-  assert.equal(run.status, "ready");
+    assert.equal(run.mode, "autopilot");
+    assert.equal(run.command, command);
+    assert.equal(run.status, "ready");
+  }
 });
 
 test("parseRunState rejects malformed or incomplete state", () => {

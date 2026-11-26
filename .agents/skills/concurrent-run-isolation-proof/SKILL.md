@@ -15,7 +15,7 @@ Harm: concurrent chats silently corrupt another chat's activity state, assign th
 
 Run this after any change to:
 
-- `.agents/skills/devflow/scripts/run-state.mjs` (`--run-id`, `writeState`, `findProjectRoot`)
+- `.agents/skills/devflow-help/scripts/run-state.mjs` (`--run-id`, `writeState`, `findProjectRoot`)
 - `packages/create-nexus-devflow/lib/run-state.ts` (`readAllRunStates`, `parseRunState`)
 - `packages/create-nexus-devflow/lib/branch-context.ts` (`calculateNextRunningId`, `reserveNextRunningId`, `evaluateWorktreeGuard`, `listWorktreeRunContexts`)
 - `packages/create-nexus-devflow/lib/active-context-engine.ts` (`getWorktreeRuns`)
@@ -54,7 +54,7 @@ Does not cover multi-machine remote branches not fetched into `refs/heads/`, man
 
 ## Sync
 
-Covered files: `.agents/skills/devflow/scripts/run-state.mjs`, `packages/create-nexus-devflow/lib/run-state.ts`, `packages/create-nexus-devflow/lib/branch-context.ts`, `packages/create-nexus-devflow/lib/active-context-engine.ts`, `packages/create-nexus-devflow/lib/project-status-engine.ts`.
+Covered files: `.agents/skills/devflow-help/scripts/run-state.mjs`, `packages/create-nexus-devflow/lib/run-state.ts`, `packages/create-nexus-devflow/lib/branch-context.ts`, `packages/create-nexus-devflow/lib/active-context-engine.ts`, `packages/create-nexus-devflow/lib/project-status-engine.ts`.
 
 Base commit before Feature 130: `8ae2f530d29771db26b9f3744034f3bb73994c68` (update to the Feature 130 commit after `/complete`).
 

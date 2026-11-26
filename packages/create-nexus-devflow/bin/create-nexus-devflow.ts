@@ -1203,6 +1203,7 @@ function parseArgs(args: readonly string[]): CliOptions {
     const normalizedCmd = first.replace(/^[/$\\]+/, "");
     const aiSkills = new Set([
       "audit", "autopilot", "check", "complete", "debug", "devflow",
+      "devflow-help", "devflow-mode",
       "discovery", "explore", "feature", "fix", "implement",
       "onboard", "overview", "prototype",
       "ci", "convert-any-to-md", "release", "rollback", "setup-tests"

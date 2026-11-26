@@ -161,12 +161,12 @@ export function createManifest(
         "complete"
       ],
       companionCommands: [
-        "devflow",
+        "devflow-help",
         "overview",
         "debug",
         "onboard",
         "idea",
-        "autopilot",
+        "devflow-mode",
         "prototype",
         "audit",
         "discovery",

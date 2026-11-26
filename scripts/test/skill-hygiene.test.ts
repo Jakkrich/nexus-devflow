@@ -132,7 +132,7 @@ test("skills (including extras) use consistent npx nexus-devflow skill add/updat
   assert.deepEqual(inconsistent, [], `Inconsistent skill CLI in: ${inconsistent.join(", ")}`);
 });
 
-test("115c consolidated skills expose Adaptive /feature, 2-Track /debug, unified /devflow, and /autopilot --all", () => {
+test("115c & 131b core skills expose Adaptive /feature, 2-Track /debug, devflow-help, and devflow-mode", () => {
   const feature = fs.readFileSync(path.join(agentsSkillsRoot, "feature", "SKILL.md"), "utf8");
   assert.match(feature, /--preview/);
   assert.match(feature, /Adaptive Pre-Flight Clarification/i);
@@ -141,14 +141,14 @@ test("115c consolidated skills expose Adaptive /feature, 2-Track /debug, unified
   assert.match(debug, /Track A/i);
   assert.match(debug, /Track B/i);
 
-  const devflow = fs.readFileSync(path.join(agentsSkillsRoot, "devflow", "SKILL.md"), "utf8");
-  assert.match(devflow, /doctor/);
-  assert.match(devflow, /Legacy Command Routing/i);
+  const devflowHelp = fs.readFileSync(path.join(agentsSkillsRoot, "devflow-help", "SKILL.md"), "utf8");
+  assert.match(devflowHelp, /doctor/);
+  assert.match(devflowHelp, /Legacy Command Routing/i);
 
-  const autopilot = fs.readFileSync(path.join(agentsSkillsRoot, "autopilot", "SKILL.md"), "utf8");
-  assert.match(autopilot, /--all/);
-  assert.match(autopilot, /continuous-loop\.md/);
-  assert.doesNotMatch(autopilot, /(?<![\w.])\/try(?![-\w])/);
+  const devflowMode = fs.readFileSync(path.join(agentsSkillsRoot, "devflow-mode", "SKILL.md"), "utf8");
+  assert.match(devflowMode, /--all/);
+  assert.match(devflowMode, /autonomous-queue\.md/);
+  assert.doesNotMatch(devflowMode, /(?<![\w.])\/try(?![-\w])/);
 
   const workflow = fs.readFileSync(path.join(repoRoot, "devflow", "workflow.md"), "utf8");
   assert.doesNotMatch(workflow, /\/devflow-doctor|\/devflow-status|\/continuous\b/);
@@ -217,7 +217,33 @@ test("131a autonomous feature-branch policies are present across feature, implem
   assert.match(complete, /delivery\.gate/);
   assert.match(complete, /option-a-evidence-packet/);
 
-  const devflow = fs.readFileSync(path.join(agentsSkillsRoot, "devflow", "SKILL.md"), "utf8");
-  assert.match(devflow, /execution/);
-  assert.match(devflow, /delivery\.gate/);
+  const devflowHelp = fs.readFileSync(path.join(agentsSkillsRoot, "devflow-help", "SKILL.md"), "utf8");
+  assert.match(devflowHelp, /execution/);
+  assert.match(devflowHelp, /delivery\.gate/);
+});
+
+test("131b devflow-mode, devflow-help, bundled playbooks, and pstack adapter contracts", () => {
+  for (const name of ["feature.md", "bug-fix.md", "refactor.md", "discovery.md", "autonomous-queue.md"]) {
+    const pbPath = path.join(agentsSkillsRoot, "devflow-mode", "playbooks", name);
+    assert.equal(fs.existsSync(pbPath), true, `Missing bundled playbook: ${name}`);
+  }
+
+  const adaptersRef = fs.readFileSync(
+    path.join(agentsSkillsRoot, "devflow-mode", "reference", "platform-adapters.md"),
+    "utf8"
+  );
+  for (const runtime of ["Antigravity", "Claude Code", "Codex", "Copilot", "OpenCode", "pstack"]) {
+    assert.match(adaptersRef, new RegExp(runtime, "i"));
+  }
+
+  const devflowHelp = fs.readFileSync(path.join(agentsSkillsRoot, "devflow-help", "SKILL.md"), "utf8");
+  assert.match(devflowHelp, /Interactive Guide & Prompt Builder/i);
+  assert.match(devflowHelp, /Legacy Command Routing/i);
+  assert.equal(
+    fs.existsSync(path.join(agentsSkillsRoot, "devflow-help", "scripts", "run-state.mjs")),
+    true
+  );
+
+  const budgetResult = checkSkillBudgets(agentsSkillsRoot);
+  assert.deepEqual(budgetResult.violations, [], `Budget violations: ${budgetResult.violations.join("; ")}`);
 });

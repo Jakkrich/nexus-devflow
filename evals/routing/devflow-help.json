@@ -1,0 +1,16 @@
+{
+  "skill": "devflow-help",
+  "description": "[devflow] State-aware interactive guide, ready-to-send prompt builder, unified status (--exec), doctor health check, and legacy command router for DevFlow workflows. Use for /devflow-help, /devflow, /devflow doctor, or /devflow --exec.",
+  "positive": [
+    "run devflow-help skill",
+    "invoke /devflow-help command",
+    "run /devflow-help doctor to check setup health",
+    "run /devflow-help --exec status",
+    "state-aware interactive guide and prompt builder",
+    "apply devflow-help guidance"
+  ],
+  "negative": [
+    "unrelated random task query",
+    "general generic string prompt"
+  ]
+}

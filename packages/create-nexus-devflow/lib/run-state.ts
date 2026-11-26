@@ -175,7 +175,7 @@ function parseRunState(value: string, now: Date = new Date()): RunStateSummary {
   return {
     state: "recorded",
     mode:
-      command === "autopilot"
+      command === "autopilot" || command === "devflow-mode"
         ? "autopilot"
         : command === "continuous"
         ? "continuous"

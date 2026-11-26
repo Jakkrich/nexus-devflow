@@ -28,13 +28,13 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 ### Universal Invocation & Agent Directives
 
-1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has **one Canonical Name across the 15 Core Skills** (`feature`, `fix`, `implement`, `check`, `complete`, `discovery`, `explore`, `idea`, `devflow`, `overview`, `debug`, `onboard`, `autopilot`, `prototype`, `audit`, plus optional opt-in extensions via `npx nexus-devflow skill add` such as `setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`). Invocation depends on your AI tool:
-   - **Canonical Name (Plain text)**: e.g., `feature`, `implement`, `autopilot`, `devflow`, `discovery`, `onboard`.
-   - **Slash Prefix (`/`)**: Claude Code, Google Antigravity, Gemini CLI, e.g., `/feature`, `/fix`, `/implement`, `/autopilot --all`, `/devflow`, `/discovery`.
-   - **Dollar Prefix (`$`)**: OpenAI Codex CLI, e.g., `$feature`, `$fix`, `$autopilot --all`, `$devflow`, `$discovery`.
+1. **Canonical Command Names & AI Provider Invocation**: Each workflow stage and companion tool has **one Canonical Name across the 15 Core Skills** (`feature`, `fix`, `implement`, `check`, `complete`, `discovery`, `explore`, `idea`, `devflow-help`, `overview`, `debug`, `onboard`, `devflow-mode`, `prototype`, `audit`, plus optional opt-in extensions via `npx nexus-devflow skill add` such as `setup-tests`, `ci`, `release`, `rollback`, `vendor`, `convert-any-to-md`, `browseros-neo`). Invocation depends on your AI tool:
+   - **Canonical Name (Plain text)**: e.g., `feature`, `implement`, `devflow-mode`, `devflow-help`, `discovery`, `onboard`.
+   - **Slash Prefix (`/`)**: Claude Code, Google Antigravity, Gemini CLI, e.g., `/feature`, `/fix`, `/implement`, `/devflow-mode --all`, `/devflow-help`, `/discovery`.
+   - **Dollar Prefix (`$`)**: OpenAI Codex CLI, e.g., `$feature`, `$fix`, `$devflow-mode --all`, `$devflow-help`, `$discovery`.
 2. **OpenAI Codex & Non-Native CLI Tools**: In environments without automatic background skill discovery, inspect `.agents/skills/<skill>/SKILL.md` before executing the stage to follow its schema, artifact contract, and quality gates.
 3. **Google Antigravity & Claude Code**: Native skill engines automatically discover `.agents/skills/` and `.claude/skills/`.
-4. **State-Aware Inspection**: When unsure what to do next, invoke `/devflow` to inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md` (or `/devflow doctor` for diagnostics).
+4. **State-Aware Inspection**: When unsure what to do next, invoke `/devflow-help` (or `/devflow`) to inspect active task directories in `devflow/context/{xxx-slug}/`, `devflow/discoveries/`, and `devflow/ideas.md` (or `/devflow-help doctor` for diagnostics).
 5. **Default Artifact & Communication Language (Thai)**: All generated markdown stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 6. **Contextual Help**: When a DevFlow command is invoked with `help`, `--help`, `-h`, or `?`, follow [the help protocol](devflow/reference/help-playbook-protocol.md) to render a concise Markdown cheat sheet in chat without running the command's primary action or creating a task run.
 
@@ -75,13 +75,13 @@ Unused adapter families can be removed. Codex, Antigravity, GitHub Copilot, and 
 
 Status reporting shows the active or most recent substantial DevFlow command from per-run state files under `devflow/.state/runs/{run-id}.json` (with `devflow/.state/run.json` retained as legacy single-run fallback). These files are generated local state, ignored by Git, and never part of a feature commit. The `dashboard`, `ui`, and `studio` commands are removed. Use `nexus-devflow status` or `nexus-devflow mcp`.
 
-Substantial mutating or multi-step workflow commands (`onboard`, `overview`, `feature`, `fix`, `rollback`, `implement`, `check` verification mode, `autopilot`, `complete`) may publish progress on a best-effort basis when `devflow/.state/` or the helper exists. Read-only, diagnostic, and lightweight commands (`audit`, `debug`, `discovery`, `explore`, `idea`, `prototype`, `devflow`, `/feature --preview`, and `/check guide`) do not need to write activity state.
+Substantial mutating or multi-step workflow commands (`onboard`, `overview`, `feature`, `fix`, `rollback`, `implement`, `check` verification mode, `devflow-mode`, `complete`) may publish progress on a best-effort basis when `devflow/.state/` or the helper exists. Read-only, diagnostic, and lightweight commands (`audit`, `debug`, `discovery`, `explore`, `idea`, `prototype`, `devflow-help`, `/feature --preview`, and `/check guide`) do not need to write activity state.
 
 Never create or edit `run.json` or `runs/*.json` directly. When recording best-effort activity from the project root, use the first helper that exists:
 
 ```text
-node .agents/skills/devflow/scripts/run-state.mjs <action> --run-id <xxx-slug> <options>
-node .claude/skills/devflow/scripts/run-state.mjs <action> --run-id <xxx-slug> <options>
+node .agents/skills/devflow-help/scripts/run-state.mjs <action> --run-id <xxx-slug> <options>
+node .claude/skills/devflow-help/scripts/run-state.mjs <action> --run-id <xxx-slug> <options>
 ```
 
 Start with `start --run-id <xxx-slug> --branch <branch> --worktree <root> --command <skill> --summary <truthful-summary> --boundary <boundary>`. Use `update` at meaningful milestones, for handoff summaries (`--handoff-next`, `--handoff-note`, `--handoff-files`, `--handoff-decisions`), or for a blocker with `--status blocked` and `--resume <exact-command>`. End with `finish --run-id <xxx-slug> --status ready|completed --summary <truthful-summary>`. The helper validates every field before atomically replacing the generated file. If it is missing or fails, report the activity warning and continue the workflow without writing a manual fallback.
@@ -91,14 +91,14 @@ The helper writes this schema:
 ```json
 {
   "schemaVersion": 1,
-  "command": "autopilot",
+  "command": "devflow-mode",
   "status": "running",
   "summary": "Completing the remaining build plan",
   "detail": "Implementing feature 3.",
   "boundary": "local-only",
   "startedAt": "<ISO-8601 timestamp>",
   "updatedAt": "<ISO-8601 timestamp>",
-  "resumeCommand": "/autopilot --all resume",
+  "resumeCommand": "/devflow-mode --all resume",
   "progress": { "current": 2, "total": 5, "label": "features" },
   "feature": { "id": "3", "title": "Export reports" }
 }

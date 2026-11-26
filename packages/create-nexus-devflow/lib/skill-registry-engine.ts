@@ -57,21 +57,21 @@ export interface SkillUpdateResult {
 export type DevFlowRole = "dev" | "sa" | "full";
 
 export const DEV_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "audit", "autopilot",
+  "audit",
   "check", "complete",
-  "debug", "devflow", "explore", "feature", "fix",
+  "debug", "devflow-help", "devflow-mode", "explore", "feature", "fix",
   "idea", "implement", "onboard", "overview", "prototype"
 ]);
 
 export const SA_ROLE_SKILLS: readonly string[] = Object.freeze([
   "audit",
-  "devflow", "discovery", "explore", "feature", "idea", "overview", "prototype"
+  "devflow-help", "discovery", "explore", "feature", "idea", "overview", "prototype"
 ]);
 
 export const FULL_ROLE_SKILLS: readonly string[] = Object.freeze([
-  "audit", "autopilot",
+  "audit",
   "check", "complete",
-  "debug", "devflow", "discovery", "explore", "feature", "fix",
+  "debug", "devflow-help", "devflow-mode", "discovery", "explore", "feature", "fix",
   "idea", "implement", "onboard", "overview", "prototype"
 ]);
 

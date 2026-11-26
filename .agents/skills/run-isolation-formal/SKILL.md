@@ -13,7 +13,7 @@ Verifies two concurrency invariants for DevFlow's multi-run orchestration:
 
 - **Guarded source files:**
   - `packages/create-nexus-devflow/lib/branch-context.ts` (`reserveNextRunningId`, `evaluateWorktreeGuard`)
-  - `.agents/skills/devflow/scripts/run-state.mjs`
+  - `.agents/skills/devflow-help/scripts/run-state.mjs`
 - **Formal artifacts (excluded from user package template):**
   - `formal/RunStateAllocation.tla`
   - `formal/RunStateAllocation.cfg`
