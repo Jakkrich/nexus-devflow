@@ -13,7 +13,7 @@ Project governance and handoff hub for **Nexus-DevFlow maintainers**. Active tas
 | Field | Value |
 |---|---|
 | Repository / Owner | `Jakkrich/nexus-devflow` (branch `main`, version `3.0.0`) |
-| Last known commit | `953126a` (`chore(maintainer): install on-project agent-starter-kit with template isolation`) |
+| Last known commit | `v3.0.0` release merge from `feat/devflow-v3-pstack-rework` (`2bc54c9`) |
 | Runtime / Stack | Node.js `>=18.17`, TypeScript `^5.7.2` (ESM), zero-runtime-dep installer CLI (`packages/create-nexus-devflow` + wrapper `packages/nexus-devflow`), Playwright (optional browser tests) |
 | Build command | `npm --prefix packages/create-nexus-devflow run build` (`npm run build:docs`, `npm run overview`) |
 | Test / Verify command | `npm run check && npm test && npm run check:release` |
@@ -56,6 +56,13 @@ Project governance and handoff hub for **Nexus-DevFlow maintainers**. Active tas
 - [x] Resolved in Feature `132`: `doctor.ts` `detectPstackSkillPath` now detects `.agents/plugins/pstack`, `open-pstack` staging, and Claude/Codex/Copilot versioned plugin caches with full ancestor symlink checks.
 
 ## 5. Change Log (newest at top)
+
+### 2026-11-27 · Antigravity · Release `v3.0.0` (Merge `feat/devflow-v3-pstack-rework` -> `main` & Tag)
+- **What:**
+  - Verified full `verify-project` matrix on `feat/devflow-v3-pstack-rework` (`2bc54c9`), reconciled `.context/cos-board.md` (moved `feature-132` to Archive), merged into `main`, created annotated tag `v3.0.0`, and pushed `main` + `v3.0.0` to `origin`.
+- **Why:** User approved Option A (`Merge & Release v3.0.0` and tag new version).
+- **Verification:** `npm run typecheck`, `npm run check:static`, `npm run validate:docs` (1037 files), `scan-security-hygiene` (0 violations), `doctor` (17 passed, 0 warnings, 0 failed), `npm run check`, `npm test`, `npm run check:release` (286 create files, 4 wrapper files, 15 Core Skills/adapter, 8 extras, exit 0).
+- **Pending / Notes for next agent:** GitHub Actions CI/CD will build and publish `3.0.0` on tag `v3.0.0`.
 
 ### 2026-11-27 · Antigravity · Option 3 Role Split (`/devflow-mode` vs `/feature`) & Task-Nature Routing
 - **What:**
