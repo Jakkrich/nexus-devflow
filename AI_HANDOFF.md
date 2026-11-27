@@ -14,7 +14,7 @@ Released delivery history lives in [`devflow/history/HISTORY.md`](./devflow/hist
 | Field | Value |
 |---|---|
 | Repository / Owner | `Jakkrich/nexus-devflow` (active branch `feat/devflow-v3-pstack-rework`) |
-| Last known commit | `1b33289` (starter-kit/engine removal + QA Round 1–3 fixes) |
+| Last known commit | `8d20a47` (AI_HANDOFF cross-provider hub feature; v3.0.1 release metadata prepared next) |
 | Runtime / Stack | TypeScript + Node.js `>=18.17` + ESM CLI (`@jakkrichm/create-nexus-devflow`, `nexus-devflow`) + Markdown adapter skills |
 | Build command | `npm run sync:adapters && npm --prefix packages/create-nexus-devflow run prepack` |
 | Test / Verify command | `npm run check && npm run check:static && npm run check:budgets && npm run test:routing && npm test && npm run check:release` |
@@ -57,11 +57,17 @@ Released delivery history lives in [`devflow/history/HISTORY.md`](./devflow/hist
 
 ## 5. Tech Debt / Open Gaps
 
-- [ ] Publish `3.0.0` wrapper (`nexus-devflow`) and installer (`@jakkrichm/create-nexus-devflow`) to npm once branch merges to `main`.
+- [ ] Merge `feat/devflow-v3-pstack-rework` to `main`, tag `v3.0.1`, and push `origin main --tags` to publish `@jakkrichm/create-nexus-devflow@3.0.1` and `nexus-devflow@3.0.1` (skipping `3.0.0` because `@jakkrichm/create-nexus-devflow@3.0.0` already exists on npm).
 
 ---
 
 ## 6. Recent Handoffs / Change Log (newest at top)
+
+### 2026-11-27 · Antigravity (Poteto) · Cross-provider AI_HANDOFF hub & v3.0.1 release preparation (`8d20a47`)
+- **What:** Committed cross-provider `AI_HANDOFF.md` hub across `AGENTS.md`, `CLAUDE.md`, lifecycle skills, `prepare-template.ts`, `update.ts` (`USER_PRESERVED_SEED_FILES`), `doctor.ts` (`ai_handoff_hub`), `smoke-package.ts`, `check-release-readiness.ts`, and unit tests (`8d20a47`). Bumped all 4 lockstep manifests and MCP fallback version to `3.0.1` (skipping `3.0.0` to avoid npm collision) and added `[3.0.1]` notes in `CHANGELOG.md`.
+- **Why:** Prepare clean `v3.0.1` Release State on `feat/devflow-v3-pstack-rework` pending explicit maintainer approval for `main` merge, `v3.0.1` tag, and push.
+- **Verification:** Prior full suite + release gate (`check`, `check:static`, `check:budgets`, `test:routing` `129/129`, `npm test` `234+6+11+7+58`, `test:package`, `check:release`) passed; live CLI E2E (`/onboard` -> `/implement` -> `/complete` -> cold-start read) passed `13/13`; re-running full suite on `3.0.1` release prep.
+- **Pending / Notes for next agent:** Awaiting maintainer approval to merge `feat/devflow-v3-pstack-rework` into `main`, create annotated tag `v3.0.1`, and `git push origin main --tags`.
 
 ### 2026-11-27 · Antigravity (Poteto) · Remove starter-kit/engine coupling and resolve QA Round 1–3 bugs (`1b33289`)
 - **What:** Removed `pstack`/`chief-of-staff`/`execution.engine` coupling; fixed Multi-Run `runId`/`activeRuns` task/status resolution, `when-sensitive` completion gating, `malformed` spec gating (`--strict` & default), `review.ts` state/reports exclusions, UTF-8 BOM stripping, automatic `devflow/{.state,reports}/.gitignore`, JS `node --check` fallback, `run-state.mjs` label inheritance, and onboarding marker/template parity across skills and tests.

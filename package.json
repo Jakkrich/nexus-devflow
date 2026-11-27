@@ -1,6 +1,6 @@
 {
   "name": "nexus-devflow",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Enterprise-grade spec-driven development framework for multi-agent workflows",
   "type": "module",
   "private": true,

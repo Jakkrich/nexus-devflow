@@ -5,6 +5,22 @@ All notable changes to **Nexus-DevFlow** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2026-11-27
+
+### Added
+- **Cross-Provider `AI_HANDOFF.md` Hub**: Shipped sanitized starter [`devflow/reference/ai-handoff-template.md`](./devflow/reference/ai-handoff-template.md) packaged as `AI_HANDOFF.md`, integrated §0–§2 and §6 session bootstrap into `AGENTS.md` / `CLAUDE.md`, wired `/onboard` (including brownfield & local-only Git tracking), `/implement` (§2 Active Lock claiming), `/complete` (lock clear, §1 update, §6 recent handoffs prepend), and `/devflow-help` / `doctor` (`ai_handoff_hub` check).
+- **Non-Destructive Handoff Preservation & Template Hygiene**: Protected user-authored `AI_HANDOFF.md` files via `USER_PRESERVED_SEED_FILES` in `lib/update.ts`, `uninstall.ts`, `doctor.ts --fix`, `prepare-template.ts`, `smoke-package.ts`, and `check-release-readiness.ts` so installer updates or uninstalls never delete or overwrite existing team handoffs, verified by live CLI `/onboard` -> `/implement` -> `/complete` E2E checks (`13/13`).
+
+### Fixed
+- **Standalone v3 Engine & QA Round 1–3 Hardening (`8d20a47`, `1b33289`)**: Removed external starter-kit and `execution.engine` coupling, stabilized Multi-Run `runId`/`activeRuns` status resolution, enforced `when-sensitive` and `malformed` spec completion gating, excluded transient `.state`/`reports` artifacts from `review.ts` staleness checks, stripped UTF-8 BOM across parsers, added JS `node --check` fallback, and aligned `run-state.mjs` progress label inheritance.
+
+### Migration & Upgrade
+- Version `3.0.0` was superseded by `3.0.1` to avoid npm version collision with an earlier `@jakkrichm/create-nexus-devflow@3.0.0` artifact while synchronizing both `@jakkrichm/create-nexus-devflow` and `nexus-devflow` at `3.0.1`.
+- Run `npx nexus-devflow update --dry-run` followed by `npx nexus-devflow update` (cleanly seeds `AI_HANDOFF.md` when absent and preserves existing `AI_HANDOFF.md`, plans, and `devflow/config.json`).
+
+### Rollback Steps
+- Restore overwritten workflow files from timestamped backups under `devflow/.state/backups/` or pin the previous v2 release via `npx @jakkrichm/create-nexus-devflow@2.21.0 update`.
+
 ## [3.0.0] - 2026-11-26
 
 ### Added

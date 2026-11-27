@@ -24,7 +24,7 @@ function readInstalledPackageVersion(): string {
       // ignore missing candidate
     }
   }
-  return "3.0.0";
+  return "3.0.1";
 }
 
 export const PROTOCOL_VERSION = "2024-11-05";
