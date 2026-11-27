@@ -15,7 +15,7 @@ Use this playbook when `/devflow-mode` is invoked with `--all`, `--max <N>`, `--
 3. **Spec & Isolate**: Create `spec.md` (splitting into `Na`, `Nb` if oversized) and work on `feature/{xxx-slug}` in an isolated worktree/branch with Strict TDD (`[TDD-Red]` -> `[TDD-Green]` -> `[TDD-Refactor]`).
 4. **Evaluate `qualityGates.continuous`**:
    - Read `qualityGates.continuous` (`audit`, `independentReview`, `check`, `tryGuide`) and `review.independentExecution` from `devflow/config.json`.
-   - Run deterministic `verify-layers`, real-app `verify` / `/check`, and `pstack:interrogate` / `audit independent current` (when `independentReview` is active, spawn and wait for the fresh isolated reviewer subagent against an immutable local checkpoint; if `manual`, stop with handoff).
+   - Run deterministic `verify-layers`, real-app `verify` / `/check`, and `audit independent current` (when `independentReview` is active, spawn and wait for the fresh isolated reviewer subagent against an immutable local checkpoint; if `manual`, stop with handoff).
    - For browser-facing features, run `npm run test:browser` when declared and capture interactive browser evidence when available.
 5. **Bounded Repair**: Auto-repair confirmed in-scope P0/P1 findings via a fresh subagent up to `continuous.maxRepairAttempts` (default `2`), then re-verify. Unresolved P0/P1 findings stop the queue.
 6. **Local Archive & Delivery**:

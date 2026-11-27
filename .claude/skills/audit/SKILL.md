@@ -14,7 +14,7 @@ Where this sits in the workflow:
     (code exists)                    (review +    (repair quality issues
                                       ledger)      or close the feature)
 
-`/check` proves behavior against the spec. `/devflow doctor` checks Blueprint setup and
+`/check` proves behavior against the spec. `/devflow-help doctor` checks Blueprint setup and
 workflow health. This skill checks the code itself through either a broad review
 or one focused lens: quality, security, performance, or tests.
 
@@ -32,7 +32,7 @@ A selected `independentReview` gate invokes independent mode instead of letting
 the builder satisfy its own review. When both audit and independent review are
 selected, one passing independent review satisfies the audit gate.
 A missing config means built-in defaults. If it exists but is invalid, stop and
-point to `/devflow doctor` before writing the findings ledger.
+point to `/devflow-help doctor` before writing the findings ledger.
 
 ## Input
 
@@ -188,7 +188,7 @@ expectations. Apply only the selected lens or lenses:
   - *Verify Claims & Edge Cases*: Does the traced path actually produce the claimed behavior? What inputs/states would break it (concurrency, retries, null/unicode/huge payloads, ordering)? What does it silently change?
   - *Assumed Decision Debt Check*: Scan `devflow/decisions/` for any ADR with `Status: Assumed`. Flag unratified assumptions as `Q-xxx` (P2) to ensure ratification before production handoff.
   - *Blast-Radius & Safety Fact Proof*: Identify the single load-bearing fact the change's safety depends on, trace non-grep seams (wire/JSON contracts, DB columns, teardown order, pinned dependency internals, multi-hop callers), and classify confidence on the 5-level **Proof Ladder** (`1: Asserted` -> `2: Line cited` -> `3: Control-flow traced` -> `4: Executed via script/test` -> `5: Reproduced end-to-end`). Never clear a risky change on Level 1–2 alone when Level 4–5 is locally runnable.
-  - *Prove-by-Run & `interrogate` Classification*: When `execution.engine` resolves `pstack` on `standard` or `high-risk` tiers, `/audit` (or the Coordinator Verifier Swarm) may delegate adversarial diff scrutiny to `pstack`'s `interrogate` skill (without editing `pstack`) and record its output here. Distinguish:
+  - *Prove-by-Run Classification*: Record adversarial diff scrutiny outputs backed by real runs here. Distinguish:
     - **Confirmed (`open`)**: locally runnable P0/P1 behavioral defects backed by an exact repro command and observed failure output (Proof Ladder Level 4–5).
     - **Hypothesis (`unverified`)**: unrun suspicions or speculative edge cases not yet reproduced by execution. Record them with status `unverified` (`### S-001 [P1] unverified - Hypothesis: ...`) so they surface as advisories without falsely blocking `check-gate` — unless local execution is genuinely impossible for a critical trust/data-loss flaw, in which case document why execution could not run.
   - *No Rubber-Stamping*: "LGTM" is prohibited. State what was traced, what was verified, and what evidence supports the verdict.

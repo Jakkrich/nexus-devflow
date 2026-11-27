@@ -204,7 +204,8 @@ test("131a autonomous feature-branch policies are present across feature, implem
 
   const implement = fs.readFileSync(path.join(agentsSkillsRoot, "implement", "SKILL.md"), "utf8");
   assert.match(implement, /execution\.autoCommitFeatureBranch/);
-  assert.match(implement, /execution\.engine/);
+  assert.match(implement, /execution\.tier/);
+  assert.doesNotMatch(implement, /execution\.engine/);
   assert.match(implement, /option-a-evidence-packet/);
 
   const reviewRef = fs.readFileSync(
@@ -222,7 +223,7 @@ test("131a autonomous feature-branch policies are present across feature, implem
   assert.match(devflowHelp, /delivery\.gate/);
 });
 
-test("131b devflow-mode, devflow-help, bundled playbooks, and pstack adapter contracts", () => {
+test("131b devflow-mode, devflow-help, bundled playbooks, and adapter contracts", () => {
   for (const name of ["feature.md", "bug-fix.md", "refactor.md", "discovery.md", "autonomous-queue.md"]) {
     const pbPath = path.join(agentsSkillsRoot, "devflow-mode", "playbooks", name);
     assert.equal(fs.existsSync(pbPath), true, `Missing bundled playbook: ${name}`);
@@ -232,7 +233,7 @@ test("131b devflow-mode, devflow-help, bundled playbooks, and pstack adapter con
     path.join(agentsSkillsRoot, "devflow-mode", "reference", "platform-adapters.md"),
     "utf8"
   );
-  for (const runtime of ["Antigravity", "Claude Code", "Codex", "Copilot", "OpenCode", "pstack"]) {
+  for (const runtime of ["Antigravity", "Claude Code", "Codex", "Copilot", "OpenCode"]) {
     assert.match(adaptersRef, new RegExp(runtime, "i"));
   }
 
@@ -259,19 +260,17 @@ test("131c evidence-first verification, onboard verify bootstrap, and audit prov
     path.join(agentsSkillsRoot, "verify", "features", "status-and-doctor.md"),
     "utf8"
   );
-  assert.match(verifyStatusDoc, /execution_engine_pstack/);
+  assert.match(verifyStatusDoc, /execution\.tier/);
   assert.match(verifyStatusDoc, /verification_driver_skill/);
 
   const onboardSkill = fs.readFileSync(path.join(agentsSkillsRoot, "onboard", "SKILL.md"), "utf8");
   assert.match(onboardSkill, /\.agents\/skills\/verify\/SKILL\.md/);
-  assert.match(onboardSkill, /create-verification-skill/);
 
   const brownfield = fs.readFileSync(
     path.join(agentsSkillsRoot, "onboard", "reference", "brownfield.md"),
     "utf8"
   );
   assert.match(brownfield, /\.agents\/skills\/verify\/SKILL\.md/);
-  assert.match(brownfield, /create-verification-skill/);
 
   const checkRef = fs.readFileSync(
     path.join(agentsSkillsRoot, "check", "reference", "verify.md"),
@@ -284,22 +283,10 @@ test("131c evidence-first verification, onboard verify bootstrap, and audit prov
   const auditSkill = fs.readFileSync(path.join(agentsSkillsRoot, "audit", "SKILL.md"), "utf8");
   assert.doesNotMatch(auditSkill, /\/autopilot\b/);
   assert.match(auditSkill, /Prove-by-Run/);
-  assert.match(auditSkill, /interrogate/);
   assert.match(auditSkill, /\bunverified\b/);
 });
 
-test("132 pstack integration contracts across platform-adapters, onboard, devflow-mode, and devflow-help", () => {
-  const adaptersRef = fs.readFileSync(
-    path.join(agentsSkillsRoot, "devflow-mode", "reference", "platform-adapters.md"),
-    "utf8"
-  );
-  assert.match(adaptersRef, /<skills>/);
-  assert.match(adaptersRef, /\.agents\/plugins\/pstack/);
-  assert.match(adaptersRef, /open-pstack/);
-  assert.match(adaptersRef, /plugins\/cache/);
-  assert.match(adaptersRef, /session hook:\s*off/i);
-  assert.match(adaptersRef, /PSTACK_SESSION_HOOK=off/);
-
+test("132 native verify adapter sync and playbook path contracts across onboard, devflow-mode, and devflow-help", () => {
   const devflowMode = fs.readFileSync(path.join(agentsSkillsRoot, "devflow-mode", "SKILL.md"), "utf8");
   assert.match(devflowMode, /devflow\/playbooks/);
 
@@ -308,7 +295,6 @@ test("132 pstack integration contracts across platform-adapters, onboard, devflo
     "utf8"
   );
   assert.match(doctorRef, /devflow\/playbooks/);
-  assert.match(doctorRef, /session hook:\s*off/i);
 
   for (const rel of ["onboard/SKILL.md", "onboard/reference/brownfield.md"]) {
     const text = fs.readFileSync(path.join(agentsSkillsRoot, rel), "utf8");

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { resolveActiveContextPaths } from "./branch-context.js";
+import { parseChecklistSteps } from "./branch-context.js";
 
 type CurrentWorkState = "active" | "idle" | "malformed";
 type CurrentWorkType = "feature" | "fix" | "rollback" | "stage";
@@ -81,7 +81,8 @@ async function readFastTrackWork(featurePath: string): Promise<CurrentWorkSummar
   return idleSummary();
 }
 
-function parseCurrentWork(markdown: string): CurrentWorkSummary {
+function parseCurrentWork(rawMarkdown: string): CurrentWorkSummary {
+  const markdown = rawMarkdown.replace(/^\uFEFF/, "");
   if (markdown.trim() === "") {
     return malformedSummary({
       code: "empty_current_work",
@@ -121,7 +122,7 @@ function parseCurrentWork(markdown: string): CurrentWorkSummary {
     fieldValue ||
     compatibilityFeature?.title ||
     heading;
-  const status = markdown.match(/^\*\*Status:\*\*\s*(.+)$/im)?.[1]?.trim() || null;
+  const status = markdown.match(/^>?\s*(?:\*\*Status:\*\*|\*\*Status\*\*:)\s*(.+)$/im)?.[1]?.trim() || null;
   const runId = markdown.match(/^\*\*Running ID:\*\*\s*`?([A-Za-z0-9-_]+)`?/im)?.[1] || null;
   const explicitBuildPlanItem = markdown.match(
     /^\*\*From build-plan:\*\*\s*feature\s+([0-9]+[a-z]?)\b/im
@@ -176,7 +177,7 @@ function parseCompatibilityFeature(
 function parseChecklistWork(markdown: string, runId: string): CurrentWorkSummary {
   const steps = parseChecklistSteps(markdown) || [];
   const completed = steps.filter((step) => step.checked).length;
-  const heading = markdown.match(/^#\s+(.+)$/m)?.[1]?.trim() || "Implementation";
+  const heading = markdown.replace(/^\uFEFF/, "").match(/^#\s+(.+)$/m)?.[1]?.trim() || "Implementation";
 
   return {
     state: "active",
@@ -192,30 +193,6 @@ function parseChecklistWork(markdown: string, runId: string): CurrentWorkSummary
     nextStep: steps.find((step) => !step.checked) || null,
     warnings: []
   };
-}
-
-function parseChecklistSteps(markdown: string): CurrentWorkStep[] {
-  const lines = markdown.split(/\r?\n/);
-  const steps: CurrentWorkStep[] = [];
-
-  for (let index = 0; index < lines.length; index += 1) {
-    const match = lines[index].match(CHECKBOX_PATTERN);
-    if (match) {
-      steps.push({
-        checked: match[1].toLowerCase() === "x",
-        line: index + 1,
-        title: parseStepTitle(match[2].trim())
-      });
-    }
-  }
-
-  return steps;
-}
-
-function parseStepTitle(content: string): string {
-  const boldTitle = content.match(/^(?:\d+\.\s*)?\*\*(.+?)\*\*/)?.[1];
-  const label = boldTitle || content.split(/\s+-\s+/, 1)[0] || content;
-  return label.replace(/^Step\s+\d+\s*[-:]\s*/i, "").trim();
 }
 
 function normalizeWorkType(label: string | null): CurrentWorkType | null {

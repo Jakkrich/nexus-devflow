@@ -96,23 +96,3 @@ disable-model-invocation: true
   assert.equal(fm.disableModelInvocation, true);
 });
 
-test("checkSkillBudgets honors DESCRIPTION_CHAR_OVERRIDES for chief-of-staff", () => {
-  const desc = "a".repeat(415);
-  const sampleSkill = `---
-name: chief-of-staff
-description: "${desc}"
-disable-model-invocation: true
----
-# Chief of Staff`;
-
-  const tempDir = path.resolve("devflow/tmp/test-budgets-cos-override");
-  fs.mkdirSync(path.join(tempDir, "chief-of-staff"), { recursive: true });
-  fs.writeFileSync(path.join(tempDir, "chief-of-staff", "SKILL.md"), sampleSkill, "utf8");
-
-  try {
-    const result = checkSkillBudgets(tempDir);
-    assert.deepEqual(result.violations, []);
-  } finally {
-    fs.rmSync(tempDir, { recursive: true, force: true });
-  }
-});

@@ -265,7 +265,7 @@ test("runDoctor reports overview_integrity pass/warn across fresh, stale, oversi
     await fs.writeFile(path.join(tempDir, "devflow", "context", "project-overview.md"), compiledOverview, "utf8");
 
     // 1. Fresh compiled overview -> pass
-    const freshDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+    const freshDoc = await runDoctor(tempDir);
     const freshCheck = freshDoc.checks.find((c) => c.id === "overview_integrity");
     assert.ok(freshCheck);
     assert.equal(freshCheck.status, "pass");
@@ -276,7 +276,7 @@ test("runDoctor reports overview_integrity pass/warn across fresh, stale, oversi
       `${projectPlan}\n## Architecture\nAdded module.\n`,
       "utf8"
     );
-    const staleDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+    const staleDoc = await runDoctor(tempDir);
     const staleCheck = staleDoc.checks.find((c) => c.id === "overview_integrity");
     assert.ok(staleCheck);
     assert.equal(staleCheck.status, "warn");
@@ -289,7 +289,7 @@ test("runDoctor reports overview_integrity pass/warn across fresh, stale, oversi
       `${compiledOverview}\n${"a".repeat(OVERVIEW_MAX_BYTES)}`,
       "utf8"
     );
-    const oversizedDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+    const oversizedDoc = await runDoctor(tempDir);
     const oversizedCheck = oversizedDoc.checks.find((c) => c.id === "overview_integrity");
     assert.ok(oversizedCheck);
     assert.equal(oversizedCheck.status, "warn");
@@ -297,7 +297,7 @@ test("runDoctor reports overview_integrity pass/warn across fresh, stale, oversi
 
     // 4. Plain # stub remains pass (zero false warning)
     await fs.writeFile(path.join(tempDir, "devflow", "context", "project-overview.md"), "# stub\n", "utf8");
-    const stubDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+    const stubDoc = await runDoctor(tempDir);
     const stubCheck = stubDoc.checks.find((c) => c.id === "overview_integrity");
     assert.ok(stubCheck);
     assert.equal(stubCheck.status, "pass");
@@ -307,7 +307,7 @@ test("runDoctor reports overview_integrity pass/warn across fresh, stale, oversi
     await fs.writeFile(outsideOverview, compiledOverview, "utf8");
     await fs.rm(path.join(tempDir, "devflow", "context", "project-overview.md"));
     await fs.symlink(outsideOverview, path.join(tempDir, "devflow", "context", "project-overview.md"));
-    const symlinkDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+    const symlinkDoc = await runDoctor(tempDir);
     const symlinkCheck = symlinkDoc.checks.find((c) => c.id === "overview_integrity");
     assert.ok(symlinkCheck);
     assert.equal(symlinkCheck.status, "warn");
@@ -317,7 +317,7 @@ test("runDoctor reports overview_integrity pass/warn across fresh, stale, oversi
     await fs.rm(path.join(tempDir, "devflow", "context", "project-overview.md"));
     const { sanitizeStarterFiles } = await import("../scripts/prepare-template.js");
     await sanitizeStarterFiles(tempDir, repoRoot);
-    const starterDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+    const starterDoc = await runDoctor(tempDir);
     const starterCheck = starterDoc.checks.find((c) => c.id === "overview_integrity");
     assert.ok(starterCheck);
     assert.equal(starterCheck.status, "pass", `Expected pass on fresh starter overview, got: ${starterCheck.message}`);

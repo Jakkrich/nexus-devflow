@@ -612,8 +612,94 @@ test("readProjectStatus blocks completion and suggests doctor on findings fault"
     const status = await readProjectStatus(tempDir);
     assert.equal(status.completion.state, "blocked");
     assert.ok(status.completion.blockers.includes("findings record is malformed"));
-    assert.equal(status.nextAction.command, "/devflow doctor");
+    assert.equal(status.nextAction.command, "/devflow-help doctor");
   } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("readProjectStatus handles Multi-Run slug fallback, ignores AC checkboxes, respects when-sensitive, and routes un-onboarded idle repos to /onboard", async () => {
+  const idleDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-idle-onboard-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-status-v3-regressions-"));
+  try {
+    await fs.mkdir(path.join(idleDir, "devflow", "context"), { recursive: true });
+    await fs.mkdir(path.join(idleDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(
+      path.join(idleDir, "AGENTS.md"),
+      "# Project\n\n<!-- devflow:onboarding-required -->\n",
+      "utf8"
+    );
+
+    const idleStatus = await readProjectStatus(idleDir);
+    assert.equal(idleStatus.currentWork.state, "idle");
+    assert.equal(idleStatus.nextAction.command, "/onboard");
+
+    await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+    await fs.mkdir(path.join(tempDir, ".agents", "skills"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Project\n", "utf8");
+    await runGit(tempDir, ["init", "-b", "main"]);
+    await runGit(tempDir, ["config", "user.name", "DevFlow Test"]);
+    await runGit(tempDir, ["config", "user.email", "test@nexus-devflow.local"]);
+    await runGit(tempDir, ["add", "."]);
+    await runGit(tempDir, ["commit", "-m", "chore: init"]);
+    await runGit(tempDir, ["checkout", "-b", "feature/001-filter-notes"]);
+    const taskDir = path.join(tempDir, "devflow", "context", "001-filter-notes");
+    await fs.mkdir(taskDir, { recursive: true });
+    await fs.writeFile(
+      path.join(taskDir, "spec.md"),
+      [
+        "# Feature: [001-filter-notes] Filter notes by tag",
+        "",
+        "> **Status**: Verified",
+        "",
+        "## 1. Specification & Scope",
+        "### 1.4 Acceptance Criteria",
+        "- [ ] **AC-1**: Filter matches exact tag",
+        "",
+        "## 3. Implementation Checklist",
+        "- [x] Task 1: Add filter helper",
+        "",
+        "## 4. Verification Evidence Matrix",
+        "### Axis 2: Spec Fidelity",
+        "- [ ] **AC-1**: Verified by tests"
+      ].join("\n"),
+      "utf8"
+    );
+
+    const activeStatus = await readProjectStatus(tempDir);
+    assert.equal(activeStatus.currentWork.state, "active");
+    assert.equal(activeStatus.currentWork.runId, "001-filter-notes");
+    assert.equal(activeStatus.currentWork.status, "Verified");
+    assert.equal(activeStatus.currentWork.completed, 1);
+    assert.equal(activeStatus.currentWork.total, 1);
+    assert.equal(activeStatus.currentWork.remaining, 0);
+    assert.equal(activeStatus.activeRuns[0]?.completedTasks, 1);
+    assert.equal(activeStatus.activeRuns[0]?.totalTasks, 1);
+    assert.equal(activeStatus.activeRuns[0]?.remainingTasks, 0);
+    assert.equal(activeStatus.activeRuns[0]?.status, "verified");
+    assert.equal(activeStatus.warnings.some((w) => w.code === "completed_steps_not_released"), false);
+    assert.equal(activeStatus.health, "ok");
+    assert.deepEqual(activeStatus.completion.blockers, []);
+    assert.equal(activeStatus.completion.state, "ready");
+    assert.equal(activeStatus.nextAction.command, "/complete");
+
+    // UTF-8 BOM tolerance for config.json and spec.md
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "config.json"),
+      `\uFEFF${JSON.stringify({ schemaVersion: 1, qualityGates: { regular: { check: "always" } } })}`,
+      "utf8"
+    );
+    await fs.writeFile(
+      path.join(taskDir, "spec.md"),
+      `\uFEFF# Feature: [001-filter-notes] Filter notes by tag\n\n> **Status**: Verified\n\n## 3. Implementation Checklist\n- [x] Task 1: Done\n`,
+      "utf8"
+    );
+    const bomStatus = await readProjectStatus(tempDir);
+    assert.equal(bomStatus.configuration.state, "project");
+    assert.equal(bomStatus.currentWork.state, "active");
+    assert.equal(bomStatus.completion.state, "ready");
+  } finally {
+    await fs.rm(idleDir, { recursive: true, force: true });
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });

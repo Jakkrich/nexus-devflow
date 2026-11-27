@@ -9,7 +9,6 @@ export interface TarballInspectionResult {
   readonly createFiles: string[];
   readonly wrapperFiles: string[];
   readonly templatePlansSanitized?: boolean;
-  readonly templateEntrypointsSanitized?: boolean;
 }
 
 export interface ReleaseReadinessCheck {
@@ -79,11 +78,7 @@ const FORBIDDEN_TARBALL_PATTERNS: readonly RegExp[] = [
   /(^|\/)devflow\/(discoveries|decisions)\/(?!README\.md$|\.gitkeep$).+/,
   /(^|\/)devflow\/check-layers\.json$/,
   /(^|\/)devflow\/context\/\d+[^/]*\//,
-  /(^|\/)AI_HANDOFF\.md$/,
-  /(^|\/)GEMINI\.md$/,
-  /(^|\/)\.context\//,
-  /(^|\/)\.(agents|claude)\/(?:\.gitignore|starter-kit\.json|assets\/|docs\/|tools\/|rules\/|plugins\/|\.cache\/|\.backup\/)/,
-  /(^|\/)\.(agents|claude)\/skills\/(publish-devflow|run-isolation-formal|concurrent-run-isolation-proof|update-resilience-proof|verify|verify-completion-gate|create-formal-verification-skill|maintain-formal-verification-skill|chief-of-staff|make-bot-ui|verify-project)\//
+  /(^|\/)\.(agents|claude)\/skills\/(publish-devflow|run-isolation-formal|concurrent-run-isolation-proof|update-resilience-proof|verify|verify-completion-gate|create-formal-verification-skill|maintain-formal-verification-skill)\//
 ];
 
 const CORE_SKILL_SET = new Set<string>(CORE_SKILLS);
@@ -148,9 +143,6 @@ async function inspectRealPackageTarballs(projectRoot: string): Promise<TarballI
       path.join(projectRoot, "devflow", "reference", "build-plan-template.md"),
       "utf8"
     );
-    const templateAgents = await fs.readFile(path.join(createPkgDir, "template", "AGENTS.md"), "utf8");
-    const templateClaude = await fs.readFile(path.join(createPkgDir, "template", "CLAUDE.md"), "utf8");
-
     const createPackJson = execSync(`${npmBin} pack --dry-run --json --ignore-scripts`, {
       cwd: createPkgDir,
       encoding: "utf8",
@@ -166,9 +158,7 @@ async function inspectRealPackageTarballs(projectRoot: string): Promise<TarballI
       createFiles: parseNpmPackFiles(createPackJson),
       wrapperFiles: parseNpmPackFiles(wrapperPackJson),
       templatePlansSanitized:
-        templateProjectPlan === refProjectPlan && templateBuildPlan === refBuildPlan,
-      templateEntrypointsSanitized:
-        !templateAgents.includes("AGENT-STARTER-KIT") && !templateClaude.includes("AGENT-STARTER-KIT")
+        templateProjectPlan === refProjectPlan && templateBuildPlan === refBuildPlan
     };
   } catch (err: unknown) {
     primaryFailed = true;
@@ -382,14 +372,12 @@ export async function evaluateReleaseReadiness(
         .map((filePath) => `nexus-devflow/${filePath}`);
       const leaked = [...leakedCreate, ...leakedWrapper];
       const plansSanitized = pack.templatePlansSanitized !== false;
-      const entrypointsSanitized = pack.templateEntrypointsSanitized !== false;
-      const tarballOk = missing.length === 0 && leaked.length === 0 && plansSanitized && entrypointsSanitized;
+      const tarballOk = missing.length === 0 && leaked.length === 0 && plansSanitized;
 
       const reasons: string[] = [];
       if (missing.length > 0) reasons.push(`missing=[${missing.join(", ")}]`);
       if (leaked.length > 0) reasons.push(`leaked=[${leaked.join(", ")}]`);
       if (!plansSanitized) reasons.push("template starter plans differ from devflow/reference/*-template.md");
-      if (!entrypointsSanitized) reasons.push("template AGENTS.md/CLAUDE.md still contain AGENT-STARTER-KIT markers");
 
       checks.push({
         id: "tarball_hygiene",

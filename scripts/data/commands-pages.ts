@@ -578,7 +578,7 @@ $onboard</code></pre>
     slug: 'commands/devflow-help',
     category: 'COMMANDS',
     title: 'DevFlow Help (/devflow-help, /devflow-help doctor)',
-    lead: 'ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)',
+    lead: 'ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/Config (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)',
     pills: ['Command', 'DevFlowHelp', 'Status', 'Doctor', 'PromptBuilder', 'HealthCheck', 'Router', 'Read-Only'],
     sections: [
       {
@@ -592,7 +592,7 @@ $onboard</code></pre>
 # รายงานสรุปผู้บริหารแบบไม่เปิดเผย path โค้ด
 /devflow-help --exec
 
-# ตรวจสุขภาพ Adapters, Config, Execution Engine (pstack), Verify Driver และ Overview 20KB Guard
+# ตรวจสุขภาพ Adapters, Config, Verify Driver และ Overview 20KB Guard
 /devflow-help doctor</code></pre>
         `
       },
@@ -603,7 +603,7 @@ $onboard</code></pre>
           <ul>
             <li><strong>Interactive Guide &amp; Prompt Builder</strong>: อ่านสถานะปัจจุบันจาก <code>devflow/</code> แล้วสร้างคำสั่งและ prompt พร้อมส่งสำหรับขั้นตอนถัดไป</li>
             <li><strong>Build Plan &amp; Active Context</strong>: ความคืบหน้า Build Plan, Spec/Findings/Review Gate ใน <code>devflow/context/</code>, และ Exact Next Action</li>
-            <li><strong>Adapters, Verify &amp; Engine Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code>, <code>execution_engine_pstack</code>, <code>verification_driver_skill</code>, และขนาด <code>project-overview.md</code> (&lt; 20KB)</li>
+            <li><strong>Adapters, Verify &amp; Engine Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code>, <code>verification_driver_skill</code>, และขนาด <code>project-overview.md</code> (&lt; 20KB)</li>
             <li><strong>Legacy Command Routing</strong>: แปลคำสั่งเดิม (เช่น <code>/autopilot</code>, <code>/devflow</code>, <code>/adopt</code>, <code>/brief</code>, <code>/continuous</code>, <code>/try</code>, <code>/grill</code>) ไปยัง 15 Core Skills</li>
           </ul>
         `
@@ -869,8 +869,8 @@ npx nexus-devflow skill add setup-tests
     slug: 'commands/devflow-mode',
     category: 'COMMANDS',
     title: 'DevFlow Mode (/devflow-mode, /devflow-mode --all)',
-    lead: 'Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)',
-    pills: ['Command', 'DevFlowMode', 'Coordinator', 'Playbooks', 'Subagents', 'pstack', 'Autonomous'],
+    lead: 'Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents และ Option A Evidence Packet (แทน /autopilot)',
+    pills: ['Command', 'DevFlowMode', 'Coordinator', 'Playbooks', 'Subagents', 'Autonomous'],
     sections: [
       {
         id: 'when-to-use-it',
@@ -892,7 +892,7 @@ npx nexus-devflow skill add setup-tests
           <ol>
             <li><strong>Coordinator Planning</strong>: จัดทำ Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code> (เดินหน้าอัตโนมัติบน branch เมื่อ <code>execution.autoApproveSpec: true</code>)</li>
             <li><strong>Isolated TDD Subagents</strong>: ให้ worker subagents พัฒนาและทดสอบแบบ TDD บน isolated worktree/branch</li>
-            <li><strong>3-Layer Evidence Verification</strong>: รัน <code>verify-layers</code>, project <code>verify</code> driver, และ <code>pstack:interrogate</code> / <code>audit</code> แบบ Prove-by-Run บันทึกหลักฐานลง <code>devflow/reports/{run-id}/</code></li>
+            <li><strong>3-Layer Evidence Verification</strong>: รัน <code>verify-layers</code>, project <code>verify</code> driver, และ <code>audit</code> แบบ Prove-by-Run บันทึกหลักฐานลง <code>devflow/reports/{run-id}/</code></li>
             <li><strong>Bounded Auto-Repair</strong>: แก้ไข Confirmed P0/P1 findings ที่รันซ้ำได้จริงและตรวจซ้ำอัตโนมัติ</li>
             <li><strong>Option A Final Human Gate</strong>: หยุดบนสาขา feature พร้อม <strong>Evidence Packet</strong> ให้มนุษย์ตัดสินใจ Merge / PR / Push เสมอ</li>
           </ol>

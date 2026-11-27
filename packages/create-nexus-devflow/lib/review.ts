@@ -132,7 +132,8 @@ async function readIndependentReview(
   }
 }
 
-function parseIndependentReview(markdown: string): IndependentReviewSummary {
+function parseIndependentReview(rawMarkdown: string): IndependentReviewSummary {
+  const markdown = rawMarkdown.replace(/^\uFEFF/, "");
   if (markdown.includes(RESET_MARKER) && !/^\*\*Status:\*\*/m.test(markdown)) {
     return emptySummary();
   }
@@ -375,6 +376,12 @@ async function hasRelevantDiff(
   relReviewPath: string,
   relFindingsPath: string
 ): Promise<boolean | null> {
+  const ignoredArtifactPrefixes = ["devflow/.state/", "devflow/reports/", ".nexus/"];
+  const isIgnoredArtifact = (file: string): boolean =>
+    file === relReviewPath ||
+    file === relFindingsPath ||
+    ignoredArtifactPrefixes.some((prefix) => file.startsWith(prefix));
+
   try {
     await execFileAsync(
       "git",
@@ -387,7 +394,10 @@ async function hasRelevantDiff(
         "--",
         ".",
         `:(exclude)${relReviewPath}`,
-        `:(exclude)${relFindingsPath}`
+        `:(exclude)${relFindingsPath}`,
+        ":(exclude)devflow/.state",
+        ":(exclude)devflow/reports",
+        ":(exclude).nexus"
       ],
       { encoding: "utf8", maxBuffer: 1024 * 1024 }
     );
@@ -412,7 +422,7 @@ async function hasRelevantDiff(
   return untracked
     .split("\0")
     .filter(Boolean)
-    .some((file) => file !== relReviewPath && file !== relFindingsPath);
+    .some((file) => !isIgnoredArtifact(file));
 }
 
 async function readOptionalRegularFile(filePath: string): Promise<string | null> {

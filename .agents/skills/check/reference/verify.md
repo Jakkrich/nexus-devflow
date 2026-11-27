@@ -30,7 +30,7 @@ verify the whole current feature against every "done when" in
 ## Step 1 - build the checklist
 
 Read `devflow/config.json` first. A missing file means the built-in defaults
-apply. If the file exists but is invalid, stop and point the user to `/devflow doctor`.
+apply. If the file exists but is invalid, stop and point the user to `/devflow-help doctor`.
 Configuration never grants permission to start a server or take any other action
 that the project instructions or user have not authorized.
 The quality-gate config controls automatic invocation only. An explicit `/check`
@@ -48,7 +48,7 @@ If there's no active feature spec, ask what to verify rather than guessing.
 Before exercising UI/CLI flows, run the executable 3-layer gate directly (first available command):
 
 - `npx tsx scripts/tooling.ts verify-layers --json` (when `scripts/tooling.ts` exists in this repo)
-- `npx nexus-devflow verify-layers --json` (in installed projects)
+- `npx nexus-devflow verify-layers --json` (in installed projects, or `npx @jakkrichm/create-nexus-devflow verify-layers --json` if an older `nexus-devflow` wrapper is cached)
 
 This code runner detects changed-file languages, enforces each layer's named `requiredLib`, and stops immediately on failure:
 1. **Layer 1:** per-language lint/typecheck
@@ -61,7 +61,7 @@ Hard stop rule: if `verify-layers` exits non-zero, **do not continue** to later 
 
 ## Step 2 - get the app running
 
-First inspect whether a project-local `verify` driver skill (`.agents/skills/verify/SKILL.md`, `.claude/skills/verify/SKILL.md`, or `verify-*/SKILL.md`) exists. When present, read its `Launch`, `Doctor`, and `features/README.md` map and prefer driving the real surface through that maintained driver inside an isolated workspace, port, or browser profile. When `execution.engine` resolves `pstack` on `standard` or `high-risk` tiers with multiple independent feature flows, you may fan out parallel read-only/isolated verification lanes via `pstack`'s `swarm` skill and merge their evidence under `devflow/reports/{xxx-slug}/`.
+First inspect whether a project-local `verify` driver skill (`.agents/skills/verify/SKILL.md`, `.claude/skills/verify/SKILL.md`, or `verify-*/SKILL.md`) exists. When present, read its `Launch`, `Doctor`, and `features/README.md` map and prefer driving the real surface through that maintained driver inside an isolated workspace, port, or browser profile. When verifying multiple independent feature flows, you may fan out parallel read-only/isolated verification subagents and merge their evidence under `devflow/reports/{xxx-slug}/`.
 
 Otherwise, use the project's real commands (see Commands in `AGENTS.md`) matching the project type:
 

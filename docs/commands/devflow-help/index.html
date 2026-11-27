@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DevFlow Help (/devflow-help, /devflow-help doctor) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)">
+  <meta name="description" content="ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/Config (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/devflow-help/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,7 +147,7 @@
       <h1 class="docs-title">DevFlow Help (/devflow-help, /devflow-help doctor)</h1>
       
       <p class="docs-lead">
-        ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)
+        ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/Config (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)
       </p>
 
       <div class="docs-meta">
@@ -174,7 +174,7 @@
 # รายงานสรุปผู้บริหารแบบไม่เปิดเผย path โค้ด
 /devflow-help --exec
 
-# ตรวจสุขภาพ Adapters, Config, Execution Engine (pstack), Verify Driver และ Overview 20KB Guard
+# ตรวจสุขภาพ Adapters, Config, Verify Driver และ Overview 20KB Guard
 /devflow-help doctor</code></pre>
         
           
@@ -187,7 +187,7 @@
           <ul>
             <li><strong>Interactive Guide &amp; Prompt Builder</strong>: อ่านสถานะปัจจุบันจาก <code>devflow/</code> แล้วสร้างคำสั่งและ prompt พร้อมส่งสำหรับขั้นตอนถัดไป</li>
             <li><strong>Build Plan &amp; Active Context</strong>: ความคืบหน้า Build Plan, Spec/Findings/Review Gate ใน <code>devflow/context/</code>, และ Exact Next Action</li>
-            <li><strong>Adapters, Verify &amp; Engine Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code>, <code>execution_engine_pstack</code>, <code>verification_driver_skill</code>, และขนาด <code>project-overview.md</code> (&lt; 20KB)</li>
+            <li><strong>Adapters, Verify &amp; Engine Health (Doctor Mode)</strong>: ตรวจสอบ <code>.agents/skills/</code>, <code>.claude/skills/</code>, Schema ของ <code>devflow/config.json</code>, <code>verification_driver_skill</code>, และขนาด <code>project-overview.md</code> (&lt; 20KB)</li>
             <li><strong>Legacy Command Routing</strong>: แปลคำสั่งเดิม (เช่น <code>/autopilot</code>, <code>/devflow</code>, <code>/adopt</code>, <code>/brief</code>, <code>/continuous</code>, <code>/try</code>, <code>/grill</code>) ไปยัง 15 Core Skills</li>
           </ul>
         

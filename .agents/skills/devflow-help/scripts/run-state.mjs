@@ -194,7 +194,14 @@ function validateOptions(options) {
   const progressCount = [options.current, options.total, options.label]
     .filter((value) => value !== null).length;
   if (progressCount !== 0 && progressCount !== 3) {
-    throw new Error("Progress requires --current, --total, and --label together.");
+    const canInheritLabel =
+      options.action === "update" &&
+      options.current !== null &&
+      options.total !== null &&
+      options.label === null;
+    if (!canInheritLabel) {
+      throw new Error("Progress requires --current, --total, and --label together.");
+    }
   }
   if (options.featureId && !options.featureTitle) {
     throw new Error("--feature-id requires --feature-title.");
@@ -296,7 +303,7 @@ function buildState(options, previous, timestamp) {
       : previous.summary,
     updatedAt: timestamp
   };
-  applyOptionalFields(state, options);
+  applyOptionalFields(state, options, previous);
 
   if (
     options.action === "finish" ||
@@ -320,7 +327,7 @@ function parseCommaList(value) {
     .filter(Boolean);
 }
 
-function applyOptionalFields(state, options) {
+function applyOptionalFields(state, options, previous = null) {
   if (options.runId) {
     state.runId = validateRunId(options.runId);
   }
@@ -341,10 +348,14 @@ function applyOptionalFields(state, options) {
     );
   }
   if (options.current !== null) {
+    const resolvedLabel = options.label ?? previous?.progress?.label ?? null;
+    if (!resolvedLabel) {
+      throw new Error("Progress requires --current, --total, and --label together.");
+    }
     state.progress = validateProgress({
       current: options.current,
       total: options.total,
-      label: options.label
+      label: resolvedLabel
     });
   }
   if (options.featureTitle) {
@@ -543,13 +554,35 @@ async function readState(projectRoot, runId = null) {
   try {
     parsed = JSON.parse(await fs.readFile(filePath, "utf8"));
   } catch {
-    throw new Error("Existing run state is malformed. Start a new run or use /devflow-help doctor (or /devflow doctor).");
+    throw new Error("Existing run state is malformed. Start a new run or use /devflow-help doctor.");
   }
   return validateState(parsed);
 }
 
+async function ensureStateGitignore(projectRoot) {
+  const gitignorePath = path.join(projectRoot, "devflow", ".state", ".gitignore");
+  try {
+    await fs.writeFile(gitignorePath, "*\n!.gitignore\n", { encoding: "utf8", flag: "wx" });
+  } catch (error) {
+    if (error?.code !== "EEXIST") {
+      throw error;
+    }
+  }
+  const reportsDir = path.join(projectRoot, "devflow", "reports");
+  await ensureRealDir(reportsDir, "DevFlow reports path");
+  const reportsGitignorePath = path.join(reportsDir, ".gitignore");
+  try {
+    await fs.writeFile(reportsGitignorePath, "*\n", { encoding: "utf8", flag: "wx" });
+  } catch (error) {
+    if (error?.code !== "EEXIST") {
+      throw error;
+    }
+  }
+}
+
 async function writeState(projectRoot, state, runId = null) {
   await ensureRealDir(path.join(projectRoot, "devflow", ".state"), "DevFlow state path");
+  await ensureStateGitignore(projectRoot);
   if (runId) {
     await ensureRunsDir(projectRoot);
   }

@@ -8,7 +8,6 @@ const PROJECT_CONFIG_PATH = "devflow/config.json";
 const PROJECT_CONFIG_SCHEMA_VERSION = 1 as const;
 
 type IndependentReviewExecution = "automatic" | "manual";
-type ExecutionEnginePolicy = "auto" | "pstack" | "native";
 type ExecutionTierPolicy = "auto" | "docs" | "standard" | "high-risk";
 type DeliveryGatePolicy =
   | "option-a-evidence-packet"
@@ -59,7 +58,6 @@ interface ProjectConfig {
     independentExecution: IndependentReviewExecution;
   };
   execution: {
-    engine: ExecutionEnginePolicy;
     tier: ExecutionTierPolicy;
     autoApproveSpec: boolean;
     autoCommitFeatureBranch: boolean;
@@ -111,7 +109,6 @@ function createDefaultProjectConfig(): ProjectConfig {
       independentExecution: "automatic"
     },
     execution: {
-      engine: "auto",
       tier: "auto",
       autoApproveSpec: true,
       autoCommitFeatureBranch: true
@@ -161,7 +158,8 @@ async function readProjectConfig(projectRoot: string): Promise<ProjectConfigResu
     let parsed: unknown;
 
     try {
-      parsed = JSON.parse(await fs.readFile(configPath, "utf8"));
+      const rawConfig = (await fs.readFile(configPath, "utf8")).replace(/^\uFEFF/, "");
+      parsed = JSON.parse(rawConfig);
     } catch (error: unknown) {
       if (error instanceof SyntaxError) {
         return invalidResult(`Invalid DevFlow config JSON: ${PROJECT_CONFIG_PATH}`);
@@ -257,7 +255,7 @@ function parseProjectConfig(value: unknown): ProjectConfig {
   assertKnownKeys(review, ["independentExecution"], "review");
   assertKnownKeys(
     execution,
-    ["engine", "tier", "autoApproveSpec", "autoCommitFeatureBranch"],
+    ["tier", "autoApproveSpec", "autoCommitFeatureBranch"],
     "execution"
   );
   assertKnownKeys(delivery, ["gate"], "delivery");
@@ -340,12 +338,6 @@ function parseProjectConfig(value: unknown): ProjectConfig {
       )
     },
     execution: {
-      engine: optionalEnum(
-        execution.engine,
-        ["auto", "pstack", "native"],
-        defaults.execution.engine,
-        "execution.engine"
-      ),
       tier: optionalEnum(
         execution.tier,
         ["auto", "docs", "standard", "high-risk"],
@@ -581,7 +573,6 @@ export type {
   CheckpointCommitPolicy,
   CheckGatePolicy,
   DeliveryGatePolicy,
-  ExecutionEnginePolicy,
   ExecutionTierPolicy,
   IndependentReviewExecution,
   IndependentReviewGatePolicy,

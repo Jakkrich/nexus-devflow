@@ -135,9 +135,21 @@ export class GatekeeperEngine {
       warnings.push(`Warning (${w.code}): ${w.message}`);
     }
 
-    // Stage 1 Check: Uncompleted tasks in Living Spec
+    const resolvedRunId =
+      status.currentWork.runId ||
+      (status.activeRuns.length === 1 ? status.activeRuns[0]?.runId : undefined) ||
+      null;
+
+    // Stage 1 Check: Malformed spec/stage contract and uncompleted tasks in Living Spec
     const remaining = status.currentWork.remaining;
-    if (status.currentWork.state === "active" && remaining > 0) {
+    if (status.currentWork.state === "malformed") {
+      const detail =
+        status.warnings.find((w) => /current_work/i.test(w.code))?.message ||
+        "Current work spec or stage contract is malformed.";
+      violations.push(
+        `Living spec '${resolvedRunId || "active"}' is malformed: ${detail}`
+      );
+    } else if (status.currentWork.state === "active" && remaining > 0) {
       violations.push(
         `Living spec '${status.currentWork.runId || "active"}' has ${remaining} uncompleted task(s)`
       );
@@ -147,9 +159,12 @@ export class GatekeeperEngine {
     if (isStrict && status.currentWork.state === "active") {
       if (status.completion.state === "needs_verification" || status.completion.state === "blocked") {
         violations.push(
-          `Living spec '${status.currentWork.runId || "active"}' is unverified (run /check before delivery)`
+          `Living spec '${resolvedRunId || "active"}' is unverified (run /check before delivery)`
         );
       }
+    } else if (isStrict && status.completion.state === "blocked" && status.currentWork.state !== "malformed") {
+      const detail = status.completion.blockers.join("; ") || "completion blocked";
+      violations.push(`Completion gate is blocked: ${detail}`);
     }
 
     // Independent review policy check
@@ -170,13 +185,13 @@ export class GatekeeperEngine {
 
 
 
-    const evidence = await inspectRunEvidence(this.projectRoot, status.currentWork.runId);
+    const evidence = await inspectRunEvidence(this.projectRoot, resolvedRunId);
     for (const evidenceWarning of evidence.warnings) {
       warnings.push(`Warning (evidence_packet): ${evidenceWarning}`);
     }
 
     if (status.currentWork.state === "active" && !evidence.present) {
-      const targetRunId = status.currentWork.runId || "active";
+      const targetRunId = resolvedRunId || "active";
       if (options.requireEvidenceArtifacts === true) {
         violations.push(
           `Missing durable evidence artifacts in devflow/reports/${targetRunId}/ (missing_evidence_artifacts)`
@@ -192,11 +207,14 @@ export class GatekeeperEngine {
       }
     }
 
-    const stage1SpecFidelity = remaining === 0 && (
-      status.currentWork.state === "idle" ||
-      status.completion.state === "ready" ||
-      !isStrict
-    );
+    const stage1SpecFidelity =
+      status.currentWork.state !== "malformed" &&
+      remaining === 0 &&
+      (
+        status.currentWork.state === "idle" ||
+        status.completion.state === "ready" ||
+        !isStrict
+      );
     const stage2CodeQuality = blockers.length === 0;
 
     const passed = violations.length === 0;

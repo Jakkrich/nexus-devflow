@@ -560,7 +560,7 @@ export const START_PAGES: DocPage[] = [
           <ul>
             <li>
               <strong><a href="../commands/devflow-mode/">/devflow-mode</a></strong>: 
-              Lead-Coordinator + Playbook Router รันงานด้วย Isolated Subagents และ <code>pstack</code> (หรือรันคิวต่อเนื่องด้วย <code>/devflow-mode --all</code>)
+              Lead-Coordinator + Playbook Router รันงานด้วย Isolated Subagents (หรือรันคิวต่อเนื่องด้วย <code>/devflow-mode --all</code>)
             </li>
           </ul>
         `
@@ -858,7 +858,7 @@ pnpm dlx nexus-devflow@latest update</code></pre>
               <tr>
                 <td><code>/autopilot</code>, <code>/continuous</code></td>
                 <td><code>/devflow-mode</code></td>
-                <td>Lead-Coordinator + 5 Composable Playbooks + Isolated Subagents &amp; <code>pstack</code> integration</td>
+                <td>Lead-Coordinator + 5 Composable Playbooks + Isolated Subagents</td>
               </tr>
               <tr>
                 <td><code>/devflow</code>, <code>/devflow-doctor</code>, <code>/devflow-status</code></td>
@@ -878,7 +878,7 @@ pnpm dlx nexus-devflow@latest update</code></pre>
           <ul>
             <li><strong><code>/check guide</code> (รวม <code>/try</code> เดิม)</strong>: สร้างเอกสารคู่มือทดสอบสำหรับมนุษย์ (Human Review Walkthrough) แบบ Read-Only โดยระบุคำสั่งรัน URL จุดคลิก ผลลัพธ์ที่ถูกต้อง และสัญญาณข้อผิดพลาด</li>
             <li><strong><code>/explore</code> (รวม <code>/brainstorm</code> เดิม)</strong>: วิเคราะห์ไอเดียและเปรียบเทียบ 2–3 ทางเลือก (Trade-offs) กับโค้ดจริงแบบ Read-Only โดยไม่แก้ไขไฟล์</li>
-            <li><strong><code>/devflow-help doctor</code> (รวม <code>/devflow doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters, Execution Engine (<code>pstack</code>), <code>verify</code> skill และขนาดของ <code>project-overview.md</code> (&lt; 20KB)</li>
+            <li><strong><code>/devflow-help doctor</code> (รวม <code>/devflow doctor</code> เดิม)</strong>: สแกนตรวจสุขภาพระบบ Adapters, Config, <code>verify</code> skill และขนาดของ <code>project-overview.md</code> (&lt; 20KB)</li>
             <li><strong><code>/overview</code></strong>: Deterministic Compiler ที่กลั่นกรองข้อมูลจาก <code>project-plan.md</code> และ <code>build-plan.md</code> ลงสู่ <code>devflow/context/project-overview.md</code></li>
           </ul>
 

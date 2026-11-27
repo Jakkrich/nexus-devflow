@@ -17,7 +17,7 @@ export const SKILL_BYTE_OVERRIDES = {
 };
 
 export const DESCRIPTION_CHAR_OVERRIDES = {
-  'chief-of-staff': 512,
+  // Granular description overrides if needed
 };
 
 export const SUPPORT_MD_OVERRIDES = {

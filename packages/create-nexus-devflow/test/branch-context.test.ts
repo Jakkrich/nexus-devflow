@@ -319,3 +319,45 @@ test("evaluateWorktreeGuard, cross-worktree calculateNextRunningId, reserveNextR
   }
 });
 
+test("listActiveRunContexts ignores AC/Axis checkboxes and reflects spec.md Verified status over default stage.md spec_ready", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-multirun-tasks-"));
+  try {
+    await setupTestProject(tempDir);
+    await initRunContext(tempDir, "014-ac-filter", "AC Filter", {
+      initialSpec: [
+        "# Feature: [014-ac-filter] AC Filter",
+        "",
+        "> **Status**: Verified",
+        "",
+        "### 1.4 Acceptance Criteria",
+        "- [ ] **AC-1**: Sample AC checkbox",
+        "",
+        "## 3. Implementation Checklist",
+        "- [x] Task 1: Real work",
+        "",
+        "## 4. Verification Evidence Matrix",
+        "### Axis 2: Spec Fidelity",
+        "- [ ] **AC-1**: Axis 2 checkbox"
+      ].join("\n")
+    });
+
+    const runs = await listActiveRunContexts(tempDir);
+    assert.equal(runs.length, 1);
+    assert.equal(runs[0].totalTasks, 1);
+    assert.equal(runs[0].completedTasks, 1);
+    assert.equal(runs[0].remainingTasks, 0);
+    assert.equal(runs[0].status, "verified");
+
+    // spec.md Verified takes precedence over stale stage.md Status: running
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "context", "014-ac-filter", "stage.md"),
+      "# Current Stage\n\n- Track: `fast`\n- Active Running ID: `014-ac-filter`\n- Status: `running`\n",
+      "utf8"
+    );
+    const updatedRuns = await listActiveRunContexts(tempDir);
+    assert.equal(updatedRuns[0].status, "verified");
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

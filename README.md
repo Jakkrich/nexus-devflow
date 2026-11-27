@@ -515,7 +515,7 @@ count and are excluded from the published package unless explicitly promoted.
 | **complete** | `/complete` / `$complete` | Delivery | Safety pass, Release Digest, archive spec, and Option A / local squash-merge gate. |
 | **debug** | `/debug` / `$debug` | Diagnostics | 2-Track diagnosis (Track A fast repro & trace; Track B 6-phase scientific isolation). |
 | **devflow-help** | `/devflow-help` / `$devflow-help` | Hub | Interactive guide & prompt builder, status (`--exec`), health check (`doctor`), and legacy router. |
-| **devflow-mode** | `/devflow-mode` / `$devflow-mode` | Coordinator | Autonomous Coordinator, 5 composable playbooks, isolated subagents, `pstack` integration, and `--all`. |
+| **devflow-mode** | `/devflow-mode` / `$devflow-mode` | Coordinator | Autonomous Coordinator, 5 composable playbooks, isolated subagents, and `--all`. |
 | **discovery** | `/discovery` / `$discovery` | Pre-Flight | Macro/micro discovery, SA requirement intake (`REQ-ID`), and Socratic domain alignment (`--grill`). |
 | **explore** | `/explore` / `$explore` | Pre-Flight | Read-only codebase exploration and 2–3 option comparison (brainstorm mode) without writing specs. |
 | **feature** | `/feature` / `$feature` | Delivery | Preview (`--preview`), adaptive pre-flight clarification, and Task-Isolated Living Spec (`--check`). |
@@ -534,7 +534,6 @@ count and are excluded from the published package unless explicitly promoted.
 
 `/devflow-mode` runs the Lead-Coordinator + Isolated Subagent workflow via composable `playbooks/` (`feature`, `bug-fix`, `refactor`, `discovery`, `autonomous-queue`):
 - Eliminates redundant intermediate approval pauses on reversible feature-branch work when `execution.autoApproveSpec` and `execution.autoCommitFeatureBranch` are active.
-- Integrates `pstack` skills (`arena`, `architect`, `interrogate`, `swarm`, `create-verification-skill`, `deslop`, `no-comments`) read-only when `execution.engine: "auto"` detects `pstack`, with native fallback otherwise.
 - Runs 3-layer empirical verification (`verify-layers` + project `verify` driver + Prove-by-Run audit) saving durable artifacts under `devflow/reports/{run-id}/`.
 - **Stops at the Option A Final Human Delivery Gate** (`delivery.gate: "option-a-evidence-packet"`), never auto-merging into `main` or pushing without explicit human confirmation.
 
@@ -727,7 +726,7 @@ When starting a new session or resuming after clearing context:
 │       ├── complete/          ($complete: safety gate, archive spec, Option A delivery / squash-merge)
 │       ├── debug/             ($debug: 2-track adaptive diagnosis)
 │       ├── devflow-help/      ($devflow-help: interactive guide, prompt builder, status, doctor & legacy router)
-│       ├── devflow-mode/      ($devflow-mode: autonomous Coordinator, composable playbooks & pstack engine)
+│       ├── devflow-mode/      ($devflow-mode: autonomous Coordinator & composable playbooks)
 │       ├── discovery/         ($discovery: roadmap/micro exploration, doc intake, & Socratic ADRs)
 │       ├── explore/           ($explore: read-only option comparison & brainstorm matrix)
 │       ├── feature/           ($feature: --preview scope, adaptive clarification, & living spec)

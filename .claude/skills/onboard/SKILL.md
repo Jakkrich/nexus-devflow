@@ -94,7 +94,7 @@ Read only enough to identify the setup:
   `tailwind.config.*`, database config, test config)
 - source layout, route layout, and app/package directories
 - existing `.gitignore`
-- `devflow/.state/manifest.json` or `.nexus/nexus-devflow.json`, when present, and its selected adapter list
+- `.nexus/nexus-devflow.json`, when present, and its selected adapter list
 - which selected tools need `.agents/`, `.claude/`, or both
 - whether Blueprint workflow paths are already tracked by git
 - existing verification commands and `.github/workflows/`
@@ -121,7 +121,7 @@ obsolete overlay content in the product README slot:
 If the root `README.md` already looks like a real project README, leave it alone.
 Never replace a project README with Blueprint documentation.
 
-Update the Commands section of `AGENTS.md` to match real scripts and commands.
+Update the Commands section of `AGENTS.md` to match real scripts and commands, and **remove the `<!-- devflow:onboarding-required -->` marker** from `AGENTS.md` once configured.
 Include only commands that exist or are intentionally available:
 
 - dev server
@@ -134,10 +134,7 @@ Include only commands that exist or are intentionally available:
 If no test command exists, say so explicitly. Do not claim tests are a gate until
 a real test command is configured.
 
-If `CLAUDE.md` exists and still has the placeholder `# Project Name`, replace it
-with the detected project name. Keep the `@AGENTS.md` and `@devflow/...`
-imports intact. Do not move detailed app context into `CLAUDE.md`; that belongs
-in `AGENTS.md` and the generated project overview.
+If `CLAUDE.md` exists and still has the placeholder `# Project Name` or `# CLAUDE.md`, note or replace it with the detected project name as appropriate while keeping `@AGENTS.md` intact. Do not move detailed app context into `CLAUDE.md`; that belongs in `AGENTS.md` and the generated project overview.
 
 ## Step 3 - tune coding standards
 
@@ -246,10 +243,9 @@ loop. The `/ci` skill owns project-specific GitHub workflow setup.
 
 Check whether `.agents/skills/verify/SKILL.md` (or a `verify-*/SKILL.md` driver under `.agents/skills/` or `.claude/skills/`) already exists:
 
-- **Already present**: verify that it defines all five required sections (`Launch`, `Doctor`, `Drive`, `Evidence`, `Cleanup`) without unresolved placeholders and stores proof under `devflow/reports/{run-id}/`. When `execution.engine` resolves `pstack` and commands/routes drifted, mention `pstack`'s `maintain-verification-skill`.
+- **Already present**: verify that it defines all five required sections (`Launch`, `Doctor`, `Drive`, `Evidence`, `Cleanup`) without unresolved placeholders and stores proof under `devflow/reports/{run-id}/` (syncing `.agents/skills/verify/` and `.claude/skills/verify/` when both adapter trees exist).
 - **Absent on a runnable project** (detected app entrypoints, CLI binary, server/API routes, UI pages, or real test target):
-  - When `execution.engine` resolves `pstack` (`auto` + `poteto-mode/SKILL.md` or in-session `poteto-mode` skill detected, or `pstack`), delegate creation of `verify/SKILL.md` + `features/README.md` to `pstack`'s `create-verification-skill` (read-only reuse; never edit `pstack`) with three explicit DevFlow contracts: (1) include exact level-2 headings `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup`, (2) save durable proof artifacts under `devflow/reports/{run-id}/`, and (3) ensure both `.agents/skills/verify/` and `.claude/skills/verify/` stay mirrored/synced via `npx nexus-devflow skill sync` (or copy across active adapter trees) so `doctor` passes cleanly.
-  - Otherwise (`native` fallback), generate `.agents/skills/verify/SKILL.md` and `.agents/skills/verify/features/README.md` directly with `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup` (mirroring to `.claude/skills/verify/` if active).
+  - Generate `.agents/skills/verify/SKILL.md` and `.agents/skills/verify/features/README.md` directly with exact level-2 headings `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup`, store durable proof artifacts under `devflow/reports/{run-id}/`, and ensure both `.agents/skills/verify/` and `.claude/skills/verify/` stay mirrored/synced via `npx nexus-devflow skill sync` (or `npx @jakkrichm/create-nexus-devflow skill sync` / copying across active adapter trees) so `doctor` passes cleanly.
   - Run one live smoke verification (`Launch -> Doctor -> Drive -> Cleanup`) saving proof in `devflow/reports/onboard-verify/` and confirming the proof files survive cleanup.
 - **Absent on an empty scaffold** (no runnable entrypoint yet): do not create a speculative or untested `verify` skill; record that `/implement` or `/onboard --adopt` should bootstrap `.agents/skills/verify/SKILL.md` once the first runnable surface exists.
 
@@ -340,13 +336,13 @@ If the user chooses option 2 (Local-only / Zero-Visibility):
 
 Then report which selected tools and adapter folders are needed:
 
-- When a valid `devflow/.state/manifest.json` or `.nexus/nexus-devflow.json` exists, its `adapters` list is
+- When a valid `.nexus/nexus-devflow.json` manifest exists, its `adapters` list is
   the authoritative installer selection. The presence of `.agents/` means its
   files are compatible with Codex, Antigravity, GitHub Copilot, and OpenCode;
   it does not mean all four tools were selected.
 - Do not ask the user to select adapters again when that valid manifest exists.
   Keep and report the exact selection. If a required adapter tree is missing,
-  report the mismatch and point to `/devflow doctor` instead of guessing or deleting
+  report the mismatch and point to `/devflow-help doctor` instead of guessing or deleting
   another tree.
 - Without a valid manifest, explain that folder detection cannot distinguish
   Codex, Antigravity, GitHub Copilot, and OpenCode, then ask which tools the user actually

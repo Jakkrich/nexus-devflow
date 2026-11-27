@@ -515,7 +515,7 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 | **complete** | `/complete` / `$complete` | Delivery | ตรวจความปลอดภัย, Release Digest, เก็บประวัติ และ Option A / Local Squash-Merge Gate |
 | **debug** | `/debug` / `$debug` | Diagnostics | วินิจฉัยแบบ 2-Track (Track A fast repro & trace; Track B 6-phase scientific isolation) |
 | **devflow-help** | `/devflow-help` / `$devflow-help` | Hub | Interactive Guide & Prompt Builder, รายงานสถานะ (`--exec`), `doctor` และเราเตอร์คำสั่งเดิม |
-| **devflow-mode** | `/devflow-mode` / `$devflow-mode` | Coordinator | Autonomous Coordinator, 5 Composable Playbooks, Subagents, รองรับ `pstack` และ `--all` |
+| **devflow-mode** | `/devflow-mode` / `$devflow-mode` | Coordinator | Autonomous Coordinator, 5 Composable Playbooks, Subagents และ `--all` |
 | **discovery** | `/discovery` / `$discovery` | Pre-Flight | สำรวจระบบ/Roadmap, รับเอกสารความต้องการ (`REQ-ID`) และ Socratic Alignment (`--grill`) |
 | **explore** | `/explore` / `$explore` | Pre-Flight | วิเคราะห์ไอเดียเทียบโค้ดจริง + เปรียบเทียบ 2–3 ทางเลือก (Brainstorm) แบบ Read-only |
 | **feature** | `/feature` / `$feature` | Delivery | พรีวิวขอบเขต (`--preview`), ถามเสริมอัตโนมัติ และสร้าง Living Spec (`--check`) |
@@ -534,7 +534,6 @@ inventory ใน `agent-bundle.manifest.json` ส่วน Local หรือ Pe
 
 `/devflow-mode` คือ Coordinator หลักของ DevFlow v3 ที่จับคู่ `playbooks/` (`feature`, `bug-fix`, `refactor`, `discovery`, `autonomous-queue`) กับ isolated worktree subagents:
 - ตัด human approval pause ระหว่างทางบน feature branch ออกเมื่อ `execution.autoApproveSpec` และ `execution.autoCommitFeatureBranch` เปิดใช้งาน
-- เชื่อมต่อ `pstack` แบบอ่านอย่างเดียว (`arena`, `architect`, `interrogate`, `swarm`, `create-verification-skill`, `deslop`, `no-comments`) เมื่อ `execution.engine: "auto"` ตรวจพบ หรือใช้ native fallback อัตโนมัติ
 - รันการพิสูจน์ 3 ชั้น (`verify-layers` + project `verify` driver + Prove-by-Run audit) และเก็บหลักฐานไว้ใน `devflow/reports/{run-id}/`
 - **หยุดที่ Final Delivery Gate (Option A — `option-a-evidence-packet`)** พร้อมหลักฐานจริงบน branch ก่อน Merge/PR/Push เสมอ
 
@@ -725,7 +724,7 @@ Nexus-DevFlow เก็บสถานะของงานไว้ในไฟ
 │       ├── complete/          ($complete: ตรวจความปลอดภัย, เก็บประวัติ, Option A / Squash-Merge)
 │       ├── debug/             ($debug: วินิจฉัย 2-Track โดยไม่แตะต้องซอร์สโค้ด)
 │       ├── devflow-help/      ($devflow-help: Interactive guide, prompt builder, status, doctor & router)
-│       ├── devflow-mode/      ($devflow-mode: Autonomous Coordinator, playbooks & pstack engine)
+│       ├── devflow-mode/      ($devflow-mode: Autonomous Coordinator & playbooks)
 │       ├── discovery/         ($discovery: สำรวจ Roadmap/ฟีเจอร์, รับเอกสาร REQ-ID และ Socratic ADRs)
 │       ├── explore/           ($explore: วิเคราะห์ไอเดียและเทียบทางเลือก 2-3 แบบ Read-only)
 │       ├── feature/           ($feature: พรีวิว --preview, ถามเสริมอัตโนมัติ และสร้าง Living Spec)

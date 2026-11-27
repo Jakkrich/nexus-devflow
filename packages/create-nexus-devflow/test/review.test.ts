@@ -308,6 +308,41 @@ test("readIndependentReview rejects an incorrect base and reviewer model", async
   assert.equal(mismatchedModel.freshness, "stale");
 });
 
+test("readIndependentReview ignores devflow/.state and devflow/reports untracked artifacts", async (t) => {
+  const projectRoot = await createProject(t);
+  const specPath = path.join(projectRoot, "devflow", "context", "001-test-task", "spec.md");
+  const specBytes = await fs.readFile(specPath);
+  const target = await runGit(projectRoot, ["rev-parse", "HEAD"]);
+  const base = await runGit(projectRoot, ["rev-parse", "main"]);
+  const specHash = createHash("sha256").update(specBytes).digest("hex");
+  const reviewPath = path.join(projectRoot, "devflow", "context", "001-test-task", "review.md");
+
+  await fs.mkdir(path.join(projectRoot, "devflow", ".state", "runs"), { recursive: true });
+  await fs.writeFile(
+    path.join(projectRoot, "devflow", ".state", "runs", "001-test-task.json"),
+    "{\"status\":\"running\"}\n",
+    "utf8"
+  );
+  await fs.mkdir(path.join(projectRoot, "devflow", "reports", "001-test-task"), { recursive: true });
+  await fs.writeFile(
+    path.join(projectRoot, "devflow", "reports", "001-test-task", "verify-layers.json"),
+    "{\"passed\":true}\n",
+    "utf8"
+  );
+  await fs.writeFile(
+    reviewPath,
+    reviewRecord("passed", true)
+      .replaceAll(TARGET, target)
+      .replaceAll(BASE, base)
+      .replaceAll(SPEC_HASH, specHash),
+    "utf8"
+  );
+
+  const review = await readIndependentReview(projectRoot, "001-test-task");
+  assert.equal(review.state, "passed");
+  assert.equal(review.freshness, "current");
+});
+
 test("readIndependentReview binds an ignored Unicode CRLF spec to exact local bytes", async (t) => {
   const fixture = await createLocalReview(t);
   const review = await readIndependentReview(fixture.projectRoot, "001-test-task");

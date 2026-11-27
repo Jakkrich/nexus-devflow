@@ -115,7 +115,7 @@
       "authoritative installer selection",
       "does not mean all four tools were selected",
       "Do not ask the user to select adapters again",
-      "point to `/devflow doctor` instead of guessing"
+      "point to `/devflow-help doctor` instead of guessing"
     ],
     "devflow-mode": [
       "qualityGates.regular.independentReview",
@@ -124,7 +124,7 @@
       "audit independent current",
       "npm run test:browser",
       "interactive browser",
-      "execution.engine",
+      "execution.tier",
       "playbooks/autonomous-queue.md"
     ]
   },

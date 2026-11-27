@@ -1,13 +1,13 @@
-# 📐 [{xxx-slug}] {title}
+# Feature: [{xxx-slug}] {title}
 
-> **Status**: In-Progress  
-> **Track**: Fast-Track (Task-Isolated Living Spec Mode - Feature)  
-> **Category**: Feature  
-> **Source**: `devflow/build-plan.md: Feature {n}` & `devflow/discoveries/{DISC-ID}/discovery.md`  
-> **Branch**: `feature/{xxx-slug}`  
-> **Started Date**: {YYYY-MM-DD}  
-> **Delivered Date**: TBD  
-> **Owner**: DevFlow Core Framework Team & AI  
+**From build-plan:** feature {n}
+**Build attempt:** 1
+**Status:** In-Progress
+**Running ID:** `{xxx-slug}`
+**Branch:** `feature/{xxx-slug}`
+**Track:** Fast-Track (Task-Isolated Living Spec Mode - Feature)
+**Started Date:** {YYYY-MM-DD}
+**Delivered Date:** TBD
 
 ---
 
@@ -24,8 +24,8 @@
 - {Items deliberately excluded or deferred to future features}
 
 ### 1.4 Acceptance Criteria
-- [ ] **AC-1**: {Acceptance criterion 1}
-- [ ] **AC-2**: {Acceptance criterion 2}
+- **AC-1**: {Acceptance criterion 1}
+- **AC-2**: {Acceptance criterion 2}
 
 ---
 
@@ -68,8 +68,15 @@
 - **Findings Ledger**: Verify `findings.md` is 100% clean
 
 ### 🎯 Axis 2: Spec Fidelity & Behavioral Acceptance Gate
-- [ ] **AC-1**: {Empirical proof for AC-1}
-- [ ] **AC-2**: {Empirical proof for AC-2}
+- **AC-1**: {Empirical proof for AC-1}
+- **AC-2**: {Empirical proof for AC-2}
+
+### 🔗 Axis 3: AC-to-Test Traceability Matrix
+
+| Acceptance Criterion | File Tier | Automated Test Case / Assertion | Verification Command | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **AC-1** | Tier 1 (Logic) / Tier 2 (UI) | `it('AC-1: ...')` | `npm test` | ⏳ Pending |
+| **AC-2** | Tier 3 (API) / Tier 4 (Tooling) | `it('AC-2: ...')` | `npm run check:static` | ⏳ Pending |
 
 ---
 

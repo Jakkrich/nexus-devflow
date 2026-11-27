@@ -102,30 +102,78 @@ export function sanitizeBranchName(branch: string): string {
     .toLowerCase();
 }
 
+const CHECKBOX_LINE_PATTERN = /^\s*[-*]\s+\[([ xX])\]\s+(.+?)\s*$/;
+const EXCLUDED_CHECKLIST_HEADING_PATTERN =
+  /acceptance criteria|verification evidence|axis\s*2|delivery verification/i;
+
+export interface ParsedChecklistStep {
+  checked: boolean;
+  line: number;
+  title: string;
+}
+
+function parseStepTitleLabel(content: string): string {
+  const boldTitle = content.match(/^(?:\d+\.\s*)?\*\*(.+?)\*\*/)?.[1];
+  const label = boldTitle || content.split(/\s+-\s+/, 1)[0] || content;
+  return label.replace(/^Step\s+\d+\s*[-:]\s*/i, "").trim();
+}
+
+export function parseChecklistSteps(markdown: string): ParsedChecklistStep[] {
+  const lines = markdown.replace(/^\uFEFF/, "").split(/\r?\n/);
+  const steps: ParsedChecklistStep[] = [];
+  let excludedH2 = false;
+  let excludedH3 = false;
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const h2Match = line.match(/^##\s+(.+)$/);
+    if (h2Match) {
+      excludedH2 = EXCLUDED_CHECKLIST_HEADING_PATTERN.test(h2Match[1]);
+      excludedH3 = false;
+      continue;
+    }
+
+    const h3Match = line.match(/^###\s+(.+)$/);
+    if (h3Match) {
+      excludedH3 = EXCLUDED_CHECKLIST_HEADING_PATTERN.test(h3Match[1]);
+      continue;
+    }
+
+    if (excludedH2 || excludedH3) {
+      continue;
+    }
+
+    const match = line.match(CHECKBOX_LINE_PATTERN);
+    if (match) {
+      steps.push({
+        checked: match[1].toLowerCase() === "x",
+        line: index + 1,
+        title: parseStepTitleLabel(match[2].trim())
+      });
+    }
+  }
+
+  return steps;
+}
+
 /**
  * Parses checklist tasks and status from a living spec content.
  */
-function parseSpecTasks(content: string): { total: number; completed: number; title: string } {
+function parseSpecTasks(content: string): { total: number; completed: number; title: string; specStatus: string | null } {
+  const cleanContent = content.replace(/^\uFEFF/, "");
   let title = "Living Spec";
-  const titleMatch = content.match(/^#\s+(?:📐\s+)?(?:\[([^\]]+)\]\s+)?(.*)/m);
+  const titleMatch = cleanContent.match(/^#\s+(?:📐\s+)?(?:\[([^\]]+)\]\s+)?(.*)/m);
   if (titleMatch) {
     title = titleMatch[2]?.trim() || titleMatch[1]?.trim() || title;
   }
 
-  let total = 0;
-  let completed = 0;
-  const lines = content.split("\n");
-  for (const line of lines) {
-    const match = line.match(/^\s*[-*]\s+\[([ xX])\]\s+(.+)/);
-    if (match) {
-      total++;
-      if (match[1].toLowerCase() === "x") {
-        completed++;
-      }
-    }
-  }
+  const specStatus =
+    cleanContent.match(/^>?\s*(?:\*\*Status:\*\*|\*\*Status\*\*:)\s*`?([^`\r\n]+)`?/im)?.[1]?.trim() ||
+    null;
+  const steps = parseChecklistSteps(cleanContent);
+  const completed = steps.filter((step) => step.checked).length;
 
-  return { total, completed, title };
+  return { total: steps.length, completed, title, specStatus };
 }
 
 /**
@@ -150,24 +198,37 @@ export async function listActiveRunContexts(projectRoot: string): Promise<Active
 
         if (fsSync.existsSync(specPath)) {
           const specContent = await fs.readFile(specPath, "utf8");
-          const { total, completed, title } = parseSpecTasks(specContent);
+          const { total, completed, title, specStatus } = parseSpecTasks(specContent);
 
           let track = "fast";
-          let status = "spec_ready";
+          const normalizedSpecStatus = specStatus ? specStatus.toLowerCase().replace(/\s+/g, "_") : null;
+          let status = normalizedSpecStatus || "spec_ready";
           let stage = "feature";
           let branch = `feature/${entry.name}`;
 
           const stagePath = path.join(runDir, "stage.md");
           if (fsSync.existsSync(stagePath)) {
-            const stageContent = await fs.readFile(stagePath, "utf8");
+            const stageContent = (await fs.readFile(stagePath, "utf8")).replace(/^\uFEFF/, "");
             const trackMatch = stageContent.match(/(?:-\s*(?:\*\*)?Track(?:\*\*)?:\s*|Track:\s*)`?([a-zA-Z0-9_-]+)`?/i);
             const branchMatch = stageContent.match(/(?:-\s*(?:\*\*)?Branch(?:\*\*)?:\s*|Branch:\s*)`?([a-zA-Z0-9_/.-]+)`?/i);
             const statusMatch = stageContent.match(/(?:-\s*(?:\*\*)?Status(?:\*\*)?:\s*|Status:\s*)`?([a-zA-Z0-9_-]+)`?/i);
-            const stageMatch = stageContent.match(/(?:-\s*(?:\*\*)?(?:Current Stage|Stage)(?:\*\*)?:\s*|(?:Current Stage|Stage):\s*)`?([a-zA-Z0-9_-]+)`?/i);
+            const stageMatch = stageContent.match(/(?:-\s*(?:\*\*)?(?:Current Stage|Stage)(?:\*\*)?:\s*|(?:Current Stage|Stage):\s*)`?([^\r\n`]+)`?/i);
             if (trackMatch) track = trackMatch[1];
             if (branchMatch) branch = branchMatch[1];
-            if (statusMatch) status = statusMatch[1];
-            if (stageMatch) stage = stageMatch[1];
+            if (stageMatch) stage = stageMatch[1].trim();
+            if (statusMatch) {
+              const stageStatus = statusMatch[1];
+              if (
+                normalizedSpecStatus &&
+                /^(?:verified|ready|verification_failed|failed)$/i.test(normalizedSpecStatus)
+              ) {
+                status = normalizedSpecStatus;
+              } else if (stageStatus.toLowerCase() !== "spec_ready" || !normalizedSpecStatus) {
+                status = stageStatus;
+              }
+            } else if (/check\s*\(passed|ready\s+for\s+\/complete/i.test(stage)) {
+              status = "verified";
+            }
           }
 
           let hasOpenFindings = false;

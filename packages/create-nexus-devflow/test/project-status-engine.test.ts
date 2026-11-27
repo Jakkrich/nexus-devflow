@@ -66,13 +66,12 @@ describe("ProjectStatusEngine Seam & Snapshot", () => {
     const engine = new ProjectStatusEngine(projectRoot);
     const status = await engine.getStatus();
     const defaultFormatted = engine.formatHuman(status, { color: false });
-    assert.match(defaultFormatted, /Execution\s+auto \(tier: auto, gate: option-a-evidence-packet\)/);
+    assert.match(defaultFormatted, /Execution\s+tier: auto, gate: option-a-evidence-packet/);
 
-    status.configuration.values.execution.engine = "pstack";
     status.configuration.values.execution.tier = "high-risk";
     status.configuration.values.delivery.gate = "local-squash";
     const customFormatted = engine.formatHuman(status, { color: false });
-    assert.match(customFormatted, /Execution\s+pstack \(tier: high-risk, gate: local-squash\)/);
+    assert.match(customFormatted, /Execution\s+tier: high-risk, gate: local-squash/);
   });
 
   it("displays Worktree row in formatHuman when running inside a linked worktree", async () => {

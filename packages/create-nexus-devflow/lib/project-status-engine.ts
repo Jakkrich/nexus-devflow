@@ -209,6 +209,13 @@ export class ProjectStatusEngine {
     stageMarkdown = await fs.readFile(contextPaths.stagePath, "utf8");
   } catch {}
 
+  let onboardingRequired = false;
+  try {
+    const agentsContent = await fs.readFile(path.join(metadata.project.root, "AGENTS.md"), "utf8");
+    onboardingRequired = agentsContent.includes("<!-- devflow:onboarding-required -->");
+  } catch {}
+
+  const evidence = classifyWorkEvidence(currentWork, findings, review, stageMarkdown);
   const warnings: StatusWarning[] = [
     ...metadata.warnings,
     ...config.warnings,
@@ -217,9 +224,8 @@ export class ProjectStatusEngine {
     ...runState.warnings,
     ...review.warnings,
     ...gitWarnings,
-    ...findDrift(currentWork, git)
+    ...findDrift(currentWork, git, evidence)
   ];
-  const evidence = classifyWorkEvidence(currentWork, findings, review, stageMarkdown);
   const completion = selectCompletion(
     currentWork,
     findings,
@@ -235,7 +241,8 @@ export class ProjectStatusEngine {
     stageMarkdown,
     evidence,
     completion,
-    config.values
+    config.values,
+    onboardingRequired
   );
 
   return {
@@ -304,7 +311,7 @@ export class ProjectStatusEngine {
     ),
     formatRow(
       "Execution",
-      `${status.configuration.values.execution.engine} (tier: ${status.configuration.values.execution.tier}, gate: ${status.configuration.values.delivery.gate})`,
+      `tier: ${status.configuration.values.execution.tier}, gate: ${status.configuration.values.delivery.gate}`,
       style
     ),
     formatRow("Quality gates", formatQualityGates(status.configuration.values.qualityGates.regular), style),
@@ -725,7 +732,7 @@ function selectCompletion(
   }
 
   if (review && config) {
-    const isGateActive = config.qualityGates.regular.independentReview !== "manual";
+    const isGateActive = config.qualityGates.regular.independentReview === "always";
     if (review.state === "changes-requested") {
       blockers.push("independent review requested changes");
     } else if (review.state === "pending") {
@@ -773,11 +780,12 @@ function selectNextAction(
   stageMarkdown?: string,
   evidence?: WorkEvidence,
   completion?: StatusCompletion,
-  config?: ProjectConfig
+  config?: ProjectConfig,
+  onboardingRequired = false
 ): StatusNextAction {
   if (currentWork.state === "malformed") {
     return {
-      command: "/devflow doctor",
+      command: "/devflow-help doctor",
       reason: "Repair the stage or spec contract before continuing."
     };
   }
@@ -785,7 +793,7 @@ function selectNextAction(
   if (currentWork.state === "active" && evidence) {
     if (evidence.recordFaults.length > 0) {
       return {
-        command: "/devflow doctor",
+        command: "/devflow-help doctor",
         reason: `Diagnose ${evidence.recordFaults.map((fault) => fault.path).join(" and ")} before continuing: ${evidence.recordFaults.map((fault) => fault.blocker).join("; ")}.`
       };
     }
@@ -867,7 +875,7 @@ function selectNextAction(
 
     if (completion && completion.state !== "ready") {
       return {
-        command: "/devflow doctor",
+        command: "/devflow-help doctor",
         reason: `Resolve completion blockers before continuing: ${completion.blockers.join("; ")}.`
       };
     }
@@ -885,6 +893,13 @@ function selectNextAction(
     return {
       command: `/fix ${openBlocker.id}`,
       reason: "Start a tracked repair for the blocking finding."
+    };
+  }
+
+  if (onboardingRequired) {
+    return {
+      command: "/onboard",
+      reason: "Repository has not been onboarded yet (AGENTS.md has the onboarding marker). Run /onboard first."
     };
   }
 
@@ -977,7 +992,8 @@ function selectIndependentReviewPolicy(
 
 function findDrift(
   currentWork: CurrentWorkSummary,
-  git: GitStatusSummary
+  git: GitStatusSummary,
+  evidence?: WorkEvidence
 ): StatusWarning[] {
   if (currentWork.state !== "active") {
     return [];
@@ -992,10 +1008,10 @@ function findDrift(
     });
   }
 
-  if (currentWork.total > 0 && currentWork.remaining === 0) {
+  if (currentWork.total > 0 && currentWork.remaining === 0 && evidence?.verification !== "verified") {
     warnings.push({
       code: "completed_steps_not_released",
-      message: "All checklist steps are checked, but run has not been completed or verified."
+      message: "All checklist steps are checked, but run has not been verified yet. Run /check."
     });
   }
 

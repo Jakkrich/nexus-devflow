@@ -24,7 +24,7 @@ Verifies two concurrency invariants for DevFlow's multi-run orchestration:
 ## Tool Choice & Scope Bounds
 
 - **Primary runnable verifier (`tsx`):** `formal/check-run-isolation.ts` exhaustively explores every reachable interleaving of the `RunStateAllocation` state machine (`Actors = 2`, `MaxId = 3`) and runs a live parity check against `branch-context.ts` (`reserveNextRunningId` + `evaluateWorktreeGuard`). Chosen because every DevFlow developer already has Node.js + `tsx` installed.
-- **TLA+ / TLC & `/statechart`:** `formal/RunStateAllocation.tla` and `formal/RunStateAllocation.cfg` express the exact same state machine for TLC. When Java/TLC is available, inspect any violation or state graph with the pstack `/statechart` skill (`formal/RunStateAllocation.tla`).
+- **TLA+ / TLC:** `formal/RunStateAllocation.tla` and `formal/RunStateAllocation.cfg` express the exact same state machine for TLC. When Java/TLC is available, inspect any counterexample trace directly against `formal/RunStateAllocation.tla`.
 - **Scope left out:** TTL-expired lock reclamation race (`expiresAt <= Date.now()` unlink window) and OS crash mid-`writeState` are outside the non-expiring lock bound (`MaxId = 3`).
 
 ## Run

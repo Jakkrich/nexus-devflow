@@ -179,13 +179,9 @@ test("evaluateReleaseReadiness rejects version mismatches, missing CHANGELOG/rol
         "template/formal/RunStateAllocation.tla",
         "template/.agents/skills/publish-devflow/SKILL.md",
         "template/.agents/skills/archify/SKILL.md",
-        "template/.agents/skills/chief-of-staff/SKILL.md",
-        "template/.agents/tools/install-project.ps1",
-        "template/AI_HANDOFF.md",
         "template/devflow/context/125-production-release-readiness/spec.md"
       ],
-      wrapperFiles: [...validPack.wrapperFiles, ".env.local"],
-      templateEntrypointsSanitized: false
+      wrapperFiles: [...validPack.wrapperFiles, ".env.local"]
     };
     const badReport = await evaluateReleaseReadiness(tempDir, {
       packInspector: async () => leakPack
@@ -196,10 +192,6 @@ test("evaluateReleaseReadiness rejects version mismatches, missing CHANGELOG/rol
     const tarballCheck = badReport.checks.find((c) => c.id === "tarball_hygiene");
     assert.equal(tarballCheck?.ok, false);
     assert.match(tarballCheck?.message ?? "", /archify/);
-    assert.match(tarballCheck?.message ?? "", /chief-of-staff/);
-    assert.match(tarballCheck?.message ?? "", /install-project\.ps1/);
-    assert.match(tarballCheck?.message ?? "", /AI_HANDOFF\.md/);
-    assert.match(tarballCheck?.message ?? "", /AGENT-STARTER-KIT/);
     assert.match(tarballCheck?.message ?? "", /nexus-devflow\/\.env\.local/);
 
     // 3. F-05 regression: missing CHANGELOG.md must fail cleanly

@@ -22,7 +22,7 @@ Build the selected spec through its acceptance criteria and required verificatio
 
 ## Review cadence and checkpoints
 
-Read `workflow.stepReview`, `workflow.checkpointCommits`, `execution.autoCommitFeatureBranch` (default `true`), `execution.engine` (default `"auto"`), and `execution.tier` (default `"auto"`) from `devflow/config.json`; defaults for `workflow` are `feature` and `disabled`.
+Read `workflow.stepReview`, `workflow.checkpointCommits`, `execution.autoCommitFeatureBranch` (default `true`), and `execution.tier` (default `"auto"`) from `devflow/config.json`; defaults for `workflow` are `feature` and `disabled`.
 
 - `stepReview: "feature"`: continue through all authorized steps without asking Continue after each step. Record evidence as work proceeds and present one final review packet.
 - `stepReview: "every"`: after each working step, show its concise diff summary, done-when proof, and optional checkpoint candidate (when `checkpointCommits: "enabled"`), then present these numbered choices and wait before moving on:
@@ -49,7 +49,7 @@ When `/implement` runs, it checks for tracer-bullet tickets in the following pri
 3. `.scratch/{xxx-slug}/issues/` or `.scratch/<feature-slug>/issues/`
 4. Section `## 🎫 Tracer-Bullet Tickets (from to-tickets)` inside `spec.md`
 
-**Backward Compatibility**: If no tickets are found in any of the above locations, `/implement` executes using the standard Checklist under `## 📋 3. Execution Plan & TDD Checklist` in `spec.md`. Existing tasks and projects experience zero breaking changes.
+**Backward Compatibility**: If no tickets are found in any of the above locations, `/implement` executes using the standard Checklist under `## 3. Implementation Checklist` (or legacy `## 📋 3. Execution Plan & TDD Checklist`) in `spec.md`. Existing tasks and projects experience zero breaking changes.
 
 ### Frontier Dependency Resolution
 

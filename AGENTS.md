@@ -1,25 +1,3 @@
-<!-- BEGIN AGENT-STARTER-KIT -->
-# AI Agent Instructions & Chief of Staff
-
-Before acting on the first message of a chat, read:
-
-1. [`.agents/skills/chief-of-staff/SKILL.md`](./.agents/skills/chief-of-staff/SKILL.md) (and follow it as the operator's Chief of Staff).
-2. [`.agents/skills/chief-of-staff/harness.md`](./.agents/skills/chief-of-staff/harness.md) (on-project tool/subagent/model map for Antigravity, Codex, Claude Code, and Grok).
-3. [`AI_HANDOFF.md`](./AI_HANDOFF.md) (repository invariants, architecture, pitfalls, and change log).
-4. [`.context/cos-board.md`](./.context/cos-board.md) (active task board and latest summary).
-
-All tooling in this repo is **on-project only** (never install `pstack` globally):
-- Chief of Staff skill: `.agents/skills/chief-of-staff/`
-- pstack (`pstack-claude`): `.agents/plugins/pstack/skills/poteto-mode/SKILL.md`
-- Model config: `.agents/rules/pstack-models.md`
-- Project verification skill: `.agents/skills/verify-project/SKILL.md`
-- Grok Bot webhook UI skill: `.agents/skills/make-bot-ui/SKILL.md`
-
-Subagents whose kickoff starts `Read <poteto>/...` or `Read <path>/worker.md` skip this file and follow their delegated brief.
-
-When you finish any change, add an entry at the top of `## 5. Change Log` in [`AI_HANDOFF.md`](./AI_HANDOFF.md), update `## 1. Current State` if state changes, and update [`.context/cos-board.md`](./.context/cos-board.md).
-<!-- END AGENT-STARTER-KIT -->
-
 # Nexus-DevFlow
 
 Project instructions for AI coding agents. This is the single cross-tool entry point for Codex, Google Antigravity, GitHub Copilot, OpenCode, and Claude Code (via `CLAUDE.md` importing `@AGENTS.md`).
@@ -61,7 +39,6 @@ Build for established requirements, not hypothetical scale, threats, or future f
 ## Workflow
 
 - **4-Stage Loop**: `/feature` (or `/fix`) ──▶ `/implement` ──▶ `/check` ──▶ `/complete` (using `.agents/skills/<skill>/SKILL.md` or `.claude/skills/<skill>/SKILL.md`).
-- **Coordinator Precedence (`pstack`)**: When `pstack` is installed alongside DevFlow, DevFlow owns planning, specs, and delivery gates as sole Coordinator while `/devflow-mode` delegates leaf skills to `pstack` (set `session hook: off` in `pstack-models.md` or `PSTACK_SESSION_HOOK=off`).
 - **Default Language (Thai)**: All generated stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 - **Contextual Help**: When invoked with `help`, `--help`, `-h`, or `?`, follow [the help protocol](devflow/reference/help-playbook-protocol.md) to reply with a concise in-chat Markdown cheat sheet without running the command's primary action.
 - **Activity State**: Never create or edit `devflow/.state/run.json` directly. Tracked commands record activity via the first helper that exists (see `devflow/workflow.md` for schema and field rules):

@@ -33,7 +33,7 @@ Write these, drawn from the survey (facts) and the interview (intent). Mark ever
 - **`devflow/project-plan.md`** - the what & why, following the existing worksheet structure (problem, users, features, data, tech, monetization, UI/UX). The "features" and "tech" sections describe what *already exists*; the rest comes from the interview.
 - **`devflow/build-plan.md`** - the ordered feature list as a checklist. **Mark shipped features `- [x]`** (the brownfield difference: the build plan reflects reality, so most of an existing app starts checked) and the roadmap items from the interview as `- [ ]`. This makes `/devflow` and `/feature` work immediately - the next unchecked item is genuinely what's next.
 - **`devflow/context/coding-standards.md`** - rewrite the default to match the project's *actual* conventions from Step 1, not the shipped Next.js/Prisma defaults. Keep the Writing and Comments sections; replace the stack-specific ones with what the code really does. Its Testing section must reflect the real testing state (the opt-in switch is a `test` command in `AGENTS.md`).
-- **`AGENTS.md` Commands section** - fill in the real dev / build / test / lint commands you found, so the rest of the workflow (and the testing gate) uses the project's actual scripts. Include `Verify` when a real combined command exists.
+- **`AGENTS.md` Commands section** - fill in the real dev / build / test / lint commands you found, and **remove `<!-- devflow:onboarding-required -->`** from `AGENTS.md` so status/doctor no longer flag incomplete onboarding. Include `Verify` when a real combined command exists.
 
 Do not write `project-overview.md`; that's `/overview`'s job, downstream of these.
 
@@ -42,7 +42,7 @@ Do not write `project-overview.md`; that's `/overview`'s job, downstream of thes
 Do not create or change Verify commands or GitHub workflows during adoption. Report any verification command or CI already present. When equivalent automatic pull-request checks are absent, mention the optional extension skill:
 
 ```text
-Install optional CI extension with `npx nexus-devflow skill add ci` when you want automatic GitHub checks.
+Install optional CI extension with `npx nexus-devflow skill add ci` (or `@jakkrichm/create-nexus-devflow` for pre-release) when you want automatic GitHub checks.
 ```
 
 Explain that CI is not required to finish adoption.
@@ -51,8 +51,8 @@ Explain that CI is not required to finish adoption.
 
 Brownfield repositories usually already expose runnable commands, routes, or APIs. Inspect `.agents/skills/verify/SKILL.md` (and `verify-*/SKILL.md`):
 
-- If present with `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup` sections, verify its entrypoints match Step 1 and both `.agents/skills/verify/` and `.claude/skills/verify/` stay synced (or refresh via `pstack` `maintain-verification-skill` when active).
-- If absent and a runnable surface exists, bootstrap `.agents/skills/verify/SKILL.md` and `features/README.md` (when delegating to `pstack`'s `create-verification-skill`, require exact H2 headings `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, `## Cleanup` and proof storage under `devflow/reports/{run-id}/`; otherwise generate directly), sync `.agents/skills/verify/` and `.claude/skills/verify/` via `npx nexus-devflow skill sync` (when both adapter trees exist), and execute one `Launch -> Doctor -> Drive -> Cleanup` smoke pass storing artifacts under `devflow/reports/onboard-verify/` so the generated driver is proven before handoff.
+- If present with `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup` sections, verify its entrypoints match Step 1 and both `.agents/skills/verify/` and `.claude/skills/verify/` stay synced.
+- If absent and a runnable surface exists, generate `.agents/skills/verify/SKILL.md` and `features/README.md` directly with exact H2 headings `## Launch`, `## Doctor`, `## Drive`, `## Evidence`, and `## Cleanup` and proof storage under `devflow/reports/{run-id}/`, sync `.agents/skills/verify/` and `.claude/skills/verify/` via `npx nexus-devflow skill sync` (or `npx @jakkrichm/create-nexus-devflow skill sync` / copying when both adapter trees exist), and execute one `Launch -> Doctor -> Drive -> Cleanup` smoke pass storing artifacts under `devflow/reports/onboard-verify/` so the generated driver is proven before handoff.
 
 ## Step 5 - ask about DevFlow visibility
 

@@ -10,7 +10,7 @@ When the input is raw stakeholder requirements, chat transcripts, or files (PDF,
    - Allocate sequential `REQ-YYYYMMDD-NNN-{slug}` (or resume an existing `REQ-ID`).
    - Create `devflow/inbox/{REQ-ID}/raw/` and copy/archive incoming source files inside it.
 2. **Parse & Normalize (`devflow/inbox/{REQ-ID}/parsed.md`)**:
-   - For Office/PDF docs: use native document/multimodal inspection, or optional extension `convert-any-to-md` (`npx nexus-devflow skill add convert-any-to-md`) if needed.
+   - For Office/PDF docs: use native document/multimodal inspection, or optional extension `convert-any-to-md` (`npx nexus-devflow skill add convert-any-to-md`, or via `@jakkrichm/create-nexus-devflow`) if needed.
    - For URLs / Confluence / Notion: use an active web-fetch/browser reader when available.
    - For images / wireframes: perform Multimodal Vision OCR and describe layout and fields.
    - Structure `parsed.md` into: **Executive Summary**, **Target Persona & User Stories**, **Functional Requirements (FR)**, **Non-Functional Requirements (NFR)**, and **Data Entities & Fields**.

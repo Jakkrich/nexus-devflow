@@ -280,7 +280,7 @@
   },
   {
     "title": "DevFlow Help (/devflow-help, /devflow-help doctor)",
-    "description": "ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/pstack (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)",
+    "description": "ศูนย์รวม Interactive Guide & Prompt Builder, รายงานสถานะงาน (--exec), ตรวจสุขภาพ Adapters/Verify/Config (/devflow-help doctor) และตารางนำทางคำสั่งเดิม (Legacy /devflow)",
     "section": "COMMANDS",
     "slug": "commands/devflow-help",
     "href": "../commands/devflow-help/",
@@ -401,7 +401,7 @@
   },
   {
     "title": "DevFlow Mode (/devflow-mode, /devflow-mode --all)",
-    "description": "Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)",
+    "description": "Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents และ Option A Evidence Packet (แทน /autopilot)",
     "section": "COMMANDS",
     "slug": "commands/devflow-mode",
     "href": "../commands/devflow-mode/",
@@ -411,7 +411,6 @@
       "Coordinator",
       "Playbooks",
       "Subagents",
-      "pstack",
       "Autonomous",
       "commands",
       "commands devflow-mode"

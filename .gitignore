@@ -152,7 +152,3 @@ docs/agents/
 # Internal Architecture & Development Docs
 docs/adr/
 
-# On-project Agent Starter Kit runtime caches & synced plugins
-.agents/plugins/
-.agents/.cache/
-.agents/.backup/

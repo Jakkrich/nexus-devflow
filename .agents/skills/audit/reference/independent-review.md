@@ -316,9 +316,7 @@ Use this phase when a current pending request exists in `devflow/context/{xxx-sl
    context. For a legacy request with no `Requested execution`, require a fresh
    reviewer session, record `fresh session`, and omit `Actual execution`.
 3. Run Audit Steps 1 through 3 across `current` with quality, security, performance,
-   and tests together. When `execution.engine` resolves `pstack` on `standard` or
-   `high-risk` tiers, you may pair this pass with `pstack`'s `interrogate` rubric
-   without modifying `pstack`. Review the code fresh against the recorded
+   and tests together. Review the code fresh against the recorded
    `Base commit` and `Target commit`; exclude the request and findings files
    from the code scope. Existing findings are context, never the review
    checklist. Apply **Blast-Radius & Safety Fact Proof** (trace non-grep seams and

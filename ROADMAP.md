@@ -12,7 +12,7 @@ Nexus-DevFlow is a local-first, stage-based workflow layer for building producti
 | :--- | :--- | :--- |
 | **Phase 1: Foundation** | Overlay installer, 5-adapter bundle, task-isolated living specs, quality gates, and 15 Core Skills. | **Completed** |
 | **Phase 2: Ecosystem Reliability** | Multi-chat isolation (`130`), overview integrity gate (`119`), cross-platform installer/update matrix, and bilingual routing evals. | **Completed / Hardened** |
-| **Phase 3: Integration** | DevFlow v3 Lead-Coordinator & `pstack` rework (`131a`–`131d`), evidence-first verification, and 5-adapter E2E harness. | **Completed (v3 Core)** |
+| **Phase 3: Integration** | DevFlow v3 Lead-Coordinator & native playbooks (`131a`–`131d`), evidence-first verification, and 5-adapter E2E harness. | **Completed (v3 Core)** |
 | **Phase 4: Adoption** | Production release readiness (`125` for `3.0.0`), retired-command contract checks, and governed npm release. | **Active Focus (`3.0.0` Ready)** |
 
 ## Current Focus

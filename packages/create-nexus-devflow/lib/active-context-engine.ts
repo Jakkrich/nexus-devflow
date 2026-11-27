@@ -100,8 +100,13 @@ export class ActiveContextEngine {
           !/Nothing in progress|None in progress|No active feature|No active work/i.test(content)
         ) {
           const summary = parseCurrentWork(content);
-          if (summary.state === "active" && activeRunningId) {
-            summary.runId = activeRunningId;
+          if (summary.state === "active") {
+            const effectiveRunId = activeRunningId || resolvedPaths.runId;
+            if (effectiveRunId && !summary.runId) {
+              summary.runId = effectiveRunId;
+            } else if (activeRunningId) {
+              summary.runId = activeRunningId;
+            }
           }
           return summary;
         }

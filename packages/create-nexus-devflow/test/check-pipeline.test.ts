@@ -282,3 +282,19 @@ test("PHP language profile plans php -l, phpstan/pint, and phpunit/pest with exp
     await fs.rm(dir, { recursive: true, force: true });
   }
 });
+
+test("planCheckPipeline falls back to project JS files for node --check when changedFiles is empty", async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-js-fallback-"));
+  try {
+    await fs.mkdir(path.join(dir, "src"), { recursive: true });
+    await fs.writeFile(path.join(dir, "package.json"), JSON.stringify({ name: "js-app" }), "utf8");
+    await fs.writeFile(path.join(dir, "src", "index.js"), "export const ok = true;\n", "utf8");
+
+    const plan = planCheckPipeline(dir, { files: [] });
+    assert.deepEqual(plan.detectedLanguages, ["javascript"]);
+    assert.equal(plan.layer1.length, 1);
+    assert.match(plan.layer1[0].command, /node --check "src\/index\.js"/);
+  } finally {
+    await fs.rm(dir, { recursive: true, force: true });
+  }
+});

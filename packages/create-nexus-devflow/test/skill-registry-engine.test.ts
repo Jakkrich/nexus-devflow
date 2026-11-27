@@ -195,7 +195,7 @@ describe("SkillRegistryEngine Seam & Lifecycle", () => {
       await assert.rejects(() => engine.remove("feature"), /Cannot remove Core Skill/);
 
       const { runDoctor } = await import("../lib/doctor.js");
-      const doc = await runDoctor(tempDir, { pstackProbePaths: [] });
+      const doc = await runDoctor(tempDir);
       assert.equal(doc.failCount, 0);
       assert.equal(doc.warnCount, 0);
     } finally {
@@ -236,7 +236,7 @@ describe("SkillRegistryEngine Seam & Lifecycle", () => {
       assert.equal(singleExt.synced, true);
 
       const { runDoctor } = await import("../lib/doctor.js");
-      const cleanDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+      const cleanDoc = await runDoctor(tempDir);
       const cleanCheck = cleanDoc.checks.find((c) => c.id === "third_party_skills");
       assert.ok(cleanCheck);
       assert.equal(cleanCheck.status, "pass");
@@ -248,7 +248,7 @@ describe("SkillRegistryEngine Seam & Lifecycle", () => {
       assert.ok(dualExt);
       assert.equal(dualExt.synced, false);
 
-      const desyncDoc = await runDoctor(tempDir, { pstackProbePaths: [] });
+      const desyncDoc = await runDoctor(tempDir);
       const desyncCheck = desyncDoc.checks.find((c) => c.id === "third_party_skills");
       assert.ok(desyncCheck);
       assert.equal(desyncCheck.status, "warn");

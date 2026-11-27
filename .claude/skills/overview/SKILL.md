@@ -11,7 +11,7 @@ description: "[devflow] Distill user-owned planning docs into `devflow/context/p
 
 ```text
 project-plan.md + build-plan.md + history + codebase signals
-            -> scripts/overview.ts
+            -> /overview
             -> devflow/context/project-overview.md
             -> /feature / fix / check / complete
 ```
@@ -66,13 +66,13 @@ After the title, write a plan fingerprint in this exact form:
 <!-- devflow:source-hash <sha256> -->
 ```
 
-Before hashing, normalize only build-plan completion markers by replacing each
-`- [x]` or `- [X]` marker with `- [ ]`, while preserving indentation and every
-other byte. Compute `<sha256>` from the exact UTF-8 bytes of `project-plan.md`,
-one zero byte, then the normalized UTF-8 bytes of `build-plan.md`. This lets
-`/devflow` detect real plan changes after cloning, copying, or updating without
-treating completed features as overview drift. Replace the previous marker every
-time this skill regenerates the overview.
+Before hashing, normalize only line-leading build-plan completion markers matching
+`/^([ \t]*-[ \t]*)\[[xX]\]/gm` by replacing `[x]` / `[X]` with `[ ]`, while
+preserving indentation and every other byte. Compute `<sha256>` from the exact UTF-8
+bytes of `project-plan.md`, one zero byte (`\0`), then the normalized UTF-8 bytes
+of `build-plan.md`. This lets `/devflow-help` detect real plan changes after cloning,
+copying, or updating without treating completed features as overview drift. Replace
+the previous marker every time this skill regenerates the overview.
 
 ## Step 3 - output and report
 
@@ -99,7 +99,9 @@ Treat this as the initial pre-feature state only when all of these are true:
 - `devflow/context/` has no active task-isolated workspace directories (`devflow/context/{xxx-slug}/`)
 - `devflow/history/features/`, `fixes/`, and `rollbacks/` contain no archived
   work beyond their shipped `README.md` placeholders
-- `devflow/build-plan.md` contains no checked feature items
+- `devflow/build-plan.md` contains no checked feature items (unless this is a fresh
+  brownfield `/onboard --adopt` baseline where pre-existing features were marked `[x]`
+  before DevFlow started and no active or archived runs exist)
 - the DevFlow workflow is meant to be committed, not kept local-only
 
 If there is no `HEAD` yet, stop and send the user back to `/onboard`, which owns
@@ -122,7 +124,7 @@ Before asking, record the resolved default branch and its exact tip:
    `CLAUDE.md`, `.agents/`, `.claude/`, and `devflow/`. Include `.gitignore`
    only when every changed hunk is clearly an onboarding or DevFlow ignore
    entry.
-3. Include the installer-owned `devflow/.state/manifest.json` and
+3. Include `.nexus/nexus-devflow.json` and
    `devflow/.state/.gitignore` when present. Exclude transient state such as
    `run.json`, backups, and staging, plus secrets, logs, caches, dependencies,
    build output, and application source.

@@ -174,7 +174,7 @@ export function validatePlanningInputs(
       code: "placeholder_project_plan",
       file: "devflow/project-plan.md",
       message: "devflow/project-plan.md ยังมีข้อความแม่แบบ (placeholder) หรือยังไม่ได้กรอกข้อมูลจริงของโปรเจกต์",
-      remediation: "แก้ไข devflow/project-plan.md ให้เป็นวิสัยทัศน์ สถาปัตยกรรม และข้อกำหนดจริง แล้วรัน npm run overview (หรือ /overview) ใหม่"
+      remediation: "แก้ไข devflow/project-plan.md ให้เป็นวิสัยทัศน์ สถาปัตยกรรม และข้อกำหนดจริง แล้วรัน '/overview' ใหม่"
     });
   }
 
@@ -189,7 +189,7 @@ export function validatePlanningInputs(
       code: "stub_build_plan_mismatch",
       file: "devflow/build-plan.md",
       message: "devflow/project-plan.md มีแผนจริงแล้ว แต่ devflow/build-plan.md ยังเป็นแม่แบบ stub หรือไม่มีรายการ checklist พร้อมส่งมอบ",
-      remediation: "แทนที่รายการตัวอย่างใน devflow/build-plan.md ด้วยฟีเจอร์จริงในรูปแบบ `- [ ] N. ชื่อฟีเจอร์` (นอกหัวข้อ Later) แล้วรัน npm run overview ใหม่"
+      remediation: "แทนที่รายการตัวอย่างใน devflow/build-plan.md ด้วยฟีเจอร์จริงในรูปแบบ `- [ ] N. ชื่อฟีเจอร์` (นอกหัวข้อ Later) แล้วรัน '/overview' ใหม่"
     });
   }
 
@@ -198,7 +198,7 @@ export function validatePlanningInputs(
       code: "placeholder_build_plan",
       file: "devflow/build-plan.md",
       message: "devflow/build-plan.md ยังมีรายการตัวอย่างจาก template หรือ stub ตกค้างอยู่",
-      remediation: "ลบหรือเขียนทับรายการตัวอย่างใน devflow/build-plan.md ด้วยงานจริงของโปรเจกต์ แล้วรัน npm run overview ใหม่"
+      remediation: "ลบหรือเขียนทับรายการตัวอย่างใน devflow/build-plan.md ด้วยงานจริงของโปรเจกต์ แล้วรัน '/overview' ใหม่"
     });
   }
 
@@ -255,7 +255,7 @@ export function inspectOverviewFreshness(
       maxBytes,
       recordedHash,
       expectedHash,
-      message: `devflow/context/project-overview.md is oversized (${bytes} bytes >= ${maxBytes} bytes). Run '/overview' or 'npm run overview' to regenerate a compact overview.`
+      message: `devflow/context/project-overview.md is oversized (${bytes} bytes >= ${maxBytes} bytes). Run '/overview' to regenerate a compact overview.`
     };
   }
 
@@ -295,7 +295,7 @@ export function inspectOverviewFreshness(
       maxBytes,
       recordedHash: null,
       expectedHash,
-      message: "devflow/context/project-overview.md is missing its devflow:source-hash fingerprint. Run '/overview' or 'npm run overview' to stamp it."
+      message: "devflow/context/project-overview.md is missing its devflow:source-hash fingerprint. Run '/overview' to stamp it."
     };
   }
 
@@ -311,7 +311,7 @@ export function inspectOverviewFreshness(
       maxBytes,
       recordedHash,
       expectedHash,
-      message: `devflow/context/project-overview.md is out of date with planning docs (recorded hash ${recordedHash.slice(0, 12)} != expected ${expectedHash?.slice(0, 12)}). Run '/overview' or 'npm run overview'.`
+      message: `devflow/context/project-overview.md is out of date with planning docs (recorded hash ${recordedHash.slice(0, 12)} != expected ${expectedHash?.slice(0, 12)}). Run '/overview'.`
     };
   }
 

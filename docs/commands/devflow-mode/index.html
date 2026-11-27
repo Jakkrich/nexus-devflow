@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DevFlow Mode (/devflow-mode, /devflow-mode --all) - คู่มือ Nexus-DevFlow</title>
-  <meta name="description" content="Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)">
+  <meta name="description" content="Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents และ Option A Evidence Packet (แทน /autopilot)">
   <link rel="canonical" href="https://jakkrich.github.io/nexus-devflow/commands/devflow-mode/">
   <link rel="icon" href="../../brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,7 +147,7 @@
       <h1 class="docs-title">DevFlow Mode (/devflow-mode, /devflow-mode --all)</h1>
       
       <p class="docs-lead">
-        Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents, pstack integration และ Option A Evidence Packet (แทน /autopilot)
+        Lead-Coordinator และ Playbook Router (feature, bug-fix, refactor, discovery, autonomous-queue) พร้อม Isolated Worktree Subagents และ Option A Evidence Packet (แทน /autopilot)
       </p>
 
       <div class="docs-meta">
@@ -156,7 +156,6 @@
         <span class="docs-pill">Coordinator</span>
         <span class="docs-pill">Playbooks</span>
         <span class="docs-pill">Subagents</span>
-        <span class="docs-pill">pstack</span>
         <span class="docs-pill">Autonomous</span>
       </div>
 
@@ -184,7 +183,7 @@
           <ol>
             <li><strong>Coordinator Planning</strong>: จัดทำ Living Spec ใน <code>devflow/context/{xxx-slug}/spec.md</code> (เดินหน้าอัตโนมัติบน branch เมื่อ <code>execution.autoApproveSpec: true</code>)</li>
             <li><strong>Isolated TDD Subagents</strong>: ให้ worker subagents พัฒนาและทดสอบแบบ TDD บน isolated worktree/branch</li>
-            <li><strong>3-Layer Evidence Verification</strong>: รัน <code>verify-layers</code>, project <code>verify</code> driver, และ <code>pstack:interrogate</code> / <code>audit</code> แบบ Prove-by-Run บันทึกหลักฐานลง <code>devflow/reports/{run-id}/</code></li>
+            <li><strong>3-Layer Evidence Verification</strong>: รัน <code>verify-layers</code>, project <code>verify</code> driver, และ <code>audit</code> แบบ Prove-by-Run บันทึกหลักฐานลง <code>devflow/reports/{run-id}/</code></li>
             <li><strong>Bounded Auto-Repair</strong>: แก้ไข Confirmed P0/P1 findings ที่รันซ้ำได้จริงและตรวจซ้ำอัตโนมัติ</li>
             <li><strong>Option A Final Human Gate</strong>: หยุดบนสาขา feature พร้อม <strong>Evidence Packet</strong> ให้มนุษย์ตัดสินใจ Merge / PR / Push เสมอ</li>
           </ol>

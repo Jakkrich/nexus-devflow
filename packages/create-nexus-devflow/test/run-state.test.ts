@@ -1,10 +1,14 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
 
 import { parseRunState, readAllRunStates } from "../lib/run-state.js";
+
+const execFileAsync = promisify(execFile);
 
 test("parseRunState returns a recorded Continuous run", () => {
   const run = parseRunState(JSON.stringify({
@@ -145,6 +149,48 @@ test("parseRunState and readAllRunStates aggregate isolated runs/*.json sorted b
     assert.equal(collection.runs[1]?.runId, "130-alpha");
     assert.equal(collection.runs[1]?.handoff?.notes, "Schema settled");
     assert.deepEqual(collection.warnings, []);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("run-state.mjs creates devflow/.state/.gitignore and inherits previous progress label on update", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-runstate-cli-"));
+  const repoRoot = path.resolve(import.meta.dirname, "../../..");
+  const scriptPath = path.join(repoRoot, ".agents", "skills", "devflow-help", "scripts", "run-state.mjs");
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow", "context"), { recursive: true });
+    await execFileAsync(process.execPath, [
+      scriptPath,
+      "start",
+      "--command", "devflow-mode",
+      "--summary", "Starting task",
+      "--boundary", "local-only",
+      "--run-id", "001-demo",
+      "--current", "0",
+      "--total", "3",
+      "--label", "features",
+      "--target", tempDir
+    ]);
+
+    const gitignore = await fs.readFile(path.join(tempDir, "devflow", ".state", ".gitignore"), "utf8");
+    assert.match(gitignore, /^\*\r?\n!\.gitignore/m);
+    const reportsGitignore = await fs.readFile(path.join(tempDir, "devflow", "reports", ".gitignore"), "utf8");
+    assert.equal(reportsGitignore, "*\n");
+
+    await execFileAsync(process.execPath, [
+      scriptPath,
+      "update",
+      "--run-id", "001-demo",
+      "--current", "2",
+      "--total", "3",
+      "--target", tempDir
+    ]);
+
+    const updated = JSON.parse(
+      await fs.readFile(path.join(tempDir, "devflow", ".state", "runs", "001-demo.json"), "utf8")
+    );
+    assert.deepEqual(updated.progress, { current: 2, total: 3, label: "features" });
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

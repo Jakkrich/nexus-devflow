@@ -213,6 +213,50 @@ function normalizeRepoPath(filePath: string): string {
   return filePath.replace(/\\/g, "/").replace(/^\.\//, "");
 }
 
+function collectProjectJsFiles(projectRoot: string, limit: number): string[] {
+  const results: string[] = [];
+  const ignoredDirs = new Set([
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    "coverage",
+    "devflow",
+    ".agents",
+    ".claude",
+    ".nexus"
+  ]);
+  const stack: string[] = [projectRoot];
+
+  while (stack.length > 0 && results.length < limit) {
+    const dir = stack.pop()!;
+    let entries: fs.Dirent[];
+    try {
+      entries = fs.readdirSync(dir, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+
+    entries.sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      if (results.length >= limit) break;
+      if (entry.isSymbolicLink()) continue;
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (!ignoredDirs.has(entry.name)) {
+          stack.push(fullPath);
+        }
+        continue;
+      }
+      if (entry.isFile() && /\.(?:js|mjs|cjs)$/i.test(entry.name)) {
+        results.push(normalizeRepoPath(path.relative(projectRoot, fullPath)));
+      }
+    }
+  }
+
+  return results;
+}
+
 function readPackageJson(projectRoot: string): PackageJsonShape | null {
   const pkgPath = path.join(projectRoot, "package.json");
   if (!fs.existsSync(pkgPath)) return null;
@@ -589,9 +633,14 @@ function resolveDefaultChecksForLanguage(
           source: "default"
         });
       } else {
-        const jsTargets = changedFiles
+        const jsTargetsFromDiff = changedFiles
           .filter((f) => LANGUAGE_PROFILES.javascript.extensions.some((ext) => f.toLowerCase().endsWith(ext)))
+          .filter((f) => f.toLowerCase().endsWith(".js") || f.toLowerCase().endsWith(".mjs") || f.toLowerCase().endsWith(".cjs"))
           .filter((f) => fs.existsSync(path.join(projectRoot, f)));
+        const jsTargets =
+          jsTargetsFromDiff.length > 0
+            ? jsTargetsFromDiff
+            : collectProjectJsFiles(projectRoot, 50);
         const checkCmd =
           jsTargets.length > 0
             ? jsTargets.map((f) => `node --check "${f}"`).join(" && ")

@@ -1,3 +1,4 @@
+import fsSync from "node:fs";
 import path from "node:path";
 import type { ToolCommand, ToolResult, ToolingOptions } from "../types.js";
 import { ToolingError } from "../types.js";
@@ -31,6 +32,15 @@ export const verifyLayersCommand: ToolCommand<CheckPipelineResult> = {
           .split(",")
           .map((item) => item.trim())
           .filter(Boolean);
+      }
+    }
+
+    if (!planOnly && fsSync.existsSync(path.join(targetDir, "devflow"))) {
+      const reportsDir = path.join(targetDir, "devflow", "reports");
+      fsSync.mkdirSync(reportsDir, { recursive: true });
+      const gitignorePath = path.join(reportsDir, ".gitignore");
+      if (!fsSync.existsSync(gitignorePath)) {
+        fsSync.writeFileSync(gitignorePath, "*\n", "utf8");
       }
     }
 

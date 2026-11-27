@@ -465,7 +465,7 @@ test("AC-1: applyPreparedUpdate migrates v2 workspace (prunes autopilot & devflo
     // Preserve customized config.json (skip force replace) -> v3 defaults still merge in readProjectConfig
     const preservedConfig = await readProjectConfig(targetDir);
     assert.equal(preservedConfig.values.workflow.stepReview, "every");
-    assert.equal(preservedConfig.values.execution.engine, "auto");
+    assert.equal(preservedConfig.values.execution.tier, "auto");
     assert.equal(preservedConfig.values.delivery.gate, "option-a-evidence-packet");
 
     // Apply v3 migration (backup + prune retired v2 skills across both adapter trees)
@@ -548,7 +548,7 @@ test("AC-2: installer matrix supports all 5 adapters (antigravity, claude, codex
           await assert.rejects(fs.stat(path.join(target, ".claude")), { code: "ENOENT" });
         }
 
-        const doctorReport = await runDoctor(target, { pstackProbePaths: [] });
+        const doctorReport = await runDoctor(target);
         assert.equal(doctorReport.failCount, 0, `${mode}/${role} doctor should have 0 failures`);
       }
     }
@@ -640,7 +640,7 @@ test("AC-2: applyPreparedUpdate installs and updates cleanly inside space + Thai
     });
     assert.ok(conflictPrep.conflictList.some((c) => c.relativePath === "devflow/build-plan.md" && c.reason === "customized"));
 
-    const doctorReport = await runDoctor(targetDir, { pstackProbePaths: [] });
+    const doctorReport = await runDoctor(targetDir);
     assert.equal(doctorReport.failCount, 0);
   } finally {
     await fs.rm(tempRoot, { recursive: true, force: true });

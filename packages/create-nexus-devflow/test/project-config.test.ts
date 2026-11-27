@@ -25,7 +25,6 @@ test("default config configures independent review execution and quality gates",
   assert.equal(defaults.workflow.checkpointCommits, "disabled");
   assert.equal(defaults.review.independentExecution, "automatic");
   assert.deepEqual(defaults.execution, {
-    engine: "auto",
     tier: "auto",
     autoApproveSpec: true,
     autoCommitFeatureBranch: true
@@ -72,7 +71,6 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
       maxFeatures: 4
     },
     execution: {
-      engine: "pstack",
       tier: "high-risk",
       autoCommitFeatureBranch: false
     },
@@ -87,7 +85,6 @@ test("readProjectConfig merges partial project values over defaults", async (t) 
   assert.equal(result.values.git.featureBranchPrefix, "feat/");
   assert.equal(result.values.git.fixBranchPrefix, "fix/");
   assert.equal(result.values.review.independentExecution, "automatic");
-  assert.equal(result.values.execution.engine, "pstack");
   assert.equal(result.values.execution.tier, "high-risk");
   assert.equal(result.values.execution.autoApproveSpec, true);
   assert.equal(result.values.execution.autoCommitFeatureBranch, false);
@@ -130,7 +127,6 @@ test("readProjectConfig merges partial execution and delivery overrides over def
   await writeConfig(projectRoot, {
     schemaVersion: 1,
     execution: {
-      engine: "pstack",
       tier: "high-risk",
       autoApproveSpec: false,
       autoCommitFeatureBranch: false
@@ -144,7 +140,6 @@ test("readProjectConfig merges partial execution and delivery overrides over def
 
   assert.equal(result.state, "project");
   assert.deepEqual(result.values.execution, {
-    engine: "pstack",
     tier: "high-risk",
     autoApproveSpec: false,
     autoCommitFeatureBranch: false
@@ -252,7 +247,7 @@ test("readProjectConfig rejects unknown and invalid values", async (t) => {
       schemaVersion: 1,
       execution: { engine: "cursor" }
     }),
-    /execution\.engine must be one of/
+    /execution contains unknown key: engine/
   );
   assert.throws(
     () => parseProjectConfig({
@@ -303,6 +298,13 @@ test("readProjectConfig refuses symbolic links", async (t) => {
 
   assert.equal(result.state, "invalid");
   assert.match(result.warnings[0]?.message || "", /symbolic link/);
+});
+
+test("repository devflow/config.json parses cleanly without unknown keys or warnings", async () => {
+  const repoRoot = path.resolve(import.meta.dirname, "../../..");
+  const result = await readProjectConfig(repoRoot);
+  assert.equal(result.state, "project");
+  assert.deepEqual(result.warnings, []);
 });
 
 async function createProject(t: TestContext): Promise<string> {

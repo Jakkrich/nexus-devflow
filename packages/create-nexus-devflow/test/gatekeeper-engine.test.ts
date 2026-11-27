@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
 import { GatekeeperEngine } from "../lib/gatekeeper-engine.js";
+
+const execFileAsync = promisify(execFile);
 
 async function setupDevFlowTestProject(dir: string): Promise<void> {
   await fs.mkdir(path.join(dir, "devflow", "context"), { recursive: true });
@@ -199,6 +203,75 @@ test("GatekeeperEngine: Prove-by-Run distinguishes unverified hypotheses from re
       statusWithoutArtifacts.warnings.some((w) => w.includes("missing_evidence_artifacts")),
       "strict mode with option-a-evidence-packet warns when verified run has no report artifacts"
     );
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("GatekeeperEngine: resolves Multi-Run slug and evidence when spec.md omits **Running ID:**", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-engine-multirun-strict-"));
+  try {
+    await setupDevFlowTestProject(tempDir);
+    await execFileAsync("git", ["init", "-b", "main"], { cwd: tempDir });
+    await execFileAsync("git", ["config", "user.name", "DevFlow Test"], { cwd: tempDir });
+    await execFileAsync("git", ["config", "user.email", "test@nexus-devflow.local"], { cwd: tempDir });
+    await execFileAsync("git", ["add", "."], { cwd: tempDir });
+    await execFileAsync("git", ["commit", "-m", "chore: init"], { cwd: tempDir });
+    await execFileAsync("git", ["checkout", "-b", "feature/001-notes-tag"], { cwd: tempDir });
+    await fs.writeFile(
+      path.join(tempDir, "devflow", "config.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        qualityGates: { regular: { check: "always", independentReview: "when-sensitive" } }
+      }),
+      "utf8"
+    );
+    const taskDir = path.join(tempDir, "devflow", "context", "001-notes-tag");
+    await fs.mkdir(taskDir, { recursive: true });
+    await fs.writeFile(
+      path.join(taskDir, "spec.md"),
+      "# Feature: [001-notes-tag] Filter notes\n\n> **Status**: verified\n\n## 3. Implementation Checklist\n- [x] Done\n",
+      "utf8"
+    );
+    const reportDir = path.join(tempDir, "devflow", "reports", "001-notes-tag");
+    await fs.mkdir(reportDir, { recursive: true });
+    await fs.writeFile(path.join(reportDir, "verify-layers.json"), "{\"passed\":true}", "utf8");
+
+    const engine = new GatekeeperEngine(tempDir);
+    const report = await engine.evaluate({ strict: true });
+    assert.equal(report.passed, true);
+    assert.equal(report.exitCode, 0);
+    assert.equal(report.evidence.runId, "001-notes-tag");
+    assert.equal(report.evidence.present, true);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("GatekeeperEngine: fails strict and default checks when active spec is malformed", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-engine-malformed-"));
+  try {
+    await setupDevFlowTestProject(tempDir);
+    const taskDir = path.join(tempDir, "devflow", "context", "001-broken");
+    await fs.mkdir(taskDir, { recursive: true });
+    await fs.writeFile(
+      path.join(taskDir, "spec.md"),
+      "**Status:** verified\n\nMissing markdown title heading.\n",
+      "utf8"
+    );
+
+    const engine = new GatekeeperEngine(tempDir);
+    const defaultReport = await engine.evaluate({ strict: false });
+    assert.equal(defaultReport.passed, false);
+    assert.equal(defaultReport.exitCode, 1);
+    assert.equal(defaultReport.twoStage.stage1SpecFidelity, false);
+    assert.ok(defaultReport.violations.some((v) => /malformed/i.test(v)));
+
+    const strictReport = await engine.evaluate({ strict: true });
+    assert.equal(strictReport.passed, false);
+    assert.equal(strictReport.exitCode, 1);
+    assert.equal(strictReport.twoStage.stage1SpecFidelity, false);
+    assert.ok(strictReport.violations.some((v) => /malformed/i.test(v)));
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

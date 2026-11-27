@@ -18,7 +18,6 @@
     "independentExecution": "automatic"
   },
   "execution": {
-    "engine": "auto",
     "tier": "auto",
     "autoApproveSpec": true,
     "autoCommitFeatureBranch": true
@@ -31,12 +30,14 @@
       "audit": "manual",
       "independentReview": "when-sensitive",
       "check": "manual",
+      "specCheck": "manual",
       "tryGuide": "manual"
     },
     "continuous": {
       "audit": "manual",
       "independentReview": "when-sensitive",
       "check": "manual",
+      "specCheck": "manual",
       "tryGuide": "manual"
     }
   },

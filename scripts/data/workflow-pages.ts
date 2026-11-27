@@ -305,7 +305,7 @@ export const WORKFLOW_PAGES: DocPage[] = [
           <table>
             <thead><tr><th>ความต้องการ</th><th>คำสั่งที่แนะนำ</th><th>พฤติกรรมหลัก</th></tr></thead>
             <tbody>
-              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/devflow-help doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, <code>pstack</code> engine, <code>verify</code> driver และ Workflow Health</td></tr>
+              <tr><td>ตรวจสุขภาพระบบและการตั้งค่า</td><td><code>/devflow-help doctor</code></td><td>Read-only ตรวจเช็ค Config, Adapters, <code>verify</code> driver และ Workflow Health</td></tr>
               <tr><td>สืบหาสาเหตุของบั๊กที่แท้จริง</td><td><code>/debug</code></td><td>วินิจฉัยแบบ 2-Track (Fast trace หรือ Scientific 6-phase) โดยไม่แก้โค้ดล่วงหน้า</td></tr>
               <tr><td>ทำความเข้าใจโค้ดหรือเทียบทางเลือก</td><td><code>/explore</code></td><td>สำรวจโค้ดและเทียบ Options 2–3 แบบแบบ Read-only</td></tr>
               <tr><td>ต้องการคู่มือคลิกทดสอบหน้าจอสำหรับมนุษย์</td><td><code>/check guide</code></td><td>สร้างคู่มือ Step-by-Step UI Manual Review พร้อมจุดสังเกต</td></tr>

@@ -219,7 +219,8 @@ function formatFindingsHuman(
   return lines.join("\n").trimEnd();
 }
 
-function parseFindings(markdown: string): FindingsSummary {
+function parseFindings(rawMarkdown: string): FindingsSummary {
+  const markdown = rawMarkdown.replace(/^\uFEFF/, "");
   const items: Finding[] = [];
   let malformed = false;
 

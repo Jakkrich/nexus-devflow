@@ -32,4 +32,4 @@ unchanged. The separate `check` gates continue to select verification mode.
 
 ## Verification startup (verification mode only)
 
-**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` to `devflow/.state/run.json` per `AGENTS.md` with command `check`; never block execution if unavailable. Guide mode must skip this startup entirely.
+**Activity tracking (best-effort):** When `devflow/.state/` and `run-state.mjs` exist, publish `running` with `--run-id {xxx-slug}` (to `devflow/.state/runs/{xxx-slug}.json`, or `run.json` when no run ID applies) and command `check`; never block execution if unavailable. Guide mode must skip this startup entirely.

@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-import os from "node:os";
 import path from "node:path";
 import { isDevFlowProjectRoot } from "./project-root.js";
 import { createStyle } from "./ui.js";
@@ -30,9 +29,6 @@ export interface DoctorReport {
 export interface DoctorOptions {
   fix?: boolean;
   color?: boolean;
-  pstackProbePaths?: readonly string[];
-  homeDir?: string;
-  env?: Readonly<Record<string, string | undefined>>;
 }
 
 const DEFAULT_FINDINGS_STUB = `# Findings Ledger
@@ -295,6 +291,24 @@ export async function runDoctor(
         name: "Proportional Engineering Guidance (AGENTS.md)",
         status: "warn",
         message: "AGENTS.md lacks proportional engineering guidance. Add '## Proportional engineering' section to prevent AI over-engineering.",
+        fixable: false
+      });
+    }
+
+    if (agentsContent.includes("<!-- devflow:onboarding-required -->")) {
+      checks.push({
+        id: "onboarding_state",
+        name: "Onboarding Status (AGENTS.md)",
+        status: "warn",
+        message: "AGENTS.md still contains <!-- devflow:onboarding-required -->. Run /onboard to configure commands and project overview.",
+        fixable: false
+      });
+    } else {
+      checks.push({
+        id: "onboarding_state",
+        name: "Onboarding Status (AGENTS.md)",
+        status: "pass",
+        message: "Project onboarding completed in AGENTS.md.",
         fixable: false
       });
     }
@@ -569,51 +583,6 @@ export async function runDoctor(
     });
   }
 
-  // Check 9b: Execution Engine & pstack Capability
-  const executionEngine = configResult.values.execution.engine;
-  const detectedPstackPath =
-    executionEngine === "native"
-      ? null
-      : await detectPstackSkillPath(projectRoot, {
-        customPaths: options.pstackProbePaths,
-        homeDir: options.homeDir,
-        env: options.env
-      });
-
-  if (executionEngine === "native") {
-    checks.push({
-      id: "execution_engine_pstack",
-      name: "Execution Engine & pstack Capability",
-      status: "pass",
-      message: "Native DevFlow execution engine active (pstack probe skipped).",
-      fixable: false
-    });
-  } else if (detectedPstackPath) {
-    checks.push({
-      id: "execution_engine_pstack",
-      name: "Execution Engine & pstack Capability",
-      status: "pass",
-      message: `Execution engine '${executionEngine}': pstack detected at ${detectedPstackPath} (tip: set 'session hook: off' in pstack-models.md or PSTACK_SESSION_HOOK=off so DevFlow remains sole Coordinator).`,
-      fixable: false
-    });
-  } else if (executionEngine === "pstack") {
-    checks.push({
-      id: "execution_engine_pstack",
-      name: "Execution Engine & pstack Capability",
-      status: "warn",
-      message: "Execution engine is set to 'pstack', but poteto-mode/SKILL.md was not found. Install pstack or set execution.engine to 'auto' / 'native'.",
-      fixable: false
-    });
-  } else {
-    checks.push({
-      id: "execution_engine_pstack",
-      name: "Execution Engine & pstack Capability",
-      status: "pass",
-      message: "Execution engine 'auto': pstack not detected; using native DevFlow single-verifier fallback.",
-      fixable: false
-    });
-  }
-
   // Check 9c: Verification Driver Skill (.agents/skills/verify/ or verify-*)
   const verifyDriver = await inspectVerifyDriverSkill(projectRoot);
   if (verifyDriver.state === "ready") {
@@ -793,132 +762,3 @@ function compareVersionDirDesc(a: string, b: string): number {
   return b.localeCompare(a, undefined, { numeric: true });
 }
 
-async function scanPstackCacheDir(dir: string, depth: number, maxDepth: number): Promise<string | null> {
-  if (!(await isRegularNonSymlinkDir(dir))) {
-    return null;
-  }
-
-  for (const suffix of [
-    ["skills", "poteto-mode", "SKILL.md"],
-    ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]
-  ] as const) {
-    const parentSegments = suffix.slice(0, -1);
-    const candidate = path.join(dir, ...suffix);
-    if ((await areChildSegmentsSafeDirs(dir, parentSegments)) && (await isRegularNonSymlinkFile(candidate))) {
-      return candidate;
-    }
-  }
-
-  if (depth >= maxDepth) {
-    return null;
-  }
-
-  let entries;
-  try {
-    entries = await fs.readdir(dir, { withFileTypes: true });
-  } catch {
-    return null;
-  }
-
-  const subdirs = entries
-    .filter((entry) => entry.isDirectory() && !entry.isSymbolicLink())
-    .map((entry) => entry.name)
-    .sort(compareVersionDirDesc);
-
-  for (const name of subdirs) {
-    const found = await scanPstackCacheDir(path.join(dir, name), depth + 1, maxDepth);
-    if (found) {
-      return found;
-    }
-  }
-
-  return null;
-}
-
-interface DetectPstackOptions {
-  customPaths?: readonly string[];
-  homeDir?: string;
-  env?: Readonly<Record<string, string | undefined>>;
-}
-
-async function resolveSafeCandidate(baseDir: string, segments: readonly string[]): Promise<string | null> {
-  if (segments.length === 0) return null;
-  if (!(await isRegularNonSymlinkDir(baseDir))) {
-    return null;
-  }
-  if (await areChildSegmentsSafeDirs(baseDir, segments.slice(0, -1))) {
-    const candidate = path.join(baseDir, ...segments);
-    if (await isRegularNonSymlinkFile(candidate)) {
-      return candidate;
-    }
-  }
-  return null;
-}
-
-async function detectPstackSkillPath(
-  projectRoot: string,
-  options: DetectPstackOptions = {}
-): Promise<string | null> {
-  if (options.customPaths !== undefined) {
-    for (const candidate of options.customPaths) {
-      if (!candidate) continue;
-      if (await isRegularNonSymlinkFile(candidate)) {
-        return candidate;
-      }
-    }
-    return null;
-  }
-
-  const home = options.homeDir ?? os.homedir();
-  const env = options.env ?? process.env;
-  const claudeHome = env.CLAUDE_CONFIG_DIR || path.join(home, ".claude");
-  const codexHome = env.CODEX_HOME || path.join(home, ".codex");
-  const copilotHome = env.COPILOT_HOME || path.join(home, ".copilot");
-
-  const safeCandidates: Array<[string, readonly string[]]> = [
-    ...(env.PSTACK_PLUGIN_DIR
-      ? [[env.PSTACK_PLUGIN_DIR, ["skills", "poteto-mode", "SKILL.md"]] as [string, readonly string[]]]
-      : []),
-    [projectRoot, [".agents", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
-    [projectRoot, [".claude", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
-    [projectRoot, [".agents", "skills", "poteto-mode", "SKILL.md"]],
-    [projectRoot, [".claude", "skills", "poteto-mode", "SKILL.md"]],
-    ...(env.XDG_DATA_HOME
-      ? [[env.XDG_DATA_HOME, ["open-pstack", "pstack", "skills", "poteto-mode", "SKILL.md"]] as [string, readonly string[]]]
-      : []),
-    [home, [".local", "share", "open-pstack", "pstack", "skills", "poteto-mode", "SKILL.md"]],
-    ...(env.LOCALAPPDATA
-      ? [[env.LOCALAPPDATA, ["open-pstack", "pstack", "skills", "poteto-mode", "SKILL.md"]] as [string, readonly string[]]]
-      : []),
-    [home, [".gemini", "config", "plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
-    [claudeHome, ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
-    [codexHome, ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
-    [copilotHome, ["plugins", "pstack", "skills", "poteto-mode", "SKILL.md"]],
-    [home, [".agents", "skills", "poteto-mode", "SKILL.md"]]
-  ];
-
-  for (const [base, segments] of safeCandidates) {
-    const resolved = await resolveSafeCandidate(base, segments);
-    if (resolved) {
-      return resolved;
-    }
-  }
-
-  const cacheRoots = [
-    path.join(claudeHome, "plugins", "cache"),
-    path.join(claudeHome, "plugins", "marketplaces"),
-    path.join(codexHome, "plugins", "cache"),
-    path.join(codexHome, "plugins", "marketplaces"),
-    path.join(copilotHome, "installed-plugins"),
-    path.join(copilotHome, "plugins", "cache")
-  ];
-
-  for (const cacheRoot of cacheRoots) {
-    const found = await scanPstackCacheDir(cacheRoot, 0, 4);
-    if (found) {
-      return found;
-    }
-  }
-
-  return null;
-}
