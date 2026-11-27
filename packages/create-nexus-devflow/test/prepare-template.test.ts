@@ -244,6 +244,11 @@ test("sanitizeStarterFiles replaces maintainer plans with clean reference starte
       await fs.readFile(path.join(repoRoot, "devflow", "build-plan.md"), "utf8"),
       "utf8"
     );
+    await fs.writeFile(
+      path.join(tempTemplate, "AI_HANDOFF.md"),
+      await fs.readFile(path.join(repoRoot, "AI_HANDOFF.md"), "utf8"),
+      "utf8"
+    );
 
     await sanitizeStarterFiles(tempTemplate, repoRoot);
 
@@ -255,13 +260,20 @@ test("sanitizeStarterFiles replaces maintainer plans with clean reference starte
       path.join(repoRoot, "devflow", "reference", "build-plan-template.md"),
       "utf8"
     );
+    const refAiHandoff = await fs.readFile(
+      path.join(repoRoot, "devflow", "reference", "ai-handoff-template.md"),
+      "utf8"
+    );
     const outProjectPlan = await fs.readFile(path.join(tempTemplate, "devflow", "project-plan.md"), "utf8");
     const outBuildPlan = await fs.readFile(path.join(tempTemplate, "devflow", "build-plan.md"), "utf8");
+    const outAiHandoff = await fs.readFile(path.join(tempTemplate, "AI_HANDOFF.md"), "utf8");
 
     assert.equal(outProjectPlan, refProjectPlan);
     assert.equal(outBuildPlan, refBuildPlan);
+    assert.equal(outAiHandoff, refAiHandoff);
     assert.ok(!outBuildPlan.includes("131a"));
     assert.ok(!outBuildPlan.includes("DISC-2026"));
+    assert.ok(!/nexus-devflow|pokeduel|poteto-starter/i.test(outAiHandoff));
     const outAgents = await fs.readFile(path.join(tempTemplate, "AGENTS.md"), "utf8");
     assert.ok(outAgents.includes("<!-- devflow:onboarding-required -->"));
 

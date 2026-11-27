@@ -23,6 +23,7 @@ const extrasRoot = path.join(packageRoot, "extras");
 const entries = [
   "AGENTS.md",
   "CLAUDE.md",
+  "AI_HANDOFF.md",
   ".agents",
   ".claude",
   "devflow",
@@ -322,12 +323,13 @@ This master ledger tracks all released delivery runs, milestones, and rollbacks 
 
   // 5. Replace maintainer project-plan.md & build-plan.md with clean reference starter templates
   const starterPlanPairs: ReadonlyArray<readonly [string, string]> = [
-    ["project-plan-template.md", "project-plan.md"],
-    ["build-plan-template.md", "build-plan.md"]
+    ["project-plan-template.md", path.join("devflow", "project-plan.md")],
+    ["build-plan-template.md", path.join("devflow", "build-plan.md")],
+    ["ai-handoff-template.md", "AI_HANDOFF.md"]
   ];
-  for (const [refName, targetName] of starterPlanPairs) {
+  for (const [refName, targetRelPath] of starterPlanPairs) {
     const srcPath = path.join(sourceRepoRoot, "devflow", "reference", refName);
-    const destPath = path.join(targetTemplateRoot, "devflow", targetName);
+    const destPath = path.join(targetTemplateRoot, targetRelPath);
     const content = await fs.readFile(srcPath, "utf8");
     await fs.writeFile(destPath, content, "utf8");
   }

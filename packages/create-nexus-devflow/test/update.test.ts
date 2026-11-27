@@ -647,3 +647,68 @@ test("AC-2: applyPreparedUpdate installs and updates cleanly inside space + Thai
   }
 });
 
+test("prepareUpdate and applyPreparedUpdate seed AI_HANDOFF.md when absent and NEVER overwrite or delete existing AI_HANDOFF.md", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-handoff-preserve-"));
+  const tplV1 = path.join(tempDir, "tpl-v1");
+  const tplV2 = path.join(tempDir, "tpl-v2");
+  const targetDir = path.join(tempDir, "target");
+
+  try {
+    await fs.mkdir(path.join(tplV1, "devflow"), { recursive: true });
+    await fs.mkdir(path.join(tplV2, "devflow"), { recursive: true });
+    await fs.mkdir(targetDir, { recursive: true });
+
+    await fs.writeFile(path.join(tplV1, "AGENTS.md"), "# V1 AGENTS\n", "utf8");
+    await fs.writeFile(path.join(tplV1, "AI_HANDOFF.md"), "# AI_HANDOFF — `<project-name>`\n", "utf8");
+
+    await fs.writeFile(path.join(tplV2, "AGENTS.md"), "# V2 AGENTS\n", "utf8");
+    await fs.writeFile(path.join(tplV2, "AI_HANDOFF.md"), "# AI_HANDOFF — v2 updated template\n", "utf8");
+
+    // 1. Fresh install creates starter AI_HANDOFF.md
+    const prepInstall = await prepareUpdate({
+      targetDir,
+      templateRoot: tplV1,
+      version: "3.0.0",
+      adapter: "codex"
+    });
+    assert.ok(prepInstall.createList.includes("AI_HANDOFF.md"));
+    await applyPreparedUpdate(prepInstall);
+
+    // 2. Team customizes AI_HANDOFF.md; subsequent update (even with replaceConflicts: true) must NOT overwrite or conflict
+    const teamHandoff = "# AI_HANDOFF — Team Repo\n\n## 2. Active Lock\n| Codex | feat/auth | ...\n";
+    await fs.writeFile(path.join(targetDir, "AI_HANDOFF.md"), teamHandoff, "utf8");
+
+    const prepUpgrade = await prepareUpdate({
+      targetDir,
+      templateRoot: tplV2,
+      version: "3.0.1",
+      adapter: "codex"
+    });
+    assert.equal(prepUpgrade.conflictList.some((c) => c.relativePath === "AI_HANDOFF.md"), false);
+    assert.equal(prepUpgrade.updateList.includes("AI_HANDOFF.md"), false);
+    assert.equal(prepUpgrade.orphanedFiles.includes("AI_HANDOFF.md"), false);
+
+    await applyPreparedUpdate(prepUpgrade, { replaceConflicts: true });
+    const afterUpgrade = await fs.readFile(path.join(targetDir, "AI_HANDOFF.md"), "utf8");
+    assert.equal(afterUpgrade, teamHandoff);
+
+    // 3. Even if AI_HANDOFF.md pre-existed BEFORE DevFlow install (untracked by prior manifest), install --force must preserve it
+    const preExistingDir = path.join(tempDir, "pre-existing");
+    await fs.mkdir(preExistingDir, { recursive: true });
+    const preExistingHandoff = "# AI_HANDOFF — Legacy Handcrafted\n";
+    await fs.writeFile(path.join(preExistingDir, "AI_HANDOFF.md"), preExistingHandoff, "utf8");
+
+    const prepPre = await prepareUpdate({
+      targetDir: preExistingDir,
+      templateRoot: tplV2,
+      version: "3.0.1",
+      adapter: "codex"
+    });
+    assert.equal(prepPre.conflictList.some((c) => c.relativePath === "AI_HANDOFF.md"), false);
+    await applyPreparedUpdate(prepPre, { replaceConflicts: true });
+    assert.equal(await fs.readFile(path.join(preExistingDir, "AI_HANDOFF.md"), "utf8"), preExistingHandoff);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

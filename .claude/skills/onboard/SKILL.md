@@ -136,6 +136,8 @@ a real test command is configured.
 
 If `CLAUDE.md` exists and still has the placeholder `# Project Name` or `# CLAUDE.md`, note or replace it with the detected project name as appropriate while keeping `@AGENTS.md` intact. Do not move detailed app context into `CLAUDE.md`; that belongs in `AGENTS.md` and the generated project overview.
 
+If `AI_HANDOFF.md` exists at repo root and still contains starter placeholders (`<project-name>`, `<fill during /onboard>`), populate `§1 Current State`, `§3 Architecture & Entry Points`, and `§4 Known Pitfalls` (plus `§5` gaps if obvious) from real project facts. Never overwrite or delete user-authored logs or notes if `AI_HANDOFF.md` is already populated.
+
 ## Step 3 - tune coding standards
 
 Update `devflow/context/coding-standards.md` so it matches the detected stack.
@@ -317,8 +319,7 @@ If the user chooses option 2 (Local-only / Zero-Visibility):
   prototypes/
   ```
 
-- Keep `AGENTS.md` tracked. It remains the lightweight public project guide for
-  commands and conventions.
+- Keep `AGENTS.md` and `AI_HANDOFF.md` tracked in Git (do not add `AI_HANDOFF.md` to `.gitignore` unless the user explicitly asks). `AGENTS.md` remains the lightweight public project guide for commands and conventions, while `AI_HANDOFF.md` serves as the team's shared cross-provider handoff hub.
 - Make `AGENTS.md` public-safe: keep project description, commands, testing gate,
   and coding conventions, but remove or avoid DevFlow workflow explanations,
   hidden adapter paths, workflow-document pointers, and core skill lists that

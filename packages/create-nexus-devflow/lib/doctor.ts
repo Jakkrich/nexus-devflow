@@ -31,6 +31,55 @@ export interface DoctorOptions {
   color?: boolean;
 }
 
+const DEFAULT_AI_HANDOFF_STUB = `# AI_HANDOFF — \`<project-name>\`
+
+Project governance, live engineering handbook, and cross-provider agent handoff hub.
+Released delivery history lives in [\`devflow/history/HISTORY.md\`](./devflow/history/HISTORY.md).
+
+## 0. Start here
+
+1. Read [\`devflow/history/HISTORY.md\`](./devflow/history/HISTORY.md) and \`AI_HANDOFF.md\` §1–§2 plus the top 3 entries of §6 before editing code.
+2. Check §2 (\`Active Lock\`) so you do not overwrite files owned by another active provider/agent or branch.
+
+## 1. Current State (update on every change)
+
+| Field | Value |
+|---|---|
+| Repository / Owner | \`<owner>/<repo>\` (branch \`main\`) |
+| Last known commit | \`—\` |
+| Runtime / Stack | \`<fill during /onboard>\` |
+| Build command | \`<fill during /onboard>\` |
+| Test / Verify command | \`<fill during /onboard>\` |
+| Deploy | \`<fill during /onboard or Manual>\` |
+
+## 2. Active Lock (lightweight conflict guard)
+
+| Provider / Agent | Branch / Worktree | Since | Task | Files touched |
+|---|---|---|---|---|
+| — | — | — | no active tasks | — |
+
+## 3. Architecture & Entry Points
+
+- **Entry points & load order:** \`<fill during /onboard>\`
+- **State / Persistence:** \`<fill during /onboard>\`
+
+## 4. Known Pitfalls
+
+- \`<Add real pitfalls discovered in this repo>\`
+
+## 5. Tech Debt / Open Gaps
+
+- [ ] \`<Add open technical debt or known gaps>\`
+
+## 6. Recent Handoffs / Change Log (newest at top)
+
+### YYYY-MM-DD · <Provider / Agent> · <short title>
+- **What:** exact file paths and symbols changed
+- **Why:** user request / bug / feature
+- **Verification:** exact commands run and observed results
+- **Pending / Notes for next agent:** none
+`;
+
 const DEFAULT_FINDINGS_STUB = `# Findings Ledger
 
 > **Generated Ledger File.** Tracks quality findings, security vulnerabilities, regression risks, and architectural debt raised during review and QA passes.
@@ -312,6 +361,47 @@ export async function runDoctor(
         fixable: false
       });
     }
+  }
+
+  // Check 3c: Cross-provider AI_HANDOFF.md
+  const aiHandoffPath = path.join(projectRoot, "AI_HANDOFF.md");
+  const aiHandoffLstat = await fs.lstat(aiHandoffPath).catch(() => null);
+  if (aiHandoffLstat?.isSymbolicLink()) {
+    checks.push({
+      id: "ai_handoff_hub",
+      name: "Cross-Provider Handoff Hub (AI_HANDOFF.md)",
+      status: "warn",
+      message: "AI_HANDOFF.md is a symbolic link and was not trusted.",
+      fixable: false
+    });
+  } else if (aiHandoffLstat?.isFile()) {
+    const handoffContent = await fs.readFile(aiHandoffPath, "utf8");
+    const hasPlaceholders = handoffContent.includes("<project-name>") || handoffContent.includes("<fill during /onboard>");
+    checks.push({
+      id: "ai_handoff_hub",
+      name: "Cross-Provider Handoff Hub (AI_HANDOFF.md)",
+      status: hasPlaceholders ? "warn" : "pass",
+      message: hasPlaceholders
+        ? "AI_HANDOFF.md still has starter placeholders. Run /onboard to populate repo facts."
+        : "Found AI_HANDOFF.md cross-provider handoff hub at repo root.",
+      fixable: false
+    });
+  } else {
+    let fixed = false;
+    if (options.fix) {
+      await fs.writeFile(aiHandoffPath, DEFAULT_AI_HANDOFF_STUB, "utf8");
+      fixed = true;
+    }
+    checks.push({
+      id: "ai_handoff_hub",
+      name: "Cross-Provider Handoff Hub (AI_HANDOFF.md)",
+      status: fixed ? "pass" : "warn",
+      message: fixed
+        ? "Restored starter AI_HANDOFF.md at project root."
+        : "Missing AI_HANDOFF.md at project root (recommended for cross-provider team handoffs).",
+      fixable: true,
+      fixed
+    });
   }
 
   // Check 4: Global Shared Context Files (Pure Multi-Run Architecture)

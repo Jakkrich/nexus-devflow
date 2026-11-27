@@ -143,6 +143,14 @@ async function inspectRealPackageTarballs(projectRoot: string): Promise<TarballI
       path.join(projectRoot, "devflow", "reference", "build-plan-template.md"),
       "utf8"
     );
+    const templateAiHandoff = await fs.readFile(
+      path.join(createPkgDir, "template", "AI_HANDOFF.md"),
+      "utf8"
+    );
+    const refAiHandoff = await fs.readFile(
+      path.join(projectRoot, "devflow", "reference", "ai-handoff-template.md"),
+      "utf8"
+    );
     const createPackJson = execSync(`${npmBin} pack --dry-run --json --ignore-scripts`, {
       cwd: createPkgDir,
       encoding: "utf8",
@@ -158,7 +166,9 @@ async function inspectRealPackageTarballs(projectRoot: string): Promise<TarballI
       createFiles: parseNpmPackFiles(createPackJson),
       wrapperFiles: parseNpmPackFiles(wrapperPackJson),
       templatePlansSanitized:
-        templateProjectPlan === refProjectPlan && templateBuildPlan === refBuildPlan
+        templateProjectPlan === refProjectPlan &&
+        templateBuildPlan === refBuildPlan &&
+        templateAiHandoff === refAiHandoff
     };
   } catch (err: unknown) {
     primaryFailed = true;

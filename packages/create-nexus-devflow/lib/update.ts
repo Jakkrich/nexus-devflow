@@ -22,13 +22,17 @@ export const DEVFLOW_PROTECTED_SKILLS = new Set([
 ]);
 
 export const MANAGED_ROOTS: Record<string, string[]> = {
-  common: ["AGENTS.md", "CLAUDE.md", "devflow", "LICENSE"],
+  common: ["AGENTS.md", "CLAUDE.md", "AI_HANDOFF.md", "devflow", "LICENSE"],
   codex: [".agents/skills"],
   copilot: [".agents/skills"],
   antigravity: [".agents/skills"],
   opencode: [".agents/skills"],
   claude: [".claude/skills"]
 };
+
+export const USER_PRESERVED_SEED_FILES = new Set<string>([
+  "AI_HANDOFF.md"
+]);
 
 export interface Manifest {
   schemaVersion: number;
@@ -354,6 +358,11 @@ export async function prepareUpdate({
       continue;
     }
 
+    // Never overwrite or flag conflicts on existing user-owned cross-provider handoff files
+    if (USER_PRESERVED_SEED_FILES.has(relativePath)) {
+      continue;
+    }
+
     if (targetStats.isSymbolicLink()) {
       conflictList.push({
         relativePath,
@@ -402,6 +411,7 @@ export async function prepareUpdate({
       }
 
       if (
+        USER_PRESERVED_SEED_FILES.has(relativePath) ||
         relativePath.startsWith("devflow/.vendor/") ||
         relativePath.includes("/.vendor/") ||
         previousManifest.thirdPartySkills?.some((s) => s.name && relativePath.includes(s.name)) ||

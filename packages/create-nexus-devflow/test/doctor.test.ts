@@ -135,3 +135,34 @@ test("runDoctor warns on onboarding_state when AGENTS.md contains onboarding mar
   }
 });
 
+test("runDoctor checks AI_HANDOFF.md, fixes only when missing, and never overwrites existing content", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "nexus-test-doctor-handoff-"));
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Project\n", "utf8");
+
+    const missingReport = await runDoctor(tempDir);
+    const missingCheck = missingReport.checks.find((c) => c.id === "ai_handoff_hub");
+    assert.ok(missingCheck);
+    assert.equal(missingCheck.status, "warn");
+    assert.equal(missingCheck.fixable, true);
+
+    const fixReport = await runDoctor(tempDir, { fix: true });
+    const fixedCheck = fixReport.checks.find((c) => c.id === "ai_handoff_hub");
+    assert.ok(fixedCheck);
+    assert.equal(fixedCheck.status, "pass");
+    assert.equal(fixedCheck.fixed, true);
+
+    const teamHandoff = "# AI_HANDOFF — My Team App\n\n## 1. Current State\nCustom team notes\n";
+    await fs.writeFile(path.join(tempDir, "AI_HANDOFF.md"), teamHandoff, "utf8");
+
+    const okReport = await runDoctor(tempDir, { fix: true });
+    const okCheck = okReport.checks.find((c) => c.id === "ai_handoff_hub");
+    assert.ok(okCheck);
+    assert.equal(okCheck.status, "pass");
+    assert.equal(await fs.readFile(path.join(tempDir, "AI_HANDOFF.md"), "utf8"), teamHandoff);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});
+

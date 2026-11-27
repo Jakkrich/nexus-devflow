@@ -110,6 +110,8 @@ Inspect `git worktree list --porcelain` and `devflow/.state/runs/*.json` alongsi
 project isn't a git repo yet, say so and ask the user to run `git init` first;
 the loop needs branches. On resume inside the owning checkout, switch back to the existing branch instead of creating a new one.
 
+If root `AI_HANDOFF.md` exists, claim or update your provider's row in `§2 Active Lock` (`Provider / Agent`, `Branch / Worktree`, `Since`, `Task`, `Files touched`), and clear it when handing off or pausing.
+
 ### Type: Rollback safeguard
 
 When implementing a rollback task, follow the exact safety procedure in `reference/rollback-implementation.md`.

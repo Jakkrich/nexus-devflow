@@ -153,6 +153,7 @@ describe("SkillRegistryEngine Seam & Lifecycle", () => {
       await fs.mkdir(path.join(tempDir, "devflow", "reference"), { recursive: true });
       await fs.mkdir(path.join(tempDir, "devflow", "discoveries"), { recursive: true });
       for (const rel of [
+        "AI_HANDOFF.md",
         "devflow/context/project-overview.md",
         "devflow/context/coding-standards.md",
         "devflow/context/ai-interaction.md",

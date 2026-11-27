@@ -71,6 +71,7 @@ async function smokeTestPackage(): Promise<void> {
     const expected = [
       "AGENTS.md",
       "CLAUDE.md",
+      "AI_HANDOFF.md",
       "LICENSE",
       ".agents/skills",
       ".claude/skills",

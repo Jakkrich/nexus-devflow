@@ -11,6 +11,7 @@ This project uses **Nexus-DevFlow**, an agentic workflow layer supporting **The 
 
 Reuse instructions already loaded. Read relevant sections rather than every document before every edit:
 
+- `AI_HANDOFF.md` (`§0–§2` and top 3 entries of `§6`) plus `devflow/history/HISTORY.md` for active provider locks, pitfalls, and recent cross-provider handoffs.
 - `devflow/config.json` for workflow policy and quality-gate decisions.
 - `devflow/context/project-overview.md` for project purpose, architecture, and cross-module boundaries.
 - `devflow/context/coding-standards.md` for conventions affecting changed code.
@@ -39,6 +40,7 @@ Build for established requirements, not hypothetical scale, threats, or future f
 ## Workflow
 
 - **4-Stage Loop**: `/feature` (or `/fix`) ──▶ `/implement` ──▶ `/check` ──▶ `/complete` (using `.agents/skills/<skill>/SKILL.md` or `.claude/skills/<skill>/SKILL.md`).
+- **Cross-Provider Handoff (`AI_HANDOFF.md`)**: Every provider (Claude Code, Codex, Antigravity, Copilot, OpenCode) must check `AI_HANDOFF.md` `§2 Active Lock` and `devflow/history/HISTORY.md` before editing, update/clear its lock row in `§2`, and prepend a summary at the top of `§6` + update `§1 Current State` upon finishing any change.
 - **Default Language (Thai)**: All generated stage artifacts (`spec.md`, `discovery.md`, etc.) and user communication MUST default to **Thai (`th`)**, while code, technical terms, file paths, and identifiers remain in English.
 - **Contextual Help**: When invoked with `help`, `--help`, `-h`, or `?`, follow [the help protocol](devflow/reference/help-playbook-protocol.md) to reply with a concise in-chat Markdown cheat sheet without running the command's primary action.
 - **Activity State**: Never create or edit `devflow/.state/run.json` directly. Tracked commands record activity via the first helper that exists (see `devflow/workflow.md` for schema and field rules):

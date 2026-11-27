@@ -137,7 +137,7 @@ and records the exact target feature, archive, commit, and parent.
 - If `devflow/context/{xxx-slug}/findings.md` holds findings, append `## Findings` to the archive file with resolved entries.
 - If `devflow/context/{xxx-slug}/review.md` holds a completed passing receipt, append a `## Independent review` section to the archive file with the receipt fields, commands, safe evidence references, findings, and remaining risk from `review.md`. Preserve the full target and base SHAs, spec hash, base ref, builder adapter and model, requested reviewer, model, and execution, actual reviewer adapter, model, and execution, Check result, fresh-context declaration, and review time. Do not archive a stale, pending, changes-requested, or malformed record.
 
-**Clean up run workspace.** Delete the task directory `devflow/context/{xxx-slug}/`. In Pure Multi-Run architecture, completed work leaves zero residual stubs in `devflow/context/`.
+**Clean up run workspace.** Delete the task directory `devflow/context/{xxx-slug}/`. In Pure Multi-Run architecture, completed work leaves zero residual stubs in `devflow/context/`. If root `AI_HANDOFF.md` exists, clear your finished row in `§2 Active Lock`, update `§1 Current State`, and prepend a concise entry at the top of `§6 Recent Handoffs` (keeping the latest ~10 entries alongside `devflow/history/HISTORY.md`).
 
 **Discard consumed prototypes.** If this feature built the look from `prototypes/`
 delete the `prototypes/` folder now.

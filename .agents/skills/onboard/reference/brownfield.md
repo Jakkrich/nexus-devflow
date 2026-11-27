@@ -34,6 +34,7 @@ Write these, drawn from the survey (facts) and the interview (intent). Mark ever
 - **`devflow/build-plan.md`** - the ordered feature list as a checklist. **Mark shipped features `- [x]`** (the brownfield difference: the build plan reflects reality, so most of an existing app starts checked) and the roadmap items from the interview as `- [ ]`. This makes `/devflow` and `/feature` work immediately - the next unchecked item is genuinely what's next.
 - **`devflow/context/coding-standards.md`** - rewrite the default to match the project's *actual* conventions from Step 1, not the shipped Next.js/Prisma defaults. Keep the Writing and Comments sections; replace the stack-specific ones with what the code really does. Its Testing section must reflect the real testing state (the opt-in switch is a `test` command in `AGENTS.md`).
 - **`AGENTS.md` Commands section** - fill in the real dev / build / test / lint commands you found, and **remove `<!-- devflow:onboarding-required -->`** from `AGENTS.md` so status/doctor no longer flag incomplete onboarding. Include `Verify` when a real combined command exists.
+- **`AI_HANDOFF.md`** - if present with starter placeholders (`<project-name>`, `<fill during /onboard>`), populate `§1 Current State`, `§3 Architecture & Entry Points`, `§4 Known Pitfalls`, and `§5 Tech Debt` from your Step 1 survey; never overwrite or delete existing team logs.
 
 Do not write `project-overview.md`; that's `/overview`'s job, downstream of these.
 
@@ -59,7 +60,7 @@ Brownfield repositories usually already expose runnable commands, routes, or API
 Ask how the DevFlow workflow files should be handled in git, unless the user already gave a preference:
 
 1. **Commit DevFlow workflow files (Recommended)**: Portable, best for teams and cross-machine work. Add the standard transient `.gitignore` block (`devflow/runs/*`, `devflow/discoveries/*`, `devflow/reports/*`, `devflow/research/*`, `devflow/scratch/*`, `devflow/decisions/*` except `README.md`, `devflow/inbox/*/raw/*`, `devflow/analysis/*`, `devflow/tmp/*`, `devflow/temp/*`, `devflow/brainstorm/*`, `devflow/brainstorms/*`, `devflow/backups/*`, `devflow/.state/`, `devflow/.vendor/`, `.nexus/`, `prototypes/*`).
-2. **Keep DevFlow workflow files local (Zero-Visibility)**: Add `.agents/`, `.claude/`, `devflow/`, `CLAUDE.md`, `.nexus/`, `prototypes/` to `.gitignore`, keep `AGENTS.md` public-safe without DevFlow workflow internals, and check whether any of those folders are already tracked (never run `git rm --cached` without explicit approval).
+2. **Keep DevFlow workflow files local (Zero-Visibility)**: Add `.agents/`, `.claude/`, `devflow/`, `CLAUDE.md`, `.nexus/`, `prototypes/` to `.gitignore`, keep `AGENTS.md` public-safe without DevFlow workflow internals and keep `AI_HANDOFF.md` tracked in Git for team handoffs, and check whether any local-only folders are already tracked (never run `git rm --cached` without explicit approval).
 
 ## Step 6 - review gate, then hand off
 

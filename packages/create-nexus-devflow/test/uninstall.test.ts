@@ -143,3 +143,24 @@ test("prepareUninstall with keepHistory: true preserves devflow/history director
     await fs.rm(tempDir, { recursive: true, force: true });
   }
 });
+
+test("prepareUninstall and applyUninstall NEVER delete user AI_HANDOFF.md", async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "devflow-uninstall-handoff-test-"));
+  try {
+    await fs.mkdir(path.join(tempDir, "devflow"), { recursive: true });
+    await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Agents\n", "utf8");
+    const userHandoff = "# AI_HANDOFF — Important Team Hub\n";
+    await fs.writeFile(path.join(tempDir, "AI_HANDOFF.md"), userHandoff, "utf8");
+
+    for (const keepHistory of [false, true]) {
+      const prepared = await prepareUninstall({ targetDir: tempDir, keepHistory });
+      assert.equal(prepared.itemsToDelete.includes("AI_HANDOFF.md"), false);
+      await applyUninstall(prepared);
+      assert.equal(await fs.readFile(path.join(tempDir, "AI_HANDOFF.md"), "utf8"), userHandoff);
+      await fs.mkdir(path.join(tempDir, "devflow"), { recursive: true });
+      await fs.writeFile(path.join(tempDir, "AGENTS.md"), "# Agents\n", "utf8");
+    }
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+});

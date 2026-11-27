@@ -5,7 +5,7 @@ Read-only diagnostic pass for setup drift, incomplete onboarding, missing files,
 ## What it checks
 
 1. **Required DevFlow files**
-   - Confirm `AGENTS.md`, `devflow/workflow.md`, `devflow/project-plan.md`, `devflow/build-plan.md`, and `devflow/context/` (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `glossary.md`) exist.
+   - Confirm `AGENTS.md`, `AI_HANDOFF.md`, `devflow/workflow.md`, `devflow/project-plan.md`, `devflow/build-plan.md`, and `devflow/context/` (`project-overview.md`, `coding-standards.md`, `ai-interaction.md`, `glossary.md`) exist.
    - Confirm `devflow/history/features/` and `devflow/history/fixes/` exist.
    - Check `devflow/context/{xxx-slug}/findings.md` (format `### <id> [<severity>] <status> - <title>`) and `review.md` (pending, changes-requested, malformed, or stale state). Report open/fixed P0/P1 blockers without blocking Doctor itself.
    - Read `devflow/config.json` when present (require regular non-symlink JSON with `schemaVersion: 1`; reject unknown keys/unsupported values). Report regular & continuous quality gates (`audit`, `independentReview`, `check`, `tryGuide`, `specCheck`), `review.independentExecution`, `execution` (`tier`, `autoApproveSpec`, `autoCommitFeatureBranch`), and `delivery.gate`.
